@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+li {
+  list-style-type: none;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+main {
+  overflow-x: hidden;
+}
+.color-test{
+  color : #20cb67;
+  color : #b3f4ce;
+}
+
+
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  background-color: #e9fbf4;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #5cabfa;
+  border-radius: 10px;
+  position: inherit;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}

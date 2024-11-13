@@ -1,0 +1,52 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  view: "grid",
+  status: [],
+  pagination: { page: 0, pageSize: 10 },
+  sortModel: [],
+  formData: {},
+  sortBy: "",
+  rowSelection: [],
+};
+
+const PoOrderListSlice = createSlice({
+  name: "PoOrderList",
+  initialState,
+  reducers: {
+    togglePackingListFilter: (state, action) => {
+      const { category, value } = action.payload;
+      const currentValues = state[category];
+      const isSelected = currentValues.includes(value);
+      state[category] = isSelected ? [] : [value];
+    },
+    updatePoOrderListInput: (state, action) => {
+      state.formData = action.payload;
+    },
+    setPoOrderPagination: (state, action) => {
+      state.pagination = action.payload;
+    },
+    setPackingListView: (state, action) => {
+      state.view = action.payload;
+    },
+    setPoOrderListSortBy: (state, action) => {
+      state.sortBy = action.payload;
+    },
+    setPackingListSortModel: (state, action) => {
+      state.sortModel = action.payload;
+    },
+  },
+});
+
+export const {
+  // togglePackingListFilter,
+  // updatePackingListInput,
+  updatePoOrderListInput,
+  setPoOrderPagination,
+  setPoOrderListSortBy,
+  // setPackingListView,
+  // setPackingListSortBy,
+  // setPackingListSortModel,
+} = PoOrderListSlice.actions;
+
+export default PoOrderListSlice.reducer;

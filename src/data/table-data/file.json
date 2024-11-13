@@ -1,0 +1,39 @@
+{
+    "FileData": [
+        {
+            "id": 1,
+            "file_name": "Document1.pdf",
+            "view": "View"
+        },
+        {
+            "id": 2,
+            "file_name": "Image1.png",
+            "view": "View"
+        },
+        {
+            "id": 3,
+            "file_name": "Presentation.pptx",
+            "view": "View"
+        },
+        {
+            "id": 4,
+            "file_name": "Spreadsheet.xlsx",
+            "view": "View"
+        },
+        {
+            "id": 5,
+            "file_name": "Report.docx",
+            "view": "View"
+        },
+        {
+            "id": 6,
+            "file_name": "Music.mp3",
+            "view": "View"
+        },
+        {
+            "id": 7,
+            "file_name": "Video.mp4",
+            "view": "View"
+        }
+    ]
+}
