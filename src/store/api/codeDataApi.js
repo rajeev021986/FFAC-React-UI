@@ -14,15 +14,31 @@ export const codeDataApi = createApi({
             },
             providesTags: ["Code"],
         }),
+        
         addCustomer: builder.mutation({
             query: (params) => {
                 const headers = { 
                     'Authorization': getAppHeaders()['Authorization'] 
                 };
+            
+                
                 return { url: `entity-service/customer/add`, method: "POST", body: params, headers : headers };
             },
             invalidatesTags: ["Code"],
         }),
+        updateCustomer: builder.mutation({
+            query: (params) => {
+                const headers = { 
+                    'Authorization': getAppHeaders()['Authorization'] 
+                };
+               
+                return { url: `entity-service/customer/update`, method: "PUT", body: params, headers : headers };
+            },
+            invalidatesTags: ["Code"],
+        }),
+
+
+
         fetchParty: builder.query({
             query: (params) => {
                 const queryString = new URLSearchParams(params).toString();
@@ -58,4 +74,4 @@ export const codeDataApi = createApi({
     }),
 });
 
-export const {useFetchCustomerQuery, useAddCustomerMutation, useFetchPartyQuery, useAddPartyMutation, useFetchAgentQuery, useAddAgentMutation } = codeDataApi;
+export const {useFetchCustomerQuery, useAddCustomerMutation,useUpdateCustomerMutation, useFetchPartyQuery, useAddPartyMutation, useFetchAgentQuery, useAddAgentMutation } = codeDataApi;

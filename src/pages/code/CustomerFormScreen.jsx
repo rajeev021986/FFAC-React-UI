@@ -20,6 +20,7 @@ export default function CustomerFormScreen() {
   
   
 const [initialValues, setInitialValues] = React.useState({
+  id:state?.initialValues?.id || '',
     city: state?.initialValues?.city || '',
     customerName: state?.initialValues?.customerName || '',
     accountNo: state?.initialValues?.accountNo || '',
@@ -45,6 +46,7 @@ const [initialValues, setInitialValues] = React.useState({
     url : state?.initialValues?.url || '',
     zipCode : state?.initialValues?.zipCode || '',
     customerEntityTariffs: [],
+    agreementExpiryDate :state?.initialValues?.agreementExpiryDate || '',
     customerEntityEmailsIds : [],
     ctypelist:'CUSTOMER',
     files: []
