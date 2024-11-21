@@ -11,12 +11,14 @@ import DashboardScreen from "./pages/dashboard/DashboardScreen";
 import HandleAuthCallback from "./HandleAuthCallback";
 import CustomerFormScreen from "./pages/code/CustomerFormScreen";
 import Component from "./pages/code/Component";
+import { useSelector} from 'react-redux';
 import SettingsPage from "./pages/setting/Setting"
 function App() {
-  // const { menuItems } = useMenuSetting(); 
+  // const { menuItems } = useMenuSetting();
+  const theme = getTheme(useSelector((state) => state.dashboard.theme));
   return (
     <div className="App">
-      <ThemeProvider theme={getTheme()}>
+      <ThemeProvider theme={theme}>
         <Routes>
           <Route
             path="/"
@@ -35,14 +37,13 @@ function App() {
             }
           />
           <Route path="/app" element={<Layout />} >
-          <Route index element={<DashboardScreen />} />
-          {/* customer Routes */}
-           <Route path="entity/customer" element={<Component />} />
-           <Route path="entity/customer/new" element={<CustomerFormScreen />} />
+            <Route index element={<DashboardScreen />} />
+            <Route path="entity/customer" element={<Component />} />
+            <Route path="entity/customer/new" element={<CustomerFormScreen />} />
            <Route path="entity/customer/editcustomer" element={<CustomerFormScreen />} />
-          <Route path="entity/vendor" element={<VendorScreen />} />
+            <Route path="entity/vendor" element={<VendorScreen />} />
           <Route path="admin/settings" element={<SettingsPage/>} />
-          <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
         <Toaster />
@@ -52,4 +53,3 @@ function App() {
 }
 
 export default App;
-		

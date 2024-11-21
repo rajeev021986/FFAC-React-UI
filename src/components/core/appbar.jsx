@@ -5,14 +5,18 @@ import UserCard from './usercard';
 // import LOGO from '../../assets/images/TransmodalBlackLogo.png';
 import { ThemeProvider } from '@mui/material/styles';
 import { getTheme } from "../../config/theme";
-import LOGO from '../../assets/images/tflLogo.png'
+import LOGO from '../../assets/images/tflLogo.png';
+import { useSelector, useDispatch } from 'react-redux';
+import { setTheme } from '../../store/freatures/dashboardSlice';
 
 export default function TAppBar({ handleDrawerToggle }) {
-  const [primaryColor, setPrimaryColor] = useState('#026de0'); // Default color
+  const dispatch = useDispatch();
+  const primaryColor=useSelector((state)=>state.dashboard.theme);
   const theme = getTheme(primaryColor); // Get the theme with updated primary color
 
   const handleColorChange = (event) => {
-    setPrimaryColor(event.target.value);
+    // setPrimaryColor(event.target.value);
+    dispatch(setTheme(event.target.value));
   };
 
   return (

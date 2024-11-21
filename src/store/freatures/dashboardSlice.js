@@ -9,7 +9,8 @@ const initialState = {
   shipper: [],
   pol: [],
   pod: [],
-  sortBy : ''
+  sortBy : '',
+  theme:"#026de0"
 };
 
 const dashboardSlice = createSlice({
@@ -46,7 +47,11 @@ const dashboardSlice = createSlice({
     },
     dashboardSetSortModel: (state, action) => {
       state.sortModel = action.payload;
+    },
+    setTheme: (state, action) => {
+      state.theme = action.payload;
     }
+     
   }
 });
 
@@ -56,6 +61,7 @@ export const {
     dashboardSetPagination,
     dashboardSetView,
     dashboardSetSortBy,
-    dashboardSetSortModel
+    dashboardSetSortModel,
+    setTheme
  } = dashboardSlice.actions;
 export default dashboardSlice.reducer;
