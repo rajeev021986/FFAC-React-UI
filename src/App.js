@@ -39,6 +39,7 @@ function App() {
           {/* customer Routes */}
            <Route path="entity/customer" element={<Component />} />
            <Route path="entity/customer/new" element={<CustomerFormScreen />} />
+           <Route path="entity/customer/editcustomer" element={<CustomerFormScreen />} />
           <Route path="entity/vendor" element={<VendorScreen />} />
           <Route path="admin/settings" element={<SettingsPage/>} />
           <Route path="*" element={<NotFound />} />

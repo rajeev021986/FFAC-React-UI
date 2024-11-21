@@ -27,10 +27,10 @@ export default function SettingsPage() {
     };
 
     return (
-        <Grid container direction="column" sx={{ height: '100vh', backgroundColor: '#f5f5f5', p: 2 }}>
-            {/* <Grid item>
+        <Grid container  sx={{ height: '100vh', backgroundColor: '#f5f5f5', p: 2 }}>
+            <Grid item xs={12} >
                 <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
-            </Grid> */}
+            </Grid>
             <Grid item sx={{ flex: 1, mt: 2 }}>
                 <Box sx={{ display: 'flex', height: '100%', backgroundColor: '#ffffff', borderRadius: '20px', overflow: 'auto' }}>
                     <Box sx={{ borderRight: 1, borderColor: 'divider', minWidth: 150 }}>
