@@ -41,7 +41,7 @@ class ApiManager {
         const url = ENDPOINTS.CHECK_USER();
         return ApiMethods.post(url,payload);
     }
-     
+
     static rejectUser = async (payload)=>{
         const url = ENDPOINTS.REJECT_USER();
         return ApiMethods.post(url,payload);
@@ -66,6 +66,22 @@ class ApiManager {
     static getCommonOptions = async (name, search) => {
         const url = ENDPOINTS.GET_COMMON_OPTIONS(name, search);
         return ApiMethods.get(url);
+    }
+    static getAuditDetails = async (id) => {
+        const url = ENDPOINTS.GET_CUSTOMER_AUDIT(id);
+        return ApiMethods.get(url);
+    }
+    static getCustomerFormData = async (source,id) => {
+        const url = ENDPOINTS.GET_CUSTOMER_DOCUMENT_FILE(source,id);
+        return ApiMethods.get(url);
+    }
+    static downloadDocumnent = async (id,source,sourceId) => {
+        const url = ENDPOINTS.DOWNLOAD_DOCUMENT(id,source,sourceId);
+        return ApiMethods.get(url);
+    }
+    static deleteDocument = async (id, source, sourceId) => {
+        const url = ENDPOINTS.DOCUMENT_DELETE(id, source, sourceId);
+        return ApiMethods.delete(url);
     }
 }
 

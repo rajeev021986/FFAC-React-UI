@@ -11,7 +11,7 @@ import DashboardScreen from "./pages/dashboard/DashboardScreen";
 import HandleAuthCallback from "./HandleAuthCallback";
 import CustomerFormScreen from "./pages/code/CustomerFormScreen";
 import Component from "./pages/code/Component";
-
+import SettingsPage from "./pages/setting/Setting"
 function App() {
   // const { menuItems } = useMenuSetting(); 
   return (
@@ -40,6 +40,7 @@ function App() {
            <Route path="entity/customer" element={<Component />} />
            <Route path="entity/customer/new" element={<CustomerFormScreen />} />
           <Route path="entity/vendor" element={<VendorScreen />} />
+          <Route path="admin/settings" element={<SettingsPage/>} />
           <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

@@ -1,4 +1,4 @@
-import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getAppHeaders, API_BASE_URL } from "../../services/ApiMethods";
 
 export const settingsApi = createApi({
@@ -15,14 +15,31 @@ export const settingsApi = createApi({
         }),
         updateFormat: builder.mutation({
             query: (params) => {
-                return { url: `/settings/format`, method: "PUT", body: params, headers : getAppHeaders() };
+                return { url: `/settings/format`, method: "PUT", body: params, headers: getAppHeaders() };
             },
             invalidatesTags: ["Format"],
+        }),
+        addOptons: builder.mutation({
+            query: (params) => {
+                const headers = {
+                    'Authorization': getAppHeaders()['Authorization']
+                };
+                return { url: `/admin-service/settings/update`, method: "PUT", body: params.body, headers: headers };
+            },
+            invalidatesTags: ["Code"],
+        }),
+        getOptionsSettings: builder.query({
+            query: (params) => {
+                // const queryString = new URLSearchParams(params).toString();
+                return { url: `/admin-service/settings/entity?entity=${params}`, method: "GET", headers: getAppHeaders() };
+            },
         }),
     }),
 });
 
-export const { 
-   useFetchFormatQuery,
-   useUpdateFormatMutation
+export const {
+    useFetchFormatQuery,
+    useUpdateFormatMutation,
+    useAddOptonsMutation,
+    useGetOptionsSettingsQuery,
 } = settingsApi;
