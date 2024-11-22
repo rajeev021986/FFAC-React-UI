@@ -27,12 +27,12 @@ export default function SettingsPage() {
     };
 
     return (
-        <Grid container  sx={{ height: '100vh', backgroundColor: '#f5f5f5', p: 2 }}>
+        <Grid container  sx={{ height: '100vh', backgroundColor: 'white.main', p: 2 }}>
             <Grid item xs={12} >
                 <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
             </Grid>
             <Grid item sx={{ flex: 1, mt: 2 }}>
-                <Box sx={{ display: 'flex', height: '100%', backgroundColor: '#ffffff', borderRadius: '20px', overflow: 'auto' }}>
+                <Box sx={{ display: 'flex', height: '100%',backgroundColor:"white.lightDark", borderRadius: '20px', overflow: 'auto' }}>
                     <Box sx={{ borderRight: 1, borderColor: 'divider', minWidth: 150 }}>
                         <Tabs
                             orientation="vertical"

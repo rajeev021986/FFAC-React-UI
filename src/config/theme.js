@@ -1,19 +1,22 @@
 import { createTheme } from "@mui/material";
 
-export const getTheme = (primaryColor = "#026de0") => {
-  if (typeof primaryColor !== 'string' || primaryColor.trim() === '') {
+export const getTheme = ( primaryColor = "#026de0",mode) => {
+  if (typeof primaryColor !== "string" || primaryColor.trim() === "") {
     primaryColor = "#026de0"; // Fallback to default color if invalid
   }
+
+  // const isDarkMode = mode === "dark";
+  const isDarkMode = mode;
   return createTheme({
     palette: {
-      mode: "light",
+      mode:isDarkMode?"dark":"light",
       primary: {
         main: primaryColor,
-        light: "#e3f2fd",
+        light: isDarkMode ? "#263859" : "#e3f2fd",
       },
       secondary: {
-        main: "#061023",
-        light: "#061023a3",
+        main: isDarkMode ? "#b3b3b3" : "#061023",
+        light: isDarkMode ? "#aaaaaa" : "#061023a3",
       },
       success: {
         main: "#22c55e",
@@ -37,25 +40,26 @@ export const getTheme = (primaryColor = "#026de0") => {
         extlight: "#90caf9",
       },
       background: {
-        default: "#f5f5f5",
-        dark: "#061023",
-        light: "#e3f2fd",
-        extlight: "#f5f9fc",
+        default: isDarkMode ? "#121212" : "#f5f5f5",
+        dark: isDarkMode ? "#000000" : "#061023",
+        light: isDarkMode ? "#333333" : "#e3f2fd",
+        extlight: isDarkMode ? "#444444" : "#f5f9fc",
       },
       white: {
-        main: "#ffffff",
+        main: isDarkMode?"#000000":"#ffffff",
+        lightDark: isDarkMode?"#353131":"#f3f3f3",
       },
       text: {
-        primary: "#041238",
-        secondary: "#0000008a",
+        primary: isDarkMode ? "#ffffff" : "#041238",
+        secondary: isDarkMode ? "#b3b3b3" : "#0000008a",
       },
       border: {
-        main: "#0000001f",
-        light: "#F2F2F2",
+        main: isDarkMode ? "#ffffff1f" : "#0000001f",
+        light: isDarkMode ? "#333333" : "#F2F2F2",
       },
       gray: {
-        main: "#f7f7f7",
-        dark: "#939393",
+        main: isDarkMode ? "#2b2b2b" : "#f7f7f7",
+        dark: isDarkMode ? "#939393" : "#939393",
       },
     },
     breakpoints: {
@@ -89,14 +93,14 @@ export const getTheme = (primaryColor = "#026de0") => {
           root: {
             borderRadius: "5px",
             boxShadow: "none",
-            border: "1px solid #0000001f",
+            border: isDarkMode ? "1px solid #353131" : "1px solid #0000001f",
           },
         },
       },
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            borderBottom: "1px solid #0000001f",
+            borderBottom: isDarkMode ? "1px solid #ffffff1f" : "1px solid #0000001f",
             "& .MuiCardHeader-title": {
               fontSize: "1rem",
               fontWeight: 500,
@@ -107,7 +111,7 @@ export const getTheme = (primaryColor = "#026de0") => {
       MuiOutlinedInput: {
         styleOverrides: {
           notchedOutline: {
-            border: "1px solid #0000001f",
+            border: isDarkMode ? "1px solid #ffffff1f" : "1px solid #0000001f",
           },
         },
       },

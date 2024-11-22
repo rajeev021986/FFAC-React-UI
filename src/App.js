@@ -15,7 +15,7 @@ import { useSelector} from 'react-redux';
 import SettingsPage from "./pages/setting/Setting"
 function App() {
   // const { menuItems } = useMenuSetting();
-  const theme = getTheme(useSelector((state) => state.dashboard.theme));
+  const theme = getTheme(useSelector((state) => state.dashboard.theme),useSelector((state) => state.dashboard.mode));
   return (
     <div className="App">
       <ThemeProvider theme={theme}>

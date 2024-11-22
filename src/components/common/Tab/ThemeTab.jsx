@@ -15,7 +15,7 @@ const ThemeTabs = ({ tabData,tabCounts, children }) => {
   };
 
   return (
-    <Box className="ThemeTabBox" sx={{ typography: 'body1', background: '#fff', position: 'relative', borderRadius: '10px', ...tabStyle.tabPanel }}>
+    <Box className="ThemeTabBox" sx={{ typography: 'body1', backgroundColor: 'white.lightDark', position: 'relative', borderRadius: '10px', ...tabStyle.tabPanel }}>
       <TabContext value={value} >
         <Box sx={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom: 4,}}>
           <Box sx={tabStyle.container}>

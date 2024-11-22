@@ -36,7 +36,7 @@ export default function CardsView({
         overflowY: "auto",
         position: "relative",
         pt: 2,
-        backgroundColor: "#f7f7f7",
+        backgroundColor: 'white.main',
       }}
     >
       {data?.map((item, index) => (
@@ -74,7 +74,7 @@ export default function CardsView({
             rowsPerPageOptions={[10, 20, 50, 100]}
             color="primary"
             size="small"
-            sx={{ mergin: "auto" }}
+            sx={{ mergin: "auto", backgroundColor: 'white.main' }}
           />
         </Box>
       )}

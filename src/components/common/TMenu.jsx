@@ -1,49 +1,61 @@
-import * as React from 'react';
+import React from 'react';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Box, Typography } from '@mui/material';
 
-
-
-export default function TMenu(
-    {
-        menuItems,
-        buttonIcon,
-        buttonProps,
-        action = false,
-        params
-    }
-) {
+export default function TMenu({
+    menuItems,
+    buttonIcon,
+    buttonProps,
+    action = false,
+    params,
+}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+
+    const handleMouseEnter = (event) => {
         setAnchorEl(event.currentTarget);
     };
-    const handleClose = () => {
+
+    const handleMouseLeave = () => {
         setAnchorEl(null);
     };
 
+    const handleMenuItemClick = (item) => {
+        if (action) {
+            item.onClick(params);
+        } else {
+            item.onClick();
+        }
+        handleMouseLeave();
+    };
+
     return (
-        <>
+        <Box
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            sx={{ display: 'inline-block' }}
+        >
             <IconButton
-                id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
+                id="hover-button"
+                aria-label="menu-button"
+                aria-controls={open ? 'hover-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
                 sx={{ color: 'white.main', ...buttonProps }}
             >
                 {buttonIcon}
             </IconButton>
             <Menu
-                id="basic-menu"
+                id="hover-menu"
                 anchorEl={anchorEl}
                 open={open}
-                onClose={handleClose}
+                onClose={handleMouseLeave}
                 elevation={2}
                 MenuListProps={{
-                    'aria-labelledby': 'basic-button',
+                    'aria-labelledby': 'hover-button',
+                    onMouseLeave: handleMouseLeave,
                 }}
                 anchorOrigin={{
                     vertical: 'top',
@@ -56,37 +68,26 @@ export default function TMenu(
                 PaperProps={{
                     style: {
                         transform: 'translateX(10px) translateY(40px)',
-                    }
+                    },
                 }}
-               
             >
-                {!action ? menuItems.map(item => (
-                    <MenuItem key={item.label} onClick={item.onClick} sx={{
-                        fontSize: '14px',
-                        display: 'flex',
-                        gap: '10px',
-                        p : '2px 20px',
-                        color : 'text.primary',
-                    }}>
-                      <Box color="primary.main" >{item.icon}</Box>  <Typography variant="p">{item.label}</Typography>
+                {menuItems.map((item) => (
+                    <MenuItem
+                        key={item.label}
+                        onClick={() => handleMenuItemClick(item)}
+                        sx={{
+                            fontSize: '14px',
+                            display: 'flex',
+                            gap: '10px',
+                            p: '2px 20px',
+                            color: 'text.primary',
+                        }}
+                    >
+                        <Box color="primary.main">{item.icon}</Box>
+                        <Typography variant="body1">{item.label}</Typography>
                     </MenuItem>
-                )) : 
-                menuItems.map(item => (
-                    <MenuItem key={item.label} onClick={() => {
-                        item.onClick(params);
-                        handleClose();
-                      }} sx={{
-                        fontSize: '14px',
-                        display: 'flex',
-                        gap: '10px',
-                        p : '2px 20px',
-                        color : 'text.primary',
-                    }}>
-                      <Box color="primary.main" >{item.icon}</Box>  <Typography variant="p">{item.label}</Typography>
-                    </MenuItem>
-                ))
-                }
+                ))}
             </Menu>
-        </>
+        </Box>
     );
 }

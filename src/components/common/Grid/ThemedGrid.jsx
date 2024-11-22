@@ -38,7 +38,7 @@ console.log(">>>>>>>>count>>>>>>>.",props);
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height : 'calc(100vh - 250px)', overflowY : 'auto'
+        height : 'calc(100vh - 250px)', overflowY : 'auto',
       }}
 
     >

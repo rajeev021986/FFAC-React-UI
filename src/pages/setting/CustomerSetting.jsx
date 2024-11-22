@@ -192,6 +192,7 @@ const CustomerSetting = () => {
                         Pagination: () => null, // Hide the pagination component
                     }}
                     autoPageSize
+                    sx={{backgroundColor:"white.main"}}
                 />
             </div>
         </Grid>

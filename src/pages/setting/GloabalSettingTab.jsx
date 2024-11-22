@@ -116,7 +116,6 @@ const GlobalSetting = () => {
             }
             return acc;
         }, {});
-        console.log(filteredData, "filteredData")
         await addOptons({ body: { common_settings: filteredData }, type: "common_settings" }).then((res) =>{setError(`setting Updated Successufully`);setErrorType("success")}).catch(() => console.log("filteredData"))
        
     };
@@ -192,6 +191,7 @@ const GlobalSetting = () => {
                         Pagination: () => null, // Hide the pagination component
                     }}
                     autoPageSize
+                    sx={{backgroundColor:"white.main"}}
                 />
             </div>
         </Grid>

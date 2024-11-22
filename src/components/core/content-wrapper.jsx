@@ -16,9 +16,11 @@ export default function ContentWrapper({
         width: { sm: `calc(100% - ${hover ? expandedDrawerWidth : drawerWidth}px)` },
         transition: 'width 0.3s ease-in-out',
         mt: 5,
+        backgroundColor: 'white.main',
       }}
     >
       {children}
     </Box>
   )
 }
+  

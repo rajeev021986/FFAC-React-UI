@@ -1,4 +1,4 @@
-import { Avatar, Badge, Box, IconButton } from '@mui/material'
+import { Avatar, Badge, Box, IconButton, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
 import TMenu from '../common/TMenu'
 import { LogoutOutlined, NotificationsOutlined, PersonOutlined, SettingsOutlined } from '@mui/icons-material';
@@ -16,23 +16,18 @@ const styles = {
 }
 
 
-export default function UserCard() {
-    const { logout:auth0Logout } = useAuth0();
+export default function UserCard({ setDraweropen }) {
+    const { logout: auth0Logout } = useAuth0();
     const dispatch = useDispatch();
     const nav = useNavigate();
     const userInfo = useSelector(state => state.auth.user);
 
     const handleLogout = () => {
         dispatch(logout());
-        if(localStorage.getItem("authtype") === "auth0") auth0Logout()
+        if (localStorage.getItem("authtype") === "auth0") auth0Logout()
         nav('/');
     }
-    const MENU_ITEMS = [
-        {
-            label: 'Logout',
-            onClick: handleLogout,
-            icon: <LogoutOutlined />
-        },
+    const MENU_ITEMS = [ 
         {
             label: 'Profile',
             onClick: () => { },
@@ -40,31 +35,39 @@ export default function UserCard() {
         }
     ]
 
-    useEffect(()=>{
-        
-            MENU_ITEMS.push({
-                label: 'Settings',
-                onClick: () => {nav('/app/settings')},
-                icon: <SettingsOutlined />
-            })
-        
-    },[userInfo,MENU_ITEMS])
+    useEffect(() => {
+
+        MENU_ITEMS.push({
+            label: 'Settings',
+            onClick: () => { setDraweropen(true) },
+            icon: <SettingsOutlined />
+        })
+
+    }, [userInfo, MENU_ITEMS])
 
 
     return (
-        <Box display="flex" gap={3}>
+        <Box display="flex" gap={3} alignItems="center">
             <IconButton>
                 <Badge color="error" overlap="circular" variant="dot">
                     <NotificationsOutlined />
                 </Badge>
             </IconButton>
             <TMenu
-                // buttonIcon={<Avatar alt="Remy Sharp" sx={styles.avater}>
-                //     {userInfo ? userInfo?.firstname[0] : 'A'}
-                // </Avatar>}
+                buttonIcon={<Avatar alt="Remy Sharp" sx={styles.avater}>
+                    A
+                </Avatar>}
                 buttonProps={{ p: 0 }}
                 menuItems={MENU_ITEMS}
             />
+            <Typography variant="subtitle1" style={{ fontWeight: 500 }}>
+                Gana
+            </Typography>
+            <IconButton onClick={()=>handleLogout()}>
+                <LogoutOutlined />
+
+            </IconButton>
+
         </Box>
     )
 }

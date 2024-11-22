@@ -10,7 +10,8 @@ const initialState = {
   pol: [],
   pod: [],
   sortBy : '',
-  theme:"#026de0"
+  theme:"#026de0",
+  mode:false
 };
 
 const dashboardSlice = createSlice({
@@ -50,6 +51,9 @@ const dashboardSlice = createSlice({
     },
     setTheme: (state, action) => {
       state.theme = action.payload;
+    },
+    setMode: (state, action) => {
+      state.mode = action.payload;
     }
      
   }
@@ -62,6 +66,7 @@ export const {
     dashboardSetView,
     dashboardSetSortBy,
     dashboardSetSortModel,
-    setTheme
+    setTheme,
+    setMode
  } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

@@ -87,7 +87,7 @@ export default function CustomerScreen() {
   }, [codeCustomerSelector.view, dispatch]);
 
   return (
-    <Box>
+    <Box sx={{backgroundColor: 'white.main'}}>
       <ScreenToolbar
         leftComps={<ThemedBreadcrumb />}
         rightComps={
