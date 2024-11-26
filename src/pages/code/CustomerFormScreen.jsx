@@ -7,7 +7,7 @@ import CustomerForm from '../../components/screen/code/customer/CustomerForm';
 import { useFetchCustomerQuery } from '../../store/api/codeDataApi';
 import ApiManager from '../../services/ApiManager';
 import Loader from '../../components/common/Loader/Loader';
-export default function CustomerFormScreen() {
+export default function CustomerFormScreen({page}) {
   const [customerDatas, setcustomerDatas] = useState({});
   const [loading, setLoading] = useState(false);
   const { state } = useLocation();
@@ -104,7 +104,6 @@ export default function CustomerFormScreen() {
 
 
   }, []);
-  console.log(customerDatas.city, "customerDatas")
 
 
   React.useEffect(() => {
@@ -149,7 +148,8 @@ export default function CustomerFormScreen() {
         } />
         <CardContent>
           <CustomerForm
-            initialValues={initialValues} />
+            initialValues={initialValues} 
+            page={page}/>
         </CardContent>
       </Card>}
     </Box>

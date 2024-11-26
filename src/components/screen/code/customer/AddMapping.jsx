@@ -79,6 +79,7 @@ export default function AddMapping({ formik }) {
               value={row.chargeName}
               options={chargeNameOptions}
               formik={formik}
+              error={formik.errors?.customerEntityTariffs?.[index]?.chargeName}
               onChange={(value) => updateRow(index, "chargeName", value)}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
             />
@@ -92,6 +93,7 @@ export default function AddMapping({ formik }) {
               options={unitType}
               formik={formik}
               onChange={(value) => updateRow(index, "unitType", value)}
+              error={formik.errors?.customerEntityTariffs?.[index]?.unitType}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
             />
           </Grid>
@@ -104,6 +106,7 @@ export default function AddMapping({ formik }) {
               options={currencyOptions}
               formik={formik}
               onChange={(value) => updateRow(index, "currency", value)}
+              error={formik.errors?.customerEntityTariffs?.[index]?.currency}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
             />
           </Grid>
@@ -116,6 +119,7 @@ export default function AddMapping({ formik }) {
               options={shipmentTypeOption}
               formik={formik}
               onChange={(value) => updateRow(index, "shipmentType", value)}
+              error={formik.errors?.customerEntityTariffs?.[index]?.shipmentType}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
             />
           </Grid>
@@ -126,6 +130,7 @@ export default function AddMapping({ formik }) {
               id={`customerEntityTariffs-${index}-unitRate`}
               value={row.unitRate}
               onChange={(e) => updateRow(index, "unitRate", e.target.value)}
+              error={formik.errors?.customerEntityTariffs?.[index]?.unitRate}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
             />
           </Grid>

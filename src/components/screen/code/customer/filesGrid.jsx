@@ -3,7 +3,7 @@ import { Grid } from "@mui/material";
 import InputBox from "../../../common/InputBox";
 export default function filesGrid({ formik }) {
   const customerEntityEmailsIds = formik.values.customerEntityEmailsIds || [
-    { emailId :"", designation: "" },
+    { emailId: "", designation: "" },
   ];
   // Handler to update row data
   const updateRow = (index, field, value) => {
@@ -14,9 +14,9 @@ export default function filesGrid({ formik }) {
 
   return (
     <>
-     {customerEntityEmailsIds.map((row, index) => (
+      {customerEntityEmailsIds.map((row, index) => (
         <Grid container spacing={2} key={index} alignItems="center">
-        
+
           <Grid item xs={12} sm={3} lg={4}>
             <InputBox
               label="Designation"
@@ -24,6 +24,7 @@ export default function filesGrid({ formik }) {
               value={row.designation}
               onChange={(e) => updateRow(index, "designation", e.target.value)}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
+              error={formik.errors?.customerEntityEmailsIds?.[index]?.designation}
             />
           </Grid>
           <Grid item xs={12} sm={3} lg={6}>
@@ -33,9 +34,10 @@ export default function filesGrid({ formik }) {
               value={row.emailId}
               onChange={(e) => updateRow(index, "emailId", e.target.value)}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
+              error={formik.errors?.customerEntityEmailsIds?.[index]?.emailId}
             />
           </Grid>
-          
+
         </Grid>
       ))}
     </>

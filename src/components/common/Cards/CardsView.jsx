@@ -13,7 +13,8 @@ export default function CardsView({
   actions,
   icon,
   setSelectedBox,
-  seletectBox
+  seletectBox,
+  page
 }) {
   const handleCardPagination = (event, page) => {
     console.log(page);
@@ -53,6 +54,7 @@ export default function CardsView({
           uniqueId={item.id}
           actions={actions}
           icon={null}
+          page={page}
         />
       ))}
       {loading && (
