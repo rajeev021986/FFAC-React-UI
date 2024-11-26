@@ -75,6 +75,10 @@ class ApiManager {
         const url = ENDPOINTS.GET_CUSTOMER_DOCUMENT_FILE(source,id);
         return ApiMethods.get(url);
     }
+    static getCustomerDeatils = async (id) => {
+        const url = ENDPOINTS.GET_CUSTOMER_DETAILS(id);
+        return ApiMethods.get(url);
+    }
     static downloadDocumnent = async (id,source,sourceId) => {
         const url = ENDPOINTS.DOWNLOAD_DOCUMENT(id,source,sourceId);
         return ApiMethods.get(url);

@@ -11,7 +11,8 @@ const initialState = {
   pod: [],
   sortBy : '',
   theme:"#026de0",
-  mode:false
+  mode:false,
+  sessionExpiredmodule:false
 };
 
 const dashboardSlice = createSlice({
@@ -54,6 +55,9 @@ const dashboardSlice = createSlice({
     },
     setMode: (state, action) => {
       state.mode = action.payload;
+    },
+    setSessionExpiredmodule: (state, action) => {
+      state.sessionExpiredmodule = action.payload;
     }
      
   }
@@ -67,6 +71,7 @@ export const {
     dashboardSetSortBy,
     dashboardSetSortModel,
     setTheme,
-    setMode
+    setMode,
+    setSessionExpiredmodule
  } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

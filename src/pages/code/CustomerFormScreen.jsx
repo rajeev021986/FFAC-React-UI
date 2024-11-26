@@ -1,12 +1,48 @@
 import { Box, Card, CardContent, CardHeader, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import ScreenToolbar from '../../components/common/ScreenToolbar';
 import ThemedBreadcrumb from '../../components/common/Breadcrumb';
 import CustomerForm from '../../components/screen/code/customer/CustomerForm';
 import { useFetchCustomerQuery } from '../../store/api/codeDataApi';
+import ApiManager from '../../services/ApiManager';
+import Loader from '../../components/common/Loader/Loader';
 export default function CustomerFormScreen() {
+  const [customerDatas, setcustomerDatas] = useState({});
+  const [loading, setLoading] = useState(false);
   const { state } = useLocation();
+  const [initialValues, setInitialValues] = React.useState({
+    id: '',
+    city: '',
+    customerName: '',
+    accountNo: '',
+    telephone: '',
+    pinNo: '',
+    accountType: '',
+    vatNo: '',
+    add1: '',
+    add2: '',
+    add3: '',
+    bankName: '',
+    emailId: '',
+    creditDays: '',
+    creditAmount: '',
+    contactPerson: '',
+    country: '',
+    email: '',
+    fax: '',
+    chargeName: '',
+    state: '',
+    paymentType: 'cash',
+    status: 'ACTIVE',
+    url: '',
+    zipCode: '',
+    customerEntityTariffs: [],
+    agreementExpiryDate: '',
+    customerEntityEmailsIds: [],
+    ctypelist: 'CUSTOMER',
+    files: []
+  });
   const {
     data: mappingData,
     isError,
@@ -14,43 +50,63 @@ export default function CustomerFormScreen() {
     error,
     isFetching,
   } = useFetchCustomerQuery({
-    acode:state?.initialValues?.acode
+    acode: state?.initialValues?.acode
   });
 
-  
-  
-const [initialValues, setInitialValues] = React.useState({
-  id:state?.initialValues?.id || '',
-    city: state?.initialValues?.city || '',
-    customerName: state?.initialValues?.customerName || '',
-    accountNo: state?.initialValues?.accountNo || '',
-    telephone: state?.initialValues?.telephone || '',
-    pinNo: state?.initialValues?.pinNo || '',
-    accountType: state?.initialValues?.accountType || '',
-    vatNo: state?.initialValues?.vatNo || '',
-    add1: state?.initialValues?.add1 || '',
-    add2: state?.initialValues?.add2 || '',
-    add3: state?.initialValues?.add3 || '',
-    bankName: state?.initialValues?.bankName || '',
-    emailId: state?.initialValues?.emailId || '',
-    creditDays: state?.initialValues?.creditDays || '',
-    creditAmount: state?.initialValues?.creditAmount || '',
-    contactPerson: state?.initialValues?.contactPerson || '',
-    country: state?.initialValues?.country || '',
-    email : state?.initialValues?.email || '',
-    fax: state?.initialValues?.fax || '',
-    chargeName: state?.initialValues?.chargeName || '',
-    state : state?.initialValues?.state || '',
-    paymentType : state?.initialValues?.paymentType || 'cash',
-    status : state?.initialValues?.status || 'ACTIVE',
-    url : state?.initialValues?.url || '',
-    zipCode : state?.initialValues?.zipCode || '',
-    customerEntityTariffs: [],
-    agreementExpiryDate :state?.initialValues?.agreementExpiryDate || '',
-    customerEntityEmailsIds : [],
-    ctypelist:'CUSTOMER',
-    files: []
-  });
+  useEffect(() => {
+    const fetchCustomerDetails = async () => {
+      try {
+        setLoading(true)
+        const res = await ApiManager.getCustomerDeatils(state?.initialValues?.id);
+        setcustomerDatas(res.body)
+        setInitialValues({
+          id: res.body?.id || '',
+          city: res.body?.city || '',
+          customerName: res.body?.customerName || '',
+          accountNo: res.body?.accountNo || '',
+          telephone: res.body?.telephone || '',
+          pinNo: res.body?.pinNo || '',
+          accountType: res.body?.accountType || '',
+          vatNo: res.body?.vatNo || '',
+          add1: res.body?.add1 || '',
+          add2: res.body?.add2 || '',
+          add3: res.body?.add3 || '',
+          bankName: res.body?.bankName || '',
+          emailId: res.body?.emailId || '',
+          creditDays: res.body?.creditDays || '',
+          creditAmount: res.body?.creditAmount || '',
+          contactPerson: res.body?.contactPerson || '',
+          country: res.body?.country || '',
+          email: res.body?.email || '',
+          fax: res.body?.fax || '',
+          chargeName: res.body?.chargeName || '',
+          state: res.body?.state || '',
+          paymentType: res.body?.paymentType || 'cash',
+          status: res.body?.status || 'ACTIVE',
+          url: res.body?.url || '',
+          zipCode: res.body?.zipCode || '',
+          customerEntityTariffs: res.body?.customerEntityTariffs || [],
+          agreementExpiryDate: res.body?.agreementExpiryDate || '',
+          customerEntityEmailsIds: res.body?.customerEntityEmailsIds || [],
+          ctypelist: 'CUSTOMER',
+          files: []
+        })
+        setLoading(false)
+        console.log(res, "res");
+      } catch (error) {
+        console.error(error, "error");
+        setLoading(false)
+      }
+    };
+    if (state?.initialValues?.id) {
+      fetchCustomerDetails();
+    }
+
+
+  }, []);
+  console.log(customerDatas.city, "customerDatas")
+
+
   React.useEffect(() => {
     if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityTariffs) {
       setInitialValues((prevValues) => ({
@@ -58,13 +114,13 @@ const [initialValues, setInitialValues] = React.useState({
         customerEntityTariffs: mappingData.data[0]?.customerEntityTariffs || []
       }));
     }
-    else{
+    else {
       setInitialValues((prevValues) => ({
         ...prevValues,
-        customerEntityTariffs: [{ chargeName: "", unitType: "", 	currency: "" ,unitRate :""  }]
+        customerEntityTariffs: [{ chargeName: "", unitType: "", currency: "", unitRate: "" }]
       }));
     }
-   
+
   }, [mappingData, isLoading, isError]);
 
   React.useEffect(() => {
@@ -74,28 +130,28 @@ const [initialValues, setInitialValues] = React.useState({
         customerEntityEmailsIds: mappingData.data[0]?.customerEntityEmailsIds || []
       }));
     }
-    else{
+    else {
       setInitialValues((prevValues) => ({
         ...prevValues,
-        customerEntityEmailsIds: [{  designation :""  }]
+        customerEntityEmailsIds: [{ designation: "" }]
       }));
     }
-   
+
   }, [mappingData, isLoading, isError]);
   return (
     <Box>
       <ScreenToolbar leftComps={<div><ThemedBreadcrumb /></div>} rightComps={<div></div>} />
-      <Card  sx={{borderWidth : 1,borderColor : "border.main"}}>
+      {loading ? <Loader /> : <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader title={
           <Box display="flex" justifyContent={"space-between"}>
             <Typography variant='subtitle3' component='div'>Customer</Typography>
           </Box>
         } />
         <CardContent>
-        <CustomerForm
-            initialValues={initialValues}/>
+          <CustomerForm
+            initialValues={initialValues} />
         </CardContent>
-      </Card>
+      </Card>}
     </Box>
   )
 }

@@ -11,6 +11,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import AddIcon from "@mui/icons-material/Add";
 import { OutlinedButton } from "../../components/common/Button";
 import { useAddOptonsMutation, useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+import Loader from "../../components/common/Loader/Loader";
 
 const CustomerSetting = () => {
     const [backendData, setBackendData] = useState({ unitType: [], creditDays: [], });
@@ -117,7 +118,7 @@ const CustomerSetting = () => {
             return acc;
         }, {});
         await addOptons({ body: { customer_settings: filteredData }, type: "customer_setting" }).then((res) => { setError(`setting Updated Successufully`); setErrorType("success") }).catch(() => console.log("filteredData"))
-       
+
     };
 
     const createColumns = (type) => [
@@ -192,7 +193,7 @@ const CustomerSetting = () => {
                         Pagination: () => null, // Hide the pagination component
                     }}
                     autoPageSize
-                    sx={{backgroundColor:"white.main"}}
+                    sx={{ backgroundColor: "white.main" }}
                 />
             </div>
         </Grid>
@@ -219,10 +220,10 @@ const CustomerSetting = () => {
             </Grid> */}
 
             {/* Render the Grids */}
-            <Grid container spacing={2} flexWrap={"wrap"}>
+            {isLoading ? <Loader /> : <Grid container spacing={2} flexWrap={"wrap"}>
                 {renderGrid("Unit Type", "unitType")}
                 {renderGrid("Credit Days", "creditDays")}
-            </Grid>
+            </Grid>}
 
             {/* Save Button */}
             <Grid style={{ width: "100%", display: "flex", flexDirection: "row-reverse", marginTop: "10px" }}>

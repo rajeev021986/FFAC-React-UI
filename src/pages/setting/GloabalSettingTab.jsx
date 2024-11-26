@@ -11,13 +11,13 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import AddIcon from "@mui/icons-material/Add";
 import { OutlinedButton } from "../../components/common/Button";
 import { useAddOptonsMutation, useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+import Loader from "../../components/common/Loader/Loader";
 
 const GlobalSetting = () => {
     const [backendData, setBackendData] = useState({});
-    // const [getOptionsSettings]=useGetOptionsSettingsQuery();
     const [addOptons, { isloading }] = useAddOptonsMutation();
     const { data, isLoading, error: geterror } = useGetOptionsSettingsQuery("common_settings");
-    const [errortype,setErrorType]=useState("true");
+    const [errortype, setErrorType] = useState("true");
 
     useEffect(() => {
         if (data) {
@@ -116,8 +116,8 @@ const GlobalSetting = () => {
             }
             return acc;
         }, {});
-        await addOptons({ body: { common_settings: filteredData }, type: "common_settings" }).then((res) =>{setError(`setting Updated Successufully`);setErrorType("success")}).catch(() => console.log("filteredData"))
-       
+        await addOptons({ body: { common_settings: filteredData }, type: "common_settings" }).then((res) => { setError(`setting Updated Successufully`); setErrorType("success") }).catch(() => console.log("filteredData"))
+
     };
     const createColumns = (type) => [
         {
@@ -191,7 +191,7 @@ const GlobalSetting = () => {
                         Pagination: () => null, // Hide the pagination component
                     }}
                     autoPageSize
-                    sx={{backgroundColor:"white.main"}}
+                    sx={{ backgroundColor: "white.main" }}
                 />
             </div>
         </Grid>
@@ -200,11 +200,11 @@ const GlobalSetting = () => {
     return (
         <div style={{ padding: "1rem" }}>
             <Grid xs={12} sx={{ marginBottom: "10px" }} ><Typography variant="h4">Global Setting</Typography></Grid>
-            <Grid container spacing={2} flexWrap={"wrap"}>
+            {isLoading ? <Loader /> : <Grid container spacing={2} flexWrap={"wrap"}>
                 {renderGrid("Status", "status")}
                 {renderGrid("Account Type", "account_type")}
                 {renderGrid("Shipment Type", "shipmentType")}
-            </Grid>
+            </Grid>}
 
             <Grid style={{ width: "100%", display: "flex", flexDirection: "row-reverse", marginTop: "10px" }}>
                 <OutlinedButton color="primary" size="small" onClick={() => Postdata()}>

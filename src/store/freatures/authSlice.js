@@ -22,7 +22,7 @@ const authSlice = createSlice({
       localStorage.setItem("user", JSON.stringify({
         ...user,
         // set token expiration time : 5 days
-        expiresIn: new Date().getTime() + 1000 * 60 * 60 * 24 * 5
+        expiresIn: new Date().getTime() + 1000 * 60 * 1
       })); 
     },
     logout: (state) => {

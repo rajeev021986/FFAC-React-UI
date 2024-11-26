@@ -130,7 +130,7 @@ export default function CustomerScreen() {
               ariaLabel="Text-only  SpeedDial"
               sx={{
                 position: "absolute",
-                bottom: 340,
+                bottom: 565,
                 right: 16,
                 "& .MuiFab-root": {
                   width: 50, // Adjust main button width
@@ -158,7 +158,7 @@ export default function CustomerScreen() {
                     "&:hover": {
                       backgroundColor: "#e0e0e0",
                     },
-                    width: 32, // Reduce action button width
+                    width: 72, // Reduce action button width
                     height: 32, // Reduce action button height
                     minHeight: 32, // Ensure consistent sizing
                     "& .MuiSvgIcon-root": {

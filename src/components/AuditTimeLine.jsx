@@ -3,13 +3,14 @@ import React, { useEffect } from "react";
 import Timeline from "./Timeline";
 import { Button, Grid } from "@mui/material";
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
-function AuditTimeLine({ auditDetails, reloadDataHandler }) {
+import Loader from "./common/Loader/Loader";
+function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
   useEffect(() => {
     reloadDataHandler();
   }, [])
-  
+
   return (
-    <div>
+    <>{loading ? <Loader /> : <div>
       <Grid container justifyContent="flex-end" marginBottom={2}>
         <Button
           variant="contained"
@@ -21,7 +22,7 @@ function AuditTimeLine({ auditDetails, reloadDataHandler }) {
         </Button>
       </Grid>
       <Timeline data={auditDetails.body} />
-    </div>
+    </div>}</>
   )
 }
 

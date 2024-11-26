@@ -34,6 +34,7 @@ export default function CustomerForm({
   const [optionsCity, setCityOptions] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState(initialValues.files || []);
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
+  const [loading,setLoading]=useState(false);
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateCustomer] = useUpdateCustomerMutation();
 
@@ -121,10 +122,13 @@ export default function CustomerForm({
   let shouldShowTabs = Object.values(formik.values?.customerName).some(value => value !== "");
   const reloadDataHandler = async () => {
     try {
+      setLoading(true);
       const res = await ApiManager.getAuditDetails(initialValues.id);
       setEnquiryAuditDetails(res)
+      setLoading(false);
     } catch (error) {
       console.log(error)
+      setLoading(false);
     }
   };
   // const getFile = async () => {
@@ -669,6 +673,7 @@ export default function CustomerForm({
               <AuditTimeline
                 auditDetails={enquiryAuditDetails}
                 reloadDataHandler={reloadDataHandler}
+                loading={loading}
               />
             </TabPanel>
 
