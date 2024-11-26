@@ -1,5 +1,5 @@
 import { Box, CircularProgress, TablePagination } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import CardItem from "./CardItem";
 
 export default function CardsView({
@@ -12,6 +12,8 @@ export default function CardsView({
   uniqueId,
   actions,
   icon,
+  setSelectedBox,
+  seletectBox
 }) {
   const handleCardPagination = (event, page) => {
     console.log(page);
@@ -20,6 +22,8 @@ export default function CardsView({
       pageSize: paginationModel.pageSize,
     });
   };
+  // const [seletectBox, setSelectedBox] = useState([]);
+
   const handleChangeRowPerPage = (event) => {
     handlePage({
       page: paginationModel.page,
@@ -36,17 +40,19 @@ export default function CardsView({
         overflowY: "auto",
         position: "relative",
         pt: 2,
-        backgroundColor: 'white.main',
+        backgroundColor: "white.main",
       }}
     >
       {data?.map((item, index) => (
         <CardItem
+          key={item.id}
           item={item}
-          key={index}
           columns={columns}
-          uniqueId={uniqueId}
+          selectedBox={seletectBox}
+          setSelectedBox={setSelectedBox}
+          uniqueId={item.id}
           actions={actions}
-          icon={icon}
+          icon={null}
         />
       ))}
       {loading && (
@@ -74,7 +80,7 @@ export default function CardsView({
             rowsPerPageOptions={[10, 20, 50, 100]}
             color="primary"
             size="small"
-            sx={{ mergin: "auto", backgroundColor: 'white.main' }}
+            sx={{ mergin: "auto", backgroundColor: "white.main" }}
           />
         </Box>
       )}

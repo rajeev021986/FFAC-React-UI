@@ -1,10 +1,11 @@
-import React, { useMemo, useState, useRef } from 'react';
+import React, { useMemo, useState, useRef } from "react";
+import { useReactTable, flexRender } from "@tanstack/react-table";
 import {
-  useReactTable,
-  flexRender,
-} from '@tanstack/react-table';
-import { getCoreRowModel, getSortedRowModel, getFilteredRowModel } from '@tanstack/table-core';
-import { useVirtualizer } from '@tanstack/react-virtual';
+  getCoreRowModel,
+  getSortedRowModel,
+  getFilteredRowModel,
+} from "@tanstack/table-core";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   Table,
   TableBody,
@@ -15,14 +16,14 @@ import {
   TableSortLabel,
   TextField,
   Paper,
-} from '@mui/material';
+} from "@mui/material";
 
 // Global filter component for searching
 function GlobalFilter({ globalFilter, setGlobalFilter }) {
   return (
     <TextField
       label="Search"
-      value={globalFilter || ''}
+      value={globalFilter || ""}
       onChange={(e) => setGlobalFilter(e.target.value || undefined)}
       variant="outlined"
       margin="normal"
@@ -32,7 +33,7 @@ function GlobalFilter({ globalFilter, setGlobalFilter }) {
 }
 
 const VirtualGrid = ({ columns, data }) => {
-  const [globalFilter, setGlobalFilter] = useState('');
+  const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const parentRef = useRef();
 
@@ -64,22 +65,41 @@ const VirtualGrid = ({ columns, data }) => {
   });
 
   return (
-    <TableContainer component={Paper} ref={parentRef} style={{ height: 600, overflow: 'auto' }}>
-      <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+    <TableContainer
+      component={Paper}
+      ref={parentRef}
+      style={{ height: 600, overflow: "auto" }}
+    >
+      <GlobalFilter
+        globalFilter={globalFilter}
+        setGlobalFilter={setGlobalFilter}
+      />
 
       <Table stickyHeader>
         <TableHead>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableCell key={header.id} sx={{textAlign : "center",minWidth: header.column.columnDef.size,maxWidth : header.column.columnDef.size}}>
+                <TableCell
+                  key={header.id}
+                  sx={{
+                    textAlign: "center",
+                    minWidth: header.column.columnDef.size,
+                    maxWidth: header.column.columnDef.size,
+                  }}
+                >
                   {header.isPlaceholder ? null : (
                     <TableSortLabel
                       active={header.column.getIsSorted() !== false}
-                      direction={header.column.getIsSorted() === 'desc' ? 'desc' : 'asc'}
+                      direction={
+                        header.column.getIsSorted() === "desc" ? "desc" : "asc"
+                      }
                       onClick={header.column.getToggleSortingHandler()}
                     >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                     </TableSortLabel>
                   )}
                 </TableCell>
@@ -91,16 +111,30 @@ const VirtualGrid = ({ columns, data }) => {
           <div
             style={{
               height: `${rowVirtualizer.getTotalSize()}px`, // Total height of all rows
-              position: 'relative',
+              position: "relative",
             }}
           >
             {rowVirtualizer.getVirtualItems().map((virtualRow) => {
               const row = table.getRowModel().rows[virtualRow.index];
               return (
-                <TableRow key={row.id} style={{ position: 'absolute', top: virtualRow.start }}>
+                <TableRow
+                  key={row.id}
+                  style={{ position: "absolute", top: virtualRow.start }}
+                >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} sx={{textAlign : "center", minWidth : cell.column.columnDef.size, maxWidth : cell.column.columnDef.size, verticalAlign: 'middle'}}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <TableCell
+                      key={cell.id}
+                      sx={{
+                        textAlign: "center",
+                        minWidth: cell.column.columnDef.size,
+                        maxWidth: cell.column.columnDef.size,
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>

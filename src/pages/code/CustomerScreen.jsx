@@ -40,17 +40,31 @@ import { getCustomerListGridActions } from "../../components/screen/code/custome
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { useEffect } from "react";
 
+import Backdrop from "@mui/material/Backdrop";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+
 const ADD_NEW_CUSTOMER_PATH = "new";
+
+// const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
 
 export default function CustomerScreen() {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const [seletectBox, setSelectedBox] = useState([]);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
+
+  const [open, setOpen] = React.useState(false);
+  // const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
+  const actions = Boolean(seletectBox.length > 0)
+    ? [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }]
+    : [{ name: "Copy" }, { name: "New Client" }];
 
   const {
     data: CustomerData,
@@ -86,13 +100,23 @@ export default function CustomerScreen() {
     }
   }, [codeCustomerSelector.view, dispatch]);
 
+  const handleActionClick = (actionName) => {
+    if (actionName === "New Client") {
+      console.log("Navigating to New Client...");
+      nav(ADD_NEW_CUSTOMER_PATH, {
+        replace: true,
+        state: { formAction: "add" },
+      });
+    }
+  };
+
   return (
-    <Box sx={{backgroundColor: 'white.main'}}>
+    <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
         leftComps={<ThemedBreadcrumb />}
         rightComps={
           <>
-            <OutlinedButton
+            {/* <OutlinedButton
               color="primary"
               size="small"
               onClick={() =>
@@ -100,7 +124,56 @@ export default function CustomerScreen() {
               }
             >
               <AddCircleOutlineOutlined fontSize="small" /> New Client
-            </OutlinedButton>
+            </OutlinedButton> */}
+            <Backdrop open={open} />
+            <SpeedDial
+              ariaLabel="Text-only  SpeedDial"
+              sx={{
+                position: "absolute",
+                bottom: 340,
+                right: 16,
+                "& .MuiFab-root": {
+                  width: 50, // Adjust main button width
+                  height: 50, // Adjust main button height
+                  minHeight: 50, // Set minimum height
+                },
+              }}
+              icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
+              direction="left"
+            >
+              {actions.map((action) => (
+                <SpeedDialAction
+                  key={action.name}
+                  tooltipTitle=""
+                  sx={{
+                    display: "flex",
+                    // width: "150px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 2,
+                    borderRadius: 1,
+                    backgroundColor: "#f0f0f0",
+                    color: "black",
+                    boxShadow: 3,
+                    "&:hover": {
+                      backgroundColor: "#e0e0e0",
+                    },
+                    width: 32, // Reduce action button width
+                    height: 32, // Reduce action button height
+                    minHeight: 32, // Ensure consistent sizing
+                    "& .MuiSvgIcon-root": {
+                      fontSize: 16, // Adjust icon size
+                    },
+                  }}
+                  icon={
+                    <span style={{ fontSize: "12px", fontWeight: "bold" }}>
+                      {action.name}
+                    </span>
+                  }
+                  onClick={() => handleActionClick(action.name)}
+                ></SpeedDialAction>
+              ))}
+            </SpeedDial>
           </>
         }
       />
@@ -180,6 +253,8 @@ export default function CustomerScreen() {
             paginationModel={codeCustomerSelector?.pagination}
             loading={isLoading || isFetching}
             actions={getCustomerListGridActions(nav, setModal)}
+            setSelectedBox={setSelectedBox}
+            seletectBox={seletectBox}
           />
         )}
       </Card>
