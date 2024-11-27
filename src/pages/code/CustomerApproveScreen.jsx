@@ -47,9 +47,10 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 const ADD_NEW_CUSTOMER_PATH = "new";
 
+
 // const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
 
-export default function CustomerScreen() {
+export default function CustomerApproveScreen({page}) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -112,69 +113,6 @@ export default function CustomerScreen() {
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
-      <ScreenToolbar
-        leftComps={<ThemedBreadcrumb />}
-        rightComps={
-          <>
-            {/* <OutlinedButton
-              color="primary"
-              size="small"
-              onClick={() =>
-                nav(ADD_NEW_CUSTOMER_PATH,  { replace :true , state: { formAction: "add" } })
-              }
-            >
-              <AddCircleOutlineOutlined fontSize="small" /> New Client
-            </OutlinedButton> */}
-            <Backdrop open={open} />
-            <SpeedDial
-              ariaLabel="Text-only  SpeedDial"
-              sx={{
-                position: "absolute",
-                bottom: 340,
-                right: 16,
-                "& .MuiFab-root": {
-                  width: "40px", 
-                  height: "40px"
-                },
-              }}
-              icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
-              direction="left"
-            >
-              {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  tooltipTitle=""
-                  sx={{
-                    display: "flex",
-                    // width: "150px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: 2,
-                    borderRadius: 1,
-                    backgroundColor: "#f0f0f0",
-                    color: "black",
-                    boxShadow: 3,
-                    "&:hover": {
-                      backgroundColor: "#e0e0e0",
-                    },
-                    width: 72, // Reduce action button width
-                    minWidth: 92, // Ensure consistent sizing
-                    "& .MuiSvgIcon-root": {
-                      fontSize: 16, // Adjust icon size
-                    },
-                  }}
-                  icon={
-                    <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                      {action.name}
-                    </span>
-                  }
-                  onClick={() => handleActionClick(action.name)}
-                ></SpeedDialAction>
-              ))}
-            </SpeedDial>
-          </>
-        }
-      />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
           title={
@@ -253,6 +191,7 @@ export default function CustomerScreen() {
             actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
+            
           />
         )}
       </Card>

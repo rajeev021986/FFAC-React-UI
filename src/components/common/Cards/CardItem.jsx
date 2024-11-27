@@ -37,7 +37,7 @@ export default function CardItem({
     <Box sx={styles.root_item}>
       {/* Checkbox at the start */}
       <Box sx={styles.card_left_box}>
-        <Checkbox
+        <Checkbox 
           checked={selectedBox.includes(uniqueId)}
           onChange={handleCheckboxChange}
           color="primary"
