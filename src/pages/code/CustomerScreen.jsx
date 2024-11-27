@@ -21,7 +21,7 @@ import { OutlinedButton } from "../../components/common/Button";
 import { replace, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-import { useFetchCustomerQuery } from "../../store/api/codeDataApi";
+import { useFetchCustomerDatasQuery, useFetchCustomerQuery } from "../../store/api/codeDataApi";
 import CustomerFilters from "../../components/screen/code/customer/CustomerFilters";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -44,12 +44,13 @@ import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
 
 const ADD_NEW_CUSTOMER_PATH = "new";
 
 // const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
 
-export default function CustomerScreen() {
+export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -59,31 +60,44 @@ export default function CustomerScreen() {
     type: "",
     data: {},
   });
-
   const [open, setOpen] = React.useState(false);
-  // const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
   const actions = Boolean(seletectBox.length > 0)
-    ? [{ name: "Copy" }, { name: "Export" }, { name: "New Customer" }]
-    : [{ name: "Copy" }, { name: "New Customer" }];
-
-  const {
-    data: CustomerData,
-    isError,
-    isLoading,
-    error,
-    isFetching,
-  } = useFetchCustomerQuery({
+    ? [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }]
+    : [{ name: "Copy" }, { name: "New Client" }];
+  const query = {
     page: codeCustomerSelector?.pagination?.page + 1,
-    perPage: codeCustomerSelector?.pagination?.pageSize,
-    orderBy:
+    size: codeCustomerSelector?.pagination?.pageSize,
+    sortBy: codeCustomerSelector.sortModel.length > 0
+      ? codeCustomerSelector.sortModel[0].field
+      : codeCustomerSelector?.sortBy?.split('*')[0],
+    sortOrder: codeCustomerSelector.sortModel.length > 0
+      ? codeCustomerSelector?.sortModel[0]?.sort
+      : codeCustomerSelector?.sortBy?.split('*')[1] || ""
+  };
+  if (
+    Boolean(
       codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector.sortModel[0].field +
-          "*" +
-          codeCustomerSelector?.sortModel[0]?.sort
-        : codeCustomerSelector?.sortBy,
-    ...codeCustomerSelector?.formData,
+        ? codeCustomerSelector.sortModel[0].field === "cname"
+        : codeCustomerSelector?.sortBy?.split('*')[0] === "cname"
+    )
+  ) {
+    query.sortBy = "customerName";
+  }
+  const payload = Object.entries(codeCustomerSelector?.formData).filter(([key, value]) => value).map(([key, value]) => {
+    let fieldname = key;
+    Boolean(key == "cname") && (fieldname = "customerName");
+    return {
+      fieldName: fieldname,
+      operator: "=",
+      value: value,
+      logicalOperator: "or",
+    };
   });
 
+  const { data: CustomerData, isLoading, isError, error, isFetching, } = useFetchCustomerDatasQuery({
+    params: query,
+    payload,
+  });
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
@@ -93,6 +107,10 @@ export default function CustomerScreen() {
     GridActions({
       actions: getCustomerListGridActions(nav, setModal),
     });
+  // CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
+  // GridActions({
+  //   actions: getCustomerListGridActionsCustomerApprovel((nav, setModal)),
+  // });  
 
   useEffect(() => {
     if (!codeCustomerSelector.view) {
@@ -101,7 +119,7 @@ export default function CustomerScreen() {
   }, [codeCustomerSelector.view, dispatch]);
 
   const handleActionClick = (actionName) => {
-    if (actionName === "New Customer") {
+    if (actionName === "New Client") {
       console.log("Navigating to New Client...");
       nav(ADD_NEW_CUSTOMER_PATH, {
         replace: true,
@@ -126,15 +144,16 @@ export default function CustomerScreen() {
               <AddCircleOutlineOutlined fontSize="small" /> New Client
             </OutlinedButton> */}
             <Backdrop open={open} />
-            <SpeedDial
+            {page == "customer" && <SpeedDial
               ariaLabel="Text-only  SpeedDial"
               sx={{
                 position: "absolute",
-                bottom: 340,
+                bottom: 565,
                 right: 16,
                 "& .MuiFab-root": {
-                  width: "40px", 
-                  height: "40px"
+                  width: 50, // Adjust main button width
+                  height: 50, // Adjust main button height
+                  minHeight: 50, // Set minimum height
                 },
               }}
               icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
@@ -158,7 +177,8 @@ export default function CustomerScreen() {
                       backgroundColor: "#e0e0e0",
                     },
                     width: 72, // Reduce action button width
-                    minWidth: 92, // Ensure consistent sizing
+                    height: 32, // Reduce action button height
+                    minHeight: 32, // Ensure consistent sizing
                     "& .MuiSvgIcon-root": {
                       fontSize: 16, // Adjust icon size
                     },
@@ -171,7 +191,7 @@ export default function CustomerScreen() {
                   onClick={() => handleActionClick(action.name)}
                 ></SpeedDialAction>
               ))}
-            </SpeedDial>
+            </SpeedDial>}
           </>
         }
       />
@@ -229,11 +249,11 @@ export default function CustomerScreen() {
           <ThemedGrid
             uniqueId="id"
             columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.length}
+            count={CustomerData?.body?.data?.length}
             handlePage={handlePage}
-            data={CustomerData?.body}
+            data={CustomerData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
+            columnVisibilityHandler={() => { }}
             paginationModel={codeCustomerSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={codeCustomerSelector.sortModel}
@@ -245,14 +265,15 @@ export default function CustomerScreen() {
           <CardsView
             uniqueId="id"
             columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.length}
+            count={CustomerData?.body?.data?.length}
             handlePage={handlePage}
-            data={CustomerData?.body}
+            data={CustomerData?.body?.data}
             paginationModel={codeCustomerSelector?.pagination}
             loading={isLoading || isFetching}
             actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
+            page={page}
           />
         )}
       </Card>

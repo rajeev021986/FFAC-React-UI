@@ -14,7 +14,6 @@ export const codeDataApi = createApi({
             },
             providesTags: ["Code"],
         }),
-
         addCustomer: builder.mutation({
             query: (params) => {
                 const headers = {
@@ -74,7 +73,7 @@ export const codeDataApi = createApi({
         uploadCustomerFile: builder.mutation({
             query: (params) => {
                 const formData = new FormData();
-                formData.append('file', params.file); 
+                formData.append('file', params.file);
                 const entityFileBlob = new Blob([JSON.stringify(params.entityFile)], { type: 'application/json' });
                 formData.append('entityFile', entityFileBlob);
 
@@ -100,10 +99,33 @@ export const codeDataApi = createApi({
         }),
         downloadDocumnent: builder.mutation({
             query: (params) => {
-                return { url: `/file/download?${params.id}`,body:params.body, method: "GET", headers: getAppHeaders() };
+                return { url: `/file/download?${params.id}`, body: params.body, method: "GET", headers: getAppHeaders() };
             },
         }),
+        // fetchCustomerDatas: builder.query({
+        //     query: (params, payload) => {
+        //         const queryString = new URLSearchParams(params).toString();
+        //         return { url: `/entity-service/customer/filter?${queryString}`, method: "POST", body: payload, headers: getAppHeaders() };
+        //     },
+        //     providesTags: ["Code"],
+        // }),
+        fetchCustomerDatas: builder.query({
+            query: ({ params, payload }) => {
+                const queryString = new URLSearchParams(params).toString();
+                const headers = {
+                    Authorization: getAppHeaders()['Authorization'],
+                };
+                return {
+                    url: `/entity-service/customer/filter?${queryString}`,
+                    method: "POST",
+                    body: payload,
+                    headers,
+                };
+            },
+            providesTags: ["Code"],
+        }),
+
     }),
 });
 
-export const { useFetchCustomerQuery, useAddCustomerMutation, useUpdateCustomerMutation, useFetchPartyQuery, useAddPartyMutation, useFetchAgentQuery, useAddAgentMutation, useUploadCustomerFileMutation, useGetCustomerFileListMutation,useDownloadDocumnentMutation } = codeDataApi;
+export const { useFetchCustomerQuery, useAddCustomerMutation, useUpdateCustomerMutation, useFetchPartyQuery, useAddPartyMutation, useFetchAgentQuery, useAddAgentMutation, useUploadCustomerFileMutation, useGetCustomerFileListMutation, useDownloadDocumnentMutation, useFetchCustomerDatasQuery } = codeDataApi;

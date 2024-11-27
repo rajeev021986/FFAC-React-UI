@@ -42,20 +42,27 @@ function App() {
           />
           <Route path="/app" element={<Layout />}>
             <Route index element={<DashboardScreen />} />
-            <Route path="entity/customer" element={<Component />} />
+            <Route
+              path="entity/customer"
+              element={<Component page="customer" />}
+            />
+            <Route
+              path="entity/approve"
+              element={<Component page="customerApprove" />}
+            />
             <Route
               path="entity/customer/new"
               element={<CustomerFormScreen />}
             />
             <Route
               path="entity/customer/editcustomer"
-              element={<CustomerFormScreen />}
-            />
-            <Route
-              path="entity/customer/approve"
-              element={<CustomerApproveScreen page="customerApprove" />}
+              element={<CustomerFormScreen page="customer" />}
             />
             <Route path="entity/vendor" element={<VendorScreen />} />
+            <Route
+              path="entity/approve/approveRequest"
+              element={<CustomerFormScreen page="customerApprove" />}
+            />
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>

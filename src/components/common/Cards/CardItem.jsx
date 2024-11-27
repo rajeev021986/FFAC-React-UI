@@ -12,6 +12,7 @@ export default function CardItem({
   uniqueId,
   actions,
   icon,
+  page
 }) {
   const handleCheckboxChange = (event) => {
     if (event.target.checked) {
@@ -36,13 +37,13 @@ export default function CardItem({
   return (
     <Box sx={styles.root_item}>
       {/* Checkbox at the start */}
-      <Box sx={styles.card_left_box}>
-        <Checkbox 
+     {page =="customer" && <Box sx={styles.card_left_box}>
+        <Checkbox
           checked={selectedBox.includes(uniqueId)}
           onChange={handleCheckboxChange}
           color="primary"
         />
-      </Box>
+      </Box>}
 
       {/* Icon and details */}
       <Box sx={styles.card_left_box}>
@@ -63,7 +64,6 @@ export default function CardItem({
       </Grid>
 
       <Box>
-        {/* action */}
         <TMenu
           buttonIcon={<MoreVert />}
           buttonProps={{ color: "text.secondary" }}

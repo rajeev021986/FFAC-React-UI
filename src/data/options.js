@@ -124,8 +124,8 @@ export const OTM_BOL_SORT_OPTIONS = [
 
 
 export const CUSTOMER_SORT_OPTIONS = [
-  { value: "acode*asc", label: "Code Ascending" },
-  { value: "acode*desc", label: "Code Descending" },
+  // { value: "acode*asc", label: "Code Ascending" },
+  // { value: "acode*desc", label: "Code Descending" },
   { value: "cname*asc", label: "Customer Ascending" },
   { value: "cname*desc", label: "Customer Descending" },
   { value: "country*asc", label: "Country Ascending" },

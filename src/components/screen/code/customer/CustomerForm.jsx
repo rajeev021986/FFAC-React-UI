@@ -26,6 +26,7 @@ import { UploadFileOutlined } from "@mui/icons-material";
 
 export default function CustomerForm({
   initialValues,
+  page
 }) {
 
 
@@ -34,7 +35,7 @@ export default function CustomerForm({
   const [optionsCity, setCityOptions] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState(initialValues.files || []);
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateCustomer] = useUpdateCustomerMutation();
 
@@ -62,7 +63,7 @@ export default function CustomerForm({
 
       if (values?.id == "") {
         try {
-          let response = await addCustomer(values).unwrap();
+          let response = await updateCustomer(values).unwrap();
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
@@ -381,7 +382,7 @@ export default function CustomerForm({
           </Box>
         </Grid>
 
-        <Grid item xs={12}>
+        {page == "customer" && <Grid item xs={12}>
           <Stack direction="row" spacing={2} justifyContent="space-between">
 
             <Stack direction="row" spacing={2}>
@@ -394,7 +395,19 @@ export default function CustomerForm({
               </ThemeButton>
             </Stack>
           </Stack>
-        </Grid>
+        </Grid>}
+        {page == "customerApprove" && <Grid item xs={12}>
+          <Stack direction="row" spacing={2} justifyContent="space-between">
+
+            <Stack direction="row" spacing={2}>
+              <ThemeButton
+                sx={{ fontWeight: "500" }}
+              >
+                {isLoading && <CircularProgress size={20} color="white" />} Approve request
+              </ThemeButton>
+            </Stack>
+          </Stack>
+        </Grid>}
 
         <PopupAlert alertConfig={alertConfig} />
       </Grid></> : <>
