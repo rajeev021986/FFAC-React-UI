@@ -48,6 +48,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
+import { columnGroupsStateInitializer } from "@mui/x-data-grid/internals";
 
 const ADD_NEW_CUSTOMER_PATH = "new";
 
@@ -57,17 +58,16 @@ export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const [seletectBox, setSelectedBox] = useState('');
+  const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
   const [open, setOpen] = React.useState(false);
-  const actions =
-    seletectBox
-      ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
-      : [{ name: "New Customer" }];
+  const actions = seletectBox
+    ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
+    : [{ name: "New Customer" }];
   const query = {
     page: codeCustomerSelector?.pagination?.page + 1,
     size: codeCustomerSelector?.pagination?.pageSize,
@@ -140,11 +140,16 @@ export default function CustomerScreen({ page }) {
   }, [codeCustomerSelector.view, dispatch]);
 
   const handleActionClick = (actionName) => {
+    console.log(actionName, "action Name");
     if (actionName === "New Customer") {
-      console.log("Navigating to New Client...");
       nav(ADD_NEW_CUSTOMER_PATH, {
         replace: true,
         state: { formAction: "add" },
+      });
+    }
+    if (actionName === "Copy") {
+      nav(`editcustomer`, {state: {formAction: "edit", initialValues: {id: seletectBox}, type:"copy"},
+  
       });
     }
   };

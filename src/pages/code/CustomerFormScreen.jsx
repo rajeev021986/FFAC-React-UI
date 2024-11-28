@@ -11,6 +11,7 @@ export default function CustomerFormScreen({page}) {
   const [customerDatas, setcustomerDatas] = useState({});
   const [loading, setLoading] = useState(false);
   const { state } = useLocation();
+  // console.log(state, 'state')
   const [initialValues, setInitialValues] = React.useState({
     id: '',
     city: '',
@@ -43,15 +44,15 @@ export default function CustomerFormScreen({page}) {
     ctypelist: 'CUSTOMER',
     files: []
   });
-  const {
-    data: mappingData,
-    isError,
-    isLoading,
-    error,
-    isFetching,
-  } = useFetchCustomerQuery({
-    acode: state?.initialValues?.acode
-  });
+  // const {
+  //   data: mappingData,
+  //   isError,
+  //   isLoading,
+  //   error,
+  //   isFetching,
+  // } = useFetchCustomerQuery({
+  //   acode: state?.initialValues?.acode
+  // });
 
   useEffect(() => {
     const fetchCustomerDetails = async () => {
@@ -106,37 +107,37 @@ export default function CustomerFormScreen({page}) {
   }, []);
 
 
-  React.useEffect(() => {
-    if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityTariffs) {
-      setInitialValues((prevValues) => ({
-        ...prevValues,
-        customerEntityTariffs: mappingData.data[0]?.customerEntityTariffs || []
-      }));
-    }
-    else {
-      setInitialValues((prevValues) => ({
-        ...prevValues,
-        customerEntityTariffs: [{ chargeName: "", unitType: "", currency: "", unitRate: "" }]
-      }));
-    }
+  // React.useEffect(() => {
+  //   if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityTariffs) {
+  //     setInitialValues((prevValues) => ({
+  //       ...prevValues,
+  //       customerEntityTariffs: mappingData.data[0]?.customerEntityTariffs || []
+  //     }));
+  //   }
+  //   else {
+  //     setInitialValues((prevValues) => ({
+  //       ...prevValues,
+  //       customerEntityTariffs: [{ chargeName: "", unitType: "", currency: "", unitRate: "" }]
+  //     }));
+  //   }
 
-  }, [mappingData, isLoading, isError]);
+  // }, [mappingData, isLoading, isError]);
 
-  React.useEffect(() => {
-    if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityEmailsIds) {
-      setInitialValues((prevValues) => ({
-        ...prevValues,
-        customerEntityEmailsIds: mappingData.data[0]?.customerEntityEmailsIds || []
-      }));
-    }
-    else {
-      setInitialValues((prevValues) => ({
-        ...prevValues,
-        customerEntityEmailsIds: [{ designation: "" }]
-      }));
-    }
+  // React.useEffect(() => {
+  //   if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityEmailsIds) {
+  //     setInitialValues((prevValues) => ({
+  //       ...prevValues,
+  //       customerEntityEmailsIds: mappingData.data[0]?.customerEntityEmailsIds || []
+  //     }));
+  //   }
+  //   else {
+  //     setInitialValues((prevValues) => ({
+  //       ...prevValues,
+  //       customerEntityEmailsIds: [{ designation: "" }]
+  //     }));
+  //   }
 
-  }, [mappingData, isLoading, isError]);
+  // }, [mappingData, isLoading, isError]);
   return (
     <Box>
       <ScreenToolbar leftComps={<div><ThemedBreadcrumb /></div>} rightComps={<div></div>} />
@@ -149,6 +150,7 @@ export default function CustomerFormScreen({page}) {
         <CardContent>
           <CustomerForm
             initialValues={initialValues} 
+            type={state?.type}
             page={page}/>
         </CardContent>
       </Card>}

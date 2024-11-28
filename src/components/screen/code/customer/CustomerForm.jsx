@@ -42,7 +42,7 @@ import UploadFile from "../../../UploadFile";
 import { UploadFileOutlined } from "@mui/icons-material";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 
-export default function CustomerForm({ initialValues, page }) {
+export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
@@ -76,7 +76,7 @@ export default function CustomerForm({ initialValues, page }) {
     enableReinitialize: true,
     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
-      if (values?.id == "") { 
+      if (value.id =="" || type == "copy" ) { 
         try {
           values.approveRequest = dropdownData?.approval_request;
           let response = await updateCustomer(values).unwrap();
