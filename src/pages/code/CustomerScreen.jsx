@@ -21,7 +21,10 @@ import { OutlinedButton } from "../../components/common/Button";
 import { replace, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-import { useFetchCustomerDatasQuery, useFetchCustomerQuery } from "../../store/api/codeDataApi";
+import {
+  useFetchCustomerDatasQuery,
+  useFetchCustomerQuery,
+} from "../../store/api/codeDataApi";
 import CustomerFilters from "../../components/screen/code/customer/CustomerFilters";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -62,16 +65,16 @@ export default function CustomerScreen({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = Boolean(seletectBox.length > 0)
-    ? [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }]
-    : [{ name: "Copy" }, { name: "New Client" }];
+    ? [{ name: "Copy" }, { name: "Export" }, { name: "New Customer" }]
+    : [{ name: "Copy" }, { name: "New Customer" }];
   const query = {
     page: codeCustomerSelector?.pagination?.page + 1,
     size: codeCustomerSelector?.pagination?.pageSize,
     sortBy: codeCustomerSelector.sortModel.length > 0
-      ? codeCustomerSelector.sortModel[0].field
+        ? codeCustomerSelector.sortModel[0].field
       : codeCustomerSelector?.sortBy?.split('*')[0],
     sortOrder: codeCustomerSelector.sortModel.length > 0
-      ? codeCustomerSelector?.sortModel[0]?.sort
+        ? codeCustomerSelector?.sortModel[0]?.sort
       : codeCustomerSelector?.sortBy?.split('*')[1] || ""
   };
   if (
@@ -84,17 +87,23 @@ export default function CustomerScreen({ page }) {
     query.sortBy = "customerName";
   }
   const payload = Object.entries(codeCustomerSelector?.formData).filter(([key, value]) => value).map(([key, value]) => {
-    let fieldname = key;
-    Boolean(key == "cname") && (fieldname = "customerName");
-    return {
-      fieldName: fieldname,
-      operator: "=",
-      value: value,
-      logicalOperator: "or",
-    };
-  });
+      let fieldname = key;
+      Boolean(key == "cname") && (fieldname = "customerName");
+      return {
+        fieldName: fieldname,
+        operator: "=",
+        value: value,
+        logicalOperator: "or",
+      };
+    });
 
-  const { data: CustomerData, isLoading, isError, error, isFetching, } = useFetchCustomerDatasQuery({
+  const {
+    data: CustomerData,
+    isLoading,
+    isError,
+    error,
+    isFetching,
+  } = useFetchCustomerDatasQuery({
     params: query,
     payload,
   });
@@ -105,12 +114,16 @@ export default function CustomerScreen({ page }) {
 
   CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
     GridActions({
-      actions: getCustomerListGridActions(nav, setModal),
+      actions:page== "customer"? getCustomerListGridActions(nav, setModal) :getCustomerListGridActionsCustomerApprovel((nav, setModal)),
     });
+  // CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
+  //   GridActions({
+  //     actions: getCustomerListGridActions(nav, setModal),
+  //   });
   // CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
   // GridActions({
   //   actions: getCustomerListGridActionsCustomerApprovel((nav, setModal)),
-  // });  
+  // });
 
   useEffect(() => {
     if (!codeCustomerSelector.view) {
@@ -119,7 +132,7 @@ export default function CustomerScreen({ page }) {
   }, [codeCustomerSelector.view, dispatch]);
 
   const handleActionClick = (actionName) => {
-    if (actionName === "New Client") {
+    if (actionName === "New Customer") {
       console.log("Navigating to New Client...");
       nav(ADD_NEW_CUSTOMER_PATH, {
         replace: true,
@@ -144,54 +157,52 @@ export default function CustomerScreen({ page }) {
               <AddCircleOutlineOutlined fontSize="small" /> New Client
             </OutlinedButton> */}
             <Backdrop open={open} />
-            {page == "customer" && <SpeedDial
-              ariaLabel="Text-only  SpeedDial"
-              sx={{
-                position: "absolute",
-                bottom: 565,
-                right: 16,
-                "& .MuiFab-root": {
-                  width: 50, // Adjust main button width
-                  height: 50, // Adjust main button height
-                  minHeight: 50, // Set minimum height
-                },
-              }}
-              icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
-              direction="left"
-            >
-              {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  tooltipTitle=""
-                  sx={{
-                    display: "flex",
-                    // width: "150px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: 2,
-                    borderRadius: 1,
-                    backgroundColor: "#f0f0f0",
-                    color: "black",
-                    boxShadow: 3,
-                    "&:hover": {
-                      backgroundColor: "#e0e0e0",
-                    },
-                    width: 72, // Reduce action button width
-                    height: 32, // Reduce action button height
-                    minHeight: 32, // Ensure consistent sizing
-                    "& .MuiSvgIcon-root": {
-                      fontSize: 16, // Adjust icon size
-                    },
-                  }}
-                  icon={
-                    <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                      {action.name}
-                    </span>
-                  }
-                  onClick={() => handleActionClick(action.name)}
-                ></SpeedDialAction>
-              ))}
-            </SpeedDial>}
+            {page == "customer" && (
+              <SpeedDial
+                ariaLabel="Text-only  SpeedDial"
+                sx={{
+                  "& .MuiFab-root": {
+                    width: 40, // Adjust main button width
+                    height: 40, // Adjust main button height
+                    minHeight: 40, // Set minimum height
+                  },
+                }}
+                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
+                direction="left"
+              >
+                {actions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    tooltipTitle=""
+                    sx={{
+                      display: "flex",
+                      // width: "150px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 2,
+                      borderRadius: 1,
+                      backgroundColor: "#f0f0f0",
+                      color: "black",
+                      boxShadow: 3,
+                      "&:hover": {
+                        backgroundColor: "#e0e0e0",
+                      },
+                      width: 72, // Reduce action button width
+                      minWidth: 92, // Ensure consistent sizing
+                      "& .MuiSvgIcon-root": {
+                        fontSize: 16, // Adjust icon size
+                      },
+                    }}
+                    icon={
+                      <span style={{ fontSize: "12px", fontWeight: "bold" }}>
+                        {action.name}
+                      </span>
+                    }
+                    onClick={() => handleActionClick(action.name)}
+                  ></SpeedDialAction>
+                ))}
+              </SpeedDial>
+            )}
           </>
         }
       />
@@ -253,7 +264,7 @@ export default function CustomerScreen({ page }) {
             handlePage={handlePage}
             data={CustomerData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => { }}
+            columnVisibilityHandler={() => {}}
             paginationModel={codeCustomerSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={codeCustomerSelector.sortModel}
@@ -270,7 +281,12 @@ export default function CustomerScreen({ page }) {
             data={CustomerData?.body?.data}
             paginationModel={codeCustomerSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={getCustomerListGridActions(nav, setModal)}
+            actions={
+              page == "customer"
+                ? getCustomerListGridActions(nav, setModal)
+                : getCustomerListGridActionsCustomerApprovel(nav, setModal)
+            }
+            // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
             page={page}
