@@ -16,17 +16,18 @@ export default function CardItem({
 }) {
   const handleCheckboxChange = (event) => {
     if (event.target.checked) {
-      setSelectedBox((prev) => {
-        const updated = [...prev, uniqueId];
-        console.log("Selected IDs after adding:", updated);
-        return updated;
-      });
+      // setSelectedBox((prev) => {
+      //   const updated = [...prev, uniqueId];
+      //   console.log("Selected IDs after adding:", updated);
+      //   return updated;
+      return setSelectedBox(uniqueId);
     } else {
-      setSelectedBox((prev) => {
-        const updated = prev.filter((id) => id !== uniqueId);
-        console.log("Selected IDs after removing:", updated);
-        return updated;
-      });
+      // setSelectedBox((prev) => {
+      //   const updated = prev.filter((id) => id !== uniqueId);
+      //   console.log("Selected IDs after removing:", updated);
+      //   return updated;
+      // });
+      setSelectedBox('')
     }
   };
   // Remove id and action columns
@@ -42,7 +43,7 @@ export default function CardItem({
           sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
         >
           <Checkbox
-            checked={selectedBox.includes(uniqueId)}
+            checked={selectedBox == uniqueId}
             onChange={handleCheckboxChange}
             color="primary"
           />

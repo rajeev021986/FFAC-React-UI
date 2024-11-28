@@ -57,25 +57,28 @@ export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const [seletectBox, setSelectedBox] = useState([]);
+  const [seletectBox, setSelectedBox] = useState('');
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
   const [open, setOpen] = React.useState(false);
-  const actions = Boolean(seletectBox.length > 0)
-    ? [{ name: "Copy" }, { name: "Export" }, { name: "New Customer" }]
-    : [{ name: "Copy" }, { name: "New Customer" }];
+  const actions =
+    seletectBox
+      ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
+      : [{ name: "New Customer" }];
   const query = {
     page: codeCustomerSelector?.pagination?.page + 1,
     size: codeCustomerSelector?.pagination?.pageSize,
-    sortBy: codeCustomerSelector.sortModel.length > 0
+    sortBy:
+      codeCustomerSelector.sortModel.length > 0
         ? codeCustomerSelector.sortModel[0].field
-      : codeCustomerSelector?.sortBy?.split('*')[0],
-    sortOrder: codeCustomerSelector.sortModel.length > 0
+        : codeCustomerSelector?.sortBy?.split("*")[0],
+    sortOrder:
+      codeCustomerSelector.sortModel.length > 0
         ? codeCustomerSelector?.sortModel[0]?.sort
-      : codeCustomerSelector?.sortBy?.split('*')[1] || ""
+        : codeCustomerSelector?.sortBy?.split("*")[1] || "",
   };
   if (
     Boolean(
@@ -86,7 +89,9 @@ export default function CustomerScreen({ page }) {
   ) {
     query.sortBy = "customerName";
   }
-  const payload = Object.entries(codeCustomerSelector?.formData).filter(([key, value]) => value).map(([key, value]) => {
+  const payload = Object.entries(codeCustomerSelector?.formData)
+    .filter(([key, value]) => value)
+    .map(([key, value]) => {
       let fieldname = key;
       Boolean(key == "cname") && (fieldname = "customerName");
       return {
@@ -114,7 +119,10 @@ export default function CustomerScreen({ page }) {
 
   CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
     GridActions({
-      actions:page== "customer"? getCustomerListGridActions(nav, setModal) :getCustomerListGridActionsCustomerApprovel((nav, setModal)),
+      actions:
+        page == "customer"
+          ? getCustomerListGridActions(nav, setModal)
+          : getCustomerListGridActionsCustomerApprovel((nav, setModal)),
     });
   // CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
   //   GridActions({
