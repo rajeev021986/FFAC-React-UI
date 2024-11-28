@@ -272,7 +272,7 @@ export default function CustomerScreen({ page }) {
           <ThemedGrid
             uniqueId="id"
             columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.data?.length}
+            count={CustomerData?.body?.totalElements || 0}
             handlePage={handlePage}
             data={CustomerData?.body?.data}
             columnVisibility={{}}
@@ -288,7 +288,7 @@ export default function CustomerScreen({ page }) {
           <CardsView
             uniqueId="id"
             columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.data?.length}
+            count={CustomerData?.body?.totalElements || 0}
             handlePage={handlePage}
             data={CustomerData?.body?.data}
             paginationModel={codeCustomerSelector?.pagination}

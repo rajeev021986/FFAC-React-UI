@@ -79,7 +79,7 @@ export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
       if (value.id =="" || type == "copy" ) { 
         try {
           values.approveRequest = dropdownData?.approval_request;
-          let response = await updateCustomer(values).unwrap();
+          let response = await addCustomer(values).unwrap();
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
