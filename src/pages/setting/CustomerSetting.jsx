@@ -3,7 +3,7 @@ import {
     DataGrid,
     GridActionsCellItem,
 } from "@mui/x-data-grid";
-import { Alert, Button, Grid, Snackbar, TextField, RadioGroup, FormControlLabel, Radio, Typography } from "@mui/material";
+import { Alert, Button, Grid, Snackbar, TextField, Typography, Switch, FormGroup, FormControlLabel } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
@@ -203,21 +203,24 @@ const CustomerSetting = () => {
         <div style={{ padding: "1rem" }}>
             {/* Radio button to handle Approval Req */}
             <Grid xs={12} sx={{ marginBottom: "10px" }} ><Typography variant="h4">Customer Setting</Typography></Grid>
-            {/* <Grid sx={{ marginBottom: "10px" }} >
-                <RadioGroup
-                    value={backendData?.approval_request ?"true":"false"}
-                    onChange={(e) =>
-                        setBackendData({
-                            ...backendData,
-                            approval_request: e.target.value === "true",
-                        })
-                    }
-                    row
-                >
-                    <FormControlLabel value="true" control={<Radio />} label="Approval Request" />
-                    <FormControlLabel value="false" control={<Radio />} label="No Approval Request" />
-                </RadioGroup>
-            </Grid> */}
+            <Grid sx={{ marginBottom: "10px" }} >
+                <FormGroup>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={backendData?.approval_request || false}
+                                onChange={(e) =>
+                                    setBackendData({
+                                        ...backendData,
+                                        approval_request: e.target.checked,
+                                    })
+                                }
+                            />
+                        }
+                        label="Approval Request"
+                    />
+                </FormGroup>
+            </Grid>
 
             {/* Render the Grids */}
             {isLoading ? <Loader /> : <Grid container spacing={2} flexWrap={"wrap"}>

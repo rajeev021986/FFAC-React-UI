@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@mui/material";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import AppAutocomplete from "../../../common/AppAutocomplete";
@@ -40,6 +40,7 @@ import { useNavigate } from "react-router-dom";
 import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { UploadFileOutlined } from "@mui/icons-material";
+import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 
 export default function CustomerForm({ initialValues, page }) {
   const [options, setOptions] = useState([]);
@@ -50,6 +51,8 @@ export default function CustomerForm({ initialValues, page }) {
   const [loading, setLoading] = useState(false);
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateCustomer] = useUpdateCustomerMutation();
+  const [dropdownData, setDropdownData] = useState({});
+
 
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
@@ -67,13 +70,15 @@ export default function CustomerForm({ initialValues, page }) {
   });
   console.log("optionsCity", optionsCity);
 
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
-      if (values?.id == "") {
+      if (values?.id == "") { 
         try {
+          values.approveRequest = dropdownData?.approval_request;
           let response = await updateCustomer(values).unwrap();
 
           // Handle response and display toast messages
@@ -152,6 +157,14 @@ export default function CustomerForm({ initialValues, page }) {
   //     setEnquiryAuditDetails(response);
   //   }
   // };
+  const { data: optionsSettingsData } = useGetOptionsSettingsQuery("common_settings");
+  const { data: customerSettingsData } = useGetOptionsSettingsQuery("customer_settings");
+
+  useEffect(() => {
+    if (optionsSettingsData?.body || customerSettingsData?.body) {
+      setDropdownData({ ...optionsSettingsData?.body, ...customerSettingsData?.body });
+    }
+  }, [optionsSettingsData]);
 
   return (
     <>
@@ -199,7 +212,7 @@ export default function CustomerForm({ initialValues, page }) {
               <SelectBox
                 label="Account Type"
                 id="accountType"
-                options={ACCOUNT_TYPE_OPTIONS}
+                options={dropdownData?.account_type}
                 value={formik.values.accountType}
                 error={formik.errors.accountType}
                 onChange={formik.handleChange}
@@ -383,7 +396,7 @@ export default function CustomerForm({ initialValues, page }) {
               <SelectBox
                 label="Status"
                 id="status"
-                options={USER_STATUS_OPTIONS}
+                options={dropdownData?.status}
                 value={formik.values.status}
                 error={formik.errors.status}
                 onChange={formik.handleChange}
@@ -404,7 +417,7 @@ export default function CustomerForm({ initialValues, page }) {
                     { label: "Email", value: "2", disable: false },
                   ]}
                 >
-                  <AddMapping formik={formik} />
+                  <AddMapping formik={formik} dropdownData={dropdownData} />
                   <FileScreen formik={formik} />
                 </ThemeTabs>
               </Box>
@@ -521,7 +534,7 @@ export default function CustomerForm({ initialValues, page }) {
                     <SelectBox
                       label="Account Type"
                       id="accountType"
-                      options={ACCOUNT_TYPE_OPTIONS}
+                      options={dropdownData?.account_type}
                       value={formik.values.accountType}
                       error={formik.errors.accountType}
                       onChange={formik.handleChange}
@@ -705,7 +718,7 @@ export default function CustomerForm({ initialValues, page }) {
                     <SelectBox
                       label="Status"
                       id="status"
-                      options={USER_STATUS_OPTIONS}
+                      options={dropdownData?.status}
                       value={formik.values.status}
                       error={formik.errors.status}
                       onChange={formik.handleChange}
@@ -726,7 +739,7 @@ export default function CustomerForm({ initialValues, page }) {
                           { label: "Email", value: "2", disable: false },
                         ]}
                       >
-                        <AddMapping formik={formik} />
+                        <AddMapping formik={formik} dropdownData={dropdownData} />
                         <FileScreen formik={formik} />
                       </ThemeTabs>
                     </Box>

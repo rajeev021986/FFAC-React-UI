@@ -3,7 +3,7 @@ import { IconButton, Grid, Box, Button } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 import AppAutocomplete from "../../../common/AppAutocomplete";
 import InputBox from "../../../common/InputBox";
-export default function AddMapping({ formik }) {
+export default function AddMapping({ formik, dropdownData }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     { chargeName: "", unitType: "", currency: "", unitRate: "" },
   ];
@@ -11,8 +11,7 @@ export default function AddMapping({ formik }) {
   const chargeNameOptions = [
     { label: "Agency Fees", value: "chargeName" },
   ];
-
-  const unitType = [
+  const unitType = dropdownData?.unitType || [
     { label: "flat", value: "FLAT" },
     { label: "20ft", value: "20FT" },
     { label: "40ft", value: "40FT" },
@@ -24,7 +23,7 @@ export default function AddMapping({ formik }) {
     { label: "USD", value: "usd" },
   ];
 
-  const shipmentTypeOption = [
+  const shipmentTypeOptions = [
     { label: "IMPORT LOCAL", value: "IMPORT_LOCAL" },
     { label: "IMPORT TRANSIT", value: "IMPORT_TRANSIT" },
     { label: "EXPORT LOCAL", value: "EXPORT_LOCAL" },
@@ -32,6 +31,7 @@ export default function AddMapping({ formik }) {
     { label: "AIR IMPORT LOCAL", value: "AIR_IMPORT_LOCAL" },
     { label: "AIR EXPORT LOCAL", value: "AIR_EXPORT_LOCAL" },
   ];
+  const shipmentTypeOption = dropdownData?.shipmentType || shipmentTypeOptions;
 
   // Handler to add a new row
   const addRow = () => {
@@ -58,7 +58,7 @@ export default function AddMapping({ formik }) {
 
   return (
     <>
-    
+
       <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 1 }}>
         <Button
           startIcon={<Add />}
