@@ -48,7 +48,6 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
-import { columnGroupsStateInitializer } from "@mui/x-data-grid/internals";
 
 const ADD_NEW_CUSTOMER_PATH = "new";
 
@@ -58,14 +57,15 @@ export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const [seletectBox, setSelectedBox] = useState("");
+  const [seletectBox, setSelectedBox] = useState('');
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
   const [open, setOpen] = React.useState(false);
-  const actions = seletectBox
+  const actions =
+    seletectBox
     ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
     : [{ name: "New Customer" }];
   const query = {
@@ -140,7 +140,6 @@ export default function CustomerScreen({ page }) {
   }, [codeCustomerSelector.view, dispatch]);
 
   const handleActionClick = (actionName) => {
-    console.log(actionName, "action Name");
     if (actionName === "New Customer") {
       nav(ADD_NEW_CUSTOMER_PATH, {
         replace: true,
