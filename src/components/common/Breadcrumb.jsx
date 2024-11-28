@@ -8,7 +8,7 @@ const Routes = {
   entity: { label: "Entity", disabled: true },
   new: { label: "Create Customer", disabled: false },
   editcustomer: { label: "Edit Customer", disabled: false },
-  approve: {label: 'Approve', disabled: false},
+  approve: {label: 'Approve Customer', disabled: false},
   admin_master: { label: "Admin Master", disabled: true },
   form: { label: "Form", disabled: false },
   packing_list: { label: "Packing List", disabled: false },

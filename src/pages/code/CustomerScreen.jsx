@@ -81,7 +81,7 @@ export default function CustomerScreen({ page }) {
     Boolean(
       codeCustomerSelector.sortModel.length > 0
         ? codeCustomerSelector.sortModel[0].field === "cname"
-        : codeCustomerSelector?.sortBy?.split('*')[0] === "cname"
+        : codeCustomerSelector?.sortBy?.split("*")[0] === "cname"
     )
   ) {
     query.sortBy = "customerName";
@@ -162,9 +162,9 @@ export default function CustomerScreen({ page }) {
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
                   "& .MuiFab-root": {
-                    width: 40, // Adjust main button width
-                    height: 40, // Adjust main button height
-                    minHeight: 40, // Set minimum height
+                    width: 50, // Adjust main button width
+                    height: 50, // Adjust main button height
+                    minHeight: 50, // Set minimum height
                   },
                 }}
                 icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}

@@ -12,7 +12,7 @@ export default function CardItem({
   uniqueId,
   actions,
   icon,
-  page
+  page,
 }) {
   const handleCheckboxChange = (event) => {
     if (event.target.checked) {
@@ -37,17 +37,28 @@ export default function CardItem({
   return (
     <Box sx={styles.root_item}>
       {/* Checkbox at the start */}
-     {page =="customer" && <Box sx={styles.card_left_box}>
-        <Checkbox
-          checked={selectedBox.includes(uniqueId)}
-          onChange={handleCheckboxChange}
-          color="primary"
-        />
-      </Box>}
+      {page == "customer" && (
+        <Box
+          sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
+        >
+          <Checkbox
+            checked={selectedBox.includes(uniqueId)}
+            onChange={handleCheckboxChange}
+            color="primary"
+          />
+        </Box>
+      )}
 
       {/* Icon and details */}
-      <Box sx={styles.card_left_box}>
-        <Box sx={styles.icon} elevation={1}>
+      <Box
+        sx={{
+          ...styles.card_left_box,
+          marginRight: "17px",
+          padding: 0,
+          width: "50px",
+        }}
+      >
+        <Box sx={{ ...styles.icon, margin: 0, padding: 0 }} elevation={1}>
           {icon ? icon : <VerifiedUserOutlined color="primary" />}
         </Box>
       </Box>
