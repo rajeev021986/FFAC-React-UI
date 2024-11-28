@@ -58,17 +58,16 @@ export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const [seletectBox, setSelectedBox] = useState('');
+  const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
   const [open, setOpen] = React.useState(false);
-  const actions =
-    seletectBox
-      ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
-      : [{ name: "New Customer" }];
+  const actions = seletectBox
+    ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
+    : [{ name: "New Customer" }, { name: "Export" }];
   const query = {
     page: codeCustomerSelector?.pagination?.page + 1,
     size: codeCustomerSelector?.pagination?.pageSize,
@@ -142,10 +141,11 @@ export default function CustomerScreen({ page }) {
 
   const handleActionClick = (actionName) => {
     // if (actionName === "Export") {
-      const worksheet = XLSX.utils.json_to_sheet(CustomerData?.body?.data);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-      XLSX.writeFile(workbook, "exported_data.xlsx");
+    const worksheet = XLSX.utils.json_to_sheet(CustomerData?.body?.data);
+    console.log(CustomerData?.body?.data, "data");
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(workbook, "exported_data.xlsx");
     // }
     if (actionName === "New Customer") {
       nav(ADD_NEW_CUSTOMER_PATH, {
@@ -155,9 +155,24 @@ export default function CustomerScreen({ page }) {
     }
     if (actionName === "Copy") {
       nav(`editcustomer`, {
-        state: { formAction: "edit", initialValues: { id: seletectBox }, type: "copy" },
-
+        state: {
+          formAction: "edit",
+          initialValues: { id: seletectBox },
+          type: "copy",
+        },
       });
+    }
+    if (actionName === "Export") {
+      const selectedCustomerData = CustomerData?.body?.data?.filter(
+        (customer) => customer.id === seletectBox
+      );
+      console.log(
+        selectedCustomerData
+      )
+      const worksheet = XLSX.utils.json_to_sheet(selectedCustomerData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, `${seletectBox}_data.xlsx`);
     }
   };
 
@@ -284,7 +299,7 @@ export default function CustomerScreen({ page }) {
             handlePage={handlePage}
             data={CustomerData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => { }}
+            columnVisibilityHandler={() => {}}
             paginationModel={codeCustomerSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={codeCustomerSelector.sortModel}
