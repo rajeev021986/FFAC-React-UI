@@ -1,6 +1,9 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import { Grid, Button, IconButton } from "@mui/material";
 import InputBox from "../../../common/InputBox";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+
 export default function filesGrid({ formik }) {
   const customerEntityEmailsIds = formik.values.customerEntityEmailsIds || [
     { emailId: "", designation: "" },
@@ -9,6 +12,18 @@ export default function filesGrid({ formik }) {
   const updateRow = (index, field, value) => {
     const newMappingRows = [...customerEntityEmailsIds];
     newMappingRows[index][field] = value;
+    formik.setFieldValue("customerEntityEmailsIds", newMappingRows);
+  };
+
+  // Add new handler for adding rows
+  const addNewRow = () => {
+    const newMappingRows = [...customerEntityEmailsIds, { emailId: "", designation: "" }];
+    formik.setFieldValue("customerEntityEmailsIds", newMappingRows);
+  };
+
+  // Add delete handler
+  const deleteRow = (index) => {
+    const newMappingRows = customerEntityEmailsIds.filter((_, i) => i !== index);
     formik.setFieldValue("customerEntityEmailsIds", newMappingRows);
   };
 
@@ -27,7 +42,7 @@ export default function filesGrid({ formik }) {
               error={formik.errors?.customerEntityEmailsIds?.[index]?.designation}
             />
           </Grid>
-          <Grid item xs={12} sm={3} lg={6}>
+          <Grid item xs={12} sm={3} lg={5}>
             <InputBox
               label="Email ID"
               id={`customerEntityEmailsIds-${index}-emailId`}
@@ -37,9 +52,30 @@ export default function filesGrid({ formik }) {
               error={formik.errors?.customerEntityEmailsIds?.[index]?.emailId}
             />
           </Grid>
+          <Grid item xs={12} sm={1} lg={1}>
+            {index > 0 && (
+              <IconButton 
+                onClick={() => deleteRow(index)}
+                color="error"
+                sx={{ marginTop: "16px" }}
+              >
+                <RemoveIcon />
+              </IconButton>
+            )}
+          </Grid>
 
         </Grid>
       ))}
+      
+      <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={addNewRow}
+        >
+          Add Email
+        </Button>
+      </Grid>
     </>
   );
 }

@@ -76,7 +76,7 @@ export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
     enableReinitialize: true,
     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
-      if (value.id =="" || type == "copy" ) { 
+      if (!value.id|| type == "copy" ) { 
         try {
           values.approveRequest = dropdownData?.approval_request;
           let response = await addCustomer(values).unwrap();
