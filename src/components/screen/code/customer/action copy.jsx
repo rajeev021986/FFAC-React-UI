@@ -6,7 +6,7 @@ export const getCustomerListGridActionsCustomerApprovel = (nav, setModal) => {
       label: "Edit",
       onClick: (params) => {
         console.log("Edit clicked for", params.row);
-        nav(`editcustomer`, {state: {formAction: "edit", initialValues: params.row},
+        nav(`approveRequest`, {state: {formAction: "edit", initialValues: params.row},
   
         });
       },
