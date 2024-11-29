@@ -79,6 +79,7 @@ export default function CustomerForm({ initialValues, page, type = 'notcopy' }) 
 
       if (!values.id || type == "copy") {
         try {
+          delete values.id
           values.approveRequest = !dropdownData?.approval_request;
           let response = await addCustomer(values).unwrap();
 
