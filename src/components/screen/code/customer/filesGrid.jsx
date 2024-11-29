@@ -4,7 +4,7 @@ import InputBox from "../../../common/InputBox";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-export default function filesGrid({ formik }) {
+export default function filesGrid({ formik, disabled }) {
   const customerEntityEmailsIds = formik.values.customerEntityEmailsIds || [
     { emailId: "", designation: "" },
   ];
@@ -37,6 +37,7 @@ export default function filesGrid({ formik }) {
               label="Designation"
               id={`customerEntityEmailsIds-${index}-designation`}
               value={row.designation}
+              disabled = {disabled}
               onChange={(e) => updateRow(index, "designation", e.target.value)}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
               error={formik.errors?.customerEntityEmailsIds?.[index]?.designation}
@@ -47,6 +48,7 @@ export default function filesGrid({ formik }) {
               label="Email ID"
               id={`customerEntityEmailsIds-${index}-emailId`}
               value={row.emailId}
+              disabled = {disabled}
               onChange={(e) => updateRow(index, "emailId", e.target.value)}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
               error={formik.errors?.customerEntityEmailsIds?.[index]?.emailId}
@@ -58,6 +60,7 @@ export default function filesGrid({ formik }) {
                 onClick={() => deleteRow(index)}
                 color="error"
                 sx={{ marginTop: "16px" }}
+                disabled = {disabled}
               >
                 <RemoveIcon />
               </IconButton>
@@ -71,6 +74,7 @@ export default function filesGrid({ formik }) {
           variant="contained"
           startIcon={<AddIcon />}
           onClick={addNewRow}
+          disabled = {disabled}
         >
           Add Email
         </Button>

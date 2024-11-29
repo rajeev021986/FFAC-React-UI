@@ -3,14 +3,12 @@ import { IconButton, Grid, Box, Button } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 import AppAutocomplete from "../../../common/AppAutocomplete";
 import InputBox from "../../../common/InputBox";
-export default function AddMapping({ formik, dropdownData }) {
+export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     { chargeName: "", unitType: "", currency: "", unitRate: "" },
   ];
   // Static options for autocomplete
-  const chargeNameOptions = [
-    { label: "Agency Fees", value: "chargeName" },
-  ];
+  const chargeNameOptions = [{ label: "Agency Fees", value: "chargeName" }];
   const unitType = dropdownData?.unitType || [
     { label: "flat", value: "FLAT" },
     { label: "20ft", value: "20FT" },
@@ -58,13 +56,13 @@ export default function AddMapping({ formik, dropdownData }) {
 
   return (
     <>
-
       <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 1 }}>
         <Button
           startIcon={<Add />}
           onClick={addRow}
           variant="outlined"
           color="primary"
+          disabled = {disabled}
         >
           Add Tariff
         </Button>
@@ -77,6 +75,7 @@ export default function AddMapping({ formik, dropdownData }) {
               label="Charge Name"
               id={`customerEntityTariffs-${index}-chargeName`}
               value={row.chargeName}
+              disabled = {disabled}
               options={chargeNameOptions}
               formik={formik}
               error={formik.errors?.customerEntityTariffs?.[index]?.chargeName}
@@ -90,6 +89,7 @@ export default function AddMapping({ formik, dropdownData }) {
               label="Unit Type"
               id={`customerEntityTariffs-${index}-unitType`}
               value={row.unitType}
+              disabled = {disabled}
               options={unitType}
               formik={formik}
               onChange={(value) => updateRow(index, "unitType", value)}
@@ -104,6 +104,7 @@ export default function AddMapping({ formik, dropdownData }) {
               id={`customerEntityTariffs-${index}-currency`}
               value={row.currency}
               options={currencyOptions}
+              disabled = {disabled}
               formik={formik}
               onChange={(value) => updateRow(index, "currency", value)}
               error={formik.errors?.customerEntityTariffs?.[index]?.currency}
@@ -117,9 +118,12 @@ export default function AddMapping({ formik, dropdownData }) {
               id={`customerEntityTariffs-${index}-shipmentType`}
               value={row.shipmentType}
               options={shipmentTypeOption}
+              disabled = {disabled}
               formik={formik}
               onChange={(value) => updateRow(index, "shipmentType", value)}
-              error={formik.errors?.customerEntityTariffs?.[index]?.shipmentType}
+              error={
+                formik.errors?.customerEntityTariffs?.[index]?.shipmentType
+              }
               sx={{ marginTop: "16px", marginBottom: "8px" }}
             />
           </Grid>
@@ -129,6 +133,7 @@ export default function AddMapping({ formik, dropdownData }) {
               label="Unit Rate"
               id={`customerEntityTariffs-${index}-unitRate`}
               value={row.unitRate}
+              disabled = {disabled}
               onChange={(e) => updateRow(index, "unitRate", e.target.value)}
               error={formik.errors?.customerEntityTariffs?.[index]?.unitRate}
               sx={{ marginTop: "16px", marginBottom: "8px" }}
