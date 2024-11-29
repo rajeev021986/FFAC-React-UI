@@ -53,7 +53,7 @@ export default function filesGrid({ formik }) {
             />
           </Grid>
           <Grid item xs={12} sm={1} lg={1}>
-            {index > 0 && (
+           
               <IconButton 
                 onClick={() => deleteRow(index)}
                 color="error"
@@ -61,7 +61,6 @@ export default function filesGrid({ formik }) {
               >
                 <RemoveIcon />
               </IconButton>
-            )}
           </Grid>
 
         </Grid>

@@ -12,10 +12,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { OutlinedButton } from "../../components/common/Button";
 import { useAddOptonsMutation, useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import Loader from "../../components/common/Loader/Loader";
+import toast from "react-hot-toast";
 
 const CustomerSetting = () => {
     const [backendData, setBackendData] = useState({ unitType: [], creditDays: [], });
-    const [addOptons, { isloading }] = useAddOptonsMutation();
+    const [addOptons, { isloading ,refetch}] = useAddOptonsMutation();
     const { data, isLoading, error: geterror } = useGetOptionsSettingsQuery("customer_settings");
     const [errorType, setErrorType] = useState();
 
@@ -117,8 +118,8 @@ const CustomerSetting = () => {
             }
             return acc;
         }, {});
-        await addOptons({ body: { customer_settings: filteredData }, type: "customer_setting" }).then((res) => { setError(`setting Updated Successufully`); setErrorType("success") }).catch(() => console.log("filteredData"))
-
+        await addOptons({ body: { customer_settings: filteredData }, type: "customer_setting" }).then((res) => { toast.success(`setting Updated Successufully`); setErrorType("success") }).catch(() => console.log("filteredData"))
+        refetch();
     };
 
     const createColumns = (type) => [

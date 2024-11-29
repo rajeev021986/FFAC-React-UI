@@ -18,7 +18,7 @@ import React, { useState } from "react";
 import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { OutlinedButton } from "../../components/common/Button";
-import { replace, useNavigate } from "react-router-dom";
+import { replace, useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import * as XLSX from "xlsx";
@@ -56,6 +56,7 @@ const ADD_NEW_CUSTOMER_PATH = "new";
 
 export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
+  const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [seletectBox, setSelectedBox] = useState("");
@@ -108,10 +109,15 @@ export default function CustomerScreen({ page }) {
     isError,
     error,
     isFetching,
+    refetch
   } = useFetchCustomerDatasQuery({
     params: query,
     payload,
+    page: page=="customer"?"filter":"approval"
   });
+  useEffect(()=>{
+    refetch();
+  },[location.pathname])
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
@@ -140,12 +146,6 @@ export default function CustomerScreen({ page }) {
   }, [codeCustomerSelector.view, dispatch]);
 
   const handleActionClick = (actionName) => {
-    // if (actionName === "Export") {
-    const worksheet = XLSX.utils.json_to_sheet(CustomerData?.body?.data);
-    console.log(CustomerData?.body?.data, "data");
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    XLSX.writeFile(workbook, "exported_data.xlsx");
     // }
     if (actionName === "New Customer") {
       nav(ADD_NEW_CUSTOMER_PATH, {
@@ -163,16 +163,12 @@ export default function CustomerScreen({ page }) {
       });
     }
     if (actionName === "Export") {
-      const selectedCustomerData = CustomerData?.body?.data?.filter(
+      const worksheet = XLSX.utils.json_to_sheet(Boolean(seletectBox) ? CustomerData?.body?.data?.filter(
         (customer) => customer.id === seletectBox
-      );
-      console.log(
-        selectedCustomerData
-      )
-      const worksheet = XLSX.utils.json_to_sheet(selectedCustomerData);
+      ) : CustomerData?.body?.data);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-      XLSX.writeFile(workbook, `${seletectBox}_data.xlsx`);
+      XLSX.writeFile(workbook, "exported_data.xlsx");
     }
   };
 
@@ -299,7 +295,7 @@ export default function CustomerScreen({ page }) {
             handlePage={handlePage}
             data={CustomerData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
+            columnVisibilityHandler={() => { }}
             paginationModel={codeCustomerSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={codeCustomerSelector.sortModel}

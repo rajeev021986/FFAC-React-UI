@@ -12,10 +12,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { OutlinedButton } from "../../components/common/Button";
 import { useAddOptonsMutation, useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import Loader from "../../components/common/Loader/Loader";
+import toast from "react-hot-toast";
 
 const GlobalSetting = () => {
     const [backendData, setBackendData] = useState({});
-    const [addOptons, { isloading }] = useAddOptonsMutation();
+    const [addOptons, { isloading,refetch }] = useAddOptonsMutation();
     const { data, isLoading, error: geterror } = useGetOptionsSettingsQuery("common_settings");
     const [errortype, setErrorType] = useState("true");
 
@@ -116,8 +117,8 @@ const GlobalSetting = () => {
             }
             return acc;
         }, {});
-        await addOptons({ body: { common_settings: filteredData }, type: "common_settings" }).then((res) => { setError(`setting Updated Successufully`); setErrorType("success") }).catch(() => console.log("filteredData"))
-
+        await addOptons({ body: { common_settings: filteredData }, type: "common_settings" }).then((res) => { toast.success(`setting Updated Successufully`); setErrorType("success") }).catch(() => console.log("filteredData"))
+        refetch();
     };
     const createColumns = (type) => [
         {

@@ -42,7 +42,7 @@ import UploadFile from "../../../UploadFile";
 import { UploadFileOutlined } from "@mui/icons-material";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 
-export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
+export default function CustomerForm({ initialValues, page, type = 'notcopy' }) {
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
@@ -76,9 +76,10 @@ export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
     enableReinitialize: true,
     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
-      if (!value.id|| type == "copy" ) { 
+
+      if (!values.id || type == "copy") {
         try {
-          values.approveRequest = dropdownData?.approval_request;
+          values.approveRequest = !dropdownData?.approval_request;
           let response = await addCustomer(values).unwrap();
 
           // Handle response and display toast messages
@@ -165,6 +166,24 @@ export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
       setDropdownData({ ...optionsSettingsData?.body, ...customerSettingsData?.body });
     }
   }, [optionsSettingsData]);
+  const handleApproveRequest = async () => {
+    try {
+      const response = await ApiManager.approveCustomerApprove(initialValues.id);
+      nav("/app/entity/approve")
+      toast.success("Approved")
+    } catch (error) {
+      toast.error("Error")
+    }
+  };
+  const handleRejectRequest = async () => {
+    try {
+      const response = await ApiManager.rejectCustomerApprove(initialValues.id);
+      nav("/app/entity/approve")
+      toast.success("Rejected")
+    } catch (error) {
+      toast.error("Error")
+    }
+  };
 
   return (
     <>
@@ -411,6 +430,8 @@ export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
                   marginBottom: 2,
                 }}
               >
+                <Grid textAlign="left" color="red">{formik.errors.customerEntityEmailsIds}</Grid>
+                <Grid textAlign="left" color="red">{formik.errors.customerEntityTariffs}</Grid>
                 <ThemeTabs
                   tabData={[
                     { label: "Tariff", value: "1", disable: false },
@@ -457,13 +478,14 @@ export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
                   <Stack direction="row" spacing={2}>
                     <ThemeButton
                       sx={{ fontWeight: "500", backgroundColor: "red" }}
+                      onClick={() => handleRejectRequest()}
                     >
                       {isLoading && (
                         <CircularProgress size={20} color="white" />
                       )}{" "}
                       Approve reject
                     </ThemeButton>
-                    <ThemeButton sx={{ fontWeight: "500" }}>
+                    <ThemeButton sx={{ fontWeight: "500" }} onClick={() => handleApproveRequest()}>
                       {isLoading && (
                         <CircularProgress size={20} color="white" />
                       )}{" "}
@@ -726,6 +748,8 @@ export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
                   </Grid>
 
                   <Grid item xs={12}>
+                    <Grid textAlign="left" color="red">{formik.errors.customerEntityEmailsIds}</Grid>
+                    <Grid textAlign="left" color="red">{formik.errors.customerEntityTariffs}</Grid>
                     <Box
                       sx={{
                         borderBottom: 1,
@@ -779,13 +803,14 @@ export default function CustomerForm({ initialValues, page, type= 'notcopy' }) {
                         <Stack direction="row" spacing={2}>
                           <ThemeButton
                             sx={{ fontWeight: "500", backgroundColor: "red" }}
+                            onClick={() => handleRejectRequest()}
                           >
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
                             Approve reject
                           </ThemeButton>
-                          <ThemeButton sx={{ fontWeight: "500" }}>
+                          <ThemeButton sx={{ fontWeight: "500" }} onClick={() => handleApproveRequest()}>
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}

@@ -110,13 +110,13 @@ export const codeDataApi = createApi({
         //     providesTags: ["Code"],
         // }),
         fetchCustomerDatas: builder.query({
-            query: ({ params, payload }) => {
+            query: ({ params, payload, page }) => {
                 const queryString = new URLSearchParams(params).toString();
                 const headers = {
                     Authorization: getAppHeaders()['Authorization'],
                 };
                 return {
-                    url: `/entity-service/customer/filter?${queryString}`,
+                    url: `/entity-service/customer/${page}?${queryString}`,
                     method: "POST",
                     body: payload,
                     headers,

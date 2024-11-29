@@ -87,6 +87,14 @@ class ApiManager {
         const url = ENDPOINTS.DOCUMENT_DELETE(id, source, sourceId);
         return ApiMethods.delete(url);
     }
+    static approveCustomerApprove = async (id) => {
+        const url = ENDPOINTS.CUSTOMER_APPROVE_REQUEST(id);
+        return ApiMethods.put(url);
+    }
+     static rejectCustomerApprove = async (id) => {
+        const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id);
+        return ApiMethods.put(url);
+    }
 }
 
 
