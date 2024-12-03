@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Button, Stack, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Button,
+  Stack,
+  MenuItem,
+  Select,
+  TextField,
+  Grid,
+} from "@mui/material";
 import { OutlinedButton } from "../../../common/Button";
 
 const UserFilterForm = () => {
@@ -24,59 +31,93 @@ const UserFilterForm = () => {
 
   const handleApply = () => {
     console.log("Filters applied:", filters);
-    // Add API call logic here
   };
 
   return (
     <div>
-      <Stack spacing={3} direction="column">
-        {filters.map((filter, index) => (
-          <Stack key={index} direction="row" spacing={2} alignItems="center">
-            {/* Field Name Display */}
-            <TextField
-              label={filter.fieldName}
-              value={filter.value}
-              onChange={(e) =>
-                handleInputChange(index, "value", e.target.value)
-              }
-              fullWidth
-              sx={{
-                width: "500px", // Adjust width
-                height: "40px", // Adjust height
-                "& .MuiInputBase-root": {
-                  padding: "0px", // Adjust padding
-                },
-                "& .MuiInputLabel-root": {
-                  fontSize: "0.8rem", // Optional: Adjust label size
-                },
-              }}
-            />
+      <Grid container spacing={3} direction="column">
+        <Grid container item spacing={1} wrap="wrap">
+          {filters.map((filter, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4}>
+              {filter.fieldName === "status" ? (
+                <Select
+                  label={filter.fieldName}
+                  value={filter.value}
+                  onChange={(e) =>
+                    handleInputChange(index, "value", e.target.value)
+                  }
+                  fullWidth
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      height: "36px",
+                      borderRadius: "8px",
+                      padding: "0",
+                    },
+                    "& .MuiInputLabel-root": {
+                      fontSize: "0.8rem",
+                      top: "-6px",
+                    },
+                    "& .MuiSelect-select": {
+                      fontSize: "0.9rem",
+                      padding: "4px 8px",
+                    },
+                  }}
+                >
+                  <MenuItem value="active">Active</MenuItem>
+                  <MenuItem value="inactive">Inactive</MenuItem>
+                </Select>
+              ) : (
+                <TextField
+                  label={filter.fieldName}
+                  value={filter.value}
+                  onChange={(e) =>
+                    handleInputChange(index, "value", e.target.value)
+                  }
+                  fullWidth
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      height: "36px",
+                      borderRadius: "8px",
+                      padding: "0",
+                    },
+                    "& .MuiInputLabel-root": {
+                      fontSize: "0.8rem",
+                      top: "-6px",
+                    },
+                    "& .MuiInputBase-input": {
+                      fontSize: "0.9rem",
+                      padding: "4px 8px",
+                    },
+                  }}
+                />
+              )}
+            </Grid>
+          ))}
+        </Grid>
 
-            {/* Logical Operator Dropdown */}
-            {/* {filter.fieldName !== "userId" && (
-              <Select
-                value={filter.logicalOperator}
-                onChange={(e) => {
-                  handleInputChange(index, "logicalOperator", e.target.value);
-                }}
-                displayEmpty
-                sx={{height: '50%' }}
-              >
-                <MenuItem>AND</MenuItem>
-                <MenuItem>OR</MenuItem>
-              </Select>
-            )} */}
-          </Stack>
-        ))}
-        <Stack direction="row" spacing={3} justifyContent={"end"}>
-          <Button color="primary" size="small" onClick={handleReset}>
-            reset
-          </Button>
-          <OutlinedButton color="primary" size="small" onClick={handleApply}>
-            apply
-          </OutlinedButton>
-        </Stack>
-      </Stack>
+        <Grid container item justifyContent="flex-end" spacing={3}>
+          <Grid item>
+            <Button
+              color="primary"
+              size="small"
+              onClick={handleReset}
+              sx={{ borderRadius: "12px" }}
+            >
+              reset
+            </Button>
+          </Grid>
+          <Grid item>
+            <OutlinedButton
+              color="primary"
+              size="small"
+              onClick={handleApply}
+              sx={{ borderRadius: "12px" }}
+            >
+              apply
+            </OutlinedButton>
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
   );
 };

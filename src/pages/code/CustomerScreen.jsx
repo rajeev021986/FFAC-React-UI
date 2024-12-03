@@ -219,13 +219,14 @@ export default function CustomerScreen({ page }) {
                       backgroundColor: "#f0f0f0",
                       color: "black",
                       boxShadow: 3,
+                      borderRadius: '20px 19px 19px 20px',
                       "&:hover": {
                         backgroundColor: "#e0e0e0",
                       },
-                      width: 72, // Reduce action button width
-                      minWidth: 92, // Ensure consistent sizing
+                      width: 72,
+                      minWidth: 92,
                       "& .MuiSvgIcon-root": {
-                        fontSize: 16, // Adjust icon size
+                        fontSize: 16, 
                       },
                     }}
                     icon={

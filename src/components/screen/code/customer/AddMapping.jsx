@@ -63,6 +63,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
           variant="outlined"
           color="primary"
           disabled = {disabled}
+          sx={{borderRadius: '17px 18px 18px 17px'}}
         >
           Add Tariff
         </Button>

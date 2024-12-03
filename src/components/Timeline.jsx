@@ -52,6 +52,7 @@ function TimelineComponent({ data }) {
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     gap: 1,
+                                                    borderRadius: '17px 18px 18px 17px'
                                                 }}
                                                 onClick={handleButtonClick}
                                             >
