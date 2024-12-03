@@ -1,31 +1,22 @@
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
-  AddCircleOutlineOutlined,
-  FileDownloadOutlined,
 } from "@mui/icons-material";
 import {
   Box,
   Card,
   CardHeader,
-  Chip,
-  CircularProgress,
   IconButton,
   Stack,
-  Typography,
+  Button,
 } from "@mui/material";
+import * as XLSX from "xlsx";
 import React, { useState } from "react";
-import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
-import { OutlinedButton } from "../../components/common/Button";
 import { replace, useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-import * as XLSX from "xlsx";
-import {
-  useFetchCustomerDatasQuery,
-  useFetchCustomerQuery,
-} from "../../store/api/codeDataApi";
+import { useFetchCustomerDatasQuery } from "../../store/api/codeDataApi";
 import CustomerFilters from "../../components/screen/code/customer/CustomerFilters";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -43,23 +34,20 @@ import { CODE_CUSTOMER_COLUMNS } from "../../data/columns/code";
 import { getCustomerListGridActions } from "../../components/screen/code/customer/action";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { useEffect } from "react";
-
-import Backdrop from "@mui/material/Backdrop";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
-
-const ADD_NEW_CUSTOMER_PATH = "new";
-
-// const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
+import UserCard from "../../components/common/Cards/UserCard";
+import UserFilter from "../../components/screen/code/User/UserFilter";
+import UserFilterForm from "../../components/screen/code/User/UserFilterForm";
 
 export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const [seletectBox, setSelectedBox] = useState("");
+  const [seletectBox, setSelectedBox] = useState([
+    
+  ]);
+  const [field, setField] = useState();
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -81,6 +69,34 @@ export default function CustomerScreen({ page }) {
         ? codeCustomerSelector?.sortModel[0]?.sort
         : codeCustomerSelector?.sortBy?.split("*")[1] || "",
   };
+
+  const cards = [
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+    { avatar: "H", title: "Work", subheader: "Dev" },
+  ];
+
+  const handleDownload = () => {
+    // Convert JSON data to a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(cards);
+
+    // Create a workbook
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Cards");
+
+    // Export the workbook to Excel
+    XLSX.writeFile(workbook, "cards_data.xlsx");
+  };
+
   if (
     Boolean(
       codeCustomerSelector.sortModel.length > 0
@@ -106,8 +122,6 @@ export default function CustomerScreen({ page }) {
   const {
     data: CustomerData,
     isLoading,
-    isError,
-    error,
     isFetching,
     refetch,
   } = useFetchCustomerDatasQuery({
@@ -123,13 +137,14 @@ export default function CustomerScreen({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
-    GridActions({
-      actions:
-        page == "customer"
-          ? getCustomerListGridActions(nav, setModal)
-          : getCustomerListGridActionsCustomerApprovel((nav, setModal)),
-    });
+
+  // CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
+  //   GridActions({
+  //     actions:
+  //       page == "customer"
+  //         ? getCustomerListGridActions(nav, setModal)
+  //         : getCustomerListGridActionsCustomerApprovel((nav, setModal)),
+  //   });
   // CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
   //   GridActions({
   //     actions: getCustomerListGridActions(nav, setModal),
@@ -138,43 +153,17 @@ export default function CustomerScreen({ page }) {
   // GridActions({
   //   actions: getCustomerListGridActionsCustomerApprovel((nav, setModal)),
   // });
-
-  useEffect(() => {
-    if (!codeCustomerSelector.view) {
-      dispatch(customerSetView("card"));
-    }
-  }, [codeCustomerSelector.view, dispatch]);
-
-  const handleActionClick = (actionName) => {
-    // }
-    if (actionName === "New Customer") {
-      nav(ADD_NEW_CUSTOMER_PATH, {
-        replace: true,
-        state: { formAction: "add" },
-      });
-    }
-    if (actionName === "Copy") {
-      nav(`editcustomer`, {
-        state: {
-          formAction: "edit",
-          initialValues: { id: seletectBox },
-          type: "copy",
-        },
-      });
-    }
-    if (actionName === "Export") {
-      const worksheet = XLSX.utils.json_to_sheet(
-        Boolean(seletectBox)
-          ? CustomerData?.body?.data?.filter(
-              (customer) => customer.id === seletectBox
-            )
-          : CustomerData?.body?.data
-      );
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-      XLSX.writeFile(workbook, "exported_data.xlsx");
-    }
+  
+  const handleAddAction = () => {
+    console.log('Navigating to /admin/users/add');
+    nav('/app/admin/users/add');
   };
+
+  // useEffect(() => {
+  //   if (!codeCustomerSelector.view) {
+  //     dispatch(customerSetView("card"));
+  //   }
+  // }, [codeCustomerSelector.view, dispatch]);
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
@@ -182,62 +171,22 @@ export default function CustomerScreen({ page }) {
         leftComps={<ThemedBreadcrumb />}
         rightComps={
           <>
-            {/* <OutlinedButton
-              color="primary"
-              size="small"
-              onClick={() =>
-                nav(ADD_NEW_CUSTOMER_PATH,  { replace :true , state: { formAction: "add" } })
-              }
-            >
-              <AddCircleOutlineOutlined fontSize="small" /> New Client
-            </OutlinedButton> */}
-            <Backdrop open={open} />
-            {page == "customer" && (
-              <SpeedDial
-                ariaLabel="Text-only  SpeedDial"
-                sx={{
-                  "& .MuiFab-root": {
-                    width: 50, // Adjust main button width
-                    height: 50, // Adjust main button height
-                    minHeight: 50, // Set minimum height
-                  },
-                }}
-                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
-                direction="left"
+            <Box style={{ display: "flex", gap: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAddAction}
               >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    tooltipTitle=""
-                    sx={{
-                      display: "flex",
-                      // width: "150px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 2,
-                      borderRadius: 1,
-                      backgroundColor: "#f0f0f0",
-                      color: "black",
-                      boxShadow: 3,
-                      "&:hover": {
-                        backgroundColor: "#e0e0e0",
-                      },
-                      width: 72, // Reduce action button width
-                      minWidth: 92, // Ensure consistent sizing
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 16, // Adjust icon size
-                      },
-                    }}
-                    icon={
-                      <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                        {action.name}
-                      </span>
-                    }
-                    onClick={() => handleActionClick(action.name)}
-                  ></SpeedDialAction>
-                ))}
-              </SpeedDial>
-            )}
+                Add
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleDownload}
+              >
+                Export
+              </Button>
+            </Box>
           </>
         }
       />
@@ -245,28 +194,16 @@ export default function CustomerScreen({ page }) {
         <CardHeader
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
-              <Box sx={{ display: "flex", gap: 2 }}>
+              <Box sx={{ display: "flex", gap: 1 }}>
                 <GridSearchInput
                   filters={codeCustomerSelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
-                  width="650px"
+                  width="500px"
+                  height="300px"
                 >
-                  <CustomerFilters filterInfo={CustomerData?.counts || []} />
+                  <UserFilter filterInfo={CustomerData?.counts || []} />
                 </GridSearchInput>
-                <SelectBox
-                  label="Sort By"
-                  options={CUSTOMER_SORT_OPTIONS}
-                  value={codeCustomerSelector.sortBy}
-                  onChange={(event) => {
-                    console.log(event);
-
-                    dispatch(setSortBy(event.target.value));
-                  }}
-                  sx={{
-                    borderRadius: "20px",
-                    width: "150px",
-                  }}
-                />
+                {/* <UserFilterForm /> */}
               </Box>
               <Box>
                 <IconButton onClick={() => dispatch(customerSetView("card"))}>
@@ -308,24 +245,7 @@ export default function CustomerScreen({ page }) {
             }
           />
         ) : (
-          <CardsView
-            uniqueId="id"
-            columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.totalElements || 0}
-            handlePage={handlePage}
-            data={CustomerData?.body?.data}
-            paginationModel={codeCustomerSelector?.pagination}
-            loading={isLoading || isFetching}
-            actions={
-              page == "customer"
-                ? getCustomerListGridActions(nav, setModal)
-                : getCustomerListGridActionsCustomerApprovel(nav, setModal)
-            }
-            // actions={getCustomerListGridActions(nav, setModal)}
-            setSelectedBox={setSelectedBox}
-            seletectBox={seletectBox}
-            page={page}
-          />
+          <UserCard user={cards} />
         )}
       </Card>
     </Box>
