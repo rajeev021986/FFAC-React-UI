@@ -1,27 +1,26 @@
 import React from "react";
-import { IconButton, Grid, Box, Button } from "@mui/material";
-import { Add, Delete } from "@mui/icons-material";
-import AppAutocomplete from "../../../common/AppAutocomplete";
-import InputBox from "../../../common/InputBox";
+import { Box, Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { Add } from "@mui/icons-material";
+
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
-    { chargeName: "", unitType: "", currency: "", unitRate: "" },
+    { id: 1, chargeName: "", unitType: "", currency: "", shipmentType: "", unitRate: "" },
   ];
-  // Static options for autocomplete
-  const chargeNameOptions = [{ label: "Agency Fees", value: "chargeName" }];
-  const unitType = dropdownData?.unitType || [
-    { label: "flat", value: "FLAT" },
+
+  // Static options for dropdowns
+  const chargeNameOptions = [{ label: "Agency Fees", value: "Agency Fees" }];
+  const unitTypeOptions = dropdownData?.unitType || [
+    { label: "Flat", value: "FLAT" },
     { label: "20ft", value: "20FT" },
     { label: "40ft", value: "40FT" },
-    { label: "cbm", value: "CBM" },
+    { label: "CBM", value: "CBM" },
   ];
-
   const currencyOptions = [
-    { label: "KSH", value: "ksh" },
-    { label: "USD", value: "usd" },
+    { label: "KSH", value: "KSH" },
+    { label: "USD", value: "USD" },
   ];
-
-  const shipmentTypeOptions = [
+  const shipmentTypeOptions = dropdownData?.shipmentType || [
     { label: "IMPORT LOCAL", value: "IMPORT_LOCAL" },
     { label: "IMPORT TRANSIT", value: "IMPORT_TRANSIT" },
     { label: "EXPORT LOCAL", value: "EXPORT_LOCAL" },
@@ -29,128 +28,113 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
     { label: "AIR IMPORT LOCAL", value: "AIR_IMPORT_LOCAL" },
     { label: "AIR EXPORT LOCAL", value: "AIR_EXPORT_LOCAL" },
   ];
-  const shipmentTypeOption = dropdownData?.shipmentType || shipmentTypeOptions;
 
   // Handler to add a new row
   const addRow = () => {
-    const newMappingRows = [
-      ...customerEntityTariffs,
-      { chargeName: "", unitType: "", currency: "", shipmentType: "", unitRate: "0" },
-    ];
-    formik.setFieldValue("customerEntityTariffs", newMappingRows);
+    const newRow = {
+      id: Date.now(),
+      chargeName: "",
+      unitType: "",
+      currency: "",
+      shipmentType: "",
+      unitRate: "0",
+    };
+    formik.setFieldValue("customerEntityTariffs", [...customerEntityTariffs, newRow]);
   };
 
   // Handler to delete a row
-  const deleteRow = (index) => {
-    const newMappingRows = [...customerEntityTariffs];
-    newMappingRows.splice(index, 1);
-    formik.setFieldValue("customerEntityTariffs", newMappingRows);
+  const deleteRow = (id) => {
+    const updatedRows = customerEntityTariffs.filter((row) => row.id !== id);
+    formik.setFieldValue("customerEntityTariffs", updatedRows);
   };
 
-  // Handler to update row data
-  const updateRow = (index, field, value) => {
-    const newMappingRows = [...customerEntityTariffs];
-    newMappingRows[index][field] = value;
-    formik.setFieldValue("customerEntityTariffs", newMappingRows);
+  // Columns for DataGrid
+  const columns = [
+    {
+      field: "chargeName",
+      headerName: "Charge Name",
+      flex: 1,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: chargeNameOptions.map((option) => option.label),
+    },
+    {
+      field: "unitType",
+      headerName: "Unit Type",
+      flex: 1,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: unitTypeOptions.map((option) => option.label),
+    },
+    {
+      field: "currency",
+      headerName: "Currency",
+      flex: 1,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: currencyOptions.map((option) => option.label),
+    },
+    {
+      field: "shipmentType",
+      headerName: "Shipment Type",
+      flex: 1,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: shipmentTypeOptions.map((option) => option.label),
+    },
+    {
+      field: "unitRate",
+      headerName: "Unit Rate",
+      flex: 1,
+      editable: true,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      sortable: false,
+      renderCell: (params) => (
+        <Button
+          color="error"
+          onClick={() => deleteRow(params.row.id)}
+          disabled={disabled || customerEntityTariffs.length === 1}
+        >
+          Delete
+        </Button>
+      ),
+    },
+  ];
+
+  // Handler to commit changes
+  const handleProcessRowUpdate = (newRow, oldRow) => {
+    const updatedRows = customerEntityTariffs.map((row) =>
+      row.id === newRow.id ? { ...row, ...newRow } : row
+    );
+    formik.setFieldValue("customerEntityTariffs", updatedRows);
+    return newRow;
   };
 
   return (
-    <>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 1 }}>
-        <Button
-          startIcon={<Add />}
-          onClick={addRow}
-          variant="outlined"
-          color="primary"
-          disabled = {disabled}
-        >
-          Add Tariff
-        </Button>
+    <Box sx={{ width: "100%", marginTop: 2 }}>
+      <Button
+        startIcon={<Add />}
+        onClick={addRow}
+        variant="outlined"
+        color="primary"
+        disabled={disabled}
+      >
+        Add Tariff
+      </Button>
+      <Box sx={{ height: 400, marginTop: 2 }}>
+        <DataGrid
+          rows={customerEntityTariffs}
+          columns={columns}
+          disableSelectionOnClick
+          processRowUpdate={handleProcessRowUpdate}
+          experimentalFeatures={{ newEditingApi: true }}
+          getRowId={(row) => row.id}
+          disableColumnMenu
+        />
       </Box>
-
-      {customerEntityTariffs.map((row, index) => (
-        <Grid container spacing={2} key={index} alignItems="center">
-          <Grid item xs={12} sm={2} lg={2}>
-            <AppAutocomplete
-              label="Charge Name"
-              id={`customerEntityTariffs-${index}-chargeName`}
-              value={row.chargeName}
-              disabled = {disabled}
-              options={chargeNameOptions}
-              formik={formik}
-              error={formik.errors?.customerEntityTariffs?.[index]?.chargeName}
-              onChange={(value) => updateRow(index, "chargeName", value)}
-              sx={{ marginTop: "16px", marginBottom: "8px" }}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={3} lg={2}>
-            <AppAutocomplete
-              label="Unit Type"
-              id={`customerEntityTariffs-${index}-unitType`}
-              value={row.unitType}
-              disabled = {disabled}
-              options={unitType}
-              formik={formik}
-              onChange={(value) => updateRow(index, "unitType", value)}
-              error={formik.errors?.customerEntityTariffs?.[index]?.unitType}
-              sx={{ marginTop: "16px", marginBottom: "8px" }}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={3} lg={2}>
-            <AppAutocomplete
-              label="Currency"
-              id={`customerEntityTariffs-${index}-currency`}
-              value={row.currency}
-              options={currencyOptions}
-              disabled = {disabled}
-              formik={formik}
-              onChange={(value) => updateRow(index, "currency", value)}
-              error={formik.errors?.customerEntityTariffs?.[index]?.currency}
-              sx={{ marginTop: "16px", marginBottom: "8px" }}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={3} lg={2}>
-            <AppAutocomplete
-              label="Shipment Type"
-              id={`customerEntityTariffs-${index}-shipmentType`}
-              value={row.shipmentType}
-              options={shipmentTypeOption}
-              disabled = {disabled}
-              formik={formik}
-              onChange={(value) => updateRow(index, "shipmentType", value)}
-              error={
-                formik.errors?.customerEntityTariffs?.[index]?.shipmentType
-              }
-              sx={{ marginTop: "16px", marginBottom: "8px" }}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={3} lg={2}>
-            <InputBox
-              label="Unit Rate"
-              id={`customerEntityTariffs-${index}-unitRate`}
-              value={row.unitRate}
-              disabled = {disabled}
-              onChange={(e) => updateRow(index, "unitRate", e.target.value)}
-              error={formik.errors?.customerEntityTariffs?.[index]?.unitRate}
-              sx={{ marginTop: "16px", marginBottom: "8px" }}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={2}>
-            <IconButton
-              color="error"
-              onClick={() => deleteRow(index)}
-              disabled={customerEntityTariffs.length === 1}
-            >
-              <Delete />
-            </IconButton>
-          </Grid>
-        </Grid>
-      ))}
-    </>
+    </Box>
   );
 }

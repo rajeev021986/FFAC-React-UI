@@ -20,8 +20,8 @@ const ENDPOINTS = {
     DOWNLOAD_DOCUMENT: (id,source, sourceId) => `/entity-service/file/download/${id}?source=${source}&sourceId=${sourceId}`,
     DOCUMENT_DELETE: (id, source, sourceId) => `/entity-service/file/delete/${id}?source=${source}&sourceId=${sourceId}`,
     GET_CUSTOMER_DETAILS:(id)=>`/entity-service/customer/get/${id}`,
-    CUSTOMER_APPROVE_REQUEST:(id)=>`/entity-service/customer/approval/set/approved/${id}`,
-    CUSTOMER_REJECT_REQUEST:(id)=>`/entity-service/customer/approval/set/rejected/${id}`
+    CUSTOMER_APPROVE_REQUEST:(id,type)=>`/entity-service/approval/set/approved/${type}/${id}`,
+    CUSTOMER_REJECT_REQUEST:(id,type)=>`/entity-service/approval/set/rejected/${type}/${id}`
 }
 
 export default ENDPOINTS;

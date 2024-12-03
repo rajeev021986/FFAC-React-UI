@@ -46,6 +46,8 @@ export default function CustomerForm({
   initialValues,
   page,
   type = "notcopy",
+  optionsSettingsData,
+  customerSettingsData
 }) {
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
@@ -160,10 +162,6 @@ export default function CustomerForm({
   //     setEnquiryAuditDetails(response);
   //   }
   // };
-  const { data: optionsSettingsData } =
-    useGetOptionsSettingsQuery("common_settings");
-  const { data: customerSettingsData } =
-    useGetOptionsSettingsQuery("customer_settings");
 
   useEffect(() => {
     if (optionsSettingsData?.body || customerSettingsData?.body) {
@@ -176,7 +174,7 @@ export default function CustomerForm({
   const handleApproveRequest = async () => {
     try {
       const response = await ApiManager.approveCustomerApprove(
-        initialValues.id
+        initialValues.id,"customer"
       );
       nav("/app/entity/approve");
       toast.success("Approved");
@@ -186,7 +184,7 @@ export default function CustomerForm({
   };
   const handleRejectRequest = async () => {
     try {
-      const response = await ApiManager.rejectCustomerApprove(initialValues.id);
+      const response = await ApiManager.rejectCustomerApprove(initialValues.id,"customer");
       nav("/app/entity/approve");
       toast.success("Rejected");
     } catch (error) {

@@ -116,7 +116,7 @@ export const codeDataApi = createApi({
                     Authorization: getAppHeaders()['Authorization'],
                 };
                 return {
-                    url: `/entity-service/customer/${page}?${queryString}`,
+                    url: `/entity-service/${page}?${queryString}`,
                     method: "POST",
                     body: payload,
                     headers,

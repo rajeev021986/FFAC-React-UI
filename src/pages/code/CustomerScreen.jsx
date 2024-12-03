@@ -113,7 +113,7 @@ export default function CustomerScreen({ page }) {
   } = useFetchCustomerDatasQuery({
     params: query,
     payload,
-    page: page == "customer" ? "filter" : "approval",
+    page: page == "customer" ? "customer/filter" : "approval/filter/customer",
   });
   useEffect(() => {
     refetch();

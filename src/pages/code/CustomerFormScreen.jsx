@@ -7,9 +7,11 @@ import CustomerForm from '../../components/screen/code/customer/CustomerForm';
 import { useFetchCustomerQuery } from '../../store/api/codeDataApi';
 import ApiManager from '../../services/ApiManager';
 import Loader from '../../components/common/Loader/Loader';
-export default function CustomerFormScreen({page}) {
+import { useGetOptionsSettingsQuery } from '../../store/api/settingsApi';
+export default function CustomerFormScreen({ page }) {
   const [customerDatas, setcustomerDatas] = useState({});
   const [loading, setLoading] = useState(false);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
   const { state } = useLocation();
   // console.log(state, 'state')
   const [initialValues, setInitialValues] = React.useState({
@@ -54,6 +56,20 @@ export default function CustomerFormScreen({page}) {
   //   acode: state?.initialValues?.acode
   // });
 
+  // Move settings queries to the top
+  const { data: optionsSettingsData, isLoading: optionsLoading } =
+    useGetOptionsSettingsQuery("common_settings");
+  const { data: customerSettingsData, isLoading: customerSettingsLoading } =
+    useGetOptionsSettingsQuery("customer_settings");
+
+  // First useEffect to handle settings loading
+  useEffect(() => {
+    if (!optionsLoading && !customerSettingsLoading) {
+      setSettingsLoaded(true);
+    }
+  }, [optionsLoading, customerSettingsLoading]);
+
+  // Only fetch customer details after settings are loaded
   useEffect(() => {
     const fetchCustomerDetails = async () => {
       try {
@@ -99,13 +115,12 @@ export default function CustomerFormScreen({page}) {
         setLoading(false)
       }
     };
-    if (state?.initialValues?.id) {
+    if (settingsLoaded && state?.initialValues?.id) {
       fetchCustomerDetails();
     }
 
 
-  }, []);
-
+  }, [settingsLoaded, state?.initialValues?.id]);
 
   // React.useEffect(() => {
   //   if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityTariffs) {
@@ -149,9 +164,11 @@ export default function CustomerFormScreen({page}) {
         } />
         <CardContent>
           <CustomerForm
-            initialValues={initialValues} 
+            optionsSettingsData={optionsSettingsData}
+            customerSettingsData={customerSettingsData}
+            initialValues={initialValues}
             type={state?.type}
-            page={page}/>
+            page={page} />
         </CardContent>
       </Card>}
     </Box>

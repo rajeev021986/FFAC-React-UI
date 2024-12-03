@@ -8,6 +8,8 @@ const AuthGuard = ({ children }) => {
   if (localToken && localUser) {
     // check if token is expired
     if (localUser.expiresIn < new Date().getTime()) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       return <Navigate to="/" />;
     }
   }
