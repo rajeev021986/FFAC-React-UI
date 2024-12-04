@@ -49,6 +49,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
+import ApiManager from "../../services/ApiManager";
 
 const ADD_NEW_CUSTOMER_PATH = "new";
 
@@ -145,7 +146,7 @@ export default function CustomerScreen({ page }) {
     }
   }, [codeCustomerSelector.view, dispatch]);
 
-  const handleActionClick = (actionName) => {
+  const handleActionClick = async (actionName) => {
     // }
     if (actionName === "New Customer") {
       nav(ADD_NEW_CUSTOMER_PATH, {
@@ -163,16 +164,34 @@ export default function CustomerScreen({ page }) {
       });
     }
     if (actionName === "Export") {
-      const worksheet = XLSX.utils.json_to_sheet(
-        Boolean(seletectBox)
-          ? CustomerData?.body?.data?.filter(
-              (customer) => customer.id === seletectBox
-            )
-          : CustomerData?.body?.data
-      );
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-      XLSX.writeFile(workbook, "exported_data.xlsx");
+
+      try {
+        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'customer-data.xlsx'); // or whatever filename you want
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Download failed:', error);
+      }
+      // const response = await fetch("http://18.223.155.76:9092/entity-service/customer/export?page=1&size=10&sortBy=&sortOrder=", {   
+      //   responseType: "blob",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Authorization": `Bearer ${localStorage.getItem("token")}`
+      //   }
+      // })
+      // const blob = await response.blob();
+      // const url = window.URL.createObjectURL(blob);
+      // const link = document.createElement('a');
+      // link.href = url;
+      // link.setAttribute('download', `${Date.now()}.xlsx`);
+      // document.body.appendChild(link);
+      // link.click();
     }
   };
 
@@ -219,13 +238,14 @@ export default function CustomerScreen({ page }) {
                       backgroundColor: "#f0f0f0",
                       color: "black",
                       boxShadow: 3,
+                      borderRadius: '20px 19px 19px 20px',
                       "&:hover": {
                         backgroundColor: "#e0e0e0",
                       },
-                      width: 72, // Reduce action button width
-                      minWidth: 92, // Ensure consistent sizing
+                      width: 72,
+                      minWidth: 92,
                       "& .MuiSvgIcon-root": {
-                        fontSize: 16, // Adjust icon size
+                        fontSize: 16,
                       },
                     }}
                     icon={

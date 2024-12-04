@@ -176,6 +176,7 @@ export default function CustomerScreen({ page }) {
                 variant="contained"
                 color="primary"
                 onClick={handleAddAction}
+                sx={{borderRadius: '17px 18px 18px 17px'}}
               >
                 Add
               </Button>
@@ -183,6 +184,7 @@ export default function CustomerScreen({ page }) {
                 variant="outlined"
                 color="secondary"
                 onClick={handleDownload}
+                sx={{borderRadius: '17px 18px 18px 17px'}}
               >
                 Export
               </Button>
@@ -194,12 +196,12 @@ export default function CustomerScreen({ page }) {
         <CardHeader
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
-              <Box sx={{ display: "flex", gap: 1 }}>
+              <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
                   filters={codeCustomerSelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="500px"
-                  height="300px"
+                  height="170px"
                 >
                   <UserFilter filterInfo={CustomerData?.counts || []} />
                 </GridSearchInput>

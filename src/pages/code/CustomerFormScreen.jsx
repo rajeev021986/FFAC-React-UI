@@ -157,11 +157,11 @@ export default function CustomerFormScreen({ page }) {
     <Box>
       <ScreenToolbar leftComps={<div><ThemedBreadcrumb /></div>} rightComps={<div></div>} />
       {loading ? <Loader /> : <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        <CardHeader title={
+        {/* <CardHeader title={
           <Box display="flex" justifyContent={"space-between"}>
             <Typography variant='subtitle3' component='div'>Customer</Typography>
           </Box>
-        } />
+        } /> */}
         <CardContent>
           <CustomerForm
             optionsSettingsData={optionsSettingsData}

@@ -9,6 +9,8 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
@@ -36,7 +38,7 @@ const DropZone = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UploadFile = ({ customer_id, disabled }) => {
+const UploadFile = ({ customer_id, disabled, dropdownData }) => {
   // const [uploadCustomerFile, { isLoading }] = useUploadCustomerFileMutation();
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
   const [openConfirmation, setOpenConfirmation] = useState(false);
@@ -46,18 +48,18 @@ const UploadFile = ({ customer_id, disabled }) => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    documentName: "",
+    documentType: "",
     issueDate: "",
     number: "",
     expiryDate: "",
   });
 
-  const handleDownload = async (id, source, sourceId, documentName) => {
+  const handleDownload = async (id, source, sourceId, documentType) => {
     try {
       setLoading(true);
       let source = "CUSTOMER";
       const res = await ApiManager.downloadDocumnent(id, source, sourceId);
-      donloadData(res.body.base64, res.body.mimeType, documentName);
+      donloadData(res.body.base64, res.body.mimeType, documentType);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -294,14 +296,20 @@ const UploadFile = ({ customer_id, disabled }) => {
           <Dialog open={dialogOpen} onClose={handleDialogClose}>
             <DialogTitle>File Details</DialogTitle>
             <DialogContent>
-              <TextField
+              <Select
                 margin="dense"
-                label="Document Name"
-                name="documentName"
+                label="Document Type"
+                name="documentType"
                 fullWidth
-                value={formData.documentName}
+                value={formData.documentType}
                 onChange={handleInputChange}
-              />
+              >
+                {dropdownData?.document_type?.map((item) => (
+                  <MenuItem key={item.value} value={item.value}>
+                    {item.value}
+                  </MenuItem>
+                ))}
+              </Select>
               <TextField
                 margin="dense"
                 label="Issue Date"

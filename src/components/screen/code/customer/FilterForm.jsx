@@ -63,13 +63,14 @@ export default function FilterForm() {
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
-          <Button color="primary" size="small" onClick={handleReset}>
+          <Button color="primary" size="small" onClick={handleReset} sx={{borderRadius: '12px'}}>
             reset
           </Button>
           <OutlinedButton
             color="primary"
             size="small"
             onClick={formik.handleSubmit}
+            sx={{borderRadius: '12px'}}
           >
             apply
           </OutlinedButton>

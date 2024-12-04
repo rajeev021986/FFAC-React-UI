@@ -21,7 +21,8 @@ const ENDPOINTS = {
     DOCUMENT_DELETE: (id, source, sourceId) => `/entity-service/file/delete/${id}?source=${source}&sourceId=${sourceId}`,
     GET_CUSTOMER_DETAILS:(id)=>`/entity-service/customer/get/${id}`,
     CUSTOMER_APPROVE_REQUEST:(id,type)=>`/entity-service/approval/set/approved/${type}/${id}`,
-    CUSTOMER_REJECT_REQUEST:(id,type)=>`/entity-service/approval/set/rejected/${type}/${id}`
+    CUSTOMER_REJECT_REQUEST:(id,type)=>`/entity-service/approval/set/rejected/${type}/${id}`,
+    FETCH_CUSTOMER_DATA_EXCEL:(queryString)=>`/entity-service/customer/export?${queryString}`,
 }
 
 export default ENDPOINTS;

@@ -9,7 +9,7 @@ export const getAppHeaders = () => {
 };
 
 class ApiMethods {
-  static apiRequest = async (method, url, body = {}) => {
+  static apiRequest = async (method, url, body = {}, isBlob = false) => {
     url = API_BASE_URL + url;
     const options = {
       method,
@@ -29,11 +29,19 @@ class ApiMethods {
             reject(new Error('Unauthorized'));
           }
 
-          const data = await res.json();
-          if (!res.ok) {
-            reject(data); 
+          const contentType = res.headers.get('content-type');
+          let data;
+          
+          if (isBlob || contentType?.includes('application/octet-stream')) {
+            data = await res.blob();
           } else {
-            resolve(data); 
+            data = await res.json();
+          }
+
+          if (!res.ok) {
+            reject(data);
+          } else {
+            resolve(data);
           }
         })
         .catch((error) => {
@@ -42,8 +50,8 @@ class ApiMethods {
     });
   };
 
-  static get(url) {
-    return this.apiRequest('GET', url);
+  static get(url, payload) {
+    return this.apiRequest('GET', url, payload);
   }
 
   static post(url, payload) {
@@ -56,6 +64,9 @@ class ApiMethods {
 
   static delete(url) {
     return this.apiRequest('DELETE', url);
+  }
+  static postBlob(url, payload) {
+    return this.apiRequest('POST', url, payload, true);
   }
 }
 

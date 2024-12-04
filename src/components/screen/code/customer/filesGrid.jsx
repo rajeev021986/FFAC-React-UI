@@ -66,7 +66,8 @@ export default function FilesGrid({ formik, disabled }) {
           variant="contained"
           startIcon={<AddIcon />}
           onClick={addNewRow}
-          disabled={disabled}
+          disabled = {disabled}
+          sx={{borderRadius: '17px 18px 18px 17px', margin: '5px'}}
         >
           Add Email
         </Button>

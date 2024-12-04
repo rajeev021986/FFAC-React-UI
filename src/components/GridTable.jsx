@@ -7,7 +7,7 @@ function GridTable({ data }) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell><Typography variant="subtitle2">ID</Typography></TableCell>
+            {/* <TableCell><Typography variant="subtitle2">ID</Typography></TableCell> */}
             <TableCell><Typography variant="subtitle2">Entity Name</Typography></TableCell>
             <TableCell><Typography variant="subtitle2">Field Name</Typography></TableCell>
             <TableCell><Typography variant="subtitle2">Old Value</Typography></TableCell>
@@ -18,7 +18,7 @@ function GridTable({ data }) {
         <TableBody>
           {data.map((row, index) => (
             <TableRow key={index}>
-              <TableCell>{row.id}</TableCell>
+              {/* <TableCell>{row.id}</TableCell> */}
               <TableCell>{row.entityName}</TableCell>
               <TableCell>{row.fieldName}</TableCell>
 
