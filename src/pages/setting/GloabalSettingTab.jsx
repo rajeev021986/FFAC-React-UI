@@ -16,8 +16,8 @@ import toast from "react-hot-toast";
 
 const GlobalSetting = () => {
     const [backendData, setBackendData] = useState({});
-    const [addOptons, { isloading,refetch }] = useAddOptonsMutation();
-    const { data, isLoading, error: geterror } = useGetOptionsSettingsQuery("common_settings");
+    const [addOptons, { isloading }] = useAddOptonsMutation();
+    const { data, isLoading, error: geterror, refetch } = useGetOptionsSettingsQuery("common_settings");
     const [errortype, setErrorType] = useState("true");
 
     useEffect(() => {

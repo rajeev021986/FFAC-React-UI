@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Table, TableBody, TableCell, TableHead, TableRow, Typography, Tooltip } from "@mui/material";
 
 function GridTable({ data }) {
   return (
@@ -21,8 +21,21 @@ function GridTable({ data }) {
               <TableCell>{row.id}</TableCell>
               <TableCell>{row.entityName}</TableCell>
               <TableCell>{row.fieldName}</TableCell>
-              <TableCell>{row.oldValue}</TableCell>
-              <TableCell>{row.newValue}</TableCell>
+
+              {/* Tooltip for Old Value with Ellipsis */}
+              <TableCell style={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <Tooltip title={row.oldValue || "No previous value"} arrow>
+                  <span>{row.oldValue}</span>
+                </Tooltip>
+              </TableCell>
+
+              {/* Tooltip for New Value with Ellipsis */}
+              <TableCell style={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <Tooltip title={row.newValue || "No new value"} arrow>
+                  <span>{row.newValue}</span>
+                </Tooltip>
+              </TableCell>
+
               <TableCell>{row.modifiedBy || "N/A"}</TableCell>
             </TableRow>
           ))}

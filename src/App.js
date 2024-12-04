@@ -17,6 +17,7 @@ import SettingsPage from "./pages/setting/Setting";
 import UserRole from "./pages/code/UserRole";
 import AddCard from "./components/common/Cards/AddCard";
 import CustomerFormScreen from "./pages/code/CustomerFormScreen";
+import Role from "./pages/code/Role";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -70,6 +71,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="admin/users" element={<UserRole />} />
             <Route path="admin/users/add" element={<AddCard />} />
+            <Route path="admin/roles" element={<Role />} />
           </Route>
         </Routes>
         <Toaster />

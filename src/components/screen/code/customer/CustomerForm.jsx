@@ -36,7 +36,7 @@ import {
   useGetCustomerAuditQuery,
   useUpdateCustomerMutation,
 } from "../../../../store/api/codeDataApi";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { UploadFileOutlined } from "@mui/icons-material";
@@ -47,7 +47,7 @@ export default function CustomerForm({
   page,
   type = "notcopy",
   optionsSettingsData,
-  customerSettingsData
+  customerSettingsData,
 }) {
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
@@ -58,6 +58,7 @@ export default function CustomerForm({
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateCustomer] = useUpdateCustomerMutation();
   const [dropdownData, setDropdownData] = useState({});
+  const location = useLocation();
 
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
@@ -174,7 +175,8 @@ export default function CustomerForm({
   const handleApproveRequest = async () => {
     try {
       const response = await ApiManager.approveCustomerApprove(
-        initialValues.id,"customer"
+        initialValues.id,
+        "customer"
       );
       nav("/app/entity/approve");
       toast.success("Approved");
@@ -184,7 +186,10 @@ export default function CustomerForm({
   };
   const handleRejectRequest = async () => {
     try {
-      const response = await ApiManager.rejectCustomerApprove(initialValues.id,"customer");
+      const response = await ApiManager.rejectCustomerApprove(
+        initialValues.id,
+        "customer"
+      );
       nav("/app/entity/approve");
       toast.success("Rejected");
     } catch (error) {
@@ -192,6 +197,10 @@ export default function CustomerForm({
     }
   };
   const disabled = page == "customer" ? false : true;
+
+  const disableStatus =
+    page === "customer" && location.pathname.includes("/new") ? true : false;
+
   return (
     <>
       {!shouldShowTabs ? (
@@ -420,11 +429,12 @@ export default function CustomerForm({
               xl={2}
               sx={{ marginTop: 2 }}
             >
-              <SelectBox
+              <InputBox
                 label="Status"
                 id="status"
-                options={dropdownData?.status}
-                value={formik.values.status}
+                // options={dropdownData?.status}
+                value={disableStatus ? "new" : formik.values.status}
+                disabled={disableStatus}
                 error={formik.errors.status}
                 onChange={formik.handleChange}
               />

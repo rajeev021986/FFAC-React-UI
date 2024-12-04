@@ -16,8 +16,8 @@ import toast from "react-hot-toast";
 
 const CustomerSetting = () => {
     const [backendData, setBackendData] = useState({ unitType: [], creditDays: [], });
-    const [addOptons, { isloading ,refetch}] = useAddOptonsMutation();
-    const { data, isLoading, error: geterror } = useGetOptionsSettingsQuery("customer_settings");
+    const [addOptons, { isloading }] = useAddOptonsMutation();
+    const { data, isLoading, error: geterror, refetch } = useGetOptionsSettingsQuery("customer_settings");
     const [errorType, setErrorType] = useState();
 
     const [editRowIds, setEditRowIds] = useState({
