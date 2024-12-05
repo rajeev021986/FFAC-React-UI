@@ -12,21 +12,22 @@ export default function CardItem({
   uniqueId,
   actions,
   icon,
-  page
+  page,
 }) {
   const handleCheckboxChange = (event) => {
     if (event.target.checked) {
-      setSelectedBox((prev) => {
-        const updated = [...prev, uniqueId];
-        console.log("Selected IDs after adding:", updated);
-        return updated;
-      });
+      // setSelectedBox((prev) => {
+      //   const updated = [...prev, uniqueId];
+      //   console.log("Selected IDs after adding:", updated);
+      //   return updated;
+      return setSelectedBox(uniqueId);
     } else {
-      setSelectedBox((prev) => {
-        const updated = prev.filter((id) => id !== uniqueId);
-        console.log("Selected IDs after removing:", updated);
-        return updated;
-      });
+      // setSelectedBox((prev) => {
+      //   const updated = prev.filter((id) => id !== uniqueId);
+      //   console.log("Selected IDs after removing:", updated);
+      //   return updated;
+      // });
+      setSelectedBox('')
     }
   };
   // Remove id and action columns
@@ -37,17 +38,28 @@ export default function CardItem({
   return (
     <Box sx={styles.root_item}>
       {/* Checkbox at the start */}
-     {page =="customer" && <Box sx={styles.card_left_box}>
-        <Checkbox
-          checked={selectedBox.includes(uniqueId)}
-          onChange={handleCheckboxChange}
-          color="primary"
-        />
-      </Box>}
+      {page == "customer" && (
+        <Box
+          sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
+        >
+          <Checkbox
+            checked={selectedBox == uniqueId}
+            onChange={handleCheckboxChange}
+            color="primary"
+          />
+        </Box>
+      )}
 
       {/* Icon and details */}
-      <Box sx={styles.card_left_box}>
-        <Box sx={styles.icon} elevation={1}>
+      <Box
+        sx={{
+          ...styles.card_left_box,
+          marginRight: "17px",
+          padding: 0,
+          width: "50px",
+        }}
+      >
+        <Box sx={{ ...styles.icon, margin: 0, padding: 0 }} elevation={1}>
           {icon ? icon : <VerifiedUserOutlined color="primary" />}
         </Box>
       </Box>

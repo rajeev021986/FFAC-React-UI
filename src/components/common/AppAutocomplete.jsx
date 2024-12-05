@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, TextField, CircularProgress } from '@mui/material';
 
-const AppAutocomplete = ({ label, id, value, formik, options, sx, onChange, error }) => {
+const AppAutocomplete = ({ label, id, value, formik, options, sx, onChange, error, disabled = false}) => {
   const [inputValue, setInputValue] = useState(value || ''); // Initialize with the initial value or empty string
   const [loading, setLoading] = useState(false);
 
@@ -31,6 +31,7 @@ const AppAutocomplete = ({ label, id, value, formik, options, sx, onChange, erro
           formik?.setFieldValue(id, selectedValue);
         }
       }}
+      disabled = {disabled}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
       }}

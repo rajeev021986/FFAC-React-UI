@@ -38,7 +38,7 @@ export default function SelectBox({
             {
                 options?.map((option,idx) => {
                     return (
-                        <MenuItem key={idx} value={option?.value}>{option?.label}</MenuItem>
+                        <MenuItem key={idx} value={option?.value}>{option?.label || option?.value}</MenuItem>
                     )
                 })
             }

@@ -9,6 +9,8 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
@@ -36,7 +38,7 @@ const DropZone = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UploadFile = ({ customer_id }) => {
+const UploadFile = ({ customer_id, disabled, dropdownData }) => {
   // const [uploadCustomerFile, { isLoading }] = useUploadCustomerFileMutation();
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
   const [openConfirmation, setOpenConfirmation] = useState(false);
@@ -46,21 +48,21 @@ const UploadFile = ({ customer_id }) => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    documentName: "",
+    documentType: "",
     issueDate: "",
     number: "",
     expiryDate: "",
   });
 
-  const handleDownload = async (id, source, sourceId, documentName) => {
+  const handleDownload = async (id, source, sourceId, documentType) => {
     try {
       setLoading(true);
       let source = "CUSTOMER";
       const res = await ApiManager.downloadDocumnent(id, source, sourceId);
-      donloadData(res.body.base64, res.body.mimeType, documentName);
+      donloadData(res.body.base64, res.body.mimeType, documentType);
       setLoading(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setLoading(false);
     }
   };
@@ -75,10 +77,9 @@ const UploadFile = ({ customer_id }) => {
       reloadDataHandler();
       setLoading(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setLoading(false);
     }
-
   };
 
   const handleFileDrop = (event) => {
@@ -100,9 +101,7 @@ const UploadFile = ({ customer_id }) => {
   };
   const onCloseConfiramtion = () => {
     setOpenConfirmation(false);
-
-
-  }
+  };
 
   const handleDialogSave = async () => {
     const uploadData = {
@@ -113,9 +112,9 @@ const UploadFile = ({ customer_id }) => {
         number: formData.number,
         expiryDate: formData.expiryDate,
         source: "CUSTOMER",
-        sourceId: customer_id
-      }
-    }
+        sourceId: customer_id,
+      },
+    };
     try {
       setLoading(true);
       let response = await uploadCustomerFile(uploadData).unwrap();
@@ -126,7 +125,6 @@ const UploadFile = ({ customer_id }) => {
       console.error("Error uploading file:", error);
       setLoading(false);
     }
-
   };
   const donloadData = (base64, mimeType, documentName) => {
     try {
@@ -169,12 +167,27 @@ const UploadFile = ({ customer_id }) => {
       headerName: "Actions",
       flex: 2,
       renderCell: (params) => (
-        <div style={{ display: "flex", gap: "8px", justifyContent: "center", alignItems: "center", height: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
           <Button
             variant="contained"
             color="primary"
             startIcon={<CloudDownload />}
-            onClick={() => handleDownload(params.row.id, params.row.source, params.row.sourceId, params.row.documentName)}
+            onClick={() =>
+              handleDownload(
+                params.row.id,
+                params.row.source,
+                params.row.sourceId,
+                params.row.documentName
+              )
+            }
           >
             Download
           </Button>
@@ -183,9 +196,14 @@ const UploadFile = ({ customer_id }) => {
             color="error"
             startIcon={<Delete />}
             onClick={() => {
-              setDeleteData({ id: params.row.id, source: params.row.source, sourceId: params.row.sourceId });
+              setDeleteData({
+                id: params.row.id,
+                source: params.row.source,
+                sourceId: params.row.sourceId,
+              });
               setOpenConfirmation(true);
             }}
+            disabled = {disabled}
           >
             Delete
           </Button>
@@ -195,9 +213,8 @@ const UploadFile = ({ customer_id }) => {
   ];
   useEffect(() => {
     reloadDataHandler();
-  }, [])
+  }, []);
   const reloadDataHandler = async () => {
-
     try {
       let source = "CUSTOMER";
       setLoading(true);
@@ -205,121 +222,148 @@ const UploadFile = ({ customer_id }) => {
       setListData(res.body);
       setLoading(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setLoading(false);
     }
   };
   return (
     <>
-      {loading ?<Grid container spacing={2} display="flex" justifyContent="center" alignContent="center">
-        <Loader /></Grid>:
-      <Grid container spacing={2}>
-        <Typography variant="h4" gutterBottom style={{ width: "100%" }}>
-          Select Files
-        </Typography>
-        <Grid item xs={12} sm={4}>
-          <Box display="flex" flexDirection="column" height="100%" gap={2}>
-            <DropZone
-              onClick={() => document.getElementById("file-input").click()}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                e.preventDefault();
-                handleFileDrop(e);
-              }}
-            >
-              <img src={Uploadimg} alt="Upload" style={{ margin: "0 auto" }} />
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
-                Drop file here or click to{" "}
-                <span style={{ textDecoration: "underline", color: "#1976d2" }}>
-                  browse
-                </span>{" "}
-                through your machine
-              </Typography>
-              <input
-                id="file-input"
-                type="file"
-                style={{ display: "none" }}
-                onChange={handleFileDrop}
+      {loading ? (
+        <Grid
+          container
+          spacing={2}
+          display="flex"
+          justifyContent="center"
+          alignContent="center"
+        >
+          <Loader />
+        </Grid>
+      ) : (
+        <Grid container spacing={2}>
+          <Typography variant="h4" gutterBottom style={{ width: "100%" }}>
+            Select Files
+          </Typography>
+          <Grid item xs={12} sm={4} >
+            <Box display="flex" flexDirection="column" height="100%" gap={2} >
+              <DropZone
+                onClick={() => document.getElementById("file-input").click()}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  handleFileDrop(e);
+                }}
+              >
+                <img
+                  src={Uploadimg}
+                  alt="Upload"
+                  style={{ margin: "0 auto" }}
+                />
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  sx={{ mt: 2 }}
+                >
+                  Drop file here or click to{" "}
+                  <span
+                    style={{ textDecoration: "underline", color: "#1976d2" }}
+                  >
+                    browse
+                  </span>{" "}
+                  through your machine
+                </Typography>
+                <input
+                  id="file-input"
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={handleFileDrop}
+                  disabled = {disabled}
+                />
+              </DropZone>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={8}>
+            <Box style={{ height: 600, width: "100%" }}>
+              <DataGrid
+                rows={listData}
+                columns={columns}
+                pageSize={20}
+                // checkboxSelection={checkBox}
+                disableSelectionOnClick
               />
-            </DropZone>
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={8}>
-          <Box style={{ height: 600, width: "100%" }}>
-            <DataGrid
-              rows={listData}
-              columns={columns}
-              pageSize={20}
-              // checkboxSelection={checkBox}
-              disableSelectionOnClick
-            />
-          </Box>
-        </Grid>
+            </Box>
+          </Grid>
 
-        <Dialog open={dialogOpen} onClose={handleDialogClose}>
-          <DialogTitle>File Details</DialogTitle>
-          <DialogContent>
-            <TextField
-              margin="dense"
-              label="Document Name"
-              name="documentName"
-              fullWidth
-              value={formData.documentName}
-              onChange={handleInputChange}
-            />
-            <TextField
-              margin="dense"
-              label="Issue Date"
-              name="issueDate"
-              type="date"
-              fullWidth
-              value={formData.issueDate}
-              onChange={handleInputChange}
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField
-              margin="dense"
-              label="Number"
-              name="number"
-              fullWidth
-              value={formData.number}
-              onChange={handleInputChange}
-            />
-            <TextField
-              margin="dense"
-              label="Expiry Date"
-              name="expiryDate"
-              type="date"
-              fullWidth
-              value={formData.expiryDate}
-              onChange={handleInputChange}
-              InputLabelProps={{ shrink: true }}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDialogClose} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={handleDialogSave} color="primary">
-              Save
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog open={openConfirmation} onClose={onCloseConfiramtion}>
-          <DialogTitle>Are you sure you want to delete it?</DialogTitle>
-          <DialogContent>
-            <p>This action cannot be undone.</p>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onCloseConfiramtion} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={onDelete} color="secondary">
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Grid>}
+          <Dialog open={dialogOpen} onClose={handleDialogClose}>
+            <DialogTitle>File Details</DialogTitle>
+            <DialogContent>
+              <Select
+                margin="dense"
+                label="Document Type"
+                name="documentType"
+                fullWidth
+                value={formData.documentType}
+                onChange={handleInputChange}
+              >
+                {dropdownData?.document_type?.map((item) => (
+                  <MenuItem key={item.value} value={item.value}>
+                    {item.value}
+                  </MenuItem>
+                ))}
+              </Select>
+              <TextField
+                margin="dense"
+                label="Issue Date"
+                name="issueDate"
+                type="date"
+                fullWidth
+                value={formData.issueDate}
+                onChange={handleInputChange}
+                InputLabelProps={{ shrink: true }}
+              />
+              <TextField
+                margin="dense"
+                label="Number"
+                name="number"
+                fullWidth
+                value={formData.number}
+                onChange={handleInputChange}
+              />
+              <TextField
+                margin="dense"
+                label="Expiry Date"
+                name="expiryDate"
+                type="date"
+                fullWidth
+                value={formData.expiryDate}
+                onChange={handleInputChange}
+                InputLabelProps={{ shrink: true }}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDialogClose} color="secondary">
+                Cancel
+              </Button>
+              <Button onClick={handleDialogSave} color="primary">
+                Save
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={openConfirmation} onClose={onCloseConfiramtion}>
+            <DialogTitle>Are you sure you want to delete it?</DialogTitle>
+            <DialogContent>
+              <p>This action cannot be undone.</p>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={onCloseConfiramtion} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={onDelete} color="secondary">
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Grid>
+      )}
     </>
   );
 };

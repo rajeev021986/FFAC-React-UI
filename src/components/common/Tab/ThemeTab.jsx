@@ -33,7 +33,7 @@ const ThemeTabs = ({ tabData,tabCounts, children }) => {
         </Box>
         {
           tabData.length > 0 && tabData.map((tab, index) => (
-            <TabPanel value={tab.value} key={index+99} >
+            <TabPanel value={tab.value} key={index+99}>
               {children[index]}
             </TabPanel>
           ))
@@ -42,7 +42,6 @@ const ThemeTabs = ({ tabData,tabCounts, children }) => {
     </Box>
   )
 }
-
 
 
 
