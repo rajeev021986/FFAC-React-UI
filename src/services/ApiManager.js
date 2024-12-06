@@ -87,6 +87,19 @@ class ApiManager {
         const url = ENDPOINTS.DOCUMENT_DELETE(id, source, sourceId);
         return ApiMethods.delete(url);
     }
+    static approveCustomerApprove = async (id,type) => {
+        const url = ENDPOINTS.CUSTOMER_APPROVE_REQUEST(id,type);
+        return ApiMethods.put(url);
+    }
+     static rejectCustomerApprove = async (id,type) => {
+        const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id,type);
+        return ApiMethods.put(url);
+    }
+    static fetchCustomerDatasExcel = async (params, payload) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString);
+        return ApiMethods.postBlob(url, payload);
+    }
 }
 
 

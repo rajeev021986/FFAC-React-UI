@@ -105,6 +105,12 @@ export default function TAppBar({ handleDrawerToggle }) {
                   Light Green
                 </Box>
               </MenuItem>
+              <MenuItem value="#800080">
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box sx={{ width: 15, height: 15, borderRadius: '50%', backgroundColor: '#800080', marginRight: 1 }} />
+                  Purple
+                </Box>
+              </MenuItem>
             </Select>
           </div>
           <div>

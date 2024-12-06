@@ -9,13 +9,21 @@ import VendorScreen from "./pages/vendor/VendorScreen";
 import AuthGuard from "./components/Providers/AuthGuard";
 import DashboardScreen from "./pages/dashboard/DashboardScreen";
 import HandleAuthCallback from "./HandleAuthCallback";
-import CustomerFormScreen from "./pages/code/CustomerFormScreen";
+import FormScreen from "./pages/code/CustomerFormScreen";
+import CustomerApproveScreen from "./pages/code/CustomerApproveScreen";
 import Component from "./pages/code/Component";
-import { useSelector } from 'react-redux';
-import SettingsPage from "./pages/setting/Setting"
+import { useSelector } from "react-redux";
+import SettingsPage from "./pages/setting/Setting";
+import UserRole from "./pages/code/UserRole";
+import AddCard from "./components/common/Cards/AddCard";
+import CustomerFormScreen from "./pages/code/CustomerFormScreen";
+import Role from "./pages/code/Role";
 function App() {
   // const { menuItems } = useMenuSetting();
-  const theme = getTheme(useSelector((state) => state.dashboard.theme), useSelector((state) => state.dashboard.mode));
+  const theme = getTheme(
+    useSelector((state) => state.dashboard.theme),
+    useSelector((state) => state.dashboard.mode)
+  );
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -36,16 +44,34 @@ function App() {
               </AuthGuard>
             }
           />
-          <Route path="/app" element={<Layout />} >
+          <Route path="/app" element={<Layout />}>
             <Route index element={<DashboardScreen />} />
-            <Route path="entity/customer" element={<Component  page="customer" />} />
-            <Route path="entity/approve" element={<Component page="customerApprove" />} />
-            <Route path="entity/customer/new" element={<CustomerFormScreen />} />
-            <Route path="entity/customer/editcustomer" element={<CustomerFormScreen page="customer" />} />
+            <Route
+              path="entity/customer"
+              element={<Component page="customer" />}
+            />
+            <Route
+              path="entity/approve"
+              element={<Component page="customerApprove" />}
+            />
+            <Route
+              path="entity/customer/new"
+              element={<CustomerFormScreen page="customer" />}
+            />
+            <Route
+              path="entity/customer/editcustomer"
+              element={<CustomerFormScreen page="customer" />}
+            />
             <Route path="entity/vendor" element={<VendorScreen />} />
-            <Route path="entity/approve/approveRequest" element={<CustomerFormScreen page="customerApprove" />} />
+            <Route
+              path="entity/approve/approveRequest"
+              element={<CustomerFormScreen page="customerApprove" />}
+            />
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="admin/users" element={<UserRole />} />
+            <Route path="admin/users/add" element={<AddCard />} />
+            <Route path="admin/roles" element={<Role />} />
           </Route>
         </Routes>
         <Toaster />

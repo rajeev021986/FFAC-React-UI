@@ -13,7 +13,7 @@ const styles = {
     @param value : string
     @param onChange : function
 */
-export default function InputBox({sx,value,onChange,label,id,error,...props}) {
+export default function InputBox({sx,value,disabled=false,onChange,label,id,error,...props}) {
   return (
     <TextField
         id={id}
@@ -22,6 +22,7 @@ export default function InputBox({sx,value,onChange,label,id,error,...props}) {
         variant="outlined"
         margin="normal"
         fullWidth
+        disabled = {disabled}
         size="small"
         value={value}
         onChange={onChange}

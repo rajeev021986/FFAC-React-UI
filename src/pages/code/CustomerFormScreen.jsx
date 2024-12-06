@@ -7,10 +7,13 @@ import CustomerForm from '../../components/screen/code/customer/CustomerForm';
 import { useFetchCustomerQuery } from '../../store/api/codeDataApi';
 import ApiManager from '../../services/ApiManager';
 import Loader from '../../components/common/Loader/Loader';
-export default function CustomerFormScreen({page}) {
+import { useGetOptionsSettingsQuery } from '../../store/api/settingsApi';
+export default function CustomerFormScreen({ page }) {
   const [customerDatas, setcustomerDatas] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
   const { state } = useLocation();
+  // console.log(state, 'state')
   const [initialValues, setInitialValues] = React.useState({
     id: '',
     city: '',
@@ -43,20 +46,33 @@ export default function CustomerFormScreen({page}) {
     ctypelist: 'CUSTOMER',
     files: []
   });
-  const {
-    data: mappingData,
-    isError,
-    isLoading,
-    error,
-    isFetching,
-  } = useFetchCustomerQuery({
-    acode: state?.initialValues?.acode
-  });
+  // const {
+  //   data: mappingData,
+  //   isError,
+  //   isLoading,
+  //   error,
+  //   isFetching,
+  // } = useFetchCustomerQuery({
+  //   acode: state?.initialValues?.acode
+  // });
 
+  // Move settings queries to the top
+  const { data: optionsSettingsData, isLoading: optionsLoading } =
+    useGetOptionsSettingsQuery("common_settings");
+  const { data: customerSettingsData, isLoading: customerSettingsLoading } =
+    useGetOptionsSettingsQuery("customer_settings");
+
+  // First useEffect to handle settings loading
+  useEffect(() => {
+    if (!optionsLoading && !customerSettingsLoading) {
+      setSettingsLoaded(true);
+    }
+  }, [optionsLoading, customerSettingsLoading]);
+
+  // Only fetch customer details after settings are loaded
   useEffect(() => {
     const fetchCustomerDetails = async () => {
       try {
-        setLoading(true)
         const res = await ApiManager.getCustomerDeatils(state?.initialValues?.id);
         setcustomerDatas(res.body)
         setInitialValues({
@@ -82,7 +98,8 @@ export default function CustomerFormScreen({page}) {
           chargeName: res.body?.chargeName || '',
           state: res.body?.state || '',
           paymentType: res.body?.paymentType || 'cash',
-          status: res.body?.status || 'ACTIVE',
+          isApproved: res.body?.isApproved || false,
+          status: res.body?.status || '',
           url: res.body?.url || '',
           zipCode: res.body?.zipCode || '',
           customerEntityTariffs: res.body?.customerEntityTariffs || [],
@@ -95,61 +112,65 @@ export default function CustomerFormScreen({page}) {
         console.log(res, "res");
       } catch (error) {
         console.error(error, "error");
-        setLoading(false)
+        // setLoading(false)
       }
     };
-    if (state?.initialValues?.id) {
+    if (settingsLoaded && state?.initialValues?.id) {
       fetchCustomerDetails();
+    }else{
+      setLoading(false);
     }
 
 
-  }, []);
+  }, [settingsLoaded, state?.initialValues?.id]);
 
+  // React.useEffect(() => {
+  //   if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityTariffs) {
+  //     setInitialValues((prevValues) => ({
+  //       ...prevValues,
+  //       customerEntityTariffs: mappingData.data[0]?.customerEntityTariffs || []
+  //     }));
+  //   }
+  //   else {
+  //     setInitialValues((prevValues) => ({
+  //       ...prevValues,
+  //       customerEntityTariffs: [{ chargeName: "", unitType: "", currency: "", unitRate: "" }]
+  //     }));
+  //   }
 
-  React.useEffect(() => {
-    if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityTariffs) {
-      setInitialValues((prevValues) => ({
-        ...prevValues,
-        customerEntityTariffs: mappingData.data[0]?.customerEntityTariffs || []
-      }));
-    }
-    else {
-      setInitialValues((prevValues) => ({
-        ...prevValues,
-        customerEntityTariffs: [{ chargeName: "", unitType: "", currency: "", unitRate: "" }]
-      }));
-    }
+  // }, [mappingData, isLoading, isError]);
 
-  }, [mappingData, isLoading, isError]);
+  // React.useEffect(() => {
+  //   if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityEmailsIds) {
+  //     setInitialValues((prevValues) => ({
+  //       ...prevValues,
+  //       customerEntityEmailsIds: mappingData.data[0]?.customerEntityEmailsIds || []
+  //     }));
+  //   }
+  //   else {
+  //     setInitialValues((prevValues) => ({
+  //       ...prevValues,
+  //       customerEntityEmailsIds: [{ designation: "" }]
+  //     }));
+  //   }
 
-  React.useEffect(() => {
-    if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityEmailsIds) {
-      setInitialValues((prevValues) => ({
-        ...prevValues,
-        customerEntityEmailsIds: mappingData.data[0]?.customerEntityEmailsIds || []
-      }));
-    }
-    else {
-      setInitialValues((prevValues) => ({
-        ...prevValues,
-        customerEntityEmailsIds: [{ designation: "" }]
-      }));
-    }
-
-  }, [mappingData, isLoading, isError]);
+  // }, [mappingData, isLoading, isError]);
   return (
     <Box>
       <ScreenToolbar leftComps={<div><ThemedBreadcrumb /></div>} rightComps={<div></div>} />
-      {loading ? <Loader /> : <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        <CardHeader title={
+      {loading || optionsLoading || customerSettingsLoading ? <Loader /> : <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+        {/* <CardHeader title={
           <Box display="flex" justifyContent={"space-between"}>
             <Typography variant='subtitle3' component='div'>Customer</Typography>
           </Box>
-        } />
+        } /> */}
         <CardContent>
           <CustomerForm
-            initialValues={initialValues} 
-            page={page}/>
+            optionsSettingsData={optionsSettingsData}
+            customerSettingsData={customerSettingsData}
+            initialValues={initialValues}
+            type={state?.type}
+            page={page} />
         </CardContent>
       </Card>}
     </Box>

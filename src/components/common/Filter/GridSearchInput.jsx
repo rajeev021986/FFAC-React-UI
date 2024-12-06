@@ -28,7 +28,7 @@ const GridSearchInput = ({
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
-      <Box sx={{ position: 'relative', minWidth: '500px' }}>
+      <Box sx={{ position: 'relative', minWidth: '500px'}}>
         {/* Search Bar */}
         <InputWithChips
           inputRef={searchRef}

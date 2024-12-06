@@ -1,45 +1,88 @@
 import React from "react";
-import { Grid } from "@mui/material";
-import InputBox from "../../../common/InputBox";
-export default function filesGrid({ formik }) {
+import { Box, Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import AddIcon from "@mui/icons-material/Add";
+
+export default function FilesGrid({ formik, disabled }) {
   const customerEntityEmailsIds = formik.values.customerEntityEmailsIds || [
-    { emailId: "", designation: "" },
+    { id: 1, emailId: "", designation: "" },
   ];
-  // Handler to update row data
-  const updateRow = (index, field, value) => {
-    const newMappingRows = [...customerEntityEmailsIds];
-    newMappingRows[index][field] = value;
-    formik.setFieldValue("customerEntityEmailsIds", newMappingRows);
+
+  // Handler to add a new row
+  const addNewRow = () => {
+    const newRow = { id: Date.now(), emailId: "", designation: "",new:true };
+    formik.setFieldValue("customerEntityEmailsIds", [...customerEntityEmailsIds, newRow]);
   };
 
+  // Handler to delete a row
+  const deleteRow = (id) => {
+    const updatedRows = customerEntityEmailsIds.filter((row) => row.id !== id);
+    formik.setFieldValue("customerEntityEmailsIds", updatedRows);
+  };
+
+  // Handle row updates
+  const handleProcessRowUpdate = (newRow, oldRow) => {
+    const updatedRows = customerEntityEmailsIds.map((row) =>
+      row.id === newRow.id ? { ...row, ...newRow } : row
+    );
+    formik.setFieldValue("customerEntityEmailsIds", updatedRows);
+    return newRow;
+  };
+
+  // Columns for DataGrid
+  const columns = [
+    {
+      field: "designation",
+      headerName: "Designation",
+      flex: 1,
+      editable: true,
+    },
+    {
+      field: "emailId",
+      headerName: "Email ID",
+      flex: 1,
+      editable: true,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      sortable: false,
+      renderCell: (params) => (
+        <Button
+          color="error"
+          onClick={() => deleteRow(params.row.id)}
+          disabled={disabled}
+        >
+          Remove
+        </Button>
+      ),
+    },
+  ];
+
   return (
-    <>
-      {customerEntityEmailsIds.map((row, index) => (
-        <Grid container spacing={2} key={index} alignItems="center">
-
-          <Grid item xs={12} sm={3} lg={4}>
-            <InputBox
-              label="Designation"
-              id={`customerEntityEmailsIds-${index}-designation`}
-              value={row.designation}
-              onChange={(e) => updateRow(index, "designation", e.target.value)}
-              sx={{ marginTop: "16px", marginBottom: "8px" }}
-              error={formik.errors?.customerEntityEmailsIds?.[index]?.designation}
-            />
-          </Grid>
-          <Grid item xs={12} sm={3} lg={6}>
-            <InputBox
-              label="Email ID"
-              id={`customerEntityEmailsIds-${index}-emailId`}
-              value={row.emailId}
-              onChange={(e) => updateRow(index, "emailId", e.target.value)}
-              sx={{ marginTop: "16px", marginBottom: "8px" }}
-              error={formik.errors?.customerEntityEmailsIds?.[index]?.emailId}
-            />
-          </Grid>
-
-        </Grid>
-      ))}
-    </>
+    <Box sx={{ width: "100%", marginTop: 2 }}>
+      <Box sx={{ textAlign: "right", mb: 2 }}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={addNewRow}
+          disabled = {disabled}
+          sx={{borderRadius: '17px 18px 18px 17px', margin: '5px'}}
+        >
+          Add Email
+        </Button>
+      </Box>
+      <Box sx={{ height: 400 }}>
+        <DataGrid
+          rows={customerEntityEmailsIds}
+          columns={columns}
+          disableSelectionOnClick
+          processRowUpdate={handleProcessRowUpdate}
+          experimentalFeatures={{ newEditingApi: true }}
+          getRowId={(row) => row.id}
+          disableColumnMenu
+        />
+      </Box>
+    </Box>
   );
 }
