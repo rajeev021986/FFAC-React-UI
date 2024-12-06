@@ -87,8 +87,8 @@ export default function CustomerForm({
         let tariffs = values.customerEntityTariffs.map((item) => item?.new ? { ...item, id: null, new: false } : item)
         try {
           delete values.id;
-          Boolean(!dropdownData?.approval_request) && (values.status = "New")
-          values.isApproved = !dropdownData?.approval_request;
+          Boolean(!dropdownData?.approvalRequest) && (values.status = "New")
+          values.isApproved = !dropdownData?.approvalRequest;
           let response = await addCustomer({ ...values, customerEntityEmailsIds: emails, customerEntityTariffs: tariffs }).unwrap();
 
           // Handle response and display toast messages
@@ -797,7 +797,7 @@ export default function CustomerForm({
                     />
                   </Grid>
 
-                  {formik.values.status == "ACTIVE" || "Active" || "Inactive" ? <Grid
+                  {!formik.values.status == "New" ? <Grid
                     item
                     xs={12}
                     sm={6}
@@ -811,7 +811,7 @@ export default function CustomerForm({
                       id="status"
                       disabled={disabled}
                       options={dropdownData?.status}
-                      value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : "Inactive"}
+                      value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
                       error={formik.errors.status}
                       onChange={formik.handleChange}
                     />
