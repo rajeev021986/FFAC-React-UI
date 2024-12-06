@@ -10,7 +10,7 @@ export default function FilesGrid({ formik, disabled }) {
 
   // Handler to add a new row
   const addNewRow = () => {
-    const newRow = { id: Date.now(), emailId: "", designation: "" };
+    const newRow = { id: Date.now(), emailId: "", designation: "",new:true };
     formik.setFieldValue("customerEntityEmailsIds", [...customerEntityEmailsIds, newRow]);
   };
 

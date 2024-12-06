@@ -99,7 +99,7 @@ export default function CustomerFormScreen({ page }) {
           chargeName: res.body?.chargeName || '',
           state: res.body?.state || '',
           paymentType: res.body?.paymentType || 'cash',
-          status: res.body?.status || 'ACTIVE',
+          status: res.body?.status || '',
           url: res.body?.url || '',
           zipCode: res.body?.zipCode || '',
           customerEntityTariffs: res.body?.customerEntityTariffs || [],

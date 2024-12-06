@@ -77,96 +77,101 @@ export default function CustomerForm({
   });
   console.log("optionsCity", optionsCity);
 
-    const formik = useFormik({
+  const formik = useFormik({
     initialValues,
-      enableReinitialize: true,
-      validationSchema: CustomerValidationSchema(),
-      onSubmit: async (values) => {
-        if (!values.id || type == "copy") {
-          try {
-            delete values.id;
-            values.approveRequest = !dropdownData?.approval_request;
-            let response = await addCustomer(values).unwrap();
+    enableReinitialize: true,
+    validationSchema: CustomerValidationSchema(),
+    onSubmit: async (values) => {
+      if (!values.id || type == "copy") {
+        let emails = values.customerEntityEmailsIds.map((item) => item?.new ? { ...item, id: null, new: false } : item)
+        let tariffs = values.customerEntityTariffs.map((item) => item?.new ? { ...item, id: null, new: false } : item)
+        try {
+          delete values.id;
+          Boolean(!dropdownData?.approval_request) && (values.status = "New")
+          values.isApproved = !dropdownData?.approval_request;
+          let response = await addCustomer({ ...values, customerEntityEmailsIds: emails, customerEntityTariffs: tariffs }).unwrap();
 
-            // Handle response and display toast messages
-            if (response.code == "SUCCESS") {
-              toast.success(response.message);
-              nav("/app/entity/customer");
-            } else {
-              toast.error(response.message);
-            }
-          } catch (error) {
-            console.error("Error submitting form:", error);
-            toast.error("An error occurred while submitting the form.");
+          // Handle response and display toast messages
+          if (response.code == "SUCCESS") {
+            toast.success(response.message);
+            nav("/app/entity/customer");
+          } else {
+            toast.error(response.message);
           }
-        } else {
-          try {
-            let response = await updateCustomer(values).unwrap();
-
-            // Handle response and display toast messages
-            if (response.code == "SUCCESS") {
-              toast.success(response.message);
-              nav("/app/entity/customer");
-            } else {
-              toast.error(response.message);
-            }
-          } catch (error) {
-            console.error("Error submitting form:", error);
-            toast.error("An error occurred while submitting the form.");
-          }
+        } catch (error) {
+          console.error("Error submitting form:", error);
+          toast.error("An error occurred while submitting the form.");
         }
-      },
-    });
+      } else {
+        try {
+          let emails = values.customerEntityEmailsIds.map((item) => item?.new ? { ...item, id: null, new: false } : item)
+          let tariffs = values.customerEntityTariffs.map((item) => item?.new ? { ...item, id: null, new: false } : item)
+          let response = await updateCustomer({ ...values, customerEntityEmailsIds: emails, customerEntityTariffs: tariffs }).unwrap();
 
-    const handleSalesOptionChange = async (query) => {
-      console.log(query);
-      ApiManager.getSalesOptions("salesname", query)
-        .then((response) => {
-          setOptions(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-
-    const handleCityOptionChange = async (query) => {
-      console.log(query);
-      ApiManager.getCityOptions("city", query)
-        .then((response) => {
-          setCityOptions(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-
-    let shouldShowTabs = Object.values(formik.values?.customerName).some(
-      (value) => value !== ""
-    );
-    const reloadDataHandler = async () => {
-      try {
-        setLoading(true);
-        const res = await ApiManager.getAuditDetails(initialValues.id);
-        setEnquiryAuditDetails(res);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
+          // Handle response and display toast messages
+          if (response.code == "SUCCESS") {
+            toast.success(response.message);
+            nav("/app/entity/customer");
+          } else {
+            toast.error(response.message);
+          }
+        } catch (error) {
+          console.error("Error submitting form:", error);
+          toast.error("An error occurred while submitting the form.");
+        }
       }
-    };
-    // const getFile = async () => {
-    //   const payload ={}
-    //   const response = ApiManager.getFileCustomerDocument(payload)
-    //     .then(() => console.log("don"))
-    //     .catch(() => console.log("error"));
-    //   if ((response.code === "SUCCESS")) {
-    //     setEnquiryAuditDetails(response);
-    //   }
-    // };
-    const { data: optionsSettingsData } =
-      useGetOptionsSettingsQuery("common_settings");
-    const { data: customerSettingsData } =
-      useGetOptionsSettingsQuery("customer_settings");
+    },
+  });
+
+  const handleSalesOptionChange = async (query) => {
+    console.log(query);
+    ApiManager.getSalesOptions("salesname", query)
+      .then((response) => {
+        setOptions(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleCityOptionChange = async (query) => {
+    console.log(query);
+    ApiManager.getCityOptions("city", query)
+      .then((response) => {
+        setCityOptions(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  let shouldShowTabs = Object.values(formik.values?.customerName).some(
+    (value) => value !== ""
+  );
+  const reloadDataHandler = async () => {
+    try {
+      setLoading(true);
+      const res = await ApiManager.getAuditDetails(initialValues.id);
+      setEnquiryAuditDetails(res);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  // const getFile = async () => {
+  //   const payload ={}
+  //   const response = ApiManager.getFileCustomerDocument(payload)
+  //     .then(() => console.log("don"))
+  //     .catch(() => console.log("error"));
+  //   if ((response.code === "SUCCESS")) {
+  //     setEnquiryAuditDetails(response);
+  //   }
+  // };
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
+  const { data: customerSettingsData } =
+    useGetOptionsSettingsQuery("customer_settings");
 
   useEffect(() => {
     if (optionsSettingsData?.body || customerSettingsData?.body) {
@@ -207,7 +212,7 @@ export default function CustomerForm({
 
   return (
     <>
-      {!shouldShowTabs ? (
+      {!shouldShowTabs || type == "copy" ? (
         <>
           {" "}
           <Grid container spacing={2}>
@@ -240,191 +245,191 @@ export default function CustomerForm({
               />
             </Grid>
 
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-                sx={{ marginTop: 2 }}
-              >
-                <SelectBox
-                  label="Account Type"
-                  id="accountType"
-                  options={dropdownData?.account_type}
-                  value={formik.values.accountType}
-                  error={formik.errors.accountType}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="PIN No."
-                  id="pinNo"
-                  value={formik.values.pinNo}
-                  error={formik.errors.pinNo}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="VAT No."
-                  id="vatNo"
-                  value={formik.values.vatNo}
-                  error={formik.errors.vatNo}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Address 1."
-                  id="add1"
-                  value={formik.values.add1}
-                  error={formik.errors.add1}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Address 2."
-                  id="add2"
-                  value={formik.values.add2}
-                  error={formik.errors.add2}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Address 3."
-                  id="add3"
-                  value={formik.values.add3}
-                  error={formik.errors.add3}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Fax"
-                  id="fax"
-                  value={formik.values.fax}
-                  error={formik.errors.fax}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Bank Name"
-                  id="bankName"
-                  value={formik.values.bankName}
-                  error={formik.errors.bankName}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Email Id "
-                  id="emailId"
-                  value={formik.values.emailId}
-                  error={formik.errors.emailId}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <RadioGroup
-                  id="paymentType"
-                  name="paymentType" // add name attribute here
-                  value={formik.values.paymentType}
-                  onChange={formik.handleChange}
-                  row
-                >
-                  <FormControlLabel
-                    value="cash"
-                    control={<Radio />}
-                    label="Cash"
-                  />
-                  <FormControlLabel
-                    value="credit"
-                    control={<Radio />}
-                    label="Credit"
-                  />
-                </RadioGroup>
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Credit Days"
-                  id="creditDays"
-                  value={formik.values.creditDays}
-                  error={formik.errors.creditDays}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Credit Amount"
-                  id="creditAmount"
-                  value={formik.values.creditAmount}
-                  error={formik.errors.creditAmount}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Zip Code"
-                  id="zipCode"
-                  value={formik.values.zipCode}
-                  error={formik.errors.zipCode}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Country"
-                  id="country"
-                  value={formik.values.country}
-                  error={formik.errors.country}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="City"
-                  id="city"
-                  value={formik.values.city}
-                  error={formik.errors.city}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="State"
-                  id="state"
-                  value={formik.values.state}
-                  error={formik.errors.state}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                  label="Contact Person"
-                  id="contactPerson"
-                  value={formik.values.contactPerson}
-                  error={formik.errors.contactPerson}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
             <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              xl={2}
+              sx={{ marginTop: 2 }}
+            >
+              <SelectBox
+                label="Account Type"
+                id="accountType"
+                options={dropdownData?.account_type}
+                value={formik.values.accountType}
+                error={formik.errors.accountType}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="PIN No."
+                id="pinNo"
+                value={formik.values.pinNo}
+                error={formik.errors.pinNo}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="VAT No."
+                id="vatNo"
+                value={formik.values.vatNo}
+                error={formik.errors.vatNo}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Address 1."
+                id="add1"
+                value={formik.values.add1}
+                error={formik.errors.add1}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Address 2."
+                id="add2"
+                value={formik.values.add2}
+                error={formik.errors.add2}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Address 3."
+                id="add3"
+                value={formik.values.add3}
+                error={formik.errors.add3}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Fax"
+                id="fax"
+                value={formik.values.fax}
+                error={formik.errors.fax}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Bank Name"
+                id="bankName"
+                value={formik.values.bankName}
+                error={formik.errors.bankName}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Email Id "
+                id="emailId"
+                value={formik.values.emailId}
+                error={formik.errors.emailId}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <RadioGroup
+                id="paymentType"
+                name="paymentType" // add name attribute here
+                value={formik.values.paymentType}
+                onChange={formik.handleChange}
+                row
+              >
+                <FormControlLabel
+                  value="cash"
+                  control={<Radio />}
+                  label="Cash"
+                />
+                <FormControlLabel
+                  value="credit"
+                  control={<Radio />}
+                  label="Credit"
+                />
+              </RadioGroup>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Credit Days"
+                id="creditDays"
+                value={formik.values.creditDays}
+                error={formik.errors.creditDays}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Credit Amount"
+                id="creditAmount"
+                value={formik.values.creditAmount}
+                error={formik.errors.creditAmount}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Zip Code"
+                id="zipCode"
+                value={formik.values.zipCode}
+                error={formik.errors.zipCode}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Country"
+                id="country"
+                value={formik.values.country}
+                error={formik.errors.country}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="City"
+                id="city"
+                value={formik.values.city}
+                error={formik.errors.city}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="State"
+                id="state"
+                value={formik.values.state}
+                error={formik.errors.state}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Contact Person"
+                id="contactPerson"
+                value={formik.values.contactPerson}
+                error={formik.errors.contactPerson}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            {!customerSettingsData?.body?.approvalRequest ? <Grid
               item
               xs={12}
               sm={6}
@@ -437,466 +442,503 @@ export default function CustomerForm({
                 label="Status"
                 id="status"
                 // options={dropdownData?.status}
-                value={disableStatus ? "new" : formik.values.status}
+                value={"New"}
                 disabled={disableStatus}
                 error={formik.errors.status}
                 onChange={formik.handleChange}
               />
+            </Grid> :
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                sx={{ marginTop: 2 }}
+              >
+                <SelectBox
+                  label="Status"
+                  id="status"
+                  disabled={disabled}
+                  options={dropdownData?.status}
+                  value={formik.values.status}
+                  error={formik.errors.status}
+                  onChange={formik.handleChange}
+                />
+              </Grid>}
+
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  marginBottom: 2,
+                }}
+              >
+                <ThemeTabs
+                  tabData={[
+                    { label: "Tariff", value: "1", disable: false },
+                    { label: "Email", value: "2", disable: false },
+                  ]}
+                >
+                  <AddMapping
+                    formik={formik}
+                    disabled={disabled}
+                    dropdownData={dropdownData}
+                  />
+                  <FileScreen formik={formik} disabled={disabled} />
+                </ThemeTabs>
+              </Box>
             </Grid>
 
+            {page == "customer" && (
               <Grid item xs={12}>
-                <Box
-                  sx={{
-                    borderBottom: 1,
-                    borderColor: "divider",
-                    marginBottom: 2,
-                  }}
-                >
-                  <ThemeTabs
-                    tabData={[
-                      { label: "Tariff", value: "1", disable: false },
-                      { label: "Email", value: "2", disable: false },
-                    ]}
+                <Stack direction="row" spacing={2}>
+                  <OutlinedButton
+                    sx={{ fontWeight: "500", borderRadius: "12px" }}
                   >
-                    <AddMapping
-                      formik={formik}
-                      disabled={disabled}
-                      dropdownData={dropdownData}
-                    />
-                    <FileScreen formik={formik} disabled={disabled} />
-                  </ThemeTabs>
-                </Box>
+                    Cancel
+                  </OutlinedButton>
+                  <ThemeButton
+                    onClick={formik.handleSubmit}
+                    sx={{ fontWeight: "500", borderRadius: "12px" }}
+                  >
+                    {isLoading && (
+                      <CircularProgress size={20} color="white" />
+                    )}{" "}
+                    Save
+                  </ThemeButton>
+                </Stack>
               </Grid>
-
-              {page == "customer" && (
-                <Grid item xs={12}>
+            )}
+            {page == "customerApprove" && (
+              <Grid item xs={12}>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  justifyContent="space-between"
+                >
                   <Stack direction="row" spacing={2}>
-                    <OutlinedButton
-                      sx={{ fontWeight: "500", borderRadius: "12px" }} 
-                    >
-                      Cancel
-                    </OutlinedButton>
                     <ThemeButton
-                      onClick={formik.handleSubmit}
-                      sx={{ fontWeight: "500", borderRadius: "12px" }} 
+                      sx={{ fontWeight: "500", backgroundColor: "red" }}
+                      onClick={() => handleRejectRequest()}
                     >
                       {isLoading && (
                         <CircularProgress size={20} color="white" />
                       )}{" "}
-                      Save
+                      Approve reject
+                    </ThemeButton>
+                    <ThemeButton
+                      sx={{ fontWeight: "500" }}
+                      onClick={() => handleApproveRequest()}
+                    >
+                      {isLoading && (
+                        <CircularProgress size={20} color="white" />
+                      )}{" "}
+                      Approve request
                     </ThemeButton>
                   </Stack>
-                </Grid>
-              )}
-              {page == "customerApprove" && (
-                <Grid item xs={12}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="space-between"
-                  >
-                    <Stack direction="row" spacing={2}>
-                      <ThemeButton
-                        sx={{ fontWeight: "500", backgroundColor: "red" }}
-                        onClick={() => handleRejectRequest()}
-                      >
-                        {isLoading && (
-                          <CircularProgress size={20} color="white" />
-                        )}{" "}
-                        Approve reject
-                      </ThemeButton>
-                      <ThemeButton
-                        sx={{ fontWeight: "500" }}
-                        onClick={() => handleApproveRequest()}
-                      >
-                        {isLoading && (
-                          <CircularProgress size={20} color="white" />
-                        )}{" "}
-                        Approve request
-                      </ThemeButton>
-                    </Stack>
-                  </Stack>
-                </Grid>
-              )}
+                </Stack>
+              </Grid>
+            )}
 
-              <PopupAlert alertConfig={alertConfig} />
-            </Grid>
-          </>
-        ) : (
-          <>
-            <Box sx={{ width: "100%", typography: "body1" }}>
-              <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="lab API tabs example"
-                  >
-                    <Tab label="Edit Customer" value="1" />
-                    <Tab label="Upload Documents" value="2" />
-                    <Tab label="Audit Logs" value="3" />
-                  </TabList>
-                </Box>
-                <TabPanel value="1">
-                  {" "}
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Customer Name"
-                        id="customerName"
-                        disabled={disabled}
-                        value={formik.values.customerName}
-                        error={formik.errors.customerName}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Account No."
-                        id="accountNo"
-                        disabled={disabled}
-                        value={formik.values.accountNo}
-                        error={formik.errors.accountNo}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Telephone"
-                        id="telephone"
-                        disabled={disabled}
-                        value={formik.values.telephone}
-                        error={formik.errors.telephone}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      sx={{ marginTop: 2 }}
-                    >
-                      <SelectBox
-                        label="Account Type"
-                        id="accountType"
-                        disabled={disabled}
-                        options={dropdownData?.account_type}
-                        value={formik.values.accountType}
-                        error={formik.errors.accountType}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="PIN No."
-                        id="pinNo"
-                        disabled={disabled}
-                        value={formik.values.pinNo}
-                        error={formik.errors.pinNo}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="VAT No."
-                        id="vatNo"
-                        disabled={disabled}
-                        value={formik.values.vatNo}
-                        error={formik.errors.vatNo}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Address 1."
-                        id="add1"
-                        disabled={disabled}
-                        value={formik.values.add1}
-                        error={formik.errors.add1}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Address 2."
-                        id="add2"
-                        disabled={disabled}
-                        value={formik.values.add2}
-                        error={formik.errors.add2}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Address 3."
-                        id="add3"
-                        disabled={disabled}
-                        value={formik.values.add3}
-                        error={formik.errors.add3}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Fax"
-                        id="fax"
-                        disabled={disabled}
-                        value={formik.values.fax}
-                        error={formik.errors.fax}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Bank Name"
-                        id="bankName"
-                        disabled={disabled}
-                        value={formik.values.bankName}
-                        error={formik.errors.bankName}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Email Id "
-                        id="emailId"
-                        disabled={disabled}
-                        value={formik.values.emailId}
-                        error={formik.errors.emailId}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <RadioGroup
-                        id="paymentType"
-                        name="paymentType" // add name attribute here
-                        disabled={disabled}
-                        value={formik.values.paymentType}
-                        onChange={formik.handleChange}
-                        row
-                      >
-                        <FormControlLabel
-                          value="cash"
-                          disabled={disabled}
-                          control={<Radio />}
-                          label="Cash"
-                        />
-                        <FormControlLabel
-                          value="credit"
-                          disabled={disabled}
-                          control={<Radio />}
-                          label="Credit"
-                        />
-                      </RadioGroup>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Credit Days"
-                        id="creditDays"
-                        disabled={disabled}
-                        value={formik.values.creditDays}
-                        error={formik.errors.creditDays}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Credit Amount"
-                        id="creditAmount"
-                        disabled={disabled}
-                        value={formik.values.creditAmount}
-                        error={formik.errors.creditAmount}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Zip Code"
-                        id="zipCode"
-                        disabled={disabled}
-                        value={formik.values.zipCode}
-                        error={formik.errors.zipCode}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Country"
-                        id="country"
-                        disabled={disabled}
-                        value={formik.values.country}
-                        error={formik.errors.country}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="City"
-                        id="city"
-                        disabled={disabled}
-                        value={formik.values.city}
-                        error={formik.errors.city}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="State"
-                        id="state"
-                        disabled={disabled}
-                        value={formik.values.state}
-                        error={formik.errors.state}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <InputBox
-                        label="Contact Person"
-                        id="contactPerson"
-                        disabled={disabled}
-                        value={formik.values.contactPerson}
-                        error={formik.errors.contactPerson}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      sx={{ marginTop: 2 }}
-                    >
-                      <SelectBox
-                        label="Status"
-                        id="status"
-                        disabled={disabled}
-                        options={dropdownData?.status}
-                        value={formik.values.status}
-                        error={formik.errors.status}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Box
-                        sx={{
-                          borderBottom: 1,
-                          borderColor: "divider",
-                          marginBottom: 2,
-                        }}
-                      >
-                        <ThemeTabs
-                          tabData={[
-                            { label: "Tariff", value: "1", disable: false },
-                            { label: "Email", value: "2", disable: false },
-                          ]}
-                        >
-                          <AddMapping
-                            formik={formik}
-                            disabled={disabled}
-                            dropdownData={dropdownData}
-                          />
-                          <FileScreen formik={formik} disabled={disabled} />
-                        </ThemeTabs>
-                      </Box>
-                    </Grid>
-
-                    {page == "customer" && (
-                      <Grid item xs={12}>
-                        <Stack
-                          direction="row"
-                          spacing={2}
-                          justifyContent="space-between"
-                        >
-                          <Stack direction="row" spacing={2}>
-                            <OutlinedButton sx={{ fontWeight: "500" }}>
-                              Cancel
-                            </OutlinedButton>
-                            <ThemeButton
-                              onClick={formik.handleSubmit}
-                              sx={{ fontWeight: "500" }}
-                            >
-                              {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                              )}{" "}
-                              Save
-                            </ThemeButton>
-                          </Stack>
-                        </Stack>
-                      </Grid>
-                    )}
-                    {page == "customerApprove" && (
-                      <Grid item xs={12}>
-                        <Stack
-                          direction="row"
-                          spacing={2}
-                          justifyContent="space-between"
-                        >
-                          <Stack direction="row" spacing={2}>
-                            <OutlinedButton sx={{ fontWeight: "500" }} onClick={() => nav(-1)}>
-                              Cancel
-                            </OutlinedButton>
-                            <ThemeButton
-                              sx={{ fontWeight: "500", backgroundColor: "red" }}
-                              onClick={() => handleRejectRequest()}
-                            >
-                              {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                              )}{" "}
-                              Approve reject
-                            </ThemeButton>
-                            <ThemeButton
-                              sx={{ fontWeight: "500" }}
-                              onClick={() => handleApproveRequest()}
-                            >
-                              {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                              )}{" "}
-                              Approve request
-                            </ThemeButton>
-                          </Stack>
-                        </Stack>
-                      </Grid>
-                    )}
-
-                    <PopupAlert alertConfig={alertConfig} />
+            <PopupAlert alertConfig={alertConfig} />
+          </Grid>
+        </>
+      ) : (
+        <>
+          <Box sx={{ width: "100%", typography: "body1" }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab label="Edit Customer" value="1" />
+                  <Tab label="Upload Documents" value="2" />
+                  <Tab label="Audit Logs" value="3" />
+                </TabList>
+              </Box>
+              <TabPanel value="1">
+                {" "}
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Customer Name"
+                      id="customerName"
+                      disabled={disabled}
+                      value={formik.values.customerName}
+                      error={formik.errors.customerName}
+                      onChange={formik.handleChange}
+                    />
                   </Grid>
-                </TabPanel>
-                <TabPanel value="2">
-                  <UploadFile
-                    customer_id={initialValues.id}
-                    disabled={disabled}
-                    dropdownData={dropdownData}
-                  />
-                </TabPanel>
-                <TabPanel value="3">
-                  <AuditTimeline
-                    auditDetails={enquiryAuditDetails}
-                    reloadDataHandler={reloadDataHandler}
-                    loading={loading}
-                  />
-                </TabPanel>
-              </TabContext>
-            </Box>
-          </>
-        )}
-      </>
-    );
-  }
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Account No."
+                      id="accountNo"
+                      disabled={disabled}
+                      value={formik.values.accountNo}
+                      error={formik.errors.accountNo}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Telephone"
+                      id="telephone"
+                      disabled={disabled}
+                      value={formik.values.telephone}
+                      error={formik.errors.telephone}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    sx={{ marginTop: 2 }}
+                  >
+                    <SelectBox
+                      label="Account Type"
+                      id="accountType"
+                      disabled={disabled}
+                      options={dropdownData?.account_type}
+                      value={formik.values.accountType}
+                      error={formik.errors.accountType}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="PIN No."
+                      id="pinNo"
+                      disabled={disabled}
+                      value={formik.values.pinNo}
+                      error={formik.errors.pinNo}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="VAT No."
+                      id="vatNo"
+                      disabled={disabled}
+                      value={formik.values.vatNo}
+                      error={formik.errors.vatNo}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Address 1."
+                      id="add1"
+                      disabled={disabled}
+                      value={formik.values.add1}
+                      error={formik.errors.add1}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Address 2."
+                      id="add2"
+                      disabled={disabled}
+                      value={formik.values.add2}
+                      error={formik.errors.add2}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Address 3."
+                      id="add3"
+                      disabled={disabled}
+                      value={formik.values.add3}
+                      error={formik.errors.add3}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Fax"
+                      id="fax"
+                      disabled={disabled}
+                      value={formik.values.fax}
+                      error={formik.errors.fax}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Bank Name"
+                      id="bankName"
+                      disabled={disabled}
+                      value={formik.values.bankName}
+                      error={formik.errors.bankName}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Email Id "
+                      id="emailId"
+                      disabled={disabled}
+                      value={formik.values.emailId}
+                      error={formik.errors.emailId}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <RadioGroup
+                      id="paymentType"
+                      name="paymentType" // add name attribute here
+                      disabled={disabled}
+                      value={formik.values.paymentType}
+                      onChange={formik.handleChange}
+                      row
+                    >
+                      <FormControlLabel
+                        value="cash"
+                        disabled={disabled}
+                        control={<Radio />}
+                        label="Cash"
+                      />
+                      <FormControlLabel
+                        value="credit"
+                        disabled={disabled}
+                        control={<Radio />}
+                        label="Credit"
+                      />
+                    </RadioGroup>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Credit Days"
+                      id="creditDays"
+                      disabled={disabled}
+                      value={formik.values.creditDays}
+                      error={formik.errors.creditDays}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Credit Amount"
+                      id="creditAmount"
+                      disabled={disabled}
+                      value={formik.values.creditAmount}
+                      error={formik.errors.creditAmount}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Zip Code"
+                      id="zipCode"
+                      disabled={disabled}
+                      value={formik.values.zipCode}
+                      error={formik.errors.zipCode}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Country"
+                      id="country"
+                      disabled={disabled}
+                      value={formik.values.country}
+                      error={formik.errors.country}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="City"
+                      id="city"
+                      disabled={disabled}
+                      value={formik.values.city}
+                      error={formik.errors.city}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="State"
+                      id="state"
+                      disabled={disabled}
+                      value={formik.values.state}
+                      error={formik.errors.state}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Contact Person"
+                      id="contactPerson"
+                      disabled={disabled}
+                      value={formik.values.contactPerson}
+                      error={formik.errors.contactPerson}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  {formik.values.status == "ACTIVE" || "Active" || "Inactive" ? <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    sx={{ marginTop: 2 }}
+                  >
+                    <SelectBox
+                      label="Status"
+                      id="status"
+                      disabled={disabled}
+                      options={dropdownData?.status}
+                      value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : "Inactive"}
+                      error={formik.errors.status}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid> : <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    sx={{ marginTop: 2 }}
+                  >
+                    <InputBox
+                      label="Status"
+                      id="status"
+                      // options={dropdownData?.status}
+                      value={"New"}
+                      disabled={disableStatus}
+                      error={formik.errors.status}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>}
+
+                  <Grid item xs={12}>
+                    <Box
+                      sx={{
+                        borderBottom: 1,
+                        borderColor: "divider",
+                        marginBottom: 2,
+                      }}
+                    >
+                      <ThemeTabs
+                        tabData={[
+                          { label: "Tariff", value: "1", disable: false },
+                          { label: "Email", value: "2", disable: false },
+                        ]}
+                      >
+                        <AddMapping
+                          formik={formik}
+                          disabled={disabled}
+                          dropdownData={dropdownData}
+                        />
+                        <FileScreen formik={formik} disabled={disabled} />
+                      </ThemeTabs>
+                    </Box>
+                  </Grid>
+
+                  {page == "customer" && (
+                    <Grid item xs={12}>
+                      <Stack
+                        direction="row"
+                        spacing={2}
+                        justifyContent="space-between"
+                      >
+                        <Stack direction="row" spacing={2}>
+                          <OutlinedButton sx={{ fontWeight: "500" }}>
+                            Cancel
+                          </OutlinedButton>
+                          <ThemeButton
+                            onClick={formik.handleSubmit}
+                            sx={{ fontWeight: "500" }}
+                          >
+                            {isLoading && (
+                              <CircularProgress size={20} color="white" />
+                            )}{" "}
+                            Save
+                          </ThemeButton>
+                        </Stack>
+                      </Stack>
+                    </Grid>
+                  )}
+                  {page == "customerApprove" && (
+                    <Grid item xs={12}>
+                      <Stack
+                        direction="row"
+                        spacing={2}
+                        justifyContent="space-between"
+                      >
+                        <Stack direction="row" spacing={2}>
+                          <OutlinedButton sx={{ fontWeight: "500" }} onClick={() => nav(-1)}>
+                            Cancel
+                          </OutlinedButton>
+                          <ThemeButton
+                            sx={{ fontWeight: "500", backgroundColor: "red" }}
+                            onClick={() => handleRejectRequest()}
+                          >
+                            {isLoading && (
+                              <CircularProgress size={20} color="white" />
+                            )}{" "}
+                            Approve reject
+                          </ThemeButton>
+                          <ThemeButton
+                            sx={{ fontWeight: "500" }}
+                            onClick={() => handleApproveRequest()}
+                          >
+                            {isLoading && (
+                              <CircularProgress size={20} color="white" />
+                            )}{" "}
+                            Approve request
+                          </ThemeButton>
+                        </Stack>
+                      </Stack>
+                    </Grid>
+                  )}
+
+                  <PopupAlert alertConfig={alertConfig} />
+                </Grid>
+              </TabPanel>
+              <TabPanel value="2">
+                <UploadFile
+                  customer_id={initialValues.id}
+                  disabled={disabled}
+                  dropdownData={dropdownData}
+                />
+              </TabPanel>
+              <TabPanel value="3">
+                <AuditTimeline
+                  auditDetails={enquiryAuditDetails}
+                  reloadDataHandler={reloadDataHandler}
+                  loading={loading}
+                />
+              </TabPanel>
+            </TabContext>
+          </Box>
+        </>
+      )}
+    </>
+  );
+}
 
