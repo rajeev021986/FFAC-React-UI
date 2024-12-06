@@ -38,6 +38,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       currency: "",
       shipmentType: "",
       unitRate: "0",
+      new:true
     };
     formik.setFieldValue("customerEntityTariffs", [...customerEntityTariffs, newRow]);
   };

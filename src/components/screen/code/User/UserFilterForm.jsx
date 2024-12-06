@@ -12,9 +12,9 @@ import { OutlinedButton } from "../../../common/Button";
 const UserFilterForm = () => {
   const [filters, setFilters] = useState([
     { fieldName: "userId", operator: "=", value: "", logicalOperator: "" },
-    { fieldName: "firstName", operator: "=", value: "", logicalOperator: "OR" },
+    { fieldName: "firstName", operator: "=", value: "", logicalOperator: "AND" },
     { fieldName: "lastName", operator: "=", value: "", logicalOperator: "AND" },
-    { fieldName: "status", operator: "=", value: "", logicalOperator: "OR" },
+    { fieldName: "status", operator: "=", value: "", logicalOperator: "AND" },
   ]);
 
   const handleInputChange = (index, field, value) => {

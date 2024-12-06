@@ -10,7 +10,7 @@ import Loader from '../../components/common/Loader/Loader';
 import { useGetOptionsSettingsQuery } from '../../store/api/settingsApi';
 export default function CustomerFormScreen({ page }) {
   const [customerDatas, setcustomerDatas] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const { state } = useLocation();
   // console.log(state, 'state')
@@ -73,7 +73,6 @@ export default function CustomerFormScreen({ page }) {
   useEffect(() => {
     const fetchCustomerDetails = async () => {
       try {
-        setLoading(true)
         const res = await ApiManager.getCustomerDeatils(state?.initialValues?.id);
         setcustomerDatas(res.body)
         setInitialValues({
@@ -99,7 +98,8 @@ export default function CustomerFormScreen({ page }) {
           chargeName: res.body?.chargeName || '',
           state: res.body?.state || '',
           paymentType: res.body?.paymentType || 'cash',
-          status: res.body?.status || 'ACTIVE',
+          isApproved: res.body?.isApproved || false,
+          status: res.body?.status || '',
           url: res.body?.url || '',
           zipCode: res.body?.zipCode || '',
           customerEntityTariffs: res.body?.customerEntityTariffs || [],
@@ -112,11 +112,13 @@ export default function CustomerFormScreen({ page }) {
         console.log(res, "res");
       } catch (error) {
         console.error(error, "error");
-        setLoading(false)
+        // setLoading(false)
       }
     };
     if (settingsLoaded && state?.initialValues?.id) {
       fetchCustomerDetails();
+    }else{
+      setLoading(false);
     }
 
 
@@ -156,7 +158,7 @@ export default function CustomerFormScreen({ page }) {
   return (
     <Box>
       <ScreenToolbar leftComps={<div><ThemedBreadcrumb /></div>} rightComps={<div></div>} />
-      {loading ? <Loader /> : <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+      {loading || optionsLoading || customerSettingsLoading ? <Loader /> : <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         {/* <CardHeader title={
           <Box display="flex" justifyContent={"space-between"}>
             <Typography variant='subtitle3' component='div'>Customer</Typography>
