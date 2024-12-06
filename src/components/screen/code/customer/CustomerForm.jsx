@@ -87,7 +87,8 @@ export default function CustomerForm({
         let tariffs = values.customerEntityTariffs.map((item) => item?.new ? { ...item, id: null, new: false } : item)
         try {
           delete values.id;
-          Boolean(!dropdownData?.approvalRequest) && (values.status = "New")
+          // Boolean(!dropdownData?.approvalRequest) && (values.status = "New")
+          values.status = "New"
           values.isApproved = !dropdownData?.approvalRequest;
           let response = await addCustomer({ ...values, customerEntityEmailsIds: emails, customerEntityTariffs: tariffs }).unwrap();
 
@@ -428,8 +429,7 @@ export default function CustomerForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-
-            {!customerSettingsData?.body?.approvalRequest ? <Grid
+            <Grid
               item
               xs={12}
               sm={6}
@@ -447,26 +447,7 @@ export default function CustomerForm({
                 error={formik.errors.status}
                 onChange={formik.handleChange}
               />
-            </Grid> :
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-                sx={{ marginTop: 2 }}
-              >
-                <SelectBox
-                  label="Status"
-                  id="status"
-                  disabled={disabled}
-                  options={dropdownData?.status}
-                  value={formik.values.status}
-                  error={formik.errors.status}
-                  onChange={formik.handleChange}
-                />
-              </Grid>}
+            </Grid>
 
             <Grid item xs={12}>
               <Box
@@ -797,7 +778,7 @@ export default function CustomerForm({
                     />
                   </Grid>
 
-                  {!formik.values.status == "New" ? <Grid
+                  {formik.values.isApproved ? <Grid
                     item
                     xs={12}
                     sm={6}
