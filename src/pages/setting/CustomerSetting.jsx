@@ -16,67 +16,68 @@ const CustomerSetting = () => {
     const [isLoadingsave, setIsLoading] = useState(false);
 
     useEffect(() => {
-        let data= {
-            "unitType": [
-                {
-                    "id": 1,
-                    "label": "Flat",
-                    "value": "Flat"
-                },
-                {
-                    "id": 2,
-                    "label": "20FT",
-                    "value": "20FT"
-                },
-                {
-                    "id": 3,
-                    "label": "40FT",
-                    "value": "40FT"
-                },
-                {
-                    "id": 4,
-                    "label": "60FT",
-                    "value": "60FT"
-                }
-            ],
-            "creditDays": [
-                {
-                    "id": 1,
-                    "label": "0",
-                    "value": "0"
-                },
-                {
-                    "id": 2,
-                    "label": "15",
-                    "value": "15"
-                },
-                {
-                    "id": 3,
-                    "label": "30",
-                    "value": "26"
-                },
-                {
-                    "id": 4,
-                    "label": "45",
-                    "value": "45"
-                },
-                {
-                    "id": 5,
-                    "label": "60",
-                    "value": "60"
-                },
-                {
-                    "id": 6,
-                    "label": "90",
-                    "value": "90"
-                }
-            ],
-            "approval_request": false
-        }
-        setUnitType(data.unitType)
-        setCreditDays(data.creditDays)
-        setApprovalRequest(data.approval_request)
-        setDocumentType(data.document_type || [])
+        // let data= {
+        //     "unitType": [
+        //         {
+        //             "id": 1,
+        //             "label": "Flat",
+        //             "value": "Flat"
+        //         },
+        //         {
+        //             "id": 2,
+        //             "label": "20FT",
+        //             "value": "20FT"
+        //         },
+        //         {
+        //             "id": 3,
+        //             "label": "40FT",
+        //             "value": "40FT"
+        //         },
+        //         {
+        //             "id": 4,
+        //             "label": "60FT",
+        //             "value": "60FT"
+        //         }
+        //     ],
+        //     "creditDays": [
+        //         {
+        //             "id": 1,
+        //             "label": "0",
+        //             "value": "0"
+        //         },
+        //         {
+        //             "id": 2,
+        //             "label": "15",
+        //             "value": "15"
+        //         },
+        //         {
+        //             "id": 3,
+        //             "label": "30",
+        //             "value": "26"
+        //         },
+        //         {
+        //             "id": 4,
+        //             "label": "45",
+        //             "value": "45"
+        //         },
+        //         {
+        //             "id": 5,
+        //             "label": "60",
+        //             "value": "60"
+        //         },
+        //         {
+        //             "id": 6,
+        //             "label": "90",
+        //             "value": "90"
+        //         }
+        //     ],
+        //     "approval_request": false
+        // }
+        setUnitType(data?.body.unitType)
+        setCreditDays(data?.body.creditDays)
+        setApprovalRequest(data?.body.approvalRequest)
+        setDocumentType(data?.body.document_type || [])
+        console.log(data,"data")
     }, [data, geterror]);
 
 
