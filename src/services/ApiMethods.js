@@ -5,6 +5,7 @@ export const getAppHeaders = () => {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
     'authtype': localStorage.getItem('authtype'),
+    'userId': localStorage.getItem('userId'),
   };
 };
 
@@ -31,7 +32,7 @@ class ApiMethods {
 
           const contentType = res.headers.get('content-type');
           let data;
-          
+
           if (isBlob || contentType?.includes('application/octet-stream')) {
             data = await res.blob();
           } else {

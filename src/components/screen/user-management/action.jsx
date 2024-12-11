@@ -1,5 +1,7 @@
+import { KeyOutlined } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import { GridDeleteIcon } from "@mui/x-data-grid";
 import toast from "react-hot-toast";
 
 export const getUserListGridActions = (nav, setModal) => {
@@ -7,19 +9,36 @@ export const getUserListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
-        nav(`/app/admin_master/user_management/form`, {state: {formAction: "edit", initialValues: params.row},
+        console.log("Tsting", params.row);
+        nav(`/app/admin/users/editUser/${params.row.userId}`, {
+          state: { formAction: "edit", initialValues: params.row },
         });
       },
       icon: <EditIcon />,
     },
+    // {
+    //   label: "Audit",
+    //   onClick: (params) => {
+    //     console.log("Audit clicked for", params.row);
+    //     setModal({ open: true, type: "audit", data: params.row });
+    //   },
+    //   icon: <EditIcon />,
+    // },
     {
-      label: "Audit",
+      label: "Delete",
       onClick: (params) => {
-        console.log("Audit clicked for", params.row);
-        setModal({ open: true, type: "audit", data: params.row });
+        console.log("Delete Tsting for", params.row);
+        setModal({ open: true, type: "delete", data: params.row.id });
       },
-      icon: <EditIcon />,
+      icon: <GridDeleteIcon />,
+    },
+    {
+      label: "Reset Pass",
+      onClick: (params) => {
+        console.log("Reset Tsting clicked for", params.row);
+        setModal({ open: true, type: "reset", data: params.row });
+      },
+      icon: <KeyOutlined />,
     },
   ];
 };
@@ -33,13 +52,14 @@ export const newUserListGridActions = (nav, setModal) => {
       onClick: (params) => {
         console.log("Edit clicked for", params.row);
         // userid : params.row.emailid
-        let data = {...params.row,}
-        if(data.status !== "APPROVED"){
+        let data = { ...params.row, }
+        if (data.status !== "APPROVED") {
           delete data.status;
-          nav(`/app/admin_master/user_management/form`, {state: {formAction: "verify", initialValues: data},
+          nav(`/app/admin_master/user_management/form`, {
+            state: { formAction: "verify", initialValues: data },
           });
         }
-        else{
+        else {
           toast.error("Already Approved")
         }
       },
@@ -49,14 +69,14 @@ export const newUserListGridActions = (nav, setModal) => {
       label: "Reject",
       onClick: (params) => {
 
-        if(params.row.status !== "APPROVED"){
+        if (params.row.status !== "APPROVED") {
           setModal({
             open: true,
             type: "reject",
             data: params.row,
           })
         }
-        else{
+        else {
           toast.error("Already Approved")
         }
       },

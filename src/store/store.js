@@ -27,7 +27,6 @@ import otmBolListSlice from "./freatures/otmBolListSlice";
 import codeCustomerReducer from "./freatures/CustomerSlice";
 import codePartyReducer from "./freatures/PartySlice";
 import codeAgentReducer from "./freatures/AgentSlice";
-
 const store = configureStore({
     reducer : {
         // api

@@ -35,7 +35,7 @@ const SessionExpired = () => {
         localStorage.setItem(
           "user",
           JSON.stringify({
-            expiresIn: new Date().getTime() + 1000 * 60 * 1, // 5 days
+            expiresIn: new Date().getTime() +  1000 * 60 * 60 * 24, 
           })
         );
         console.log("Logged in successfully with token:", res.body.jwtToken);

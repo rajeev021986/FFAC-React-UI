@@ -52,6 +52,57 @@ export const CODE_CUSTOMER_COLUMNS = [
     }
   
 ]
+export const CODE_USER_COLUMNS = [
+
+    {
+        field: 'firstName',
+        headerName: 'User Name',
+        width: 150,
+        headerAlign: 'center',
+        align : 'center',
+        editable: true
+    },
+    {
+        field: 'email',
+        headerName: 'Email',
+        width: 150,
+        headerAlign: 'center',
+        align : 'center',
+        editable: true
+    },
+    {
+        field: 'phone',
+        headerName: 'Phone',
+        width: 150,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    {
+        flex: 1,
+        field: 'address',
+        headerName: 'Address',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    {
+        flex: 1,
+        field: 'status',
+        headerName: 'Status',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    // {
+    //     flex: 1,
+    //     field: 'action',
+    //     headerName: 'Action',
+    //     width: 110,
+    //     headerAlign: 'center',
+    //     align : 'center',editable: true
+    // }
+  
+]
 
 export const CODE_PARTY_COLUMNS = [
     {

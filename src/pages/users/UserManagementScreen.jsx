@@ -40,44 +40,77 @@ import { getUserListGridActions } from '../../components/screen/user-management/
 // import EditIcon from "@mui/icons-material/Edit";
 import ReusableRightDrawer from "../../components/common/CommonDrawer";
 import { COMMON } from "../../data/columns/audit";
+import UserManagementModules from "./UserManagementModules";
 
-const ADD_NEW_USER_PATH = "/app/admin_master/user_management/form";
+const ADD_NEW_USER_PATH = "/app/admin/users/addUser";
 
 export default function UserManagementScreen() {
   const userManagementSelector = useSelector((state) => state.userManagement);
-  console.log("userManagementSelectoruserManagementSelector",userManagementSelector);
   const nav = useNavigate();
   const dispatch = useDispatch();
-//   const [drawerOpen, setDrawerOpen] = useState(false);
-//   const [drawerData, setDrawerData] = useState(null);
+  //   const [drawerOpen, setDrawerOpen] = useState(false);
+  //   const [drawerData, setDrawerData] = useState(null);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
-  console.log("modalmodal",modal);
-  
+  console.log("modalmodal", modal);
 
+  const query = {
+    page: userManagementSelector?.pagination?.page + 1,
+    size: userManagementSelector?.pagination?.pageSize,
+    sortBy:
+      userManagementSelector.sortModel.length > 0
+        ? userManagementSelector.sortModel[0].field
+        : userManagementSelector?.sortBy?.split("*")[0],
+    sortOrder:
+      userManagementSelector.sortModel.length > 0
+        ? userManagementSelector?.sortModel[0]?.sort
+        : userManagementSelector?.sortBy?.split("*")[1] || "",
+  };
+  console.log("userManagementSelector?.formData", userManagementSelector?.formData);
+  const payload = Object.entries(userManagementSelector?.formData)
+    .filter(([key, value]) => value)
+    .map(([key, value]) => {
+      return {
+        fieldName: key,
+        operator: "=",
+        value: value,
+        logicalOperator: "and",
+      };
+    });
+  Boolean(userManagementSelector?.status) && (payload.push({ fieldName: "status", operator: "=", value: userManagementSelector?.status, logicalOperator: "and" }))
+  // const {
+  //   data: UserData,
+  //   isError,
+  //   isLoading,
+  //   error,
+  //   isFetching,
+  // } = useFetchUsersQuery({
+  //   page: userManagementSelector?.pagination?.page + 1,
+  //   size: userManagementSelector?.pagination?.pageSize,
+  //   orderBy:
+  //     userManagementSelector.sortModel.length > 0
+  //       ? userManagementSelector.sortModel[0].field +
+  //       "*" +
+  //       userManagementSelector.sortModel[0].sort
+  //       : userManagementSelector.sortBy,
+  //   role: userManagementSelector.role.join(","),
+  //   status: userManagementSelector.status.join(","),
+  //   ...userManagementSelector.formData,
+  // });
   const {
     data: UserData,
     isError,
     isLoading,
     error,
     isFetching,
+    refetch
   } = useFetchUsersQuery({
-    page: userManagementSelector?.pagination?.page + 1,
-    perPage: userManagementSelector?.pagination?.pageSize,
-    orderBy:
-      userManagementSelector.sortModel.length > 0
-        ? userManagementSelector.sortModel[0].field +
-          "*" +
-          userManagementSelector.sortModel[0].sort
-        : userManagementSelector.sortBy,
-    role: userManagementSelector.role.join(","),
-    status: userManagementSelector.status.join(","),
-    ...userManagementSelector.formData,
+    params: query,
+    payload,
   });
-
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
@@ -85,7 +118,7 @@ export default function UserManagementScreen() {
 
   USER_MANAGEMENT_COLUMNS[USER_MANAGEMENT_COLUMNS.length - 1].renderCell =
     GridActions({
-      actions: getUserListGridActions(nav,setModal),
+      actions: getUserListGridActions(nav, setModal),
     });
 
   return (
@@ -94,13 +127,13 @@ export default function UserManagementScreen() {
         leftComps={<ThemedBreadcrumb />}
         rightComps={
           <>
-            <OutlinedButton
+            {/* <OutlinedButton
               color="primary"
               size="small"
               onClick={() => exportUserManagement(UserData?.rows)}
             >
               <FileDownloadOutlined fontSize="small" /> Export
-            </OutlinedButton>
+            </OutlinedButton> */}
             <OutlinedButton
               color="primary"
               size="small"
@@ -113,7 +146,7 @@ export default function UserManagementScreen() {
           </>
         }
       />
-      <Card sx={{borderWidth : 1,borderColor : "border.main"}}>
+      <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
@@ -163,13 +196,13 @@ export default function UserManagementScreen() {
         />
         {userManagementSelector.view === "grid" ? (
           <ThemedGrid
-            uniqueId="usercode"
+            uniqueId="id"
             columns={USER_MANAGEMENT_COLUMNS}
-            count={UserData?.totalRecord}
+            count={UserData?.body?.totalElements}
             handlePage={handlePage}
-            data={UserData?.rows}
+            data={UserData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
+            columnVisibilityHandler={() => { }}
             paginationModel={userManagementSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={userManagementSelector.sortModel}
@@ -177,17 +210,19 @@ export default function UserManagementScreen() {
           />
         ) : (
           <CardsView
-            uniqueId="usercode"
+            uniqueId="id"
             columns={USER_MANAGEMENT_COLUMNS}
-            count={UserData?.totalRecord}
+            count={UserData?.body?.totalElements}
             handlePage={handlePage}
-            data={UserData?.rows}
+            data={UserData?.body?.data}
             paginationModel={userManagementSelector.pagination}
             loading={isLoading || isFetching}
-            actions={getUserListGridActions(nav,setModal)}
+            actions={getUserListGridActions(nav, setModal)}
+            page="user_management"
           />
         )}
       </Card>
+      <UserManagementModules refetch={refetch} modal={modal} setModal={setModal} />
       {modal.type === 'audit' && (
         <ReusableRightDrawer
           open={modal?.open}

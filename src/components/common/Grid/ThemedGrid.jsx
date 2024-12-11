@@ -1,9 +1,11 @@
 // mui components
 import {
   Paper,
-  Pagination
+  Pagination,
+  Box
 } from "@mui/material";
 import { StyledDataGrid } from "./styles";
+import { GridToolbarColumnsButton } from "@mui/x-data-grid";
 
 
 
@@ -22,10 +24,10 @@ const ThemedGrid = (props) => {
     uniqueId,
     ...rest
   } = props;
-  
 
 
-console.log(">>>>>>>>count>>>>>>>.",props);
+
+  console.log(">>>>>>>>count>>>>>>>.", props);
 
 
 
@@ -38,7 +40,7 @@ console.log(">>>>>>>>count>>>>>>>.",props);
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height : 'calc(100vh - 250px)', overflowY : 'auto',
+        height: 'calc(100vh - 250px)', overflowY: 'auto',
       }}
 
     >
@@ -60,6 +62,13 @@ console.log(">>>>>>>>count>>>>>>>.",props);
         onPaginationModelChange={handlePage}
         getRowId={(row) => row[uniqueId]}
         disableColumnFilter
+        slots={{
+          toolbar: () => (
+            <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
+              <GridToolbarColumnsButton />
+            </Box>
+          )
+        }}
         {...rest}
       />
     </Paper>

@@ -14,10 +14,12 @@ import CustomerApproveScreen from "./pages/code/CustomerApproveScreen";
 import Component from "./pages/code/Component";
 import { useSelector } from "react-redux";
 import SettingsPage from "./pages/setting/Setting";
-import UserRole from "./pages/code/UserRole";
 import AddCard from "./components/common/Cards/AddCard";
 import CustomerFormScreen from "./pages/code/CustomerFormScreen";
 import Role from "./pages/code/Role";
+import AddEditRole from "./pages/code/AddEditRole";
+import UserManagementScreen from "./pages/users/UserManagementScreen";
+import UserFormScreen from "./pages/users/UserFormScreen";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -69,9 +71,12 @@ function App() {
             />
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="admin/users" element={<UserRole />} />
-            <Route path="admin/users/add" element={<AddCard />} />
+            <Route path="admin/users" element={<UserManagementScreen />} />
+            <Route path="admin/users/addUser" element={<AddCard />} />
+            <Route path="admin/users/editUser/:id" element={<AddCard />} />
             <Route path="admin/roles" element={<Role />} />
+            <Route path="admin/roles/add" element={<AddEditRole />} />
+            <Route path="admin/roles/edit/:id" element={<AddEditRole />} />
           </Route>
         </Routes>
         <Toaster />

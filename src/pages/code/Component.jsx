@@ -4,7 +4,7 @@ import Main from "../../components/core/main";
 export default function Component({page}) {
   return (
     <>
-      <Main />
+      {/* <Main /> */}
       <CustomerScreen page={page} />
     </>
   );

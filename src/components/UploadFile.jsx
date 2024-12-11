@@ -304,11 +304,17 @@ const UploadFile = ({ customer_id, disabled, dropdownData }) => {
                 value={formData.documentType}
                 onChange={handleInputChange}
               >
-                {dropdownData?.document_type?.map((item) => (
-                  <MenuItem key={item.value} value={item.value}>
-                    {item.value}
+                {dropdownData?.document_type?.length > 0 ? (
+                  dropdownData.document_type.map((item) => (
+                    <MenuItem key={item.value} value={item.value}>
+                      {item.value}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem disabled>
+                    No options available
                   </MenuItem>
-                ))}
+                )}
               </Select>
               <TextField
                 margin="dense"

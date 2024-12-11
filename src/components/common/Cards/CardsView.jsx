@@ -42,6 +42,9 @@ export default function CardsView({
         position: "relative",
         pt: 2,
         backgroundColor: "white.main",
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "10px",
       }}
     >
       {data?.map((item, index) => (
@@ -82,7 +85,7 @@ export default function CardsView({
             rowsPerPageOptions={[10, 20, 50, 100]}
             color="primary"
             size="small"
-            sx={{ mergin: "auto", backgroundColor: "white.main" }}
+            sx={{ mergin: "auto", backgroundColor: "white.main"}}
           />
         </Box>
       )}
@@ -97,5 +100,8 @@ const styles = {
     right: 0,
     backgroundColor: "white.main",
     borderTop: "1px solid #e0e0e0",
+    width: "100%",
+    height: "50px",
+    marginTop: "auto",
   },
 };

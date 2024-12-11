@@ -31,6 +31,7 @@ const Routes = {
   customer: { label: "Customer", disabled: false },
   party: { label: "Party", disabled: false },
   agent: { label: "Agent", disabled: false },
+  roles: { label: "Roles", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {
