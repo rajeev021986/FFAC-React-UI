@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"; // Assuming you're using react-router
 import { setSessionExpiredmodule } from "../../../store/freatures/dashboardSlice";
@@ -13,6 +13,7 @@ import {
   Alert,
 } from "@mui/material";
 import ApiManager from "../../../services/ApiManager";
+import toast from "react-hot-toast";
 
 const SessionExpired = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const SessionExpired = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const [open, setOpen] = useState(false);
   const handleLogin = async () => {
     if (!username || !password) {
       setError("Both fields are required.");
@@ -35,12 +36,12 @@ const SessionExpired = () => {
         localStorage.setItem(
           "user",
           JSON.stringify({
-            expiresIn: new Date().getTime() +  1000 * 60 * 60 * 24, 
+            expiresIn: new Date().getTime() + 1000 * 60 * 60 * 6,
           })
         );
+        setOpen(false)
+        toast.success("login successFull");
         console.log("Logged in successfully with token:", res.body.jwtToken);
-        dispatch(setSessionExpiredmodule(false));
-        // window.location.reload();
       } else {
         setError("Invalid response from server. Please try again.");
       }
@@ -52,11 +53,22 @@ const SessionExpired = () => {
 
   const handleClose = () => {
     dispatch(setSessionExpiredmodule(false));
-    navigate("/"); // Redirect to a specific route on close
+    navigate("/");
   };
 
+
+  useEffect(() => {
+    const localUser = JSON.parse(localStorage.getItem("user"));
+    const localToken = localStorage.getItem("token");
+    if (localToken && localUser) {
+      if (localUser.expiresIn < new Date().getTime()) {
+        setOpen(true);
+      }
+    }
+  }, [])
+
   return (
-    <Dialog open={false} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Session Expired</DialogTitle>
       <DialogContent>
         <DialogContentText>

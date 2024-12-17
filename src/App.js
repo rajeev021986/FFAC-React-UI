@@ -20,6 +20,8 @@ import Role from "./pages/code/Role";
 import AddEditRole from "./pages/code/AddEditRole";
 import UserManagementScreen from "./pages/users/UserManagementScreen";
 import UserFormScreen from "./pages/users/UserFormScreen";
+import ProfileScreen from "./pages/ProfileScreen";
+import VendorForm from "./components/screen/code/vendor/VendorForm";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -64,7 +66,8 @@ function App() {
               path="entity/customer/editcustomer"
               element={<CustomerFormScreen page="customer" />}
             />
-            <Route path="entity/vendor" element={<VendorScreen />} />
+            <Route path="entity/vendor" element={<VendorScreen page="vendor" />} />
+            <Route path="entity/vendorApproval" element={<VendorScreen page="vendorApprove" />} />
             <Route
               path="entity/approve/approveRequest"
               element={<CustomerFormScreen page="customerApprove" />}
@@ -77,6 +80,10 @@ function App() {
             <Route path="admin/roles" element={<Role />} />
             <Route path="admin/roles/add" element={<AddEditRole />} />
             <Route path="admin/roles/edit/:id" element={<AddEditRole />} />
+            <Route path="entity/vendor/addVendor" element={<VendorForm />} />
+            <Route path="entity/vendor/editVendor" element={<VendorForm />} />
+            <Route path="entity/vendorApproval/editVendorApprove" element={<VendorForm page="vendorApproval" />} />
+            <Route path="profile" element={<ProfileScreen />} />
           </Route>
         </Routes>
         <Toaster />

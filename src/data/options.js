@@ -15,25 +15,25 @@ export const USER_STATUS_OPTIONS = [
 ];
 
 
- export const PAYMENTTYPE_OPTIONS = [
+export const PAYMENTTYPE_OPTIONS = [
   { label: "cash", value: "Cash" },
   { label: "credit", value: "Credit" },
 ];
 
- export const ACCOUNT_TYPE_OPTIONS = [
+export const ACCOUNT_TYPE_OPTIONS = [
   { value: "local", label: "Local" },
   { value: "transit", label: "Transit" }
 ];
 
 export const USER_SORT_OPTIONS = [
-  { value: "companyname*asc", label: "Company Name Ascending" },
-  { value: "companyname*desc", label: "Company Name Descending" },
-  { value: "firstname*asc", label: "Name Ascending" },
-  { value: "firstname*desc", label: "Name Descending" },
+  { value: "companyName*asc", label: "Company Name Ascending" },
+  { value: "companyName*desc", label: "Company Name Descending" },
+  { value: "firstName*asc", label: "Name Ascending" },
+  { value: "firstName*desc", label: "Name Descending" },
   { value: "role*asc", label: "Role Ascending" },
   { value: "role*desc", label: "Role Descending" },
-  { value: "userid*asc", label: "User ID Ascending" },
-  { value: "userid*desc", label: "User ID Descending" },
+  { value: "userId*asc", label: "User ID Ascending" },
+  { value: "userId*desc", label: "User ID Descending" },
 ];
 
 
@@ -131,7 +131,14 @@ export const CUSTOMER_SORT_OPTIONS = [
   { value: "country*asc", label: "Country Ascending" },
   { value: "country*desc", label: "Country Descending" },
 ];
-
+export const VENDOR_SORT_OPTIONS = [
+  { value: "vendorName*asc", label: "Vendor Ascending" },
+  { value: "vendorName*desc", label: "Vendor Descending" },
+  { value: "city*asc", label: "City Ascending" },
+  { value: "city*desc", label: "City Descending" },
+  { value: "country*asc", label: "Country Ascending" },
+  { value: "country*desc", label: "Country Descending" },
+];
 export const PARTY_SORT_OPTIONS = [
   { value: "acode*asc", label: "Code Ascending" },
   { value: "acode*desc", label: "Code Descending" },

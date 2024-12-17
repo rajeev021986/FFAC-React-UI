@@ -20,6 +20,7 @@ import Uploadimg from "../assets/images/upload-placeholder.png";
 import ApiManager from "../services/ApiManager";
 import { useAddAgentMutation, useDownloadDocumnentMutation, useGetCustomerFileListMutation, useUploadCustomerFileMutation } from "../store/api/codeDataApi";
 import Loader from "./common/Loader/Loader";
+import { useGetOptionsSettingsQuery } from "../store/api/settingsApi";
 // Custom styled drop zone
 const DropZone = styled(Box)(({ theme }) => ({
   border: "2px dashed #ccc",
@@ -38,8 +39,21 @@ const DropZone = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UploadFile = ({ customer_id, disabled, dropdownData }) => {
+const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
   // const [uploadCustomerFile, { isLoading }] = useUploadCustomerFileMutation();
+  const [dropdownData, setDropdownData] = useState();
+  const { data: customerSettingsData } =
+    useGetOptionsSettingsQuery("customer_settings");
+
+  const formNotNeed = sourceType == "VENDOR";
+  console.log(sourceType, "sourceType", formNotNeed);
+  useEffect(() => {
+    if (customerSettingsData?.body) {
+      setDropdownData({
+        ...customerSettingsData?.body,
+      });
+    }
+  }, [customerSettingsData]);
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [deleteData, setDeleteData] = useState({});
@@ -47,17 +61,12 @@ const UploadFile = ({ customer_id, disabled, dropdownData }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    documentType: "",
-    issueDate: "",
-    number: "",
-    expiryDate: "",
-  });
+  const [formData, setFormData] = useState({});
 
   const handleDownload = async (id, source, sourceId, documentType) => {
     try {
       setLoading(true);
-      let source = "CUSTOMER";
+      let source = sourceType;
       const res = await ApiManager.downloadDocumnent(id, source, sourceId);
       donloadData(res.body.base64, res.body.mimeType, documentType);
       setLoading(false);
@@ -69,7 +78,7 @@ const UploadFile = ({ customer_id, disabled, dropdownData }) => {
 
   const onDelete = async () => {
     try {
-      let source = "CUSTOMER";
+      let source = sourceType;
       setLoading(true);
       const res = await ApiManager.deleteDocument(deleteData.id, deleteData.source, deleteData.sourceId);
 
@@ -86,7 +95,14 @@ const UploadFile = ({ customer_id, disabled, dropdownData }) => {
     const files = event.target.files || event.dataTransfer.files;
     if (files.length > 0) {
       setUploadedFile(files[0]);
-      setDialogOpen(true);
+      if (formNotNeed) {
+        handleDialogSave();
+        return;
+      } else {
+        handleDialogSave();
+        setDialogOpen(true);
+      }
+
     }
   };
 
@@ -104,14 +120,12 @@ const UploadFile = ({ customer_id, disabled, dropdownData }) => {
   };
 
   const handleDialogSave = async () => {
+    console.log(uploadedFile, "uploadedFile")
     const uploadData = {
       file: uploadedFile,
       entityFile: {
-        documentName: formData.documentName,
-        issueDate: formData.issueDate,
-        number: formData.number,
-        expiryDate: formData.expiryDate,
-        source: "CUSTOMER",
+        ...formData,
+        source: sourceType,
         sourceId: customer_id,
       },
     };
@@ -203,7 +217,7 @@ const UploadFile = ({ customer_id, disabled, dropdownData }) => {
               });
               setOpenConfirmation(true);
             }}
-            disabled = {disabled}
+            disabled={disabled}
           >
             Delete
           </Button>
@@ -216,7 +230,7 @@ const UploadFile = ({ customer_id, disabled, dropdownData }) => {
   }, []);
   const reloadDataHandler = async () => {
     try {
-      let source = "CUSTOMER";
+      let source = sourceType;
       setLoading(true);
       const res = await ApiManager.getCustomerFormData(source, customer_id);
       setListData(res.body);
@@ -276,7 +290,7 @@ const UploadFile = ({ customer_id, disabled, dropdownData }) => {
                   type="file"
                   style={{ display: "none" }}
                   onChange={handleFileDrop}
-                  disabled = {disabled}
+                  disabled={disabled}
                 />
               </DropZone>
             </Box>

@@ -144,6 +144,14 @@ class ApiManager {
         const url = ENDPOINTS.USER_PASS_RESET();
         return ApiMethods.put(url, payload);
     }
+    static updateUserProfile = async (payload) => {
+        const url = ENDPOINTS.UPDATE_USER_PROFILE();
+        return ApiMethods.put(url, payload);
+    }
+    static updateUserProfileImage = async (payload,id) => {
+        const url = ENDPOINTS.UPDATE_USER_PROFILE_IMAGE(id);
+        return ApiMethods.put(url, payload);
+    }
 }
 
 

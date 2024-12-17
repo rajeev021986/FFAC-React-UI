@@ -3,7 +3,7 @@ import { Box, Drawer, Card, InputAdornment, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Close, Search } from "@mui/icons-material";
 import InputBox from "./InputBox";
-import { useFetchAuditQuery } from "../../store/api/common";
+import {useLazyFetchAuditQuery } from "../../store/api/common";
 
 export default function ReusableRightDrawer({ open, data, table, column, onClose, isFrontmost }) {
   
@@ -16,9 +16,8 @@ export default function ReusableRightDrawer({ open, data, table, column, onClose
     isLoading,
     error,
     isFetching,
-  } = useFetchAuditQuery({
-    type: table,
-    serial_id: data,
+  } = useLazyFetchAuditQuery({
+    userId: data.id,
   });
 
   function removeUnderscores(str) {

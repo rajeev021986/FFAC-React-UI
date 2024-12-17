@@ -19,7 +19,7 @@ function TimelineComponent({ data }) {
                     <Timeline>
                         {data?.map((entry, index) => (
                             <div style={{ display: "flex" }} key={index}>
-                                <TimelineItem position="left">
+                                <TimelineItem position="left" sx={{width:"30%"}}>
                                     <TimelineSeparator>
                                         <TimelineDot sx={{ backgroundColor: "primary.main" }} />
                                         {index < data.length - 1 && (
@@ -37,8 +37,8 @@ function TimelineComponent({ data }) {
                                         </Typography>
                                     </TimelineContent>
                                 </TimelineItem>
-                                <div style={{ flexGrow: 1, marginTop: "10px" }}>
-                                    <Accordion>
+                                <div style={{  marginTop: "10px",width:"70%" }}>
+                                    <Accordion sx={{width:"100%"}}>
                                         <AccordionSummary>
                                             <Typography sx={{ flexGrow: 1, color: 'primary.main' }}>
                                                 {entry.label}

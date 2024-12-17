@@ -192,7 +192,7 @@ export default function AddCard() {
             }
             await ApiManager.addUserData(payload).then((res) => {
               toast.success(res.message)
-            })
+            }).catch((er) => toast.error(er.msg))
           }
           navigate(-1)
         }}

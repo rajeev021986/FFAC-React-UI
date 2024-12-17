@@ -10,19 +10,19 @@ import SessionExpired from './components/common/SessionExpired/SessionExpired';
 export default function Layout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    const localUser = JSON.parse(localStorage.getItem("user"));
-    const localToken = localStorage.getItem("token");
-    if (localToken && localUser) {
-      if (localUser.expiresIn < new Date().getTime()) {
-        dispatch(setSessionExpiredmodule(true));
-      }
-    }
-  }, [])
-  const handleLogout = () => {
-    dispatch(setSessionExpiredmodule(false));
-    navigate("/")
-  }
+  // useEffect(() => {
+  //   const localUser = JSON.parse(localStorage.getItem("user"));
+  //   const localToken = localStorage.getItem("token");
+  //   if (localToken && localUser) {
+  //     if (localUser.expiresIn < new Date().getTime()) {
+  //       dispatch(setSessionExpiredmodule(true));
+  //     }
+  //   }
+  // }, [])
+  // const handleLogout = () => {
+  //   dispatch(setSessionExpiredmodule(false));
+  //   navigate("/")
+  // }
   return (
     <Main>
       <SessionExpired/>

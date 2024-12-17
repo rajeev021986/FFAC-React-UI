@@ -906,6 +906,7 @@ export default function CustomerForm({
                   customer_id={initialValues.id}
                   disabled={disabled}
                   dropdownData={dropdownData}
+                  sourceType="CUSTOMER"
                 />
               </TabPanel>
               <TabPanel value="3">

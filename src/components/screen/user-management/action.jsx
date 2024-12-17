@@ -1,5 +1,6 @@
 import { KeyOutlined } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
+import BiotechIcon from '@mui/icons-material/Biotech';
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import toast from "react-hot-toast";
@@ -16,14 +17,14 @@ export const getUserListGridActions = (nav, setModal) => {
       },
       icon: <EditIcon />,
     },
-    // {
-    //   label: "Audit",
-    //   onClick: (params) => {
-    //     console.log("Audit clicked for", params.row);
-    //     setModal({ open: true, type: "audit", data: params.row });
-    //   },
-    //   icon: <EditIcon />,
-    // },
+    {
+      label: "Audit",
+      onClick: (params) => {
+        console.log("Audit clicked for", params.row);
+        setModal({ open: true, type: "audit", data: params.row });
+      },
+      icon: <BiotechIcon />,
+    },
     {
       label: "Delete",
       onClick: (params) => {

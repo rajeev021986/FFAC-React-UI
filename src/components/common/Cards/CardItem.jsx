@@ -87,16 +87,16 @@ export default function CardItem({
             </Grid>
           ))}
         </Grid>
-
-        <Box>
-          <TMenu
-            buttonIcon={<MoreVert />}
-            buttonProps={{ color: "text.secondary" }}
-            menuItems={actions}
-            params={{ row: item }}
-            action={true}
-          />
-        </Box>
+        {actions &&
+          <Box>
+            <TMenu
+              buttonIcon={<MoreVert />}
+              buttonProps={{ color: "text.secondary" }}
+              menuItems={actions}
+              params={{ row: item }}
+              action={true}
+            />
+          </Box>}
       </Box>
     )
   );

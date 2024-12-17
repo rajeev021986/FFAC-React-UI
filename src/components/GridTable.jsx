@@ -20,19 +20,19 @@ function GridTable({ data }) {
             <TableRow key={index}>
               {/* <TableCell>{row.id}</TableCell> */}
               <TableCell>{row.entityName}</TableCell>
-              <TableCell>{row.fieldName}</TableCell>
+              <TableCell>{row.fieldName || "N/A"}</TableCell>
 
               {/* Tooltip for Old Value with Ellipsis */}
               <TableCell style={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 <Tooltip title={row.oldValue || "No previous value"} arrow>
-                  <span>{row.oldValue}</span>
+                  <span>{row.oldValue || "N/A"}</span>
                 </Tooltip>
               </TableCell>
 
               {/* Tooltip for New Value with Ellipsis */}
               <TableCell style={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 <Tooltip title={row.newValue || "No new value"} arrow>
-                  <span>{row.newValue}</span>
+                  <span>{row.newValue || "N/A"}</span>
                 </Tooltip>
               </TableCell>
 

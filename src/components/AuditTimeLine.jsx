@@ -8,7 +8,6 @@ function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
   useEffect(() => {
     reloadDataHandler();
   }, [])
-
   return (
     <>{loading ? <Loader /> : <div>
       <Grid container justifyContent="flex-end" marginBottom={2}>
@@ -22,7 +21,7 @@ function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
           Refresh
         </Button>
       </Grid>
-      <Timeline data={auditDetails.body} />
+      <Timeline data={auditDetails?.body} />
     </div>}</>
   )
 }

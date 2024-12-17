@@ -33,7 +33,9 @@ const ENDPOINTS = {
     DELETE_USER: (id) => `/admin-service/user/${id}`,
     GET_ROLES: () => `/admin-service/role`,
     UPDATE_ROLE_PERMISSIONS: () => `/admin-service/role/permissions/update`,
-    USER_PASS_RESET: () => `/admin-service/user/update/password`
+    USER_PASS_RESET: () => `/admin-service/user/update/password`,
+    UPDATE_USER_PROFILE: () => `/admin-service/v1/profile`,
+    UPDATE_USER_PROFILE_IMAGE: (id) => `/admin-service/v1/profile/image?id=${id}`
 }
 
 export default ENDPOINTS;

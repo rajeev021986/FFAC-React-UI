@@ -9,6 +9,7 @@ import {
   Card,
   CardHeader,
   CircularProgress,
+  Drawer,
   IconButton,
   Stack,
   Typography,
@@ -41,6 +42,8 @@ import { getUserListGridActions } from '../../components/screen/user-management/
 import ReusableRightDrawer from "../../components/common/CommonDrawer";
 import { COMMON } from "../../data/columns/audit";
 import UserManagementModules from "./UserManagementModules";
+import AuditTimeLine from "../../components/AuditTimeLine";
+import { useLazyFetchAuditQuery } from "../../store/api/common";
 
 const ADD_NEW_USER_PATH = "/app/admin/users/addUser";
 
@@ -80,26 +83,8 @@ export default function UserManagementScreen() {
         logicalOperator: "and",
       };
     });
-  Boolean(userManagementSelector?.status) && (payload.push({ fieldName: "status", operator: "=", value: userManagementSelector?.status, logicalOperator: "and" }))
-  // const {
-  //   data: UserData,
-  //   isError,
-  //   isLoading,
-  //   error,
-  //   isFetching,
-  // } = useFetchUsersQuery({
-  //   page: userManagementSelector?.pagination?.page + 1,
-  //   size: userManagementSelector?.pagination?.pageSize,
-  //   orderBy:
-  //     userManagementSelector.sortModel.length > 0
-  //       ? userManagementSelector.sortModel[0].field +
-  //       "*" +
-  //       userManagementSelector.sortModel[0].sort
-  //       : userManagementSelector.sortBy,
-  //   role: userManagementSelector.role.join(","),
-  //   status: userManagementSelector.status.join(","),
-  //   ...userManagementSelector.formData,
-  // });
+  Boolean(userManagementSelector?.status.length>0) && (payload.push({ fieldName: "status", operator: "=", value: userManagementSelector?.status[0], logicalOperator: "and" }))
+
   const {
     data: UserData,
     isError,
@@ -111,6 +96,10 @@ export default function UserManagementScreen() {
     params: query,
     payload,
   });
+  const [fetchAudit, {
+    data: AuditData,
+    isLoading: AuditLoadinng
+  }] = useLazyFetchAuditQuery();
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
@@ -120,7 +109,12 @@ export default function UserManagementScreen() {
     GridActions({
       actions: getUserListGridActions(nav, setModal),
     });
-
+  const fetchUserAudit = () => {
+    fetchAudit({
+      userId: modal.data.id,
+    })
+    console.log('first')
+  }
   return (
     <Box>
       <ScreenToolbar
@@ -223,15 +217,37 @@ export default function UserManagementScreen() {
         )}
       </Card>
       <UserManagementModules refetch={refetch} modal={modal} setModal={setModal} />
-      {modal.type === 'audit' && (
+      {/* {modal.type === 'audit' && (
         <ReusableRightDrawer
           open={modal?.open}
-          data={modal?.data?.usercode}
+          data={modal?.data}
           table={"USER"}
           column={COMMON}
           onClose={() => setModal({ open: false, type: "", data: {} })}
           sx={{ zIndex: 2, position: "absolute" }}
         />
+      )} */}
+      {modal.type === 'audit' && (
+        <Drawer
+          anchor="right"
+          open={modal?.open}
+          onClose={() => setModal({ open: false, type: "", data: {} })}
+          sx={{
+            width: "50vw",
+            // maxWidth: "50vw",  
+            display: "flex",
+            flexDirection: "column",
+            // zIndex: isFrontmost ? 1301 : 1300, // Adjust z-index based on isFrontmost,
+            zIndex: 1301
+          }}
+        >
+          <Box sx={{ p: 2 }}>
+            <Typography variant="h6" component="div" sx={{ mb: 2 }}> 
+              User Audit Logs
+            </Typography>
+            <AuditTimeLine auditDetails={AuditData} reloadDataHandler={fetchUserAudit} loading={AuditLoadinng} />
+          </Box>
+        </Drawer>
       )}
     </Box>
   );

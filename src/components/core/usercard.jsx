@@ -27,15 +27,15 @@ export default function UserCard({ setDraweropen }) {
         if (localStorage.getItem("authtype") === "auth0") auth0Logout()
         nav('/');
     }
-    const MENU_ITEMS = [ 
+    const MENU_ITEMS = [
         {
             label: 'Profile',
-            onClick: () => { },
+            onClick: () => { nav("profile") },
             icon: <PersonOutlined />
         }
     ]
 
-    useEffect(() => {
+    useEffect(() => {   
 
         MENU_ITEMS.push({
             label: 'Settings',
@@ -63,7 +63,7 @@ export default function UserCard({ setDraweropen }) {
             <Typography variant="subtitle1" style={{ fontWeight: 500 }}>
                 Gana
             </Typography>
-            <IconButton onClick={()=>handleLogout()}>
+            <IconButton onClick={() => handleLogout()}>
                 <LogoutOutlined />
 
             </IconButton>
