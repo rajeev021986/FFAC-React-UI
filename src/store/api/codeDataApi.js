@@ -21,7 +21,7 @@ export const codeDataApi = createApi({
                 };
 
 
-                return { url: `entity-service/customer/add`, method: "POST", body: params, headers: headers };
+                return { url: `entity-service/v1/customer/add`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Code"],
         }),
@@ -31,7 +31,7 @@ export const codeDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `entity-service/customer/update`, method: "PUT", body: params, headers: headers };
+                return { url: `entity-service/v1/customer/update`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Code"],
         }),
@@ -82,7 +82,7 @@ export const codeDataApi = createApi({
                 };
 
                 return {
-                    url: `/entity-service/file/upload`,
+                    url: `/entity-service/v1/file/upload`,
                     method: "POST",
                     body: formData,
                     headers: headers
@@ -94,7 +94,7 @@ export const codeDataApi = createApi({
                 const headers = {
                     'Authorization': getAppHeaders()['Authorization']
                 };
-                return { url: `/entity-service/file/get`, method: "POST", body: params, headers: headers };
+                return { url: `/entity-service/v1/file/get`, method: "POST", body: params, headers: headers };
             },
         }),
         downloadDocumnent: builder.mutation({
@@ -116,7 +116,7 @@ export const codeDataApi = createApi({
                     Authorization: getAppHeaders()['Authorization'],
                 };
                 return {
-                    url: `/entity-service/${page}?${queryString}`,
+                    url: `/entity-service/v1/${page}?${queryString}`,
                     method: "POST",
                     body: payload,
                     headers,

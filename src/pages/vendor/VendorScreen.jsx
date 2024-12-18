@@ -133,7 +133,7 @@ export default function VendorScreen({ page }) {
     }
     if (actionName === "Export") {
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload);
+        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload,"vendor");
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;

@@ -166,7 +166,7 @@ export default function CustomerScreen({ page }) {
     if (actionName === "Export") {
 
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload);
+        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload,"customer");
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;

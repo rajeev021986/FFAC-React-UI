@@ -95,9 +95,9 @@ class ApiManager {
         const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id, type);
         return ApiMethods.put(url);
     }
-    static fetchCustomerDatasExcel = async (params, payload) => {
+    static fetchCustomerDatasExcel = async (params, payload,source) => {
         const queryString = new URLSearchParams(params).toString();
-        const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString);
+        const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString,source);
         return ApiMethods.postBlob(url, payload);
     }
     static getUserData = async (id) => {

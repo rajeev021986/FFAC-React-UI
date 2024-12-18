@@ -106,7 +106,7 @@ export default function VendorFormInput({ formik, type, optionsSettingsData }) {
                         onChange={formik.handleChange}
                         disabled
                     />
-                </Grid>) : (formik.values?.isApproved ? <Grid
+                </Grid>) : (formik.values?.isApproved || formik.values?.status !== "New" ? <Grid
                     item
                     xs={12}
                     sm={6}
