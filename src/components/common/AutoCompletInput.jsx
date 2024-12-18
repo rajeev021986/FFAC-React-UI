@@ -44,7 +44,7 @@ function AutoCompleteInput({
   };
 
   return (
-    <Box>
+    <Box sx={{ width: "100%" }}>
       <Autocomplete
         id={id}
         value={value}

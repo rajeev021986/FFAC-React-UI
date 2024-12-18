@@ -173,7 +173,11 @@ export function VesselForm({ initialValues, type }) {
                   marginBottom: 2,
                 }}
               >
-                <VesselMapping disabled={disabled} formik={formik} />
+                <VesselMapping
+                  disabled={disabled}
+                  formik={formik}
+                  fetchSuggestions={fetchSuggestions}
+                />
               </Box>
             </Grid>
             <Grid item xs={12}>

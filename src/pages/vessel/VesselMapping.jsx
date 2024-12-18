@@ -2,8 +2,9 @@ import React from "react";
 import { Add } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import AutoCompleteInput from "../../components/common/AutoCompletInput";
 
-export function VesselMapping({ formik, disabled }) {
+export function VesselMapping({ formik, disabled, fetchSuggestions }) {
   const vesselLineEntity = formik.values.vesselLineEntities || [
     { id: 1, vesselName: "", shippingLine: "" },
   ];
@@ -31,12 +32,36 @@ export function VesselMapping({ formik, disabled }) {
       headerName: "Vessel Name",
       flex: 1,
       editable: true,
+      renderEditCell: (params) => (
+        <AutoCompleteInput
+          id="vesselName"
+          suggestionName="vessel_name"
+          value={params.value}
+          error={
+            formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
+          }
+          onChange={formik.handleChange}
+          fetchSuggestions={fetchSuggestions} // Pass the function for fetching suggestions
+        />
+      ),
     },
     {
       field: "shippingLine",
       headerName: "Shipping Line",
       flex: 1,
       editable: true,
+      renderEditCell: (params) => (
+        <AutoCompleteInput
+          id="shippingLine"
+          suggestionName="name"
+          value={params.value}
+          error={
+            formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
+          }
+          onChange={formik.handleChange}
+          fetchSuggestions={fetchSuggestions} // Pass the function for fetching suggestions
+        />
+      ),
     },
 
     {
