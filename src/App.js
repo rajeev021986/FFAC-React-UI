@@ -22,6 +22,8 @@ import UserManagementScreen from "./pages/users/UserManagementScreen";
 import UserFormScreen from "./pages/users/UserFormScreen";
 import ProfileScreen from "./pages/ProfileScreen";
 import VendorForm from "./components/screen/code/vendor/VendorForm";
+import { VesselScreen } from "./pages/vessel/VesselScreen";
+import { VesselFormScreen } from "./pages/vessel/VesselFormScreen";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -84,6 +86,19 @@ function App() {
             <Route path="entity/vendor/editVendor" element={<VendorForm />} />
             <Route path="entity/vendorApproval/editVendorApprove" element={<VendorForm page="vendorApproval" />} />
             <Route path="profile" element={<ProfileScreen />} />
+            <Route
+              path="master/vessel/editvessel"
+              element={<VesselFormScreen />}
+            />
+            <Route
+              path="master/vessel/newvessel"
+              element={<VesselFormScreen />}
+            />
+            <Route
+              path="master/vessel"
+              element={<VesselScreen />}
+            />
+
           </Route>
         </Routes>
         <Toaster />

@@ -155,4 +155,12 @@ export const AGENT_SORT_OPTIONS = [
   { value: "cname*desc", label: "Agent Descending" },
   { value: "country*asc", label: "Country Ascending" },
   { value: "country*desc", label: "Country Descending" },
+
+];
+
+export const VESSEL_SORT_OPTIONS = [
+  { value: "vname*asc", label: "Vessel Ascending" },
+  { value: "vname*desc", label: "Vessel Descending" },
+  { value: "lname*asc", label: "Line Ascending" },
+  { value: "lname*desc", label: "Line Descending" }
 ];

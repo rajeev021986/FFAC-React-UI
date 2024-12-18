@@ -144,11 +144,29 @@ class ApiManager {
         const url = ENDPOINTS.USER_PASS_RESET();
         return ApiMethods.put(url, payload);
     }
+
+    static fetchEditVessel = (id) => {
+        const url = ENDPOINTS.GET_EDIT_VESSEL(id);
+        return ApiMethods.get(url);
+    }
+
+    static fetchVesselDatasExcel = async (params, payload) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = ENDPOINTS.FETCH_VESSEL_DATA_EXCEL(queryString);
+        return ApiMethods.postBlob(url, payload);
+    }
+
+    static fetchVesselSuggestions = (inputValue, id) => {
+        const url = ENDPOINTS.FETCH_VESSEL_SUGGESTIONS(inputValue, id);
+        return ApiMethods.get(url);
+    }
+
+
     static updateUserProfile = async (payload) => {
         const url = ENDPOINTS.UPDATE_USER_PROFILE();
         return ApiMethods.put(url, payload);
     }
-    static updateUserProfileImage = async (payload,id) => {
+    static updateUserProfileImage = async (payload, id) => {
         const url = ENDPOINTS.UPDATE_USER_PROFILE_IMAGE(id);
         return ApiMethods.put(url, payload);
     }

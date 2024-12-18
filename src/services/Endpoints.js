@@ -35,7 +35,11 @@ const ENDPOINTS = {
     UPDATE_ROLE_PERMISSIONS: () => `/admin-service/role/permissions/update`,
     USER_PASS_RESET: () => `/admin-service/user/update/password`,
     UPDATE_USER_PROFILE: () => `/admin-service/v1/profile`,
-    UPDATE_USER_PROFILE_IMAGE: (id) => `/admin-service/v1/profile/image?id=${id}`
+    UPDATE_USER_PROFILE_IMAGE: (id) => `/admin-service/v1/profile/image?id=${id}`,
+    USER_PASS_RESET: () => `/admin-service/user/update/password`,
+    GET_EDIT_VESSEL: (id) => `/master-service/v1/vessel/${id}`,
+    FETCH_VESSEL_DATA_EXCEL: (queryString) => `/master-service/v1/vessel/export?${queryString}`,
+    FETCH_VESSEL_SUGGESTIONS: (inputValue, id) => `/admin-service/v1/data?pattern=${inputValue}&type=${id}`
 }
 
 export default ENDPOINTS;

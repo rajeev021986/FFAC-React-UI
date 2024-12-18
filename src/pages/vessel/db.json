@@ -1,0 +1,490 @@
+{
+    "body":
+
+    [
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 1,
+          "status": "active",
+          "vesselMaster": "master1",
+          "mode": "mode1",
+          "vesselName": "vessel1",
+          "lineName": "line1",
+          "vesselOwner": "yes",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 0,
+              "shippingLine": "line1",
+              "vesselName": "vessel1"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 2,
+          "status": "inactive",
+          "vesselMaster": "master2",
+          "mode": "mode2",
+          "vesselName": "vessel2",
+          "lineName": "line2",
+          "vesselOwner": "no",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 1,
+              "shippingLine": "line2",
+              "vesselName": "vessel2"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 3,
+          "status": "active",
+          "vesselMaster": "master3",
+          "mode": "mode3",
+          "vesselName": "vessel3",
+          "lineName": "line3",
+          "vesselOwner": "yes",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 2,
+              "shippingLine": "line3",
+              "vesselName": "vessel3"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 4,
+          "status": "inactive",
+          "vesselMaster": "master4",
+          "mode": "mode4",
+          "vesselName": "vessel4",
+          "lineName": "line4",
+          "vesselOwner": "no",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 3,
+              "shippingLine": "line4",
+              "vesselName": "vessel4"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 5,
+          "status": "active",
+          "vesselMaster": "master5",
+          "mode": "mode5",
+          "vesselName": "vessel5",
+          "lineName": "line5",
+          "vesselOwner": "yes",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 4,
+              "shippingLine": "line5",
+              "vesselName": "vessel5"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 6,
+          "status": "inactive",
+          "vesselMaster": "master6",
+          "mode": "mode6",
+          "vesselName": "vessel6",
+          "lineName": "line6",
+          "vesselOwner": "no",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 5,
+              "shippingLine": "line6",
+              "vesselName": "vessel6"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 7,
+          "status": "active",
+          "vesselMaster": "master7",
+          "mode": "mode7",
+          "vesselName": "vessel7",
+          "lineName": "line7",
+          "vesselOwner": "yes",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 6,
+              "shippingLine": "line7",
+              "vesselName": "vessel7"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 8,
+          "status": "inactive",
+          "vesselMaster": "master8",
+          "mode": "mode8",
+          "vesselName": "vessel8",
+          "lineName": "line8",
+          "vesselOwner": "no",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 7,
+              "shippingLine": "line8",
+              "vesselName": "vessel8"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 9,
+          "status": "active",
+          "vesselMaster": "master9",
+          "mode": "mode9",
+          "vesselName": "vessel9",
+          "lineName": "line9",
+          "vesselOwner": "yes",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 8,
+              "shippingLine": "line9",
+              "vesselName": "vessel9"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 10,
+          "status": "inactive",
+          "vesselMaster": "master10",
+          "mode": "mode10",
+          "vesselName": "vessel10",
+          "lineName": "line10",
+          "vesselOwner": "no",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 9,
+              "shippingLine": "line10",
+              "vesselName": "vessel10"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 11,
+          "status": "active",
+          "vesselMaster": "master11",
+          "mode": "mode11",
+          "vesselName": "vessel11",
+          "lineName": "line11",
+          "vesselOwner": "yes",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 10,
+              "shippingLine": "line11",
+              "vesselName": "vessel11"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 12,
+          "status": "inactive",
+          "vesselMaster": "master12",
+          "mode": "mode12",
+          "vesselName": "vessel12",
+          "lineName": "line12",
+          "vesselOwner": "no",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 11,
+              "shippingLine": "line12",
+              "vesselName": "vessel12"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 13,
+          "status": "active",
+          "vesselMaster": "master13",
+          "mode": "mode13",
+          "vesselName": "vessel13",
+          "lineName": "line13",
+          "vesselOwner": "yes",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 12,
+              "shippingLine": "line13",
+              "vesselName": "vessel13"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 14,
+          "status": "inactive",
+          "vesselMaster": "master14",
+          "mode": "mode14",
+          "vesselName": "vessel14",
+          "lineName": "line14",
+          "vesselOwner": "no",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 13,
+              "shippingLine": "line14",
+              "vesselName": "vessel14"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 15,
+          "status": "active",
+          "vesselMaster": "master15",
+          "mode": "mode15",
+          "vesselName": "vessel15",
+          "lineName": "line15",
+          "vesselOwner": "yes",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 14,
+              "shippingLine": "line15",
+              "vesselName": "vessel15"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 16,
+          "status": "inactive",
+          "vesselMaster": "master16",
+          "mode": "mode16",
+          "vesselName": "vessel16",
+          "lineName": "line16",
+          "vesselOwner": "no",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 15,
+              "shippingLine": "line16",
+              "vesselName": "vessel16"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 17,
+          "status": "active",
+          "vesselMaster": "master17",
+          "mode": "mode17",
+          "vesselName": "vessel17",
+          "lineName": "line17",
+          "vesselOwner": "yes",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 16,
+              "shippingLine": "line17",
+              "vesselName": "vessel17"
+            }
+          ]
+        },
+        {
+          "createdBy": "admin",
+          "modifiedBy": "admin",
+          "createdDate": "2024-12-14T09:03:13.663Z",
+          "modifiedDate": "2024-12-14T09:03:13.663Z",
+          "id": 18,
+          "status": "inactive",
+          "vesselMaster": "master18",
+          "mode": "mode18",
+          "vesselName": "vessel18",
+          "lineName": "line18",
+          "vesselOwner": "no",
+          "vesselLineEntities": [
+            {
+              "createdBy": "admin",
+              "modifiedBy": "admin",
+              "createdDate": "2024-12-14T09:03:13.663Z",
+              "modifiedDate": "2024-12-14T09:03:13.663Z",
+              "id": 17,
+              "shippingLine": "line18",
+              "vesselName": "vessel18"
+            }
+          ]
+        },
+        {
+            "createdBy": "admin",
+            "modifiedBy": "admin",
+            "createdDate": "2024-12-14T09:03:13.663Z",
+            "modifiedDate": "2024-12-14T09:03:13.663Z",
+            "id": 19,
+            "status": "active",
+            "vesselMaster": "master19",
+            "mode": "mode19",
+            "vesselName": "vessel19",
+            "lineName": "line19",
+            "vesselOwner": "yes",
+            "vesselLineEntities": [
+              {
+                "createdBy": "admin",
+                "modifiedBy": "admin",
+                "createdDate": "2024-12-14T09:03:13.663Z",
+                "modifiedDate": "2024-12-14T09:03:13.663Z",
+                "id": 18,
+                "shippingLine": "line19",
+                "vesselName": "vessel19"
+              }
+            ]
+          },
+          {
+            "createdBy": "admin",
+            "modifiedBy": "admin",
+            "createdDate": "2024-12-14T09:03:13.663Z",
+            "modifiedDate": "2024-12-14T09:03:13.663Z",
+            "id": 20,
+            "status": "inactive",
+            "vesselMaster": "master20",
+            "mode": "mode20",
+            "vesselName": "vessel20",
+            "lineName": "line20",
+            "vesselOwner": "no",
+            "vesselLineEntities": [
+              {
+                "createdBy": "admin",
+                "modifiedBy": "admin",
+                "createdDate": "2024-12-14T09:03:13.663Z",
+                "modifiedDate": "2024-12-14T09:03:13.663Z",
+                "id": 19,
+                "shippingLine": "line20",
+                "vesselName": "vessel20"
+              }
+            ]
+          }
+    ],
+    "code": "code1",
+	"message": "message1",
+	"success": true
+}
+  

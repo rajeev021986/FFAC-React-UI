@@ -18,7 +18,12 @@ import { CloudDownload, Delete } from "@mui/icons-material";
 import moment from "moment";
 import Uploadimg from "../assets/images/upload-placeholder.png";
 import ApiManager from "../services/ApiManager";
-import { useAddAgentMutation, useDownloadDocumnentMutation, useGetCustomerFileListMutation, useUploadCustomerFileMutation } from "../store/api/codeDataApi";
+import {
+  useAddAgentMutation,
+  useDownloadDocumnentMutation,
+  useGetCustomerFileListMutation,
+  useUploadCustomerFileMutation,
+} from "../store/api/codeDataApi";
 import Loader from "./common/Loader/Loader";
 import { useGetOptionsSettingsQuery } from "../store/api/settingsApi";
 // Custom styled drop zone
@@ -80,7 +85,11 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
     try {
       let source = sourceType;
       setLoading(true);
-      const res = await ApiManager.deleteDocument(deleteData.id, deleteData.source, deleteData.sourceId);
+      const res = await ApiManager.deleteDocument(
+        deleteData.id,
+        deleteData.source,
+        deleteData.sourceId
+      );
 
       setOpenConfirmation(false);
       reloadDataHandler();
@@ -102,7 +111,6 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
         handleDialogSave();
         setDialogOpen(true);
       }
-
     }
   };
 
@@ -120,7 +128,7 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
   };
 
   const handleDialogSave = async () => {
-    console.log(uploadedFile, "uploadedFile")
+    console.log(uploadedFile, "uploadedFile");
     const uploadData = {
       file: uploadedFile,
       entityFile: {
@@ -257,8 +265,8 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
           <Typography variant="h4" gutterBottom style={{ width: "100%" }}>
             Select Files
           </Typography>
-          <Grid item xs={12} sm={4} >
-            <Box display="flex" flexDirection="column" height="100%" gap={2} >
+          <Grid item xs={12} sm={4}>
+            <Box display="flex" flexDirection="column" height="100%" gap={2}>
               <DropZone
                 onClick={() => document.getElementById("file-input").click()}
                 onDragOver={(e) => e.preventDefault()}
@@ -325,9 +333,7 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
                     </MenuItem>
                   ))
                 ) : (
-                  <MenuItem disabled>
-                    No options available
-                  </MenuItem>
+                  <MenuItem disabled>No options available</MenuItem>
                 )}
               </Select>
               <TextField

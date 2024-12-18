@@ -25,7 +25,7 @@ export default function Layout() {
   // }
   return (
     <Main>
-      <SessionExpired/>
+      <SessionExpired />
       <Outlet />
     </Main >
   )
