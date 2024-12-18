@@ -51,7 +51,6 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
     useGetOptionsSettingsQuery("customer_settings");
 
   const formNotNeed = sourceType == "VENDOR";
-  console.log(sourceType, "sourceType", formNotNeed);
   useEffect(() => {
     if (customerSettingsData?.body) {
       setDropdownData({
@@ -104,13 +103,7 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
     const files = event.target.files || event.dataTransfer.files;
     if (files.length > 0) {
       setUploadedFile(files[0]);
-      if (formNotNeed) {
-        handleDialogSave();
-        return;
-      } else {
-        handleDialogSave();
-        setDialogOpen(true);
-      }
+      setDialogOpen(true);
     }
   };
 
@@ -317,7 +310,7 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
 
           <Dialog open={dialogOpen} onClose={handleDialogClose}>
             <DialogTitle>File Details</DialogTitle>
-            <DialogContent>
+            {formNotNeed ? <DialogContent>Are you sure want to save the document?</DialogContent> : <DialogContent>
               <Select
                 margin="dense"
                 label="Document Type"
@@ -364,7 +357,7 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
               />
-            </DialogContent>
+            </DialogContent>}
             <DialogActions>
               <Button onClick={handleDialogClose} color="secondary">
                 Cancel
