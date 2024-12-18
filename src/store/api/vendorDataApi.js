@@ -11,7 +11,7 @@ export const vendorDataApi = createApi({
                 let url = params.page == "vendor" ? "vendor/filter" : "approval/filter/vendor"
                 const queryString = new URLSearchParams(params.params).toString();
                 // return { url: `entity-service/${url}?${queryString}`, method: "GET", headers: getAppHeaders() };
-                return { url: `entity-service/vendor/filter?${queryString}`, method: "GET", headers: getAppHeaders() };
+                return { url: `entity-service/vendor/filter?${queryString}`, method: "POST", headers: getAppHeaders() };
             },
             providesTags: ["Vendor"],
         }),

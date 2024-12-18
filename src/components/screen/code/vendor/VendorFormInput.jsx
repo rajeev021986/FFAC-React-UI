@@ -6,8 +6,10 @@ import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import { useNavigate } from "react-router-dom";
 import ApiManager from "../../../../services/ApiManager";
 import toast from "react-hot-toast";
+import SelectBox from "../../../common/SelectBox";
 
-export default function VendorFormInput({ formik, type }) {
+export default function VendorFormInput({ formik, type, optionsSettingsData }) {
+    console.log(type, "typeFd")
     const nav = useNavigate();
     const handleApproveRequest = async () => {
         try {
@@ -95,16 +97,44 @@ export default function VendorFormInput({ formik, type }) {
                         disabled={disable}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                {type == "copy" || type == "new" ? (<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                         label="Status"
                         id="status"
                         value={formik.values.status}
                         error={formik.errors.status}
                         onChange={formik.handleChange}
-                        disabled={disable}
+                        disabled
                     />
-                </Grid>
+                </Grid>) : (formik.values?.isApproved ? <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    sx={{ marginTop: 2 }}
+                >
+                    <SelectBox
+                        label="Status"
+                        id="status"
+                        disabled={disable}
+                        options={optionsSettingsData?.status}
+                        value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                    />
+                </Grid> : <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                        label="Status"
+                        id="status"
+                        value={formik.values.status}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                        disabled
+                    />
+                </Grid>)}
+
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                         label="Type"

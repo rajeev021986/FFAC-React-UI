@@ -10,6 +10,9 @@ import UploadFile from '../../../UploadFile';
 import { Box, Grid, Stack, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { OutlinedButton, ThemeButton } from '../../../common/Button';
+import ScreenToolbar from '../../../common/ScreenToolbar';
+import ThemedBreadcrumb from '../../../common/Breadcrumb';
+import { useGetOptionsSettingsQuery } from '../../../../store/api/settingsApi';
 
 export default function VendorForm({ page = "vendor" }) {
     const [value, setValue] = React.useState(1);
@@ -34,7 +37,7 @@ export default function VendorForm({ page = "vendor" }) {
             .required('Vendor Number is required'),
         mlo: Yup.string()
             .required('MLO is required'),
-        status: Yup.boolean()
+        status: Yup.string()
             .required('Status is required'),
         type: Yup.string()
             .required('Type is required'),
@@ -111,31 +114,45 @@ export default function VendorForm({ page = "vendor" }) {
             })
         ).required('Vendor Entity Emails are required'),
     });
+    const { data: optionsSettingsData } = useGetOptionsSettingsQuery("common_settings");
+    const { data: customerSettingsData } = useGetOptionsSettingsQuery("customer_settings");
+
     useEffect(() => {
         const handleFetchVendor = async () => {
             try {
                 const response = await getVendor({ id });
                 if (response?.data) {
-                    formik.setValues(response.data.body);
+                    if (type === "copy" || type === "new") {
+                        formik.setValues({
+                            ...response.data.body,
+                            status: "New",
+                            isApproved: !customerSettingsData?.approvalRequest,
+                        });
+                    } else {
+                        formik.setValues(response.data.body);
+                    }
                 } else {
-                    toast.error('Failed to fetch vendor data');
+                    toast.error("Failed to fetch vendor data");
                 }
             } catch (error) {
-                console.error('Error fetching vendor data:', error);
-                toast.error('Error fetching vendor data');
+                console.error("Error fetching vendor data:", error);
+                toast.error("Error fetching vendor data");
             }
         };
+
         if (id) {
             handleFetchVendor();
         }
-    }, [])
+
+    }, [optionsSettingsData]);
+
 
     const initialValues = {
         vendorName: '',
         vendorCode: '',
         vendorNo: '',
         mlo: '',
-        status: true,
+        status: "New",
         type: '',
         vendorCreation: '',
         mode: '',
@@ -216,8 +233,8 @@ export default function VendorForm({ page = "vendor" }) {
                     s.new ? { ...s, new: null, id: null } : s
                 )
             };
-            if (type === "copy" || type === "new") {
-                await addVendor(updatedValue).then(() => toast.success("Added successfully")).catch((error) => toast.error(error.msg));
+            if (type == "copy" || type == "new") {
+                await addVendor({ ...updatedValue, id: null }).then(() => toast.success("Added successfully")).catch((error) => toast.error(error.msg));
             } else {
                 await updateVendor(updatedValue).then(() => toast.success("Updated successfully")).catch((error) => toast.error(error.msg))
             }
@@ -227,13 +244,14 @@ export default function VendorForm({ page = "vendor" }) {
 
     return (
         <><Box sx={{ width: '100%', typography: 'body1' }}>
+            <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange} aria-label="lab API tabs example">
                         {tabs.map((a) => <Tab label={a.label} value={a.value} />)}
                     </TabList>
                 </Box>
-                <TabPanel value={1}>{isLoading ? <Loader /> : <VendorFormInput formik={formik} type={type} disabled={page == "vendorApproval"} />}</TabPanel>
+                <TabPanel value={1}>{isLoading ? <Loader /> : <VendorFormInput formik={formik} type={type} disabled={page == "vendorApproval"} optionsSettingsData={optionsSettingsData} />}</TabPanel>
                 <TabPanel value={2}><UploadFile customer_id={id} sourceType="VENDOR" page={page} disabled={page == "vendorApproval"} /></TabPanel>
             </TabContext>
         </Box></>

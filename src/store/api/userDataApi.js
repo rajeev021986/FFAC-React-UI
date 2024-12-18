@@ -10,7 +10,7 @@ export const userDataApi = createApi({
       query: (params) => {
         const queryString = new URLSearchParams(params.params).toString();
         return {
-          url: `/admin-service/user/filter?${queryString}`,
+          url: `/admin-service/v1/user/filter?${queryString}`,
           method: "POST",
           headers: getAppHeaders(),
           body: params.payload
@@ -76,21 +76,21 @@ export const userDataApi = createApi({
     }),
     menuSubmenu: builder.query({
       query: () => {
-        return { url: `/admin-service/menu/submenu`, method: "GET", headers: getAppHeaders() };
+        return { url: `/admin-service/v1/menu/submenu`, method: "GET", headers: getAppHeaders() };
       },
       providesTags: ["User"],
     }),
     fetchuser: builder.query({
       query: (params) => {
         const queryString = new URLSearchParams(params).toString();
-        return { url: `/admin-service/role/users`, method: "GET", headers: getAppHeaders() };
+        return { url: `/admin-service/v1/role/users`, method: "GET", headers: getAppHeaders() };
       },
       providesTags: ["User"],
     }),
     resetPassword: builder.mutation({
       query: (params) => {
         return {
-          url: `/admin-service/user/update/password`,
+          url: `/admin-service/v1/user/update/password`,
           method: "PUT",
           body: params,
           headers: getAppHeaders(),

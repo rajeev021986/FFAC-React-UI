@@ -309,7 +309,7 @@ export function VesselForm({ initialValues, type }) {
                 <UploadFile
                   customer_id={initialValues.id}
                   disabled={disabled}
-                  sourceType="vessel"
+                  sourceType="VESSEL"
                 />
               </TabPanel>
             </TabContext>

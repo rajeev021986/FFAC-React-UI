@@ -36,6 +36,10 @@ const Routes = {
   party: { label: "Party", disabled: false },
   agent: { label: "Agent", disabled: false },
   roles: { label: "Roles", disabled: false },
+  vendorApproval: { label: "Vendor Approval", disabled: false },
+  editVendorApprove: { label: "Vendor Approval Form", disabled: false },
+  editVendor: { label: "Edit Vendor", disabled: false },
+  users: { label: "Users", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {

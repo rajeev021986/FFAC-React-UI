@@ -31,7 +31,7 @@ export const settingsApi = createApi({
         getOptionsSettings: builder.query({
             query: (params) => {
                 // const queryString = new URLSearchParams(params).toString();
-                return { url: `/admin-service/settings/entity?entity=${params}`, method: "GET", headers: getAppHeaders() };
+                return { url: `/admin-service/v1/settings/entity?entity=${params}`, method: "GET", headers: getAppHeaders() };
             },
         }),
     }),
