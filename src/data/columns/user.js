@@ -5,21 +5,21 @@ import { appDateFormat } from "../../components/utils/date"
 export const USER_MANAGEMENT_COLUMNS = [
     { field: 'usercode', headerName: 'User Code', width: 90 },
     {
-        field: 'userid',
+        field: 'userId',
         headerName: 'User Id',
         width: 110,
         headerAlign: 'center',
         align : 'center'
     },
     {
-        field: 'firstname',
+        field: 'firstName',
         headerName: 'First name',
         width: 150,
         headerAlign: 'center',
         align : 'center'
     },
     {
-        field: 'lastname',
+        field: 'lastName',
         headerName: 'Last name',
         width: 150,
         headerAlign: 'center',
@@ -27,7 +27,7 @@ export const USER_MANAGEMENT_COLUMNS = [
     },
     {
         flex: 1,
-        field: 'companyname',
+        field: 'companyCode',
         headerName: 'Company Name',
         width: 110,
         headerAlign: 'center',
@@ -35,7 +35,7 @@ export const USER_MANAGEMENT_COLUMNS = [
     },
     {
         flex: 1,
-        field: 'emailid',
+        field: 'email',
         headerName: 'Email',
         width: 110,
         headerAlign: 'center',
@@ -57,7 +57,7 @@ export const USER_MANAGEMENT_COLUMNS = [
     },
     {
         flex: 1,
-        field: 'lastmodifiedby',
+        field: 'modifiedBy',
         headerName: 'Updated By',
         width: 110,
         headerAlign: 'center',
@@ -65,7 +65,7 @@ export const USER_MANAGEMENT_COLUMNS = [
     },
     {
         flex: 1,
-        field: 'lastmodifieddate',
+        field: 'modifiedDate',
         headerName: 'Updated At',
         width: 110,
         headerAlign: 'center',

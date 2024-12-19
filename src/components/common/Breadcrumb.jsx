@@ -6,9 +6,10 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 const Routes = {
   user_management: { label: "User Management", disabled: false },
   entity: { label: "Entity", disabled: true },
+  master: { label: "Master", disabled: true },
   new: { label: "Create Customer", disabled: false },
   editcustomer: { label: "Edit Customer", disabled: false },
-  approve: {label: 'Approve Customer', disabled: false},
+  approve: { label: "Approve Customer", disabled: false },
   admin_master: { label: "Admin Master", disabled: true },
   form: { label: "Form", disabled: false },
   packing_list: { label: "Packing List", disabled: false },
@@ -26,11 +27,19 @@ const Routes = {
   otm_bol: { label: "OTM BOL", disabled: false },
   add: { label: "Add", disabled: false },
   edit: { label: "Edit", disabled: false },
-  approveRequest: {label: 'ApproveRequest', disabled: false},
+  approveRequest: { label: "ApproveRequest", disabled: false },
   code: { label: "Code", disabled: true },
   customer: { label: "Customer", disabled: false },
+  vessel: { label: "Vessel", disabled: false },
+  editvessel: { label: "Edit Vessel", disabled: false },
+  newvessel: { label: "Create Vessel", disabled: false },
   party: { label: "Party", disabled: false },
   agent: { label: "Agent", disabled: false },
+  roles: { label: "Roles", disabled: false },
+  vendorApproval: { label: "Vendor Approval", disabled: false },
+  editVendorApprove: { label: "Vendor Approval Form", disabled: false },
+  editVendor: { label: "Edit Vendor", disabled: false },
+  users: { label: "Users", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {
@@ -51,7 +60,6 @@ const ThemedBreadcrumb = () => {
         const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
         const isLast = index === pathnames?.length - 1;
         if (!Routes[value]?.label) return null;
-
         return isLast || Routes[value]?.disabled ? (
           <Typography key={routeTo}>{Routes[value]?.label}</Typography>
         ) : (

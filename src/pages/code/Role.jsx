@@ -36,11 +36,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
-// import { useGetRoleUsersQuery } from '../../store/api/settingsApi';
+import { useFetchuserQuery } from "../../store/api/userDataApi";
+import ApiManager from "../../services/ApiManager";
 
 const Role = () => {
   const navigate = useNavigate();
-  // const { data, isLoading } = useGetRoleUsersQuery();
+  const { data, isLoading, refetch } = useFetchuserQuery();
   const [roles, setRoles] = useState([
     {
       role: {
@@ -209,11 +210,12 @@ const Role = () => {
       ],
     },
   ]);
-  // useEffect(() => {
-  //     setRoles(data?.body || []);
-  //     setFilteredRoles(data?.body || []);
-  // }, [data]);
+  useEffect(() => {
+    setRoles(data?.body || []);
+    setFilteredRoles(data?.body || []);
+  }, [data]);
   const [filteredRoles, setFilteredRoles] = useState(roles);
+  console.log(filteredRoles,"filteredRoles")
   const [refresh, setRefresh] = useState(false);
   const [loader, setLoader] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -236,13 +238,13 @@ const Role = () => {
   // Replace the commented useEffect with this dummy data version
 
   // Handle removing user from role
-  const handleRemoveUser = (roleId, userId) => {
+  const handleRemoveUser = async (roleId, userId) => {
     const hasDeletePermission = adminMenuData.some(
       (item) => item.subMenu === "Role" && item.delete === "yes"
     );
 
     if (!hasDeletePermission) {
-      toast.error("You do not have permission to delete users.");
+      toast.error("You do not have permission to delete Role.");
       return;
     }
 
@@ -253,19 +255,9 @@ const Role = () => {
   // Add this new function to handle the confirmation
   const handleConfirmRemove = async () => {
     try {
-      const queryParams = `roleId=${dialogConfig.roleId}&userId=${dialogConfig.userId}`;
-      console.log(queryParams);
-      //   const result = await CommonApiCall(
-      //     ApiEndPoints.REMOVE_ASSIGNED_USER,
-      //     'DELETE',
-      //     null,
-      //     queryParams
-      //   );
-
-      //   if (result?.code === 'SUCCESS') {
+      const queryParams = `role/${dialogConfig.roleId}/user/${dialogConfig.userId}`;
+      await ApiManager.removeAssignedUser(queryParams).then(() => toast.success("User Removed successfully!")).then(() => refetch()).catch(() => toast.error("Failed to Remove User"))
       setRefresh((prev) => !prev);
-      //   }
-      toast.success("User removed successfully!");
     } catch (error) {
       console.error("Error removing user:", error);
       toast.error("Failed to remove user");
@@ -273,7 +265,7 @@ const Role = () => {
     setOpenDialog(false);
   };
 
-  const handleRoleDelete = (roleId) => {
+  const handleRoleDelete = async (roleId) => {
     const hasDeletePermission = adminMenuData.some(
       (item) => item.subMenu === "Role" && item.delete === "yes"
     );
@@ -288,18 +280,17 @@ const Role = () => {
     ) {
       toast.error("Cannot delete role with assigned users.");
       return;
+    } else {
+      setDialogConfig({ roleId, type: "role" });
+      setOpenDialog(true);
     }
-
-    setDialogConfig({ roleId, type: "role" });
-    setOpenDialog(true);
   };
-
   const handleAddRole = () => {
     const userPermission = adminMenuData.find(
       (item) => item.subMenu === "Role"
     );
     if (userPermission && userPermission.add === "yes") {
-      navigate("/admin/role/add");
+      navigate("add");
     } else {
       toast.error("You don't have permission to add users.");
     }
@@ -333,18 +324,22 @@ const Role = () => {
         );
         setRoles(updatedRoles);
         setFilteredRoles(updatedRoles);
-        toast.success("Role deleted successfully!");
+        const result = await ApiManager.deleteRole(dialogConfig.roleId).then((res) => {
+          console.log(res);
+          toast.success("Role deleted successfully!");
+        }).then((res) => {
+          setRefresh((prev) => !prev);
+        }).catch((error) => {
+          console.log(error);
+          toast.error("Failed to delete role");
+        });
       } else {
-        const queryParams = `roleId=${dialogConfig.roleId}&userId=${dialogConfig.userId}`;
-        // Your API call here
         setRefresh((prev) => !prev);
-        toast.success("User removed successfully!");
       }
     } catch (error) {
       console.error("Error:", error);
       toast.error(
-        `Failed to ${
-          dialogConfig.type === "role" ? "delete role" : "remove user"
+        `Failed to ${dialogConfig.type === "role" ? "delete role" : "remove user"
         }`
       );
     }
@@ -382,7 +377,7 @@ const Role = () => {
                 color="warning"
                 size="small"
                 onClick={() =>
-                  handleRemoveUser(record.role.roleId, user.userId)
+                  handleRemoveUser(record.role.roleId, user.id)
                 }
                 sx={{
                   borderColor: "#f47123",
@@ -402,14 +397,15 @@ const Role = () => {
                 <CancelIcon
                   sx={{
                     position: "absolute",
-                    top: -8,
+                    top: -8.5,
                     right: -8,
-                    bgcolor: "#f47123",
                     color: "white",
                     borderRadius: "50%",
-                    padding: "2px",
-                    fontSize: "16px",
+                    padding: "0",
+                    fontSize: "20px",
+                    backgroundColor: "antiquewhite",
                   }}
+                  
                 />
               </Button>
             </Grid>
@@ -435,6 +431,7 @@ const Role = () => {
       label: "Requested",
       width: "15%",
       render: (record) => {
+        console.log(record, "record");
         // Check for update permission
         const userPermission = adminMenuData.find(
           (item) => item.subMenu === "Role"
@@ -449,7 +446,7 @@ const Role = () => {
                 variant="contained"
                 onClick={() => {
                   if (userPermission?.update === "yes") {
-                    navigate(`/admin/role/edit/${record.role}`, {
+                    navigate(`edit/${record.role.roleId}`, {
                       state: { adminMenuData },
                     });
                   } else {
@@ -531,7 +528,7 @@ const Role = () => {
                   >
                     Add
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="contained"
                     startIcon={<CopyIcon />}
                     color="primary"
@@ -544,7 +541,7 @@ const Role = () => {
                     sx={{ borderRadius: "22px 20px 20px 22px" }}
                   >
                     Export
-                  </Button>
+                  </Button> */}
                 </Box>
               </>
             }
@@ -564,24 +561,6 @@ const Role = () => {
               },
             }}
           />
-          {/* <div className="flex gap-3">
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleAddRole}
-              color="primary"
-            >
-              Add
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<CopyIcon />}
-              color="primary"
-            >
-              Copy
-            </Button>
-            <Button variant="contained">Export</Button>
-          </div> */}
 
           <Box className={{ backgroundColor: "white.main" }}>
             <Card

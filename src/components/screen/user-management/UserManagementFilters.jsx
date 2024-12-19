@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleFilter } from '../../../store/freatures/userManagementSlice';
 
 
-export default function UserManagementFilters({filterInfo}) {
+export default function UserManagementFilters({ filterInfo }) {
   // Define the filter categories and options
   const selectedFilters = useSelector((state) => state.userManagement);
+  console.log("filterInfo", selectedFilters);
 
   const dispatch = useDispatch();
 
@@ -22,7 +23,7 @@ export default function UserManagementFilters({filterInfo}) {
       title: 'Role',
       category: 'role',
       options: filterInfo?.map((item) => {
-        return { label: makeCapitalized(item.role) , value: item.role, count : item.count };
+        return { label: makeCapitalized(item.role), value: item.role, count: item.count };
       })
     },
     {

@@ -18,7 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ScreenToolbar from "../../common/ScreenToolbar";
 import ThemedBreadcrumb from "../../common/Breadcrumb";
 import InputBox from "../InputBox";
@@ -26,6 +26,10 @@ import SelectBox from "../SelectBox";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
 import TabContext from "@mui/lab/TabContext";
+import { useParams } from "react-router-dom";
+import ApiManager from "../../../services/ApiManager";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First Name is required"),
@@ -43,28 +47,85 @@ const validationSchema = Yup.object({
 });
 
 export default function AddCard() {
-  const [selectedOptions, setSelectedOptions] = useState([
-    { label: "Option 1", value: "option1", checked: false },
-    { label: "Option 2", value: "option2", checked: false },
-    { label: "Option 3", value: "option3", checked: false },
-    { label: "Option 4", value: "option4", checked: false },
-    { label: "Option 5", value: "option5", checked: false },
-    // { label: "Option 6", value: "option6", checked: false },
-    // { label: "Option 7", value: "option7", checked: false },
-    // { label: "Option 8", value: "option8", checked: false },
-    // { label: "Option 9", value: "option9", checked: false },
-    // { label: "Option 10", value: "option10", checked: false },
-  ]);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const formikRef = useRef(null);
+  const [locations, setLocations] = useState([{ value: "Chennai", label: "Chennai" }, { value: "Mumbai", label: "Mumbai" }]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await ApiManager.getUserData(id);
+        console.log(res, "dfghjkl");
+        if (formikRef.current) {
+          formikRef.current.setFieldValue("defaultLocation", res.body.defaultLocation);
+          formikRef.current.setFieldValue("status", res.body.status);
+          formikRef.current.setFieldValue("firstName", res.body.firstName);
+          formikRef.current.setFieldValue("lastName", res.body.lastName);
+          formikRef.current.setFieldValue("email", res.body.email);
+          formikRef.current.setFieldValue("phone", res.body.phone);
+          formikRef.current.setFieldValue("password", res.body.password);
+          formikRef.current.setFieldValue("confirmPassword", res.body.confirmPassword);
+          formikRef.current.setFieldValue("role", res.body.roles.map(role => role.roleName));
+          formikRef.current.setFieldValue("companyCode", res.body.companyCode);
+          formikRef.current.setFieldValue("userId", res.body.userId);
+          formikRef.current.setFieldValue("id", res.body.id);
+          const userRoles = res.body.roles.map(role => role.roleName) || [];
+          setSelectedOptions(roles.map(role => ({
+            value: role.roleName,
+            checked: userRoles.includes(role.roleName)
+          })));
+        }
+      } catch (err) {
+        toast.error(err.message);
+      }
+    };
+
+    const fetchRoles = async () => {
+      try {
+        const res = await ApiManager.getRoles();
+        setRoles(res.body);
+        setSelectedOptions(res.body.map(role => ({
+          value: role.roleName,
+          checked: false
+        })));
+      } catch (err) {
+        toast.error(err.message);
+      }
+    };
+
+    fetchRoles();
+    id && fetchUserData();
+  }, []);
 
   const handleCheckboxChange = (event, optionValue) => {
-    setSelectedOptions((prevOptions) =>
-      prevOptions.map((option) =>
+    const isChecked = event.target.checked;
+
+    setSelectedOptions(prevOptions =>
+      prevOptions.map(option =>
         option.value === optionValue
-          ? { ...option, checked: event.target.checked }
+          ? { ...option, checked: isChecked }
           : option
       )
     );
+
+    const currentRoles = formikRef.current?.values?.role || [];
+    if (isChecked) {
+      formikRef.current.setFieldValue("role", [...currentRoles, optionValue]);
+    } else {
+      formikRef.current.setFieldValue(
+        "role",
+        currentRoles.filter(role => role !== optionValue)
+      );
+    }
   };
+
+  const status = [{ label: "Active", value: "Active" }, { label: "Inactive", value: "Inactive" }]
+
+
 
   const handleRemoveOption = (optionValue) => {
     setSelectedOptions((prevOptions) =>
@@ -72,11 +133,17 @@ export default function AddCard() {
         option.value === optionValue ? { ...option, checked: false } : option
       )
     );
+    const currentRoles = formikRef.current?.values?.role || [];
+    formikRef.current.setFieldValue("role", currentRoles.filter(role => role !== optionValue));
   };
 
   const selectedCount = selectedOptions.filter(
     (option) => option.checked
   ).length;
+
+  const filteredRoles = roles.filter(role =>
+    role.roleName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Box>
@@ -89,6 +156,7 @@ export default function AddCard() {
         rightComps={<div></div>}
       />
       <Formik
+        innerRef={formikRef}
         initialValues={{
           firstName: "",
           lastName: "",
@@ -96,15 +164,40 @@ export default function AddCard() {
           phone: "",
           password: "",
           confirmPassword: "",
-          location: "",
-          status: "",
+          defaultLocation: "",
+          status: "Active",
+          companyCode: "",
+          userId: "",
+          role: [],
         }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
+          if (id) {
+            const payload = {
+              ...values,
+              locations: [values.defaultLocation],
+              roles: values.role.map((role, index) => { return { roleId: roles.find(r => r.roleName === role).roleId, roleName: role, isDeleted: roles.find(r => r.roleName === role).isDeleted } })
+            }
+            await ApiManager.updateUserData(payload).then((res) => {
+              toast.success(res.message)
+            }).catch((err) => {
+              toast.error(err.message)
+            })
+          } else {
+            const payload = {
+              ...values,
+              id: null,
+              locations: [values.defaultLocation],
+              roles: values.role.map((role, index) => { return { roleId: roles.find(r => r.roleName === role).roleId, roleName: role, isDeleted: roles.find(r => r.roleName === role).isDeleted } })
+            }
+            await ApiManager.addUserData(payload).then((res) => {
+              toast.success(res.message)
+            }).catch((er) => toast.error(er.msg))
+          }
+          navigate(-1)
         }}
       >
-        {() => (
+        {(formik) => (
           <Form>
             <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
               <CardHeader
@@ -129,8 +222,34 @@ export default function AddCard() {
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                       <Field
+                        name="userId"
+                        label="User ID"
+                        autoComplete="off"
+                        value={formik.values.userId}
+                        onChange={(e) => {
+                          formik.setFieldValue("userId", e.target.value)
+                        }}
+                        component={InputBox}
+                        sx={{ width: "90%" }}
+                      />
+                      <ErrorMessage
+                        name="userId"
+                        component="div"
+                        style={{
+                          color: "red",
+                          fontSize: "12px",
+                          marginTop: "4px",
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                      <Field
                         name="firstName"
                         label="First Name"
+                        value={formik.values.firstName}
+                        onChange={(e) => {
+                          formik.setFieldValue("firstName", e.target.value)
+                        }}
                         component={InputBox}
                         sx={{ width: "90%" }}
                       />
@@ -148,7 +267,11 @@ export default function AddCard() {
                       <Field
                         name="lastName"
                         label="Last Name"
+                        value={formik.values.lastName}
                         component={InputBox}
+                        onChange={(e) => {
+                          formik.setFieldValue("lastName", e.target.value)
+                        }}
                         sx={{ width: "90%" }}
                       />
                       <ErrorMessage
@@ -165,7 +288,11 @@ export default function AddCard() {
                       <Field
                         name="email"
                         label="Email Address"
+                        value={formik.values.email}
                         component={InputBox}
+                        onChange={(e) => {
+                          formik.setFieldValue("email", e.target.value)
+                        }}
                         sx={{ width: "90%" }}
                       />
                       <ErrorMessage
@@ -182,7 +309,11 @@ export default function AddCard() {
                       <Field
                         name="phone"
                         label="Phone"
+                        value={formik.values.phone}
                         component={InputBox}
+                        onChange={(e) => {
+                          formik.setFieldValue("phone", e.target.value)
+                        }}
                         sx={{ width: "90%" }}
                       />
                       <ErrorMessage
@@ -204,14 +335,16 @@ export default function AddCard() {
                       xl={2}
                       sx={{ marginTop: "15px" }}
                     >
-                      <Field
-                        name="location"
-                        label="Select Location"
-                        component={SelectBox}
-                        sx={{ width: "90%" }}
+                      <SelectBox
+                        label="Locations"
+                        id="defaultLocation"
+                        options={locations}
+                        value={formik.values.defaultLocation}
+                        error={formik.errors.defaultLocation}
+                        onChange={formik.handleChange}
                       />
                       <ErrorMessage
-                        name="location"
+                        name="defaultLocation"
                         component="div"
                         style={{
                           color: "red",
@@ -229,11 +362,13 @@ export default function AddCard() {
                       xl={2}
                       sx={{ marginTop: "15px" }}
                     >
-                      <Field
-                        name="status"
+                      <SelectBox
                         label="Status"
-                        component={SelectBox}
-                        sx={{ width: "90%" }}
+                        id="status"
+                        options={status}
+                        value={formik.values.status}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
                       />
                       <ErrorMessage
                         name="status"
@@ -251,6 +386,10 @@ export default function AddCard() {
                         label="Password"
                         type="password"
                         component={InputBox}
+                        value={formik.values.password}
+                        onChange={(e) => {
+                          formik.setFieldValue("password", e.target.value)
+                        }}
                         sx={{ width: "90%" }}
                       />
                       <ErrorMessage
@@ -269,10 +408,35 @@ export default function AddCard() {
                         label="Confirm Password"
                         type="password"
                         component={InputBox}
+                        value={formik.values.confirmPassword}
+                        onChange={(e) => {
+                          formik.setFieldValue("confirmPassword", e.target.value)
+                        }}
                         sx={{ width: "90%" }}
                       />
                       <ErrorMessage
                         name="confirmPassword"
+                        component="div"
+                        style={{
+                          color: "red",
+                          fontSize: "12px",
+                          marginTop: "4px",
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                      <Field
+                        name="companyCode"
+                        label="Company Code"
+                        value={formik.values.companyCode}
+                        component={InputBox}
+                        onChange={(e) => {
+                          formik.setFieldValue("companyCode", e.target.value)
+                        }}
+                        sx={{ width: "90%" }}
+                      />
+                      <ErrorMessage
+                        name="companyCode"
                         component="div"
                         style={{
                           color: "red",
@@ -322,6 +486,8 @@ export default function AddCard() {
                         variant="outlined"
                         fullWidth
                         size="small"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment
@@ -339,19 +505,19 @@ export default function AddCard() {
                       />
                       <FormControl component="fieldset">
                         <FormGroup>
-                          {selectedOptions.map((option, index) => (
+                          {filteredRoles.map((option, index) => (
                             <FormControlLabel
                               key={index}
                               control={
                                 <Checkbox
-                                  name={option.value}
-                                  checked={option.checked}
+                                  name={option.roleName}
+                                  checked={formik.values.role?.includes(option.roleName)}
                                   onChange={(event) =>
-                                    handleCheckboxChange(event, option.value)
+                                    handleCheckboxChange(event, option.roleName)
                                   }
                                 />
                               }
-                              label={option.label}
+                              label={option.roleName}
                             />
                           ))}
                         </FormGroup>
@@ -371,8 +537,7 @@ export default function AddCard() {
                       </Box>
                     </Box>
                     <Box sx={{ marginTop: 2 }}>
-                      {selectedOptions
-                        .filter((option) => option.checked)
+                      {formik.values.role?.length > 0 && formik.values.role
                         .map((option, index) => (
                           <Box
                             key={index}
@@ -386,9 +551,9 @@ export default function AddCard() {
                               borderRadius: "4px",
                             }}
                           >
-                            <Typography>{option.label}</Typography>
+                            <Typography>{option}</Typography>
                             <IconButton
-                              onClick={() => handleRemoveOption(option.value)}
+                              onClick={() => handleRemoveOption(option)}
                               size="small"
                             >
                               <CloseIcon fontSize="small" />

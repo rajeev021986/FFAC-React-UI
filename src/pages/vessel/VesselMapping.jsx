@@ -1,0 +1,116 @@
+import React from "react";
+import { Add } from "@mui/icons-material";
+import { Box, Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import AutoCompleteInput from "../../components/common/AutoCompletInput";
+
+export function VesselMapping({ formik, disabled, fetchSuggestions }) {
+  const vesselLineEntity = formik.values.vesselLineEntities || [
+    { id: 1, vesselName: "", shippingLine: "" },
+  ];
+  // Handler to add a new row
+  const addRow = () => {
+    const newRow = {
+      id: Date.now(),
+      vesselName: "",
+      shippingLine: "",
+      new: true,
+    };
+    formik.setFieldValue("vesselLineEntities", [...vesselLineEntity, newRow]);
+  };
+
+  // Handler to delete a row
+  const deleteRow = (id) => {
+    const updatedRows = vesselLineEntity.filter((row) => row.id !== id);
+    formik.setFieldValue("vesselLineEntities", updatedRows);
+  };
+
+  // Columns for DataGrid
+  const columns = [
+    {
+      field: "vesselName",
+      headerName: "Vessel Name",
+      flex: 1,
+      editable: true,
+      renderEditCell: (params) => (
+        <AutoCompleteInput
+          id="vesselName"
+          suggestionName="vessel_name"
+          value={params.value}
+          error={
+            formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
+          }
+          onChange={formik.handleChange}
+          fetchSuggestions={fetchSuggestions} // Pass the function for fetching suggestions
+        />
+      ),
+    },
+    {
+      field: "shippingLine",
+      headerName: "Shipping Line",
+      flex: 1,
+      editable: true,
+      renderEditCell: (params) => (
+        <AutoCompleteInput
+          id="shippingLine"
+          suggestionName="name"
+          value={params.value}
+          error={
+            formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
+          }
+          onChange={formik.handleChange}
+          fetchSuggestions={fetchSuggestions} // Pass the function for fetching suggestions
+        />
+      ),
+    },
+
+    {
+      field: "actions",
+      headerName: "Actions",
+      sortable: false,
+      renderCell: (params) => (
+        <Button
+          color="error"
+          onClick={() => deleteRow(params.row.id)}
+          disabled={disabled || vesselLineEntity.length === 1}
+        >
+          Delete
+        </Button>
+      ),
+    },
+  ];
+
+  // Handler to commit changes
+  const handleProcessRowUpdate = (newRow, oldRow) => {
+    const updatedRows = vesselLineEntity.map((row) =>
+      row.id === newRow.id ? { ...row, ...newRow } : row
+    );
+    formik.setFieldValue("vesselLineEntities", updatedRows);
+    return newRow;
+  };
+
+  return (
+    <Box sx={{ width: "100%", marginTop: 2 }}>
+      <Button
+        startIcon={<Add />}
+        onClick={addRow}
+        variant="outlined"
+        color="primary"
+        disabled={disabled}
+      >
+        Add Line
+      </Button>
+      <Box sx={{ height: 400, marginTop: 2 }}>
+        <DataGrid
+          rows={vesselLineEntity}
+          columns={columns}
+          disableSelectionOnClick
+          processRowUpdate={handleProcessRowUpdate}
+          experimentalFeatures={{ newEditingApi: true }}
+          getRowId={(row) => row.id}
+          disableColumnMenu
+        />
+      </Box>
+    </Box>
+  );
+}

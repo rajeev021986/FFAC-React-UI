@@ -49,6 +49,7 @@ export default function LoginScreen() {
             token: res.body.jwtToken,
             user: res.user,
             authtype: "normal",
+            userId: user.userId,
           })
         );
 

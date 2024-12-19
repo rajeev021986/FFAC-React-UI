@@ -19,7 +19,7 @@ const CustomerSetting = () => {
         setUnitType(data?.body.unitType)
         setCreditDays(data?.body.creditDays)
         setApprovalRequest(data?.body.approvalRequest)
-        setDocumentType(data?.body.document_type || [])
+        setDocumentType(data?.body.documentType || [])
         console.log(data,"data")
     }, [data, geterror]);
 

@@ -7,7 +7,7 @@ export const getCustomerListGridActions = (nav, setModal) => {
       onClick: (params) => {
         console.log("Edit clicked for", params.row);
         nav(`editcustomer`, {state: {formAction: "edit", initialValues: params.row},
-  
+       
         });
       },
       icon: <EditIcon />,

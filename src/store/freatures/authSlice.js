@@ -14,22 +14,23 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      const { token, user,authtype } = action.payload;
+      const { token, user, authtype, userId } = action.payload;
       state.isAuthenticated = true;
       state.user = user;
       localStorage.setItem("token", token);
-      localStorage.setItem("authtype",authtype);
+      localStorage.setItem("authtype", authtype);
       localStorage.setItem("user", JSON.stringify({
         ...user,
         // set token expiration time : 5 days
-        expiresIn: new Date().getTime() + 1000 * 60 * 1
-      })); 
+        expiresIn: new Date().getTime() + 1000 * 60 * 60 * 6
+      }));
+      localStorage.setItem("userId", userId);
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;
       localStorage.removeItem("token");
-      localStorage.removeItem("user"); 
+      localStorage.removeItem("user");
       localStorage.removeItem("authtype");
     },
   },

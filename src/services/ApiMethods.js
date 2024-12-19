@@ -5,6 +5,7 @@ export const getAppHeaders = () => {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
     'authtype': localStorage.getItem('authtype'),
+    'userId': localStorage.getItem('userId'),
   };
 };
 
@@ -25,13 +26,13 @@ class ApiMethods {
           if (res.status === 401 || res.status === 403) {
             localStorage.removeItem('token');
             localStorage.removeItem('authtype');
-            window.location.reload();
+            // window.location.reload();
             reject(new Error('Unauthorized'));
           }
 
           const contentType = res.headers.get('content-type');
           let data;
-          
+
           if (isBlob || contentType?.includes('application/octet-stream')) {
             data = await res.blob();
           } else {
