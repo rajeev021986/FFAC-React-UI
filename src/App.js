@@ -24,6 +24,8 @@ import ProfileScreen from "./pages/ProfileScreen";
 import VendorForm from "./components/screen/code/vendor/VendorForm";
 import { VesselScreen } from "./pages/vessel/VesselScreen";
 import { VesselFormScreen } from "./pages/vessel/VesselFormScreen";
+import PortScreen from "./pages/port/PortScreen";
+import PortForm from "./components/screen/code/port/PortForm";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -98,7 +100,9 @@ function App() {
               path="master/vessel"
               element={<VesselScreen />}
             />
-
+            <Route path="master/port" element={<PortScreen />} />
+            <Route path="master/port/portAdd" element={<PortForm />} />
+            <Route path="master/port/editPort" element={<PortForm />} />
           </Route>
         </Routes>
         <Toaster />

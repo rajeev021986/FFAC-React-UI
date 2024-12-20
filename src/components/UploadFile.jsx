@@ -26,6 +26,7 @@ import {
 } from "../store/api/codeDataApi";
 import Loader from "./common/Loader/Loader";
 import { useGetOptionsSettingsQuery } from "../store/api/settingsApi";
+import SelectBox from "./common/SelectBox";
 // Custom styled drop zone
 const DropZone = styled(Box)(({ theme }) => ({
   border: "2px dashed #ccc",
@@ -44,20 +45,7 @@ const DropZone = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
-  // const [uploadCustomerFile, { isLoading }] = useUploadCustomerFileMutation();
-  const [dropdownData, setDropdownData] = useState();
-  const { data: customerSettingsData } =
-    useGetOptionsSettingsQuery("customer_settings");
-
-  const formNotNeed = sourceType == "VENDOR";
-  useEffect(() => {
-    if (customerSettingsData?.body) {
-      setDropdownData({
-        ...customerSettingsData?.body,
-      });
-    }
-  }, [customerSettingsData]);
+const UploadFile = ({ customer_id, disabled = false, dropdownData, sourceType = null }) => {
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [deleteData, setDeleteData] = useState({});
@@ -139,6 +127,7 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
     } catch (error) {
       console.error("Error uploading file:", error);
       setLoading(false);
+      setDialogOpen(false);
     }
   };
   const donloadData = (base64, mimeType, documentName) => {
@@ -310,25 +299,14 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
 
           <Dialog open={dialogOpen} onClose={handleDialogClose}>
             <DialogTitle>File Details</DialogTitle>
-            {formNotNeed ? <DialogContent>Are you sure want to save the document?</DialogContent> : <DialogContent>
-              <Select
-                margin="dense"
+            <DialogContent>
+              <SelectBox
                 label="Document Type"
-                name="documentType"
-                fullWidth
+                id="documentType"
+                options={dropdownData}
                 value={formData.documentType}
                 onChange={handleInputChange}
-              >
-                {dropdownData?.document_type?.length > 0 ? (
-                  dropdownData.document_type.map((item) => (
-                    <MenuItem key={item.value} value={item.value}>
-                      {item.value}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem disabled>No options available</MenuItem>
-                )}
-              </Select>
+              />
               <TextField
                 margin="dense"
                 label="Issue Date"
@@ -357,7 +335,7 @@ const UploadFile = ({ customer_id, disabled = false, sourceType = null }) => {
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
               />
-            </DialogContent>}
+            </DialogContent>
             <DialogActions>
               <Button onClick={handleDialogClose} color="secondary">
                 Cancel

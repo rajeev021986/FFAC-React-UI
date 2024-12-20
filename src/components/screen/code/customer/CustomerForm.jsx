@@ -905,7 +905,7 @@ export default function CustomerForm({
                 <UploadFile
                   customer_id={initialValues.id}
                   disabled={disabled}
-                  dropdownData={dropdownData}
+                  dropdownData={dropdownData.documentType}
                   sourceType="CUSTOMER"
                 />
               </TabPanel>

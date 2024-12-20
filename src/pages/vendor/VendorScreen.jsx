@@ -116,9 +116,7 @@ export default function VendorScreen({ page }) {
     dispatch(setVendorPagination({ page, pageSize }));
   };
   const Actions = page == "vendor" ? getVendorGridActions(nav, setModal) : getVendorApproveGridActions(nav, setModal);
-  VENDOR_COLUMNS[VENDOR_COLUMNS.length - 1].renderCell = GridActions({
-    actions: Actions
-  });
+  
   const actions = seletectBox
     ? [{ name: "New Vendor" }, { name: "Copy" }, { name: "Export" }]
     : page == "vendor" ? [{ name: "New Vendor" }, { name: "Export" }] : [{ name: "Export" }];

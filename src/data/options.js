@@ -139,6 +139,14 @@ export const VENDOR_SORT_OPTIONS = [
   { value: "country*asc", label: "Country Ascending" },
   { value: "country*desc", label: "Country Descending" },
 ];
+export const PORT_SORT_OPTIONS = [
+  { value: "portName*asc", label: "Port Ascending" },
+  { value: "portName*desc", label: "Port Descending" },
+  { value: "city*asc", label: "City Ascending" },
+  { value: "city*desc", label: "City Descending" },
+  { value: "country*asc", label: "Country Ascending" },
+  { value: "country*desc", label: "Country Descending" },
+];
 export const PARTY_SORT_OPTIONS = [
   { value: "acode*asc", label: "Code Ascending" },
   { value: "acode*desc", label: "Code Descending" },

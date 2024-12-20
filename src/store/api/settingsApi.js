@@ -24,14 +24,14 @@ export const settingsApi = createApi({
                 const headers = {
                     'Authorization': getAppHeaders()['Authorization']
                 };
-                return { url: `/admin-service/settings/update`, method: "PUT", body: params.body, headers: headers };
+                return { url: `/admin-service/v1/settings`, method: "PUT", body: params.body, headers: headers };
             },
             invalidatesTags: ["Code"],
         }),
         getOptionsSettings: builder.query({
             query: (params) => {
                 // const queryString = new URLSearchParams(params).toString();
-                return { url: `/admin-service/v1/settings/entity?entity=${params}`, method: "GET", headers: getAppHeaders() };
+                return { url: `/admin-service/v1/settings?entity=${params}`, method: "GET", headers: getAppHeaders() };
             },
         }),
     }),

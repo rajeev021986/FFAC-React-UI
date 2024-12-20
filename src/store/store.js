@@ -9,6 +9,7 @@ import { auditDataApi } from "./api/common";
 import { dashboardDataApi } from "./api/dashbaordDataApi";
 import { settingsApi } from "./api/settingsApi";
 import { codeDataApi } from "./api/codeDataApi";
+import { portDataAPI } from "./api/portDataApi";
 import userManagementReducer from "./freatures/userManagementSlice";
 import authReducer from "./freatures/authSlice";
 import packingListReducer from "./freatures/packingListSlice";
@@ -28,6 +29,7 @@ import codeCustomerReducer from "./freatures/CustomerSlice";
 import vesselReducer from "./freatures/VesselSlice";
 import codePartyReducer from "./freatures/PartySlice";
 import codeAgentReducer from "./freatures/AgentSlice";
+import portReducer from "./freatures/portSlice"
 import { vesselDataApi } from "./api/vesselDataApi";
 const store = configureStore({
     reducer: {
@@ -44,6 +46,7 @@ const store = configureStore({
         [otmBolDataApi.reducerPath]: otmBolDataApi.reducer,
         [codeDataApi.reducerPath]: codeDataApi.reducer,
         [vesselDataApi.reducerPath]: vesselDataApi.reducer,
+        [portDataAPI.reducerPath]: portDataAPI.reducer,
         // slice
         userManagement: userManagementReducer,
         auth: authReducer,
@@ -64,6 +67,7 @@ const store = configureStore({
         vesselStore: vesselReducer,
         codeParty: codePartyReducer,
         codeAgent: codeAgentReducer,
+        port: portReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
@@ -79,6 +83,7 @@ const store = configureStore({
             otmBolDataApi.middleware,
             codeDataApi.middleware,
             vesselDataApi.middleware,
+            portDataAPI.middleware
         ),
 });
 

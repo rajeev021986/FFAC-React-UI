@@ -17,6 +17,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
 import AutoCompleteInput from "../../components/common/AutoCompletInput";
 import ApiManager from "../../services/ApiManager";
+import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 
 export function VesselForm({ initialValues, type }) {
   const location = useLocation();
@@ -87,8 +88,8 @@ export function VesselForm({ initialValues, type }) {
       inputId === "vesselName"
         ? "VESSEL"
         : inputId === "lineName"
-        ? "LINE"
-        : "SHIPPER";
+          ? "LINE"
+          : "SHIPPER";
     if (!inputValue) return [];
 
     const response = await ApiManager.fetchVesselSuggestions(
@@ -99,7 +100,7 @@ export function VesselForm({ initialValues, type }) {
 
     return data || [];
   };
-
+  const { data: vesselSettingsData } = useGetOptionsSettingsQuery("vessel_settings");
   return (
     <>
       {type == "copy" || type == "add" ? (
@@ -314,6 +315,7 @@ export function VesselForm({ initialValues, type }) {
                   customer_id={initialValues.id}
                   disabled={disabled}
                   sourceType="VESSEL"
+                  dropdownData={vesselSettingsData?.body?.documentType}
                 />
               </TabPanel>
             </TabContext>
