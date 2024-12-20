@@ -131,6 +131,14 @@ export const CUSTOMER_SORT_OPTIONS = [
   { value: "country*asc", label: "Country Ascending" },
   { value: "country*desc", label: "Country Descending" },
 ];
+export const SHIPPER_SORT_OPTIONS = [
+  // { value: "acode*asc", label: "Code Ascending" },
+  // { value: "acode*desc", label: "Code Descending" },
+  { value: "name*asc", label: "Shipper Ascending" },
+  { value: "name*desc", label: "Shipper Descending" },
+  { value: "country*asc", label: "Country Ascending" },
+  { value: "country*desc", label: "Country Descending" },
+];
 
 export const PARTY_SORT_OPTIONS = [
   { value: "acode*asc", label: "Code Ascending" },

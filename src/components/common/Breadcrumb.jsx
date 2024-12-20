@@ -31,6 +31,9 @@ const Routes = {
   customer: { label: "Customer", disabled: false },
   party: { label: "Party", disabled: false },
   agent: { label: "Agent", disabled: false },
+  shipper:{ label: "Shipper", disabled: false},
+  editshipper:{ label: "Edit Shipper", disabled: false },
+  new_shipper: { label: "Create Shipper", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {

@@ -71,6 +71,7 @@ class ApiManager {
         const url = ENDPOINTS.GET_CUSTOMER_AUDIT(id);
         return ApiMethods.get(url);
     }
+    
     static getCustomerFormData = async (source,id) => {
         const url = ENDPOINTS.GET_CUSTOMER_DOCUMENT_FILE(source,id);
         return ApiMethods.get(url);
@@ -86,6 +87,14 @@ class ApiManager {
     static deleteDocument = async (id, source, sourceId) => {
         const url = ENDPOINTS.DOCUMENT_DELETE(id, source, sourceId);
         return ApiMethods.delete(url);
+    }
+    static getShipperAuditDetails = async (id) => {
+        const url = ENDPOINTS.GET_SHIPPER_AUDIT(id);
+        return ApiMethods.get(url);
+    }
+    static getShipperDeatils = async (id) => {
+        const url = ENDPOINTS.GET_SHIPPER_DETAILS(id);
+        return ApiMethods.get(url);
     }
     static approveCustomerApprove = async (id,type) => {
         const url = ENDPOINTS.CUSTOMER_APPROVE_REQUEST(id,type);

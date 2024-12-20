@@ -49,6 +49,17 @@ export default function CardItem({
           />
         </Box>
       )}
+      {page ==="shipper" && (
+        <Box
+          sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
+        >
+          <Checkbox
+            checked={selectedBox == uniqueId}
+            onChange={handleCheckboxChange}
+            color="primary"
+          />
+        </Box>
+      )}
 
       {/* Icon and details */}
       <Box

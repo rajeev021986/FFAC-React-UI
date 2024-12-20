@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getAppHeaders, API_BASE_URL } from "../../services/ApiMethods";
+//export const API_BASE_URL1= process.env.REACT_APP_Shipper_API_BASE_URL1;
+
 
 export const codeDataApi = createApi({
     reducerPath: "codeDataApi",

@@ -12,11 +12,13 @@ import HandleAuthCallback from "./HandleAuthCallback";
 import FormScreen from "./pages/code/CustomerFormScreen";
 import CustomerApproveScreen from "./pages/code/CustomerApproveScreen";
 import Component from "./pages/code/Component";
+import ShipperComponent from "./pages/code/ShipperComponent";
 import { useSelector } from "react-redux";
 import SettingsPage from "./pages/setting/Setting";
 import UserRole from "./pages/code/UserRole";
 import AddCard from "./components/common/Cards/AddCard";
 import CustomerFormScreen from "./pages/code/CustomerFormScreen";
+import ShipperFormScreen from "./pages/code/ShipperFormScreen";
 import Role from "./pages/code/Role";
 function App() {
   // const { menuItems } = useMenuSetting();
@@ -66,6 +68,18 @@ function App() {
             <Route
               path="entity/approve/approveRequest"
               element={<CustomerFormScreen page="customerApprove" />}
+            />
+             <Route
+              path="entity/shipper"
+              element={<ShipperComponent page="shipper" />}
+            />
+            <Route
+              path="entity/shipper/new_shipper"
+              element={<ShipperFormScreen page="shipper" />}
+            />
+            <Route
+              path="entity/shipper/editshipper"
+              element={<ShipperFormScreen page="shipper" />}
             />
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />

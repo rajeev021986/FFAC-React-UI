@@ -1,4 +1,5 @@
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+export const API_BASE_URL1= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const getAppHeaders = () => {
   return {

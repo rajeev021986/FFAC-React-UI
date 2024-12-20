@@ -9,6 +9,7 @@ import { auditDataApi } from "./api/common";
 import { dashboardDataApi } from "./api/dashbaordDataApi";
 import { settingsApi } from "./api/settingsApi";
 import { codeDataApi } from "./api/codeDataApi";
+import { shipperDataApi } from "./api/shipperDataApi";
 import userManagementReducer from "./freatures/userManagementSlice";
 import authReducer from "./freatures/authSlice";
 import packingListReducer from "./freatures/packingListSlice";
@@ -16,6 +17,7 @@ import serviceInvoiceReducer from "./freatures/serviceInvoiceSlice";
 import expenseCodeReducer from "./freatures/expenseCodeSlice";
 import destinationReducer from "./freatures/destinationSlice";
 import vendorReducer from "./freatures/vendorSlice";
+import shipperReducer from "./freatures/shipperSlice";
 import sprblDetailsReducer from "./freatures/sprblDataSlice";
 import PoOrderListSlice from "./freatures/PoOrderListSlice";
 import DsoOrderListSlice from "./freatures/DsoOrderListSlice";
@@ -25,6 +27,7 @@ import settingsSlice from "./freatures/settingsSlice"
 import { otmBolDataApi } from "./api/otmBolDataApi";
 import otmBolListSlice from "./freatures/otmBolListSlice";
 import codeCustomerReducer from "./freatures/CustomerSlice";
+
 import codePartyReducer from "./freatures/PartySlice";
 import codeAgentReducer from "./freatures/AgentSlice";
 
@@ -37,6 +40,7 @@ const store = configureStore({
         [expenseCodeDataApi.reducerPath] : expenseCodeDataApi.reducer,
         [destinationDataApi.reducerPath] : destinationDataApi.reducer,
         [vendorDataApi.reducerPath] : vendorDataApi.reducer,
+        [shipperDataApi.reducerPath] : shipperDataApi.reducer,
         [auditDataApi.reducerPath] : auditDataApi.reducer,
         [dashboardDataApi.reducerPath] : dashboardDataApi.reducer,
         [settingsApi.reducerPath] : settingsApi.reducer,
@@ -50,6 +54,7 @@ const store = configureStore({
         expenseCode : expenseCodeReducer,
         destination : destinationReducer,
         vendor : vendorReducer,
+        shipper : shipperReducer,
         sprblDetails : sprblDetailsReducer,
         poOrderList : PoOrderListSlice,
         dsoOrderList : DsoOrderListSlice,
@@ -70,6 +75,7 @@ const store = configureStore({
         expenseCodeDataApi.middleware,
         destinationDataApi.middleware,
         vendorDataApi.middleware,
+        shipperDataApi.middleware,
         auditDataApi.middleware,
         dashboardDataApi.middleware,
         settingsApi.middleware,

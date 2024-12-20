@@ -1,62 +1,52 @@
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
-  AddCircleOutlineOutlined,
-  FileDownloadOutlined,
 } from "@mui/icons-material";
 import {
   Box,
   Card,
   CardHeader,
-  Chip,
-  CircularProgress,
   IconButton,
   Stack,
-  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
-import { OutlinedButton } from "../../components/common/Button";
-import { replace, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-// import * as XLSX from "xlsx";
 import {
-  useFetchCustomerDatasQuery,
-  useFetchCustomerQuery,
-} from "../../store/api/codeDataApi";
-import CustomerFilters from "../../components/screen/code/customer/CustomerFilters";
+  useFetchShipperDatasQuery
+} from "../../store/api/shipperDataApi";
+import ShipperFilters from "../../components/screen/code/Shipper/ShipperFilters";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPagination,
   setSortBy,
-  customerSetView,
-  customerSetSortModel,
+  shipperSetView,
+  shipperSetSortModel,
   updateInput,
-} from "../../store/freatures/CustomerSlice";
+} from "../../store/freatures/shipperSlice";
 import SelectBox from "../../components/common/SelectBox";
-import { CUSTOMER_SORT_OPTIONS } from "../../data/options";
+import { SHIPPER_SORT_OPTIONS } from "../../data/options";
 import GridActions from "../../components/common/Grid/GridActions";
-
-import { CODE_CUSTOMER_COLUMNS } from "../../data/columns/code";
-import { getCustomerListGridActions } from "../../components/screen/code/customer/action";
+import { SHIPPER_COLUMNS} from "../../data/columns/shipper"
+import { getShipperListGridActions } from "../../components/screen/code/Shipper/action";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { useEffect } from "react";
-
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
+import { getShipperListGridActionsShipperApprovel } from "../../components/screen/code/Shipper/action copy";
 import ApiManager from "../../services/ApiManager";
 
-const ADD_NEW_CUSTOMER_PATH = "new";
 
-// const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
+const ADD_NEW_SHIPPER_PATH = "new_shipper";
 
-export default function CustomerScreen({ page }) {
-  const codeCustomerSelector = useSelector((state) => state.codeCustomer);
+
+export default function ShipperScreen({ page }) {
+  const shipperSelector = useSelector((state) => state.shipper);
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -68,34 +58,34 @@ export default function CustomerScreen({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New Customer" }, { name: "Export" }];
+    ? [{ name: "New Shipper" }, { name: "Copy" }, { name: "Export" }]
+    : [{ name: "New Shipper" }, { name: "Export" }];
   const query = {
-    page: codeCustomerSelector?.pagination?.page + 1,
-    size: codeCustomerSelector?.pagination?.pageSize,
+    page: shipperSelector?.pagination?.page + 1,
+    size: shipperSelector?.pagination?.pageSize,
     sortBy:
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector.sortModel[0].field
-        : codeCustomerSelector?.sortBy?.split("*")[0],
+    shipperSelector.sortModel.length > 0
+        ? shipperSelector.sortModel[0].field
+        : shipperSelector?.sortBy?.split("*")[0],
     sortOrder:
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector?.sortModel[0]?.sort
-        : codeCustomerSelector?.sortBy?.split("*")[1] || "",
+    shipperSelector.sortModel.length > 0
+        ? shipperSelector?.sortModel[0]?.sort
+        : shipperSelector?.sortBy?.split("*")[1] || "",
   };
   if (
     Boolean(
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector.sortModel[0].field === "cname"
-        : codeCustomerSelector?.sortBy?.split("*")[0] === "cname"
+      shipperSelector.sortModel.length > 0
+        ? shipperSelector.sortModel[0].field === "name"
+        : shipperSelector?.sortBy?.split("*")[0] === "name"
     )
   ) {
-    query.sortBy = "customerName";
+    query.sortBy = "name";
   }
-  const payload = Object.entries(codeCustomerSelector?.formData)
+  const payload = Object.entries(shipperSelector?.formData)
     .filter(([key, value]) => value)
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key == "cname") && (fieldname = "customerName");
+      Boolean(key == "name") && (fieldname = "name");
       return {
         fieldName: fieldname,
         operator: "=",
@@ -105,16 +95,16 @@ export default function CustomerScreen({ page }) {
     });
 
   const {
-    data: CustomerData,
+    data: ShipperData,
     isLoading,
     isError,
     error,
     isFetching,
     refetch,
-  } = useFetchCustomerDatasQuery({
+  } = useFetchShipperDatasQuery({
     params: query,
     payload,
-    page: page == "customer" ? "customer/filter" : "approval/filter/customer",
+    page: page == "shipper" ? "shipper/filter" : "approval/filter/shipper",
   });
   useEffect(() => {
     refetch();
@@ -124,38 +114,29 @@ export default function CustomerScreen({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
+  SHIPPER_COLUMNS[SHIPPER_COLUMNS.length - 1].renderCell =
     GridActions({
       actions:
-        page == "customer"
-          ? getCustomerListGridActions(nav, setModal)
-          : getCustomerListGridActionsCustomerApprovel((nav, setModal)),
+        page == "shipper"
+          ? getShipperListGridActions(nav, setModal)
+          : getShipperListGridActionsShipperApprovel((nav, setModal)),
     });
-  // CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
-  //   GridActions({
-  //     actions: getCustomerListGridActions(nav, setModal),
-  //   });
-  // CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
-  // GridActions({
-  //   actions: getCustomerListGridActionsCustomerApprovel((nav, setModal)),
-  // });
 
   useEffect(() => {
-    if (!codeCustomerSelector.view) {
-      dispatch(customerSetView("card"));
+    if (!shipperSelector.view) {
+      dispatch(shipperSetView("card"));
     }
-  }, [codeCustomerSelector.view, dispatch]);
+  }, [shipperSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
-    // }
-    if (actionName === "New Customer") {
-      nav(ADD_NEW_CUSTOMER_PATH, {
+    if (actionName === "New Shipper") {
+      nav(ADD_NEW_SHIPPER_PATH, {
         replace: true,
         state: { formAction: "add" },
-      });
-    }
+    });
+  }
     if (actionName === "Copy") {
-      nav(`editcustomer`, {
+      nav(`editshipper`, {
         state: {
           formAction: "edit",
           initialValues: { id: seletectBox },
@@ -163,37 +144,25 @@ export default function CustomerScreen({ page }) {
         },
       });
     }
+    
     if (actionName === "Export") {
-
-      try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload);
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'customer-data.xlsx'); // or whatever filename you want
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error('Download failed:', error);
-      }
-      // const response = await fetch("http://18.223.155.76:9092/entity-service/customer/export?page=1&size=10&sortBy=&sortOrder=", {   
-      //   responseType: "blob",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     "Authorization": `Bearer ${localStorage.getItem("token")}`
-      //   }
-      // })
-      // const blob = await response.blob();
-      // const url = window.URL.createObjectURL(blob);
-      // const link = document.createElement('a');
-      // link.href = url;
-      // link.setAttribute('download', `${Date.now()}.xlsx`);
-      // document.body.appendChild(link);
-      // link.click();
+      const response = await fetch("http://localhost:9083/entity-service/shipper/export?page=1&size=10&sortBy=&sortOrder=", {   
+        responseType: "blob",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      })
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${Date.now()}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
     }
-  };
+  }
+  
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
@@ -201,17 +170,8 @@ export default function CustomerScreen({ page }) {
         leftComps={<ThemedBreadcrumb />}
         rightComps={
           <>
-            {/* <OutlinedButton
-              color="primary"
-              size="small"
-              onClick={() =>
-                nav(ADD_NEW_CUSTOMER_PATH,  { replace :true , state: { formAction: "add" } })
-              }
-            >
-              <AddCircleOutlineOutlined fontSize="small" /> New Client
-            </OutlinedButton> */}
             <Backdrop open={open} />
-            {page == "customer" && (
+            {page == "shipper" && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
@@ -267,16 +227,16 @@ export default function CustomerScreen({ page }) {
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
-                  filters={codeCustomerSelector?.formData}
+                  filters={shipperSelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <CustomerFilters filterInfo={CustomerData?.counts || []} />
+                  <ShipperFilters filterInfo={ShipperData?.counts || []} />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"
-                  options={CUSTOMER_SORT_OPTIONS}
-                  value={codeCustomerSelector.sortBy}
+                  options={SHIPPER_SORT_OPTIONS}
+                  value={shipperSelector.sortBy}
                   onChange={(event) => {
                     console.log(event);
 
@@ -289,19 +249,19 @@ export default function CustomerScreen({ page }) {
                 />
               </Box>
               <Box>
-                <IconButton onClick={() => dispatch(customerSetView("card"))}>
+                <IconButton onClick={() => dispatch(shipperSetView("card"))}>
                   <FormatListBulletedOutlined
                     color={
-                      codeCustomerSelector.view === "card"
+                      shipperSelector.view === "card"
                         ? "primary"
                         : "secondary"
                     }
                   />
                 </IconButton>
-                <IconButton onClick={() => dispatch(customerSetView("grid"))}>
+                <IconButton onClick={() => dispatch(shipperSetView("grid"))}>
                   <GridOnOutlined
                     color={
-                      codeCustomerSelector.view === "grid"
+                      shipperSelector.view === "grid"
                         ? "primary"
                         : "secondary"
                     }
@@ -311,43 +271,43 @@ export default function CustomerScreen({ page }) {
             </Stack>
           }
         />
-        {codeCustomerSelector.view === "grid" ? (
+        {shipperSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.totalElements || 0}
+            columns={SHIPPER_COLUMNS}
+            count={ShipperData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={CustomerData?.body?.data}
+            data={ShipperData?.body?.data}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
-            paginationModel={codeCustomerSelector.pagination}
+            paginationModel={shipperSelector.pagination}
             loading={isLoading || isFetching}
-            sortModel={codeCustomerSelector.sortModel}
+            sortModel={shipperSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(customerSetSortModel(sortModel))
+              dispatch(shipperSetSortModel(sortModel))
             }
           />
         ) : (
           <CardsView
             uniqueId="id"
-            columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.totalElements || 0}
+            columns={SHIPPER_COLUMNS}
+            count={ShipperData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={CustomerData?.body?.data}
-            paginationModel={codeCustomerSelector?.pagination}
+            data={ShipperData?.body?.data}
+            paginationModel={shipperSelector?.pagination}
             loading={isLoading || isFetching}
             actions={
-              page == "customer"
-                ? getCustomerListGridActions(nav, setModal)
-                : getCustomerListGridActionsCustomerApprovel(nav, setModal)
+              page == "shipper"
+                ? getShipperListGridActions(nav, setModal)
+                : getShipperListGridActionsShipperApprovel(nav, setModal)
             }
-            // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
             page={page}
           />
         )}
       </Card>
+     
     </Box>
   );
 }
