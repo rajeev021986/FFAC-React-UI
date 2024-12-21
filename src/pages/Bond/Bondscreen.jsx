@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
-import { PORT_COLUMNS } from '../../data/columns/port';
-import { useFetchPortQuery, useLazyGetPortAuditQuery } from '../../store/api/portDataApi';
-import { setPortPagination, setSortBy, setSortModel, setView, updatePortInput } from '../../store/freatures/portSlice';
+import { BOND_COLUMNS } from '../../data/columns/bond';
+import { useFetchbondQuery, useLazyGetbondAuditQuery } from '../../store/api/bondDataApi';
+import { setBondPagination, setSortBy, setSortModel, setView, updateBondInput } from '../../store/freatures/bondSlice';
 import { Box, Card, CardHeader, Drawer, IconButton, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack, Typography } from '@mui/material';
 import CardsView from '../../components/common/Cards/CardsView';
 import GridSearchInput from '../../components/common/Filter/GridSearchInput';
 import SelectBox from '../../components/common/SelectBox';
-import { PORT_SORT_OPTIONS } from '../../data/options';
+import { BOND_SORT_OPTIONS } from '../../data/options';
 import { FormatListBulletedOutlined, GridOnOutlined } from '@mui/icons-material';
-import PortFilterForm from '../../components/screen/code/port/PortFilter';
+import BondFilterForm from '../../components/screen/code/bond/BondFilterForm';
 import ThemedBreadcrumb from '../../components/common/Breadcrumb';
-import { getPortGridActions } from '../../components/screen/code/port/port';
+import { getBondGridActions } from '../../components/screen/code/bond/bond';
 import { useNavigate } from 'react-router-dom';
 import ScreenToolbar from '../../components/common/ScreenToolbar';
 import ApiManager from '../../services/ApiManager';
 import GridActions from '../../components/common/Grid/GridActions';
 import AuditTimeLine from '../../components/AuditTimeLine';
-export default function PortScreen() {
-    const portSelector = useSelector((state) => state.port);
+export default function BondScreen() {
+    const bondSelector = useSelector((state) => state.bond);
     const nav = useNavigate();
     const [modal, setModal] = React.useState({
         open: false,
@@ -30,9 +30,9 @@ export default function PortScreen() {
     const dispatch = useDispatch();
     const handlePage = (params) => {
         let { page, pageSize } = params;
-        dispatch(setPortPagination({ page, pageSize }));
+        dispatch(setBondPagination({ page, pageSize }));
     };
-    const payload = Object.entries(portSelector?.formData)
+    const payload = Object.entries(bondSelector?.formData)
         .filter(([key, value]) => value)
         .map(([key, value]) => {
             return {
@@ -43,51 +43,51 @@ export default function PortScreen() {
             };
         });
     const query = {
-        page: portSelector?.pagination?.page + 1,
-        size: portSelector?.pagination?.pageSize,
+        page: bondSelector?.pagination?.page + 1,
+        size: bondSelector?.pagination?.pageSize,
         sortBy:
-            portSelector.sortModel.length > 0
-                ? portSelector.sortModel[0].field
-                : portSelector?.sortBy?.split("*")[0],
+            bondSelector.sortModel.length > 0
+                ? bondSelector.sortModel[0].field
+                : bondSelector?.sortBy?.split("*")[0],
         sortOrder:
-            portSelector.sortModel.length > 0
-                ? portSelector?.sortModel[0]?.sort
-                : portSelector?.sortBy?.split("*")[1] || "",
+            bondSelector.sortModel.length > 0
+                ? bondSelector?.sortModel[0]?.sort
+                : bondSelector?.sortBy?.split("*")[1] || "",
     }
 
     const {
-        data: PortData,
+        data: BondData,
         isError,
         isLoading,
         error,
         isFetching,
-    } = useFetchPortQuery({
+    } = useFetchbondQuery({
         params: query,
         payload,
     }
     );
-    PORT_COLUMNS[PORT_COLUMNS.length - 1].renderCell = GridActions({
-        actions: getPortGridActions(nav, setModal)
+    BOND_COLUMNS[BOND_COLUMNS.length - 1].renderCell = GridActions({
+        actions: getBondGridActions(nav, setModal)
     });
     const actions = seletectBox
-        ? [{ name: "New Port" }, { name: "Copy" }, { name: "Export" }]
-        : [{ name: "New Port" }, { name: "Export" }]
+        ? [{ name: "New Bond" }, { name: "Copy" }, { name: "Export" }]
+        : [{ name: "New Bond" }, { name: "Export" }]
     const handleActionClick = async (actionName) => {
-        if (actionName === "New Port") {
-            nav("portAdd", {
+        if (actionName === "New Bond") {
+            nav("bondAdd", {
                 state: { id: null, type: "new" },
             });
         }
         if (actionName === "Copy") {
-            nav("portAdd", { state: { id: seletectBox, type: "copy" } });
+            nav("bondAdd", { state: { id: seletectBox, type: "copy" } });
         }
         if (actionName === "Export") {
             try {
-                const blob = await ApiManager.fetchCustomerDatasExcel(query, payload, "Port");
+                const blob = await ApiManager.fetchCustomerDatasExcel(query, payload, "Bond");
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'port-data.xlsx');
+                link.setAttribute('download', 'bond-data.xlsx');
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
@@ -97,10 +97,10 @@ export default function PortScreen() {
             }
         }
     };
-    const [getPortAudit, { data: AuditData,
-        isLoading: isLoadingAudit }] = useLazyGetPortAuditQuery();
+    const [getbondAudit, { data: AuditData,
+        isLoading: isLoadingAudit }] = useLazyGetbondAuditQuery();
     const fetchUserAudit = () => {
-        getPortAudit({
+        getbondAudit({
             id: modal.data.id,
         });
     }
@@ -163,16 +163,16 @@ export default function PortScreen() {
                         <Stack spacing={2} direction="row" justifyContent="space-between">
                             <Box sx={{ display: "flex", gap: 2 }}>
                                 <GridSearchInput
-                                    filters={portSelector?.formData}
-                                    setFilters={(filters) => dispatch(updatePortInput(filters))}
+                                    filters={bondSelector?.formData}
+                                    setFilters={(filters) => dispatch(updateBondInput(filters))}
                                     width="650px"
                                 >
-                                    <PortFilterForm />
+                                    <BondFilterForm/>
                                 </GridSearchInput>
                                 <SelectBox
                                     label="Sort By"
-                                    options={PORT_SORT_OPTIONS}
-                                    value={portSelector.sortBy}
+                                    options={BOND_SORT_OPTIONS}
+                                    value={bondSelector.sortBy}
                                     onChange={(event) => {
                                         dispatch(setSortBy(event.target.value));
                                     }}
@@ -186,7 +186,7 @@ export default function PortScreen() {
                                 <IconButton onClick={() => dispatch(setView("card"))}>
                                     <FormatListBulletedOutlined
                                         color={
-                                            portSelector.view === "card"
+                                            bondSelector.view === "card"
                                                 ? "primary"
                                                 : "secondary"
                                         }
@@ -195,7 +195,7 @@ export default function PortScreen() {
                                 <IconButton onClick={() => dispatch(setView("grid"))}>
                                     <GridOnOutlined
                                         color={
-                                            portSelector.view === "grid"
+                                            bondSelector.view === "grid"
                                                 ? "primary"
                                                 : "secondary"
                                         }
@@ -205,30 +205,30 @@ export default function PortScreen() {
                         </Stack>
                     }
                 />
-                {portSelector.view === "grid" ? (
+                {bondSelector.view === "grid" ? (
                     <ThemedGrid
-                        columns={PORT_COLUMNS}
+                        columns={BOND_COLUMNS}
                         uniqueId="id"
-                        data={PortData?.body?.data}
-                        count={PortData?.body?.totalElements}
+                        data={BondData?.body?.data}
+                        count={BondData?.body?.totalElements}
                         handlePage={handlePage}
                         columnVisibility={{}}
                         columnVisibilityHandler={() => { }}
-                        paginationModel={portSelector.pagination}
+                        paginationModel={bondSelector.pagination}
                         loading={isLoading || isFetching}
                         disableColumnMenu
                         disableColumnSorting
-                        sortModel={portSelector.sortModel}
+                        sortModel={bondSelector.sortModel}
                         onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
                     />) : (<CardsView
                         uniqueId="id"
-                        columns={PORT_COLUMNS}
-                        count={PortData?.body?.totalElements || 0}
+                        columns={BOND_COLUMNS}
+                        count={BondData?.body?.totalElements || 0}
                         handlePage={handlePage}
-                        data={PortData?.body?.data}
-                        paginationModel={portSelector?.pagination}
+                        data={BondData?.body?.data}
+                        paginationModel={bondSelector?.pagination}
                         loading={isLoading || isFetching}
-                        actions={getPortGridActions(nav, setModal)}
+                        actions={getBondGridActions(nav, setModal)}
                         setSelectedBox={setSelectedBox}
                         seletectBox={seletectBox}
                         page="customer"
@@ -252,7 +252,7 @@ export default function PortScreen() {
                 >
                     <Box sx={{ p: 2 }}>
                         <Typography variant="h6" component="div" sx={{ mb: 2 }}>
-                            Port Audit Logs
+                            Bond Audit Logs
                         </Typography>
                         <AuditTimeLine auditDetails={AuditData} reloadDataHandler={fetchUserAudit} loading={isLoadingAudit} />
                     </Box>

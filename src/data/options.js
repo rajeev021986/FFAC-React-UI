@@ -13,6 +13,10 @@ export const USER_STATUS_OPTIONS = [
   { value: UserStatusEnum.ACTIVE, label: "Active" },
   { value: UserStatusEnum.INACTIVE, label: "Inactive" },
 ];
+export const BOND_SORT_OPTIONS = [
+  { value: UserStatusEnum.ACTIVE, label: "Active" },
+  { value: UserStatusEnum.INACTIVE, label: "Inactive" },
+];
 
 
 export const PAYMENTTYPE_OPTIONS = [

@@ -5,30 +5,30 @@ const initialState = {
     view: "grid",
     pagination: { page: 0, pageSize: 10 },
     formData: {
-        // city: "",
-        // portName: "",
-        // country: "",
+        city: "",
+        bondName: "",
+        country: "",
     },
     sortBy: "",
     sortModel: [],
     view: "card"
 }
 
-const portSlice = createSlice({
-    name: 'port',
+const bondSlice = createSlice({
+    name: 'bond',
     initialState,
     reducers: {
-        togglePortFilter: (state, action) => {
+        toggleBondFilter: (state, action) => {
             const { category, value } = action.payload;
             const currentValues = state[category];
             const isSelected = currentValues.includes(value);
 
             state[category] = isSelected ? [] : [value];
         },
-        updatePortInput: (state, action) => {
+        updateBondInput: (state, action) => {
             state.formData = action.payload;
         },
-        setPortPagination: (state, action) => {
+        setBondPagination: (state, action) => {
             state.pagination = action.payload;
         },
         setSortBy: (state, action) => {
@@ -44,12 +44,12 @@ const portSlice = createSlice({
 });
 
 export const {
-    togglePortFilter,
-    updatePortInput,
-    setPortPagination,
+    toggleBondFilter,
+    updateBondInput,
+    setBondPagination,
     setSortBy,
     setSortModel,
     setView
-} = portSlice.actions;
+} = bondSlice.actions;
 
-export default portSlice.reducer; 
+export default bondSlice.reducer; 

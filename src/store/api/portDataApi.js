@@ -16,7 +16,7 @@ export const portDataAPI = createApi({
         addPort: builder.mutation({
             query: (payload) => ({
                 url: 'master-service/v1/port',
-                method: 'PUT',
+                method: 'POST',
                 body: payload,
                 headers: getAppHeaders(),
             }),
