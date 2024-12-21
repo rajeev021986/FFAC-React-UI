@@ -1,4 +1,4 @@
-import { Box, CircularProgress, TablePagination } from "@mui/material";
+import { Box, CircularProgress, Grid, TablePagination } from "@mui/material";
 import React, { useState } from "react";
 import CardItem from "./CardItem";
 
@@ -33,7 +33,7 @@ export default function CardsView({
   };
 
   return (
-    <Box
+    <Grid
       sx={{
         maxWidth: "100%",
         borderRadius: "5px",
@@ -47,31 +47,33 @@ export default function CardsView({
         gap: "10px",
       }}
     >
-      {data?.map((item, index) => (
-        <CardItem
-          key={item.id}
-          item={item}
-          columns={columns}
-          selectedBox={seletectBox}
-          setSelectedBox={setSelectedBox}
-          uniqueId={item.id}
-          actions={actions}
-          icon={null}
-          page={page}
-        />
-      ))}
-      {loading && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <CircularProgress color="primary" />
-        </Box>
-      )}
+      <Grid width="100%" >
+        {data?.map((item, index) => (
+          <CardItem
+            key={item.id}
+            item={item}
+            columns={columns}
+            selectedBox={seletectBox}
+            setSelectedBox={setSelectedBox}
+            uniqueId={item.id}
+            actions={actions}
+            icon={null}
+            page={page}
+          />
+        ))}
+        {loading && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <CircularProgress color="primary" />
+          </Box>
+        )}
+      </Grid>
 
       {data?.length > 0 && (
         <Box sx={styles.pagination}>
@@ -85,11 +87,11 @@ export default function CardsView({
             rowsPerPageOptions={[10, 20, 50, 100]}
             color="primary"
             size="small"
-            sx={{ mergin: "auto", backgroundColor: "white.main"}}
+            sx={{ mergin: "auto", backgroundColor: "white.main" }}
           />
         </Box>
       )}
-    </Box>
+    </Grid>
   );
 }
 

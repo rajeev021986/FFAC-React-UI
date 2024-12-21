@@ -3,6 +3,20 @@ import { appDateFormat } from "../../components/utils/date"
 
 export const BOND_COLUMNS = [
     {
+        field: 'bondNumber',
+        headerName: 'Bond Number',
+        width: 130,
+        headerAlign: 'center',
+        align: 'center'
+    },
+    {
+        field: 'bondType',
+        headerName: 'Bond Type',
+        width: 130,
+        headerAlign: 'center',
+        align: 'center'
+    },
+    {
         field: 'status',
         headerName: 'Status',
         width: 130,

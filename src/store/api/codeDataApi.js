@@ -31,7 +31,7 @@ export const codeDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `entity-service/v1/customer/update`, method: "PUT", body: params, headers: headers };
+                return { url: `entity-service/v1/customer`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Code"],
         }),
