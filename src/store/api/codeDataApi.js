@@ -21,7 +21,7 @@ export const codeDataApi = createApi({
                 };
 
 
-                return { url: `entity-service/v1/customer/add`, method: "POST", body: params, headers: headers };
+                return { url: `entity-service/v1/customer`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Code"],
         }),

@@ -100,6 +100,11 @@ class ApiManager {
         const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString, source);
         return ApiMethods.postBlob(url, payload);
     }
+    static fetchCustomerDatasExcelPort = async (params, payload, source) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = ENDPOINTS.FETCH_PORT_DATA_EXCEL(queryString, source);
+        return ApiMethods.postBlob(url, payload);
+    }
     static getUserData = async (id) => {
         const url = ENDPOINTS.GET_USER_DATA(id);
         return ApiMethods.get(url);

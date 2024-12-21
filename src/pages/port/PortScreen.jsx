@@ -83,7 +83,7 @@ export default function PortScreen() {
         }
         if (actionName === "Export") {
             try {
-                const blob = await ApiManager.fetchCustomerDatasExcel(query, payload, "Port");
+                const blob = await ApiManager.fetchCustomerDatasExcelPort(query, payload, "port");
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;

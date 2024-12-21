@@ -56,25 +56,18 @@ export default function BondForm() {
     };
     const formik = useFormik({
         initialValues: {
-            bondNumber: "BND12345",
-            bondType: "TypeA",
-            openingBalance: "10000",
-            status: "Active",
-            remark: "Bond is in good standing",
+            bondNumber: "",
+            bondType: "",
+            openingBalance: "",
+            status: "",
+            remark: "",
             bondPurchaseDetailsEntities: [
                 {
-                    id: 101,
-                    policyNo: "POL12345",
-                    date: "2024-12-20",
-                    amount: "5000",
-                    validUpToDate: "2025-12-20",
-                },
-                {
-                    id: 102,
-                    policyNo: "POL67890",
-                    date: "2024-11-15",
-                    amount: "3000",
-                    validUpToDate: "2025-11-15",
+                    id: Date.now(),
+                    policyNo: "",
+                    date: "",
+                    amount: "",
+                    validUpToDate: "",
                 },
             ],
         },
@@ -100,7 +93,11 @@ export default function BondForm() {
         onSubmit: async (values) => {
             if (type == "copy" || type == "new") {
                 try {
-                    const result = await addBond({ ...values, id: null }).unwrap();
+                    const result = await addBond({ 
+                        ...values,
+                        bondPurchaseDetailsEntities: values.bondPurchaseDetailsEntities.map((a) => ({ ...a, id: null })),
+                        id: null 
+                    }).unwrap();
                     console.log("Success:", result);
                 } catch (error) {
                     console.error("Error:", error);

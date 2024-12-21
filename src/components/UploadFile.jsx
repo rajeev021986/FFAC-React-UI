@@ -155,22 +155,22 @@ const UploadFile = ({
   const columns = [
     { field: "documentName", headerName: "Document Name", flex: 1 },
     { field: "number", headerName: "Number", flex: 1 },
-    {
-      field: "modifiedDate",
-      headerName: "Issue Date",
-      flex: 1,
-      renderCell: (params) => (
-        <span>{moment(params.value).format("DD-MM-YYYY")}</span>
-      ),
-    },
-    {
-      field: "expiredDate",
-      headerName: "Expiry Date",
-      flex: 1,
-      renderCell: (params) => (
-        <span>{moment(params.value).format("DD-MM-YYYY")}</span>
-      ),
-    },
+    // {
+    //   field: "modifiedDate",
+    //   headerName: "Issue Date",
+    //   flex: 1,
+    //   renderCell: (params) => (
+    //     <span>{moment(params.value).format("DD-MM-YYYY")}</span>
+    //   ),
+    // },
+    // {
+    //   field: "expiredDate",
+    //   headerName: "Expiry Date",
+    //   flex: 1,
+    //   renderCell: (params) => (
+    //     <span>{moment(params.value).format("DD-MM-YYYY")}</span>
+    //   ),
+    // },
     {
       field: "actions",
       headerName: "Actions",
@@ -312,7 +312,7 @@ const UploadFile = ({
                 value={formData.documentType}
                 onChange={handleInputChange}
               />
-              <TextField
+              {/* <TextField
                 margin="dense"
                 label="Issue Date"
                 name="issueDate"
@@ -321,7 +321,7 @@ const UploadFile = ({
                 value={formData.issueDate}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
-              />
+              /> */}
               <TextField
                 margin="dense"
                 label="Number"
@@ -330,7 +330,7 @@ const UploadFile = ({
                 value={formData.number}
                 onChange={handleInputChange}
               />
-              <TextField
+              {/* <TextField
                 margin="dense"
                 label="Expiry Date"
                 name="expiryDate"
@@ -339,7 +339,7 @@ const UploadFile = ({
                 value={formData.expiryDate}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
-              />
+              /> */}
             </DialogContent>
             <DialogActions>
               <Button onClick={handleDialogClose} color="secondary">

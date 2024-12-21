@@ -83,7 +83,7 @@ export default function BondScreen() {
         }
         if (actionName === "Export") {
             try {
-                const blob = await ApiManager.fetchCustomerDatasExcel(query, payload, "Bond");
+                const blob = await ApiManager.fetchCustomerDatasExcelPort(query, payload, "bond");
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
