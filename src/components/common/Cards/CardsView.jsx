@@ -31,6 +31,19 @@ export default function CardsView({
       pageSize: parseInt(event.target.value, 10),
     });
   };
+  var styles = {
+    pagination: {
+      position: "sticky",
+      bottom: -1,
+      right: 0,
+      backgroundColor: "white.main",
+      borderTop: "1px solid #e0e0e0",
+      width: "100%",
+      height: "50px",
+      marginTop: "auto",
+    },
+  };
+  Boolean(page === "user_management") && (styles = { ...styles, grid: { display: "flex", flexWrap: "wrap", gap: "10px" } })
 
   return (
     <Grid
@@ -47,7 +60,7 @@ export default function CardsView({
         gap: "10px",
       }}
     >
-      <Grid width="100%" >
+      <Grid width="100%" gap={2} sx={styles.grid}>
         {data?.map((item, index) => (
           <CardItem
             key={item.id}
@@ -95,15 +108,4 @@ export default function CardsView({
   );
 }
 
-const styles = {
-  pagination: {
-    position: "sticky",
-    bottom: -1,
-    right: 0,
-    backgroundColor: "white.main",
-    borderTop: "1px solid #e0e0e0",
-    width: "100%",
-    height: "50px",
-    marginTop: "auto",
-  },
-};
+

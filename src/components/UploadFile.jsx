@@ -51,6 +51,7 @@ const UploadFile = ({
   dropdownData,
   sourceType = null,
 }) => {
+  console.log(sourceType,"sourceType")
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [deleteData, setDeleteData] = useState({});
@@ -194,7 +195,7 @@ const UploadFile = ({
                 params.row.id,
                 params.row.source,
                 params.row.sourceId,
-                params.row.documentName
+                params.row.fileName,
               )
             }
           >
@@ -312,7 +313,7 @@ const UploadFile = ({
                 value={formData.documentType}
                 onChange={handleInputChange}
               />
-              {/* <TextField
+              {sourceType == "CUSTOMER" && <TextField
                 margin="dense"
                 label="Issue Date"
                 name="issueDate"
@@ -321,7 +322,7 @@ const UploadFile = ({
                 value={formData.issueDate}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
-              /> */}
+              />}
               <TextField
                 margin="dense"
                 label="Number"
@@ -330,7 +331,7 @@ const UploadFile = ({
                 value={formData.number}
                 onChange={handleInputChange}
               />
-              {/* <TextField
+              {sourceType == "CUSTOMER" && <TextField
                 margin="dense"
                 label="Expiry Date"
                 name="expiryDate"
@@ -339,7 +340,7 @@ const UploadFile = ({
                 value={formData.expiryDate}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
-              /> */}
+              />}
             </DialogContent>
             <DialogActions>
               <Button onClick={handleDialogClose} color="secondary">
