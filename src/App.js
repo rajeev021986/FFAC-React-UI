@@ -71,7 +71,7 @@ function App() {
             />
              <Route
               path="entity/shipper"
-              element={<ShipperComponent page="shipper" />}
+              element={<Component page="shipper" />}
             />
             <Route
               path="entity/shipper/new_shipper"
