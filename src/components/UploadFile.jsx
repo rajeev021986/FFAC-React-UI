@@ -45,7 +45,12 @@ const DropZone = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UploadFile = ({ customer_id, disabled = false, dropdownData, sourceType = null }) => {
+const UploadFile = ({
+  customer_id,
+  disabled = false,
+  dropdownData,
+  sourceType = null,
+}) => {
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [deleteData, setDeleteData] = useState({});

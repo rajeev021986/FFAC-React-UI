@@ -28,6 +28,8 @@ import PortScreen from "./pages/port/PortScreen";
 import PortForm from "./components/screen/code/port/PortForm";
 import BondScreen from "./pages/Bond/Bondscreen";
 import BondForm from "./components/screen/code/bond/BondForm";
+import { VesselVoyage, VesselVoyageScreen } from "./pages/vessel_voyage/VesselVoyageScreen";
+import { VesselVoyageFormScreen } from "./pages/vessel_voyage/VesselVoyageFormScreen";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -108,6 +110,19 @@ function App() {
             <Route path="master/bond" element={<BondScreen />} />
             <Route path="master/port/portAdd" element={<PortForm />} />
             <Route path="master/port/editPort" element={<PortForm />} />
+            <Route
+              path="master/vesselVoyage"
+              element={<VesselVoyageScreen />}
+            />
+            <Route
+              path="master/vesselVoyage/newvoyage"
+              element={<VesselVoyageFormScreen />}
+            />
+            <Route
+              path="master/vesselVoyage/editvoyage"
+              element={<VesselVoyageFormScreen />}
+            />
+
           </Route>
         </Routes>
         <Toaster />

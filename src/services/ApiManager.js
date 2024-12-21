@@ -95,9 +95,9 @@ class ApiManager {
         const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id, type);
         return ApiMethods.put(url);
     }
-    static fetchCustomerDatasExcel = async (params, payload,source) => {
+    static fetchCustomerDatasExcel = async (params, payload, source) => {
         const queryString = new URLSearchParams(params).toString();
-        const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString,source);
+        const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString, source);
         return ApiMethods.postBlob(url, payload);
     }
     static getUserData = async (id) => {
@@ -169,6 +169,17 @@ class ApiManager {
     static updateUserProfileImage = async (payload, id) => {
         const url = ENDPOINTS.UPDATE_USER_PROFILE_IMAGE(id);
         return ApiMethods.put(url, payload);
+    }
+
+    static fetchVoyageDatasExcel = async (params, payload) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = ENDPOINTS.FETCH_VOYAGE_DATA_EXCEL(queryString);
+        return ApiMethods.postBlob(url, payload);
+    }
+
+    static fetchEditVoyage = (id) => {
+        const url = ENDPOINTS.GET_EDIT_VOYAGE(id);
+        return ApiMethods.get(url);
     }
 }
 

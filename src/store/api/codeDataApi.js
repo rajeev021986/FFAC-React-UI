@@ -82,7 +82,7 @@ export const codeDataApi = createApi({
                 };
 
                 return {
-                    url: `/entity-service/v1/file/upload`,
+                    url: `/entity-service/v1/file`,
                     method: "POST",
                     body: formData,
                     headers: headers

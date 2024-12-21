@@ -39,7 +39,9 @@ const ENDPOINTS = {
     USER_PASS_RESET: () => `/admin-service/v1/user/update/password`,
     GET_EDIT_VESSEL: (id) => `/master-service/v1/vessel/${id}`,
     FETCH_VESSEL_DATA_EXCEL: (queryString) => `/master-service/v1/vessel/export?${queryString}`,
-    FETCH_VESSEL_SUGGESTIONS: (inputValue, id) => `/admin-service/v1/data?pattern=${inputValue}&type=${id}`
+    FETCH_VESSEL_SUGGESTIONS: (inputValue, id) => `/admin-service/v1/data?pattern=${inputValue}&type=${id}`,
+    FETCH_VOYAGE_DATA_EXCEL: (queryString) => `/master-service/v1/vessel/voyage/export?${queryString}`,
+    GET_EDIT_VOYAGE: (id) => `/master-service/v1/vessel/voyage/${id}`,
 }
 
 export default ENDPOINTS;

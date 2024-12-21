@@ -176,3 +176,8 @@ export const VESSEL_SORT_OPTIONS = [
   { value: "lname*asc", label: "Line Ascending" },
   { value: "lname*desc", label: "Line Descending" }
 ];
+
+export const VOYAGE_SORT_OPTIONS = [
+  { value: "vvoyage*asc", label: "Voyage Ascending" },
+  { value: "vvoyage*desc", label: "Voyage Descending" }
+]
