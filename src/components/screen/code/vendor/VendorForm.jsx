@@ -115,6 +115,7 @@ export default function VendorForm({ page = "vendor" }) {
         ).required('Vendor Entity Emails are required'),
     });
     const { data: optionsSettingsData } = useGetOptionsSettingsQuery("common_settings");
+    const { data: vendorSettingsData } = useGetOptionsSettingsQuery("vendor_settings");
     const { data: customerSettingsData } = useGetOptionsSettingsQuery("customer_settings");
 
     useEffect(() => {
@@ -252,7 +253,7 @@ export default function VendorForm({ page = "vendor" }) {
                     </TabList>
                 </Box>
                 <TabPanel value={1}>{isLoading ? <Loader /> : <VendorFormInput formik={formik} type={type} disabled={page == "vendorApproval"} optionsSettingsData={optionsSettingsData} />}</TabPanel>
-                <TabPanel value={2}><UploadFile customer_id={id} sourceType="VENDOR" page={page} disabled={page == "vendorApproval"} /></TabPanel>
+                <TabPanel value={2}><UploadFile customer_id={id} sourceType="VENDOR" page={page} disabled={page == "vendorApproval"} dropdownData={vendorSettingsData?.body?.documentType} /></TabPanel>
             </TabContext>
         </Box></>
     );

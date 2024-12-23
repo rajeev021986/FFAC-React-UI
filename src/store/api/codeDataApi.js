@@ -21,7 +21,7 @@ export const codeDataApi = createApi({
                 };
 
 
-                return { url: `entity-service/v1/customer/add`, method: "POST", body: params, headers: headers };
+                return { url: `entity-service/v1/customer`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Code"],
         }),
@@ -31,7 +31,7 @@ export const codeDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `entity-service/v1/customer/update`, method: "PUT", body: params, headers: headers };
+                return { url: `entity-service/v1/customer`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Code"],
         }),
@@ -82,7 +82,7 @@ export const codeDataApi = createApi({
                 };
 
                 return {
-                    url: `/entity-service/v1/file/upload`,
+                    url: `/entity-service/v1/file`,
                     method: "POST",
                     body: formData,
                     headers: headers

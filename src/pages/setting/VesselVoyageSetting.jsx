@@ -1,0 +1,44 @@
+import React, { useEffect, useState } from "react";
+import { Typography, Switch, FormGroup, FormControlLabel, Grid } from "@mui/material";
+import { OutlinedButton } from "../../components/common/Button";
+import { useAddOptonsMutation, useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+import Loader from "../../components/common/Loader/Loader";
+import GlobalDrrpdownSetting from "./GlobalDrrpdownSetting";
+import toast from "react-hot-toast";
+
+const VesselVoyageSetting = () => {
+    const [addOptons, { isloading }] = useAddOptonsMutation();
+    const { data, isLoading, error: geterror, refetch } = useGetOptionsSettingsQuery("vessel_voyage_settings");
+    const [documentType, setDocumentType] = useState([]);
+    const [isLoadingsave, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        setDocumentType(data?.body.documentType || [])
+    }, [data, geterror]);
+
+
+    const Postdata = async () => {
+        const filteredData = { documentType: documentType.filter(item => !item.value.includes('Type the')) }
+        setIsLoading(true);
+        await addOptons({ body: { vessel_voyage_settings: filteredData }, type: "vessel_voyage_settings" }).then((res) => { if (res.error) { toast.error(res.error.data.error) } else { toast.success(`setting Updated Successufully`) } }).catch(() => console.log("filteredData"))
+        refetch();
+        setIsLoading(false);
+    };
+
+    return (
+        <div style={{ padding: "1rem" }}>
+            <Grid xs={12} sx={{ marginBottom: "10px" }} ><Typography variant="h4">Vessel Voyage Setting</Typography></Grid>
+
+            {isLoading ? <Loader /> : <Grid container spacing={2} flexWrap={"wrap"}>
+                <GlobalDrrpdownSetting value={documentType} setvalue={setDocumentType} title="Document Type" />
+            </Grid>}
+            <Grid style={{ width: "100%", display: "flex", flexDirection: "row-reverse", marginTop: "10px" }}>
+                <OutlinedButton color="primary" size="small" onClick={Postdata} >
+                    {isLoadingsave ? "Saving..." : "Save"}
+                </OutlinedButton>
+            </Grid>
+        </div>
+    );
+};
+
+export default VesselVoyageSetting;

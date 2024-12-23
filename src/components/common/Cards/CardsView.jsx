@@ -1,4 +1,4 @@
-import { Box, CircularProgress, TablePagination } from "@mui/material";
+import { Box, CircularProgress, Grid, TablePagination } from "@mui/material";
 import React, { useState } from "react";
 import CardItem from "./CardItem";
 
@@ -31,9 +31,22 @@ export default function CardsView({
       pageSize: parseInt(event.target.value, 10),
     });
   };
+  var styles = {
+    pagination: {
+      position: "sticky",
+      bottom: -1,
+      right: 0,
+      backgroundColor: "white.main",
+      borderTop: "1px solid #e0e0e0",
+      width: "100%",
+      height: "50px",
+      marginTop: "auto",
+    },
+  };
+  Boolean(page === "user_management") && (styles = { ...styles, grid: { display: "flex", flexWrap: "wrap", gap: "10px" } })
 
   return (
-    <Box
+    <Grid
       sx={{
         maxWidth: "100%",
         borderRadius: "5px",
@@ -47,31 +60,33 @@ export default function CardsView({
         gap: "10px",
       }}
     >
-      {data?.map((item, index) => (
-        <CardItem
-          key={item.id}
-          item={item}
-          columns={columns}
-          selectedBox={seletectBox}
-          setSelectedBox={setSelectedBox}
-          uniqueId={item.id}
-          actions={actions}
-          icon={null}
-          page={page}
-        />
-      ))}
-      {loading && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <CircularProgress color="primary" />
-        </Box>
-      )}
+      <Grid width="100%" gap={2} sx={styles.grid}>
+        {data?.map((item, index) => (
+          <CardItem
+            key={item.id}
+            item={item}
+            columns={columns}
+            selectedBox={seletectBox}
+            setSelectedBox={setSelectedBox}
+            uniqueId={item.id}
+            actions={actions}
+            icon={null}
+            page={page}
+          />
+        ))}
+        {loading && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <CircularProgress color="primary" />
+          </Box>
+        )}
+      </Grid>
 
       {data?.length > 0 && (
         <Box sx={styles.pagination}>
@@ -85,23 +100,12 @@ export default function CardsView({
             rowsPerPageOptions={[10, 20, 50, 100]}
             color="primary"
             size="small"
-            sx={{ mergin: "auto", backgroundColor: "white.main"}}
+            sx={{ mergin: "auto", backgroundColor: "white.main" }}
           />
         </Box>
       )}
-    </Box>
+    </Grid>
   );
 }
 
-const styles = {
-  pagination: {
-    position: "sticky",
-    bottom: -1,
-    right: 0,
-    backgroundColor: "white.main",
-    borderTop: "1px solid #e0e0e0",
-    width: "100%",
-    height: "50px",
-    marginTop: "auto",
-  },
-};
+

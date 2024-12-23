@@ -20,12 +20,13 @@ const ENDPOINTS = {
     DOWNLOAD_DOCUMENT: (id, source, sourceId) => `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
     DOCUMENT_DELETE: (id, source, sourceId) => `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
     GET_CUSTOMER_DETAILS: (id) => `/entity-service/v1/customer/${id}`,
-    CUSTOMER_APPROVE_REQUEST: (id, type) => `/entity-service/v1/approval/set/approved/${type}/${id}`,
-    CUSTOMER_REJECT_REQUEST: (id, type) => `/entity-service/v1/approval/set/rejected/${type}/${id}`,
+    CUSTOMER_APPROVE_REQUEST: (id, type) => `/entity-service/v1/approval/approved/${type}/${id}`,
+    CUSTOMER_REJECT_REQUEST: (id, type) => `/entity-service/v1/approval/rejected/${type}/${id}`,
     FETCH_CUSTOMER_DATA_EXCEL: (queryString, source) => `/entity-service/v1/${source}/export?${queryString}`,
+    FETCH_PORT_DATA_EXCEL: (queryString, source) => `/master-service/v1/${source}/export?${queryString}`,
     GET_USER_DATA: (id) => `/admin-service/v1/user/${id}`,
-    ADD_USER_DATA: () => `/admin-service/v1/user/save`,
-    UPDATE_USER_DATA: () => `/admin-service/v1/user/update`,
+    ADD_USER_DATA: () => `/admin-service/v1/user`,
+    UPDATE_USER_DATA: () => `/admin-service/v1/user`,
     DELETE_ROLE: (id) => `/admin-service/v1/role/${id}`,
     REMOVE_ASSIGNED_USER: (params) => `/admin-service/v1/${params}`,
     ADD_ROLE: () => `/admin-service/v1/role`,
@@ -39,7 +40,9 @@ const ENDPOINTS = {
     USER_PASS_RESET: () => `/admin-service/v1/user/update/password`,
     GET_EDIT_VESSEL: (id) => `/master-service/v1/vessel/${id}`,
     FETCH_VESSEL_DATA_EXCEL: (queryString) => `/master-service/v1/vessel/export?${queryString}`,
-    FETCH_VESSEL_SUGGESTIONS: (inputValue, id) => `/admin-service/v1/data?pattern=${inputValue}&type=${id}`
+    FETCH_VESSEL_SUGGESTIONS: (inputValue, id) => `/admin-service/v1/data?pattern=${inputValue}&type=${id}`,
+    FETCH_VOYAGE_DATA_EXCEL: (queryString) => `/master-service/v1/vessel/voyage/export?${queryString}`,
+    GET_EDIT_VOYAGE: (id) => `/master-service/v1/vessel/voyage/${id}`,
 }
 
 export default ENDPOINTS;

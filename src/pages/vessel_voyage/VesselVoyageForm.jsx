@@ -1,30 +1,23 @@
-import { Box, CircularProgress, Grid, Stack } from "@mui/material";
+import { Box, CircularProgress, Grid, Stack, Tab } from "@mui/material";
 import InputBox from "../../components/common/InputBox";
-import {
-  useAddVesselMutation,
-  useFetchVesselQuery,
-  useUpdateVesselMutation,
-} from "../../store/api/vesselDataApi";
-import { useFormik } from "formik";
-import { useLocation, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
-import { VesselValidation } from "../../components/screen/vessel/validation";
-import toast from "react-hot-toast";
 import { OutlinedButton, ThemeButton } from "../../components/common/Button";
-import { VesselMapping } from "./VesselMapping";
-import UploadFile from "../../components/UploadFile";
+import { VesselVoyageMapping } from "./VesselVoyageMapping";
+import { useFormik } from "formik";
+import { VesselVoyageValidation } from "../../components/screen/vessel_voyage/validation";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Tab } from "@mui/material";
-import AutoCompleteInput from "../../components/common/AutoCompletInput";
-import ApiManager from "../../services/ApiManager";
+import UploadFile from "../../components/UploadFile";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import {
+  useAddVoyageMutation,
+  useUpdateVoyageMutation,
+} from "../../store/api/vesselVoyageDataApi";
 
-export function VesselForm({ initialValues, type }) {
-  const location = useLocation();
-  const nav = useNavigate();
+export function VesselVoyageForm({ initialValues, type }) {
   const disabled = false;
-  const [addVessel, { isLoading }] = useAddVesselMutation();
-  const [updateVessel] = useUpdateVesselMutation();
+  const nav = useNavigate();
 
   const [value, setValue] = React.useState("1");
 
@@ -32,26 +25,23 @@ export function VesselForm({ initialValues, type }) {
     setValue(newValue);
   };
 
+  const [addVoyage, { isLoading }] = useAddVoyageMutation();
+  const [updateVoyage] = useUpdateVoyageMutation();
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
-    validationSchema: VesselValidation(),
+    validationSchema: VesselVoyageValidation(),
     onSubmit: async (values) => {
       if (type == "copy" || type == "add") {
-        let line = values.vesselLineEntities.map((item) =>
-          item?.new ? { ...item, id: null, new: false } : item
-        );
-
         try {
           delete values.id;
-          let response = await addVessel({
+          let response = await addVoyage({
             ...values,
-            vesselLineEntities: line,
           }).unwrap();
-
           if (response.code == "SUCCESS") {
             toast.success(response.message);
-            nav("/app/master/vessel");
+            nav("/app/master/vesselVoyage");
           } else {
             toast.error(response.message);
           }
@@ -61,17 +51,13 @@ export function VesselForm({ initialValues, type }) {
         }
       } else {
         try {
-          let line = values.vesselLineEntities.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
-          let response = await updateVessel({
+          let response = await updateVoyage({
             ...values,
-            vesselLineEntities: line,
           }).unwrap();
 
           if (response.code == "SUCCESS") {
             toast.success(response.message);
-            nav("/app/master/vessel");
+            nav("/app/master/vesselVoyage");
           } else {
             toast.error(response.message);
           }
@@ -83,67 +69,21 @@ export function VesselForm({ initialValues, type }) {
     },
   });
 
-  const fetchSuggestions = async (inputValue, inputId) => {
-    inputId =
-      inputId === "vesselName"
-        ? "VESSEL"
-        : inputId === "lineName"
-          ? "LINE"
-          : "SHIPPER";
-    if (!inputValue) return [];
+  const { data: voyageSettingsData } = useGetOptionsSettingsQuery(
+    "vessel_voyage_settings"
+  );
 
-    const response = await ApiManager.fetchVesselSuggestions(
-      inputValue,
-      inputId
-    );
-    const data = await response.body;
-
-    return data || [];
-  };
-  const { data: vesselSettingsData } = useGetOptionsSettingsQuery("vessel_settings");
   return (
     <>
       {type == "copy" || type == "add" ? (
         <>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <AutoCompleteInput
-                label="Vessel Name"
-                id="vesselName"
-                suggestionName="vessel_name"
-                value={formik.values.vesselName}
-                error={formik.errors.vesselName}
-                onChange={formik.handleChange}
-                fetchSuggestions={fetchSuggestions}
-              ></AutoCompleteInput>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <AutoCompleteInput
-                label="Line Name"
-                id="lineName"
-                value={formik.values.lineName}
-                error={formik.errors.lineName}
-                onChange={formik.handleChange}
-                suggestionName="line_name"
-                fetchSuggestions={fetchSuggestions}
-              ></AutoCompleteInput>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
-                label="Vessel Owner"
-                id="vesselOwner"
-                value={formik.values.vesselOwner}
-                error={formik.errors.vesselOwner}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Vessel Master"
-                id="vesselMaster"
-                value={formik.values.vesselMaster}
-                error={formik.errors.vesselMaster}
+                label="Vessel Voyage"
+                id="vesselVoyage"
+                value={formik.values.vesselVoyage}
+                error={formik.errors.vesselVoyage}
                 onChange={formik.handleChange}
               />
             </Grid>
@@ -153,6 +93,45 @@ export function VesselForm({ initialValues, type }) {
                 id="status"
                 value={formik.values.status}
                 error={formik.errors.status}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Voyage InBound"
+                id="voyageInBound"
+                value={formik.values.voyageInBound}
+                error={formik.errors.voyageInBound}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Voyage OutBound"
+                id="voyageOutBound"
+                value={formik.values.voyageOutBound}
+                error={formik.errors.voyageOutBound}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Gate Status"
+                id="gateStatus"
+                value={formik.values.gateStatus}
+                error={formik.errors.gateStatus}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Post Operator"
+                id="portOperator"
+                value={formik.values.portOperator}
+                error={formik.errors.portOperator}
                 onChange={formik.handleChange}
               />
             </Grid>
@@ -166,21 +145,6 @@ export function VesselForm({ initialValues, type }) {
               />
             </Grid>
 
-            <Grid item xs={12}>
-              <Box
-                sx={{
-                  borderBottom: 1,
-                  borderColor: "divider",
-                  marginBottom: 2,
-                }}
-              >
-                <VesselMapping
-                  disabled={disabled}
-                  formik={formik}
-                  fetchSuggestions={fetchSuggestions}
-                />
-              </Box>
-            </Grid>
             <Grid item xs={12}>
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
@@ -208,7 +172,7 @@ export function VesselForm({ initialValues, type }) {
                   onChange={handleChange}
                   aria-label="lab API tabs example"
                 >
-                  <Tab label="Edit Vessel" value="1" />
+                  <Tab label="Edit Voyage" value="1" />
                   <Tab label="Upload Documents" value="2" />
                 </TabList>
               </Box>
@@ -216,52 +180,60 @@ export function VesselForm({ initialValues, type }) {
                 {" "}
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <AutoCompleteInput
-                      label="Vessel Name"
-                      id="vesselName"
-                      suggestionName="vessel_name"
-                      value={formik.values.vesselName}
-                      error={formik.errors.vesselName}
-                      onChange={formik.handleChange}
-                      fetchSuggestions={fetchSuggestions}
-                    ></AutoCompleteInput>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <AutoCompleteInput
-                      label="Line Name"
-                      id="lineName"
-                      value={formik.values.lineName}
-                      error={formik.errors.lineName}
-                      onChange={formik.handleChange}
-                      suggestionName="line_name"
-                      fetchSuggestions={fetchSuggestions}
-                    ></AutoCompleteInput>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
-                      label="Vessel Owner"
-                      id="vesselOwner"
-                      value={formik.values.vesselOwner}
-                      error={formik.errors.vesselOwner}
+                      label="Vessel Voyage"
+                      id="vesselVoyage"
+                      value={formik.values.vesselVoyage}
+                      error={formik.errors.vesselVoyage}
                       onChange={formik.handleChange}
                     />
                   </Grid>
 
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
-                      label="Vessel Master"
-                      id="vesselMaster"
-                      value={formik.values.vesselMaster}
-                      error={formik.errors.vesselMaster}
+                      label="Status"
+                      id="status"
+                      value={formik.values.status}
+                      error={formik.errors.status}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Voyage InBound"
+                      id="voyageInBound"
+                      value={formik.values.voyageInBound}
+                      error={formik.errors.voyageInBound}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Voyage OutBound"
+                      id="voyageOutBound"
+                      value={formik.values.voyageOutBound}
+                      error={formik.errors.voyageOutBound}
                       onChange={formik.handleChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
-                      label="Status"
-                      id="status"
-                      value={formik.values.status}
-                      error={formik.errors.status}
+                      label="Gate Status"
+                      id="gateStatus"
+                      value={formik.values.gateStatus}
+                      error={formik.errors.gateStatus}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Post Operator"
+                      id="portOperator"
+                      value={formik.values.portOperator}
+                      error={formik.errors.portOperator}
                       onChange={formik.handleChange}
                     />
                   </Grid>
@@ -275,21 +247,6 @@ export function VesselForm({ initialValues, type }) {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <Box
-                      sx={{
-                        borderBottom: 1,
-                        borderColor: "divider",
-                        marginBottom: 2,
-                      }}
-                    >
-                      <VesselMapping
-                        disabled={disabled}
-                        formik={formik}
-                        fetchSuggestions={fetchSuggestions}
-                      />
-                    </Box>
-                  </Grid>
                   <Grid item xs={12}>
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
@@ -314,8 +271,8 @@ export function VesselForm({ initialValues, type }) {
                 <UploadFile
                   customer_id={initialValues.id}
                   disabled={disabled}
-                  sourceType="VESSEL"
-                  dropdownData={vesselSettingsData?.body?.documentType}
+                  sourceType="VOYAGE"
+                  dropdownData={voyageSettingsData?.body?.documentType}
                 />
               </TabPanel>
             </TabContext>

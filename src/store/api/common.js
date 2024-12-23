@@ -9,7 +9,7 @@ export const auditDataApi = createApi({
         fetchAudit: builder.query({
             query: (params) => {
                 // const queryString = new URLSearchParams(params).toString();
-                return { url: `admin-service/user/audit/${params.userId}`, method: "GET", headers: getAppHeaders() };
+                return { url: `admin-service/v1/user/audit/${params.userId}`, method: "GET", headers: getAppHeaders() };
             },
             providesTags: ["Audit"],
         }),

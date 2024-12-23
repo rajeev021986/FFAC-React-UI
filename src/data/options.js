@@ -13,6 +13,10 @@ export const USER_STATUS_OPTIONS = [
   { value: UserStatusEnum.ACTIVE, label: "Active" },
   { value: UserStatusEnum.INACTIVE, label: "Inactive" },
 ];
+export const BOND_SORT_OPTIONS = [
+  { value: UserStatusEnum.ACTIVE, label: "Active" },
+  { value: UserStatusEnum.INACTIVE, label: "Inactive" },
+];
 
 
 export const PAYMENTTYPE_OPTIONS = [
@@ -136,8 +140,16 @@ export const VENDOR_SORT_OPTIONS = [
   { value: "vendorName*desc", label: "Vendor Descending" },
   { value: "city*asc", label: "City Ascending" },
   { value: "city*desc", label: "City Descending" },
-  { value: "country*asc", label: "Country Ascending" },
-  { value: "country*desc", label: "Country Descending" },
+  { value: "countryName*asc", label: "Country Ascending" },
+  { value: "countryName*desc", label: "Country Descending" },
+];
+export const PORT_SORT_OPTIONS = [
+  { value: "portName*asc", label: "Port Ascending" },
+  { value: "portName*desc", label: "Port Descending" },
+  { value: "region*asc", label: "Region Ascending" },
+  { value: "region*desc", label: "Region Descending" },
+  { value: "countryName*asc", label: "Country Ascending" },
+  { value: "countryName*desc", label: "Country Descending" },
 ];
 export const PARTY_SORT_OPTIONS = [
   { value: "acode*asc", label: "Code Ascending" },
@@ -164,3 +176,8 @@ export const VESSEL_SORT_OPTIONS = [
   { value: "lname*asc", label: "Line Ascending" },
   { value: "lname*desc", label: "Line Descending" }
 ];
+
+export const VOYAGE_SORT_OPTIONS = [
+  { value: "vvoyage*asc", label: "Voyage Ascending" },
+  { value: "vvoyage*desc", label: "Voyage Descending" }
+]
