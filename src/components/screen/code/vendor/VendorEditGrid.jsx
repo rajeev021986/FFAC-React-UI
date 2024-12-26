@@ -134,7 +134,7 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                                         (entity) => entity.id === params.id
                                     );
                                     // setTimeout(() => {
-                                    formik.setValues({ ...formik.values, vendorEntityTariffs: formik.values.vendorEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, chargeName: newValue } : entity) });
+                                    formik.setValues({ ...formik.values, vendorEntityTariffs: formik.values.vendorEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, currency: newValue } : entity) });
                                     // }, 1500);
                                 }}
                                 fetchSuggestions={fetchSuggestions}

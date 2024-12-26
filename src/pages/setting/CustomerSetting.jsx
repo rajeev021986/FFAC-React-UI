@@ -12,6 +12,7 @@ const CustomerSetting = () => {
     const [approvalRequest, setApprovalRequest] = useState(false);
     const [unitType, setUnitType] = useState([]);
     const [creditDays, setCreditDays] = useState([]);
+    const [designation, setDesignation] = useState([]);
     const [documentType, setDocumentType] = useState([]);
     const [isLoadingsave, setIsLoading] = useState(false);
 
@@ -20,14 +21,15 @@ const CustomerSetting = () => {
         setCreditDays(data?.body.creditDays)
         setApprovalRequest(data?.body.approvalRequest)
         setDocumentType(data?.body.documentType || [])
-        console.log(data,"data")
+        setDesignation(data?.body.designation || [])
+        console.log(data, "data")
     }, [data, geterror]);
 
 
     const Postdata = async () => {
-        const filteredData = { approvalRequest, unitType:unitType.filter(item=>!item.value.includes('Type the')), creditDays:creditDays.filter(item=>!item.value.includes('Type the')), documentType:documentType.filter(item=>!item.value.includes('Type the')) }
+        const filteredData = { approvalRequest, unitType: unitType.filter(item => !item.value.includes('Type the')), creditDays: creditDays.filter(item => !item.value.includes('Type the')), documentType: documentType.filter(item => !item.value.includes('Type the')), designation: designation.filter(item => !item.value.includes('Type the')) }
         setIsLoading(true);
-        await addOptons({ body: { customer_settings: filteredData }, type: "customer_setting" }).then((res) => { if(res.error){toast.error(res.error.data.error)}else{toast.success(`setting Updated Successufully`)}}).catch(() => console.log("filteredData"))
+        await addOptons({ body: { customer_settings: filteredData }, type: "customer_setting" }).then((res) => { if (res.error) { toast.error(res.error.data.error) } else { toast.success(`setting Updated Successufully`) } }).catch(() => console.log("filteredData"))
         refetch();
         setIsLoading(false);
     };
@@ -53,6 +55,7 @@ const CustomerSetting = () => {
                 <GlobalDrrpdownSetting value={unitType} setvalue={setUnitType} title="Unit Type" />
                 <GlobalDrrpdownSetting value={creditDays} setvalue={setCreditDays} title="Credit Days" />
                 <GlobalDrrpdownSetting value={documentType} setvalue={setDocumentType} title="Document Type" />
+                <GlobalDrrpdownSetting value={designation} setvalue={setDesignation} title="Designation" />
             </Grid>}
             <Grid style={{ width: "100%", display: "flex", flexDirection: "row-reverse", marginTop: "10px" }}>
                 <OutlinedButton color="primary" size="small" onClick={Postdata} >
