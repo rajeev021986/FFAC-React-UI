@@ -14,11 +14,8 @@ import ApiManager from "../../../../services/ApiManager";
 export default function VendorEditGrid({ formik, disabled, vendorSettingsData }) {
     const fetchSuggestions = async (inputValue, inputId) => {
         inputId =
-            inputId === "vesselName"
-                ? "VESSEL"
-                : inputId === "lineName"
-                    ? "LINE"
-                    : "SHIPPER";
+            inputId === "chargeName"
+                ? "CHARGE" : "CURRENCY"
         if (!inputValue) return [];
 
         const response = await ApiManager.fetchVesselSuggestions(
@@ -74,14 +71,12 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                 {
                     field: "chargeName",
                     headerName: "chargeName",
-                    flex: 1,
-                    editable: !disabled,
-                    renderEditCell: (params) => {
-                        console.log("Edit Cell Params:", params.rowIndex);
+                    flex: 2,
+                    renderCell: (params) => {
                         return (
                             <AutoCompleteInput
-                                id="vesselName"
-                                suggestionName="vessel_name"
+                                id="chargeName"
+                                suggestionName="charge_name"
                                 value={params.value}
                                 error={
                                     formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeName
@@ -90,10 +85,9 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                                     const rowIndex = formik.values.vendorEntityTariffs.findIndex(
                                         (entity) => entity.id === params.id
                                     );
-                                    setTimeout(() => {
-                                        formik.setValues({ ...formik.values, vendorEntityTariffs: formik.values.vendorEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, chargeName: newValue } : entity) });
-                                    }, 1500);
-                                    // console.log("Row Index:", rowIndex, newValue, { ...formik.values, vendorEntityTariffs: formik.values.vendorEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, chargeName: newValue } : entity) });
+                                    // setTimeout(() => {
+                                    formik.setValues({ ...formik.values, vendorEntityTariffs: formik.values.vendorEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, chargeName: newValue } : entity) });
+                                    // }, 1500);
                                 }}
                                 fetchSuggestions={fetchSuggestions}
                             />
@@ -126,7 +120,28 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                     field: "currency",
                     headerName: "Currency",
                     flex: 1,
-                    editable: !disabled,
+                    renderCell: (params) => {
+                        return (
+                            <AutoCompleteInput
+                                id="currency"
+                                suggestionName="currency_name"
+                                value={params.value}
+                                error={
+                                    formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeName
+                                }
+                                onChange={(newValue) => {
+                                    const rowIndex = formik.values.vendorEntityTariffs.findIndex(
+                                        (entity) => entity.id === params.id
+                                    );
+                                    // setTimeout(() => {
+                                    formik.setValues({ ...formik.values, vendorEntityTariffs: formik.values.vendorEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, chargeName: newValue } : entity) });
+                                    // }, 1500);
+                                }}
+                                fetchSuggestions={fetchSuggestions}
+                            />
+                        );
+
+                    },
                 }, {
                     field: "unitRate",
                     headerName: "UnitRate",
