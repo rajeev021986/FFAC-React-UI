@@ -62,7 +62,7 @@ export const VENDOR_COLUMNS = [
         }
     },
     {
-        field: 'lastmodifieddate',
+        field: 'modifiedDate',
         headerName: 'Modified Date',
         width: 130,
         headerAlign: 'center',
