@@ -51,31 +51,32 @@ export default function CardItem({
     ) : (
       <Box sx={styles.root_item}>
         {/* Checkbox at the start */}
-        {page == "customer" && (
-          <Box
-            sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
-          >
-            <Checkbox
-              checked={selectedBox == uniqueId}
-              onChange={handleCheckboxChange}
-              color="primary"
-            />
-          </Box>
+        {(page === "customer" || page==="shipper" || page=== "consignee") && ( 
+           <Box
+           sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
+           >
+           <Checkbox 
+          checked={selectedBox == uniqueId}
+          onChange={handleCheckboxChange}
+          color="primary"
+           />
+          </Box> 
+
         )}
 
         {/* Icon and details */}
-        <Box
-          sx={{
-            ...styles.card_left_box,
-            marginRight: "17px",
-            padding: 0,
-            width: "50px",
-          }}
+        <Box 
+        sx={{
+        ...styles.card_left_box,
+        marginRight: "7px",
+        padding: 0,
+        width: "20px",
+        }}
         >
-          <Box sx={{ ...styles.icon, margin: 0, padding: 0 }} elevation={1}>
+          {/* <Box sx={{ ...styles.icon, margin: 0, padding: 0 }} elevation={1}>
             {icon ? icon : <VerifiedUserOutlined color="primary" />}
-          </Box>
-        </Box>
+          </Box>  */}
+        </Box> 
 
         <Grid container spacing={1} sx={styles.card_right_box}>
           {columns.map((column, index) => (

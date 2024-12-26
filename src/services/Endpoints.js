@@ -16,10 +16,15 @@ const ENDPOINTS = {
     GET_CITY_OPTIONS: (name, search) => `/getAutoComplete?name=${name}&search=${search}`,
     GET_COMMON_OPTIONS: (name, search) => `/getAutoComplete?name=${name}&search=${search}`,
     GET_CUSTOMER_AUDIT: (id) => `/entity-service/v1/customer/audit/${id}`,
+    GET_SHIPPER_AUDIT: (id) => `/entity-service/shipper/audit/${id}`,
+    GET_CONSIGNEE_AUDIT: (id) => `/entity-service/consignee/audit/${id}`,
     GET_CUSTOMER_DOCUMENT_FILE: (source, id) => `/entity-service/v1/file?source=${source}&sourceId=${id}`,
+    GET_SHIPPER_DOCUMENT_FILE: (source, id) => `/entity-service/file/get?source=${source}&sourceId=${id}`,
     DOWNLOAD_DOCUMENT: (id, source, sourceId) => `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
     DOCUMENT_DELETE: (id, source, sourceId) => `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
     GET_CUSTOMER_DETAILS: (id) => `/entity-service/v1/customer/${id}`,
+    GET_SHIPPER_DETAILS:(id)=>`/entity-service/shipper/get/${id}`,
+    GET_CONSIGNEE_DETAILS:(id)=>`/entity-service/consignee/get/${id}`,
     CUSTOMER_APPROVE_REQUEST: (id, type) => `/entity-service/v1/approval/set/approved/${type}/${id}`,
     CUSTOMER_REJECT_REQUEST: (id, type) => `/entity-service/v1/approval/set/rejected/${type}/${id}`,
     FETCH_CUSTOMER_DATA_EXCEL: (queryString, source) => `/entity-service/v1/${source}/export?${queryString}`,
@@ -39,7 +44,8 @@ const ENDPOINTS = {
     USER_PASS_RESET: () => `/admin-service/v1/user/update/password`,
     GET_EDIT_VESSEL: (id) => `/master-service/v1/vessel/${id}`,
     FETCH_VESSEL_DATA_EXCEL: (queryString) => `/master-service/v1/vessel/export?${queryString}`,
-    FETCH_VESSEL_SUGGESTIONS: (inputValue, id) => `/admin-service/v1/data?pattern=${inputValue}&type=${id}`
+    FETCH_VESSEL_SUGGESTIONS: (inputValue, id) => `/admin-service/v1/data?pattern=${inputValue}&type=${id}`,
+  
 }
 
 export default ENDPOINTS;

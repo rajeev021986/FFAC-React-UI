@@ -5,6 +5,8 @@ import { serviceInvoiceDataApi } from "./api/serviceInvoiceApi";
 import { expenseCodeDataApi } from "./api/expenseCodeDataApi";
 import { destinationDataApi } from "./api/destinationDataApi";
 import { vendorDataApi } from "./api/vendorDataApi";
+import { shipperDataApi } from "./api/shipperDataApi";
+import {consigneeDataApi } from "./api/consigneeDataApi"; 
 import { auditDataApi } from "./api/common";
 import { dashboardDataApi } from "./api/dashbaordDataApi";
 import { settingsApi } from "./api/settingsApi";
@@ -17,6 +19,8 @@ import serviceInvoiceReducer from "./freatures/serviceInvoiceSlice";
 import expenseCodeReducer from "./freatures/expenseCodeSlice";
 import destinationReducer from "./freatures/destinationSlice";
 import vendorReducer from "./freatures/vendorSlice";
+import shipperReducer from "./freatures/shipperSlice";
+import consigneeReducer from "./freatures/consigneeSlice";
 import sprblDetailsReducer from "./freatures/sprblDataSlice";
 import PoOrderListSlice from "./freatures/PoOrderListSlice";
 import DsoOrderListSlice from "./freatures/DsoOrderListSlice";
@@ -40,6 +44,8 @@ const store = configureStore({
         [expenseCodeDataApi.reducerPath]: expenseCodeDataApi.reducer,
         [destinationDataApi.reducerPath]: destinationDataApi.reducer,
         [vendorDataApi.reducerPath]: vendorDataApi.reducer,
+        [shipperDataApi.reducerPath] : shipperDataApi.reducer ,
+        [consigneeDataApi.reducerPath] : consigneeDataApi.reducer , 
         [auditDataApi.reducerPath]: auditDataApi.reducer,
         [dashboardDataApi.reducerPath]: dashboardDataApi.reducer,
         [settingsApi.reducerPath]: settingsApi.reducer,
@@ -51,6 +57,8 @@ const store = configureStore({
         userManagement: userManagementReducer,
         auth: authReducer,
         packingList: packingListReducer,
+        shipper : shipperReducer,
+        consignee : consigneeReducer ,
         serviceInvoice: serviceInvoiceReducer,
         expenseCode: expenseCodeReducer,
         destination: destinationReducer,
@@ -77,6 +85,8 @@ const store = configureStore({
             expenseCodeDataApi.middleware,
             destinationDataApi.middleware,
             vendorDataApi.middleware,
+            shipperDataApi.middleware,
+            consigneeDataApi.middleware,
             auditDataApi.middleware,
             dashboardDataApi.middleware,
             settingsApi.middleware,

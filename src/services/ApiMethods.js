@@ -1,4 +1,8 @@
+import ENDPOINTS from "./Endpoints";
+import {useLocation} from "react-router-dom";
+
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+export const API_BASE_URL1= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const getAppHeaders = () => {
   return {
@@ -10,8 +14,22 @@ export const getAppHeaders = () => {
 };
 
 class ApiMethods {
+ 
+  
   static apiRequest = async (method, url, body = {}, isBlob = false) => {
-    url = API_BASE_URL + url;
+    const searchParams = new URLSearchParams(window.location.search);
+    const searchTerm = searchParams.get('source');
+    console.log('searchTerm', searchTerm);
+  
+  if(url.includes('/shipper'||searchTerm=='SHIPPER')) {
+    url=API_BASE_URL1 + url;
+  }
+  else{
+    
+   url = API_BASE_URL + url;
+  }
+    
+   
     const options = {
       method,
       headers: getAppHeaders(),

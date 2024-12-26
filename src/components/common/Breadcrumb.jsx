@@ -18,6 +18,8 @@ const Routes = {
   expense_code: { label: "Expense Code", disabled: false },
   destination: { label: "Destination", disabled: false },
   vendor: { label: "Vendor", disabled: false },
+  new_shipper: { label: "Create Shipper", disabled: false },
+  new_consignee: { label: "Create Consignee", disabled: false},
   bol: { label: "BOL", disabled: false },
   po_orders: { label: "PO Orders", disabled: false },
   dso_orders: { label: "DSO Orders", disabled: false },
@@ -31,7 +33,10 @@ const Routes = {
   code: { label: "Code", disabled: true },
   customer: { label: "Customer", disabled: false },
   vessel: { label: "Vessel", disabled: false },
+  consignee:{label: "Consignee", disabled: false},
   editvessel: { label: "Edit Vessel", disabled: false },
+  editshipper:{ label: "Edit Shipper", disabled: false },
+  editconsignee: { label: "Edit Consignee", disabled: false },
   newvessel: { label: "Create Vessel", disabled: false },
   party: { label: "Party", disabled: false },
   agent: { label: "Agent", disabled: false },
@@ -39,6 +44,7 @@ const Routes = {
   vendorApproval: { label: "Vendor Approval", disabled: false },
   editVendorApprove: { label: "Vendor Approval Form", disabled: false },
   editVendor: { label: "Edit Vendor", disabled: false },
+  shipper:{ label: "Shipper", disabled: false},
   users: { label: "Users", disabled: false },
 };
 
