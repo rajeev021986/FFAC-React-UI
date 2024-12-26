@@ -294,7 +294,7 @@ export default function VendorFormInput({ formik, type, optionsSettingsData, ven
                 <Grid item xs={12}>
                     <VendorEditGrid formik={formik} disabled={disable} vendorSettingsData={vendorSettingsData} />
                 </Grid>
-                <Grid item xs={12} >
+                {type !== "new" && type !== "copy" && <Grid item xs={12} >
                     <TextField
                         label="Reject Remarks"
                         name="rejectRemarks"
@@ -307,7 +307,7 @@ export default function VendorFormInput({ formik, type, optionsSettingsData, ven
                         variant="outlined"
                         fullWidth
                     />
-                </Grid>
+                </Grid>}
                 {!disable ? (
                     <Grid item xs={12}>
                         <Stack

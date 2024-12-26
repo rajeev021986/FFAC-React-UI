@@ -14,12 +14,12 @@ function TimelineComponent({ data }) {
 
     return (
         <>
-            <div style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
+            <div style={{ display: "flex", flexDirection: "column", padding: "10px", width: "100%" }}>
                 {data?.length > 0 ? (
                     <Timeline>
                         {data?.map((entry, index) => (
-                            <div style={{ display: "flex" }} key={index}>
-                                <TimelineItem position="left" sx={{width:"30%"}}>
+                            <div style={{ display: "flex"}} key={index}>
+                                <TimelineItem position="left" sx={{ width: "40%" }}>
                                     <TimelineSeparator>
                                         <TimelineDot sx={{ backgroundColor: "primary.main" }} />
                                         {index < data.length - 1 && (
@@ -37,8 +37,8 @@ function TimelineComponent({ data }) {
                                         </Typography>
                                     </TimelineContent>
                                 </TimelineItem>
-                                <div style={{  marginTop: "10px",width:"70%" }}>
-                                    <Accordion sx={{width:"100%"}}>
+                                <div style={{ marginTop: "10px", width: "70%" }}>
+                                    <Accordion sx={{ width: "100%" }}>
                                         <AccordionSummary>
                                             <Typography sx={{ flexGrow: 1, color: 'primary.main' }}>
                                                 {entry.label}
