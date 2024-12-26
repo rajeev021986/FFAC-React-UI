@@ -40,7 +40,8 @@ function AutoCompleteInput({
   };
 
   const handleSelectionChange = (event, newValue) => {
-    onChange({ target: { name: id, value: newValue } });
+    // onChange({ target: { name: id, value: newValue } });
+    onChange(newValue);
   };
 
   return (

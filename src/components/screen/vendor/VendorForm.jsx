@@ -52,7 +52,6 @@ export default function VendorForm({ modal, setModal }) {
                 ...values,
               }).unwrap()
             : await addVendor(values).unwrap();
-        // handle errors and success with toast
         if (response.status === "success") {
           toast.success(response.message);
           setModal({ open: false, type: "", data: {} });

@@ -91,9 +91,10 @@ class ApiManager {
         const url = ENDPOINTS.CUSTOMER_APPROVE_REQUEST(id, type);
         return ApiMethods.put(url);
     }
-    static rejectCustomerApprove = async (id, type) => {
+    static rejectCustomerApprove = async (id, type, remarkMessage) => {
+        let payload = { remarks: remarkMessage }
         const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id, type);
-        return ApiMethods.put(url);
+        return ApiMethods.put(url, payload);
     }
     static fetchCustomerDatasExcel = async (params, payload, source) => {
         const queryString = new URLSearchParams(params).toString();

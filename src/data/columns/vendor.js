@@ -3,8 +3,8 @@ import { appDateFormat } from "../../components/utils/date"
 
 export const VENDOR_COLUMNS = [
     {
-        field: 'id',
-        headerName: 'Party Id',
+        field: 'vendorName',
+        headerName: 'Vendor Name',
         width: 130,
         headerAlign: 'center',
         align: 'center'
@@ -17,53 +17,49 @@ export const VENDOR_COLUMNS = [
         align: 'center'
     },
     {
-        field: 'vendorName',
-        headerName: 'Name',
+        field: 'type',
+        headerName: 'Type',
         width: 130,
         headerAlign: 'center',
         align: 'center'
     },
     {
-        field: 'address',
-        headerName: 'Address',
+        field: 'tinNo',
+        headerName: 'TIN No',
         width: 130,
         headerAlign: 'center',
         align: 'center'
     },
     {
-        field: 'bankName',
-        headerName: 'Bank Name',
+        field: 'vrnNo',
+        headerName: 'VRN No',
         width: 130,
         headerAlign: 'center',
         align: 'center'
     },
     {
-        field: 'telephone1',
-        headerName: 'Contact Number',
+        field: 'modifiedBy',
+        headerName: 'Modified By',
         width: 130,
         headerAlign: 'center',
         align: 'center'
     },
     {
-        field: 'pinNo',
-        headerName: 'Pin Code',
+        field: 'createdBy',
+        headerName: 'Created By',
         width: 130,
         headerAlign: 'center',
         align: 'center'
     },
     {
-        field: 'city',
-        headerName: 'City',
+        field: 'createdDate',
+        headerName: 'Created Date',
         width: 130,
         headerAlign: 'center',
-        align: 'center'
-    },
-    {
-        field: 'country',
-        headerName: 'Country',
-        width: 130,
-        headerAlign: 'center',
-        align: 'center'
+        align: 'center',
+        renderCell: (params) => {
+            return <div>{appDateFormat(params.value)}</div>
+        }
     },
     {
         field: 'lastmodifieddate',

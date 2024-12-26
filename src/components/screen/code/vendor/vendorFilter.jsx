@@ -12,9 +12,9 @@ export default function VendorFilterForm() {
 
     const formik = useFormik({
         initialValues: {
-            city: inputs.city || "",
+            tinNo: inputs.tinNo || "",
             vendorName: inputs.vendorName || "",
-            country: inputs.country || "",
+            vrnNo: inputs.country || "",
         },
         onSubmit: (values) => {
             dispatch(updateVendorInput(values));
@@ -24,9 +24,9 @@ export default function VendorFilterForm() {
         formik.resetForm();
         dispatch(
             updateVendorInput({
-                city: "",
+                tinNo: "",
                 vendorName: "",
-                country: "",
+                vrnNo: "",
             })
         );
     };
@@ -48,15 +48,15 @@ export default function VendorFilterForm() {
                         onChange={formik.handleChange}
                     />
                     <InputBox
-                        label="City"
-                        id="city"
-                        value={formik.values.city}
+                        label="Tin No"
+                        id="tinNo"
+                        value={formik.values.tinNo}
                         onChange={formik.handleChange}
                     />
                     <InputBox
-                        label="Country"
-                        id="country"
-                        value={formik.values.country}
+                        label="Vrn No"
+                        id="vrnNo"
+                        value={formik.values.vrnNo}
                         onChange={formik.handleChange}
                     />
                 </Stack>

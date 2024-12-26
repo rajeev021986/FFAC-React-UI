@@ -10,15 +10,29 @@ const VendorSetting = () => {
     const [addOptons, { isloading }] = useAddOptonsMutation();
     const { data, isLoading, error: geterror, refetch } = useGetOptionsSettingsQuery("vendor_settings");
     const [documentType, setDocumentType] = useState([]);
+    const [vendorType, setVendorType] = useState([]);
+    const [tarifType, setTarifType] = useState([]);
+    const [unitType, setUnitType] = useState([]);
+    const [container, setContainer] = useState([]);
     const [isLoadingsave, setIsLoading] = useState(false);
 
     useEffect(() => {
         setDocumentType(data?.body.documentType || [])
+        setVendorType(data?.body.vendorType || [])
+        setTarifType(data?.body.tarifType || [])
+        setUnitType(data?.body.unitType || [])
+        setContainer(data?.body.container || [])
     }, [data, geterror]);
 
 
     const Postdata = async () => {
-        const filteredData = { documentType: documentType.filter(item => !item.value.includes('Type the')) }
+        const filteredData = {
+            documentType: documentType.filter(item => !item.value.includes('Type the')),
+            tarifType: tarifType.filter(item => !item.value.includes('Type the')),
+            unitType: unitType.filter(item => !item.value.includes('Type the')),
+            container: container.filter(item => !item.value.includes('Type the')),
+            vendorType: vendorType.filter(item => !item.value.includes('Type the')),
+        }
         setIsLoading(true);
         await addOptons({ body: { vendor_settings: filteredData }, type: "vendor_settings" }).then((res) => { if (res.error) { toast.error(res.error.data.error) } else { toast.success(`setting Updated Successufully`) } }).catch(() => console.log("filteredData"))
         refetch();
@@ -31,6 +45,10 @@ const VendorSetting = () => {
 
             {isLoading ? <Loader /> : <Grid container spacing={2} flexWrap={"wrap"}>
                 <GlobalDrrpdownSetting value={documentType} setvalue={setDocumentType} title="Document Type" />
+                <GlobalDrrpdownSetting value={tarifType} setvalue={setTarifType} title="Tarif Type" />
+                <GlobalDrrpdownSetting value={unitType} setvalue={setUnitType} title="Unit Type" />
+                <GlobalDrrpdownSetting value={container} setvalue={setContainer} title="Container" />
+                <GlobalDrrpdownSetting value={vendorType} setvalue={setVendorType} title="Vendor Type" />
             </Grid>}
             <Grid style={{ width: "100%", display: "flex", flexDirection: "row-reverse", marginTop: "10px" }}>
                 <OutlinedButton color="primary" size="small" onClick={Postdata} >

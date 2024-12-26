@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
-import { CloudDownload, Delete } from "@mui/icons-material";
+import { CloudDownload, Delete, Visibility } from "@mui/icons-material"; // Add Visibility icon
 import moment from "moment";
 import Uploadimg from "../assets/images/upload-placeholder.png";
 import ApiManager from "../services/ApiManager";
@@ -27,6 +27,7 @@ import {
 import Loader from "./common/Loader/Loader";
 import { useGetOptionsSettingsQuery } from "../store/api/settingsApi";
 import SelectBox from "./common/SelectBox";
+import { appDateFormat } from "./utils/date";
 // Custom styled drop zone
 const DropZone = styled(Box)(({ theme }) => ({
   border: "2px dashed #ccc",
@@ -51,7 +52,6 @@ const UploadFile = ({
   dropdownData,
   sourceType = null,
 }) => {
-  console.log(sourceType,"sourceType")
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [deleteData, setDeleteData] = useState({});
@@ -60,18 +60,43 @@ const UploadFile = ({
   const [uploadedFile, setUploadedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
+  const [formErrors, setFormErrors] = useState({});
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [viewDocument, setViewDocument] = useState({});
 
-  const handleDownload = async (id, source, sourceId, documentType) => {
+  const handleDownload = async (event, id, source, sourceId, documentType) => {
+    event.preventDefault();
     try {
-      setLoading(true);
       let source = sourceType;
       const res = await ApiManager.downloadDocumnent(id, source, sourceId);
       donloadData(res.body.base64, res.body.mimeType, documentType);
-      setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
+  };
+
+  const handleView = async (event, id, source, sourceId, documentType) => {
+    event.preventDefault();
+    try {
+      let source = sourceType;
+      const res = await ApiManager.downloadDocumnent(id, source, sourceId);
+      const binaryString = atob(res.body.base64);
+      const binaryArray = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        binaryArray[i] = binaryString.charCodeAt(i);
+      }
+      const blob = new Blob([binaryArray], { type: res.body.mimeType });
+      const url = URL.createObjectURL(blob);
+      setViewDocument({ url, documentType });
+      setViewDialogOpen(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleViewDialogClose = () => {
+    setViewDialogOpen(false);
+    setViewDocument({});
   };
 
   const onDelete = async () => {
@@ -114,8 +139,19 @@ const UploadFile = ({
     setOpenConfirmation(false);
   };
 
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.documentType) {
+      errors.documentType = "Document Type is required";
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleDialogSave = async () => {
-    console.log(uploadedFile, "uploadedFile");
+    if (!validateForm()) {
+      return;
+    }
     const uploadData = {
       file: uploadedFile,
       entityFile: {
@@ -153,29 +189,32 @@ const UploadFile = ({
       console.error("Error downloading the file:", error);
     }
   };
-  const columns = [
-    { field: "documentName", headerName: "Document Name", flex: 1 },
-    { field: "number", headerName: "Number", flex: 1 },
-    // {
-    //   field: "modifiedDate",
-    //   headerName: "Issue Date",
-    //   flex: 1,
-    //   renderCell: (params) => (
-    //     <span>{moment(params.value).format("DD-MM-YYYY")}</span>
-    //   ),
-    // },
-    // {
-    //   field: "expiredDate",
-    //   headerName: "Expiry Date",
-    //   flex: 1,
-    //   renderCell: (params) => (
-    //     <span>{moment(params.value).format("DD-MM-YYYY")}</span>
-    //   ),
-    // },
+  const cusColumns = [
+    { field: "documentType", headerName: "Document Name", flex: 1,headerAlign: 'center' },
+    { field: "number", headerName: "Number", flex: 1,headerAlign: 'center' },
+    {
+      field: "modifiedDate",
+      headerName: "Issue Date",
+      flex: 1,
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <span>{moment(params.value).format("DD-MM-YYYY")}</span>
+      ),
+    },
+    {
+      field: "expiredDate",
+      headerName: "Expiry Date",
+      flex: 1,
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <span>{moment(params.value).format("DD-MM-YYYY")}</span>
+      ),
+    },
     {
       field: "actions",
       headerName: "Actions",
-      flex: 2,
+      flex: 1,
+      headerAlign: 'center',
       renderCell: (params) => (
         <div
           style={{
@@ -186,25 +225,20 @@ const UploadFile = ({
             height: "100%",
           }}
         >
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<CloudDownload />}
-            onClick={() =>
-              handleDownload(
+          <Visibility
+            style={{ cursor: "pointer", color: "#1976d2" }}
+            onClick={(event) =>
+              handleView(
+                event,
                 params.row.id,
                 params.row.source,
                 params.row.sourceId,
-                params.row.fileName,
+                params.row.fileName
               )
             }
-          >
-            Download
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            startIcon={<Delete />}
+          />
+          <Delete
+            style={{ cursor: "pointer", color: "red" }}
             onClick={() => {
               setDeleteData({
                 id: params.row.id,
@@ -214,13 +248,76 @@ const UploadFile = ({
               setOpenConfirmation(true);
             }}
             disabled={disabled}
-          >
-            Delete
-          </Button>
+          />
         </div>
       ),
     },
   ];
+  const columns = [
+    { field: "documentType", headerName: "Document Name", flex: 1,headerAlign: 'center' },
+    { field: "createdBy", headerName: "Created By", flex: 1,headerAlign: 'center', },
+    { field: "modifiedBy", headerName: "Modified By", flex: 1,headerAlign: 'center', },
+    {
+      field: 'createdDate',
+      headerName: 'Created Date',
+      width: 130,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
+        return <div>{appDateFormat(params.value)}</div>
+      }
+    },
+    {
+      field: 'modifiedDate',
+      headerName: 'Modified Date',
+      width: 130,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
+        return <div>{appDateFormat(params.value)}</div>
+      }
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 1,
+      renderCell: (params) => (
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <Visibility
+            style={{ cursor: "pointer", color: "#1976d2" }}
+            onClick={(event) =>
+              handleView(
+                event,
+                params.row.id,
+                params.row.source,
+                params.row.sourceId,
+                params.row.fileName
+              )
+            }
+          />
+          <Delete
+            style={{ cursor: "pointer", color: "red" }}
+            onClick={() => {
+              setDeleteData({
+                id: params.row.id,
+                source: params.row.source,
+                sourceId: params.row.sourceId,
+              });
+              setOpenConfirmation(true);
+            }}
+            disabled={disabled}
+          />
+        </div>
+      ),
+    },]
   useEffect(() => {
     reloadDataHandler();
   }, []);
@@ -295,7 +392,7 @@ const UploadFile = ({
             <Box style={{ height: 600, width: "100%" }}>
               <DataGrid
                 rows={listData}
-                columns={columns}
+                columns={sourceType == "CUSTOMER" ? cusColumns : columns}
                 pageSize={20}
                 // checkboxSelection={checkBox}
                 disableSelectionOnClick
@@ -303,44 +400,64 @@ const UploadFile = ({
             </Box>
           </Grid>
 
-          <Dialog open={dialogOpen} onClose={handleDialogClose}>
-            <DialogTitle>File Details</DialogTitle>
-            <DialogContent>
-              <SelectBox
-                label="Document Type"
-                id="documentType"
-                options={dropdownData}
-                value={formData.documentType}
-                onChange={handleInputChange}
-              />
-              {sourceType == "CUSTOMER" && <TextField
-                margin="dense"
-                label="Issue Date"
-                name="issueDate"
-                type="date"
-                fullWidth
-                value={formData.issueDate}
-                onChange={handleInputChange}
-                InputLabelProps={{ shrink: true }}
-              />}
-              <TextField
-                margin="dense"
-                label="Number"
-                name="number"
-                fullWidth
-                value={formData.number}
-                onChange={handleInputChange}
-              />
-              {sourceType == "CUSTOMER" && <TextField
-                margin="dense"
-                label="Expiry Date"
-                name="expiryDate"
-                type="date"
-                fullWidth
-                value={formData.expiryDate}
-                onChange={handleInputChange}
-                InputLabelProps={{ shrink: true }}
-              />}
+          <Dialog open={dialogOpen} onClose={handleDialogClose} maxWidth="sm" fullWidth>
+            <DialogTitle>
+              <Typography variant="h6" component="div">
+                File Details
+              </Typography>
+            </DialogTitle>
+            <DialogContent dividers>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <SelectBox
+                    label="Document Type"
+                    id="documentType"
+                    options={dropdownData}
+                    value={formData.documentType}
+                    onChange={handleInputChange}
+                    error={!!formErrors.documentType}
+                    helperText={formErrors.documentType}
+                  />
+                </Grid>
+                {sourceType == "CUSTOMER" && (
+                  <Grid item xs={12}>
+                    <TextField
+                      margin="dense"
+                      label="Issue Date"
+                      name="issueDate"
+                      type="date"
+                      fullWidth
+                      value={formData.issueDate}
+                      onChange={handleInputChange}
+                      InputLabelProps={{ shrink: true }}
+                    />
+                  </Grid>
+                )}
+                {sourceType == "CUSTOMER" && (<Grid item xs={12}>
+                  <TextField
+                    margin="dense"
+                    label="Number"
+                    name="number"
+                    fullWidth
+                    value={formData.number}
+                    onChange={handleInputChange}
+                  />
+                </Grid>)}
+                {sourceType == "CUSTOMER" && (
+                  <Grid item xs={12}>
+                    <TextField
+                      margin="dense"
+                      label="Expiry Date"
+                      name="expiryDate"
+                      type="date"
+                      fullWidth
+                      value={formData.expiryDate}
+                      onChange={handleInputChange}
+                      InputLabelProps={{ shrink: true }}
+                    />
+                  </Grid>
+                )}
+              </Grid>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleDialogClose} color="secondary">
@@ -362,6 +479,28 @@ const UploadFile = ({
               </Button>
               <Button onClick={onDelete} color="secondary">
                 Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={viewDialogOpen} onClose={handleViewDialogClose} maxWidth="lg" fullWidth>
+            <DialogTitle>{viewDocument.documentType}</DialogTitle>
+            <DialogContent>
+              <iframe src={viewDocument.url} width="100%" height="600px" title="Document Viewer"></iframe>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleViewDialogClose} color="secondary">
+                Close
+              </Button>
+              <Button
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = viewDocument.url;
+                  link.download = viewDocument.documentType;
+                  link.click();
+                }}
+                color="primary"
+              >
+                Download
               </Button>
             </DialogActions>
           </Dialog>
