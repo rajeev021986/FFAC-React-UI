@@ -117,7 +117,7 @@ export default function VendorForm({ page = "vendor" }) {
                         formik.setValues({
                             ...response.data.body,
                             status: "New",
-                            isApproved: !customerSettingsData?.approvalRequest,
+                            isApproved: !vendorSettingsData?.body?.approvalRequest,
                         });
                     } else {
                         formik.setValues(response.data.body);
@@ -131,7 +131,7 @@ export default function VendorForm({ page = "vendor" }) {
             }
         };
 
-        if (id) {
+        if (id && vendorSettingsData) {
             handleFetchVendor();
         }
 

@@ -14,12 +14,14 @@ const VendorSetting = () => {
     const [tarifType, setTarifType] = useState([]);
     const [unitType, setUnitType] = useState([]);
     const [container, setContainer] = useState([]);
+    const [approvalRequest, setApprovalRequest] = useState(false);
     const [isLoadingsave, setIsLoading] = useState(false);
 
     useEffect(() => {
         setDocumentType(data?.body.documentType || [])
         setVendorType(data?.body.vendorType || [])
         setTarifType(data?.body.tarifType || [])
+        setApprovalRequest(data?.body.approvalRequest || false)
         setUnitType(data?.body.unitType || [])
         setContainer(data?.body.container || [])
     }, [data, geterror]);
@@ -27,6 +29,7 @@ const VendorSetting = () => {
 
     const Postdata = async () => {
         const filteredData = {
+            approvalRequest,
             documentType: documentType.filter(item => !item.value.includes('Type the')),
             tarifType: tarifType.filter(item => !item.value.includes('Type the')),
             unitType: unitType.filter(item => !item.value.includes('Type the')),
@@ -42,7 +45,19 @@ const VendorSetting = () => {
     return (
         <div style={{ padding: "1rem" }}>
             <Grid xs={12} sx={{ marginBottom: "10px" }} ><Typography variant="h4">Vendor Setting</Typography></Grid>
-
+            <Grid sx={{ marginBottom: "10px" }} >
+                <FormGroup>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={approvalRequest || false}
+                                onChange={(e) => setApprovalRequest(e.target.checked)}
+                            />
+                        }
+                        label="Approval Required"
+                    />
+                </FormGroup>
+            </Grid>
             {isLoading ? <Loader /> : <Grid container spacing={2} flexWrap={"wrap"}>
                 <GlobalDrrpdownSetting value={documentType} setvalue={setDocumentType} title="Document Type" />
                 <GlobalDrrpdownSetting value={tarifType} setvalue={setTarifType} title="Tarif Type" />
