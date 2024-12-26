@@ -132,8 +132,10 @@ export const CUSTOMER_SORT_OPTIONS = [
   // { value: "acode*desc", label: "Code Descending" },
   { value: "cname*asc", label: "Customer Ascending" },
   { value: "cname*desc", label: "Customer Descending" },
-  { value: "country*asc", label: "Country Ascending" },
-  { value: "country*desc", label: "Country Descending" },
+  { value: "vatNo*asc", label: "VatNo Ascending" },
+  { value: "vatNo*desc", label: "VatNo Descending" },
+  { value: "tinNo*asc", label: "TinNo Ascending" },
+  { value: "tinNo*desc", label: "TinNo Descending" },
 ];
 export const VENDOR_SORT_OPTIONS = [
   { value: "vendorName*asc", label: "Vendor Ascending" },

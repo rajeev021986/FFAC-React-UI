@@ -7,6 +7,7 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  TextField,
 } from "@mui/material";
 import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
@@ -75,7 +76,6 @@ export default function CustomerForm({
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
-  console.log("optionsCity", optionsCity);
 
   const formik = useFormik({
     initialValues,
@@ -83,14 +83,25 @@ export default function CustomerForm({
     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
-        let emails = values.customerEntityEmailsIds.map((item) => item?.new ? { ...item, id: null, new: false } : item)
-        let tariffs = values.customerEntityTariffs.map((item) => item?.new ? { ...item, id: null, new: false } : item)
+        let emails = values.customerEntityEmailsIds.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
+        let tariffs = values.customerEntityTariffs.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
         try {
           delete values.id;
-          // Boolean(!dropdownData?.approvalRequest) && (values.status = "New")
-          values.status = "New"
           values.isApproved = !dropdownData?.approvalRequest;
-          let response = await addCustomer({ ...values, customerEntityEmailsIds: emails, customerEntityTariffs: tariffs }).unwrap();
+          values.status = "";
+          if (values.paymentType === "cash") {
+            delete values.creditAmount;
+            delete values.creditDays;
+          }
+          let response = await addCustomer({
+            ...values,
+            customerEntityEmailsIds: emails,
+            customerEntityTariffs: tariffs,
+          }).unwrap();
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
@@ -100,14 +111,30 @@ export default function CustomerForm({
             toast.error(response.message);
           }
         } catch (error) {
-          console.error("Error submitting form:", error);
-          toast.error("An error occurred while submitting the form.");
+          if (error.status === 409) {
+            toast.error(error.data.message);
+          } else {
+            toast.error("An error occurred while submitting the form.");
+          }
         }
       } else {
         try {
-          let emails = values.customerEntityEmailsIds.map((item) => item?.new ? { ...item, id: null, new: false } : item)
-          let tariffs = values.customerEntityTariffs.map((item) => item?.new ? { ...item, id: null, new: false } : item)
-          let response = await updateCustomer({ ...values, customerEntityEmailsIds: emails, customerEntityTariffs: tariffs }).unwrap();
+          if (values.paymentType === "cash") {
+            delete values.creditAmount;
+            delete values.creditDays;
+          }
+
+          let emails = values.customerEntityEmailsIds.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
+          let tariffs = values.customerEntityTariffs.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
+          let response = await updateCustomer({
+            ...values,
+            customerEntityEmailsIds: emails,
+            customerEntityTariffs: tariffs,
+          }).unwrap();
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
@@ -207,12 +234,28 @@ export default function CustomerForm({
     }
   };
   const disabled = page == "customer" ? false : true;
+  const getFirstError = (errors) => {
+    for (const key in errors) {
+      if (Array.isArray(errors[key])) {
+        for (const item of errors[key]) {
+          const nestedError = getFirstError(item);
+          if (nestedError) return nestedError;
+        }
+      } else if (typeof errors[key] === "object") {
+        const nestedError = getFirstError(errors[key]);
+        if (nestedError) return nestedError;
+      } else {
+        return errors[key];
+      }
+    }
+    return null;
+  };
 
-  const disableStatus =
-    page === "customer" && location.pathname.includes("/new") ? true : false;
+  const currentError = getFirstError(formik.errors);
 
   return (
     <>
+      {currentError && <div style={{ color: "red" }}>{currentError}</div>}
       {!shouldShowTabs || type == "copy" ? (
         <>
           {" "}
@@ -229,49 +272,12 @@ export default function CustomerForm({
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
-                label="Account No."
-                id="accountNo"
-                value={formik.values.accountNo}
-                error={formik.errors.accountNo}
+                label="TIN No."
+                id="tinNo"
+                value={formik.values.tinNo}
+                error={formik.errors.tinNo}
                 onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Telephone"
-                id="telephone"
-                value={formik.values.telephone}
-                error={formik.errors.telephone}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              lg={3}
-              xl={2}
-              sx={{ marginTop: 2 }}
-            >
-              <SelectBox
-                label="Account Type"
-                id="accountType"
-                options={dropdownData?.account_type}
-                value={formik.values.accountType}
-                error={formik.errors.accountType}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="PIN No."
-                id="pinNo"
-                value={formik.values.pinNo}
-                error={formik.errors.pinNo}
-                onChange={formik.handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -280,6 +286,18 @@ export default function CustomerForm({
                 id="vatNo"
                 value={formik.values.vatNo}
                 error={formik.errors.vatNo}
+                onChange={formik.handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Status"
+                id="status"
+                // options={dropdownData?.status}
+                disabled={!initialValues.isApproved}
+                value={formik.values.status}
+                error={formik.errors.status}
                 onChange={formik.handleChange}
               />
             </Grid>
@@ -290,6 +308,7 @@ export default function CustomerForm({
                 value={formik.values.add1}
                 error={formik.errors.add1}
                 onChange={formik.handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -299,6 +318,7 @@ export default function CustomerForm({
                 value={formik.values.add2}
                 error={formik.errors.add2}
                 onChange={formik.handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -308,98 +328,20 @@ export default function CustomerForm({
                 value={formik.values.add3}
                 error={formik.errors.add3}
                 onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Fax"
-                id="fax"
-                value={formik.values.fax}
-                error={formik.errors.fax}
-                onChange={formik.handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
-                label="Bank Name"
-                id="bankName"
-                value={formik.values.bankName}
-                error={formik.errors.bankName}
+                label="PoNo"
+                id="poNo"
+                value={formik.values.poNo}
+                error={formik.errors.poNo}
                 onChange={formik.handleChange}
+                disabled={disabled}
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Email Id "
-                id="emailId"
-                value={formik.values.emailId}
-                error={formik.errors.emailId}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <RadioGroup
-                id="paymentType"
-                name="paymentType" // add name attribute here
-                value={formik.values.paymentType}
-                onChange={formik.handleChange}
-                row
-              >
-                <FormControlLabel
-                  value="cash"
-                  control={<Radio />}
-                  label="Cash"
-                />
-                <FormControlLabel
-                  value="credit"
-                  control={<Radio />}
-                  label="Credit"
-                />
-              </RadioGroup>
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Credit Days"
-                id="creditDays"
-                value={formik.values.creditDays}
-                error={formik.errors.creditDays}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Credit Amount"
-                id="creditAmount"
-                value={formik.values.creditAmount}
-                error={formik.errors.creditAmount}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Zip Code"
-                id="zipCode"
-                value={formik.values.zipCode}
-                error={formik.errors.zipCode}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Country"
-                id="country"
-                value={formik.values.country}
-                error={formik.errors.country}
-                onChange={formik.handleChange}
-              />
-            </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
                 label="City"
@@ -407,16 +349,27 @@ export default function CustomerForm({
                 value={formik.values.city}
                 error={formik.errors.city}
                 onChange={formik.handleChange}
+                disabled={disabled}
               />
             </Grid>
-
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
-                label="State"
-                id="state"
-                value={formik.values.state}
-                error={formik.errors.state}
+                label="Country"
+                id="country"
+                value={formik.values.country}
+                error={formik.errors.country}
                 onChange={formik.handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Province"
+                id="province"
+                value={formik.values.province}
+                error={formik.errors.province}
+                onChange={formik.handleChange}
+                disabled={disabled}
               />
             </Grid>
 
@@ -427,25 +380,113 @@ export default function CustomerForm({
                 value={formik.values.contactPerson}
                 error={formik.errors.contactPerson}
                 onChange={formik.handleChange}
+                disabled={disabled}
               />
             </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              lg={3}
-              xl={2}
-              sx={{ marginTop: 2 }}
-            >
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
-                label="Status"
-                id="status"
-                // options={dropdownData?.status}
-                value={"New"}
-                disabled={disableStatus}
-                error={formik.errors.status}
+                label="Email Id "
+                id="emailId"
+                value={formik.values.emailId}
+                error={formik.errors.emailId}
                 onChange={formik.handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Telephone"
+                id="telephone"
+                value={formik.values.telephone}
+                error={formik.errors.telephone}
+                onChange={formik.handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Fax"
+                id="fax"
+                value={formik.values.fax}
+                error={formik.errors.fax}
+                onChange={formik.handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Bank Name"
+                id="bankName"
+                value={formik.values.bankName}
+                error={formik.errors.bankName}
+                onChange={formik.handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Account No."
+                id="accountNo"
+                value={formik.values.accountNo}
+                error={formik.errors.accountNo}
+                onChange={formik.handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+            {/* customer type */}
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Customer Type"
+                id="customerType"
+                value={formik.values.customerType}
+                error={formik.errors.customerType}
+                onChange={formik.handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <RadioGroup
+                id="paymentType"
+                name="paymentType" // add name attribute here
+                value={formik.values.paymentType}
+                onChange={formik.handleChange}
+                disabled={disabled}
+                row
+              >
+                <FormControlLabel
+                  disabled={disabled}
+                  value="cash"
+                  control={<Radio />}
+                  label="Cash"
+                />
+                <FormControlLabel
+                  disabled={disabled}
+                  value="credit"
+                  control={<Radio />}
+                  label="Credit"
+                />
+              </RadioGroup>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Credit Days"
+                id="creditDays"
+                value={formik.values.creditDays}
+                error={formik.errors.creditDays}
+                onChange={formik.handleChange}
+                disabled={formik.values.paymentType === "cash" || disabled}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="Credit Amount"
+                id="creditAmount"
+                value={formik.values.creditAmount}
+                error={formik.errors.creditAmount}
+                onChange={formik.handleChange}
+                disabled={formik.values.paymentType === "cash" || disabled}
               />
             </Grid>
 
@@ -473,6 +514,21 @@ export default function CustomerForm({
               </Box>
             </Grid>
 
+            <Grid item xs={12}>
+              <TextField
+                label="Reject Remarks"
+                name="rejectRemarks"
+                value={formik.values.rejectRemarks}
+                error={formik.errors.rejectRemarks}
+                onChange={formik.handleChange}
+                disabled={!disabled}
+                multiline
+                rows={4}
+                variant="outlined"
+                fullWidth
+              />
+            </Grid>
+
             {page == "customer" && (
               <Grid item xs={12}>
                 <Stack direction="row" spacing={2}>
@@ -485,9 +541,7 @@ export default function CustomerForm({
                     onClick={formik.handleSubmit}
                     sx={{ fontWeight: "500", borderRadius: "12px" }}
                   >
-                    {isLoading && (
-                      <CircularProgress size={20} color="white" />
-                    )}{" "}
+                    {isLoading && <CircularProgress size={20} color="white" />}{" "}
                     Save
                   </ThemeButton>
                 </Stack>
@@ -548,70 +602,40 @@ export default function CustomerForm({
                     <InputBox
                       label="Customer Name"
                       id="customerName"
-                      disabled={disabled}
                       value={formik.values.customerName}
+                      disabled={disabled}
                       error={formik.errors.customerName}
                       onChange={formik.handleChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
-                      label="Account No."
-                      id="accountNo"
-                      disabled={disabled}
-                      value={formik.values.accountNo}
-                      error={formik.errors.accountNo}
+                      label="TIN No."
+                      id="tinNo"
+                      value={formik.values.tinNo}
+                      error={formik.errors.tinNo}
                       onChange={formik.handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Telephone"
-                      id="telephone"
                       disabled={disabled}
-                      value={formik.values.telephone}
-                      error={formik.errors.telephone}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    xl={2}
-                    sx={{ marginTop: 2 }}
-                  >
-                    <SelectBox
-                      label="Account Type"
-                      id="accountType"
-                      disabled={disabled}
-                      options={dropdownData?.account_type}
-                      value={formik.values.accountType}
-                      error={formik.errors.accountType}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="PIN No."
-                      id="pinNo"
-                      disabled={disabled}
-                      value={formik.values.pinNo}
-                      error={formik.errors.pinNo}
-                      onChange={formik.handleChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="VAT No."
                       id="vatNo"
-                      disabled={disabled}
                       value={formik.values.vatNo}
                       error={formik.errors.vatNo}
+                      onChange={formik.handleChange}
+                      disabled={disabled}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Status"
+                      id="status"
+                      // options={dropdownData?.status}
+                      disabled={!initialValues.isApproved || disabled}
+                      value={formik.values.status}
+                      error={formik.errors.status}
                       onChange={formik.handleChange}
                     />
                   </Grid>
@@ -619,151 +643,71 @@ export default function CustomerForm({
                     <InputBox
                       label="Address 1."
                       id="add1"
-                      disabled={disabled}
                       value={formik.values.add1}
                       error={formik.errors.add1}
                       onChange={formik.handleChange}
+                      disabled={disabled}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Address 2."
                       id="add2"
-                      disabled={disabled}
                       value={formik.values.add2}
                       error={formik.errors.add2}
                       onChange={formik.handleChange}
+                      disabled={disabled}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Address 3."
                       id="add3"
-                      disabled={disabled}
                       value={formik.values.add3}
                       error={formik.errors.add3}
                       onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Fax"
-                      id="fax"
                       disabled={disabled}
-                      value={formik.values.fax}
-                      error={formik.errors.fax}
-                      onChange={formik.handleChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
-                      label="Bank Name"
-                      id="bankName"
-                      disabled={disabled}
-                      value={formik.values.bankName}
-                      error={formik.errors.bankName}
+                      label="PoNo"
+                      id="poNo"
+                      value={formik.values.poNo}
+                      error={formik.errors.poNo}
                       onChange={formik.handleChange}
+                      disabled={disabled}
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Email Id "
-                      id="emailId"
-                      disabled={disabled}
-                      value={formik.values.emailId}
-                      error={formik.errors.emailId}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <RadioGroup
-                      id="paymentType"
-                      name="paymentType" // add name attribute here
-                      disabled={disabled}
-                      value={formik.values.paymentType}
-                      onChange={formik.handleChange}
-                      row
-                    >
-                      <FormControlLabel
-                        value="cash"
-                        disabled={disabled}
-                        control={<Radio />}
-                        label="Cash"
-                      />
-                      <FormControlLabel
-                        value="credit"
-                        disabled={disabled}
-                        control={<Radio />}
-                        label="Credit"
-                      />
-                    </RadioGroup>
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Credit Days"
-                      id="creditDays"
-                      disabled={disabled}
-                      value={formik.values.creditDays}
-                      error={formik.errors.creditDays}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Credit Amount"
-                      id="creditAmount"
-                      disabled={disabled}
-                      value={formik.values.creditAmount}
-                      error={formik.errors.creditAmount}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Zip Code"
-                      id="zipCode"
-                      disabled={disabled}
-                      value={formik.values.zipCode}
-                      error={formik.errors.zipCode}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Country"
-                      id="country"
-                      disabled={disabled}
-                      value={formik.values.country}
-                      error={formik.errors.country}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="City"
                       id="city"
-                      disabled={disabled}
                       value={formik.values.city}
                       error={formik.errors.city}
                       onChange={formik.handleChange}
+                      disabled={disabled}
                     />
                   </Grid>
-
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
-                      label="State"
-                      id="state"
-                      disabled={disabled}
-                      value={formik.values.state}
-                      error={formik.errors.state}
+                      label="Country"
+                      id="country"
+                      value={formik.values.country}
+                      error={formik.errors.country}
                       onChange={formik.handleChange}
+                      disabled={disabled}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Province"
+                      id="province"
+                      value={formik.values.province}
+                      error={formik.errors.province}
+                      onChange={formik.handleChange}
+                      disabled={disabled}
                     />
                   </Grid>
 
@@ -771,50 +715,122 @@ export default function CustomerForm({
                     <InputBox
                       label="Contact Person"
                       id="contactPerson"
-                      disabled={disabled}
                       value={formik.values.contactPerson}
                       error={formik.errors.contactPerson}
                       onChange={formik.handleChange}
+                      disabled={disabled}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Email Id "
+                      id="emailId"
+                      value={formik.values.emailId}
+                      error={formik.errors.emailId}
+                      onChange={formik.handleChange}
+                      disabled={disabled}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Telephone"
+                      id="telephone"
+                      value={formik.values.telephone}
+                      error={formik.errors.telephone}
+                      onChange={formik.handleChange}
+                      disabled={disabled}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Fax"
+                      id="fax"
+                      value={formik.values.fax}
+                      error={formik.errors.fax}
+                      onChange={formik.handleChange}
+                      disabled={disabled}
                     />
                   </Grid>
 
-                  {formik.values.isApproved ? <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    xl={2}
-                    sx={{ marginTop: 2 }}
-                  >
-                    <SelectBox
-                      label="Status"
-                      id="status"
-                      disabled={disabled}
-                      options={dropdownData?.status}
-                      value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
-                      error={formik.errors.status}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid> : <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    xl={2}
-                    sx={{ marginTop: 2 }}
-                  >
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
-                      label="Status"
-                      id="status"
-                      // options={dropdownData?.status}
-                      value={"New"}
-                      disabled={disableStatus}
-                      error={formik.errors.status}
+                      label="Bank Name"
+                      id="bankName"
+                      value={formik.values.bankName}
+                      error={formik.errors.bankName}
                       onChange={formik.handleChange}
+                      disabled={disabled}
                     />
-                  </Grid>}
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Account No."
+                      id="accountNo"
+                      value={formik.values.accountNo}
+                      error={formik.errors.accountNo}
+                      onChange={formik.handleChange}
+                      disabled={disabled}
+                    />
+                  </Grid>
+                  {/* customer type */}
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Customer Type"
+                      id="customerType"
+                      value={formik.values.customerType}
+                      error={formik.errors.customerType}
+                      onChange={formik.handleChange}
+                      disabled={disabled}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <RadioGroup
+                      id="paymentType"
+                      name="paymentType" // add name attribute here
+                      value={formik.values.paymentType}
+                      onChange={formik.handleChange}
+                      disabled={disabled}
+                      row
+                    >
+                      <FormControlLabel
+                        disabled={disabled}
+                        value="cash"
+                        control={<Radio />}
+                        label="Cash"
+                      />
+                      <FormControlLabel
+                        disabled={disabled}
+                        value="credit"
+                        control={<Radio />}
+                        label="Credit"
+                      />
+                    </RadioGroup>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Credit Days"
+                      id="creditDays"
+                      value={formik.values.creditDays}
+                      error={formik.errors.creditDays}
+                      onChange={formik.handleChange}
+                      disabled={
+                        formik.values.paymentType === "cash" || disabled
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <InputBox
+                      label="Credit Amount"
+                      id="creditAmount"
+                      value={formik.values.creditAmount}
+                      error={formik.errors.creditAmount}
+                      onChange={formik.handleChange}
+                      disabled={
+                        formik.values.paymentType === "cash" || disabled
+                      }
+                    />
+                  </Grid>
 
                   <Grid item xs={12}>
                     <Box
@@ -838,6 +854,20 @@ export default function CustomerForm({
                         <FileScreen formik={formik} disabled={disabled} />
                       </ThemeTabs>
                     </Box>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Reject Remarks"
+                      name="rejectRemarks"
+                      value={formik.values.rejectRemarks}
+                      error={formik.errors.rejectRemarks}
+                      onChange={formik.handleChange}
+                      disabled={!disabled}
+                      multiline
+                      rows={4}
+                      variant="outlined"
+                      fullWidth
+                    />
                   </Grid>
 
                   {page == "customer" && (
@@ -872,7 +902,10 @@ export default function CustomerForm({
                         justifyContent="space-between"
                       >
                         <Stack direction="row" spacing={2}>
-                          <OutlinedButton sx={{ fontWeight: "500" }} onClick={() => nav(-1)}>
+                          <OutlinedButton
+                            sx={{ fontWeight: "500" }}
+                            onClick={() => nav(-1)}
+                          >
                             Cancel
                           </OutlinedButton>
                           <ThemeButton
@@ -923,4 +956,3 @@ export default function CustomerForm({
     </>
   );
 }
-

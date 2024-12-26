@@ -1,11 +1,18 @@
 import React from "react";
 import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { Add } from "@mui/icons-material";
+import { Add, Delete } from "@mui/icons-material";
 
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
-    { id: 1, chargeName: "", unitType: "", currency: "", shipmentType: "", unitRate: "" },
+    {
+      id: 1,
+      chargeName: "",
+      unitType: "",
+      currency: "",
+      shipmentType: "",
+      unitRate: "",
+    },
   ];
 
   // Static options for dropdowns
@@ -38,9 +45,12 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       currency: "",
       shipmentType: "",
       unitRate: "0",
-      new:true
+      new: true,
     };
-    formik.setFieldValue("customerEntityTariffs", [...customerEntityTariffs, newRow]);
+    formik.setFieldValue("customerEntityTariffs", [
+      ...customerEntityTariffs,
+      newRow,
+    ]);
   };
 
   // Handler to delete a row
@@ -58,6 +68,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       editable: true,
       type: "singleSelect",
       valueOptions: chargeNameOptions.map((option) => option.label),
+      headerAlign: "center",
     },
     {
       field: "unitType",
@@ -66,6 +77,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       editable: true,
       type: "singleSelect",
       valueOptions: unitTypeOptions.map((option) => option.label),
+      headerAlign: "center",
     },
     {
       field: "currency",
@@ -74,6 +86,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       editable: true,
       type: "singleSelect",
       valueOptions: currencyOptions.map((option) => option.label),
+      headerAlign: "center",
     },
     {
       field: "shipmentType",
@@ -82,12 +95,14 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       editable: true,
       type: "singleSelect",
       valueOptions: shipmentTypeOptions.map((option) => option.label),
+      headerAlign: "center",
     },
     {
       field: "unitRate",
       headerName: "Unit Rate",
       flex: 1,
       editable: true,
+      headerAlign: "center",
     },
     {
       field: "actions",
@@ -95,13 +110,15 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       sortable: false,
       renderCell: (params) => (
         <Button
+          disabled={disabled}
           color="error"
           onClick={() => deleteRow(params.row.id)}
-          disabled={disabled || customerEntityTariffs.length === 1}
+          // disabled={disabled || customerEntityTariffs.length === 1}
         >
-          Delete
+          <Delete />
         </Button>
       ),
+      headerAlign: "center",
     },
   ];
 
@@ -115,13 +132,13 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   };
 
   return (
-    <Box sx={{ width: "100%", marginTop: 2 }}>
+    <Box sx={{ width: "100%", marginTop: 2, textAlign: "right" }}>
       <Button
+        variant="contained"
         startIcon={<Add />}
         onClick={addRow}
-        variant="outlined"
-        color="primary"
         disabled={disabled}
+        sx={{ borderRadius: "17px 18px 18px 17px", margin: "5px" }}
       >
         Add Tariff
       </Button>
