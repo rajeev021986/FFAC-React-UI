@@ -44,11 +44,38 @@ export const SHIPPER_COLUMNS = [
     },
     {
         flex: 1,
+        field: 'designation',
+        headerName: 'Designation',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    
+    {
+        flex: 1,
+        field: 'created_by',
+        headerName: 'Created By',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    {
+        flex: 1,
+        field: 'modified_by',
+        headerName: 'Modified By',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    
+    {
+        flex: 1,
         field: 'action',
         headerName: 'Action',
         width: 110,
         headerAlign: 'center',
         align : 'center',editable: true
     }
+    
   
 ]

@@ -27,7 +27,10 @@ export default function ConsigneeFormScreen({ page }) {
     createdBy: "",
     modifiedBy: "",
     createdDate: "",
-    modifiedDate: ""
+    modifiedDate: "",
+    consigneeEntityFreeDays: [],
+    ctypelist: 'CONSIGNEE',
+    files: []
   });
   
 
@@ -68,6 +71,7 @@ export default function ConsigneeFormScreen({ page }) {
           modifiedBy: res.body?.modifiedBy || "",
           createdDate: res.body?.createdDate || "",
           modifiedDate: res.body?.modifiedDate || "",
+          consigneeEntityFreeDays: res.body?.consigneeEntityFreeDays || [],
           ctypelist: "CONSIGNEE",
           files: [],
         });

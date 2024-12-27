@@ -34,14 +34,39 @@ export const CONSIGNEE_COLUMNS = [
         headerAlign: 'center',
         align : 'center',editable: true
     },
-    // {
-    //     flex: 1,
-    //     field: 'email',
-    //     headerName: 'Email ',
-    //     width: 110,
-    //     headerAlign: 'center',
-    //     align : 'center',editable: true
-    // },
+    {
+        flex: 1,
+        field: 'standard_free_days',
+        headerName: 'Standard Free Days',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    {
+        flex: 1,
+        field: 'standard_rate',
+        headerName: 'Standard Rate',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    {
+        flex: 1,
+        field: 'created_by',
+        headerName: 'Created By',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    {
+        flex: 1,
+        field: 'modified_by',
+        headerName: 'Modified By',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true
+    },
+    
     {
         flex: 1,
         field: 'action',

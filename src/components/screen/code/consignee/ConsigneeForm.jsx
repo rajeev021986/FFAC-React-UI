@@ -1,6 +1,7 @@
 import { CircularProgress, Grid, Stack } from "@mui/material";
 import { useFormik } from "formik";
 import AddMapping from "./AddMapping";
+import * as Yup from 'yup';
 import React, { useEffect, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
@@ -22,6 +23,7 @@ import ThemeTabs from "../../../common/Tab/ThemeTab";
 import AuditTimeline from "../../../AuditTimeLine";
 import ConsigneeUploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import { Navigation } from "@mui/icons-material";
 
 export default function ConsigneeForm({
   initialValues,
@@ -42,6 +44,11 @@ export default function ConsigneeForm({
 
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
+  const validationSchema = Yup.object({
+    consigneeName: Yup.string().required("Name is required"),
+    address1: Yup.string().required("Address1 is required"),
+
+  });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -59,8 +66,8 @@ export default function ConsigneeForm({
 
   const formik = useFormik({
     initialValues,
+    validationSchema,
     enableReinitialize: true,
-    // validationSchema: ShipperValidationSchema(),
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
         let freeDays = values.consigneeEntityFreeDays.map((item) => item?.new ? { ...item, id: null, new: false } : item)
@@ -358,7 +365,7 @@ export default function ConsigneeForm({
                     <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Standard Rate"
-                      id="standard_rate"
+                      id="standardRate"
                       value={formik.values.standardRate}
                       error={formik.errors.standardRate}
                       onChange={formik.handleChange}
@@ -376,9 +383,7 @@ export default function ConsigneeForm({
                     >
                       <ThemeTabs
                         tabData={[
-                          { label: "Free Days", value: "1", disable: false },
-                         
-                        ]}
+                          { label: "Free Days", value: "1", disable: false }]}
                       >
                         <AddMapping
                           formik={formik}
@@ -397,9 +402,14 @@ export default function ConsigneeForm({
                         justifyContent="space-between"
                       >
                         <Stack direction="row" spacing={2}>
-                          <OutlinedButton sx={{ fontWeight: "500" }}>
-                            Cancel
-                          </OutlinedButton>
+                        <OutlinedButton 
+                         onClick={()=>nav(-1)}
+                        sx={{ fontWeight: "500" }}
+                                   
+                                >
+                                    Cancel
+                                </OutlinedButton>
+                        
                           <ThemeButton
                             onClick={formik.handleSubmit}
                             sx={{ fontWeight: "500" }}

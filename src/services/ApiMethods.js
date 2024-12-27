@@ -24,9 +24,13 @@ class ApiMethods {
   if(url.includes('/shipper'||searchTerm=='SHIPPER')) {
     url=API_BASE_URL1 + url;
   }
-  else{
+  else if(url.includes('/consignee'||searchTerm=='CONSIGNEE'))
+  {
     
-   url = API_BASE_URL + url;
+   url = API_BASE_URL1 + url;
+  }
+  else{
+    url = API_BASE_URL + url;
   }
     
    

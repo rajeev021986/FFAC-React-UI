@@ -9,6 +9,7 @@ import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import ApiManager from "../../../../services/ApiManager";
 import PopupAlert from "../../../common/Alert/PopupAlert";
+import * as Yup from 'yup';
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -45,6 +46,11 @@ export default function ShipperForm({
 
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
+  const validationSchema = Yup.object({
+      name: Yup.string().required("Name is required"),
+      address1: Yup.string().required("Address1 is required"),
+  
+    });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -62,6 +68,7 @@ export default function ShipperForm({
 
   const formik = useFormik({
     initialValues,
+    validationSchema,
     enableReinitialize: true,
     // validationSchema: ShipperValidationSchema(),
     onSubmit: async (values) => {
@@ -105,11 +112,6 @@ export default function ShipperForm({
       }
     },
   });
-
-  
-
- 
-
   let shouldShowTabs = Object.values(formik.values?.name).some(
     (value) => value !== ""
   );
@@ -281,10 +283,20 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="IE CODE"
+                id="ieCode"
+                value={formik.values.ieCode}
+                error={formik.errors.ieCode}
+                onChange={formik.handleChange}
+              />
+            </Grid>
             {page == "shipper" && (
               <Grid item xs={12}>
                 <Stack direction="row" spacing={2}>
                   <OutlinedButton
+                  onClick={()=>nav(-1)}
                     sx={{ fontWeight: "500", borderRadius: "12px" }}
                   >
                     Cancel
@@ -465,8 +477,16 @@ export default function ShipperForm({
                 error={formik.errors.mobile}
                 onChange={formik.handleChange}
                 />
-            
                   </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <InputBox
+                label="IE CODE"
+                id="ieCode"
+                value={formik.values.ieCode}
+                error={formik.errors.ieCode}
+                onChange={formik.handleChange}
+              />
+            </Grid>
                   {page == "shipper" && (
                     <Grid item xs={12}>
                       <Stack
@@ -475,9 +495,14 @@ export default function ShipperForm({
                         justifyContent="space-between"
                       >
                         <Stack direction="row" spacing={2}>
-                          <OutlinedButton sx={{ fontWeight: "500" }}>
-                            Cancel
-                          </OutlinedButton>
+                        <OutlinedButton sx={{ fontWeight: "500" }}
+                                    onClick={() => 
+                                      {
+                                        console.log("Inside OnClick")
+                                        nav(-1)}}
+                                >
+                                    Cancel
+                                </OutlinedButton>
                           <ThemeButton
                             onClick={formik.handleSubmit}
                             sx={{ fontWeight: "500" }}
