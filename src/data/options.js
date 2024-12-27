@@ -182,4 +182,10 @@ export const VESSEL_SORT_OPTIONS = [
 export const VOYAGE_SORT_OPTIONS = [
   { value: "vvoyage*asc", label: "Voyage Ascending" },
   { value: "vvoyage*desc", label: "Voyage Descending" }
+
+]
+
+export const CHARGES_SORT_OPTIONS = [
+  { value: "cname*asc", label: "Charges Ascending" },
+  { value: "cname*desc", label: "Charges Descending" },
 ]

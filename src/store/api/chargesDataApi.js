@@ -14,7 +14,7 @@ export const chargesDataApi = createApi({
                     Authorization: getAppHeaders()['Authorization'],
                 };
                 return {
-                    url: `/master-service/v1/${page}?${queryString}`,
+                    url: `/admin-service/v1/${page}?${queryString}`,
                     method: "POST",
                     body: payload,
                     headers,

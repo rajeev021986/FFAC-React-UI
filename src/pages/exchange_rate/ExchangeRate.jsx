@@ -1,49 +1,45 @@
 import {
+  Backdrop,
+  Box,
+  Card,
+  CardHeader,
+  IconButton,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+  Stack,
+} from "@mui/material";
+import ScreenToolbar from "../../components/common/ScreenToolbar";
+import ThemedBreadcrumb from "../../components/common/Breadcrumb";
+import GridSearchInput from "../../components/common/Filter/GridSearchInput";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useFetchChargesDatasQuery } from "../../store/api/chargesDataApi";
+import {
+  chargesSetSortModel,
+  chargesSetView,
+  setPagination,
+  setSortBy,
+  updateInput,
+} from "../../store/freatures/ChargesSlice";
+import { CARD_CHARGES_COLUMNS } from "../../data/columns/charges";
+import { getChargesListGridActions } from "../../components/screen/code/charge/action";
+import GridActions from "../../components/common/Grid/GridActions";
+import SelectBox from "../../components/common/SelectBox";
+import { CHARGES_SORT_OPTIONS } from "../../data/options";
+import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { Box, Card, CardHeader, IconButton, Stack } from "@mui/material";
-import React, { useState } from "react";
-import CardsView from "../../components/common/Cards/CardsView";
-import ScreenToolbar from "../../components/common/ScreenToolbar";
-import { useLocation, useNavigate } from "react-router-dom";
-import ThemedBreadcrumb from "../../components/common/Breadcrumb";
-import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-import {
-  useDeleteCustomerMutation,
-  useFetchCustomerDatasQuery,
-} from "../../store/api/codeDataApi";
-import CustomerFilters from "../../components/screen/code/customer/CustomerFilters";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setPagination,
-  setSortBy,
-  customerSetView,
-  customerSetSortModel,
-  updateInput,
-} from "../../store/freatures/CustomerSlice";
-import SelectBox from "../../components/common/SelectBox";
-import { CUSTOMER_SORT_OPTIONS } from "../../data/options";
-import GridActions from "../../components/common/Grid/GridActions";
-
-import { CODE_CUSTOMER_COLUMNS } from "../../data/columns/code";
-import { getCustomerListGridActions } from "../../components/screen/code/customer/action";
+import ChargesFilters from "../../components/screen/code/charge/ChargesFilters";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
-import { useEffect } from "react";
+import CardsView from "../../components/common/Cards/CardsView";
 
-import Backdrop from "@mui/material/Backdrop";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
-import ApiManager from "../../services/ApiManager";
-import DeleteDialog from "../../components/common/DeleteDialog";
-import toast from "react-hot-toast";
+const ADD_NEW_EXCHANGE_RATE_PATH = "new";
 
-const ADD_NEW_CUSTOMER_PATH = "new";
-
-export default function CustomerScreen({ page }) {
-  const codeCustomerSelector = useSelector((state) => state.codeCustomer);
+export function ExchangeRate({ page }) {
+  const exchangeRateSelector = useSelector((state) => state.exchangeRateStore);
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -55,34 +51,35 @@ export default function CustomerScreen({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New Customer" }, { name: "Export" }];
+    ? [{ name: "New Exchange Rate" }, { name: "Copy" }, { name: "Export" }]
+    : [{ name: "New Exchange Rate" }, { name: "Export" }];
+
   const query = {
-    page: codeCustomerSelector?.pagination?.page + 1,
-    size: codeCustomerSelector?.pagination?.pageSize,
+    page: exchangeRateSelector?.pagination?.page + 1,
+    size: exchangeRateSelector?.pagination?.pageSize,
     sortBy:
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector.sortModel[0].field
-        : codeCustomerSelector?.sortBy?.split("*")[0],
+      exchangeRateSelector.sortModel.length > 0
+        ? exchangeRateSelector.sortModel[0].field
+        : exchangeRateSelector?.sortBy?.split("*")[0],
     sortOrder:
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector?.sortModel[0]?.sort
-        : codeCustomerSelector?.sortBy?.split("*")[1] || "",
+      exchangeRateSelector.sortModel.length > 0
+        ? exchangeRateSelector?.sortModel[0]?.sort
+        : exchangeRateSelector?.sortBy?.split("*")[1] || "",
   };
   if (
     Boolean(
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector.sortModel[0].field === "cname"
-        : codeCustomerSelector?.sortBy?.split("*")[0] === "cname"
+      exchangeRateSelector.sortModel.length > 0
+        ? exchangeRateSelector.sortModel[0].field === "cname"
+        : exchangeRateSelector?.sortBy?.split("*")[0] === "cname"
     )
   ) {
-    query.sortBy = "customerName";
+    query.sortBy = "chargeName";
   }
-  const payload = Object.entries(codeCustomerSelector?.formData)
+  const payload = Object.entries(exchangeRateSelector?.formData)
     .filter(([key, value]) => value)
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key == "cname") && (fieldname = "customerName");
+      Boolean(key == "cname") && (fieldname = "chargeName");
       return {
         fieldName: fieldname,
         operator: "=",
@@ -92,16 +89,16 @@ export default function CustomerScreen({ page }) {
     });
 
   const {
-    data: CustomerData,
+    data: ChargesData,
     isLoading,
     isError,
     error,
     isFetching,
     refetch,
-  } = useFetchCustomerDatasQuery({
+  } = useFetchChargesDatasQuery({
     params: query,
     payload,
-    page: page == "customer" ? "customer/filter" : "approval/filter/customer",
+    page: "charge/filter",
   });
   useEffect(() => {
     refetch();
@@ -112,29 +109,26 @@ export default function CustomerScreen({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
+  CARD_CHARGES_COLUMNS[CARD_CHARGES_COLUMNS.length - 1].renderCell =
     GridActions({
-      actions:
-        page == "customer"
-          ? getCustomerListGridActions(nav, setModal)
-          : getCustomerListGridActionsCustomerApprovel((nav, setModal)),
+      actions: getChargesListGridActions(nav, setModal),
     });
 
   useEffect(() => {
-    if (!codeCustomerSelector.view) {
-      dispatch(customerSetView("card"));
+    if (!exchangeRateSelector.view) {
+      dispatch(chargesSetView("card"));
     }
-  }, [codeCustomerSelector.view, dispatch]);
+  }, [exchangeRateSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
-    if (actionName === "New Customer") {
-      nav("newcustomer", {
+    if (actionName === "New Charges") {
+      nav(ADD_NEW_CHARGES_PATH, {
         replace: true,
         state: { formAction: "add" },
       });
     }
     if (actionName === "Copy") {
-      nav("newcustomer", {
+      nav(`editcharges`, {
         state: {
           formAction: "edit",
           initialValues: { id: seletectBox },
@@ -142,47 +136,47 @@ export default function CustomerScreen({ page }) {
         },
       });
     }
-    if (actionName === "Export") {
-      try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(
-          query,
-          payload,
-          "customer"
-        );
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "customer-data.xlsx"); // or whatever filename you want
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error("Download failed:", error);
-      }
-    }
+    // if (actionName === "Export") {
+    //   try {
+    //     const blob = await ApiManager.fetchCustomerDatasExcel(
+    //       query,
+    //       payload,
+    //       "customer"
+    //     );
+    //     const url = window.URL.createObjectURL(blob);
+    //     const link = document.createElement("a");
+    //     link.href = url;
+    //     link.setAttribute("download", "customer-data.xlsx"); // or whatever filename you want
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     link.remove();
+    //     window.URL.revokeObjectURL(url);
+    //   } catch (error) {
+    //     console.error("Download failed:", error);
+    //   }
+    // }
   };
 
-  const [deleteCustomer] = useDeleteCustomerMutation();
+  //   const [deleteCustomer] = useDeleteCustomerMutation();
 
-  const handleClose = () => {
-    setModal({
-      open: false,
-      type: "",
-      data: {},
-    });
-  };
+  //   const handleClose = () => {
+  //     setModal({
+  //       open: false,
+  //       type: "",
+  //       data: {},
+  //     });
+  //   };
 
-  const handleDelete = async () => {
-    try {
-      await deleteCustomer(modal.data.id).unwrap();
-      toast.success("Customer deleted successfully!");
-      handleClose();
-    } catch (error) {
-      toast.error("Failed to delete customer.");
-      console.error("Delete Error:", error);
-    }
-  };
+  //   const handleDelete = async () => {
+  //     try {
+  //       await deleteCustomer(modal.data.id).unwrap();
+  //       toast.success("Customer deleted successfully!");
+  //       handleClose();
+  //     } catch (error) {
+  //       toast.error("Failed to delete customer.");
+  //       console.error("Delete Error:", error);
+  //     }
+  //   };
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
@@ -247,16 +241,16 @@ export default function CustomerScreen({ page }) {
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
-                  filters={codeCustomerSelector?.formData}
+                  filters={exchangeRateSelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <CustomerFilters filterInfo={CustomerData?.counts || []} />
+                  <ChargesFilters filterInfo={ChargesData?.counts || []} />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"
-                  options={CUSTOMER_SORT_OPTIONS}
-                  value={codeCustomerSelector.sortBy}
+                  options={CHARGES_SORT_OPTIONS}
+                  value={exchangeRateSelector.sortBy}
                   onChange={(event) => {
                     console.log(event);
 
@@ -269,19 +263,19 @@ export default function CustomerScreen({ page }) {
                 />
               </Box>
               <Box>
-                <IconButton onClick={() => dispatch(customerSetView("card"))}>
+                <IconButton onClick={() => dispatch(chargesSetView("card"))}>
                   <FormatListBulletedOutlined
                     color={
-                      codeCustomerSelector.view === "card"
+                      exchangeRateSelector.view === "card"
                         ? "primary"
                         : "secondary"
                     }
                   />
                 </IconButton>
-                <IconButton onClick={() => dispatch(customerSetView("grid"))}>
+                <IconButton onClick={() => dispatch(chargesSetView("grid"))}>
                   <GridOnOutlined
                     color={
-                      codeCustomerSelector.view === "grid"
+                      exchangeRateSelector.view === "grid"
                         ? "primary"
                         : "secondary"
                     }
@@ -291,48 +285,44 @@ export default function CustomerScreen({ page }) {
             </Stack>
           }
         />
-        {codeCustomerSelector.view === "grid" ? (
+        {exchangeRateSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.totalElements || 0}
+            columns={CARD_CHARGES_COLUMNS}
+            count={ChargesData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={CustomerData?.body?.data}
+            data={ChargesData?.body?.data}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
-            paginationModel={codeCustomerSelector.pagination}
+            paginationModel={exchangeRateSelector.pagination}
             loading={isLoading || isFetching}
-            sortModel={codeCustomerSelector.sortModel}
+            sortModel={exchangeRateSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(customerSetSortModel(sortModel))
+              dispatch(chargesSetSortModel(sortModel))
             }
           />
         ) : (
           <CardsView
             uniqueId="id"
-            columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.totalElements || 0}
+            columns={CARD_CHARGES_COLUMNS}
+            count={ChargesData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={CustomerData?.body?.data}
-            paginationModel={codeCustomerSelector?.pagination}
+            data={ChargesData?.body?.data}
+            paginationModel={exchangeRateSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={
-              page == "customer"
-                ? getCustomerListGridActions(nav, setModal)
-                : getCustomerListGridActionsCustomerApprovel(nav, setModal)
-            }
+            actions={getChargesListGridActions(nav, setModal)}
             // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
-            page={page}
+            page={"customer"}
           />
         )}
       </Card>
-      <DeleteDialog
-        modal={modal}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-      />
+      {/* <DeleteDialog
+          modal={modal}
+          handleClose={handleClose}
+          handleDelete={handleDelete}
+        /> */}
     </Box>
   );
 }

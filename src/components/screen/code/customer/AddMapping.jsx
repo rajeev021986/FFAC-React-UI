@@ -69,6 +69,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       type: "singleSelect",
       valueOptions: chargeNameOptions.map((option) => option.label),
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "unitType",
@@ -78,6 +79,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       type: "singleSelect",
       valueOptions: unitTypeOptions.map((option) => option.label),
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "currency",
@@ -87,6 +89,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       type: "singleSelect",
       valueOptions: currencyOptions.map((option) => option.label),
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "shipmentType",
@@ -96,6 +99,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       type: "singleSelect",
       valueOptions: shipmentTypeOptions.map((option) => option.label),
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "unitRate",
@@ -103,6 +107,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "actions",
@@ -119,6 +124,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
         </Button>
       ),
       headerAlign: "center",
+      align: "center",
     },
   ];
 

@@ -41,6 +41,7 @@ export default function FilesGrid({ formik, disabled }) {
       flex: 1,
       editable: true,
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "emailId",
@@ -48,6 +49,7 @@ export default function FilesGrid({ formik, disabled }) {
       flex: 1,
       editable: true,
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "actions",
@@ -63,6 +65,7 @@ export default function FilesGrid({ formik, disabled }) {
         </Button>
       ),
       headerAlign: "center",
+      align: "center",
     },
   ];
 

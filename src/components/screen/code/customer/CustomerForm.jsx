@@ -44,6 +44,7 @@ import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { UploadFileOutlined } from "@mui/icons-material";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import { ToastMessage } from "../../../utils/toastMessage";
 
 export default function CustomerForm({
   initialValues,
@@ -107,6 +108,7 @@ export default function CustomerForm({
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
             toast.success(response.message);
+            ToastMessage("Pending Document");
             nav("/app/entity/customer");
           } else {
             toast.error(response.message);
@@ -316,8 +318,7 @@ export default function CustomerForm({
                 label="Status"
                 id="status"
                 // options={dropdownData?.status}
-                disabled={!initialValues.isApproved}
-                value={formik.values.status}
+                disabled={true}
                 error={formik.errors.status}
                 onChange={formik.handleChange}
               />
@@ -535,21 +536,6 @@ export default function CustomerForm({
               </Box>
             </Grid>
 
-            <Grid item xs={12}>
-              <TextField
-                label="Reject Remarks"
-                name="rejectRemarks"
-                value={formik.values.rejectRemarks}
-                error={formik.errors.rejectRemarks}
-                onChange={formik.handleChange}
-                disabled={!disabled}
-                multiline
-                rows={4}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-
             {page == "customer" && (
               <Grid item xs={12}>
                 <Stack direction="row" spacing={2}>
@@ -649,6 +635,7 @@ export default function CustomerForm({
                       disabled={disabled}
                     />
                   </Grid>
+
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Status"
@@ -876,20 +863,25 @@ export default function CustomerForm({
                       </ThemeTabs>
                     </Box>
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Reject Remarks"
-                      name="rejectRemarks"
-                      value={formik.values.rejectRemarks}
-                      error={formik.errors.rejectRemarks}
-                      onChange={formik.handleChange}
-                      disabled={!disabled}
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                      fullWidth
-                    />
-                  </Grid>
+                  {formik.values.status.toLowerCase() === "rejected" ||
+                  page == "customerApprove" ? (
+                    <Grid item xs={12}>
+                      <TextField
+                        label="Reject Remarks"
+                        name="rejectRemarks"
+                        value={formik.values.rejectRemarks}
+                        error={formik.errors.rejectRemarks}
+                        onChange={formik.handleChange}
+                        disabled={!disabled}
+                        multiline
+                        rows={4}
+                        variant="outlined"
+                        fullWidth
+                      />
+                    </Grid>
+                  ) : (
+                    <></>
+                  )}
 
                   {page == "customer" && (
                     <Grid item xs={12}>
