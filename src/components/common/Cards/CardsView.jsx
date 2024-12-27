@@ -14,7 +14,7 @@ export default function CardsView({
   icon,
   setSelectedBox,
   seletectBox,
-  page
+  page,
 }) {
   const handleCardPagination = (event, page) => {
     console.log(page);
@@ -43,7 +43,27 @@ export default function CardsView({
       marginTop: "auto",
     },
   };
-  Boolean(page === "user_management") && (styles = { ...styles, grid: { display: "flex", flexWrap: "wrap", gap: "10px" } })
+  Boolean(page === "user_management") &&
+    (styles = {
+      ...styles,
+      grid: { display: "flex", flexWrap: "wrap", gap: "10px" },
+    });
+
+  const handleDate = (date) => {
+    return date.split("T")[0];
+  };
+
+  const gridData = data?.map((obj) => {
+    return {
+      ...obj,
+      modifiedDate: obj.modifiedDate
+        ? handleDate(obj.modifiedDate)
+        : obj.modifiedDate,
+      createdDate: obj.createdDate
+        ? handleDate(obj.createdDate)
+        : obj.createdDate,
+    };
+  });
 
   return (
     <Grid
@@ -61,7 +81,7 @@ export default function CardsView({
       }}
     >
       <Grid width="100%" gap={2} sx={styles.grid}>
-        {data?.map((item, index) => (
+        {gridData?.map((item, index) => (
           <CardItem
             key={item.id}
             item={item}
@@ -88,7 +108,7 @@ export default function CardsView({
         )}
       </Grid>
 
-      {data?.length > 0 && (
+      {gridData?.length > 0 && (
         <Box sx={styles.pagination}>
           <TablePagination
             component="div"
@@ -107,5 +127,3 @@ export default function CardsView({
     </Grid>
   );
 }
-
-
