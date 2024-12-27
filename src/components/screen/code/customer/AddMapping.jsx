@@ -67,7 +67,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       type: "singleSelect",
-      valueOptions: chargeNameOptions.map((option) => option.label),
+      valueOptions: chargeNameOptions.map((option) => option.value),
       headerAlign: "center",
       align: "center",
     },
@@ -77,7 +77,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       type: "singleSelect",
-      valueOptions: unitTypeOptions.map((option) => option.label),
+      valueOptions: unitTypeOptions.map((option) => option.value),
       headerAlign: "center",
       align: "center",
     },
@@ -87,7 +87,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       type: "singleSelect",
-      valueOptions: currencyOptions.map((option) => option.label),
+      valueOptions: currencyOptions.map((option) => option.value),
       headerAlign: "center",
       align: "center",
     },
@@ -97,7 +97,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       type: "singleSelect",
-      valueOptions: shipmentTypeOptions.map((option) => option.label),
+      valueOptions: shipmentTypeOptions.map((option) => option.value),
       headerAlign: "center",
       align: "center",
     },
@@ -118,7 +118,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
           disabled={disabled}
           color="error"
           onClick={() => deleteRow(params.row.id)}
-          // disabled={disabled || customerEntityTariffs.length === 1}
+        // disabled={disabled || customerEntityTariffs.length === 1}
         >
           <Delete />
         </Button>

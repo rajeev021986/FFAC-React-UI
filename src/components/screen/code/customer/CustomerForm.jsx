@@ -516,8 +516,9 @@ export default function CustomerForm({
               <Box
                 sx={{
                   borderBottom: 1,
-                  borderColor: "divider",
                   marginBottom: 2,
+                  border: "1px solid #0000001f",
+                  borderRadius: "10px",
                 }}
               >
                 <ThemeTabs
@@ -844,8 +845,9 @@ export default function CustomerForm({
                     <Box
                       sx={{
                         borderBottom: 1,
-                        borderColor: "divider",
                         marginBottom: 2,
+                        border: "1px solid #0000001f",
+                        borderRadius: "10px",
                       }}
                     >
                       <ThemeTabs

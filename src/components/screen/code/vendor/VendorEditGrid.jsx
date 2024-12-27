@@ -22,7 +22,7 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
             inputValue,
             inputId
         );
-        const data = await response.body;   
+        const data = await response.body;
 
         return data || [];
     };
@@ -483,7 +483,13 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
     return (
         <Box sx={{ width: "100%", marginTop: 2 }}>
 
-            <Box sx={{ width: '100%', typography: 'body1' }}>
+            <Box sx={{
+                width: '100%', typography: 'body1', borderBottom: 1,
+                border: "1px solid",
+                borderColor: "divider",
+                marginBottom: 2,
+                borderRadius: '10px',
+            }}>
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -491,7 +497,7 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                         </TabList>
                     </Box>
                     {TabsHosts.map((ob, index) =>
-                        <TabPanel value={index}>
+                        <TabPanel value={index} sx={{ padding: 0,marginTop:2 }}>
                             <Box sx={{ width: "100%" }}>
                                 <Box
                                     sx={{
