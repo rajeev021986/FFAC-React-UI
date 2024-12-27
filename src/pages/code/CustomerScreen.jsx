@@ -119,6 +119,7 @@ export default function CustomerScreen({ page }) {
   useEffect(() => {
     refetch();
   }, [location.pathname]);
+
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
@@ -164,21 +165,24 @@ export default function CustomerScreen({ page }) {
       });
     }
     if (actionName === "Export") {
-
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload,"customer");
+        const blob = await ApiManager.fetchCustomerDatasExcel(
+          query,
+          payload,
+          "customer"
+        );
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', 'customer-data.xlsx'); // or whatever filename you want
+        link.setAttribute("download", "customer-data.xlsx"); // or whatever filename you want
         document.body.appendChild(link);
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {
-        console.error('Download failed:', error);
+        console.error("Download failed:", error);
       }
-      // const response = await fetch("http://18.223.155.76:9092/entity-service/customer/export?page=1&size=10&sortBy=&sortOrder=", {   
+      // const response = await fetch("http://18.223.155.76:9092/entity-service/customer/export?page=1&size=10&sortBy=&sortOrder=", {
       //   responseType: "blob",
       //   headers: {
       //     "Content-Type": "application/json",
@@ -238,7 +242,7 @@ export default function CustomerScreen({ page }) {
                       backgroundColor: "#f0f0f0",
                       color: "black",
                       boxShadow: 3,
-                      borderRadius: '20px 19px 19px 20px',
+                      borderRadius: "20px 19px 19px 20px",
                       "&:hover": {
                         backgroundColor: "#e0e0e0",
                       },

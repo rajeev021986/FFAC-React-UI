@@ -1,13 +1,13 @@
-import { Box, Card, CardContent, CardHeader, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import ScreenToolbar from '../../components/common/ScreenToolbar';
-import ThemedBreadcrumb from '../../components/common/Breadcrumb';
-import CustomerForm from '../../components/screen/code/customer/CustomerForm';
-import { useFetchCustomerQuery } from '../../store/api/codeDataApi';
-import ApiManager from '../../services/ApiManager';
-import Loader from '../../components/common/Loader/Loader';
-import { useGetOptionsSettingsQuery } from '../../store/api/settingsApi';
+import { Box, Card, CardContent, CardHeader, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import ScreenToolbar from "../../components/common/ScreenToolbar";
+import ThemedBreadcrumb from "../../components/common/Breadcrumb";
+import CustomerForm from "../../components/screen/code/customer/CustomerForm";
+import { useFetchCustomerQuery } from "../../store/api/codeDataApi";
+import ApiManager from "../../services/ApiManager";
+import Loader from "../../components/common/Loader/Loader";
+import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 export default function CustomerFormScreen({ page }) {
   const [customerDatas, setcustomerDatas] = useState({});
   const [loading, setLoading] = useState(true);
@@ -15,36 +15,34 @@ export default function CustomerFormScreen({ page }) {
   const { state } = useLocation();
   // console.log(state, 'state')
   const [initialValues, setInitialValues] = React.useState({
-    id: '',
-    city: '',
-    customerName: '',
-    accountNo: '',
-    telephone: '',
-    pinNo: '',
-    accountType: '',
-    vatNo: '',
-    add1: '',
-    add2: '',
-    add3: '',
-    bankName: '',
-    emailId: '',
-    creditDays: '',
-    creditAmount: '',
-    contactPerson: '',
-    country: '',
-    email: '',
-    fax: '',
-    chargeName: '',
-    state: '',
-    paymentType: 'cash',
-    status: 'ACTIVE',
-    url: '',
-    zipCode: '',
+    id: "",
+    customerName: "",
+    tinNo: "",
+    vatNo: "",
+    status: "",
+    add1: "",
+    add2: "",
+    add3: "",
+    poNo: "",
+    city: "",
+    country: "",
+    province: "",
+    contactPerson: "",
+    emailId: "",
+    telephone: "",
+    fax: "",
+    bankName: "",
+    accountNo: "",
+    customerType: "",
+    companyCode: "",
+    paymentType: "cash",
+    creditDays: "",
+    creditAmount: "",
+    rejectRemarks: "",
+    isApproved: false,
+    agreementExpiryDate: "",
     customerEntityTariffs: [],
-    agreementExpiryDate: '',
     customerEntityEmailsIds: [],
-    ctypelist: 'CUSTOMER',
-    files: []
   });
   // const {
   //   data: mappingData,
@@ -73,42 +71,42 @@ export default function CustomerFormScreen({ page }) {
   useEffect(() => {
     const fetchCustomerDetails = async () => {
       try {
-        const res = await ApiManager.getCustomerDeatils(state?.initialValues?.id);
-        setcustomerDatas(res.body)
+        const res = await ApiManager.getCustomerDeatils(
+          state?.initialValues?.id
+        );
+        console.log("customerdata", res);
+        setcustomerDatas(res.body);
         setInitialValues({
-          id: res.body?.id || '',
-          city: res.body?.city || '',
-          customerName: res.body?.customerName || '',
-          accountNo: res.body?.accountNo || '',
-          telephone: res.body?.telephone || '',
-          pinNo: res.body?.pinNo || '',
-          accountType: res.body?.accountType || '',
-          vatNo: res.body?.vatNo || '',
-          add1: res.body?.add1 || '',
-          add2: res.body?.add2 || '',
-          add3: res.body?.add3 || '',
-          bankName: res.body?.bankName || '',
-          emailId: res.body?.emailId || '',
-          creditDays: res.body?.creditDays || '',
-          creditAmount: res.body?.creditAmount || '',
-          contactPerson: res.body?.contactPerson || '',
-          country: res.body?.country || '',
-          email: res.body?.email || '',
-          fax: res.body?.fax || '',
-          chargeName: res.body?.chargeName || '',
-          state: res.body?.state || '',
-          paymentType: res.body?.paymentType || 'cash',
+          id: res.body?.id || "",
+          customerName: res.body?.customerName || "",
+          tinNo: res.body?.tinNo || "",
+          vatNo: res.body?.vatNo || "",
+          status: res.body?.status || "",
+          add1: res.body?.add1 || "",
+          add2: res.body?.add2 || "",
+          add3: res.body?.add3 || "",
+          poNo: res.body?.poNo || "",
+          city: res.body?.city || "",
+          country: res.body?.country || "",
+          province: res.body?.province || "",
+          contactPerson: res.body?.contactPerson || "",
+          emailId: res.body?.emailId || "",
+          telephone: res.body?.telephone || "",
+          fax: res.body?.fax || "",
+          bankName: res.body?.bankName || "",
+          accountNo: res.body?.accountNo || "",
+          customerType: res.body?.customerType || "",
+          companyCode: res.body?.companyCode || "",
+          paymentType: res.body?.paymentType || "cash",
+          creditDays: res.body?.creditDays || "",
+          creditAmount: res.body?.creditAmount || "",
+          rejectRemarks: res.body?.rejectRemarks || "",
           isApproved: res.body?.isApproved || false,
-          status: res.body?.status || '',
-          url: res.body?.url || '',
-          zipCode: res.body?.zipCode || '',
+          agreementExpiryDate: res.body?.agreementExpiryDate || "",
           customerEntityTariffs: res.body?.customerEntityTariffs || [],
-          agreementExpiryDate: res.body?.agreementExpiryDate || '',
           customerEntityEmailsIds: res.body?.customerEntityEmailsIds || [],
-          ctypelist: 'CUSTOMER',
-          files: []
-        })
-        setLoading(false)
+        });
+        setLoading(false);
         console.log(res, "res");
       } catch (error) {
         console.error(error, "error");
@@ -117,11 +115,9 @@ export default function CustomerFormScreen({ page }) {
     };
     if (settingsLoaded && state?.initialValues?.id) {
       fetchCustomerDetails();
-    }else{
+    } else {
       setLoading(false);
     }
-
-
   }, [settingsLoaded, state?.initialValues?.id]);
 
   // React.useEffect(() => {
@@ -157,22 +153,34 @@ export default function CustomerFormScreen({ page }) {
   // }, [mappingData, isLoading, isError]);
   return (
     <Box>
-      <ScreenToolbar leftComps={<div><ThemedBreadcrumb /></div>} rightComps={<div></div>} />
-      {loading || optionsLoading || customerSettingsLoading ? <Loader /> : <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        {/* <CardHeader title={
+      <ScreenToolbar
+        leftComps={
+          <div>
+            <ThemedBreadcrumb />
+          </div>
+        }
+        rightComps={<div></div>}
+      />
+      {loading || optionsLoading || customerSettingsLoading ? (
+        <Loader />
+      ) : (
+        <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+          {/* <CardHeader title={
           <Box display="flex" justifyContent={"space-between"}>
             <Typography variant='subtitle3' component='div'>Customer</Typography>
           </Box>
         } /> */}
-        <CardContent>
-          <CustomerForm
-            optionsSettingsData={optionsSettingsData}
-            customerSettingsData={customerSettingsData}
-            initialValues={initialValues}
-            type={state?.type}
-            page={page} />
-        </CardContent>
-      </Card>}
+          <CardContent>
+            <CustomerForm
+              optionsSettingsData={optionsSettingsData}
+              customerSettingsData={customerSettingsData}
+              initialValues={initialValues}
+              type={state?.type}
+              page={page}
+            />
+          </CardContent>
+        </Card>
+      )}
     </Box>
-  )
+  );
 }

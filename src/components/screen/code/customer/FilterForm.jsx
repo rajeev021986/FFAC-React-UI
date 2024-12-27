@@ -12,10 +12,9 @@ export default function FilterForm() {
 
   const formik = useFormik({
     initialValues: {
-      acode: inputs.acode || "",
-      city: inputs.city || "",
-      cname: inputs.cname || "",
-      country: inputs.country || "",
+      customerName: inputs.customerName || "",
+      tinNo: inputs.tinNo || "",
+      vatNo: inputs.vatNo || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -25,10 +24,9 @@ export default function FilterForm() {
     formik.resetForm();
     dispatch(
       updateInput({
-        acode: "",
-        city: "",
-        cname: "",
-        country: "",
+        customerName: "",
+        tinNo: "",
+        vatNo: "",
       })
     );
   };
@@ -45,32 +43,37 @@ export default function FilterForm() {
         <Stack direction="row" spacing={2}>
           <InputBox
             label="Customer Name"
-            id="cname"
-            value={formik.values.cname}
+            id="customerName"
+            value={formik.values.customerName}
             onChange={formik.handleChange}
           />
           <InputBox
-            label="City"
-            id="city"
-            value={formik.values.city}
+            label="Tin No"
+            id="tinNo"
+            value={formik.values.tinNo}
             onChange={formik.handleChange}
           />
           <InputBox
-            label="Country"
-            id="country"
-            value={formik.values.country}
+            label="Vat No"
+            id="vatNo"
+            value={formik.values.vatNo}
             onChange={formik.handleChange}
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
-          <Button color="primary" size="small" onClick={handleReset} sx={{borderRadius: '12px'}}>
+          <Button
+            color="primary"
+            size="small"
+            onClick={handleReset}
+            sx={{ borderRadius: "12px" }}
+          >
             reset
           </Button>
           <OutlinedButton
             color="primary"
             size="small"
             onClick={formik.handleSubmit}
-            sx={{borderRadius: '12px'}}
+            sx={{ borderRadius: "12px" }}
           >
             apply
           </OutlinedButton>

@@ -28,7 +28,7 @@ export default function CardItem({
       //   console.log("Selected IDs after removing:", updated);
       //   return updated;
       // });
-      setSelectedBox('')
+      setSelectedBox("");
     }
   };
   // Remove id and action columns
@@ -36,69 +36,67 @@ export default function CardItem({
     (column) => column.field !== "id" && column.field !== "action"
   );
 
-  return (
-    page === "user_management" ? (
-      <CardItemUser
-        item={item}
-        columns={columns}
-        selectedBox={selectedBox}
-        setSelectedBox={setSelectedBox}
-        uniqueId={uniqueId}
-        actions={actions}
-        icon={icon}
-        page={page}
-      />
-    ) : (
-      <Box sx={styles.root_item}>
-        {/* Checkbox at the start */}
-        {page == "customer" && (
-          <Box
-            sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
-          >
-            <Checkbox
-              checked={selectedBox == uniqueId}
-              onChange={handleCheckboxChange}
-              color="primary"
-            />
-          </Box>
-        )}
-
-        {/* Icon and details */}
+  return page === "user_management" ? (
+    <CardItemUser
+      item={item}
+      columns={columns}
+      selectedBox={selectedBox}
+      setSelectedBox={setSelectedBox}
+      uniqueId={uniqueId}
+      actions={actions}
+      icon={icon}
+      page={page}
+    />
+  ) : (
+    <Box sx={styles.root_item}>
+      {/* Checkbox at the start */}
+      {page == "customer" && (
         <Box
-          sx={{
-            ...styles.card_left_box,
-            marginRight: "17px",
-            padding: 0,
-            width: "50px",
-          }}
+          sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
         >
-          <Box sx={{ ...styles.icon, margin: 0, padding: 0 }} elevation={1}>
-            {icon ? icon : <VerifiedUserOutlined color="primary" />}
-          </Box>
+          <Checkbox
+            checked={selectedBox == uniqueId}
+            onChange={handleCheckboxChange}
+            color="primary"
+          />
         </Box>
+      )}
 
-        <Grid container spacing={1} sx={styles.card_right_box}>
-          {columns.map((column, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
-              <CardField
-                title={column.headerName}
-                subtitle={item[column.field]}
-              />
-            </Grid>
-          ))}
-        </Grid>
-        {actions &&
-          <Box>
-            <TMenu
-              buttonIcon={<MoreVert />}
-              buttonProps={{ color: "text.secondary" }}
-              menuItems={actions}
-              params={{ row: item }}
-              action={true}
-            />
-          </Box>}
+      {/* Icon and details */}
+      <Box
+        sx={{
+          ...styles.card_left_box,
+          padding: 0,
+          width: "30px",
+        }}
+      >
+        {/* <Box sx={{ ...styles.icon, margin: 0, padding: 0 }} elevation={1}>
+            {icon ? icon : <VerifiedUserOutlined color="primary" />}
+          </Box> */}
       </Box>
-    )
+
+      <Grid container spacing={1} sx={styles.card_right_box}>
+        {columns.map((column, index) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
+            <CardField
+              title={column.headerName}
+              subtitle={item[column.field]}
+            />
+          </Grid>
+        ))}
+      </Grid>
+      {actions && (
+        <Box>
+          <TMenu
+            buttonIcon={<MoreVert />}
+            buttonProps={{ color: "text.secondary" }}
+            menuItems={actions}
+            params={{ row: item }}
+            action={true}
+          />
+        </Box>
+      )}
+    </Box>
   );
 }
 

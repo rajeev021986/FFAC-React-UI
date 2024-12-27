@@ -2,29 +2,29 @@
 
 
 export const CODE_CUSTOMER_COLUMNS = [
+    {
+        field: 'status',
+        headerName: 'Status',
+        width: 150,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
 
     {
         field: 'customerName',
         headerName: 'Customer Name',
         width: 150,
         headerAlign: 'center',
-        align : 'center',
-        editable: true
+        align: 'center',
+        editable: false
     },
     {
-        field: 'add1',
-        headerName: 'Address',
+        field: 'tinNo',
+        headerName: 'TIN NO.',
         width: 150,
         headerAlign: 'center',
-        align : 'center',
-        editable: true
-    },
-    {
-        field: 'pinNo',
-        headerName: 'PIN',
-        width: 150,
-        headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: false
     },
     {
         flex: 1,
@@ -32,25 +32,26 @@ export const CODE_CUSTOMER_COLUMNS = [
         headerName: 'VAT NO.',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: false
     },
     {
-        flex: 1,
-        field: 'bankName',
-        headerName: 'Bank Name ',
-        width: 110,
+        field: 'add1',
+        headerName: 'Address',
+        width: 150,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center',
+        editable: false
     },
+
     {
         flex: 1,
         field: 'action',
         headerName: 'Action',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: false
     }
-  
+
 ]
 export const CODE_USER_COLUMNS = [
 
@@ -59,7 +60,7 @@ export const CODE_USER_COLUMNS = [
         headerName: 'User Name',
         width: 150,
         headerAlign: 'center',
-        align : 'center',
+        align: 'center',
         editable: true
     },
     {
@@ -67,7 +68,7 @@ export const CODE_USER_COLUMNS = [
         headerName: 'Email',
         width: 150,
         headerAlign: 'center',
-        align : 'center',
+        align: 'center',
         editable: true
     },
     {
@@ -75,7 +76,7 @@ export const CODE_USER_COLUMNS = [
         headerName: 'Phone',
         width: 150,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: true
     },
     {
         flex: 1,
@@ -83,7 +84,7 @@ export const CODE_USER_COLUMNS = [
         headerName: 'Address',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: true
     },
     {
         flex: 1,
@@ -91,7 +92,7 @@ export const CODE_USER_COLUMNS = [
         headerName: 'Status',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: true
     },
     // {
     //     flex: 1,
@@ -101,7 +102,7 @@ export const CODE_USER_COLUMNS = [
     //     headerAlign: 'center',
     //     align : 'center',editable: true
     // }
-  
+
 ]
 
 export const CODE_PARTY_COLUMNS = [
@@ -110,21 +111,21 @@ export const CODE_PARTY_COLUMNS = [
         headerName: 'Code',
         width: 110,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         field: 'city',
         headerName: 'City',
         width: 150,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         field: 'cname',
         headerName: 'PARTY',
         width: 150,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         flex: 1,
@@ -132,7 +133,7 @@ export const CODE_PARTY_COLUMNS = [
         headerName: 'Country',
         width: 110,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         flex: 1,
@@ -140,7 +141,7 @@ export const CODE_PARTY_COLUMNS = [
         headerName: 'MAIN TEL#',
         width: 110,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         flex: 1,
@@ -148,7 +149,7 @@ export const CODE_PARTY_COLUMNS = [
         headerName: 'Status',
         width: 110,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     }
 ]
 
@@ -158,21 +159,21 @@ export const AGENT_PARTY_COLUMNS = [
         headerName: 'Code',
         width: 110,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         field: 'city',
         headerName: 'City',
         width: 150,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         field: 'cname',
         headerName: 'AGENT',
         width: 150,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         flex: 1,
@@ -180,7 +181,7 @@ export const AGENT_PARTY_COLUMNS = [
         headerName: 'Country',
         width: 110,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         flex: 1,
@@ -188,7 +189,7 @@ export const AGENT_PARTY_COLUMNS = [
         headerName: 'MAIN TEL#',
         width: 110,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     },
     {
         flex: 1,
@@ -196,6 +197,6 @@ export const AGENT_PARTY_COLUMNS = [
         headerName: 'Status',
         width: 110,
         headerAlign: 'center',
-        align : 'center'
+        align: 'center'
     }
 ]

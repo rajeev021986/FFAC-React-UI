@@ -1,25 +1,40 @@
 import React from "react";
-import { Box, Button, colors, Typography } from "@mui/material";
+import { Box, Button, colors, Typography, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 import toast from "react-hot-toast";
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import AutoCompleteInput from "../../../common/AutoCompletInput";
+import ApiManager from "../../../../services/ApiManager";
 
-export default function VendorEditGrid({ formik, disabled }) {
+export default function VendorEditGrid({ formik, disabled, vendorSettingsData }) {
+    const fetchSuggestions = async (inputValue, inputId) => {
+        inputId =
+            inputId === "chargeName"
+                ? "CHARGE" : "CURRENCY"
+        if (!inputValue) return [];
+
+        const response = await ApiManager.fetchVesselSuggestions(
+            inputValue,
+            inputId
+        );
+        const data = await response.body;
+
+        return data || [];
+    };
 
     const TabsHosts = [
         {
-            tabLable: "Vendor Entity Tariffs",
+            tabLable: "Tariffs",
             value: formik.values.vendorEntityTariffs || [],
             addNewRow: () => {
                 const hasEmptyFields = TabsHosts[0].value.some((row) =>
                     Object.values(row).some((value) => value === '' || value === null || value === undefined)
                 );
-                console.log(TabsHosts[0].value, "hasEmptyFields")
-
                 if (hasEmptyFields) {
                     toast.error("Please fill in all fields before adding a new row.", {
                         position: "top-right",
@@ -56,14 +71,37 @@ export default function VendorEditGrid({ formik, disabled }) {
                 {
                     field: "chargeName",
                     headerName: "chargeName",
-                    flex: 1,
-                    editable: !disabled,
+                    flex: 2,
+                    renderCell: (params) => {
+                        return (
+                            <AutoCompleteInput
+                                id="chargeName"
+                                suggestionName="charge_name"
+                                value={params.value}
+                                error={
+                                    formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeName
+                                }
+                                onChange={(newValue) => {
+                                    const rowIndex = formik.values.vendorEntityTariffs.findIndex(
+                                        (entity) => entity.id === params.id
+                                    );
+                                    // setTimeout(() => {
+                                    formik.setValues({ ...formik.values, vendorEntityTariffs: formik.values.vendorEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, chargeName: newValue } : entity) });
+                                    // }, 1500);
+                                }}
+                                fetchSuggestions={fetchSuggestions}
+                            />
+                        );
+
+                    },
                 },
                 {
                     field: "type",
                     headerName: "Type",
                     flex: 1,
                     editable: !disabled,
+                    type: "singleSelect",
+                    valueOptions: vendorSettingsData?.body?.tarifType?.map((option) => option.value),
                 },
                 {
                     field: "finalDestination",
@@ -76,11 +114,34 @@ export default function VendorEditGrid({ formik, disabled }) {
                     headerName: "UnitType",
                     flex: 1,
                     editable: !disabled,
+                    type: "singleSelect",
+                    valueOptions: vendorSettingsData?.body?.unitType?.map((option) => option.value),
                 }, {
                     field: "currency",
                     headerName: "Currency",
                     flex: 1,
-                    editable: !disabled,
+                    renderCell: (params) => {
+                        return (
+                            <AutoCompleteInput
+                                id="currency"
+                                suggestionName="currency_name"
+                                value={params.value}
+                                error={
+                                    formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeName
+                                }
+                                onChange={(newValue) => {
+                                    const rowIndex = formik.values.vendorEntityTariffs.findIndex(
+                                        (entity) => entity.id === params.id
+                                    );
+                                    // setTimeout(() => {
+                                    formik.setValues({ ...formik.values, vendorEntityTariffs: formik.values.vendorEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, currency: newValue } : entity) });
+                                    // }, 1500);
+                                }}
+                                fetchSuggestions={fetchSuggestions}
+                            />
+                        );
+
+                    },
                 }, {
                     field: "unitRate",
                     headerName: "UnitRate",
@@ -92,18 +153,18 @@ export default function VendorEditGrid({ formik, disabled }) {
                     headerName: "Actions",
                     sortable: false,
                     renderCell: (params) => (
-                        <Button
+                        <IconButton
                             color="error"
                             onClick={() => TabsHosts[0].deleteRow(params.row.id)}
                         >
-                            Remove
-                        </Button>
+                            <DeleteIcon />
+                        </IconButton>
                     ),
                 },
             ]
         },
         {
-            tabLable: "vendor Entity Demurage Tariffs",
+            tabLable: "Demurage Tariffs",
             value: formik.values.vendorEntityDemurageTariffs || [
                 {
                     id: 0,
@@ -165,6 +226,8 @@ export default function VendorEditGrid({ formik, disabled }) {
                     headerName: "containerType",
                     flex: 1,
                     editable: !disabled,
+                    type: "singleSelect",
+                    valueOptions: vendorSettingsData?.body?.container?.map((option) => option.value),
                 },
                 {
                     field: "firstWeek",
@@ -188,18 +251,18 @@ export default function VendorEditGrid({ formik, disabled }) {
                     headerName: "Actions",
                     sortable: false,
                     renderCell: (params) => (
-                        <Button
+                        <IconButton
                             color="error"
                             onClick={() => TabsHosts[1].deleteRow(params.row.id)}
                         >
-                            Remove
-                        </Button>
+                            <DeleteIcon />
+                        </IconButton>
                     ),
                 },
             ]
         },
         {
-            tabLable: "vendor Entity FreeDays",
+            tabLable: "FreeDays",
             value: formik.values.vendorEntityFreeDays || [],
             addNewRow: () => {
                 const hasEmptyFields = TabsHosts[2].value.some((row) =>
@@ -254,21 +317,21 @@ export default function VendorEditGrid({ formik, disabled }) {
                     headerName: "Actions",
                     sortable: false,
                     renderCell: (params) => (
-                        <Button
+                        <IconButton
                             color="error"
                             onClick={() => TabsHosts[2].deleteRow(params.row.id)}
                         >
-                            Remove
-                        </Button>
+                            <DeleteIcon />
+                        </IconButton>
                     ),
                 },
             ]
         },
         {
-            tabLable: "Vendor Entity Emails",
+            tabLable: "Emails",
             value: formik.values.vendorEntityEmails || [],
             addNewRow: () => {
-                const hasEmptyFields = TabsHosts[2].value.some((row) =>
+                const hasEmptyFields = TabsHosts[3].value.some((row) =>
                     Object.values(row).some((value) => value === '' || value === null || value === undefined)
                 );
 
@@ -321,12 +384,93 @@ export default function VendorEditGrid({ formik, disabled }) {
                     headerName: "Actions",
                     sortable: false,
                     renderCell: (params) => (
-                        <Button
+                        <IconButton
                             color="error"
                             onClick={() => TabsHosts[3].deleteRow(params.row.id)}
                         >
-                            Remove
-                        </Button>
+                            <DeleteIcon />
+                        </IconButton>
+                    ),
+                },
+            ]
+        },
+        {
+            tabLable: "Bank Details",
+            value: formik.values.vendorBankDetails || [],
+            addNewRow: () => {
+                const hasEmptyFields = TabsHosts[4].value.some((row) =>
+                    Object.values(row).some((value) => value === '' || value === null || value === undefined)
+                );
+
+                if (hasEmptyFields) {
+                    toast.error("Please fill in all fields before adding a new row.", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                    });
+                    return;
+                }
+                const newRow = {
+                    id: Date.now(),
+                    bankName: '',
+                    bankAddress: '',
+                    currency: '',
+                    swiftCode: '',
+                    vendorId: 0,
+                    new: true
+                };
+                formik.setFieldValue("vendorBankDetails", [...TabsHosts[4].value, newRow]);
+            },
+            deleteRow: (id) => {
+                const updatedRows = TabsHosts[4].value.filter((row) => row.id !== id);
+                formik.setFieldValue("vendorBankDetails", updatedRows);
+            },
+            handleProcessRowUpdate: (newRow, oldRow) => {
+                const updatedRows = TabsHosts[4].value.map((row) =>
+                    row.id === newRow.id ? { ...row, ...newRow } : row
+                );
+                formik.setFieldValue("vendorBankDetails", updatedRows);
+                return newRow;
+            },
+            columns: [
+                {
+                    field: "bankName",
+                    headerName: "Bank Name",
+                    flex: 1,
+                    editable: !disabled,
+                },
+                {
+                    field: "bankAddress",
+                    headerName: "Bank Address",
+                    flex: 1,
+                    editable: !disabled,
+                },
+                {
+                    field: "currency",
+                    headerName: "Currency",
+                    flex: 1,
+                    editable: !disabled,
+                },
+                {
+                    field: "swiftCode",
+                    headerName: "SWIFT Code",
+                    flex: 1,
+                    editable: !disabled,
+                },
+                {
+                    field: "actions",
+                    headerName: "Actions",
+                    sortable: false,
+                    renderCell: (params) => (
+                        <IconButton
+                            color="error"
+                            onClick={() => TabsHosts[4].deleteRow(params.row.id)}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
                     ),
                 },
             ]
@@ -370,7 +514,10 @@ export default function VendorEditGrid({ formik, disabled }) {
                                 <Box sx={{ height: 400 }}>
                                     <DataGrid
                                         rows={ob.value}
-                                        columns={ob.columns}
+                                        columns={ob.columns.map((column) => ({
+                                            ...column,
+                                            headerAlign: 'center',
+                                        }))}
                                         disableSelectionOnClick
                                         processRowUpdate={ob.handleProcessRowUpdate}
                                         experimentalFeatures={{ newEditingApi: true }}

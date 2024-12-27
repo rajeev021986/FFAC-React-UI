@@ -1,13 +1,8 @@
 // mui components
-import {
-  Paper,
-  Pagination,
-  Box
-} from "@mui/material";
+import { Paper, Pagination, Box } from "@mui/material";
 import { StyledDataGrid } from "./styles";
 import { GridToolbarColumnsButton } from "@mui/x-data-grid";
-
-
+import { StatusChip } from "../../utils/statusChip";
 
 const ThemedGrid = (props) => {
   const {
@@ -25,11 +20,23 @@ const ThemedGrid = (props) => {
     ...rest
   } = props;
 
-
-
   console.log(">>>>>>>>count>>>>>>>.", props);
-
-
+  let modifiedColumns = columns.map((a) => {
+    if (a.field === "status") {
+      return {
+        field: "status",
+        headerName: "Status",
+        width: 150,
+        headerAlign: "center",
+        align: "center",
+        renderCell: (params) => {
+          return StatusChip(params.row.status.toLowerCase());
+        },
+      };
+    } else {
+      return a;
+    }
+  });
 
   return (
     <Paper
@@ -40,16 +47,16 @@ const ThemedGrid = (props) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: 'calc(100vh - 250px)', overflowY: 'auto',
+        height: "calc(100vh - 250px)",
+        overflowY: "auto",
       }}
-
     >
       <StyledDataGrid
         pagination
         paginationMode="server"
         sortingMode="server"
         loading={loading}
-        columns={columns}
+        columns={modifiedColumns}
         rows={data}
         columnHeaderHeight={42}
         // columnVisibilityModel={columnVisibility}
@@ -67,7 +74,7 @@ const ThemedGrid = (props) => {
             <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
               <GridToolbarColumnsButton />
             </Box>
-          )
+          ),
         }}
         {...rest}
       />

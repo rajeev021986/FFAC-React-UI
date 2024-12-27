@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
+import { Delete } from "@mui/icons-material";
 
 export default function FilesGrid({ formik, disabled }) {
   const customerEntityEmailsIds = formik.values.customerEntityEmailsIds || [
@@ -10,8 +11,11 @@ export default function FilesGrid({ formik, disabled }) {
 
   // Handler to add a new row
   const addNewRow = () => {
-    const newRow = { id: Date.now(), emailId: "", designation: "",new:true };
-    formik.setFieldValue("customerEntityEmailsIds", [...customerEntityEmailsIds, newRow]);
+    const newRow = { id: Date.now(), emailId: "", designation: "", new: true };
+    formik.setFieldValue("customerEntityEmailsIds", [
+      ...customerEntityEmailsIds,
+      newRow,
+    ]);
   };
 
   // Handler to delete a row
@@ -36,12 +40,14 @@ export default function FilesGrid({ formik, disabled }) {
       headerName: "Designation",
       flex: 1,
       editable: true,
+      headerAlign: "center",
     },
     {
       field: "emailId",
       headerName: "Email ID",
       flex: 1,
       editable: true,
+      headerAlign: "center",
     },
     {
       field: "actions",
@@ -53,9 +59,10 @@ export default function FilesGrid({ formik, disabled }) {
           onClick={() => deleteRow(params.row.id)}
           disabled={disabled}
         >
-          Remove
+          <Delete />
         </Button>
       ),
+      headerAlign: "center",
     },
   ];
 
@@ -66,8 +73,8 @@ export default function FilesGrid({ formik, disabled }) {
           variant="contained"
           startIcon={<AddIcon />}
           onClick={addNewRow}
-          disabled = {disabled}
-          sx={{borderRadius: '17px 18px 18px 17px', margin: '5px'}}
+          disabled={disabled}
+          sx={{ borderRadius: "17px 18px 18px 17px", margin: "5px" }}
         >
           Add Email
         </Button>

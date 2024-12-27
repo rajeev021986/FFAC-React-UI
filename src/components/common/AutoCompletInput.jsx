@@ -40,7 +40,8 @@ function AutoCompleteInput({
   };
 
   const handleSelectionChange = (event, newValue) => {
-    onChange({ target: { name: id, value: newValue } });
+    // onChange({ target: { name: id, value: newValue } });
+    onChange(newValue);
   };
 
   return (
@@ -58,20 +59,30 @@ function AutoCompleteInput({
             label={label}
             error={Boolean(error)}
             helperText={error}
-            variant="outlined"
+            variant="standard" 
             fullWidth
+            sx={{
+              "& .MuiInputBase-root": {
+                border: "none",
+              },
+              "& .MuiInput-underline:before, & .MuiInput-underline:after": {
+                borderBottom: "none",
+              },
+              "& .MuiFormHelperText-root": {
+                margin: 0, 
+              },
+            }}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
                 <>
-                  {loading ? (
-                    <CircularProgress color="inherit" size={20} />
-                  ) : null}
+                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
                   {params.InputProps.endAdornment}
                 </>
               ),
             }}
           />
+
         )}
         renderOption={(props, option) => (
           <MenuItem {...props} key={option}>

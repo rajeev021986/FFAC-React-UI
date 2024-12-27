@@ -116,7 +116,11 @@ export default function VendorScreen({ page }) {
     dispatch(setVendorPagination({ page, pageSize }));
   };
   const Actions = page == "vendor" ? getVendorGridActions(nav, setModal) : getVendorApproveGridActions(nav, setModal);
-  
+
+  VENDOR_COLUMNS[VENDOR_COLUMNS.length - 1].renderCell =
+    GridActions({
+      actions: Actions,
+    });
   const actions = seletectBox
     ? [{ name: "New Vendor" }, { name: "Copy" }, { name: "Export" }]
     : page == "vendor" ? [{ name: "New Vendor" }, { name: "Export" }] : [{ name: "Export" }];
@@ -131,11 +135,11 @@ export default function VendorScreen({ page }) {
     }
     if (actionName === "Export") {
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload,"vendor");
+        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload, "vendor");
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'customer-data.xlsx'); 
+        link.setAttribute('download', 'customer-data.xlsx');
         document.body.appendChild(link);
         link.click();
         link.remove();

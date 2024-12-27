@@ -13,10 +13,11 @@ import { OutlinedButton, ThemeButton } from '../../../common/Button';
 import ScreenToolbar from '../../../common/ScreenToolbar';
 import ThemedBreadcrumb from '../../../common/Breadcrumb';
 import { useGetOptionsSettingsQuery } from '../../../../store/api/settingsApi';
+import { useNavigate } from 'react-router-dom';
 
 export default function VendorForm({ page = "vendor" }) {
     const [value, setValue] = React.useState(1);
-
+    const nav = useNavigate();
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -25,59 +26,32 @@ export default function VendorForm({ page = "vendor" }) {
     ];
     const location = useLocation();
     const { id, type } = location.state;
+    Boolean(type == "copy" || type == "new") && tabs.splice(1, 1);
     const [addVendor] = useAddVendorMutation();
     const [updateVendor] = useUpdateVendorMutation();
     const [getVendor, { isLoading }] = useLazyGetVendorQuery();
     const validationSchema = Yup.object({
-        vendorName: Yup.string()
-            .required('Vendor Name is required'),
-        vendorCode: Yup.string()
-            .required('Vendor Code is required'),
-        vendorNo: Yup.string()
-            .required('Vendor Number is required'),
-        mlo: Yup.string()
-            .required('MLO is required'),
-        status: Yup.string()
-            .required('Status is required'),
-        type: Yup.string()
-            .required('Type is required'),
-        vendorCreation: Yup.string()
-            .required('Vendor Creation is required'),
-        mode: Yup.string()
-            .required('Mode is required'),
-        address: Yup.string()
-            .required('Address is required'),
-        alia: Yup.string()
-            .required('Alia is required'),
-        bankName: Yup.string()
-            .required('Bank Name is required'),
-        bankAddress: Yup.string()
-            .required('Bank Address is required'),
-        usdAccountNo: Yup.string()
-            .required('USD Account No is required'),
-        kshAccountNo: Yup.string()
-            .required('KSH Account No is required'),
-        swiftCode: Yup.string()
-            .required('Swift Code is required'),
-        telephone1: Yup.string()
-            .required('Telephone1 is required'),
-        telephone2: Yup.string()
-            .optional(),
-        fax: Yup.string()
-            .optional(),
-        emailId: Yup.string()
-            .email('Invalid email format')
-            .required('Email ID is required'),
-        pinNo: Yup.string()
-            .required('PIN Number is required'),
-        vrnNo: Yup.string()
-            .required('VRN Number is required'),
-        city: Yup.string()
-            .required('City is required'),
-        country: Yup.string()
-            .required('Country is required'),
-        creditDays: Yup.number()
-            .required('Credit Days is required').min(0, 'Credit Days cannot be negative'),
+        vendorName: Yup.string().required('Vendor Name is required'),
+        status: Yup.string().required('Status is required'),
+        type: Yup.string().required('Type is required'),
+        add1: Yup.string().nullable(),
+        add2: Yup.string().nullable(),
+        add3: Yup.string().nullable(),
+        alias: Yup.string().required('Alias is required'),
+        telephone1: Yup.string().required('Telephone1 is required'),
+        telephone2: Yup.string().nullable(),
+        fax: Yup.string().nullable(),
+        emailId: Yup.string().email('Invalid email format').required('Email ID is required'),
+        tinNo: Yup.string().required('TIN Number is required'),
+        vrnNo: Yup.string().required('VRN Number is required'),
+        city: Yup.string().required('City is required'),
+        country: Yup.string().required('Country is required'),
+        creditDays: Yup.number().required('Credit Days is required').min(0, 'Credit Days cannot be negative'),
+        province: Yup.string().nullable(),
+        poNo: Yup.string().nullable(),
+        contactPerson: Yup.string().nullable(),
+        // companyCode: Yup.string().nullable(),
+        rejectRemarks: Yup.string().nullable(),
         vendorEntityTariffs: Yup.array(
             Yup.object({
                 id: Yup.number().required('ID is required'),
@@ -110,9 +84,25 @@ export default function VendorForm({ page = "vendor" }) {
             Yup.object({
                 id: Yup.number().required('ID is required'),
                 designation: Yup.string().required('Designation is required'),
-                emailId: Yup.string().email('Invalid email format').required('Email ID is required'),
+                emailId: Yup.string()
+                    .required('Email ID is required')
+                    .test('multiple-emails', 'Invalid email format', (value) => {
+                        if (!value) return false;
+                        const emails = value.split(',').map((email) => email.trim());
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        return emails.every((email) => emailRegex.test(email));
+                    })
             })
         ).required('Vendor Entity Emails are required'),
+        vendorBankDetails: Yup.array(
+            Yup.object({
+                id: Yup.number().required('ID is required'),
+                bankName: Yup.string().required('Bank Name is required'),
+                bankAddress: Yup.string().required('Bank Address is required'),
+                currency: Yup.string().required('Currency is required'),
+                swiftCode: Yup.string().required('SWIFT Code is required'),
+            })
+        ).required('Vendor Bank Details are required'),
     });
     const { data: optionsSettingsData } = useGetOptionsSettingsQuery("common_settings");
     const { data: vendorSettingsData } = useGetOptionsSettingsQuery("vendor_settings");
@@ -127,7 +117,7 @@ export default function VendorForm({ page = "vendor" }) {
                         formik.setValues({
                             ...response.data.body,
                             status: "New",
-                            isApproved: !customerSettingsData?.approvalRequest,
+                            isApproved: !vendorSettingsData?.body?.approvalRequest,
                         });
                     } else {
                         formik.setValues(response.data.body);
@@ -141,7 +131,7 @@ export default function VendorForm({ page = "vendor" }) {
             }
         };
 
-        if (id) {
+        if (id && vendorSettingsData) {
             handleFetchVendor();
         }
 
@@ -149,30 +139,27 @@ export default function VendorForm({ page = "vendor" }) {
 
 
     const initialValues = {
-        vendorName: '',
-        vendorCode: '',
-        vendorNo: '',
-        mlo: '',
-        status: "New",
-        type: '',
-        vendorCreation: '',
-        mode: '',
-        address: '',
-        alia: '',
-        bankName: '',
-        bankAddress: '',
-        usdAccountNo: '',
-        kshAccountNo: '',
-        swiftCode: '',
-        telephone1: '',
-        telephone2: '',
-        fax: '',
-        emailId: '',
-        pinNo: '',
-        vrnNo: '',
-        city: '',
-        country: '',
+        vendorName: "",
+        status: "",
+        type: "",
+        add1: "",
+        add2: "",
+        add3: "",
+        alias: "",
+        telephone1: "",
+        telephone2: "",
+        fax: "",
+        emailId: "",
+        tinNo: "",
+        vrnNo: "",
+        city: "",
+        country: "",
         creditDays: 0,
+        province: "",
+        poNo: "",
+        contactPerson: "",
+        // companyCode: "",
+        rejectRemarks: "",
         vendorEntityTariffs: [
             {
                 id: Date.now(),
@@ -212,13 +199,23 @@ export default function VendorForm({ page = "vendor" }) {
                 new: true
             },
         ],
+        vendorBankDetails: [
+            {
+                id: Date.now(),
+                bankName: '',
+                bankAddress: '',
+                currency: '',
+                swiftCode: '',
+                vendorId: 0,
+                new: true
+            },
+        ],
     };
 
     const formik = useFormik({
         initialValues,
         validationSchema,
         onSubmit: async (values) => {
-            console.log(type, "type")
             let updatedValue = {
                 ...values,
                 vendorEntityTariffs: values.vendorEntityTariffs.map((s) =>
@@ -232,12 +229,33 @@ export default function VendorForm({ page = "vendor" }) {
                 ),
                 vendorEntityEmails: values.vendorEntityEmails.map((s) =>
                     s.new ? { ...s, new: null, id: null } : s
-                )
+                ),
+                vendorBankDetails: values.vendorBankDetails.map((s) =>
+                    s.new ? { ...s, new: null, id: null } : s
+                ),
             };
             if (type == "copy" || type == "new") {
-                await addVendor({ ...updatedValue, id: null }).then(() => toast.success("Added successfully")).catch((error) => toast.error(error.msg));
+                try {
+
+                    let res = await addVendor(updatedValue).unwrap();
+                    if (res.success) {
+                        toast.success(res.message);
+                        nav(-1);
+                    }
+                } catch (error) {
+                    toast.error(error.data.message)
+                }
             } else {
-                await updateVendor(updatedValue).then(() => toast.success("Updated successfully")).catch((error) => toast.error(error.msg))
+                try {
+                    let res = await updateVendor(updatedValue).unwrap();
+                    console.log(res.success, "res.success")
+                    if (res.success) {
+                        toast.success(res.message);
+                        nav(-1);
+                    }
+                } catch (error) {
+                    toast.error(error.data.message)
+                }
             }
 
         },
@@ -252,7 +270,7 @@ export default function VendorForm({ page = "vendor" }) {
                         {tabs.map((a) => <Tab label={a.label} value={a.value} />)}
                     </TabList>
                 </Box>
-                <TabPanel value={1}>{isLoading ? <Loader /> : <VendorFormInput formik={formik} type={type} disabled={page == "vendorApproval"} optionsSettingsData={optionsSettingsData} />}</TabPanel>
+                <TabPanel value={1}>{isLoading ? <Loader /> : <VendorFormInput formik={formik} type={type} disabled={page == "vendorApproval"} optionsSettingsData={optionsSettingsData} vendorSettingsData={vendorSettingsData} />}</TabPanel>
                 <TabPanel value={2}><UploadFile customer_id={id} sourceType="VENDOR" page={page} disabled={page == "vendorApproval"} dropdownData={vendorSettingsData?.body?.documentType} /></TabPanel>
             </TabContext>
         </Box></>
