@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useFormik } from "formik";
+import WarningIcon from '@mui/icons-material/Warning'; 
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import InputBox from "../../../common/InputBox";
@@ -200,7 +201,12 @@ export default function CustomerForm({
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
-
+  const customToast = () => (
+    <div style={{ color: 'black', fontSize: '16px', display: 'flex', alignItems: 'center' }}>
+      <WarningIcon style={{ marginRight: '8px', color: 'yellow', fontSize: '20px' }} />
+      Document is pending
+    </div>
+  );
   useEffect(() => {
     if (optionsSettingsData?.body || customerSettingsData?.body) {
       setDropdownData({
@@ -210,6 +216,16 @@ export default function CustomerForm({
     }
   }, [optionsSettingsData]);
   const handleApproveRequest = async () => {
+    if (formik.values.status == "Pending_Documents") {
+      toast.custom(customToast, {
+        style: {
+          backgroundColor: '#FFEB3B',
+          color: 'black',
+        },
+        closeButton: false,
+      });
+      return;
+    }
     try {
       const response = await ApiManager.approveCustomerApprove(
         initialValues.id,
@@ -222,10 +238,15 @@ export default function CustomerForm({
     }
   };
   const handleRejectRequest = async () => {
+    if (!formik.values.rejectRemarks) {
+      toast.error("Please enter reject remarks");
+      return
+    }
     try {
       const response = await ApiManager.rejectCustomerApprove(
         initialValues.id,
-        "customer"
+        "customer",
+        formik.values.rejectRemarks
       );
       nav("/app/entity/approve");
       toast.success("Rejected");

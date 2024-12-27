@@ -389,12 +389,14 @@ const UploadFile = ({
             </Box>
           </Grid>
           <Grid item xs={12} sm={8}>
-            <Box style={{ height: 600, width: "100%" }}>
+            <Box style={{ height: 400, width: "100%" }}>
               <DataGrid
                 rows={listData}
-                columns={sourceType == "CUSTOMER" ? cusColumns : columns}
+                columns={(sourceType === "CUSTOMER" ? cusColumns : columns).map((a) => ({
+                  ...a, 
+                  align: 'center'
+                }))}
                 pageSize={20}
-                // checkboxSelection={checkBox}
                 disableSelectionOnClick
               />
             </Box>

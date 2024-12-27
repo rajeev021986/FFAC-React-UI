@@ -517,6 +517,7 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                                         columns={ob.columns.map((column) => ({
                                             ...column,
                                             headerAlign: 'center',
+                                            align: 'center',
                                         }))}
                                         disableSelectionOnClick
                                         processRowUpdate={ob.handleProcessRowUpdate}

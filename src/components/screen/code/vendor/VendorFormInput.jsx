@@ -7,7 +7,13 @@ import { useNavigate } from "react-router-dom";
 import ApiManager from "../../../../services/ApiManager";
 import toast from "react-hot-toast";
 import SelectBox from "../../../common/SelectBox";
-
+import WarningIcon from '@mui/icons-material/Warning';
+const customToast = () => (
+    <div style={{ color: 'black', fontSize: '16px', display: 'flex', alignItems: 'center' }}>
+        <WarningIcon style={{ marginRight: '8px', color: 'yellow', fontSize: '20px' }} />
+        Document is pending
+    </div>
+);
 export default function VendorFormInput({ formik, type, optionsSettingsData, vendorSettingsData }) {
     const nav = useNavigate();
     const handleApproveRequest = async () => {
@@ -16,6 +22,16 @@ export default function VendorFormInput({ formik, type, optionsSettingsData, ven
             return;
         }
         try {
+            if (formik.values.status == "Pending_Documents") {
+                toast.custom(customToast, {
+                    style: {
+                        backgroundColor: '#FFEB3B',
+                        color: 'black',
+                    },
+                    closeButton: false,
+                });
+                return;
+            }
             const response = await ApiManager.approveCustomerApprove(
                 formik.values.id,
                 "Vendor"
