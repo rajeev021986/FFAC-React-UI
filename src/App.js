@@ -32,7 +32,6 @@ import { VesselVoyage, VesselVoyageScreen } from "./pages/vessel_voyage/VesselVo
 import { VesselVoyageFormScreen } from "./pages/vessel_voyage/VesselVoyageFormScreen";
 import { ChargesScreen } from "./pages/charges/ChargesScreen";
 import AddEditCharge from "./components/screen/code/charge/AddEditCharge";
-import AddEditCharge from "./components/screen/code/charge/AddEditCharge";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
