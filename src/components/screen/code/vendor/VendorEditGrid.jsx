@@ -22,7 +22,7 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
             inputValue,
             inputId
         );
-        const data = await response.body;
+        const data = await response.body;   
 
         return data || [];
     };

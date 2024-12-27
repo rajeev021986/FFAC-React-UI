@@ -32,6 +32,7 @@ import { VesselVoyage, VesselVoyageScreen } from "./pages/vessel_voyage/VesselVo
 import { VesselVoyageFormScreen } from "./pages/vessel_voyage/VesselVoyageFormScreen";
 import { ChargesScreen } from "./pages/charges/ChargesScreen";
 import AddEditCharge from "./components/screen/code/charge/AddEditCharge";
+import AddEditCharge from "./components/screen/code/charge/AddEditCharge";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -111,7 +112,8 @@ function App() {
             <Route path="master/bond/editBond" element={<BondForm />} />
             <Route path="master/bond" element={<BondScreen />} />
             <Route path="master/port/portAdd" element={<PortForm />} />
-            <Route path="admin/charges/chargeAdd" element={<PortForm />} />
+            <Route path="admin/charges/newcharges" element={<AddEditCharge />} />
+            <Route path="admin/charges/editcharges" element={<AddEditCharge />} />
             <Route path="master/port/editPort" element={<PortForm />} />
             <Route
               path="master/vesselVoyage"

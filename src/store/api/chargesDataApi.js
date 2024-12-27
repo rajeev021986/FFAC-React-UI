@@ -22,8 +22,26 @@ export const chargesDataApi = createApi({
             },
             providesTags: ["Charges"],
         }),
+        addCharge: builder.mutation({
+            query: (params) => {
+                return { url: `admin-service/v1/charge`, method: "POST", body: params, headers: getAppHeaders() };
+            },
+            invalidatesTags: ["Charges"],
+        }),
+        updateCharge: builder.mutation({
+            query: (params) => {
+                console.log(params, "params")
+                return { url: `admin-service/v1/charge`, method: "PUT", body: params, headers: getAppHeaders() };
+            },
+            invalidatesTags: ["Charges"],
+        }),
+        getCharge: builder.query({
+            query: (params) => {
+                return { url: `admin-service/v1/charge/${params.id}`, method: "GET", body: params.body, headers: getAppHeaders() };
+            },
+        }),
     })
 
 })
 
-export const { useFetchChargesDatasQuery } = chargesDataApi;
+export const { useFetchChargesDatasQuery, useAddChargeMutation, useUpdateChargeMutation,useLazyGetChargeQuery  } = chargesDataApi;
