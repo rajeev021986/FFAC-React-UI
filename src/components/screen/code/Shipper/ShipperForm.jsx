@@ -22,7 +22,7 @@ import {
 } from "../../../../store/api/shipperDataApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import AuditTimeline from "../../../AuditTimeLine";
-import ShipperUploadFile from "../../../ShipperUploadFile";
+import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 
 export default function ShipperForm({
@@ -30,8 +30,6 @@ export default function ShipperForm({
   page,
   type = "notcopy",
   id,
-  
- 
 }) {
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
@@ -70,7 +68,6 @@ export default function ShipperForm({
     initialValues,
     validationSchema,
     enableReinitialize: true,
-    // validationSchema: ShipperValidationSchema(),
     onSubmit: async (values) => {
       console.log("Form values:", values);
       if (!values.id || type == "copy") {
@@ -497,9 +494,7 @@ export default function ShipperForm({
                         <Stack direction="row" spacing={2}>
                         <OutlinedButton sx={{ fontWeight: "500" }}
                                     onClick={() => 
-                                      {
-                                        console.log("Inside OnClick")
-                                        nav(-1)}}
+                                      nav(-1)}
                                 >
                                     Cancel
                                 </OutlinedButton>
@@ -521,7 +516,7 @@ export default function ShipperForm({
                 </Grid>
               </TabPanel>
               <TabPanel value="2">
-                <ShipperUploadFile
+                <UploadFile
                   shipper_id={initialValues.id}
                   disabled={disabled}
                   dropdownData={shipperSettingsData?.body?.documentType}

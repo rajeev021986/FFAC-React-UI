@@ -9,25 +9,11 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   ];
 
   // Static options for dropdowns
-  const itemNameOptions = [{ label: "Agency Fees", value: "Agency Fees" }];
-  // const unitTypeOptions = dropdownData?.unitType || [
-  //   { label: "Flat", value: "FLAT" },
-  //   { label: "20ft", value: "20FT" },
-  //   { label: "40ft", value: "40FT" },
-  //   { label: "CBM", value: "CBM" },
-  // ];
-  // const currencyOptions = [
-  //   { label: "KSH", value: "KSH" },
-  //   { label: "USD", value: "USD" },
-  // ];
-  // const shipmentTypeOptions = dropdownData?.shipmentType || [
-  //   { label: "IMPORT LOCAL", value: "IMPORT_LOCAL" },
-  //   { label: "IMPORT TRANSIT", value: "IMPORT_TRANSIT" },
-  //   { label: "EXPORT LOCAL", value: "EXPORT_LOCAL" },
-  //   { label: "EXPORT TRANSIT", value: "EXPORT_TRANSIT" },
-  //   { label: "AIR IMPORT LOCAL", value: "AIR_IMPORT_LOCAL" },
-  //   { label: "AIR EXPORT LOCAL", value: "AIR_EXPORT_LOCAL" },
-  // ];
+  const itemNameOptions = [{ label: "ANODE", value: "ANODE" },
+    { label: "CATHODE", value: "CATHODE" },
+    { label: "ELECTROLYTE", value: "ELECTROLYTE"},
+    { label: "COPPER CEMENT", value: "COPPER CEMENT" },
+  ];
 
   // Handler to add a new row
   const addRow = () => {
@@ -36,9 +22,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       item: "",
       freeDays: "",
       storageRate: "",
-      // shipmentType: "",
-      // unitRate: "0",
-      // new:true
     };
     formik.setFieldValue("consigneeEntityFreeDays", [...consigneeEntityFreeDays, newRow]);
   };
@@ -105,7 +88,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
         color="primary"
         disabled={disabled}
       >
-        
+        Add Free Days
       </Button>
       <Box sx={{ height: 400, marginTop: 2 }}>
         <DataGrid

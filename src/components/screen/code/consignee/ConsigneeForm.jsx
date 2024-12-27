@@ -1,7 +1,7 @@
 import { CircularProgress, Grid, Stack } from "@mui/material";
 import { useFormik } from "formik";
 import AddMapping from "./AddMapping";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
@@ -12,7 +12,6 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
-import FileScreen from "./filesGrid";
 import TabPanel from "@mui/lab/TabPanel";
 import {
   useAddConsigneeMutation,
@@ -21,9 +20,8 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemeTabs from "../../../common/Tab/ThemeTab";
 import AuditTimeline from "../../../AuditTimeLine";
-import ConsigneeUploadFile from "../../../UploadFile";
+import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
-import { Navigation } from "@mui/icons-material";
 
 export default function ConsigneeForm({
   initialValues,
@@ -47,7 +45,6 @@ export default function ConsigneeForm({
   const validationSchema = Yup.object({
     consigneeName: Yup.string().required("Name is required"),
     address1: Yup.string().required("Address1 is required"),
-
   });
 
   const handleChange = (event, newValue) => {
@@ -70,13 +67,18 @@ export default function ConsigneeForm({
     enableReinitialize: true,
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
-        let freeDays = values.consigneeEntityFreeDays.map((item) => item?.new ? { ...item, id: null, new: false } : item)
+        let freeDays = values.consigneeEntityFreeDays.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
         try {
           delete values.id;
 
           values.status = "New";
           values.isApproved = !dropdownData?.approvalRequest;
-          let response = await addConsignee({ ...values,consigneeEntityFreeDays: freeDays }).unwrap();
+          let response = await addConsignee({
+            ...values,
+            consigneeEntityFreeDays: freeDays,
+          }).unwrap();
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
             toast.success(response.message);
@@ -88,11 +90,15 @@ export default function ConsigneeForm({
           console.error("Error submitting form:", error);
           toast.error("An error occurred while submitting the form.");
         }
-      } 
-    else {
+      } else {
         try {
-          let freeDays = values.consigneeEntityFreeDays.map((item) => item?.new ? { ...item, id: null, new: false } : item)
-          let response = await updateConsignee({ ...values, consigneeEntityFreeDays: freeDays }).unwrap();
+          let freeDays = values.consigneeEntityFreeDays.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
+          let response = await updateConsignee({
+            ...values,
+            consigneeEntityFreeDays: freeDays,
+          }).unwrap();
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
             toast.success(response.message);
@@ -203,8 +209,8 @@ export default function ConsigneeForm({
                 error={formik.errors.country}
                 onChange={formik.handleChange}
               />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3}>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
               <InputBox
                 label="Standard Free Days"
                 id="standardFreeDays"
@@ -212,8 +218,8 @@ export default function ConsigneeForm({
                 error={formik.errors.standardFreeDays}
                 onChange={formik.handleChange}
               />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3}>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
               <InputBox
                 label="Standard Rate"
                 id="standardRate"
@@ -230,18 +236,11 @@ export default function ConsigneeForm({
                   marginBottom: 2,
                 }}
               >
-                <ThemeTabs
-                  tabData={[
-                    { label: "Free Days", value: "1", disable: false },
-                  ]}
-                >
-                  <AddMapping
-                    formik={formik}
-                    disabled={disabled}
-                    dropdownData={dropdownData}
-                  />
-                  <FileScreen formik={formik} disabled={disabled} />
-                </ThemeTabs>
+                <AddMapping
+                  formik={formik}
+                  disabled={disabled}
+                  dropdownData={dropdownData}
+                />
               </Box>
             </Grid>
             {page == "consignee" && (
@@ -352,8 +351,8 @@ export default function ConsigneeForm({
                       error={formik.errors.country}
                       onChange={formik.handleChange}
                     />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Standard Free Days"
                       id="standardFreeDays"
@@ -361,8 +360,8 @@ export default function ConsigneeForm({
                       error={formik.errors.standardFreeDays}
                       onChange={formik.handleChange}
                     />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Standard Rate"
                       id="standardRate"
@@ -370,9 +369,8 @@ export default function ConsigneeForm({
                       error={formik.errors.standardRate}
                       onChange={formik.handleChange}
                     />
-                    </Grid>
-                    
-                  
+                  </Grid>
+
                   <Grid item xs={12}>
                     <Box
                       sx={{
@@ -381,17 +379,11 @@ export default function ConsigneeForm({
                         marginBottom: 2,
                       }}
                     >
-                      <ThemeTabs
-                        tabData={[
-                          { label: "Free Days", value: "1", disable: false }]}
-                      >
-                        <AddMapping
-                          formik={formik}
-                          disabled={disabled}
-                          dropdownData={dropdownData}
-                        />
-                        <FileScreen formik={formik} disabled={disabled} />
-                      </ThemeTabs>
+                      <AddMapping
+                        formik={formik}
+                        disabled={disabled}
+                        dropdownData={dropdownData}
+                      />
                     </Box>
                   </Grid>
                   {page == "consignee" && (
@@ -402,14 +394,13 @@ export default function ConsigneeForm({
                         justifyContent="space-between"
                       >
                         <Stack direction="row" spacing={2}>
-                        <OutlinedButton 
-                         onClick={()=>nav(-1)}
-                        sx={{ fontWeight: "500" }}
-                                   
-                                >
-                                    Cancel
-                                </OutlinedButton>
-                        
+                          <OutlinedButton
+                            onClick={() => nav(-1)}
+                            sx={{ fontWeight: "500" }}
+                          >
+                            Cancel
+                          </OutlinedButton>
+
                           <ThemeButton
                             onClick={formik.handleSubmit}
                             sx={{ fontWeight: "500" }}
@@ -428,7 +419,7 @@ export default function ConsigneeForm({
                 </Grid>
               </TabPanel>
               <TabPanel value="2">
-                <ConsigneeUploadFile
+                <UploadFile
                   consignee_id={initialValues.id}
                   disabled={disabled}
                   dropdownData={consigneeSettingsData?.body?.documentType}
