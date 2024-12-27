@@ -109,6 +109,7 @@ function App() {
             <Route path="master/bond/editBond" element={<BondForm />} />
             <Route path="master/bond" element={<BondScreen />} />
             <Route path="master/port/portAdd" element={<PortForm />} />
+            <Route path="admin/charges/chargeAdd" element={<PortForm />} />
             <Route path="master/port/editPort" element={<PortForm />} />
             <Route
               path="master/vesselVoyage"
