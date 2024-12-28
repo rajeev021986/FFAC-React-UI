@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, Delete } from "@mui/icons-material";
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     {
@@ -113,6 +113,10 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "actions",
       headerName: "Actions",
       sortable: false,
+      renderHeader: () => (
+        <IconButton color="primary">
+          <AddCircleIcon onClick={addRow} />
+        </IconButton>),
       renderCell: (params) => (
         <Button
           disabled={disabled}
@@ -139,7 +143,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
 
   return (
     <Box sx={{ width: "100%", marginTop: 2, textAlign: "right" }}>
-      <Button
+      {/* <Button
         variant="contained"
         startIcon={<Add />}
         onClick={addRow}
@@ -147,7 +151,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
         sx={{ borderRadius: "17px 18px 18px 17px", margin: "5px" }}
       >
         Add Tariff
-      </Button>
+      </Button> */}
       <Box sx={{ height: 400, marginTop: 2 }}>
         <DataGrid
           rows={customerEntityTariffs}
