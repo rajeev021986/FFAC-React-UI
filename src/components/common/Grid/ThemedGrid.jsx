@@ -20,7 +20,22 @@ const ThemedGrid = (props) => {
     ...rest
   } = props;
 
-  console.log(">>>>>>>>count>>>>>>>.", props);
+  const handleDate = (date) => {
+    return date.split("T")[0];
+  };
+
+  const gridData = data?.map((obj) => {
+    return {
+      ...obj,
+      modifiedDate: obj.modifiedDate
+        ? handleDate(obj.modifiedDate)
+        : obj.modifiedDate,
+      createdDate: obj.createdDate
+        ? handleDate(obj.createdDate)
+        : obj.createdDate,
+    };
+  });
+
   let modifiedColumns = columns.map((a) => {
     if (a.field === "status") {
       return {
@@ -57,7 +72,7 @@ const ThemedGrid = (props) => {
         sortingMode="server"
         loading={loading}
         columns={modifiedColumns}
-        rows={data}
+        rows={gridData}
         columnHeaderHeight={42}
         // columnVisibilityModel={columnVisibility}
         // onColumnVisibilityModelChange={columnVisibilityHandler}

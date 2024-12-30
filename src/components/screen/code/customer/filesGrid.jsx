@@ -3,6 +3,8 @@ import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import { Delete } from "@mui/icons-material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import IconButton from '@mui/material/IconButton';
 
 export default function FilesGrid({ formik, disabled }) {
   const customerEntityEmailsIds = formik.values.customerEntityEmailsIds || [
@@ -41,6 +43,7 @@ export default function FilesGrid({ formik, disabled }) {
       flex: 1,
       editable: true,
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "emailId",
@@ -48,11 +51,16 @@ export default function FilesGrid({ formik, disabled }) {
       flex: 1,
       editable: true,
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
       sortable: false,
+      renderHeader: () => (
+        <IconButton color="primary">
+          <AddCircleIcon onClick={addNewRow} />
+        </IconButton>),
       renderCell: (params) => (
         <Button
           color="error"
@@ -63,21 +71,22 @@ export default function FilesGrid({ formik, disabled }) {
         </Button>
       ),
       headerAlign: "center",
+      align: "center",
     },
   ];
 
   return (
     <Box sx={{ width: "100%", marginTop: 2 }}>
       <Box sx={{ textAlign: "right", mb: 2 }}>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={addNewRow}
-          disabled={disabled}
-          sx={{ borderRadius: "17px 18px 18px 17px", margin: "5px" }}
-        >
-          Add Email
-        </Button>
+          {/* <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={addNewRow}
+            disabled={disabled}
+            sx={{ borderRadius: "17px 18px 18px 17px", margin: "5px" }}
+          >
+            Add Email
+          </Button> */}
       </Box>
       <Box sx={{ height: 400 }}>
         <DataGrid

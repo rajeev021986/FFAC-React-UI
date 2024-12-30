@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, Delete } from "@mui/icons-material";
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     {
@@ -67,8 +67,9 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       type: "singleSelect",
-      valueOptions: chargeNameOptions.map((option) => option.label),
+      valueOptions: chargeNameOptions.map((option) => option.value),
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "unitType",
@@ -76,8 +77,9 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       type: "singleSelect",
-      valueOptions: unitTypeOptions.map((option) => option.label),
+      valueOptions: unitTypeOptions.map((option) => option.value),
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "currency",
@@ -85,8 +87,9 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       type: "singleSelect",
-      valueOptions: currencyOptions.map((option) => option.label),
+      valueOptions: currencyOptions.map((option) => option.value),
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "shipmentType",
@@ -94,8 +97,9 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       type: "singleSelect",
-      valueOptions: shipmentTypeOptions.map((option) => option.label),
+      valueOptions: shipmentTypeOptions.map((option) => option.value),
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "unitRate",
@@ -103,22 +107,28 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       editable: true,
       headerAlign: "center",
+      align: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
       sortable: false,
+      renderHeader: () => (
+        <IconButton color="primary">
+          <AddCircleIcon onClick={addRow} />
+        </IconButton>),
       renderCell: (params) => (
         <Button
           disabled={disabled}
           color="error"
           onClick={() => deleteRow(params.row.id)}
-          // disabled={disabled || customerEntityTariffs.length === 1}
+        // disabled={disabled || customerEntityTariffs.length === 1}
         >
           <Delete />
         </Button>
       ),
       headerAlign: "center",
+      align: "center",
     },
   ];
 
@@ -133,7 +143,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
 
   return (
     <Box sx={{ width: "100%", marginTop: 2, textAlign: "right" }}>
-      <Button
+      {/* <Button
         variant="contained"
         startIcon={<Add />}
         onClick={addRow}
@@ -141,7 +151,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
         sx={{ borderRadius: "17px 18px 18px 17px", margin: "5px" }}
       >
         Add Tariff
-      </Button>
+      </Button> */}
       <Box sx={{ height: 400, marginTop: 2 }}>
         <DataGrid
           rows={customerEntityTariffs}

@@ -7,7 +7,7 @@ const Routes = {
   user_management: { label: "User Management", disabled: false },
   entity: { label: "Entity", disabled: true },
   master: { label: "Master", disabled: true },
-  new: { label: "Create Customer", disabled: false },
+  newcustomer: { label: "Create Customer", disabled: false },
   editcustomer: { label: "Edit Customer", disabled: false },
   approve: { label: "Approve Customer", disabled: false },
   admin_master: { label: "Admin Master", disabled: true },
@@ -43,6 +43,9 @@ const Routes = {
   editVendorApprove: { label: "Vendor Approval Form", disabled: false },
   editVendor: { label: "Edit Vendor", disabled: false },
   users: { label: "Users", disabled: false },
+  charges: { label: "Charges", disabled: false },
+  newCharges: { label: "Create Charges", disabled: false },
+  editCharges: { label: "Edit Charges", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {

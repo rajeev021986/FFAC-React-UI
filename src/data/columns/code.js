@@ -5,7 +5,7 @@ export const CODE_CUSTOMER_COLUMNS = [
     {
         field: 'status',
         headerName: 'Status',
-        width: 150,
+        width: 110,
         headerAlign: 'center',
         align: 'center',
         editable: false
@@ -14,7 +14,7 @@ export const CODE_CUSTOMER_COLUMNS = [
     {
         field: 'customerName',
         headerName: 'Customer Name',
-        width: 150,
+        width: 110,
         headerAlign: 'center',
         align: 'center',
         editable: false
@@ -22,7 +22,7 @@ export const CODE_CUSTOMER_COLUMNS = [
     {
         field: 'tinNo',
         headerName: 'TIN NO.',
-        width: 150,
+        width: 110,
         headerAlign: 'center',
         align: 'center', editable: false
     },
@@ -35,9 +35,33 @@ export const CODE_CUSTOMER_COLUMNS = [
         align: 'center', editable: false
     },
     {
-        field: 'add1',
-        headerName: 'Address',
-        width: 150,
+        field: 'createdBy',
+        headerName: 'Created By',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        field: 'createdDate',
+        headerName: 'Created Date',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        field: 'modifiedBy',
+        headerName: 'Modified By',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        field: 'modifiedDate',
+        headerName: 'Modified Date',
+        width: 110,
         headerAlign: 'center',
         align: 'center',
         editable: false

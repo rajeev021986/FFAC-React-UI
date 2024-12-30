@@ -1,0 +1,79 @@
+export const CARD_CHARGES_COLUMNS =
+    [
+        {
+            flex: 1,
+            field: 'status',
+            headerName: 'Status',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center',
+            editable: true
+        },
+        {
+            field: 'chargeName',
+            headerName: 'Charge Name',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center',
+            editable: true
+        },
+        {
+            field: 'chargeFor',
+            headerName: 'Charge For',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center',
+            editable: true
+        },
+        {
+            field: 'chargeCode',
+            headerName: 'Charge Code',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center',
+            editable: true
+        },
+        {
+            field: 'createdBy',
+            headerName: 'Created By',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center',
+            editable: false
+        },
+        {
+            field: 'createdDate',
+            headerName: 'Created Date',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center',
+            editable: false
+        },
+        {
+            field: 'modifiedBy',
+            headerName: 'Modified By',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center',
+            editable: false
+        },
+        {
+            field: 'modifiedDate',
+            headerName: 'Modified Date',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center',
+            editable: false
+        },
+
+        {
+            flex: 1,
+            field: 'action',
+            headerName: 'Action',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center', editable: false
+        }
+
+
+    ]

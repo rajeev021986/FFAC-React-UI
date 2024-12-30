@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getAppHeaders, API_BASE_URL } from "../../services/ApiMethods";
 
+
 export const codeDataApi = createApi({
     reducerPath: "codeDataApi",
     baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
@@ -36,7 +37,16 @@ export const codeDataApi = createApi({
             invalidatesTags: ["Code"],
         }),
 
-
+        deleteCustomer: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `entity-service/v1/customer/${id}`,
+                    method: "DELETE",
+                    headers: getAppHeaders()
+                };
+            },
+            invalidatesTags: ["Code"],
+        }),
 
         fetchParty: builder.query({
             query: (params) => {
@@ -128,4 +138,4 @@ export const codeDataApi = createApi({
     }),
 });
 
-export const { useFetchCustomerQuery, useAddCustomerMutation, useUpdateCustomerMutation, useFetchPartyQuery, useAddPartyMutation, useFetchAgentQuery, useAddAgentMutation, useUploadCustomerFileMutation, useGetCustomerFileListMutation, useDownloadDocumnentMutation, useFetchCustomerDatasQuery } = codeDataApi;
+export const { useFetchCustomerQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useFetchPartyQuery, useAddPartyMutation, useFetchAgentQuery, useAddAgentMutation, useUploadCustomerFileMutation, useGetCustomerFileListMutation, useDownloadDocumnentMutation, useFetchCustomerDatasQuery } = codeDataApi;

@@ -10,7 +10,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import AutoCompleteInput from "../../../common/AutoCompletInput";
 import ApiManager from "../../../../services/ApiManager";
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 export default function VendorEditGrid({ formik, disabled, vendorSettingsData }) {
     const fetchSuggestions = async (inputValue, inputId) => {
         inputId =
@@ -150,8 +150,15 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                 },
                 {
                     field: "actions",
-                    headerName: "Actions",
                     sortable: false,
+                    renderHeader: () => (
+                        <IconButton
+                            color="primary"
+                            onClick={TabsHosts[0].addNewRow}
+                        >
+                            <AddCircleIcon />
+                        </IconButton>
+                    ),
                     renderCell: (params) => (
                         <IconButton
                             color="error"
@@ -250,6 +257,10 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                     field: "actions",
                     headerName: "Actions",
                     sortable: false,
+                    renderHeader: () => (
+                        <IconButton color="primary">
+                            <AddCircleIcon onClick={TabsHosts[1].addNewRow} />
+                        </IconButton>),
                     renderCell: (params) => (
                         <IconButton
                             color="error"
@@ -316,6 +327,10 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                     field: "actions",
                     headerName: "Actions",
                     sortable: false,
+                    renderHeader: () => (
+                        <IconButton color="primary">
+                            <AddCircleIcon onClick={TabsHosts[2].addNewRow} />
+                        </IconButton>),
                     renderCell: (params) => (
                         <IconButton
                             color="error"
@@ -383,6 +398,10 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                     field: "actions",
                     headerName: "Actions",
                     sortable: false,
+                    renderHeader: () => (
+                        <IconButton color="primary">
+                            <AddCircleIcon onClick={TabsHosts[3].addNewRow} />
+                        </IconButton>),
                     renderCell: (params) => (
                         <IconButton
                             color="error"
@@ -464,6 +483,10 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                     field: "actions",
                     headerName: "Actions",
                     sortable: false,
+                    renderHeader: () => (
+                        <IconButton color="primary">
+                            <AddCircleIcon onClick={TabsHosts[4].addNewRow} />
+                        </IconButton>),
                     renderCell: (params) => (
                         <IconButton
                             color="error"
@@ -483,7 +506,13 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
     return (
         <Box sx={{ width: "100%", marginTop: 2 }}>
 
-            <Box sx={{ width: '100%', typography: 'body1' }}>
+            <Box sx={{
+                width: '100%', typography: 'body1', borderBottom: 1,
+                border: "1px solid",
+                borderColor: "divider",
+                marginBottom: 2,
+                borderRadius: '10px',
+            }}>
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -491,9 +520,9 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                         </TabList>
                     </Box>
                     {TabsHosts.map((ob, index) =>
-                        <TabPanel value={index}>
+                        <TabPanel value={index} sx={{ padding: 0, marginTop: 2 }}>
                             <Box sx={{ width: "100%" }}>
-                                <Box
+                                {/* <Box
                                     sx={{
                                         display: "flex",
                                         justifyContent: "space-between",
@@ -510,13 +539,14 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                                     >
                                         Add {ob.tabLable}
                                     </Button>
-                                </Box>
+                                </Box> */}
                                 <Box sx={{ height: 400 }}>
                                     <DataGrid
                                         rows={ob.value}
                                         columns={ob.columns.map((column) => ({
                                             ...column,
                                             headerAlign: 'center',
+                                            align: 'center',
                                         }))}
                                         disableSelectionOnClick
                                         processRowUpdate={ob.handleProcessRowUpdate}

@@ -14,12 +14,17 @@ function TimelineComponent({ data }) {
 
     return (
         <>
-            <div style={{ display: "flex", flexDirection: "column", padding: "10px", width: "100%" }}>
+            <div style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
                 {data?.length > 0 ? (
                     <Timeline>
                         {data?.map((entry, index) => (
-                            <div style={{ display: "flex"}} key={index}>
-                                <TimelineItem position="left" sx={{ width: "40%" }}>
+                            <div style={{ display: "flex" }} key={index}>
+                                <TimelineItem position="left" sx={{
+                                    width: "30%", '&::before': {
+                                        content: 'none',
+                                    },
+                                    paddingRight:"40px"
+                                }}>
                                     <TimelineSeparator>
                                         <TimelineDot sx={{ backgroundColor: "primary.main" }} />
                                         {index < data.length - 1 && (

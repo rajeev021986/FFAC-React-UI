@@ -30,6 +30,8 @@ import BondScreen from "./pages/Bond/Bondscreen";
 import BondForm from "./components/screen/code/bond/BondForm";
 import { VesselVoyage, VesselVoyageScreen } from "./pages/vessel_voyage/VesselVoyageScreen";
 import { VesselVoyageFormScreen } from "./pages/vessel_voyage/VesselVoyageFormScreen";
+import { ChargesScreen } from "./pages/charges/ChargesScreen";
+import AddEditCharge from "./components/screen/code/charge/AddEditCharge";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -67,7 +69,7 @@ function App() {
               element={<Component page="customerApprove" />}
             />
             <Route
-              path="entity/customer/new"
+              path="entity/customer/newcustomer"
               element={<CustomerFormScreen page="customer" />}
             />
             <Route
@@ -109,6 +111,8 @@ function App() {
             <Route path="master/bond/editBond" element={<BondForm />} />
             <Route path="master/bond" element={<BondScreen />} />
             <Route path="master/port/portAdd" element={<PortForm />} />
+            <Route path="admin/charges/newcharges" element={<AddEditCharge />} />
+            <Route path="admin/charges/editcharges" element={<AddEditCharge />} />
             <Route path="master/port/editPort" element={<PortForm />} />
             <Route
               path="master/vesselVoyage"
@@ -121,6 +125,18 @@ function App() {
             <Route
               path="master/vesselVoyage/editvoyage"
               element={<VesselVoyageFormScreen />}
+            />
+            <Route
+              path="admin/charges"
+              element={<ChargesScreen page={"charges"} />}
+            />
+            <Route
+              path="admin/charges/newcharges"
+              element={<AddEditCharge />}
+            />
+            <Route
+              path="admin/charges/editcharges"
+              element={<AddEditCharge />}
             />
 
           </Route>

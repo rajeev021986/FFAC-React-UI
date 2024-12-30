@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useFormik } from "formik";
+import WarningIcon from '@mui/icons-material/Warning'; 
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import InputBox from "../../../common/InputBox";
@@ -43,6 +44,7 @@ import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { UploadFileOutlined } from "@mui/icons-material";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import { ToastMessage } from "../../../utils/toastMessage";
 
 export default function CustomerForm({
   initialValues,
@@ -106,6 +108,7 @@ export default function CustomerForm({
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
             toast.success(response.message);
+            ToastMessage("Pending Document");
             nav("/app/entity/customer");
           } else {
             toast.error(response.message);
@@ -200,7 +203,12 @@ export default function CustomerForm({
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
-
+  const customToast = () => (
+    <div style={{ color: 'black', fontSize: '16px', display: 'flex', alignItems: 'center' }}>
+      <WarningIcon style={{ marginRight: '8px', color: 'yellow', fontSize: '20px' }} />
+      Document is pending
+    </div>
+  );
   useEffect(() => {
     if (optionsSettingsData?.body || customerSettingsData?.body) {
       setDropdownData({
@@ -210,6 +218,16 @@ export default function CustomerForm({
     }
   }, [optionsSettingsData]);
   const handleApproveRequest = async () => {
+    if (formik.values.status == "Pending_Documents") {
+      toast.custom(customToast, {
+        style: {
+          backgroundColor: '#FFEB3B',
+          color: 'black',
+        },
+        closeButton: false,
+      });
+      return;
+    }
     try {
       const response = await ApiManager.approveCustomerApprove(
         initialValues.id,
@@ -222,10 +240,15 @@ export default function CustomerForm({
     }
   };
   const handleRejectRequest = async () => {
+    if (!formik.values.rejectRemarks) {
+      toast.error("Please enter reject remarks");
+      return
+    }
     try {
       const response = await ApiManager.rejectCustomerApprove(
         initialValues.id,
-        "customer"
+        "customer",
+        formik.values.rejectRemarks
       );
       nav("/app/entity/approve");
       toast.success("Rejected");
@@ -295,8 +318,7 @@ export default function CustomerForm({
                 label="Status"
                 id="status"
                 // options={dropdownData?.status}
-                disabled={!initialValues.isApproved}
-                value={formik.values.status}
+                disabled={true}
                 error={formik.errors.status}
                 onChange={formik.handleChange}
               />
@@ -494,8 +516,9 @@ export default function CustomerForm({
               <Box
                 sx={{
                   borderBottom: 1,
-                  borderColor: "divider",
                   marginBottom: 2,
+                  border: "1px solid #0000001f",
+                  borderRadius: "10px",
                 }}
               >
                 <ThemeTabs
@@ -512,21 +535,6 @@ export default function CustomerForm({
                   <FileScreen formik={formik} disabled={disabled} />
                 </ThemeTabs>
               </Box>
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Reject Remarks"
-                name="rejectRemarks"
-                value={formik.values.rejectRemarks}
-                error={formik.errors.rejectRemarks}
-                onChange={formik.handleChange}
-                disabled={!disabled}
-                multiline
-                rows={4}
-                variant="outlined"
-                fullWidth
-              />
             </Grid>
 
             {page == "customer" && (
@@ -628,6 +636,7 @@ export default function CustomerForm({
                       disabled={disabled}
                     />
                   </Grid>
+
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Status"
@@ -836,8 +845,9 @@ export default function CustomerForm({
                     <Box
                       sx={{
                         borderBottom: 1,
-                        borderColor: "divider",
                         marginBottom: 2,
+                        border: "1px solid #0000001f",
+                        borderRadius: "10px",
                       }}
                     >
                       <ThemeTabs
@@ -855,20 +865,25 @@ export default function CustomerForm({
                       </ThemeTabs>
                     </Box>
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Reject Remarks"
-                      name="rejectRemarks"
-                      value={formik.values.rejectRemarks}
-                      error={formik.errors.rejectRemarks}
-                      onChange={formik.handleChange}
-                      disabled={!disabled}
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                      fullWidth
-                    />
-                  </Grid>
+                  {formik.values.status.toLowerCase() === "rejected" ||
+                  page == "customerApprove" ? (
+                    <Grid item xs={12}>
+                      <TextField
+                        label="Reject Remarks"
+                        name="rejectRemarks"
+                        value={formik.values.rejectRemarks}
+                        error={formik.errors.rejectRemarks}
+                        onChange={formik.handleChange}
+                        disabled={!disabled}
+                        multiline
+                        rows={4}
+                        variant="outlined"
+                        fullWidth
+                      />
+                    </Grid>
+                  ) : (
+                    <></>
+                  )}
 
                   {page == "customer" && (
                     <Grid item xs={12}>
