@@ -46,6 +46,9 @@ const Routes = {
   charges: { label: "Charges", disabled: false },
   newCharges: { label: "Create Charges", disabled: false },
   editCharges: { label: "Edit Charges", disabled: false },
+  exchangeRate: { label: "Exchange Rate", disabled: false },
+  newExchangeRate: { label: "New Exchange Rate", disabled: false },
+  editExchangeRate: { label: "Edit Exchange Rate", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {

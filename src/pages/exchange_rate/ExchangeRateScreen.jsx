@@ -9,34 +9,33 @@ import {
   SpeedDialIcon,
   Stack,
 } from "@mui/material";
-import ScreenToolbar from "../../components/common/ScreenToolbar";
-import ThemedBreadcrumb from "../../components/common/Breadcrumb";
-import GridSearchInput from "../../components/common/Filter/GridSearchInput";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { useFetchChargesDatasQuery } from "../../store/api/chargesDataApi";
+import { useFetchExchangeRateDatasQuery } from "../../store/api/exchangeRateDataApi";
 import {
-  chargesSetSortModel,
-  chargesSetView,
+  exchangeRateSetSortModel,
+  exchangeRateSetView,
   setPagination,
   setSortBy,
   updateInput,
-} from "../../store/freatures/ChargesSlice";
-import { CARD_CHARGES_COLUMNS } from "../../data/columns/charges";
-import { getChargesListGridActions } from "../../components/screen/code/charge/action";
-import GridActions from "../../components/common/Grid/GridActions";
+} from "../../store/freatures/ExchangeRateSlice";
+import { EXCHANGE_RATE_COLUMNS } from "../../data/columns/exchangeRate";
+import { getExchangeRateListGridActions } from "../../components/screen/code/exchange/action";
+import ScreenToolbar from "../../components/common/ScreenToolbar";
+import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import SelectBox from "../../components/common/SelectBox";
-import { CHARGES_SORT_OPTIONS } from "../../data/options";
+import { EXCHANGE_RATE_SORT_OPTIONS } from "../../data/options";
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import ChargesFilters from "../../components/screen/code/charge/ChargesFilters";
+import ExchangeRateFilters from "../../components/screen/code/exchange/ExchangeRateFilters";
+import GridActions from "../../components/common/Grid/GridActions";
+import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import CardsView from "../../components/common/Cards/CardsView";
-
-const ADD_NEW_EXCHANGE_RATE_PATH = "new";
 
 export function ExchangeRate({ page }) {
   const exchangeRateSelector = useSelector((state) => state.exchangeRateStore);
@@ -51,8 +50,8 @@ export function ExchangeRate({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New Exchange Rate" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New Exchange Rate" }, { name: "Export" }];
+    ? [{ name: "New Exchange" }, { name: "Copy" }, { name: "Export" }]
+    : [{ name: "New Exchange" }, { name: "Export" }];
 
   const query = {
     page: exchangeRateSelector?.pagination?.page + 1,
@@ -69,17 +68,17 @@ export function ExchangeRate({ page }) {
   if (
     Boolean(
       exchangeRateSelector.sortModel.length > 0
-        ? exchangeRateSelector.sortModel[0].field === "cname"
-        : exchangeRateSelector?.sortBy?.split("*")[0] === "cname"
+        ? exchangeRateSelector.sortModel[0].field === "currency"
+        : exchangeRateSelector?.sortBy?.split("*")[0] === "currency"
     )
   ) {
-    query.sortBy = "chargeName";
+    query.sortBy = "currency";
   }
   const payload = Object.entries(exchangeRateSelector?.formData)
     .filter(([key, value]) => value)
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key == "cname") && (fieldname = "chargeName");
+      Boolean(key == "currency") && (fieldname = "currency");
       return {
         fieldName: fieldname,
         operator: "=",
@@ -89,16 +88,16 @@ export function ExchangeRate({ page }) {
     });
 
   const {
-    data: ChargesData,
+    data: ExchangeRateData,
     isLoading,
     isError,
     error,
     isFetching,
     refetch,
-  } = useFetchChargesDatasQuery({
+  } = useFetchExchangeRateDatasQuery({
     params: query,
     payload,
-    page: "charge/filter",
+    page: "exchange-rate/filter",
   });
   useEffect(() => {
     refetch();
@@ -109,26 +108,26 @@ export function ExchangeRate({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  CARD_CHARGES_COLUMNS[CARD_CHARGES_COLUMNS.length - 1].renderCell =
+  EXCHANGE_RATE_COLUMNS[EXCHANGE_RATE_COLUMNS.length - 1].renderCell =
     GridActions({
-      actions: getChargesListGridActions(nav, setModal),
+      actions: getExchangeRateListGridActions(nav, setModal),
     });
 
   useEffect(() => {
     if (!exchangeRateSelector.view) {
-      dispatch(chargesSetView("card"));
+      dispatch(exchangeRateSetView("card"));
     }
   }, [exchangeRateSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
-    if (actionName === "New Charges") {
-      nav(ADD_NEW_CHARGES_PATH, {
+    if (actionName === "New Exchange Rate") {
+      nav("newexchangerate", {
         replace: true,
         state: { formAction: "add" },
       });
     }
     if (actionName === "Copy") {
-      nav(`editcharges`, {
+      nav("newexchangerate", {
         state: {
           formAction: "edit",
           initialValues: { id: seletectBox },
@@ -185,7 +184,7 @@ export function ExchangeRate({ page }) {
         rightComps={
           <>
             <Backdrop open={open} />
-            {page == "customer" && (
+            {page == "exchangeRate" && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
@@ -245,11 +244,13 @@ export function ExchangeRate({ page }) {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <ChargesFilters filterInfo={ChargesData?.counts || []} />
+                  <ExchangeRateFilters
+                    filterInfo={ExchangeRateData?.counts || []}
+                  />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"
-                  options={CHARGES_SORT_OPTIONS}
+                  options={EXCHANGE_RATE_SORT_OPTIONS}
                   value={exchangeRateSelector.sortBy}
                   onChange={(event) => {
                     console.log(event);
@@ -263,7 +264,9 @@ export function ExchangeRate({ page }) {
                 />
               </Box>
               <Box>
-                <IconButton onClick={() => dispatch(chargesSetView("card"))}>
+                <IconButton
+                  onClick={() => dispatch(exchangeRateSetView("card"))}
+                >
                   <FormatListBulletedOutlined
                     color={
                       exchangeRateSelector.view === "card"
@@ -272,7 +275,9 @@ export function ExchangeRate({ page }) {
                     }
                   />
                 </IconButton>
-                <IconButton onClick={() => dispatch(chargesSetView("grid"))}>
+                <IconButton
+                  onClick={() => dispatch(exchangeRateSetView("grid"))}
+                >
                   <GridOnOutlined
                     color={
                       exchangeRateSelector.view === "grid"
@@ -288,29 +293,29 @@ export function ExchangeRate({ page }) {
         {exchangeRateSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={CARD_CHARGES_COLUMNS}
-            count={ChargesData?.body?.totalElements || 0}
+            columns={EXCHANGE_RATE_COLUMNS}
+            count={ExchangeRateData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={ChargesData?.body?.data}
+            data={ExchangeRateData?.body?.data}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={exchangeRateSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={exchangeRateSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(chargesSetSortModel(sortModel))
+              dispatch(exchangeRateSetSortModel(sortModel))
             }
           />
         ) : (
           <CardsView
             uniqueId="id"
-            columns={CARD_CHARGES_COLUMNS}
-            count={ChargesData?.body?.totalElements || 0}
+            columns={EXCHANGE_RATE_COLUMNS}
+            count={ExchangeRateData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={ChargesData?.body?.data}
+            data={ExchangeRateData?.body?.data}
             paginationModel={exchangeRateSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={getChargesListGridActions(nav, setModal)}
+            actions={getExchangeRateListGridActions(nav, setModal)}
             // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}

@@ -29,7 +29,7 @@ const exchangeRateSlice = createSlice({
         exchangeRateSetView: (state, action) => {
             state.view = action.payload;
         },
-        exchangeSetSortModel: (state, action) => {
+        exchangeRateSetSortModel: (state, action) => {
             state.sortModel = action.payload;
         },
         setPagination: (state, action) => {
@@ -44,5 +44,5 @@ const exchangeRateSlice = createSlice({
     }
 });
 
-export const { toggleFilter, exchangeRateSetView, exchangeSetSortModel, updateInput, setPagination, setView, setSortBy, setSortModel } = exchangeRateSlice.actions;
+export const { toggleFilter, exchangeRateSetView, exchangeRateSetSortModel, updateInput, setPagination, setView, setSortBy, setSortModel } = exchangeRateSlice.actions;
 export default exchangeRateSlice.reducer;
