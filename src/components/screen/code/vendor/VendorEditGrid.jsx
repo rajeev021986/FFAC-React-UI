@@ -124,7 +124,7 @@ export default function VendorEditGrid({ formik, disabled, vendorSettingsData })
                         return (
                             <AutoCompleteInput
                                 id="currency"
-                                suggestionName="currency_name"
+                                suggestionName="currency"
                                 value={params.value}
                                 error={
                                     formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeName

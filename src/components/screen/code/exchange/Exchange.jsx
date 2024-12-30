@@ -14,17 +14,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 export default function Exchange() {
-    // const location = useLocation();
-    // const { id, type } = location.state;
+    const location = useLocation();
+    const { id, type } = location.state;
+    console.log(id, type, "dfghjk")
     const nav = useNavigate();
-    const type = "new";
-    const id = 101;
     const [value, setValue] = React.useState(1);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    const { data: ChargeSettingsData } = useGetOptionsSettingsQuery("common_settings");
-    const { data: CustomerSettingsData } = useGetOptionsSettingsQuery("customer_settings");
+    const { data: ExchageSettingsData, isFetching } = useGetOptionsSettingsQuery("common_settings");
     const tabs = [
         { label: "Exchange Details", value: 1 },
         { label: "Document Details", value: 2 }
@@ -80,15 +78,15 @@ export default function Exchange() {
         }
     };
     useEffect(() => {
-        if (id && ChargeSettingsData) {
+        if (id && ExchageSettingsData) {
             handleFetchExchangeRate();
         }
-    }, [ChargeSettingsData]);
+    }, [ExchageSettingsData]);
 
     const initialValues = {
-        fromDate: "2024-12-30T05:27:31.793Z",
-        toDate: "2024-12-30T05:27:31.793Z",
-        currency: "string",
+        fromDate: "",
+        toDate: "",
+        currency: "",
         usdExchange: 0,
         ugxExchange: 0
     };
@@ -116,8 +114,8 @@ export default function Exchange() {
                         {tabs.map((a) => <Tab label={a.label} value={a.value} />)}
                     </TabList>
                 </Box>
-                <TabPanel value={1}>{isLoading ? <Loader /> : <ExchangeInputs formik={formik} ChargeSettingsData={ChargeSettingsData} nav={nav} type={type} />}</TabPanel>
-                <TabPanel value={2}><UploadFile customer_id={id} sourceType="EXCHANGE" disabled={false} dropdownData={CustomerSettingsData?.body?.documentType} /></TabPanel>
+                <TabPanel value={1}>{isLoading || isFetching ? <Loader /> : <ExchangeInputs formik={formik} nav={nav} type={type} />}</TabPanel>
+                <TabPanel value={2}><UploadFile customer_id={id} sourceType="EXCHANGE" disabled={false} dropdownData={ExchageSettingsData?.body?.documentType} /></TabPanel>
             </TabContext>
         </Box>
         </>

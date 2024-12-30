@@ -120,10 +120,10 @@ export function ExchangeRate({ page }) {
   }, [exchangeRateSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
-    if (actionName === "New Exchange Rate") {
+    if (actionName === "New Exchange") {
       nav("newexchangerate", {
         replace: true,
-        state: { formAction: "add" },
+        state: { id: null, type: "new" },
       });
     }
     if (actionName === "Copy") {
@@ -298,7 +298,7 @@ export function ExchangeRate({ page }) {
             handlePage={handlePage}
             data={ExchangeRateData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
+            columnVisibilityHandler={() => { }}
             paginationModel={exchangeRateSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={exchangeRateSelector.sortModel}

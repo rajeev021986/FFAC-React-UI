@@ -80,231 +80,257 @@ export default function VendorFormInput({ formik, type, optionsSettingsData, ven
     return (
         <>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Vendor Name"
-                        id="vendorName"
-                        value={formik.values.vendorName}
-                        error={formik.errors.vendorName}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
+                <Grid container xs={12} spacing={2}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Vendor Name"
+                            id="vendorName"
+                            value={formik.values.vendorName}
+                            error={formik.errors.vendorName}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="TIN No"
+                            id="tinNo"
+                            value={formik.values.tinNo}
+                            error={formik.errors.tinNo}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="VRN No"
+                            id="vrnNo"
+                            value={formik.values.vrnNo}
+                            error={formik.errors.vrnNo}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    {type == "copy" || type == "new" ? (<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Status"
+                            id="status"
+                            value={formik.values.status}
+                            error={formik.errors.status}
+                            onChange={formik.handleChange}
+                            disabled
+                        />
+                    </Grid>) : (formik.values?.isApproved ? <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                        sx={{ marginTop: 2 }}
+                    >
+                        <SelectBox
+                            label="Status"
+                            id="status"
+                            disabled={disable}
+                            options={optionsSettingsData?.body.status}
+                            value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                            error={formik.errors.status}
+                            onChange={formik.handleChange}
+                        />
+                    </Grid> : <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Status"
+                            id="status"
+                            value={formik.values.status}
+                            error={formik.errors.status}
+                            onChange={formik.handleChange}
+                            disabled
+                        />
+                    </Grid>)}
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="TIN No"
-                        id="tinNo"
-                        value={formik.values.tinNo}
-                        error={formik.errors.tinNo}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
+
+
+                <Grid container xs={12} spacing={2}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Alias"
+                            id="alias"
+                            value={formik.values.alias}
+                            error={formik.errors.alias}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                        sx={{ marginTop: 2 }}
+                    >
+                        <SelectBox
+                            label="Vendor Type"
+                            id="type"
+                            options={vendorSettingsData?.body.vendorType}
+                            value={formik.values.type}
+                            error={formik.errors.type}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Address 1"
+                            id="add1"
+                            value={formik.values.add1}
+                            error={formik.errors.add1}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Address 2"
+                            id="add2"
+                            value={formik.values.add2}
+                            error={formik.errors.add2}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="VRN No"
-                        id="vrnNo"
-                        value={formik.values.vrnNo}
-                        error={formik.errors.vrnNo}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
+
+                <Grid container xs={12} spacing={2}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Address 3"
+                            id="add3"
+                            value={formik.values.add3}
+                            error={formik.errors.add3}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="PO No"
+                            id="poNo"
+                            value={formik.values.poNo}
+                            error={formik.errors.poNo}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
                 </Grid>
-                {type == "copy" || type == "new" ? (<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Status"
-                        id="status"
-                        value={formik.values.status}
-                        error={formik.errors.status}
-                        onChange={formik.handleChange}
-                        disabled
-                    />
-                </Grid>) : (formik.values?.isApproved ? <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    xl={2}
-                    sx={{ marginTop: 2 }}
-                >
-                    <SelectBox
-                        label="Status"
-                        id="status"
-                        disabled={disable}
-                        options={optionsSettingsData?.body.status}
-                        value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
-                        error={formik.errors.status}
-                        onChange={formik.handleChange}
-                    />
-                </Grid> : <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Status"
-                        id="status"
-                        value={formik.values.status}
-                        error={formik.errors.status}
-                        onChange={formik.handleChange}
-                        disabled
-                    />
-                </Grid>)}
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Alias"
-                        id="alias"
-                        value={formik.values.alias}
-                        error={formik.errors.alias}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
+                <Grid container xs={12} spacing={2}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="City"
+                            id="city"
+                            value={formik.values.city}
+                            error={formik.errors.city}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="State"
+                            id="state"
+                            value={formik.values.state}
+                            error={formik.errors.state}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Country"
+                            id="country"
+                            value={formik.values.country}
+                            error={formik.errors.country}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Province"
+                            id="province"
+                            value={formik.values.province}
+                            error={formik.errors.province}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    xl={2}
-                    sx={{ marginTop: 2 }}
-                >
-                    <SelectBox
-                        label="Vendor Type"
-                        id="type"
-                        options={vendorSettingsData?.body.vendorType}
-                        value={formik.values.type}
-                        error={formik.errors.type}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
+                <Grid container xs={12} spacing={2}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Contact Person"
+                            id="contactPerson"
+                            value={formik.values.contactPerson}
+                            error={formik.errors.contactPerson}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Email Id"
+                            id="emailId"
+                            value={formik.values.emailId}
+                            error={formik.errors.emailId}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Phone 1"
+                            id="telephone1"
+                            value={formik.values.telephone1}
+                            error={formik.errors.telephone1}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Phone 2"
+                            id="telephone2"
+                            value={formik.values.telephone2}
+                            error={formik.errors.telephone2}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Fax"
+                            id="fax"
+                            value={formik.values.fax}
+                            error={formik.errors.fax}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Address 1"
-                        id="add1"
-                        value={formik.values.add1}
-                        error={formik.errors.add1}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Address 2"
-                        id="add2"
-                        value={formik.values.add2}
-                        error={formik.errors.add2}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Address 3"
-                        id="add3"
-                        value={formik.values.add3}
-                        error={formik.errors.add3}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="PO No"
-                        id="poNo"
-                        value={formik.values.poNo}
-                        error={formik.errors.poNo}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="City"
-                        id="city"
-                        value={formik.values.city}
-                        error={formik.errors.city}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Country"
-                        id="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Province"
-                        id="province"
-                        value={formik.values.province}
-                        error={formik.errors.province}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Contact Person"
-                        id="contactPerson"
-                        value={formik.values.contactPerson}
-                        error={formik.errors.contactPerson}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Email Id"
-                        id="emailId"
-                        value={formik.values.emailId}
-                        error={formik.errors.emailId}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Phone 1"
-                        id="telephone1"
-                        value={formik.values.telephone1}
-                        error={formik.errors.telephone1}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Phone 2"
-                        id="telephone2"
-                        value={formik.values.telephone2}
-                        error={formik.errors.telephone2}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Fax"
-                        id="fax"
-                        value={formik.values.fax}
-                        error={formik.errors.fax}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                        label="Credit Days"
-                        id="creditDays"
-                        value={formik.values.creditDays}
-                        error={formik.errors.creditDays}
-                        onChange={formik.handleChange}
-                        disabled={disable}
-                    />
+                <Grid container xs={12} spacing={2}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <InputBox
+                            label="Credit Days"
+                            id="creditDays"
+                            value={formik.values.creditDays}
+                            error={formik.errors.creditDays}
+                            onChange={formik.handleChange}
+                            disabled={disable}
+                        />
+                    </Grid>
                 </Grid>
                 {currentError && <Grid item xs={12} style={{ color: "red" }}>{currentError}</Grid>}
                 <Grid item xs={12}>

@@ -3,6 +3,8 @@ import { Box, Button, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, Delete } from "@mui/icons-material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AutoCompleteInput from "../../../common/AutoCompletInput";
+import ApiManager from "../../../../services/ApiManager";
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     {
@@ -52,22 +54,52 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       newRow,
     ]);
   };
-
-  // Handler to delete a row
   const deleteRow = (id) => {
     const updatedRows = customerEntityTariffs.filter((row) => row.id !== id);
     formik.setFieldValue("customerEntityTariffs", updatedRows);
   };
+  const fetchSuggestions = async (inputValue, inputId) => {
+    inputId =
+      inputId === "chargeName"
+        ? "CHARGE" : "CURRENCY"
+    if (!inputValue) return [];
 
+    const response = await ApiManager.fetchVesselSuggestions(
+      inputValue,
+      inputId
+    );
+    const data = await response.body;
+
+    return data || [];
+  };
   // Columns for DataGrid
   const columns = [
     {
       field: "chargeName",
       headerName: "Charge Name",
       flex: 1,
-      editable: true,
-      type: "singleSelect",
-      valueOptions: chargeNameOptions.map((option) => option.value),
+      renderCell: (params) => {
+        return (
+          <AutoCompleteInput
+            id="chargeName"
+            suggestionName="charge_name"
+            value={params.value}
+            error={
+              formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeName
+            }
+            onChange={(newValue) => {
+              const rowIndex = formik.values.customerEntityTariffs.findIndex(
+                (entity) => entity.id === params.id
+              );
+              // setTimeout(() => {
+              formik.setValues({ ...formik.values, customerEntityTariffs: formik.values.customerEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, chargeName: newValue } : entity) });
+              // }, 1500);
+            }}
+            fetchSuggestions={fetchSuggestions}
+          />
+        );
+
+      },
       headerAlign: "center",
       align: "center",
     },
@@ -85,9 +117,26 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "currency",
       headerName: "Currency",
       flex: 1,
-      editable: true,
-      type: "singleSelect",
-      valueOptions: currencyOptions.map((option) => option.value),
+      renderCell: (params) => {
+        return (
+          <AutoCompleteInput
+            id="currency"
+            suggestionName="currency"
+            value={params.value}
+            error={
+              formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeName
+            }
+            onChange={(newValue) => {
+              const rowIndex = formik.values.customerEntityTariffs.findIndex(
+                (entity) => entity.id === params.id
+              );
+              formik.setValues({ ...formik.values, customerEntityTariffs: formik.values.customerEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, currency: newValue } : entity) });
+            }}
+            fetchSuggestions={fetchSuggestions}
+          />
+        );
+
+      },
       headerAlign: "center",
       align: "center",
     },
