@@ -3,10 +3,12 @@ import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import { Delete } from "@mui/icons-material";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import IconButton from "@mui/material/IconButton";
 
-export default function FilesGrid({ formik, disabled }) {
+export default function FilesGrid({ formik, disabled, dropdownData }) {
+  const designation = dropdownData?.designation;
+  console.log(designation, "designation");
   const customerEntityEmailsIds = formik.values.customerEntityEmailsIds || [
     { id: 1, emailId: "", designation: "" },
   ];
@@ -43,6 +45,8 @@ export default function FilesGrid({ formik, disabled }) {
       flex: 1,
       editable: true,
       headerAlign: "center",
+      type: "singleSelect",
+      valueOptions: designation.map((option) => option.value),
       align: "center",
     },
     {
@@ -60,7 +64,8 @@ export default function FilesGrid({ formik, disabled }) {
       renderHeader: () => (
         <IconButton color="primary">
           <AddCircleIcon onClick={addNewRow} />
-        </IconButton>),
+        </IconButton>
+      ),
       renderCell: (params) => (
         <Button
           color="error"
@@ -78,7 +83,7 @@ export default function FilesGrid({ formik, disabled }) {
   return (
     <Box sx={{ width: "100%", marginTop: 2 }}>
       <Box sx={{ textAlign: "right", mb: 2 }}>
-          {/* <Button
+        {/* <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={addNewRow}

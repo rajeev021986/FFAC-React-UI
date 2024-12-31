@@ -27,9 +27,15 @@ export const CODE_CUSTOMER_COLUMNS = [
         align: 'center', editable: false
     },
     {
-        flex: 1,
         field: 'vatNo',
         headerName: 'VAT NO.',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center', editable: false
+    },
+    {
+        field: 'add1',
+        headerName: 'Address',
         width: 110,
         headerAlign: 'center',
         align: 'center', editable: false
