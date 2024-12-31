@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import VendorFormInput from './VendorFormInput';
-import { useAddVendorMutation, useLazyGetVendorQuery, useUpdateVendorMutation } from '../../../../store/api/vendorDataApi';
+import { useAddVendorMutation, useLazyGetVendorAuditQuery, useLazyGetVendorQuery, useUpdateVendorMutation } from '../../../../store/api/vendorDataApi';
 import toast from 'react-hot-toast';
 import Loader from '../../../common/Loader/Loader';
 import { useLocation } from 'react-router-dom';
@@ -14,6 +14,7 @@ import ScreenToolbar from '../../../common/ScreenToolbar';
 import ThemedBreadcrumb from '../../../common/Breadcrumb';
 import { useGetOptionsSettingsQuery } from '../../../../store/api/settingsApi';
 import { useNavigate } from 'react-router-dom';
+import AuditTimeLine from '../../../AuditTimeLine';
 
 export default function VendorForm({ page = "vendor" }) {
     const [value, setValue] = React.useState(1);
@@ -22,7 +23,8 @@ export default function VendorForm({ page = "vendor" }) {
         setValue(newValue);
     };
     const tabs = [{ label: "Vendor Details", value: 1 },
-    { label: "Document Details", value: 2 }
+    { label: "Document Details", value: 2 },
+    { label: "Audit logs", value: 3 }
     ];
     const location = useLocation();
     const { id, type } = location.state;
@@ -260,7 +262,13 @@ export default function VendorForm({ page = "vendor" }) {
 
         },
     });
-
+    const [getVendorAudit, { data: AuditData,
+        isLoading: isLoadingAudit }] = useLazyGetVendorAuditQuery();
+    const fetchUserAudit = () => {
+        getVendorAudit({
+            id: id,
+        });
+    }
     return (
         <><Box sx={{ width: '100%', typography: 'body1' }}>
             <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
@@ -272,6 +280,7 @@ export default function VendorForm({ page = "vendor" }) {
                 </Box>
                 <TabPanel value={1}>{isLoading ? <Loader /> : <VendorFormInput formik={formik} type={type} disabled={page == "vendorApproval"} optionsSettingsData={optionsSettingsData} vendorSettingsData={vendorSettingsData} />}</TabPanel>
                 <TabPanel value={2}><UploadFile customer_id={id} sourceType="VENDOR" page={page} disabled={page == "vendorApproval"} dropdownData={vendorSettingsData?.body?.documentType} /></TabPanel>
+                <TabPanel value={3}><AuditTimeLine auditDetails={AuditData} reloadDataHandler={fetchUserAudit} loading={isLoadingAudit} /></TabPanel>
             </TabContext>
         </Box></>
     );

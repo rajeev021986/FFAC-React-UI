@@ -1,6 +1,7 @@
 import EditIcon from "@mui/icons-material/Edit";
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import toast from "react-hot-toast";
+import BiotechIcon from '@mui/icons-material/Biotech';
 
 export const getCustomerListGridActions = (nav, setModal) => {
   return [
@@ -13,6 +14,15 @@ export const getCustomerListGridActions = (nav, setModal) => {
         });
       },
       icon: <EditIcon />,
+    },
+    {
+      label: 'Audit',
+      onClick: (params) => {
+        setModal(
+          { open: true, type: 'audit', data: params.row }
+        )
+      },
+      icon: <BiotechIcon />,
     },
     {
       label: "Delete",

@@ -2,7 +2,15 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { Box, Card, CardHeader, IconButton, Stack } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardHeader,
+  Drawer,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
@@ -12,6 +20,7 @@ import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import {
   useDeleteCustomerMutation,
   useFetchCustomerDatasQuery,
+  useLazyGetCustomerAuditQuery,
 } from "../../store/api/codeDataApi";
 import CustomerFilters from "../../components/screen/code/customer/CustomerFilters";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,8 +48,7 @@ import { getCustomerListGridActionsCustomerApprovel } from "../../components/scr
 import ApiManager from "../../services/ApiManager";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast from "react-hot-toast";
-
-const ADD_NEW_CUSTOMER_PATH = "new";
+import AuditTimeLine from "../../components/AuditTimeLine";
 
 export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
@@ -53,6 +61,14 @@ export default function CustomerScreen({ page }) {
     type: "",
     data: {},
   });
+  const [getCustomerAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetCustomerAuditQuery();
+
+  const fetchUserAudit = () => {
+    getCustomerAudit({
+      id: modal.data.id,
+    });
+  };
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
@@ -328,6 +344,30 @@ export default function CustomerScreen({ page }) {
           />
         )}
       </Card>
+      {modal.type === "audit" && (
+        <Drawer
+          anchor="right"
+          open={modal?.open}
+          onClose={() => setModal({ open: false, type: "", data: {} })}
+          sx={{
+            width: "50vw",
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 1301,
+          }}
+        >
+          <Box sx={{ p: 2 }}>
+            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+              Customer Audit Logs
+            </Typography>
+            <AuditTimeLine
+              auditDetails={AuditData}
+              reloadDataHandler={fetchUserAudit}
+              loading={isLoadingAudit}
+            />
+          </Box>
+        </Drawer>
+      )}
       <DeleteDialog
         modal={modal}
         handleClose={handleClose}
