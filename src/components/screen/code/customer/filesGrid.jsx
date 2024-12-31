@@ -8,7 +8,6 @@ import IconButton from "@mui/material/IconButton";
 
 export default function FilesGrid({ formik, disabled, dropdownData }) {
   const designation = dropdownData?.designation;
-  console.log(designation, "designation");
   const customerEntityEmailsIds = formik.values.customerEntityEmailsIds || [
     { id: 1, emailId: "", designation: "" },
   ];
