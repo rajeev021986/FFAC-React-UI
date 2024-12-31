@@ -10,7 +10,6 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
     const handleClick = () => {
         setOpen(!open);
     };
-    console.log(items, "itemsasdfg")
     return (
         <>
             <ListItem button onClick={handleClick} sx={{ "&:hover": { backgroundColor: "background.light" }, backgroundColor: items.find((item) => (item.path === pathname)) !== undefined ? 'background.light' : '' }} >
