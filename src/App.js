@@ -32,6 +32,8 @@ import { VesselVoyage, VesselVoyageScreen } from "./pages/vessel_voyage/VesselVo
 import { VesselVoyageFormScreen } from "./pages/vessel_voyage/VesselVoyageFormScreen";
 import { ChargesScreen } from "./pages/charges/ChargesScreen";
 import AddEditCharge from "./components/screen/code/charge/AddEditCharge";
+import { ExchangeRate } from "./pages/exchange_rate/ExchangeRateScreen";
+import Exchange from "./components/screen/code/exchange/Exchange";
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -137,6 +139,18 @@ function App() {
             <Route
               path="admin/charges/editcharges"
               element={<AddEditCharge />}
+            />
+            <Route
+              path="admin/exchangeRate"
+              element={<ExchangeRate page={"exchangeRate"} />}
+            />
+            <Route
+              path="admin/exchangeRate/editexchangerate"
+              element={<Exchange />}
+            />
+            <Route
+              path="admin/exchangeRate/newexchangerate"
+              element={<Exchange />}
             />
 
           </Route>

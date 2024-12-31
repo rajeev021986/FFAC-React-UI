@@ -14,11 +14,9 @@ import toast from 'react-hot-toast';
 import Loader from '../../../common/Loader/Loader';
 
 const AddEditCharge = () => {
-    // const location = useLocation();
-    // const { id, type } = location.state;
+    const location = useLocation();
+    const { id, type } = location.state;
     const nav = useNavigate();
-    const type = "new";
-    const id = 101;
     const [value, setValue] = React.useState(1);
     const handleChange = (event, newValue) => {
         setValue(newValue);

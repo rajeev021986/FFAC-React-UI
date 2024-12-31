@@ -465,16 +465,64 @@ const UploadFile = ({
               </Button>
             </DialogActions>
           </Dialog>
-          <Dialog open={openConfirmation} onClose={onCloseConfiramtion}>
-            <DialogTitle>Are you sure you want to delete it?</DialogTitle>
-            <DialogContent>
+          <Dialog
+            open={openConfirmation}
+            onClose={onCloseConfiramtion}
+            PaperProps={{
+              sx: {
+                padding: 2,
+                borderRadius: 4,
+                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+              },
+            }}
+          >
+            <DialogTitle
+              sx={{
+                textAlign: "center",
+                fontWeight: "bold",
+                color: "primary.main",
+                borderBottom: "1px solid #ddd",
+                pb: 2,
+              }}
+            >
+              Are you sure you want to delete it?
+            </DialogTitle>
+            <DialogContent
+              sx={{
+                textAlign: "center",
+                color: "text.secondary",
+                fontSize: "1rem",
+                mt: 2,
+              }}
+            >
               <p>This action cannot be undone.</p>
             </DialogContent>
-            <DialogActions>
-              <Button onClick={onCloseConfiramtion} color="primary">
+            <DialogActions
+              sx={{
+                justifyContent: "center",
+                pt: 2,
+              }}
+            >
+              <Button
+                onClick={onCloseConfiramtion}
+                color="primary"
+                variant="outlined"
+                sx={{
+                  minWidth: 100,
+                  borderRadius: 50,
+                }}
+              >
                 Cancel
               </Button>
-              <Button onClick={onDelete} color="secondary">
+              <Button
+                onClick={onDelete}
+                color="secondary"
+                variant="contained"
+                sx={{
+                  minWidth: 100,
+                  borderRadius: 50,
+                }}
+              >
                 Delete
               </Button>
             </DialogActions>

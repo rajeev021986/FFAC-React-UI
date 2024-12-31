@@ -36,8 +36,6 @@ import ChargesFilters from "../../components/screen/code/charge/ChargesFilters";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import CardsView from "../../components/common/Cards/CardsView";
 
-const ADD_NEW_CHARGES_PATH = "new";
-
 export function ChargesScreen({ page }) {
   const chargesSelector = useSelector((state) => state.chargesStore);
   const location = useLocation();
@@ -130,7 +128,7 @@ export function ChargesScreen({ page }) {
     if (actionName === "Copy") {
       nav("newcharges", {
         state: {
-          initialValues: { id: seletectBox },
+          id: seletectBox,
           type: "copy",
         },
       });
@@ -184,7 +182,7 @@ export function ChargesScreen({ page }) {
         rightComps={
           <>
             <Backdrop open={open} />
-            {page == "customer" && (
+            {page == "charges" && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
@@ -288,7 +286,7 @@ export function ChargesScreen({ page }) {
             handlePage={handlePage}
             data={ChargesData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
+            columnVisibilityHandler={() => { }}
             paginationModel={chargesSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={chargesSelector.sortModel}

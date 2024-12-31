@@ -35,8 +35,11 @@ import bondReducer from "./freatures/bondSlice"
 import { vesselDataApi } from "./api/vesselDataApi";
 import { vesselVoyageDataApi } from "./api/vesselVoyageDataApi";
 import { chargesDataApi } from "./api/chargesDataApi";
+import { exchangeRateDataApi } from "./api/exchangeRateDataApi";
 import vesselVoyagaReducer from "./freatures/VesselVoyageSlice";
 import chargesReducer from "./freatures/ChargesSlice";
+import exchangeRateReducer from "./freatures/ExchangeRateSlice";
+
 
 const store = configureStore({
         reducer: {
@@ -57,6 +60,7 @@ const store = configureStore({
                 [bondDataAPI.reducerPath]: bondDataAPI.reducer,
                 [vesselVoyageDataApi.reducerPath]: vesselVoyageDataApi.reducer,
                 [chargesDataApi.reducerPath]: chargesDataApi.reducer,
+                [exchangeRateDataApi.reducerPath]: exchangeRateDataApi.reducer,
                 // slice
                 userManagement: userManagementReducer,
                 auth: authReducer,
@@ -81,6 +85,7 @@ const store = configureStore({
                 bond: bondReducer,
                 vesselVoyageStore: vesselVoyagaReducer,
                 chargesStore: chargesReducer,
+                exchangeRateStore: exchangeRateReducer,
         },
         middleware: (getDefaultMiddleware) =>
                 getDefaultMiddleware().concat(
@@ -100,6 +105,7 @@ const store = configureStore({
                         bondDataAPI.middleware,
                         vesselVoyageDataApi.middleware,
                         chargesDataApi.middleware,
+                        exchangeRateDataApi.middleware,
                 ),
 });
 

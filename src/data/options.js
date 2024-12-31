@@ -189,3 +189,8 @@ export const CHARGES_SORT_OPTIONS = [
   { value: "cname*asc", label: "Charges Ascending" },
   { value: "cname*desc", label: "Charges Descending" },
 ]
+
+export const EXCHANGE_RATE_SORT_OPTIONS = [
+  { value: "currency*asc", label: "Currency Ascending" },
+  { value: "currency*desc", label: "Currency Descending" },
+]

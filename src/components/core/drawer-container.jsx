@@ -6,8 +6,8 @@ import { useMenuSetting } from "../../hooks/useMenuItems";
 const DrawerContainer = ({ hover }) => {
     const { menuItems } = useMenuSetting();
 
-   
-    
+
+
     return (
         <div>
             <Toolbar />
@@ -17,7 +17,8 @@ const DrawerContainer = ({ hover }) => {
                         <ExpandableListItems
                             key={item.label}
                             label={item.label}
-                            icon={iconsMap[item.iconKey]}
+                            // icon={iconsMap[item.iconKey]}
+                            icon={item.iconKey}
                             hover={hover}
                             items={item.items}
                         />
@@ -26,7 +27,7 @@ const DrawerContainer = ({ hover }) => {
                             key={item.label}
                             label={item.label}
                             to={item.path}
-                            icon={iconsMap[item.iconKey]}
+                            icon={item.iconKey}
                         />
                     )
                 )}
