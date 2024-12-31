@@ -72,6 +72,8 @@ export default function CustomerScreen({ page }) {
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
+    : page === "customerApprove"
+    ? [{ name: "Export" }]
     : [{ name: "New Customer" }, { name: "Export" }];
   const query = {
     page: codeCustomerSelector?.pagination?.page + 1,
@@ -207,7 +209,7 @@ export default function CustomerScreen({ page }) {
         rightComps={
           <>
             <Backdrop open={open} />
-            {page == "customer" && (
+            {(page == "customer" || page == "customerApprove") && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{

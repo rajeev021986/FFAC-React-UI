@@ -96,8 +96,8 @@ export default function CustomerForm({
           values.isApproved = !dropdownData?.approvalRequest;
           values.status = "";
           if (values.paymentType === "cash") {
-            delete values.creditAmount;
-            delete values.creditDays;
+            values.creditAmount = null;
+            values.creditDays = null;
           }
           let response = await addCustomer({
             ...values,
@@ -138,8 +138,8 @@ export default function CustomerForm({
       } else {
         try {
           if (values.paymentType === "cash") {
-            delete values.creditAmount;
-            delete values.creditDays;
+            values.creditAmount = null;
+            values.creditDays = null;
           }
 
           let emails = values.customerEntityEmailsIds.map((item) =>
@@ -545,7 +545,10 @@ export default function CustomerForm({
                   id="paymentType"
                   name="paymentType" // add name attribute here
                   value={formik.values.paymentType}
-                  onChange={formik.handleChange}
+                  // onChange={formik.handleChange}
+                  onChange={(e) => {
+                    formik.setFieldValue("paymentType", e.target.value);
+                  }}
                   disabled={disabled}
                   row
                   sx={{
@@ -572,7 +575,11 @@ export default function CustomerForm({
                 <InputBox
                   label="Credit Days"
                   id="creditDays"
-                  value={formik.values.creditDays}
+                  value={
+                    formik.values.paymentType === "credit"
+                      ? formik.values.creditDays
+                      : ""
+                  }
                   error={formik.errors.creditDays}
                   onChange={formik.handleChange}
                   disabled={formik.values.paymentType === "cash" || disabled}
@@ -582,7 +589,11 @@ export default function CustomerForm({
                 <InputBox
                   label="Credit Amount"
                   id="creditAmount"
-                  value={formik.values.creditAmount}
+                  value={
+                    formik.values.paymentType === "credit"
+                      ? formik.values.creditAmount
+                      : ""
+                  }
                   error={formik.errors.creditAmount}
                   onChange={formik.handleChange}
                   disabled={formik.values.paymentType === "cash" || disabled}
