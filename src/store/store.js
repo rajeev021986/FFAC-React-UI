@@ -12,6 +12,7 @@ import { dashboardDataApi } from "./api/dashbaordDataApi";
 import { settingsApi } from "./api/settingsApi";
 import { codeDataApi } from "./api/codeDataApi";
 import { portDataAPI } from "./api/portDataApi";
+import {icdDataApi} from "./api/icdDataApi";
 import userManagementReducer from "./freatures/userManagementSlice";
 import authReducer from "./freatures/authSlice";
 import packingListReducer from "./freatures/packingListSlice";
@@ -21,6 +22,7 @@ import destinationReducer from "./freatures/destinationSlice";
 import vendorReducer from "./freatures/vendorSlice";
 import shipperReducer from "./freatures/shipperSlice";
 import consigneeReducer from "./freatures/consigneeSlice";
+import icdReducer from "./freatures/icdSlice";
 import sprblDetailsReducer from "./freatures/sprblDataSlice";
 import PoOrderListSlice from "./freatures/PoOrderListSlice";
 import DsoOrderListSlice from "./freatures/DsoOrderListSlice";
@@ -45,7 +47,8 @@ const store = configureStore({
         [destinationDataApi.reducerPath]: destinationDataApi.reducer,
         [vendorDataApi.reducerPath]: vendorDataApi.reducer,
         [shipperDataApi.reducerPath] : shipperDataApi.reducer ,
-        [consigneeDataApi.reducerPath] : consigneeDataApi.reducer , 
+        [consigneeDataApi.reducerPath] : consigneeDataApi.reducer ,
+        [icdDataApi.reducerPath]: icdDataApi.reducer, 
         [auditDataApi.reducerPath]: auditDataApi.reducer,
         [dashboardDataApi.reducerPath]: dashboardDataApi.reducer,
         [settingsApi.reducerPath]: settingsApi.reducer,
@@ -63,6 +66,7 @@ const store = configureStore({
         expenseCode: expenseCodeReducer,
         destination: destinationReducer,
         vendor: vendorReducer,
+        icd:icdReducer,
         sprblDetails: sprblDetailsReducer,
         poOrderList: PoOrderListSlice,
         dsoOrderList: DsoOrderListSlice,
@@ -93,7 +97,8 @@ const store = configureStore({
             otmBolDataApi.middleware,
             codeDataApi.middleware,
             vesselDataApi.middleware,
-            portDataAPI.middleware
+            portDataAPI.middleware,
+            icdDataApi.middleware,
         ),
 });
 

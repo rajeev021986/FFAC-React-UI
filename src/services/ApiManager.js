@@ -83,6 +83,11 @@ class ApiManager {
        
         return ApiMethods.get(url);
     }
+    static getIcdAuditDetails = async (id) => {
+        const url = ENDPOINTS.GET_ICD_AUDIT(id);
+       
+        return ApiMethods.get(url);
+    }
     static getCustomerFormData = async (source, id) => {
         const url = ENDPOINTS.GET_CUSTOMER_DOCUMENT_FILE(source, id);
         return ApiMethods.get(url);
@@ -103,6 +108,11 @@ class ApiManager {
     static getConsigneeDeatils = async (id) => {
         const url = ENDPOINTS.GET_CONSIGNEE_DETAILS(id);
         const page="consignee";
+        return ApiMethods.get(url,page);
+    }
+    static getIcdDeatils = async (id) => {
+        const url = ENDPOINTS.GET_ICD_DETAILS(id);
+        const page="shipper";
         return ApiMethods.get(url,page);
     }
     static downloadDocumnent = async (id, source, sourceId) => {

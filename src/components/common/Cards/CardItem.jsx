@@ -51,7 +51,7 @@ export default function CardItem({
     ) : (
       <Box sx={styles.root_item}>
         {/* Checkbox at the start */}
-        {(page === "customer" || page==="shipper" || page=== "consignee") && ( 
+        {(page === "customer" || page==="shipper" || page=== "consignee"|| page==="icd") && ( 
            <Box
            sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
            >

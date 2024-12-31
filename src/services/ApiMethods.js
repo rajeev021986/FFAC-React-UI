@@ -29,6 +29,10 @@ class ApiMethods {
     
    url = API_BASE_URL1 + url;
   }
+  else if(url.includes('/icd'||searchTerm=='ICD'))
+  {
+    url = API_BASE_URL1 + url;
+  }
   else{
     url = API_BASE_URL + url;
   }

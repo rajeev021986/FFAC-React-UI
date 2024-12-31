@@ -11,6 +11,8 @@ import DashboardScreen from "./pages/dashboard/DashboardScreen";
 import HandleAuthCallback from "./HandleAuthCallback";
 import FormScreen from "./pages/code/CustomerFormScreen";
 import CustomerApproveScreen from "./pages/code/CustomerApproveScreen";
+import IcdScreen from "./pages/icd/IcdScreen";
+import IcdForm from "./components/screen/code/icd/IcdForm";
 import Component from "./pages/code/Component";
 import { useSelector } from "react-redux";
 import SettingsPage from "./pages/setting/Setting";
@@ -30,6 +32,8 @@ import PortScreen from "./pages/port/PortScreen";
 import PortForm from "./components/screen/code/port/PortForm";
 import ShipperFormScreen from "./pages/code/ShipperFormScreen";
 import ConsigneeFormScreen from "./pages/code/ConsigneeFormScreen";
+import IcdFormScreen from "./pages/icd/IcdFormScreen";
+
 
 function App() {
   // const { menuItems } = useMenuSetting();
@@ -132,6 +136,10 @@ function App() {
             <Route path="master/port" element={<PortScreen />} />
             <Route path="master/port/portAdd" element={<PortForm />} />
             <Route path="master/port/editPort" element={<PortForm />} />
+
+            <Route path="master/icd" element={<IcdScreen page="icd"/>} />
+            <Route path="master/icd/new_icd" element={<IcdFormScreen page="icd" />} />
+            <Route path="master/icd/editIcd" element={<IcdFormScreen page="icd" />} />
           </Route>
         </Routes>
         <Toaster />

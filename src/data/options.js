@@ -147,6 +147,14 @@ export const CONSIGNEE_SORT_OPTIONS = [
   { value: "country*asc", label: "Country Ascending" },
   { value: "country*desc", label: "Country Descending" },
 ];
+export const ICD_SORT_OPTIONS = [
+  // { value: "acode*asc", label: "Code Ascending" },
+  // { value: "acode*desc", label: "Code Descending" },
+  { value: "icdName*asc", label: "Icd Ascending" },
+  { value: "icdName*desc", label: "Icd Descending" },
+  { value: "icdCode*asc", label: "Code Ascending" },
+  { value: "icdCode*desc", label: "Code Descending" },
+];
 export const VENDOR_SORT_OPTIONS = [
   { value: "vendorName*asc", label: "Vendor Ascending" },
   { value: "vendorName*desc", label: "Vendor Descending" },
