@@ -128,7 +128,7 @@ export function ChargesScreen({ page }) {
     if (actionName === "Copy") {
       nav("newcharges", {
         state: {
-          initialValues: { id: seletectBox },
+          id: seletectBox,
           type: "copy",
         },
       });
@@ -286,7 +286,7 @@ export function ChargesScreen({ page }) {
             handlePage={handlePage}
             data={ChargesData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
+            columnVisibilityHandler={() => { }}
             paginationModel={chargesSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={chargesSelector.sortModel}
