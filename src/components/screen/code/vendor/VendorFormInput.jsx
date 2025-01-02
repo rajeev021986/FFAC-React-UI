@@ -155,7 +155,7 @@ export default function VendorFormInput({
                 disabled
               />
             </Grid>
-          ) : formik.values?.isApproved ? (
+          ) : formik.values.isApproved == -2 || formik.values.isApproved == 1 ? (
             <Grid
               item
               xs={12}
@@ -173,7 +173,7 @@ export default function VendorFormInput({
                 options={optionsSettingsData?.body.status}
                 value={
                   formik.values.status == "ACTIVE" ||
-                  formik.values.status == "Active"
+                    formik.values.status == "Active"
                     ? "Active"
                     : formik.values.status
                 }
@@ -381,7 +381,7 @@ export default function VendorFormInput({
           />
         </Grid>
         {formik.values.status.toLowerCase() === "rejected" ||
-        page == "vendorApproval" ? (
+          page == "vendorApproval" ? (
           <Grid item xs={12}>
             <TextField
               label="Reject Remarks"

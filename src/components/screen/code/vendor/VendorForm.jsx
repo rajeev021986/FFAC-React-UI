@@ -255,6 +255,7 @@ export default function VendorForm({ page = "vendor" }) {
       };
       if (type == "copy" || type == "new") {
         try {
+          updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest ? 0 : 1;
           let res = await addVendor(updatedValue).unwrap();
           if (res.success) {
             toast.success(res.message);
@@ -265,6 +266,8 @@ export default function VendorForm({ page = "vendor" }) {
         }
       } else {
         try {
+          Boolean(updatedValue.status == "Active") && (updatedValue.isApproved = 1);
+          Boolean(updatedValue.status == "Inactive") && (updatedValue.isApproved = -2);
           let res = await updateVendor(updatedValue).unwrap();
           console.log(res.success, "res.success");
           if (res.success) {

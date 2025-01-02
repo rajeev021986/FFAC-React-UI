@@ -93,7 +93,7 @@ export default function CustomerForm({
         );
         try {
           delete values.id;
-          values.isApproved = !dropdownData?.approvalRequest;
+          values.isApproved = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
           if (values.paymentType === "cash") {
             values.creditAmount = null;
@@ -148,6 +148,8 @@ export default function CustomerForm({
           let tariffs = values.customerEntityTariffs.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           );
+          Boolean(values.status == "Active") && (values.isApproved = 1);
+          Boolean(values.status == "Inactive") && (values.isApproved = -2);
           let response = await updateCustomer({
             ...values,
             customerEntityEmailsIds: emails,
@@ -719,7 +721,7 @@ export default function CustomerForm({
                     />
                   </Grid>
 
-                  {initialValues.isApproved ? (
+                  {initialValues.isApproved == -2 || initialValues.isApproved == 1 ? (
                     <Grid
                       item
                       xs={12}
@@ -733,7 +735,7 @@ export default function CustomerForm({
                         label="Status"
                         id="status"
                         options={optionsSettingsData?.body.status}
-                        disabled={!initialValues.isApproved || disabled}
+                        // disabled={!initialValues.isApproved || disabled}
                         value={formik.values.status}
                         error={formik.errors.status}
                         onChange={formik.handleChange}
@@ -744,7 +746,7 @@ export default function CustomerForm({
                       <InputBox
                         label="Status"
                         id="status"
-                        disabled={!initialValues.isApproved || disabled}
+                        disabled={true}
                         value={formik.values.status}
                         error={formik.errors.status}
                         onChange={formik.handleChange}
@@ -983,7 +985,7 @@ export default function CustomerForm({
                     </Box>
                   </Grid>
                   {formik.values.status.toLowerCase() === "rejected" ||
-                  page == "customerApprove" ? (
+                    page == "customerApprove" ? (
                     <Grid item xs={12}>
                       <TextField
                         label="Reject Remarks"
