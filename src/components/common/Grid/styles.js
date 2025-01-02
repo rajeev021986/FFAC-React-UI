@@ -14,12 +14,12 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   border: "none",
   borderRadius: "5px !important",
   "& .MuiDataGrid-columnHeader": {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
     lineHeight: 10,
   },
   "& .MuiDataGrid-columnHeaderTitle": {
-    color: theme.palette.secondary.main,
-    fontWeight: 600,
+    color: 'white',
+    fontSize: '1rem'
   },
   // "& .MuiPopper-root": {
   //   overflowY: "hidden",
