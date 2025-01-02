@@ -8,7 +8,7 @@ export default function ScreenToolbar({leftComps, rightComps}) {
             alignItems={"center"}
             direction="row"
             spacing={2}
-            my={2}
+            my={0}
         >
             <Box display={"flex"} gap={2} >
                 {leftComps}

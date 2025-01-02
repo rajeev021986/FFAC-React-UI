@@ -137,6 +137,30 @@ export const CUSTOMER_SORT_OPTIONS = [
   { value: "tinNo*asc", label: "TinNo Ascending" },
   { value: "tinNo*desc", label: "TinNo Descending" },
 ];
+export const SHIPPER_SORT_OPTIONS = [
+  // { value: "acode*asc", label: "Code Ascending" },
+  // { value: "acode*desc", label: "Code Descending" },
+  { value: "name*asc", label: "Shipper Ascending" },
+  { value: "name*desc", label: "Shipper Descending" },
+  { value: "country*asc", label: "Country Ascending" },
+  { value: "country*desc", label: "Country Descending" },
+];
+export const CONSIGNEE_SORT_OPTIONS = [
+  // { value: "acode*asc", label: "Code Ascending" },
+  // { value: "acode*desc", label: "Code Descending" },
+  { value: "consignee_name*asc", label: "Consignee Ascending" },
+  { value: "consignee_name*desc", label: "Consignee Descending" },
+  { value: "country*asc", label: "Country Ascending" },
+  { value: "country*desc", label: "Country Descending" },
+];
+export const ICD_SORT_OPTIONS = [
+  // { value: "acode*asc", label: "Code Ascending" },
+  // { value: "acode*desc", label: "Code Descending" },
+  { value: "icdName*asc", label: "Icd Ascending" },
+  { value: "icdName*desc", label: "Icd Descending" },
+  { value: "icdCode*asc", label: "Code Ascending" },
+  { value: "icdCode*desc", label: "Code Descending" },
+];
 export const VENDOR_SORT_OPTIONS = [
   { value: "vendorName*asc", label: "Vendor Ascending" },
   { value: "vendorName*desc", label: "Vendor Descending" },

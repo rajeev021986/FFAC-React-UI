@@ -2,6 +2,8 @@ import ENDPOINTS from "./Endpoints";
 import ApiMethods from "./ApiMethods";
 
 class ApiManager {
+ 
+   
     static login = async (payload) => {
         const url = ENDPOINTS.LOGIN();
         return ApiMethods.post(url, payload);
@@ -71,13 +73,47 @@ class ApiManager {
         const url = ENDPOINTS.GET_CUSTOMER_AUDIT(id);
         return ApiMethods.get(url);
     }
+    static getShipperAuditDetails = async (id) => {
+        const url = ENDPOINTS.GET_SHIPPER_AUDIT(id);
+       
+        return ApiMethods.get(url);
+    }
+    static getConsigneeAuditDetails = async (id) => {
+        const url = ENDPOINTS.GET_CONSIGNEE_AUDIT(id);
+       
+        return ApiMethods.get(url);
+    }
+    static getIcdAuditDetails = async (id) => {
+        const url = ENDPOINTS.GET_ICD_AUDIT(id);
+       
+        return ApiMethods.get(url);
+    }
     static getCustomerFormData = async (source, id) => {
         const url = ENDPOINTS.GET_CUSTOMER_DOCUMENT_FILE(source, id);
+        return ApiMethods.get(url);
+    }
+    static getShipperFormData = async (source, id) => {
+        const url = ENDPOINTS.GET_SHIPPER_DOCUMENT_FILE(source, id);
         return ApiMethods.get(url);
     }
     static getCustomerDeatils = async (id) => {
         const url = ENDPOINTS.GET_CUSTOMER_DETAILS(id);
         return ApiMethods.get(url);
+    }
+    static getShipperDeatils = async (id) => {
+        const url = ENDPOINTS.GET_SHIPPER_DETAILS(id);
+        const page="shipper";
+        return ApiMethods.get(url,page);
+    }
+    static getConsigneeDeatils = async (id) => {
+        const url = ENDPOINTS.GET_CONSIGNEE_DETAILS(id);
+        const page="consignee";
+        return ApiMethods.get(url,page);
+    }
+    static getIcdDeatils = async (id) => {
+        const url = ENDPOINTS.GET_ICD_DETAILS(id);
+        const page="shipper";
+        return ApiMethods.get(url,page);
     }
     static downloadDocumnent = async (id, source, sourceId) => {
         const url = ENDPOINTS.DOWNLOAD_DOCUMENT(id, source, sourceId);

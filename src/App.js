@@ -11,11 +11,15 @@ import DashboardScreen from "./pages/dashboard/DashboardScreen";
 import HandleAuthCallback from "./HandleAuthCallback";
 import FormScreen from "./pages/code/CustomerFormScreen";
 import CustomerApproveScreen from "./pages/code/CustomerApproveScreen";
+import IcdScreen from "./pages/icd/IcdScreen";
+import IcdForm from "./components/screen/code/icd/IcdForm";
 import Component from "./pages/code/Component";
 import { useSelector } from "react-redux";
 import SettingsPage from "./pages/setting/Setting";
 import AddCard from "./components/common/Cards/AddCard";
 import CustomerFormScreen from "./pages/code/CustomerFormScreen";
+import ShipperComponent from "./pages/code/ShipperComponent";
+import ConsigneeComponent from "./pages/code/ConsigneeComponent";
 import Role from "./pages/code/Role";
 import AddEditRole from "./pages/code/AddEditRole";
 import UserManagementScreen from "./pages/users/UserManagementScreen";
@@ -34,6 +38,11 @@ import { ChargesScreen } from "./pages/charges/ChargesScreen";
 import AddEditCharge from "./components/screen/code/charge/AddEditCharge";
 import { ExchangeRate } from "./pages/exchange_rate/ExchangeRateScreen";
 import Exchange from "./components/screen/code/exchange/Exchange";
+import ShipperFormScreen from "./pages/code/ShipperFormScreen";
+import ConsigneeFormScreen from "./pages/code/ConsigneeFormScreen";
+import IcdFormScreen from "./pages/icd/IcdFormScreen";
+
+
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -83,6 +92,30 @@ function App() {
             <Route
               path="entity/approve/approveRequest"
               element={<CustomerFormScreen page="customerApprove" />}
+            />
+            <Route
+              path="master/shipper"
+              element={<ShipperComponent page="shipper" />}
+            />
+            <Route
+              path="master/shipper/new_shipper"
+              element={<ShipperFormScreen page="shipper" />}
+            />
+            <Route
+              path="master/shipper/editshipper"
+              element={<ShipperFormScreen page="shipper" />}
+            />
+            <Route
+              path="master/consignee"
+              element={<ConsigneeComponent page="consignee" />}
+            />
+            <Route
+              path="master/consignee/new_consignee"
+              element={<ConsigneeFormScreen page="consignee" />}
+            />
+            <Route
+              path="master/consignee/editconsignee"
+              element={<ConsigneeFormScreen page="consignee" />}
             />
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
@@ -153,6 +186,10 @@ function App() {
               element={<Exchange />}
             />
 
+
+            <Route path="master/icd" element={<IcdScreen page="icd"/>} />
+            <Route path="master/icd/new_icd" element={<IcdFormScreen page="icd" />} />
+            <Route path="master/icd/editIcd" element={<IcdFormScreen page="icd" />} />
           </Route>
         </Routes>
         <Toaster />
