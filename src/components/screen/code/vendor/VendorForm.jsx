@@ -40,87 +40,85 @@ export default function VendorForm({ page = "vendor" }) {
   const [getVendor, { isLoading }] = useLazyGetVendorQuery();
   const validationSchema = Yup.object({
     vendorName: Yup.string().required("Vendor Name is required"),
-    status: Yup.string().required("Status is required"),
-    type: Yup.string().required("Type is required"),
-    add1: Yup.string().nullable(),
-    add2: Yup.string().nullable(),
-    add3: Yup.string().nullable(),
-    alias: Yup.string().required("Alias is required"),
-    telephone1: Yup.string().required("Telephone1 is required"),
-    telephone2: Yup.string().nullable(),
-    fax: Yup.string().nullable(),
-    emailId: Yup.string()
-      .email("Invalid email format")
-      .required("Email ID is required"),
     tinNo: Yup.string().required("TIN Number is required"),
     vrnNo: Yup.string().required("VRN Number is required"),
+    // status: Yup.string().required("Status is required"),
+    type: Yup.string().required("Type is required"),
+    add1: Yup.string().required("Address is required"),
+    // add2: Yup.string().nullable(),
+    // add3: Yup.string().nullable(),
+    alias: Yup.string().required("Alias is required"),
+    telephone1: Yup.string().required("Telephone1 is required"),
+    // telephone2: Yup.string().nullable(),
+    fax: Yup.string().required("Fax is required"),
+    emailId: Yup.string()
+      .required("Email is required")
+      .test("valid-email", "Invalid email format", (value) => {
+        if (!value) return false;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+      }),
+
     city: Yup.string().required("City is required"),
     country: Yup.string().required("Country is required"),
     creditDays: Yup.number()
       .required("Credit Days is required")
       .min(0, "Credit Days cannot be negative"),
-    province: Yup.string().nullable(),
-    poNo: Yup.string().nullable(),
-    contactPerson: Yup.string().nullable(),
+    province: Yup.string().required("Province is required"),
+    poNo: Yup.string().required("Post is required"),
+    contactPerson: Yup.string().required("Person is required"),
     // companyCode: Yup.string().nullable(),
-    rejectRemarks: Yup.string().nullable(),
-    vendorEntityTariffs: Yup.array(
-      Yup.object({
-        id: Yup.number().required("ID is required"),
-        chargeName: Yup.string().required("Charge Name is required"),
-        type: Yup.string().required("Type is required"),
-        finalDestination: Yup.string().required(
-          "Final Destination is required"
-        ),
-        unitType: Yup.string().required("Unit Type is required"),
-        currency: Yup.string().required("Currency is required"),
+    // rejectRemarks: Yup.string().nullable(),
+    vendorEntityTariffs: Yup.array().of(
+      Yup.object().shape({
         unitRate: Yup.number()
-          .required("Unit Rate is required")
-          .min(0, "Unit Rate cannot be negative"),
+          .positive("Unit Rate must be a positive number")
+          .min(0.01, "Unit Rate must be greater than 0"),
       })
-    ).required("Vendor Entity Tariffs are required"),
-    vendorEntityDemurageTariffs: Yup.array(
-      Yup.object({
-        id: Yup.number().required("ID is required"),
-        country: Yup.string().required("Country is required"),
-        containerType: Yup.string().required("Container Type is required"),
-        firstWeek: Yup.string().required("First Week is required"),
-        secondWeek: Yup.string().required("Second Week is required"),
-        thirdWeek: Yup.string().required("Third Week is required"),
-      })
-    ).required("Vendor Entity Demurage Tariffs are required"),
-    vendorEntityFreeDays: Yup.array(
-      Yup.object({
-        id: Yup.number().required("ID is required"),
-        country: Yup.string().required("Country is required"),
-        noOfFreeDays: Yup.number()
-          .required("Number of Free Days is required")
-          .min(0, "Number of Free Days cannot be negative"),
-      })
-    ).required("Vendor Entity Free Days are required"),
-    vendorEntityEmails: Yup.array(
-      Yup.object({
-        id: Yup.number().required("ID is required"),
-        designation: Yup.string().required("Designation is required"),
-        emailId: Yup.string()
-          .required("Email ID is required")
-          .test("multiple-emails", "Invalid email format", (value) => {
+    ),
+    vendorEntityEmails: Yup.array().of(
+      Yup.object().shape({
+        emailId: Yup.string().test(
+          "multiple-emails",
+          "Invalid email format",
+          (value) => {
             if (!value) return false;
             const emails = value.split(",").map((email) => email.trim());
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emails.every((email) => emailRegex.test(email));
-          }),
+          }
+        ),
       })
-    ).required("Vendor Entity Emails are required"),
-    vendorBankDetails: Yup.array(
-      Yup.object({
-        id: Yup.number().required("ID is required"),
-        bankName: Yup.string().required("Bank Name is required"),
-        bankAddress: Yup.string().required("Bank Address is required"),
-        currency: Yup.string().required("Currency is required"),
-        swiftCode: Yup.string().required("SWIFT Code is required"),
-      })
-    ).required("Vendor Bank Details are required"),
+    ),
+    // vendorEntityDemurageTariffs: Yup.array(
+    //   Yup.object({
+    //     id: Yup.number().required("ID is required"),
+    //     country: Yup.string().required("Country is required"),
+    //     containerType: Yup.string().required("Container Type is required"),
+    //     firstWeek: Yup.string().required("First Week is required"),
+    //     secondWeek: Yup.string().required("Second Week is required"),
+    //     thirdWeek: Yup.string().required("Third Week is required"),
+    //   })
+    // ).required("Vendor Entity Demurage Tariffs are required"),
+    // vendorEntityFreeDays: Yup.array(
+    //   Yup.object({
+    //     id: Yup.number().required("ID is required"),
+    //     country: Yup.string().required("Country is required"),
+    //     noOfFreeDays: Yup.number()
+    //       .required("Number of Free Days is required")
+    //       .min(0, "Number of Free Days cannot be negative"),
+    //   })
+    // ).required("Vendor Entity Free Days are required"),
+
+    // vendorBankDetails: Yup.array(
+    //   Yup.object({
+    //     id: Yup.number().required("ID is required"),
+    //     bankName: Yup.string().required("Bank Name is required"),
+    //     bankAddress: Yup.string().required("Bank Address is required"),
+    //     currency: Yup.string().required("Currency is required"),
+    //     swiftCode: Yup.string().required("SWIFT Code is required"),
+    //   })
+    // ).required("Vendor Bank Details are required"),
   });
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -295,7 +293,11 @@ export default function VendorForm({ page = "vendor" }) {
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               {tabs.map((a) => (
-                <Tab label={a.label} value={a.value} />
+                <Tab
+                  sx={{ fontSize: "1rem" }}
+                  label={a.label}
+                  value={a.value}
+                />
               ))}
             </TabList>
           </Box>

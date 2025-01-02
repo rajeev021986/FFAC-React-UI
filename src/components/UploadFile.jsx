@@ -11,9 +11,9 @@ import {
   TextField,
   Select,
   MenuItem,
+  Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { DataGrid } from "@mui/x-data-grid";
 import { CloudDownload, Delete, Visibility } from "@mui/icons-material"; // Add Visibility icon
 import moment from "moment";
 import Uploadimg from "../assets/images/upload-placeholder.png";
@@ -33,6 +33,7 @@ import ImageViewer from "./common/FileViewer/ImageViewer";
 import PDFViewer from "./common/FileViewer/PDFViewer";
 import WordViewer from "./common/FileViewer/WordViewer";
 import TextViewer from "./common/FileViewer/TextViewer";
+import { StyledDataGrid } from "./common/Grid/styles";
 // Custom styled drop zone
 const DropZone = styled(Box)(({ theme }) => ({
   border: "2px dashed #ccc",
@@ -74,12 +75,20 @@ const UploadFile = ({
     try {
       let source = sourceType;
       const res = await ApiManager.downloadDocumnent(id, source, sourceId);
-      setFileDaat({ base64Data: res.body.base64, mimeType: res.body.mimeTsype });
-      Boolean(res.body.mimeType.includes("spreadsheetml.sheet")) && setFileDaat(prev => ({ ...prev, documentType: "XL" }));
-      Boolean(res.body.mimeType.includes("image")) && setFileDaat(prev => ({ ...prev, documentType: "IMG" }));
-      Boolean(res.body.mimeType.includes("pdf")) && setFileDaat(prev => ({ ...prev, documentType: "PDF" }));
-      Boolean(res.body.mimeType.includes("wordprocessingml")) && setFileDaat(prev => ({ ...prev, documentType: "MSW" }));
-      Boolean(res.body.mimeType.includes("plain")) && setFileDaat(prev => ({ ...prev, documentType: "TXT" }));
+      setFileDaat({
+        base64Data: res.body.base64,
+        mimeType: res.body.mimeTsype,
+      });
+      Boolean(res.body.mimeType.includes("spreadsheetml.sheet")) &&
+        setFileDaat((prev) => ({ ...prev, documentType: "XL" }));
+      Boolean(res.body.mimeType.includes("image")) &&
+        setFileDaat((prev) => ({ ...prev, documentType: "IMG" }));
+      Boolean(res.body.mimeType.includes("pdf")) &&
+        setFileDaat((prev) => ({ ...prev, documentType: "PDF" }));
+      Boolean(res.body.mimeType.includes("wordprocessingml")) &&
+        setFileDaat((prev) => ({ ...prev, documentType: "MSW" }));
+      Boolean(res.body.mimeType.includes("plain")) &&
+        setFileDaat((prev) => ({ ...prev, documentType: "TXT" }));
       const binaryString = atob(res.body.base64);
       const binaryArray = new Uint8Array(binaryString.length);
       for (let i = 0; i < binaryString.length; i++) {
@@ -173,25 +182,40 @@ const UploadFile = ({
     }
   };
   const cusColumns = [
-    { field: "documentType", headerName: "Type", flex: 1, headerAlign: 'center' },
-    { field: "number", headerName: "Number", flex: 1, headerAlign: 'center' },
-    { field: "createdBy", headerName: "Created By", flex: 1, headerAlign: 'center', },
-    { field: "modifiedBy", headerName: "Modified By", flex: 1, headerAlign: 'center', },
     {
-      field: 'createdDate',
-      headerName: 'Created Date',
+      field: "documentType",
+      headerName: "Type",
+      flex: 1,
+      headerAlign: "center",
+    },
+    { field: "number", headerName: "Number", flex: 1, headerAlign: "center" },
+    {
+      field: "createdBy",
+      headerName: "Created By",
+      flex: 1,
+      headerAlign: "center",
+    },
+    {
+      field: "modifiedBy",
+      headerName: "Modified By",
+      flex: 1,
+      headerAlign: "center",
+    },
+    {
+      field: "createdDate",
+      headerName: "Created Date",
       width: 130,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: "center",
+      align: "center",
       renderCell: (params) => {
-        return <div>{appDateFormat(params.value)}</div>
-      }
+        return <div>{appDateFormat(params.value)}</div>;
+      },
     },
     {
       field: "modifiedDate",
       headerName: "Issue Date",
       flex: 1,
-      headerAlign: 'center',
+      headerAlign: "center",
       renderCell: (params) => (
         <span>{moment(params.value).format("DD-MM-YYYY")}</span>
       ),
@@ -200,7 +224,7 @@ const UploadFile = ({
       field: "expiredDate",
       headerName: "Expiry Date",
       flex: 1,
-      headerAlign: 'center',
+      headerAlign: "center",
       renderCell: (params) => (
         <span>{moment(params.value).format("DD-MM-YYYY")}</span>
       ),
@@ -209,7 +233,7 @@ const UploadFile = ({
       field: "actions",
       headerName: "Actions",
       flex: 1,
-      headerAlign: 'center',
+      headerAlign: "center",
       renderCell: (params) => (
         <div
           style={{
@@ -249,28 +273,62 @@ const UploadFile = ({
     },
   ];
   const columns = [
-    { field: "documentType", headerName: "Type", flex: 1, headerAlign: 'center' },
-    { field: "createdBy", headerName: "Created By", flex: 1, headerAlign: 'center', },
-    { field: "modifiedBy", headerName: "Modified By", flex: 1, headerAlign: 'center', },
     {
-      field: 'createdDate',
-      headerName: 'Created Date',
-      width: 130,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => {
-        return <div>{appDateFormat(params.value)}</div>
-      }
+      field: "documentType",
+      headerName: "Type",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
-      field: 'modifiedDate',
-      headerName: 'Modified Date',
+      field: "createdBy",
+      headerName: "Created By",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.createdBy}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
+    },
+    {
+      field: "modifiedBy",
+      headerName: "Modified By",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.modifiedBy}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
+    },
+    {
+      field: "createdDate",
+      headerName: "Created Date",
       width: 130,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => {
-        return <div>{appDateFormat(params.value)}</div>
-      }
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.createdDate}`} arrow>
+          <div>{appDateFormat(params.value)}</div>;
+        </Tooltip>
+      ),
+    },
+    {
+      field: "modifiedDate",
+      headerName: "Modified Date",
+      width: 130,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.modifiedDate}`} arrow>
+          <div>{appDateFormat(params.value)}</div>;
+        </Tooltip>
+      ),
     },
     {
       field: "actions",
@@ -312,7 +370,8 @@ const UploadFile = ({
           />
         </div>
       ),
-    },]
+    },
+  ];
   useEffect(() => {
     reloadDataHandler();
   }, []);
@@ -342,7 +401,11 @@ const UploadFile = ({
         </Grid>
       ) : (
         <Grid container spacing={2}>
-          <Typography variant="h4" gutterBottom style={{ width: "100%" }}>
+          <Typography
+            variant="h5"
+            gutterBottom
+            style={{ width: "100%", marginLeft: "15px" }}
+          >
             Select Files
           </Typography>
           <Grid item xs={12} sm={4}>
@@ -385,19 +448,26 @@ const UploadFile = ({
           </Grid>
           <Grid item xs={12} sm={8}>
             <Box style={{ height: 400, width: "100%" }}>
-              <DataGrid
+              <StyledDataGrid
                 rows={listData}
-                columns={(sourceType === "CUSTOMER" ? cusColumns : columns).map((a) => ({
-                  ...a,
-                  align: 'center'
-                }))}
+                columns={(sourceType === "CUSTOMER" ? cusColumns : columns).map(
+                  (a) => ({
+                    ...a,
+                    align: "center",
+                  })
+                )}
                 pageSize={20}
                 disableSelectionOnClick
               />
             </Box>
           </Grid>
 
-          <Dialog open={dialogOpen} onClose={handleDialogClose} maxWidth="sm" fullWidth>
+          <Dialog
+            open={dialogOpen}
+            onClose={handleDialogClose}
+            maxWidth="sm"
+            fullWidth
+          >
             <DialogTitle>
               <Typography variant="h6" component="div">
                 File Details
@@ -430,16 +500,18 @@ const UploadFile = ({
                     />
                   </Grid>
                 )}
-                {sourceType == "CUSTOMER" && (<Grid item xs={12}>
-                  <TextField
-                    margin="dense"
-                    label="Number"
-                    name="number"
-                    fullWidth
-                    value={formData.number}
-                    onChange={handleInputChange}
-                  />
-                </Grid>)}
+                {sourceType == "CUSTOMER" && (
+                  <Grid item xs={12}>
+                    <TextField
+                      margin="dense"
+                      label="Number"
+                      name="number"
+                      fullWidth
+                      value={formData.number}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                )}
                 {sourceType == "CUSTOMER" && (
                   <Grid item xs={12}>
                     <TextField
@@ -527,14 +599,44 @@ const UploadFile = ({
               </Button>
             </DialogActions>
           </Dialog>
-          <Dialog open={viewDialogOpen} onClose={handleViewDialogClose} maxWidth="lg" fullWidth>
+          <Dialog
+            open={viewDialogOpen}
+            onClose={handleViewDialogClose}
+            maxWidth="lg"
+            fullWidth
+          >
             <DialogTitle>{viewDocument.documentType}</DialogTitle>
             <DialogContent>
-              {fileData.documentType == "XL" && <ExcelViewer mimeType={fileData.mimeType} base64Data={fileData.base64Data} />}
-              {fileData.documentType == "IMG" && <ImageViewer mimeType={fileData.mimeType} base64Data={fileData.base64Data} />}
-              {fileData.documentType == "PDF" && <PDFViewer mimeType={fileData.mimeType} base64Data={fileData.base64Data} />}
-              {fileData.documentType == "MSW" && <WordViewer mimeType={fileData.mimeType} base64Data={fileData.base64Data} />}
-              {fileData.documentType == "TXT" && <TextViewer mimeType={fileData.mimeType} base64Data={fileData.base64Data} />}
+              {fileData.documentType == "XL" && (
+                <ExcelViewer
+                  mimeType={fileData.mimeType}
+                  base64Data={fileData.base64Data}
+                />
+              )}
+              {fileData.documentType == "IMG" && (
+                <ImageViewer
+                  mimeType={fileData.mimeType}
+                  base64Data={fileData.base64Data}
+                />
+              )}
+              {fileData.documentType == "PDF" && (
+                <PDFViewer
+                  mimeType={fileData.mimeType}
+                  base64Data={fileData.base64Data}
+                />
+              )}
+              {fileData.documentType == "MSW" && (
+                <WordViewer
+                  mimeType={fileData.mimeType}
+                  base64Data={fileData.base64Data}
+                />
+              )}
+              {fileData.documentType == "TXT" && (
+                <TextViewer
+                  mimeType={fileData.mimeType}
+                  base64Data={fileData.base64Data}
+                />
+              )}
             </DialogContent>
             <DialogActions>
               <Button onClick={handleViewDialogClose} color="secondary">

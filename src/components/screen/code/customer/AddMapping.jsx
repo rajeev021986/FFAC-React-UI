@@ -1,10 +1,11 @@
 import React from "react";
-import { Box, Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton, styled, Tooltip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, Delete } from "@mui/icons-material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AutoCompleteInput from "../../../common/AutoCompletInput";
 import ApiManager from "../../../../services/ApiManager";
+import { StyledDataGrid } from "../../../common/Grid/styles";
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     {
@@ -70,6 +71,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
 
     return data || [];
   };
+
   // Columns for DataGrid
   const columns = [
     {
@@ -117,6 +119,11 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       valueOptions: unitTypeOptions.map((option) => option.value),
       headerAlign: "center",
       align: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.unitType}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "currency",
@@ -161,6 +168,11 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       valueOptions: shipmentTypeOptions.map((option) => option.value),
       headerAlign: "center",
       align: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.shipmentType}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "unitRate",
@@ -169,13 +181,18 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       editable: true,
       headerAlign: "center",
       align: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.unitRate}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "actions",
       headerName: "Actions",
       sortable: false,
       renderHeader: () => (
-        <IconButton color="primary">
+        <IconButton color="white">
           <AddCircleIcon onClick={addRow} />
         </IconButton>
       ),
@@ -204,23 +221,13 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   };
 
   return (
-    <Box sx={{ width: "100%", marginTop: 2, textAlign: "right" }}>
-      {/* <Button
-        variant="contained"
-        startIcon={<Add />}
-        onClick={addRow}
-        disabled={disabled}
-        sx={{ borderRadius: "17px 18px 18px 17px", margin: "5px" }}
-      >
-        Add Tariff
-      </Button> */}
+    <Box sx={{ width: "100%", textAlign: "right" }}>
       <Box
         sx={{
           height: 400,
-          marginTop: 2,
         }}
       >
-        <DataGrid
+        <StyledDataGrid
           rows={customerEntityTariffs}
           columns={columns}
           disableSelectionOnClick

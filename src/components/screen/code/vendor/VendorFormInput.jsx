@@ -10,6 +10,7 @@ import SelectBox from "../../../common/SelectBox";
 import WarningIcon from "@mui/icons-material/Warning";
 import { useEffect, useState } from "react";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import CustomToast from "../../../common/Toast/CustomToast";
 const customToast = () => (
   <div
     style={{
@@ -35,29 +36,35 @@ export default function VendorFormInput({
   const nav = useNavigate();
   const [dropdownData, setDropdownData] = useState({});
   const handleApproveRequest = async () => {
-    if (!formik.values.rejectRemarks) {
-      toast.error("Remark field is required");
+    if (formik.values.status == "Pending_Documents") {
+      toast.custom(
+        <CustomToast message="Document is Pending!" toast="warn" />,
+        {
+          closeButton: false,
+        }
+      );
       return;
     }
     try {
-      if (formik.values.status == "Pending_Documents") {
-        toast.custom(customToast, {
-          style: {
-            backgroundColor: "#FFEB3B",
-            color: "black",
-          },
-          closeButton: false,
-        });
-        return;
-      }
       const response = await ApiManager.approveCustomerApprove(
         formik.values.id,
         "Vendor"
       );
+      const message = response.message;
       nav(-1);
-      toast.success("Approved");
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
     } catch (error) {
-      toast.error("Error");
+      toast.custom(
+        <CustomToast
+          message="Error occurred while approve customer"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
 
@@ -77,7 +84,12 @@ export default function VendorFormInput({
 
   const handleRejectRequest = async () => {
     if (!formik.values.rejectRemarks) {
-      toast.error("Remark field is required");
+      toast.custom(
+        <CustomToast message="Reject remarks to be filled!" toast="warn" />,
+        {
+          closeButton: false,
+        }
+      );
       return;
     }
     try {
@@ -86,10 +98,21 @@ export default function VendorFormInput({
         "Vendor",
         formik.values.rejectRemarks
       );
+      const message = response.message;
       nav(-1);
-      toast.success("Rejected");
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
     } catch (error) {
-      toast.error("Error");
+      toast.custom(
+        <CustomToast
+          message="Error occurred while reject customer"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   const getFirstError = (errors) => {

@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  view : "card",
-  pagination : { page: 0, pageSize: 10 },
-  sortModel : [],
+  view: "card",
+  pagination: { page: 0, pageSize: 10 },
+  sortModel: [],
   formData: {},
   shipment: ["ALL"],
   shipper: [],
   pol: [],
   pod: [],
-  sortBy : '',
-  theme:"#026de0",
-  mode:false,
-  sessionExpiredmodule:false
+  sortBy: '',
+  theme: "#800080",
+  mode: false,
+  sessionExpiredmodule: false
 };
 
 const dashboardSlice = createSlice({
@@ -20,31 +20,31 @@ const dashboardSlice = createSlice({
   initialState,
   reducers: {
     dashboardToggleFilter: (state, action) => {
-        const { category, value, type = 'checkbox' } = action.payload;
+      const { category, value, type = 'checkbox' } = action.payload;
 
-        const currentValues = state[category];
-        const isSelected = currentValues.includes(value);
+      const currentValues = state[category];
+      const isSelected = currentValues.includes(value);
 
-        if(type === 'radio'){
-          state[category] = isSelected ? [] : [value];
-        }else{
-          if (isSelected) {
-            state[category] = currentValues.filter((v) => v !== value);
-          } else {
-            state[category] = [...currentValues, value];
-          }
+      if (type === 'radio') {
+        state[category] = isSelected ? [] : [value];
+      } else {
+        if (isSelected) {
+          state[category] = currentValues.filter((v) => v !== value);
+        } else {
+          state[category] = [...currentValues, value];
         }
+      }
     },
     dashboardUpdateInput: (state, action) => {
-        state.formData = action.payload;
+      state.formData = action.payload;
     },
     dashboardSetPagination: (state, action) => {
-        state.pagination = action.payload;
+      state.pagination = action.payload;
     },
     dashboardSetView: (state, action) => {
-        state.view = action.payload;
+      state.view = action.payload;
     },
-    dashboardSetSortBy: (state,action) =>{
+    dashboardSetSortBy: (state, action) => {
       state.sortBy = action.payload;
     },
     dashboardSetSortModel: (state, action) => {
@@ -59,19 +59,19 @@ const dashboardSlice = createSlice({
     setSessionExpiredmodule: (state, action) => {
       state.sessionExpiredmodule = action.payload;
     }
-     
+
   }
 });
 
-export const { 
-    dashboardToggleFilter,
-    dashboardUpdateInput,
-    dashboardSetPagination,
-    dashboardSetView,
-    dashboardSetSortBy,
-    dashboardSetSortModel,
-    setTheme,
-    setMode,
-    setSessionExpiredmodule
- } = dashboardSlice.actions;
+export const {
+  dashboardToggleFilter,
+  dashboardUpdateInput,
+  dashboardSetPagination,
+  dashboardSetView,
+  dashboardSetSortBy,
+  dashboardSetSortModel,
+  setTheme,
+  setMode,
+  setSessionExpiredmodule
+} = dashboardSlice.actions;
 export default dashboardSlice.reducer;

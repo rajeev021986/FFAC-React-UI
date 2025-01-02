@@ -5,7 +5,9 @@ import {
   Box,
   CircularProgress,
   MenuItem,
+  Tooltip,
 } from "@mui/material";
+import { GridToolbarColumnsButton } from "@mui/x-data-grid";
 
 function AutoCompleteInput({
   label,
@@ -18,6 +20,7 @@ function AutoCompleteInput({
 }) {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const tooltipMessage = value ? value : "This field is empty";
 
   const handleInputChange = async (event, newValue) => {
     console.log("newValue", newValue);
@@ -63,36 +66,38 @@ function AutoCompleteInput({
         getOptionLabel={(option) => option || ""}
         sx={{
           height: "100%",
-          width: "70%",
+          width: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            label={label}
-            error={Boolean(error)}
-            helperText={error}
-            variant="standard"
-            fullWidth
-            InputProps={{
-              disableUnderline: true,
-              ...params.InputProps,
-              style: { border: "none" },
-              endAdornment: (
-                <>
-                  {loading ? (
-                    <CircularProgress color="inherit" size={20} />
-                  ) : null}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
-            }}
-          />
+          <Tooltip title={tooltipMessage} arrow>
+            <TextField
+              {...params}
+              label={label}
+              error={Boolean(error)}
+              helperText={error}
+              variant="standard"
+              fullWidth
+              InputProps={{
+                disableUnderline: true,
+                ...params.InputProps,
+                style: { border: "none", fontSize: "14px" },
+                endAdornment: (
+                  <>
+                    {loading ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+            />
+          </Tooltip>
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option}>
+          <MenuItem {...props} key={option} sx={{ fontSize: "14px" }}>
             {option}
           </MenuItem>
         )}
