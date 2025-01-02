@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, Delete } from "@mui/icons-material";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AutoCompleteInput from "../../../common/AutoCompletInput";
 import ApiManager from "../../../../services/ApiManager";
 export default function AddMapping({ formik, dropdownData, disabled }) {
@@ -59,9 +59,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
     formik.setFieldValue("customerEntityTariffs", updatedRows);
   };
   const fetchSuggestions = async (inputValue, inputId) => {
-    inputId =
-      inputId === "chargeName"
-        ? "CHARGE" : "CURRENCY"
+    inputId = inputId === "chargeName" ? "CHARGE" : "CURRENCY";
     if (!inputValue) return [];
 
     const response = await ApiManager.fetchVesselSuggestions(
@@ -92,13 +90,20 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
                 (entity) => entity.id === params.id
               );
               // setTimeout(() => {
-              formik.setValues({ ...formik.values, customerEntityTariffs: formik.values.customerEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, chargeName: newValue } : entity) });
+              formik.setValues({
+                ...formik.values,
+                customerEntityTariffs: formik.values.customerEntityTariffs.map(
+                  (entity, index) =>
+                    index === rowIndex
+                      ? { ...entity, chargeName: newValue }
+                      : entity
+                ),
+              });
               // }, 1500);
             }}
             fetchSuggestions={fetchSuggestions}
           />
         );
-
       },
       headerAlign: "center",
       align: "center",
@@ -130,12 +135,19 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
               const rowIndex = formik.values.customerEntityTariffs.findIndex(
                 (entity) => entity.id === params.id
               );
-              formik.setValues({ ...formik.values, customerEntityTariffs: formik.values.customerEntityTariffs.map((entity, index) => index === rowIndex ? { ...entity, currency: newValue } : entity) });
+              formik.setValues({
+                ...formik.values,
+                customerEntityTariffs: formik.values.customerEntityTariffs.map(
+                  (entity, index) =>
+                    index === rowIndex
+                      ? { ...entity, currency: newValue }
+                      : entity
+                ),
+              });
             }}
             fetchSuggestions={fetchSuggestions}
           />
         );
-
       },
       headerAlign: "center",
       align: "center",
@@ -165,13 +177,14 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       renderHeader: () => (
         <IconButton color="primary">
           <AddCircleIcon onClick={addRow} />
-        </IconButton>),
+        </IconButton>
+      ),
       renderCell: (params) => (
         <Button
           disabled={disabled}
           color="error"
           onClick={() => deleteRow(params.row.id)}
-        // disabled={disabled || customerEntityTariffs.length === 1}
+          // disabled={disabled || customerEntityTariffs.length === 1}
         >
           <Delete />
         </Button>
@@ -201,7 +214,12 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       >
         Add Tariff
       </Button> */}
-      <Box sx={{ height: 400, marginTop: 2 }}>
+      <Box
+        sx={{
+          height: 400,
+          marginTop: 2,
+        }}
+      >
         <DataGrid
           rows={customerEntityTariffs}
           columns={columns}

@@ -45,7 +45,15 @@ function AutoCompleteInput({
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Autocomplete
         id={id}
         value={value}
@@ -53,36 +61,35 @@ function AutoCompleteInput({
         onChange={handleSelectionChange}
         options={suggestions}
         getOptionLabel={(option) => option || ""}
+        sx={{
+          height: "100%",
+          width: "70%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
         renderInput={(params) => (
           <TextField
             {...params}
             label={label}
             error={Boolean(error)}
             helperText={error}
-            variant="standard" 
+            variant="standard"
             fullWidth
-            sx={{
-              "& .MuiInputBase-root": {
-                border: "none",
-              },
-              "& .MuiInput-underline:before, & .MuiInput-underline:after": {
-                borderBottom: "none",
-              },
-              "& .MuiFormHelperText-root": {
-                margin: 0, 
-              },
-            }}
             InputProps={{
+              disableUnderline: true,
               ...params.InputProps,
+              style: { border: "none" },
               endAdornment: (
                 <>
-                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
                   {params.InputProps.endAdornment}
                 </>
               ),
             }}
           />
-
         )}
         renderOption={(props, option) => (
           <MenuItem {...props} key={option}>

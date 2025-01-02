@@ -5,7 +5,6 @@ export const CustomerValidationSchema = () => Yup.object({
   tinNo: Yup.string().required("TIN No is required"),
   vatNo: Yup.string().required("VAT No is required"),
   // status: Yup.string().required("Status is required"),
-  bankName: Yup.string().required("Bank Name is required"),
   add1: Yup.string().required("Address is required"),
   // add2: Yup.string().required("Address is required"),
   // add3: Yup.string().required("Address is required"),
@@ -14,40 +13,57 @@ export const CustomerValidationSchema = () => Yup.object({
   country: Yup.string().required("Country is required"),
   province: Yup.string().required("Province is required"),
   contactPerson: Yup.string().required("Person is required"),
-  emailId: Yup.string().required("Email is required"),
+  emailId: Yup.string().required("Email is required")
+    .test("valid-email", "Invalid email format", (value) => {
+      if (!value) return false;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(value);
+    }),
   telephone: Yup.string().required("Telephone is required"),
   fax: Yup.string().required("Fax is required"),
   bankName: Yup.string().required("Bank is required"),
   accountNo: Yup.string().required("Account Number is required"),
   customerType: Yup.string().required("Customer Type is required"),
   // companyCode: Yup.string().required("Company Code is required"),
-  // paymentType: Yup.string().required("Payment Type is required"),
-  // creditDays: Yup.string().required("Credit Days is required"),
-  // creditAmount: Yup.string().required("Credit Amount is required"),
-  // rejectRemarks: Yup.string().required("Remarks is required"),
-  // customerEntityTariffs: Yup.array()
-  //   .min(1, "At least one customer entity tariff is required")
-  //   .of(
-  //     Yup.object().shape({
-  //       chargeName: Yup.string().required("Charge Name is required"),
-  //       unitType: Yup.string().required("Unit Type is required"),
-  //       currency: Yup.string().required("Currency is required"),
-  //       shipmentType: Yup.string().required("Shipment Type is required"),
-  //       unitRate: Yup.number()
-  //         .required("Unit Rate is required")
-  //         .positive("Unit Rate must be a positive number")
-  //         .min(0.01, "Unit Rate must be greater than 0"),  // Enforce a minimum value of 0.01
-  //     })
-  //   )
-  //   .required("Customer entity tariffs are required"),
+  paymentType: Yup.string()
+    .required("Payment Type is required"),
+  creditDays: Yup.number().when('paymentType', {
+    is: (value) => value === 'credit',
+    then: (schema) => schema
+      .required("Credit Days is required")
+      .positive("Credit Days must be a positive number")
+      .min(1, "Credit Days must be greater than or equal to 1"),
+    otherwise: (schema) => schema
+  }),
 
-  // customerEntityEmailsIds: Yup.array()
-  //   .min(1, "At least one Email and Designation is required")
-  //   .of(
-  //     Yup.object().shape({
-  //       designation: Yup.string().required("Designation is required"),
-  //       emailId: Yup.string().required("Email ID is required").email("Email ID must be valid"),
-  //     })
-  //   )
-  //   .required("Customer entity emails are required"),
+  creditAmount: Yup.number().when('paymentType', {
+    is: (value) => value === 'credit',
+    then: (schema) => schema
+      .required("Credit Amount is required")
+      .positive("Credit Amount must be a positive number")
+      .min(0.01, "Credit Amount must be greater than or equal to 1"),
+    otherwise: (schema) => schema
+  }),
+  // rejectRemarks: Yup.string().required("Remarks is required"),
+  customerEntityTariffs: Yup.array()
+    .of(
+      Yup.object().shape({
+        unitRate: Yup.number()
+          .positive("Unit Rate must be a positive number")
+          .min(0.01, "Unit Rate must be greater than 0"),
+      })
+    ),
+
+  customerEntityEmailsIds: Yup.array()
+    .of(
+      Yup.object().shape({
+        emailId: Yup.string()
+          .test("multiple-emails", "Invalid email format", (value) => {
+            if (!value) return false;
+            const emails = value.split(",").map((email) => email.trim());
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emails.every((email) => emailRegex.test(email));
+          }),
+      })
+    )
 });

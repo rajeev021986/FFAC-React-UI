@@ -10,6 +10,7 @@ import {
   CardHeader,
   Chip,
   CircularProgress,
+  Drawer,
   IconButton,
   Stack,
   Typography,
@@ -21,7 +22,10 @@ import { OutlinedButton } from "../../components/common/Button";
 import { replace, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-import { useFetchCustomerQuery } from "../../store/api/codeDataApi";
+import {
+  useFetchCustomerQuery,
+  useLazyGetCustomerAuditQuery,
+} from "../../store/api/codeDataApi";
 import CustomerFilters from "../../components/screen/code/customer/CustomerFilters";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -44,13 +48,13 @@ import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import AuditTimeLine from "../../components/AuditTimeLine";
 
 const ADD_NEW_CUSTOMER_PATH = "new";
 
-
 // const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
 
-export default function CustomerApproveScreen({page}) {
+export default function CustomerApproveScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -60,6 +64,15 @@ export default function CustomerApproveScreen({page}) {
     type: "",
     data: {},
   });
+
+  const [getCustomerAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetCustomerAuditQuery();
+
+  const fetchUserAudit = () => {
+    getCustomerAudit({
+      id: modal.data.id,
+    });
+  };
 
   const [open, setOpen] = React.useState(false);
   // const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
@@ -112,89 +125,114 @@ export default function CustomerApproveScreen({page}) {
   };
 
   return (
-    <Box sx={{ backgroundColor: "white.main" }}>
-      <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        <CardHeader
-          title={
-            <Stack spacing={2} direction="row" justifyContent="space-between">
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <GridSearchInput
-                  filters={codeCustomerSelector?.formData}
-                  setFilters={(filters) => dispatch(updateInput(filters))}
-                  width="650px"
-                >
-                  <CustomerFilters filterInfo={CustomerData?.counts || []} />
-                </GridSearchInput>
-                <SelectBox
-                  label="Sort By"
-                  options={CUSTOMER_SORT_OPTIONS}
-                  value={codeCustomerSelector.sortBy}
-                  onChange={(event) => {
-                    console.log(event);
+    <>
+      <Box sx={{ backgroundColor: "white.main" }}>
+        <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+          <CardHeader
+            title={
+              <Stack spacing={2} direction="row" justifyContent="space-between">
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <GridSearchInput
+                    filters={codeCustomerSelector?.formData}
+                    setFilters={(filters) => dispatch(updateInput(filters))}
+                    width="650px"
+                  >
+                    <CustomerFilters filterInfo={CustomerData?.counts || []} />
+                  </GridSearchInput>
+                  <SelectBox
+                    label="Sort By"
+                    options={CUSTOMER_SORT_OPTIONS}
+                    value={codeCustomerSelector.sortBy}
+                    onChange={(event) => {
+                      console.log(event);
 
-                    dispatch(setSortBy(event.target.value));
-                  }}
-                  sx={{
-                    borderRadius: "20px",
-                    width: "150px",
-                  }}
-                />
-              </Box>
-              <Box>
-                <IconButton onClick={() => dispatch(customerSetView("card"))}>
-                  <FormatListBulletedOutlined
-                    color={
-                      codeCustomerSelector.view === "card"
-                        ? "primary"
-                        : "secondary"
-                    }
+                      dispatch(setSortBy(event.target.value));
+                    }}
+                    sx={{
+                      borderRadius: "20px",
+                      width: "150px",
+                    }}
                   />
-                </IconButton>
-                <IconButton onClick={() => dispatch(customerSetView("grid"))}>
-                  <GridOnOutlined
-                    color={
-                      codeCustomerSelector.view === "grid"
-                        ? "primary"
-                        : "secondary"
-                    }
-                  />
-                </IconButton>
-              </Box>
-            </Stack>
-          }
-        />
-        {codeCustomerSelector.view === "grid" ? (
-          <ThemedGrid
-            uniqueId="id"
-            columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.length}
-            handlePage={handlePage}
-            data={CustomerData?.body}
-            columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
-            paginationModel={codeCustomerSelector.pagination}
-            loading={isLoading || isFetching}
-            sortModel={codeCustomerSelector.sortModel}
-            onSortModelChange={(sortModel) =>
-              dispatch(customerSetSortModel(sortModel))
+                </Box>
+                <Box>
+                  <IconButton onClick={() => dispatch(customerSetView("card"))}>
+                    <FormatListBulletedOutlined
+                      color={
+                        codeCustomerSelector.view === "card"
+                          ? "primary"
+                          : "secondary"
+                      }
+                    />
+                  </IconButton>
+                  <IconButton onClick={() => dispatch(customerSetView("grid"))}>
+                    <GridOnOutlined
+                      color={
+                        codeCustomerSelector.view === "grid"
+                          ? "primary"
+                          : "secondary"
+                      }
+                    />
+                  </IconButton>
+                </Box>
+              </Stack>
             }
           />
-        ) : (
-          <CardsView
-            uniqueId="id"
-            columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.length}
-            handlePage={handlePage}
-            data={CustomerData?.body}
-            paginationModel={codeCustomerSelector?.pagination}
-            loading={isLoading || isFetching}
-            actions={getCustomerListGridActions(nav, setModal)}
-            setSelectedBox={setSelectedBox}
-            seletectBox={seletectBox}
-            
-          />
-        )}
-      </Card>
-    </Box>
+          {codeCustomerSelector.view === "grid" ? (
+            <ThemedGrid
+              uniqueId="id"
+              columns={CODE_CUSTOMER_COLUMNS}
+              count={CustomerData?.body?.length}
+              handlePage={handlePage}
+              data={CustomerData?.body}
+              columnVisibility={{}}
+              columnVisibilityHandler={() => {}}
+              paginationModel={codeCustomerSelector.pagination}
+              loading={isLoading || isFetching}
+              sortModel={codeCustomerSelector.sortModel}
+              onSortModelChange={(sortModel) =>
+                dispatch(customerSetSortModel(sortModel))
+              }
+            />
+          ) : (
+            <CardsView
+              uniqueId="id"
+              columns={CODE_CUSTOMER_COLUMNS}
+              count={CustomerData?.body?.length}
+              handlePage={handlePage}
+              data={CustomerData?.body}
+              paginationModel={codeCustomerSelector?.pagination}
+              loading={isLoading || isFetching}
+              actions={getCustomerListGridActions(nav, setModal)}
+              setSelectedBox={setSelectedBox}
+              seletectBox={seletectBox}
+            />
+          )}
+        </Card>
+      </Box>
+      {modal.type === "audit" && (
+        <Drawer
+          anchor="right"
+          open={modal?.open}
+          onClose={() => setModal({ open: false, type: "", data: {} })}
+          sx={{
+            width: "50vw",
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 1301,
+          }}
+        >
+          <Box sx={{ p: 2 }}>
+            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+              Customer Audit Logs
+            </Typography>
+            <AuditTimeLine
+              auditDetails={AuditData}
+              reloadDataHandler={fetchUserAudit}
+              loading={isLoadingAudit}
+            />
+          </Box>
+        </Drawer>
+      )}
+    </>
   );
 }

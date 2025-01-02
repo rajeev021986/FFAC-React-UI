@@ -30,6 +30,7 @@ export default function VendorFormInput({
   type,
   optionsSettingsData,
   vendorSettingsData,
+  page,
 }) {
   const nav = useNavigate();
   const [dropdownData, setDropdownData] = useState({});
@@ -111,9 +112,9 @@ export default function VendorFormInput({
   const disable = type == "Approve";
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid container xs={12} spacing={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+      <Grid container paddingBottom={2}>
+        <Grid container paddingTop={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Vendor Name"
               id="vendorName"
@@ -123,7 +124,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="TIN No"
               id="tinNo"
@@ -133,7 +134,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="VRN No"
               id="vrnNo"
@@ -144,7 +145,7 @@ export default function VendorFormInput({
             />
           </Grid>
           {type == "copy" || type == "new" ? (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
               <InputBox
                 label="Status"
                 id="status"
@@ -163,6 +164,7 @@ export default function VendorFormInput({
               lg={3}
               xl={2}
               sx={{ marginTop: 2 }}
+              paddingLeft={2}
             >
               <SelectBox
                 label="Status"
@@ -180,7 +182,7 @@ export default function VendorFormInput({
               />
             </Grid>
           ) : (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
               <InputBox
                 label="Status"
                 id="status"
@@ -193,8 +195,8 @@ export default function VendorFormInput({
           )}
         </Grid>
 
-        <Grid container xs={12} spacing={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+        <Grid container paddingTop={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Alias"
               id="alias"
@@ -204,7 +206,16 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ marginTop: 2 }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            sx={{ marginTop: 2 }}
+            paddingLeft={2}
+          >
             <SelectBox
               label="Vendor Type"
               id="type"
@@ -215,7 +226,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Address 1"
               id="add1"
@@ -225,7 +236,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Address 2"
               id="add2"
@@ -237,8 +248,8 @@ export default function VendorFormInput({
           </Grid>
         </Grid>
 
-        <Grid container xs={12} spacing={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+        <Grid container xs={12} paddingTop={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Address 3"
               id="add3"
@@ -248,7 +259,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="PO No"
               id="poNo"
@@ -259,8 +270,8 @@ export default function VendorFormInput({
             />
           </Grid>
         </Grid>
-        <Grid container xs={12} spacing={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+        <Grid container paddingTop={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="City"
               id="city"
@@ -270,28 +281,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
-              label="State"
-              id="state"
-              value={formik.values.state}
-              error={formik.errors.state}
-              onChange={formik.handleChange}
-              disabled={disable}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
-              label="Country"
-              id="country"
-              value={formik.values.country}
-              error={formik.errors.country}
-              onChange={formik.handleChange}
-              disabled={disable}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Province"
               id="province"
@@ -301,9 +291,20 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+            <InputBox
+              label="Country"
+              id="country"
+              value={formik.values.country}
+              error={formik.errors.country}
+              onChange={formik.handleChange}
+              disabled={disable}
+            />
+          </Grid>
         </Grid>
-        <Grid container xs={12} spacing={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+
+        <Grid container paddingTop={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Contact Person"
               id="contactPerson"
@@ -313,7 +314,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Email Id"
               id="emailId"
@@ -323,7 +324,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Phone 1"
               id="telephone1"
@@ -333,7 +334,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Phone 2"
               id="telephone2"
@@ -343,7 +344,7 @@ export default function VendorFormInput({
               disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Fax"
               id="fax"
@@ -354,8 +355,8 @@ export default function VendorFormInput({
             />
           </Grid>
         </Grid>
-        <Grid container xs={12} spacing={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+        <Grid container paddingTop={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
             <InputBox
               label="Credit Days"
               id="creditDays"
@@ -379,7 +380,8 @@ export default function VendorFormInput({
             dropdownData={dropdownData}
           />
         </Grid>
-        {type !== "new" && type !== "copy" && (
+        {formik.values.status.toLowerCase() === "rejected" ||
+        page == "vendorApproval" ? (
           <Grid item xs={12}>
             <TextField
               label="Reject Remarks"
@@ -387,13 +389,15 @@ export default function VendorFormInput({
               value={formik.values.rejectRemarks}
               error={formik.errors.rejectRemarks}
               onChange={formik.handleChange}
-              disabled={!disable}
+              disabled={page != "vendorApproval"}
               multiline
               rows={4}
               variant="outlined"
               fullWidth
             />
           </Grid>
+        ) : (
+          <></>
         )}
         {!disable ? (
           <Grid item xs={12}>
