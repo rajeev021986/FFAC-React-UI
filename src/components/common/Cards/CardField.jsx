@@ -29,7 +29,7 @@ export default function CardField({ title, subtitle, icon, ...props }) {
             {StatusChip(subtitle.toLowerCase())}
           </div>
         ) : (
-          <Typography variant="subtitle1" sx={{ ml: 5 }}>
+          <Typography variant="subtitle1" sx={{ ml: 5, width: "50%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {subtitle}
           </Typography>
         )}
