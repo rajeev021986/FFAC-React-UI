@@ -88,7 +88,6 @@ function TimelineComponent({ data }) {
                           gap: 1,
                           borderRadius: "17px 18px 18px 17px",
                         }}
-                        onClick={() => handleButtonClick(index + 1)}
                       >
                         <span>More Details</span>
                         <ArrowForwardIosIcon

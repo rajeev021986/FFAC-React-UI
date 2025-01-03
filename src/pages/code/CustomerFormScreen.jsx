@@ -39,7 +39,7 @@ export default function CustomerFormScreen({ page }) {
     creditDays: "",
     creditAmount: "",
     rejectRemarks: "",
-    isApproved:"" ,
+    isApproved: "",
     agreementExpiryDate: "",
     customerEntityTariffs: [],
     customerEntityEmailsIds: [],
@@ -74,14 +74,20 @@ export default function CustomerFormScreen({ page }) {
         const res = await ApiManager.getCustomerDeatils(
           state?.initialValues?.id
         );
-        console.log("customerdata", res);
         setcustomerDatas(res.body);
+        let status = "";
+        if (res.body?.status) {
+          status =
+            res.body?.status.charAt(0).toUpperCase() +
+            res.body?.status.slice(1).toLowerCase();
+          console.log(status, "status");
+        }
         setInitialValues({
           id: res.body?.id || "",
           customerName: res.body?.customerName || "",
           tinNo: res.body?.tinNo || "",
           vatNo: res.body?.vatNo || "",
-          status: res.body?.status || "",
+          status: status,
           add1: res.body?.add1 || "",
           add2: res.body?.add2 || "",
           add3: res.body?.add3 || "",

@@ -19,7 +19,7 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   },
   "& .MuiDataGrid-columnHeaderTitle": {
     color: 'white',
-    fontSize: '1rem'
+    fontSize: '15px'
   },
   // "& .MuiPopper-root": {
   //   overflowY: "hidden",
