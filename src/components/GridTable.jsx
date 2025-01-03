@@ -1,48 +1,102 @@
 import React from "react";
-import { Table, TableBody, TableCell, TableHead, TableRow, Typography, Tooltip } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { appDateFormat } from "./utils/date";
 
-function GridTable({ data }) {
+function GridDataTable({ data }) {
+  const columns = [
+    {
+      field: "displayName",
+      headerName: "Display Name",
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <Tooltip title={params.value || "No Value"} arrow>
+          <span>{params.value || "N/A"}</span>
+        </Tooltip>
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "oldValue",
+      headerName: "Old Value",
+      flex: 1,
+      minWidth: 180,
+      renderCell: (params) => (
+        <Tooltip title={params.value || "No Value"} arrow>
+          <span>{params.value || "N/A"}</span>
+        </Tooltip>
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "newValue",
+      headerName: "New Value",
+      flex: 1,
+      minWidth: 180,
+      renderCell: (params) => (
+        <Tooltip title={params.value || "No Value"} arrow>
+          <span>{params.value || "N/A"}</span>
+        </Tooltip>
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "modifiedBy",
+      headerName: "Modified By",
+      flex: 1,
+      minWidth: 110,
+      renderCell: (params) => (
+        <Tooltip title={params.value || "No Value"} arrow>
+          <span>{params.value || "N/A"}</span>
+        </Tooltip>
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "modifiedDate",
+      headerName: "Modified Date",
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <Tooltip title={params.value || "No Value"} arrow>
+          <span>{appDateFormat(params.value) || "N/A"}</span>
+        </Tooltip>
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+  ];
+
   return (
-    <div>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {/* <TableCell><Typography variant="subtitle2">ID</Typography></TableCell> */}
-            <TableCell><Typography variant="subtitle2">Entity Name</Typography></TableCell>
-            <TableCell><Typography variant="subtitle2">Field Name</Typography></TableCell>
-            <TableCell><Typography variant="subtitle2">Old Value</Typography></TableCell>
-            <TableCell><Typography variant="subtitle2">New Value</Typography></TableCell>
-            <TableCell><Typography variant="subtitle2">Modified By</Typography></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row, index) => (
-            <TableRow key={index}>
-              {/* <TableCell>{row.id}</TableCell> */}
-              <TableCell>{row.entityName}</TableCell>
-              <TableCell>{row.fieldName || "N/A"}</TableCell>
-
-              {/* Tooltip for Old Value with Ellipsis */}
-              <TableCell style={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <Tooltip title={row.oldValue || "No previous value"} arrow>
-                  <span>{row.oldValue || "N/A"}</span>
-                </Tooltip>
-              </TableCell>
-
-              {/* Tooltip for New Value with Ellipsis */}
-              <TableCell style={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <Tooltip title={row.newValue || "No new value"} arrow>
-                  <span>{row.newValue || "N/A"}</span>
-                </Tooltip>
-              </TableCell>
-
-              <TableCell>{row.modifiedBy || "N/A"}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <Box sx={{ width: "100%", textAlign: "right" }}>
+      <Box sx={{ height: "auto" }}>
+        <DataGrid
+          rows={data}
+          columns={columns}
+          disableSelectionOnClick
+          disableColumnMenu
+          getRowId={(row) => row.id}
+          autoHeight={true}
+          hideFooter
+          sx={{
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "primary.main",
+              lineHeight: 10,
+            },
+            "& .MuiDataGrid-cell": {
+              whiteSpace: "normal",
+              wordWrap: "break-word",
+            },
+          }}
+        />
+      </Box>
+    </Box>
   );
 }
 
-export default GridTable;
+export default GridDataTable;
