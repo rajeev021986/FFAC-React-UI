@@ -4,7 +4,7 @@ const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const icdDataApi = createApi({
     reducerPath: "icdDataApi",
-    baseQuery: fetchBaseQuery({ baseUrl: API_BASE_Shipper_URL }),
+    baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
     tagTypes: ["Icd"],
     endpoints: (builder) => ({
         fetchIcd: builder.query({
