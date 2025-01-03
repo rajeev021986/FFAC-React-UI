@@ -10,7 +10,7 @@ export const consigneeDataApi = createApi({
         fetchConsignee: builder.query({
             query: (params) => {
                 const queryString = new URLSearchParams(params).toString();
-                return { url: `/entity-service/consignee/get`, method: "GET", headers: getAppHeaders() };
+                return { url: `/entity-service/consignee`, method: "GET", headers: getAppHeaders() };
             },
             providesTags: ["Consignee"],
         }),
@@ -22,7 +22,7 @@ export const consigneeDataApi = createApi({
                 };
 
 
-                return { url: `entity-service/consignee/add`, method: "POST", body: params, headers: headers };
+                return { url: `entity-service/consignee`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Consignee"],
         }),
@@ -33,7 +33,7 @@ export const consigneeDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `entity-service/consignee/update`, method: "PUT", body: params, headers: headers };
+                return { url: `entity-service/consignee`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Consignee"],
         }),

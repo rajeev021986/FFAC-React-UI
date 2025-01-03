@@ -10,7 +10,7 @@ export const shipperDataApi = createApi({
         fetchShipper: builder.query({
             query: (params) => {
                 const queryString = new URLSearchParams(params).toString();
-                return { url: `/entity-service/shipper/get`, method: "GET", headers: getAppHeaders() };
+                return { url: `/entity-service/shipper`, method: "GET", headers: getAppHeaders() };
             },
             providesTags: ["Shipper"],
         }),
@@ -22,7 +22,7 @@ export const shipperDataApi = createApi({
                 };
 
 
-                return { url: `entity-service/shipper/add`, method: "POST", body: params, headers: headers };
+                return { url: `entity-service/shipper`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Shipper"],
         }),
@@ -33,7 +33,7 @@ export const shipperDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `entity-service/shipper/update`, method: "PUT", body: params, headers: headers };
+                return { url: `entity-service/shipper`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Shipper"],
         }),

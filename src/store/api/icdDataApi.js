@@ -10,7 +10,7 @@ export const icdDataApi = createApi({
         fetchIcd: builder.query({
             query: (params) => {
                 const queryString = new URLSearchParams(params).toString();
-                return { url: `/entity-service/icd/get`, method: "GET", headers: getAppHeaders() };
+                return { url: `/entity-service/icd`, method: "GET", headers: getAppHeaders() };
             },
             providesTags: ["Icd"],
         }),
@@ -22,7 +22,7 @@ export const icdDataApi = createApi({
                 };
 
 
-                return { url: `entity-service/icd/add`, method: "POST", body: params, headers: headers };
+                return { url: `entity-service/icd`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Icd"],
         }),
@@ -33,7 +33,7 @@ export const icdDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `entity-service/icd/update`, method: "PUT", body: params, headers: headers };
+                return { url: `entity-service/icd`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Icd"],
         }),

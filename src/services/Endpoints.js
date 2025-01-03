@@ -24,7 +24,7 @@ const ENDPOINTS = {
     DOWNLOAD_DOCUMENT: (id, source, sourceId) => `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
     DOCUMENT_DELETE: (id, source, sourceId) => `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
     GET_CUSTOMER_DETAILS: (id) => `/entity-service/v1/customer/${id}`,
-    GET_SHIPPER_DETAILS:(id)=>`/entity-service/shipper/get/${id}`,
+    GET_SHIPPER_DETAILS:(id)=>`/entity-service/shipper/${id}`,
     GET_CONSIGNEE_DETAILS:(id)=>`/entity-service/consignee/get/${id}`,
     GET_ICD_DETAILS:(id)=>`/entity-service/icd/get/${id}`,
     CUSTOMER_APPROVE_REQUEST: (id, type) => `/entity-service/v1/approval/approved/${type}/${id}`,
