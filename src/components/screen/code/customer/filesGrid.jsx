@@ -1,10 +1,11 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import { Delete } from "@mui/icons-material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
+import { StyledDataGrid } from "../../../common/Grid/styles";
 
 export default function FilesGrid({ formik, disabled, dropdownData }) {
   const designation = dropdownData?.designation;
@@ -47,21 +48,31 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
       type: "singleSelect",
       valueOptions: designation.map((option) => option.value),
       align: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.designation}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "emailId",
-      headerName: "Email ID",
+      headerName: "Email",
       flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.emailId}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "actions",
       headerName: "Actions",
       sortable: false,
       renderHeader: () => (
-        <IconButton color="primary">
+        <IconButton color="white">
           <AddCircleIcon onClick={addNewRow} />
         </IconButton>
       ),
@@ -93,7 +104,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
           </Button> */}
       </Box>
       <Box sx={{ height: 400 }}>
-        <DataGrid
+        <StyledDataGrid
           rows={customerEntityEmailsIds}
           columns={columns}
           disableSelectionOnClick

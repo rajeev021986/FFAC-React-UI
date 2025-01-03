@@ -3,13 +3,6 @@ import { appDateFormat } from "../../components/utils/date"
 
 export const VENDOR_COLUMNS = [
     {
-        field: 'vendorName',
-        headerName: 'Vendor Name',
-        width: 130,
-        headerAlign: 'center',
-        align: 'center'
-    },
-    {
         field: 'status',
         headerName: 'Status',
         width: 130,
@@ -17,12 +10,13 @@ export const VENDOR_COLUMNS = [
         align: 'center'
     },
     {
-        field: 'type',
-        headerName: 'Type',
+        field: 'vendorName',
+        headerName: 'Vendor Name',
         width: 130,
         headerAlign: 'center',
         align: 'center'
     },
+
     {
         field: 'tinNo',
         headerName: 'TIN No',
@@ -38,8 +32,8 @@ export const VENDOR_COLUMNS = [
         align: 'center'
     },
     {
-        field: 'modifiedBy',
-        headerName: 'Modified By',
+        field: 'type',
+        headerName: 'Type',
         width: 130,
         headerAlign: 'center',
         align: 'center'
@@ -61,6 +55,14 @@ export const VENDOR_COLUMNS = [
             return <div>{appDateFormat(params.value)}</div>
         }
     },
+    {
+        field: 'modifiedBy',
+        headerName: 'Modified By',
+        width: 130,
+        headerAlign: 'center',
+        align: 'center'
+    },
+
     {
         field: 'modifiedDate',
         headerName: 'Modified Date',

@@ -1,21 +1,21 @@
-import { Box, Stack } from '@mui/material'
-import React from 'react'
+import { Box, Stack } from "@mui/material";
+import React from "react";
 
-export default function ScreenToolbar({leftComps, rightComps}) {
-    return (
-        <Stack
-            justifyContent={"space-between"}
-            alignItems={"center"}
-            direction="row"
-            spacing={2}
-            my={0}
-        >
-            <Box display={"flex"} gap={2} >
-                {leftComps}
-            </Box>
-            <Box display={"flex"} gap={2} >
-                {rightComps}
-            </Box>
-        </Stack>
-    )
+export default function ScreenToolbar({ leftComps, rightComps }) {
+  return (
+    <Stack
+      justifyContent={"space-between"}
+      alignItems={"center"}
+      direction="row"
+      spacing={2}
+      marginBottom={"8px"}
+    >
+      <Box display={"flex"} gap={2}>
+        {leftComps}
+      </Box>
+      <Box display={"flex"} gap={2}>
+        {rightComps}
+      </Box>
+    </Stack>
+  );
 }

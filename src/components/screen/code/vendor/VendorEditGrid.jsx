@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Button, colors, Typography, IconButton } from "@mui/material";
+import {
+  Box,
+  Button,
+  colors,
+  Typography,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -11,6 +18,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import AutoCompleteInput from "../../../common/AutoCompletInput";
 import ApiManager from "../../../../services/ApiManager";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { StyledDataGrid } from "../../../common/Grid/styles";
 export default function VendorEditGrid({
   formik,
   disabled,
@@ -80,7 +88,7 @@ export default function VendorEditGrid({
       columns: [
         {
           field: "chargeName",
-          headerName: "chargeName",
+          headerName: "Charge Name",
           flex: 2,
           renderCell: (params) => {
             return (
@@ -122,21 +130,36 @@ export default function VendorEditGrid({
           valueOptions: vendorSettingsData?.body?.tarifType?.map(
             (option) => option.value
           ),
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.type}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "finalDestination",
           headerName: "Final Destination",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.finalDestination}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "unitType",
-          headerName: "UnitType",
+          headerName: "Unit Type",
           flex: 1,
           editable: !disabled,
           type: "singleSelect",
           valueOptions: vendorSettingsData?.body?.unitType?.map(
             (option) => option.value
+          ),
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.unitType}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
           ),
         },
         {
@@ -176,15 +199,20 @@ export default function VendorEditGrid({
         },
         {
           field: "unitRate",
-          headerName: "UnitRate",
+          headerName: "Unit Rate",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.unitRate}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary" onClick={TabsHosts[0].addNewRow}>
+            <IconButton color="white" onClick={TabsHosts[0].addNewRow}>
               <AddCircleIcon />
             </IconButton>
           ),
@@ -258,44 +286,69 @@ export default function VendorEditGrid({
       columns: [
         {
           field: "country",
-          headerName: "country",
+          headerName: "Country",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.country}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "containerType",
-          headerName: "containerType",
+          headerName: "Container Type",
           flex: 1,
           editable: !disabled,
           type: "singleSelect",
           valueOptions: vendorSettingsData?.body?.container?.map(
             (option) => option.value
           ),
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.containerType}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "firstSlab",
-          headerName: "firstSlab",
+          headerName: "First Slab",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.firstSlab}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "secondSlab",
-          headerName: "secondSlab",
+          headerName: "Second Slab",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.secondSlab}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
-          field: "thirdWeek",
-          headerName: "thirdWeek",
+          field: "thirdSlab",
+          headerName: "Third Slab",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.thirdSlab}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "actions",
           headerName: "Actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary">
+            <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[1].addNewRow} />
             </IconButton>
           ),
@@ -356,22 +409,32 @@ export default function VendorEditGrid({
       columns: [
         {
           field: "country",
-          headerName: "country",
+          headerName: "Country",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.country}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "noOfFreeDays",
-          headerName: "noOfFreeDays",
+          headerName: "No Of Free Days",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.noOfFreeDays}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "actions",
           headerName: "Actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary">
+            <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[2].addNewRow} />
             </IconButton>
           ),
@@ -438,19 +501,29 @@ export default function VendorEditGrid({
           editable: !disabled,
           type: "singleSelect",
           valueOptions: designation?.map((option) => option.value),
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.designation}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "emailId",
           headerName: "Email",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.emailId}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "actions",
           headerName: "Actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary">
+            <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[3].addNewRow} />
             </IconButton>
           ),
@@ -517,31 +590,51 @@ export default function VendorEditGrid({
           headerName: "Bank Name",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.bankName}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "bankAddress",
           headerName: "Bank Address",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.bankAddress}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "currency",
           headerName: "Currency",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.currency}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "swiftCode",
-          headerName: "SWIFT Code",
+          headerName: "Swift Code",
           flex: 1,
           editable: !disabled,
+          renderCell: (params) => (
+            <Tooltip title={`${params.row.swiftCode}`} arrow>
+              <div>{params.value}</div>
+            </Tooltip>
+          ),
         },
         {
           field: "actions",
           headerName: "Actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary">
+            <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[4].addNewRow} />
             </IconButton>
           ),
@@ -578,7 +671,11 @@ export default function VendorEditGrid({
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               {TabsHosts.map((value, index) => (
-                <Tab label={value.tabLable} value={index} />
+                <Tab
+                  sx={{ fontSize: "1rem" }}
+                  label={value.tabLable}
+                  value={index}
+                />
               ))}
             </TabList>
           </Box>
@@ -604,7 +701,7 @@ export default function VendorEditGrid({
                                     </Button>
                                 </Box> */}
                 <Box sx={{ height: 400 }}>
-                  <DataGrid
+                  <StyledDataGrid
                     rows={ob.value}
                     columns={ob.columns.map((column) => ({
                       ...column,

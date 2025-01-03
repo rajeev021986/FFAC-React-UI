@@ -1,4 +1,4 @@
-import { Grid, Stack, Typography } from "@mui/material";
+import { Grid, Stack, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import { appDateFormat } from "../../utils/date";
 import { StatusChip } from "../../utils/statusChip";
@@ -29,9 +29,20 @@ export default function CardField({ title, subtitle, icon, ...props }) {
             {StatusChip(subtitle.toLowerCase())}
           </div>
         ) : (
-          <Typography variant="subtitle1" sx={{ ml: 5 }}>
-            {subtitle}
-          </Typography>
+          <Tooltip title={subtitle} arrow>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                ml: 5,
+                width: "80%",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {subtitle}
+            </Typography>
+          </Tooltip>
         )}
       </Grid>
     </Grid>
