@@ -18,6 +18,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import AutoCompleteInput from "../../../common/AutoCompletInput";
 import ApiManager from "../../../../services/ApiManager";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { StyledDataGrid } from "../../../common/Grid/styles";
 export default function VendorEditGrid({
   formik,
   disabled,
@@ -211,7 +212,7 @@ export default function VendorEditGrid({
           field: "actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary" onClick={TabsHosts[0].addNewRow}>
+            <IconButton color="white" onClick={TabsHosts[0].addNewRow}>
               <AddCircleIcon />
             </IconButton>
           ),
@@ -347,7 +348,7 @@ export default function VendorEditGrid({
           headerName: "Actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary">
+            <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[1].addNewRow} />
             </IconButton>
           ),
@@ -433,7 +434,7 @@ export default function VendorEditGrid({
           headerName: "Actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary">
+            <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[2].addNewRow} />
             </IconButton>
           ),
@@ -522,7 +523,7 @@ export default function VendorEditGrid({
           headerName: "Actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary">
+            <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[3].addNewRow} />
             </IconButton>
           ),
@@ -633,7 +634,7 @@ export default function VendorEditGrid({
           headerName: "Actions",
           sortable: false,
           renderHeader: () => (
-            <IconButton color="primary">
+            <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[4].addNewRow} />
             </IconButton>
           ),
@@ -700,7 +701,7 @@ export default function VendorEditGrid({
                                     </Button>
                                 </Box> */}
                 <Box sx={{ height: 400 }}>
-                  <DataGrid
+                  <StyledDataGrid
                     rows={ob.value}
                     columns={ob.columns.map((column) => ({
                       ...column,
