@@ -16,6 +16,7 @@ import {
   TimelineDot,
   TimelineConnector,
   TimelineContent,
+  TimelineOppositeContent,
 } from "@mui/lab";
 import GridTable from "./GridTable";
 
@@ -52,6 +53,12 @@ function TimelineComponent({ data }) {
                   }}
                 >
                   <TimelineSeparator>
+                    <TimelineConnector
+                      sx={{
+                        height: "100%",
+                        backgroundColor: "primary.main",
+                      }}
+                    />
                     <TimelineDot sx={{ backgroundColor: "primary.main" }} />
                     {index < data.length - 1 && (
                       <TimelineConnector
@@ -62,11 +69,21 @@ function TimelineComponent({ data }) {
                       />
                     )}
                   </TimelineSeparator>
-                  <TimelineContent>
+                  <TimelineOppositeContent
+                    sx={{ m: "auto 0" }}
+                    align="right"
+                    variant="body2"
+                    color="text.secondary"
+                  >
                     <Typography variant="body1" color="textSecondary">
                       {new Date(entry.date).toLocaleString()}
                     </Typography>
-                  </TimelineContent>
+                  </TimelineOppositeContent>
+                  {/* <TimelineContent>
+                    <Typography variant="body1" color="textSecondary">
+                      {new Date(entry.date).toLocaleString()}
+                    </Typography>
+                  </TimelineContent> */}
                 </TimelineItem>
                 <div
                   style={{ marginTop: "10px", width: "70%" }}
@@ -100,7 +117,7 @@ function TimelineComponent({ data }) {
                         />
                       </Button>
                     </AccordionSummary>
-                    <AccordionDetails>
+                    <AccordionDetails onClick={(e) => e.stopPropagation()}>
                       <GridTable data={entry.value} />
                     </AccordionDetails>
                   </Accordion>
