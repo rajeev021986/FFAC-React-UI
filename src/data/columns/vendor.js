@@ -10,6 +10,14 @@ export const VENDOR_COLUMNS = [
         align: 'center'
     },
     {
+        field: 'isDoc',
+        headerName: 'Document',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
         field: 'vendorName',
         headerName: 'Vendor Name',
         width: 130,
