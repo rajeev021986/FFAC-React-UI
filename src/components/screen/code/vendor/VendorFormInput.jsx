@@ -144,7 +144,6 @@ export default function VendorFormInput({
               value={formik.values.vendorName}
               error={formik.errors.vendorName}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -154,7 +153,6 @@ export default function VendorFormInput({
               value={formik.values.tinNo}
               error={formik.errors.tinNo}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -164,7 +162,6 @@ export default function VendorFormInput({
               value={formik.values.vrnNo}
               error={formik.errors.vrnNo}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           {type == "copy" || type == "new" ? (
@@ -192,7 +189,6 @@ export default function VendorFormInput({
               <SelectBox
                 label="Status"
                 id="status"
-                disabled={disable}
                 options={optionsSettingsData?.body.status}
                 value={
                   formik.values.status == "ACTIVE" ||
@@ -226,7 +222,6 @@ export default function VendorFormInput({
               value={formik.values.alias}
               error={formik.errors.alias}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid
@@ -246,7 +241,6 @@ export default function VendorFormInput({
               value={formik.values.type}
               error={formik.errors.type}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -256,7 +250,6 @@ export default function VendorFormInput({
               value={formik.values.add1}
               error={formik.errors.add1}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -266,7 +259,6 @@ export default function VendorFormInput({
               value={formik.values.add2}
               error={formik.errors.add2}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
         </Grid>
@@ -279,7 +271,6 @@ export default function VendorFormInput({
               value={formik.values.add3}
               error={formik.errors.add3}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -289,7 +280,6 @@ export default function VendorFormInput({
               value={formik.values.poNo}
               error={formik.errors.poNo}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
         </Grid>
@@ -301,7 +291,6 @@ export default function VendorFormInput({
               value={formik.values.city}
               error={formik.errors.city}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -311,7 +300,6 @@ export default function VendorFormInput({
               value={formik.values.province}
               error={formik.errors.province}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -321,7 +309,6 @@ export default function VendorFormInput({
               value={formik.values.country}
               error={formik.errors.country}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
         </Grid>
@@ -334,7 +321,6 @@ export default function VendorFormInput({
               value={formik.values.contactPerson}
               error={formik.errors.contactPerson}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -344,7 +330,6 @@ export default function VendorFormInput({
               value={formik.values.emailId}
               error={formik.errors.emailId}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -354,7 +339,6 @@ export default function VendorFormInput({
               value={formik.values.telephone1}
               error={formik.errors.telephone1}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -364,7 +348,6 @@ export default function VendorFormInput({
               value={formik.values.telephone2}
               error={formik.errors.telephone2}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
@@ -374,7 +357,6 @@ export default function VendorFormInput({
               value={formik.values.fax}
               error={formik.errors.fax}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
         </Grid>
@@ -386,7 +368,6 @@ export default function VendorFormInput({
               value={formik.values.creditDays}
               error={formik.errors.creditDays}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
         </Grid>
@@ -398,7 +379,6 @@ export default function VendorFormInput({
         <Grid item xs={12}>
           <VendorEditGrid
             formik={formik}
-            disabled={disable}
             vendorSettingsData={vendorSettingsData}
             dropdownData={dropdownData}
           />
@@ -454,6 +434,15 @@ export default function VendorFormInput({
                 >
                   Cancel
                 </OutlinedButton>
+                <ThemeButton
+                  onClick={formik.handleSubmit}
+                  sx={{ fontWeight: "500" }}
+                >
+                  {/* {isLoading && (
+                                <CircularProgress size={20} color="white" />
+                            )}{" "} */}
+                  Update
+                </ThemeButton>
                 <ThemeButton
                   sx={{ fontWeight: "500", backgroundColor: "red" }}
                   onClick={() => handleRejectRequest()}

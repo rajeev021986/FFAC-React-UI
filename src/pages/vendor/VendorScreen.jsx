@@ -283,9 +283,6 @@ export default function VendorScreen({ page }) {
           paginationModel={vendorSelector?.pagination}
           loading={isLoading || isFetching}
           actions={Actions}
-          setSelectedBox={setSelectedBox}
-          seletectBox={seletectBox}
-          page={page == "vendor" ? "customer" : ""}
         />)}
 
 

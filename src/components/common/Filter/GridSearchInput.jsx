@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Paper, Box, ClickAwayListener } from '@mui/material';
+import { Paper, Box, ClickAwayListener, IconButton } from '@mui/material';
 import InputWithChips from './InputWithChips';
+import { GridCloseIcon } from '@mui/x-data-grid';
 
 
 const GridSearchInput = ({
@@ -27,29 +28,57 @@ const GridSearchInput = ({
   }
 
   return (
-    <ClickAwayListener onClickAway={handleClickAway}>
-      <Box sx={{ position: 'relative', minWidth: '500px'}}>
-        {/* Search Bar */}
-        <InputWithChips
-          inputRef={searchRef}
-          onFocus={handleSearchFocus}
-          placeholder="Search & Filters"
-          onFilterChange={handleChipsChange}
-          onFilterReset={handleResetFilter}
-          filters={filters}
-        />
+    <Box sx={{ position: 'relative', minWidth: '500px' }}>
+      {/* Search Bar */}
+      <InputWithChips
+        inputRef={searchRef}
+        onFocus={handleSearchFocus}
+        placeholder="Search & Filters"
+        onFilterChange={handleChipsChange}
+        onFilterReset={handleResetFilter}
+        filters={filters}
+      />
 
-        {/* Filter Popup Box */}
-        {filterOpen && (
-          <Paper
-            elevation={3}
-            sx={{...styles.paper, width, height, overflowY: 'auto'}}
+      {/* Filter Popup Box */}
+      {filterOpen && (
+        <Paper
+          elevation={3}
+          sx={{
+            position: 'absolute',
+            zIndex: 10,
+            top: '100%',
+            left: 0,
+            mt: 1,
+            width,
+            height,
+            overflowY: 'auto',
+            ...styles.paper,
+          }}
+        >
+          {/* Close Button */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              // p: 1,
+              borderBottom: '1px solid #e0e0e0',
+              marginBottom:"10px"
+            }}
           >
-            {children}
-          </Paper>
-        )}
-      </Box>
-    </ClickAwayListener>
+            <IconButton
+              size="small"
+              onClick={() => setFilterOpen(false)} // Close the popup
+            >
+              <GridCloseIcon />
+            </IconButton>
+          </Box>
+
+          {/* Popup Content */}
+          {children}
+        </Paper>
+      )}
+    </Box>
+
   );
 };
 

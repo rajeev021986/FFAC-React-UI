@@ -40,17 +40,17 @@ export default function VendorForm({ page = "vendor" }) {
   const [getVendor, { isLoading }] = useLazyGetVendorQuery();
   const validationSchema = Yup.object({
     vendorName: Yup.string().required("Vendor Name is required"),
-    tinNo: Yup.string().required("TIN Number is required"),
-    vrnNo: Yup.string().required("VRN Number is required"),
+    tinNo: Yup.string(),
+    vrnNo: Yup.string(),
     // status: Yup.string().required("Status is required"),
     type: Yup.string().required("Type is required"),
     add1: Yup.string().required("Address is required"),
     // add2: Yup.string().nullable(),
     // add3: Yup.string().nullable(),
-    alias: Yup.string().required("Alias is required"),
-    telephone1: Yup.string().required("Telephone1 is required"),
+    alias: Yup.string(),
+    telephone1: Yup.string(),
     // telephone2: Yup.string().nullable(),
-    fax: Yup.string().required("Fax is required"),
+    fax: Yup.string(),
     emailId: Yup.string()
       .required("Email is required")
       .test("valid-email", "Invalid email format", (value) => {
@@ -59,14 +59,14 @@ export default function VendorForm({ page = "vendor" }) {
         return emailRegex.test(value);
       }),
 
-    city: Yup.string().required("City is required"),
-    country: Yup.string().required("Country is required"),
+    city: Yup.string(),
+    country: Yup.string(),
     creditDays: Yup.number()
       .required("Credit Days is required")
       .min(0, "Credit Days cannot be negative"),
-    province: Yup.string().required("Province is required"),
-    poNo: Yup.string().required("Post is required"),
-    contactPerson: Yup.string().required("Person is required"),
+    province: Yup.string(),
+    poNo: Yup.string(),
+    contactPerson: Yup.string(),
     // companyCode: Yup.string().nullable(),
     // rejectRemarks: Yup.string().nullable(),
     vendorEntityTariffs: Yup.array().of(
@@ -232,6 +232,7 @@ export default function VendorForm({ page = "vendor" }) {
   const formik = useFormik({
     initialValues,
     validationSchema,
+    validateOnChange: false,
     onSubmit: async (values) => {
       let updatedValue = {
         ...values,
@@ -294,7 +295,7 @@ export default function VendorForm({ page = "vendor" }) {
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               {tabs.map((a) => (
                 <Tab
-                  sx={{ fontSize: "1rem" }}
+                  sx={{ fontSize: "1rem", textTransform: "capitalize" }}
                   label={a.label}
                   value={a.value}
                 />

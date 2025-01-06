@@ -6,6 +6,7 @@ import {
   Typography,
   IconButton,
   Tooltip,
+  TextField,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
@@ -19,15 +20,23 @@ import AutoCompleteInput from "../../../common/AutoCompletInput";
 import ApiManager from "../../../../services/ApiManager";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { StyledDataGrid } from "../../../common/Grid/styles";
+import SelectBox from "../../../common/SelectBox";
+import InputBox from "../../../common/InputBox";
 export default function VendorEditGrid({
   formik,
-  disabled,
+  disabled = false,
   vendorSettingsData,
   dropdownData,
 }) {
   const designation = dropdownData?.designation;
   const fetchSuggestions = async (inputValue, inputId) => {
-    inputId = inputId === "chargeName" ? "CHARGE" : "CURRENCY";
+    if (inputId === "chargeName") {
+      inputId = "CHARGE";
+    } else if (inputId === "currency") {
+      inputId = "CURRENCY";
+    } else if (inputId === "country") {
+      inputId = "COUNTRY";
+    }
     if (!inputValue) return [];
     const response = await ApiManager.fetchVesselSuggestions(
       inputValue,
@@ -37,6 +46,20 @@ export default function VendorEditGrid({
 
     return data || [];
   };
+  const OnChange = (params, e, name) => {
+    const rowIndex = formik.values[name].findIndex(
+      (entity) => entity.id === params.id
+    );
+    formik.setValues({
+      ...formik.values,
+      [name]: formik.values[name].map(
+        (entity, index) =>
+          index === rowIndex
+            ? { ...entity, [params.field]: e.target.value }
+            : entity
+      ),
+    });
+  }
 
   const TabsHosts = [
     {
@@ -125,41 +148,52 @@ export default function VendorEditGrid({
           field: "type",
           headerName: "Type",
           flex: 1,
-          editable: !disabled,
-          type: "singleSelect",
-          valueOptions: vendorSettingsData?.body?.tarifType?.map(
-            (option) => option.value
-          ),
           renderCell: (params) => (
-            <Tooltip title={`${params.row.type}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}> <SelectBox
+              size="small"
+              sx={{
+                marginTop: "0px",
+                marginBottom: "0px"
+              }}
+              options={vendorSettingsData?.body?.tarifType}
+              value={params.value}
+              onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
+            /></div>
           ),
         },
         {
           field: "finalDestination",
           headerName: "Final Destination",
           flex: 1,
-          editable: !disabled,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.finalDestination}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <TextField
+                size="small"
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
           ),
         },
         {
           field: "unitType",
           headerName: "Unit Type",
           flex: 1,
-          editable: !disabled,
-          type: "singleSelect",
-          valueOptions: vendorSettingsData?.body?.unitType?.map(
-            (option) => option.value
-          ),
           renderCell: (params) => (
-            <Tooltip title={`${params.row.unitType}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}> <SelectBox
+              size="small"
+              sx={{
+                marginTop: "0px",
+                marginBottom: "0px"
+              }}
+              options={vendorSettingsData?.body?.unitType}
+              value={params.value}
+              onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
+            /></div>
           ),
         },
         {
@@ -201,11 +235,19 @@ export default function VendorEditGrid({
           field: "unitRate",
           headerName: "Unit Rate",
           flex: 1,
-          editable: !disabled,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.unitRate}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <InputBox
+                size="small"
+                value={params.value}
+                type="number"
+                onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
           ),
         },
         {
@@ -287,62 +329,108 @@ export default function VendorEditGrid({
         {
           field: "country",
           headerName: "Country",
-          flex: 1,
-          editable: !disabled,
+          width: 200,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.country}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <InputBox
+                size="small"
+                value={params.value}
+                type="number"
+                onChange={(e) => OnChange(params, e, "vendorEntityDemurageTariffs")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
           ),
+          renderCell: (params) => {
+            return (
+              <AutoCompleteInput
+                id="country"
+                suggestionName="country_name"
+                value={params.value}
+                error={
+                  formik.errors.vendorEntityDemurageTariffs?.[params.rowIndex]
+                    ?.chargeName
+                }
+                onChange={(newValue) => {
+                  const rowIndex = formik.values.vendorEntityDemurageTariffs.findIndex(
+                    (entity) => entity.id === params.id
+                  );
+                  // setTimeout(() => {
+                  formik.setValues({
+                    ...formik.values,
+                    vendorEntityDemurageTariffs: formik.values.vendorEntityDemurageTariffs.map(
+                      (entity, index) =>
+                        index === rowIndex
+                          ? { ...entity, chargeName: newValue }
+                          : entity
+                    ),
+                  });
+                  // }, 1500);
+                }}
+                fetchSuggestions={fetchSuggestions}
+              />
+            );
+          },
         },
         {
           field: "containerType",
           headerName: "Container Type",
-          flex: 1,
-          editable: !disabled,
-          type: "singleSelect",
-          valueOptions: vendorSettingsData?.body?.container?.map(
-            (option) => option.value
-          ),
+          width: 200,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.containerType}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}> <SelectBox
+              size="small"
+              sx={{
+                marginTop: "0px",
+                marginBottom: "0px"
+              }}
+              options={vendorSettingsData?.body?.container}
+              value={params.value}
+              onChange={(e) => OnChange(params, e, "vendorEntityDemurageTariffs")}
+            /></div>
           ),
         },
-        {
-          field: "firstSlab",
-          headerName: "First Slab",
-          flex: 1,
-          editable: !disabled,
-          renderCell: (params) => (
-            <Tooltip title={`${params.row.firstSlab}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
-          ),
-        },
-        {
-          field: "secondSlab",
-          headerName: "Second Slab",
-          flex: 1,
-          editable: !disabled,
-          renderCell: (params) => (
-            <Tooltip title={`${params.row.secondSlab}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
-          ),
-        },
-        {
-          field: "thirdSlab",
-          headerName: "Third Slab",
-          flex: 1,
-          editable: !disabled,
-          renderCell: (params) => (
-            <Tooltip title={`${params.row.thirdSlab}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
-          ),
-        },
+        ...["firstWeek",
+          "secondWeek",
+          "thirdWeek",
+          "freeTime",
+          "freeTimeType",
+          "t1Start",
+          "t1End",
+          "t1Type",
+          "t1Rate",
+          "t2Start",
+          "t2End",
+          "t2Type",
+          "t2Rate",
+          "t3Start",
+          "t3End",
+          "t3Type",
+          "t3Rate"].map((a) => {
+            return {
+              field: a,
+              headerName: a.replace(/([a-z])([A-Z])/g, '$1 $2').charAt(0).toUpperCase() + a.slice(1),
+              // flex: 1,
+              width: 100,
+              headerName: a.replace(/([a-z])([A-Z])/g, '$1 $2').charAt(0).toUpperCase() + a.slice(1),
+              renderCell: (params) => (
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+                  <TextField
+                    size="small"
+                    value={params.value}
+                    onChange={(e) => OnChange(params, e, "vendorEntityDemurageTariffs")}
+                    sx={{
+                      marginTop: "0px",
+                      marginBottom: "0px"
+                    }}
+                  />
+                </div>
+              ),
+            }
+          }),
+
         {
           field: "actions",
           headerName: "Actions",
@@ -411,23 +499,38 @@ export default function VendorEditGrid({
           field: "country",
           headerName: "Country",
           flex: 1,
-          editable: !disabled,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.country}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <TextField
+                size="small"
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorEntityFreeDays")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
           ),
         },
         {
           field: "noOfFreeDays",
           headerName: "No Of Free Days",
           flex: 1,
-          editable: !disabled,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.noOfFreeDays}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
-          ),
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <TextField
+                size="small"
+                type="number"
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorEntityFreeDays")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
+          )
         },
         {
           field: "actions",
@@ -473,7 +576,7 @@ export default function VendorEditGrid({
         const newRow = {
           id: Date.now(),
           designation: "",
-          emailId: 0,
+          emailId: "",
           new: true,
         };
         formik.setFieldValue("vendorEntityEmails", [
@@ -496,26 +599,36 @@ export default function VendorEditGrid({
         {
           field: "designation",
           headerName: "Designation",
-          cellStyle: { color: "red" },
           flex: 1,
-          editable: !disabled,
-          type: "singleSelect",
-          valueOptions: designation?.map((option) => option.value),
           renderCell: (params) => (
-            <Tooltip title={`${params.row.designation}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
-          ),
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}> <SelectBox
+              size="small"
+              sx={{
+                marginTop: "0px",
+                marginBottom: "0px"
+              }}
+              options={designation}
+              value={params.value}
+              onChange={(e) => OnChange(params, e, "vendorEntityEmails")}
+            /></div>
+          )
         },
         {
           field: "emailId",
           headerName: "Email",
           flex: 1,
-          editable: !disabled,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.emailId}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <TextField
+                size="small"
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorEntityEmails")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
           ),
         },
         {
@@ -589,44 +702,90 @@ export default function VendorEditGrid({
           field: "bankName",
           headerName: "Bank Name",
           flex: 1,
-          editable: !disabled,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.bankName}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <TextField
+                size="small"
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
           ),
         },
         {
           field: "bankAddress",
           headerName: "Bank Address",
           flex: 1,
-          editable: !disabled,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.bankAddress}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <TextField
+                size="small"
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
+          ),
+        },
+        {
+          field: "accountNo",
+          headerName: "accountNo",
+          flex: 1,
+          renderCell: (params) => (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <TextField
+                size="small"
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
           ),
         },
         {
           field: "currency",
           headerName: "Currency",
           flex: 1,
-          editable: !disabled,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.currency}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <TextField
+                size="small"
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
           ),
         },
         {
           field: "swiftCode",
           headerName: "Swift Code",
           flex: 1,
-          editable: !disabled,
           renderCell: (params) => (
-            <Tooltip title={`${params.row.swiftCode}`} arrow>
-              <div>{params.value}</div>
-            </Tooltip>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <TextField
+                size="small"
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px"
+                }}
+              />
+            </div>
           ),
         },
         {
@@ -669,10 +828,10 @@ export default function VendorEditGrid({
       >
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <TabList onChange={handleChange} aria-label="lab API tabs example" >
               {TabsHosts.map((value, index) => (
                 <Tab
-                  sx={{ fontSize: "1rem" }}
+                  sx={{ fontSize: "1rem", textTransform: "capitalize" }}
                   label={value.tabLable}
                   value={index}
                 />
@@ -682,24 +841,6 @@ export default function VendorEditGrid({
           {TabsHosts.map((ob, index) => (
             <TabPanel value={index} sx={{ padding: 0, marginTop: 2 }}>
               <Box sx={{ width: "100%" }}>
-                {/* <Box
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        flexDirection: "row-reverse",
-                                        mb: 2,
-                                    }}
-                                >
-                                    <Button
-                                        variant="contained"
-                                        startIcon={<AddIcon />}
-                                        onClick={ob.addNewRow}
-                                        sx={{ borderRadius: '17px 18px 18px 17px', margin: '5px' }}
-                                    >
-                                        Add {ob.tabLable}
-                                    </Button>
-                                </Box> */}
                 <Box sx={{ height: 400 }}>
                   <StyledDataGrid
                     rows={ob.value}
