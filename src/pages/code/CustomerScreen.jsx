@@ -49,6 +49,7 @@ import ApiManager from "../../services/ApiManager";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast from "react-hot-toast";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
@@ -176,7 +177,12 @@ export default function CustomerScreen({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {
-        console.error("Download failed:", error);
+        toast.custom(
+          <CustomToast message="Something went wrong" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     }
   };
@@ -262,7 +268,7 @@ export default function CustomerScreen({ page }) {
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
           title={
-            <Stack spacing={2} direction="row" justifyContent="space-between">
+            <Stack direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
                   filters={codeCustomerSelector?.formData}
@@ -342,7 +348,6 @@ export default function CustomerScreen({ page }) {
             // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
-            page={page}
           />
         )}
       </Card>

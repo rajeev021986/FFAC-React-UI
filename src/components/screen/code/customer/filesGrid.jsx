@@ -30,7 +30,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
 
   // Handle row updates
   const handleProcessRowUpdate = (newRow, oldRow) => {
-    const updatedRows = customerEntityEmailsIds.map((row) =>
+    const updatedRows = customerEntityEmailsIds?.map((row) =>
       row.id === newRow.id ? { ...row, ...newRow } : row
     );
     formik.setFieldValue("customerEntityEmailsIds", updatedRows);
@@ -46,7 +46,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
       editable: true,
       headerAlign: "center",
       type: "singleSelect",
-      valueOptions: designation.map((option) => option.value),
+      valueOptions: designation?.map((option) => option.value),
       align: "center",
       renderCell: (params) => (
         <Tooltip title={`${params.row.designation}`} arrow>

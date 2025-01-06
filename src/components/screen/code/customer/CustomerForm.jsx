@@ -8,11 +8,12 @@ import {
   RadioGroup,
   Stack,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { useFormik } from "formik";
 import WarningIcon from "@mui/icons-material/Warning";
 import { useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import AppAutocomplete from "../../../common/AppAutocomplete";
@@ -82,6 +83,7 @@ export default function CustomerForm({
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
+    validateOnChange: false,
     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
@@ -332,25 +334,41 @@ export default function CustomerForm({
 
   const currentError = getFirstError(formik.errors);
 
+  const customerNameRef = useRef(null);
+
+  useEffect(() => {
+    if (customerNameRef.current) {
+      customerNameRef.current.focus();
+    }
+  }, []);
+
   return (
     <>
       {currentError && <div style={{ color: "red" }}>{currentError}</div>}
-      {!shouldShowTabs || type == "copy" ? (
+      {type == "add" ? (
         <>
           {" "}
           <Grid container paddingBottom={2}>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
-                <InputBox
-                  label="Customer Name"
-                  id="customerName"
-                  value={formik.values.customerName}
-                  disabled={disabled}
-                  error={formik.errors.customerName}
-                  onChange={formik.handleChange}
-                />
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <Tooltip
+                  title={
+                    !formik.values.customerName ? "Field is mandatory" : ""
+                  }
+                  arrow
+                >
+                  <InputBox
+                    label="Customer Name**"
+                    id="customerName"
+                    value={formik.values.customerName}
+                    disabled={disabled}
+                    error={formik.errors.customerName}
+                    onChange={formik.handleChange}
+                    inputRef={customerNameRef}
+                  />
+                </Tooltip>
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="TIN No."
                   id="tinNo"
@@ -360,7 +378,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="VAT No."
                   id="vatNo"
@@ -370,7 +388,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Status"
                   id="status"
@@ -381,18 +399,23 @@ export default function CustomerForm({
                 />
               </Grid>
             </Grid>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
-                <InputBox
-                  label="Address 1."
-                  id="add1"
-                  value={formik.values.add1}
-                  error={formik.errors.add1}
-                  onChange={formik.handleChange}
-                  disabled={disabled}
-                />
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <Tooltip
+                  title={!formik.values.add1 ? "Field is mandatory" : ""}
+                  arrow
+                >
+                  <InputBox
+                    label="Address 1.**"
+                    id="add1"
+                    value={formik.values.add1}
+                    error={formik.errors.add1}
+                    onChange={formik.handleChange}
+                    disabled={disabled}
+                  />
+                </Tooltip>
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Address 2."
                   id="add2"
@@ -402,7 +425,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Address 3."
                   id="add3"
@@ -412,7 +435,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="PoNo"
                   id="poNo"
@@ -423,8 +446,8 @@ export default function CustomerForm({
                 />
               </Grid>
             </Grid>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="City"
                   id="city"
@@ -434,7 +457,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Province"
                   id="province"
@@ -444,7 +467,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Country"
                   id="country"
@@ -455,8 +478,8 @@ export default function CustomerForm({
                 />
               </Grid>
             </Grid>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Contact Person"
                   id="contactPerson"
@@ -466,7 +489,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Email Id "
                   id="emailId"
@@ -476,7 +499,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Telephone"
                   id="telephone"
@@ -486,7 +509,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Fax"
                   id="fax"
@@ -497,8 +520,8 @@ export default function CustomerForm({
                 />
               </Grid>
             </Grid>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Bank Name"
                   id="bankName"
@@ -508,7 +531,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Account No."
                   id="accountNo"
@@ -519,7 +542,7 @@ export default function CustomerForm({
                 />
               </Grid>
               {/* customer type */}
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Customer Type"
                   id="customerType"
@@ -530,7 +553,7 @@ export default function CustomerForm({
                 />
               </Grid>
             </Grid>
-            <Grid container paddingTop={2}>
+            <Grid container>
               <Grid
                 item
                 xs={12}
@@ -538,7 +561,7 @@ export default function CustomerForm({
                 md={4}
                 lg={3}
                 xl={2}
-                paddingLeft={2}
+                paddingLeft={1}
                 container
                 justifyContent="start"
                 alignItems="center"
@@ -573,7 +596,7 @@ export default function CustomerForm({
                   />
                 </RadioGroup>
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Credit Days"
                   id="creditDays"
@@ -587,7 +610,7 @@ export default function CustomerForm({
                   disabled={formik.values.paymentType === "cash" || disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Credit Amount"
                   id="creditAmount"
@@ -604,17 +627,11 @@ export default function CustomerForm({
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Box
-              sx={{
-                borderBottom: 1,
-                border: "1px solid #0000001f",
-                borderRadius: "10px",
-              }}
-            >
+            <Box>
               <ThemeTabs
                 tabData={[
-                  { label: "TARIFFS", value: "1", disable: false },
-                  { label: "EMAIL", value: "2", disable: false },
+                  { label: "Tariffs", value: "1", disable: false },
+                  { label: "Email", value: "2", disable: false },
                 ]}
               >
                 <AddMapping
@@ -674,7 +691,7 @@ export default function CustomerForm({
         </>
       ) : (
         <>
-          <Box sx={{ width: "100%", typography: "body1" }}>
+          <Box sx={{ width: "100%", typography: "body1", margin: 0 }}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
@@ -684,20 +701,24 @@ export default function CustomerForm({
                   <Tab
                     label="Edit Customer"
                     value="1"
-                    sx={{ fontSize: "1rem" }}
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
                   />
                   <Tab
                     label="Upload Documents"
                     value="2"
-                    sx={{ fontSize: "1rem" }}
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
                   />
-                  <Tab label="Audit Logs" value="3" sx={{ fontSize: "1rem" }} />
+                  <Tab
+                    label="Audit Logs"
+                    value="3"
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  />
                 </TabList>
               </Box>
-              <TabPanel value="1">
+              <TabPanel value="1" sx={{ padding: "0px" }}>
                 {" "}
-                <Grid container spacing={2}>
-                  <Grid container paddingTop={2}>
+                <Grid container>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -705,16 +726,25 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
-                      <InputBox
-                        label="Customer Name"
-                        id="customerName"
-                        value={formik.values.customerName}
-                        disabled={disabled}
-                        error={formik.errors.customerName}
-                        onChange={formik.handleChange}
-                      />
+                      <Tooltip
+                        title={
+                          !formik.values.customerName
+                            ? "Field is mandatory"
+                            : ""
+                        }
+                        arrow
+                      >
+                        <InputBox
+                          label="Customer Name**"
+                          id="customerName"
+                          value={formik.values.customerName}
+                          disabled={disabled}
+                          error={formik.errors.customerName}
+                          onChange={formik.handleChange}
+                        />
+                      </Tooltip>
                     </Grid>
                     <Grid
                       item
@@ -723,7 +753,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="TIN No."
@@ -741,7 +771,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="VAT No."
@@ -763,7 +793,7 @@ export default function CustomerForm({
                         lg={3}
                         xl={2}
                         sx={{ marginTop: 2 }}
-                        paddingLeft={2}
+                        paddingLeft={1}
                       >
                         <SelectBox
                           label="Status"
@@ -783,7 +813,7 @@ export default function CustomerForm({
                         md={4}
                         lg={3}
                         xl={2}
-                        paddingLeft={2}
+                        paddingLeft={1}
                       >
                         <InputBox
                           label="Status"
@@ -796,7 +826,7 @@ export default function CustomerForm({
                       </Grid>
                     )}
                   </Grid>
-                  <Grid container paddingTop={2}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -804,16 +834,21 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
-                      <InputBox
-                        label="Address 1."
-                        id="add1"
-                        value={formik.values.add1}
-                        error={formik.errors.add1}
-                        onChange={formik.handleChange}
-                        disabled={disabled}
-                      />
+                      <Tooltip
+                        title={!formik.values.add1 ? "Field is mandatory" : ""}
+                        arrow
+                      >
+                        <InputBox
+                          label="Address 1.**"
+                          id="add1"
+                          value={formik.values.add1}
+                          error={formik.errors.add1}
+                          onChange={formik.handleChange}
+                          disabled={disabled}
+                        />
+                      </Tooltip>
                     </Grid>
                     <Grid
                       item
@@ -822,7 +857,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Address 2."
@@ -840,7 +875,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Address 3."
@@ -858,7 +893,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="PoNo"
@@ -870,7 +905,7 @@ export default function CustomerForm({
                       />
                     </Grid>
                   </Grid>
-                  <Grid container paddingTop={2}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -878,7 +913,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="City"
@@ -896,25 +931,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
-                    >
-                      <InputBox
-                        label="Country"
-                        id="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
-                        onChange={formik.handleChange}
-                        disabled={disabled}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Province"
@@ -925,8 +942,6 @@ export default function CustomerForm({
                         disabled={disabled}
                       />
                     </Grid>
-                  </Grid>
-                  <Grid container paddingTop={2}>
                     <Grid
                       item
                       xs={12}
@@ -934,7 +949,27 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Country"
+                        id="country"
+                        value={formik.values.country}
+                        error={formik.errors.country}
+                        onChange={formik.handleChange}
+                        disabled={disabled}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Contact Person"
@@ -952,7 +987,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Email Id "
@@ -970,7 +1005,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Telephone"
@@ -988,7 +1023,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Fax"
@@ -1000,7 +1035,7 @@ export default function CustomerForm({
                       />
                     </Grid>
                   </Grid>
-                  <Grid container paddingTop={2}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -1008,7 +1043,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Bank Name"
@@ -1026,7 +1061,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Account No."
@@ -1045,7 +1080,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Customer Type"
@@ -1057,7 +1092,7 @@ export default function CustomerForm({
                       />
                     </Grid>
                   </Grid>
-                  <Grid container paddingTop={2}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -1068,7 +1103,7 @@ export default function CustomerForm({
                       container
                       justifyContent="start"
                       alignItems="center"
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <RadioGroup
                         id="paymentType"
@@ -1099,7 +1134,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Credit Days"
@@ -1119,7 +1154,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Credit Amount"
@@ -1144,8 +1179,8 @@ export default function CustomerForm({
                     >
                       <ThemeTabs
                         tabData={[
-                          { label: "TARIFFS", value: "1", disable: false },
-                          { label: "EMAIL", value: "2", disable: false },
+                          { label: "Tariffs", value: "1", disable: false },
+                          { label: "Email", value: "2", disable: false },
                         ]}
                       >
                         <AddMapping
@@ -1182,7 +1217,7 @@ export default function CustomerForm({
                   )}
 
                   {page == "customer" && (
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sx={{ marginTop: 2 }}>
                       <Stack
                         direction="row"
                         spacing={2}
@@ -1245,7 +1280,7 @@ export default function CustomerForm({
                   <PopupAlert alertConfig={alertConfig} />
                 </Grid>
               </TabPanel>
-              <TabPanel value="2">
+              <TabPanel value="2" sx={{ padding: "0px" }}>
                 <UploadFile
                   customer_id={initialValues.id}
                   disabled={disabled}
@@ -1253,7 +1288,7 @@ export default function CustomerForm({
                   sourceType="CUSTOMER"
                 />
               </TabPanel>
-              <TabPanel value="3">
+              <TabPanel value="3" sx={{ padding: "0px" }}>
                 <AuditTimeline
                   auditDetails={enquiryAuditDetails}
                   reloadDataHandler={reloadDataHandler}

@@ -92,6 +92,10 @@ function GridDataTable({ data }) {
               whiteSpace: "normal",
               wordWrap: "break-word",
             },
+            "& .MuiDataGrid-columnHeaderTitle": {
+              color: "#fff",
+              fontSize: "15px",
+            },
           }}
         />
       </Box>

@@ -10,6 +10,14 @@ export const CODE_CUSTOMER_COLUMNS = [
         align: 'center',
         editable: false
     },
+    {
+        field: 'isDoc',
+        headerName: 'Document',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
 
     {
         field: 'customerName',

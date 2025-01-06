@@ -2,28 +2,28 @@ import * as Yup from 'yup';
 
 export const CustomerValidationSchema = () => Yup.object({
   customerName: Yup.string().required("Name is required"),
-  tinNo: Yup.string().required("TIN No is required"),
-  vatNo: Yup.string().required("VAT No is required"),
+  // tinNo: Yup.string().required("TIN No is required"),
+  // vatNo: Yup.string().required("VAT No is required"),
   // status: Yup.string().required("Status is required"),
   add1: Yup.string().required("Address is required"),
   // add2: Yup.string().required("Address is required"),
   // add3: Yup.string().required("Address is required"),
-  poNo: Yup.string().required("Post is required"),
-  city: Yup.string().required("City is required"),
-  country: Yup.string().required("Country is required"),
-  province: Yup.string().required("Province is required"),
-  contactPerson: Yup.string().required("Person is required"),
-  emailId: Yup.string().required("Email is required")
+  // poNo: Yup.string().required("Post is required"),
+  // city: Yup.string().required("City is required"),
+  // country: Yup.string().required("Country is required"),
+  // province: Yup.string().required("Province is required"),
+  // contactPerson: Yup.string().required("Person is required"),
+  emailId: Yup.string()
     .test("valid-email", "Invalid email format", (value) => {
-      if (!value) return false;
+      if (!value) return true;
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(value);
     }),
-  telephone: Yup.string().required("Telephone is required"),
-  fax: Yup.string().required("Fax is required"),
-  bankName: Yup.string().required("Bank is required"),
-  accountNo: Yup.string().required("Account Number is required"),
-  customerType: Yup.string().required("Customer Type is required"),
+  // telephone: Yup.string().required("Telephone is required"),
+  // fax: Yup.string().required("Fax is required"),
+  // bankName: Yup.string().required("Bank is required"),
+  // accountNo: Yup.string().required("Account Number is required"),
+  // customerType: Yup.string().required("Customer Type is required"),
   // companyCode: Yup.string().required("Company Code is required"),
   paymentType: Yup.string()
     .required("Payment Type is required"),

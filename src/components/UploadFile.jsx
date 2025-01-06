@@ -13,7 +13,7 @@ import {
   MenuItem,
   Tooltip,
 } from "@mui/material";
-import { styled } from "@mui/system";
+import { margin, styled } from "@mui/system";
 import { CloudDownload, Delete, Visibility } from "@mui/icons-material"; // Add Visibility icon
 import moment from "moment";
 import Uploadimg from "../assets/images/upload-placeholder.png";
@@ -70,6 +70,7 @@ const UploadFile = ({
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [viewDocument, setViewDocument] = useState({});
   const [fileData, setFileDaat] = useState({});
+  console.log(listData, "formData");
   const handleView = async (event, id, source, sourceId, documentType) => {
     event.preventDefault();
     try {
@@ -181,25 +182,71 @@ const UploadFile = ({
       setDialogOpen(false);
     }
   };
+
+  const handleDate = (date) => {
+    if (!date) {
+      return "";
+    }
+    console.log(date.split("T")[0], "datesplit");
+    return date.split("T")[0];
+  };
+
   const cusColumns = [
     {
       field: "documentType",
       headerName: "Type",
       flex: 1,
       headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
-    { field: "number", headerName: "Number", flex: 1, headerAlign: "center" },
+    {
+      field: "fileName",
+      headerName: "Name",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
+    },
+
+    {
+      field: "number",
+      headerName: "Number",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
+    },
     {
       field: "createdBy",
       headerName: "Created By",
       flex: 1,
       headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "modifiedBy",
       headerName: "Modified By",
       flex: 1,
       headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "createdDate",
@@ -208,7 +255,11 @@ const UploadFile = ({
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
-        return <div>{appDateFormat(params.value)}</div>;
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>
+          </Tooltip>
+        );
       },
     },
     {
@@ -216,18 +267,26 @@ const UploadFile = ({
       headerName: "Issue Date",
       flex: 1,
       headerAlign: "center",
-      renderCell: (params) => (
-        <span>{moment(params.value).format("DD-MM-YYYY")}</span>
-      ),
+      renderCell: (params) => {
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       field: "expiredDate",
       headerName: "Expiry Date",
       flex: 1,
       headerAlign: "center",
-      renderCell: (params) => (
-        <span>{moment(params.value).format("DD-MM-YYYY")}</span>
-      ),
+      renderCell: (params) => {
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       field: "actions",
@@ -263,6 +322,7 @@ const UploadFile = ({
                 id: params.row.id,
                 source: params.row.source,
                 sourceId: params.row.sourceId,
+                fileName: params.row.fileName,
               });
               setOpenConfirmation(true);
             }}
@@ -276,6 +336,17 @@ const UploadFile = ({
     {
       field: "documentType",
       headerName: "Type",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
+    },
+    {
+      field: "fileName",
+      headerName: "Name",
       flex: 1,
       headerAlign: "center",
       renderCell: (params) => (
@@ -312,11 +383,13 @@ const UploadFile = ({
       width: 130,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => (
-        <Tooltip title={`${params.row.createdDate}`} arrow>
-          <div>{appDateFormat(params.value)}</div>;
-        </Tooltip>
-      ),
+      renderCell: (params) => {
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>;
+          </Tooltip>
+        );
+      },
     },
     {
       field: "modifiedDate",
@@ -324,11 +397,13 @@ const UploadFile = ({
       width: 130,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => (
-        <Tooltip title={`${params.row.modifiedDate}`} arrow>
-          <div>{appDateFormat(params.value)}</div>;
-        </Tooltip>
-      ),
+      renderCell: (params) => {
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>;
+          </Tooltip>
+        );
+      },
     },
     {
       field: "actions",
@@ -363,6 +438,7 @@ const UploadFile = ({
                 id: params.row.id,
                 source: params.row.source,
                 sourceId: params.row.sourceId,
+                fileName: params.row.fileName,
               });
               setOpenConfirmation(true);
             }}
@@ -400,15 +476,15 @@ const UploadFile = ({
           <Loader />
         </Grid>
       ) : (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} marginTop={1}>
           <Typography
             variant="h5"
             gutterBottom
-            style={{ width: "100%", marginLeft: "15px" }}
+            style={{ width: "100%", marginLeft: "15px", marginBottom: "8px" }}
           >
             Select Files
           </Typography>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} margin={0} padding={0}>
             <Box display="flex" flexDirection="column" height="100%" gap={2}>
               <DropZone
                 onClick={() => document.getElementById("file-input").click()}
@@ -564,15 +640,18 @@ const UploadFile = ({
                 textAlign: "center",
                 color: "text.secondary",
                 fontSize: "1rem",
-                mt: 2,
               }}
             >
+              <p>
+                <strong>{deleteData.fileName}</strong>
+              </p>
               <p>This action cannot be undone.</p>
             </DialogContent>
             <DialogActions
               sx={{
-                justifyContent: "center",
-                pt: 2,
+                padding: 0,
+                marginX: 5,
+                justifyContent: "space-around",
               }}
             >
               <Button
@@ -588,11 +667,12 @@ const UploadFile = ({
               </Button>
               <Button
                 onClick={onDelete}
-                color="secondary"
                 variant="contained"
                 sx={{
                   minWidth: 100,
                   borderRadius: 50,
+                  backgroundColor: "red",
+                  color: "white",
                 }}
               >
                 Delete
