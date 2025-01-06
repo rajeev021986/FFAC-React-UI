@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Box,
   Button,
@@ -29,6 +29,14 @@ export default function VendorEditGrid({
   dropdownData,
 }) {
   const designation = dropdownData?.designation;
+  const newRowRef = useRef(null);
+  const setFocus = () => {
+    setTimeout(() => {
+      if (newRowRef.current) {
+        newRowRef.current.focus();
+      }
+    }, 1000);
+  }
   const fetchSuggestions = async (inputValue, inputId) => {
     if (inputId === "chargeName") {
       inputId = "CHARGE";
@@ -96,6 +104,7 @@ export default function VendorEditGrid({
           ...TabsHosts[0].value,
           newRow,
         ]);
+        setFocus();
       },
       deleteRow: (id) => {
         const updatedRows = TabsHosts[0].value.filter((row) => row.id !== id);
@@ -139,6 +148,7 @@ export default function VendorEditGrid({
                   });
                   // }, 1500);
                 }}
+                inputRef={newRowRef}
                 fetchSuggestions={fetchSuggestions}
               />
             );
@@ -313,6 +323,7 @@ export default function VendorEditGrid({
           ...TabsHosts[1].value,
           newRow,
         ]);
+        setFocus();
       },
       deleteRow: (id) => {
         const updatedRows = TabsHosts[1].value.filter((row) => row.id !== id);
@@ -341,6 +352,7 @@ export default function VendorEditGrid({
                   marginTop: "0px",
                   marginBottom: "0px"
                 }}
+                inputRef={newRowRef}
               />
             </div>
           ),
@@ -482,6 +494,7 @@ export default function VendorEditGrid({
           ...TabsHosts[2].value,
           newRow,
         ]);
+        setFocus();
       },
       deleteRow: (id) => {
         const updatedRows = TabsHosts[2].value.filter((row) => row.id !== id);
@@ -509,6 +522,7 @@ export default function VendorEditGrid({
                   marginTop: "0px",
                   marginBottom: "0px"
                 }}
+                inputRef={newRowRef}
               />
             </div>
           ),
@@ -583,6 +597,7 @@ export default function VendorEditGrid({
           ...TabsHosts[3].value,
           newRow,
         ]);
+        setFocus();
       },
       deleteRow: (id) => {
         const updatedRows = TabsHosts[3].value.filter((row) => row.id !== id);
@@ -610,6 +625,7 @@ export default function VendorEditGrid({
               options={designation}
               value={params.value}
               onChange={(e) => OnChange(params, e, "vendorEntityEmails")}
+              inputRef={newRowRef}
             /></div>
           )
         },
@@ -685,6 +701,7 @@ export default function VendorEditGrid({
           ...TabsHosts[4].value,
           newRow,
         ]);
+        setFocus();
       },
       deleteRow: (id) => {
         const updatedRows = TabsHosts[4].value.filter((row) => row.id !== id);
@@ -712,6 +729,7 @@ export default function VendorEditGrid({
                   marginTop: "0px",
                   marginBottom: "0px"
                 }}
+                inputRef={newRowRef}
               />
             </div>
           ),

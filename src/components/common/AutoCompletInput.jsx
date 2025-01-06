@@ -17,6 +17,7 @@ function AutoCompleteInput({
   error,
   onChange,
   fetchSuggestions,
+  ...props
 }) {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -93,6 +94,7 @@ function AutoCompleteInput({
                   </>
                 ),
               }}
+              {...props}
             />
           </Tooltip>
         )}
