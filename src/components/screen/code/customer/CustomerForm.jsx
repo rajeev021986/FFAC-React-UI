@@ -98,10 +98,13 @@ export default function CustomerForm({
           delete values.id;
           values.isApproved = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
+
           if (values.paymentType === "cash") {
             delete values.creditAmount;
             delete values.creditDays;
           }
+          values.tinNo = values.tinNo.trim() || null;
+          values.vatNo = values.vatNo.trim() || null;
           let response = await addCustomer({
             ...values,
             customerEntityEmailsIds: emails,
@@ -114,15 +117,15 @@ export default function CustomerForm({
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
-            nav("/app/entity/customer");
+            nav(-1);
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
               closeButton: false,
             });
           }
         } catch (error) {
-          const message = error.data.message;
           if (error.status === 409) {
+            const message = error.data.message;
             toast.custom(<CustomToast message={message} toast="error" />, {
               closeButton: false,
             });
@@ -145,6 +148,8 @@ export default function CustomerForm({
             delete values.creditAmount;
             delete values.creditDays;
           }
+          values.tinNo = values.tinNo.trim() || null;
+          values.vatNo = values.vatNo.trim() || null;
 
           let emails = values.customerEntityEmailsIds.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
@@ -166,15 +171,15 @@ export default function CustomerForm({
             toast.custom(<CustomToast message={message} toast="success" />, {
               closeButton: false,
             });
-            nav("/app/entity/customer");
+            nav(-1);
           } else {
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
           }
         } catch (error) {
-          const message = error.data.message;
           if (error.status === 409) {
+            const message = error.data.message;
             toast.custom(
               <CustomToast message={message} toast="error" />,
 
@@ -652,7 +657,8 @@ export default function CustomerForm({
             <Grid item xs={12} sx={{ marginTop: 2 }}>
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
-                  sx={{ fontWeight: "500", borderRadius: "12px" }}
+                  sx={{ fontWeight: "500" }}
+                  onClick={() => nav("/app/entity/customer")}
                 >
                   Cancel
                 </OutlinedButton>
@@ -1204,7 +1210,7 @@ export default function CustomerForm({
                         label="Reject Remarks"
                         name="rejectRemarks"
                         value={formik.values.rejectRemarks}
-                        error={formik.errors.rejectRemarks || rejectError}
+                        error={rejectError}
                         helperText={
                           rejectError
                             ? "Reject remarks are required when rejecting a customer*."
@@ -1232,7 +1238,10 @@ export default function CustomerForm({
                         justifyContent="space-between"
                       >
                         <Stack direction="row" spacing={2}>
-                          <OutlinedButton sx={{ fontWeight: "500" }}>
+                          <OutlinedButton
+                            sx={{ fontWeight: "500" }}
+                            onClick={() => nav(-1)}
+                          >
                             Cancel
                           </OutlinedButton>
                           <ThemeButton

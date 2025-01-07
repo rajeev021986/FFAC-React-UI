@@ -73,10 +73,17 @@ export default function CustomerScreen({ page }) {
   };
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New Customer" }, { name: "Copy" }, { name: exportLoader ? <LoaderIcon /> : "Export" }]
+    ? [
+        { name: "New Customer" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
     : page === "customerApprove"
-      ? [{ name: "Export" }]
-      : [{ name: "New Customer" }, { name: exportLoader ? <LoaderIcon /> : "Export" }];
+    ? [{ name: "Export" }]
+    : [
+        { name: "New Customer" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ];
   const query = {
     page: codeCustomerSelector?.pagination?.page + 1,
     size: codeCustomerSelector?.pagination?.pageSize,
@@ -99,7 +106,7 @@ export default function CustomerScreen({ page }) {
     query.sortBy = "customerName";
   }
   const payload = Object.entries(codeCustomerSelector?.formData)
-    .filter(([key, value]) => value != "")
+    .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
       Boolean(key == "cname") && (fieldname = "customerName");
@@ -107,7 +114,7 @@ export default function CustomerScreen({ page }) {
         fieldName: fieldname,
         operator: "=",
         value: value,
-        logicalOperator: "or",
+        logicalOperator: "and",
       };
     });
 
@@ -326,7 +333,7 @@ export default function CustomerScreen({ page }) {
             handlePage={handlePage}
             data={CustomerData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => { }}
+            columnVisibilityHandler={() => {}}
             paginationModel={codeCustomerSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={codeCustomerSelector.sortModel}

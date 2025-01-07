@@ -37,11 +37,11 @@ export default function FilterForm() {
   };
 
   const statusOptions = [
-    { value: "Active" },
-    { value: "InActive" },
-    { value: "New" },
-    { value: "Pending_Documents" },
-    { value: "Rejected" },
+    { value: 1, label: "Active" },
+    { value: -2, label: "InActive" },
+    { value: 0, label: "New" },
+    { value: 0, label: "Pending_Documents" },
+    { value: -1, label: "Rejected" },
   ];
   const documentOptions = [
     { value: false, label: "Pending" },

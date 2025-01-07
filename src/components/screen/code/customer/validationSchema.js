@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 
 export const CustomerValidationSchema = () => Yup.object({
   customerName: Yup.string().required("Name is required"),
-  // tinNo: Yup.string().required("TIN No is required"),
-  // vatNo: Yup.string().required("VAT No is required"),
+  tinNo: Yup.string().nullable(),
+  vatNo: Yup.string().nullable(),
   // status: Yup.string().required("Status is required"),
   add1: Yup.string().required("Address is required"),
   // add2: Yup.string().required("Address is required"),
@@ -44,7 +44,7 @@ export const CustomerValidationSchema = () => Yup.object({
       .min(1, "Credit Amount must be greater than or equal to 1"),
     otherwise: (schema) => schema
   }),
-  rejectRemarks: Yup.string().required("Reject remarks is required"),
+  // rejectRemarks: Yup.string().required("Reject remarks is required"),
   customerEntityTariffs: Yup.array()
     .of(
       Yup.object().shape({
