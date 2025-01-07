@@ -9,7 +9,7 @@ function GridDataTable({ data }) {
       field: "displayName",
       headerName: "Display Name",
       flex: 1,
-      minWidth: 150,
+      minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value || "No Value"} arrow>
           <span>{params.value || "N/A"}</span>
@@ -22,7 +22,7 @@ function GridDataTable({ data }) {
       field: "oldValue",
       headerName: "Old Value",
       flex: 1,
-      minWidth: 180,
+      minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value || "No Value"} arrow>
           <span>{params.value || "N/A"}</span>
@@ -35,7 +35,7 @@ function GridDataTable({ data }) {
       field: "newValue",
       headerName: "New Value",
       flex: 1,
-      minWidth: 180,
+      minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value || "No Value"} arrow>
           <span>{params.value || "N/A"}</span>
@@ -48,23 +48,10 @@ function GridDataTable({ data }) {
       field: "modifiedBy",
       headerName: "Modified By",
       flex: 1,
-      minWidth: 110,
+      minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value || "No Value"} arrow>
           <span>{params.value || "N/A"}</span>
-        </Tooltip>
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "modifiedDate",
-      headerName: "Modified Date",
-      flex: 1,
-      minWidth: 150,
-      renderCell: (params) => (
-        <Tooltip title={params.value || "No Value"} arrow>
-          <span>{appDateFormat(params.value) || "N/A"}</span>
         </Tooltip>
       ),
       headerAlign: "center",

@@ -99,7 +99,7 @@ export default function CustomerScreen({ page }) {
     query.sortBy = "customerName";
   }
   const payload = Object.entries(codeCustomerSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(([key, value]) => value != "")
     .map(([key, value]) => {
       let fieldname = key;
       Boolean(key == "cname") && (fieldname = "customerName");

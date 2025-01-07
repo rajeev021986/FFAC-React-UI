@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   TextField,
   Autocomplete,
@@ -56,6 +56,8 @@ function AutoCompleteInput({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        paddingTop: "5px",
+        paddingBottom: "8px",
       }}
     >
       <Autocomplete
@@ -71,6 +73,9 @@ function AutoCompleteInput({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          border: "1px solid #ccc",
+          borderRadius: "10px",
+          paddingLeft: "5px",
         }}
         renderInput={(params) => (
           <Tooltip title={tooltipMessage} arrow>
@@ -84,7 +89,10 @@ function AutoCompleteInput({
               InputProps={{
                 disableUnderline: true,
                 ...params.InputProps,
-                style: { border: "none", fontSize: "14px" },
+                style: {
+                  border: "none",
+                  fontSize: "14px",
+                },
                 endAdornment: (
                   <>
                     {loading ? (

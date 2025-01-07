@@ -5,6 +5,7 @@ import InputBox from "../../../common/InputBox";
 import { updateInput } from "../../../../store/freatures/CustomerSlice";
 import { OutlinedButton } from "../../../common/Button";
 import { useFormik } from "formik";
+import SelectBox from "../../../common/SelectBox";
 
 export default function FilterForm() {
   const dispatch = useDispatch();
@@ -15,6 +16,8 @@ export default function FilterForm() {
       customerName: inputs.customerName || "",
       tinNo: inputs.tinNo || "",
       vatNo: inputs.vatNo || "",
+      status: inputs.status || "",
+      isDoc: inputs.isDoc || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -27,9 +30,23 @@ export default function FilterForm() {
         customerName: "",
         tinNo: "",
         vatNo: "",
+        status: "",
+        isDoc: "",
       })
     );
   };
+
+  const statusOptions = [
+    { value: "Active" },
+    { value: "InActive" },
+    { value: "New" },
+    { value: "Pending_Documents" },
+    { value: "Rejected" },
+  ];
+  const documentOptions = [
+    { value: false, label: "Pending" },
+    { value: true, label: "Available" },
+  ];
 
   return (
     <div>
@@ -60,14 +77,52 @@ export default function FilterForm() {
             onChange={formik.handleChange}
           />
         </Stack>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            width: "65.7%",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ width: "48%", marginLeft: "0px" }}>
+            <SelectBox
+              label="Status"
+              id="status"
+              options={statusOptions}
+              value={formik.values.status}
+              onChange={formik.handleChange}
+              sx={{ marginLeft: "0px !important" }}
+            />
+          </div>
+          <div style={{ width: "48%", marginLeft: "0px" }}>
+            <SelectBox
+              label="Doc Status"
+              id="isDoc"
+              options={documentOptions}
+              value={formik.values.isDoc}
+              onChange={formik.handleChange}
+              sx={{ marginLeft: "0px !important" }}
+            />
+          </div>
+        </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
           <Button
             color="primary"
             size="small"
             onClick={handleReset}
-            sx={{ borderRadius: "12px" }}
+            sx={{
+              borderRadius: "12px",
+              padding: "6px 16px",
+              textTransform: "capitalize",
+              backgroundColor: "#f5f5f5",
+              color: "#333",
+              "&:hover": {
+                backgroundColor: "#e0e0e0",
+              },
+            }}
           >
-            reset
+            Reset
           </Button>
           <OutlinedButton
             color="primary"
@@ -75,7 +130,7 @@ export default function FilterForm() {
             onClick={formik.handleSubmit}
             sx={{ borderRadius: "12px" }}
           >
-            apply
+            Apply
           </OutlinedButton>
         </Stack>
       </Stack>

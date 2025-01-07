@@ -64,6 +64,7 @@ export default function CustomerForm({
   const [updateCustomer] = useUpdateCustomerMutation();
   const [dropdownData, setDropdownData] = useState({});
   const location = useLocation();
+  const [rejectError, setRejectError] = useState(false);
 
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
@@ -139,6 +140,7 @@ export default function CustomerForm({
         }
       } else {
         try {
+          setRejectError(false);
           if (values.paymentType === "cash") {
             delete values.creditAmount;
             delete values.creditDays;
@@ -249,15 +251,7 @@ export default function CustomerForm({
     }
   }, [optionsSettingsData]);
   const handleApproveRequest = async () => {
-    if (formik.values.status == "Pending_Documents") {
-      toast.custom(
-        <CustomToast message="Document is Pending!" toast="warn" />,
-        {
-          closeButton: false,
-        }
-      );
-      return;
-    }
+    setRejectError(false);
     try {
       const response = await ApiManager.approveCustomerApprove(
         initialValues.id,
@@ -282,6 +276,7 @@ export default function CustomerForm({
   };
   const handleRejectRequest = async () => {
     if (!formik.values.rejectRemarks) {
+      setRejectError(true);
       toast.custom(
         <CustomToast message="Reject remarks to be filled!" toast="warn" />,
         {
@@ -314,7 +309,8 @@ export default function CustomerForm({
       );
     }
   };
-  const disabled = page == "customer" ? false : true;
+  const disabled =
+    page == "customer" || page == "customerApprove" ? false : true;
   const getFirstError = (errors) => {
     for (const key in errors) {
       if (Array.isArray(errors[key])) {
@@ -358,7 +354,7 @@ export default function CustomerForm({
                   arrow
                 >
                   <InputBox
-                    label="Customer Name**"
+                    label="Customer Name*"
                     id="customerName"
                     value={formik.values.customerName}
                     disabled={disabled}
@@ -406,7 +402,7 @@ export default function CustomerForm({
                   arrow
                 >
                   <InputBox
-                    label="Address 1.**"
+                    label="Address 1.*"
                     id="add1"
                     value={formik.values.add1}
                     error={formik.errors.add1}
@@ -627,7 +623,12 @@ export default function CustomerForm({
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Box>
+            <Box
+              sx={{
+                border: "1px solid #ccc",
+                borderRadius: "10px",
+              }}
+            >
               <ThemeTabs
                 tabData={[
                   { label: "Tariffs", value: "1", disable: false },
@@ -674,14 +675,14 @@ export default function CustomerForm({
                     onClick={() => handleRejectRequest()}
                   >
                     {isLoading && <CircularProgress size={20} color="white" />}{" "}
-                    Approve reject
+                    Reject
                   </ThemeButton>
                   <ThemeButton
                     sx={{ fontWeight: "500" }}
                     onClick={() => handleApproveRequest()}
                   >
                     {isLoading && <CircularProgress size={20} color="white" />}{" "}
-                    Approve request
+                    Approve
                   </ThemeButton>
                 </Stack>
               </Stack>
@@ -737,7 +738,7 @@ export default function CustomerForm({
                         arrow
                       >
                         <InputBox
-                          label="Customer Name**"
+                          label="Customer Name*"
                           id="customerName"
                           value={formik.values.customerName}
                           disabled={disabled}
@@ -841,7 +842,7 @@ export default function CustomerForm({
                         arrow
                       >
                         <InputBox
-                          label="Address 1.**"
+                          label="Address 1.*"
                           id="add1"
                           value={formik.values.add1}
                           error={formik.errors.add1}
@@ -1198,14 +1199,21 @@ export default function CustomerForm({
                   </Grid>
                   {formik.values.status.toLowerCase() === "rejected" ||
                   page == "customerApprove" ? (
-                    <Grid item xs={12}>
+                    <Grid item xs={12} marginTop={2}>
                       <TextField
                         label="Reject Remarks"
                         name="rejectRemarks"
                         value={formik.values.rejectRemarks}
-                        error={formik.errors.rejectRemarks}
+                        error={formik.errors.rejectRemarks || rejectError}
+                        helperText={
+                          rejectError
+                            ? "Reject remarks are required when rejecting a customer*."
+                            : formik.errors.rejectRemarks
+                        }
                         onChange={formik.handleChange}
-                        disabled={!disabled}
+                        disabled={
+                          page === "customerApprove" ? disabled : !disabled
+                        }
                         multiline
                         rows={4}
                         variant="outlined"
@@ -1246,6 +1254,7 @@ export default function CustomerForm({
                         direction="row"
                         spacing={2}
                         justifyContent="space-between"
+                        marginTop={2}
                       >
                         <Stack direction="row" spacing={2}>
                           <OutlinedButton
@@ -1255,13 +1264,22 @@ export default function CustomerForm({
                             Cancel
                           </OutlinedButton>
                           <ThemeButton
+                            onClick={formik.handleSubmit}
+                            sx={{ fontWeight: "500" }}
+                          >
+                            {isLoading && (
+                              <CircularProgress size={20} color="white" />
+                            )}{" "}
+                            Update
+                          </ThemeButton>
+                          <ThemeButton
                             sx={{ fontWeight: "500", backgroundColor: "red" }}
                             onClick={() => handleRejectRequest()}
                           >
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
-                            Approve reject
+                            Reject
                           </ThemeButton>
                           <ThemeButton
                             sx={{ fontWeight: "500" }}
@@ -1270,7 +1288,7 @@ export default function CustomerForm({
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
-                            Approve request
+                            Approve
                           </ThemeButton>
                         </Stack>
                       </Stack>

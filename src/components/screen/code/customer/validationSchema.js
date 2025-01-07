@@ -8,7 +8,7 @@ export const CustomerValidationSchema = () => Yup.object({
   add1: Yup.string().required("Address is required"),
   // add2: Yup.string().required("Address is required"),
   // add3: Yup.string().required("Address is required"),
-  // poNo: Yup.string().required("Post is required"),
+  // poNo: Yup.string().required("Po number is required"),
   // city: Yup.string().required("City is required"),
   // country: Yup.string().required("Country is required"),
   // province: Yup.string().required("Province is required"),
@@ -41,10 +41,10 @@ export const CustomerValidationSchema = () => Yup.object({
     then: (schema) => schema
       .required("Credit Amount is required")
       .positive("Credit Amount must be a positive number")
-      .min(0.01, "Credit Amount must be greater than or equal to 1"),
+      .min(1, "Credit Amount must be greater than or equal to 1"),
     otherwise: (schema) => schema
   }),
-  // rejectRemarks: Yup.string().required("Remarks is required"),
+  rejectRemarks: Yup.string().required("Reject remarks is required"),
   customerEntityTariffs: Yup.array()
     .of(
       Yup.object().shape({

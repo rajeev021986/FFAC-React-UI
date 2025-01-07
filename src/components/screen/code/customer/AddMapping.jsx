@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Box, Button, IconButton, styled, Tooltip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, Delete } from "@mui/icons-material";
@@ -6,6 +6,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AutoCompleteInput from "../../../common/AutoCompletInput";
 import ApiManager from "../../../../services/ApiManager";
 import { StyledDataGrid } from "../../../common/Grid/styles";
+import SelectBox from "../../../common/SelectBox";
+import InputBox from "../../../common/InputBox";
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     {
@@ -39,6 +41,15 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
     { label: "AIR EXPORT LOCAL", value: "AIR_EXPORT_LOCAL" },
   ];
 
+  const newRowRef = useRef(null);
+  const setFocus = () => {
+    setTimeout(() => {
+      if (newRowRef.current) {
+        newRowRef.current.focus();
+      }
+    }, 1000);
+  };
+
   // Handler to add a new row
   const addRow = () => {
     const newRow = {
@@ -54,6 +65,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       ...customerEntityTariffs,
       newRow,
     ]);
+    setFocus();
   };
   const deleteRow = (id) => {
     const updatedRows = customerEntityTariffs.filter((row) => row.id !== id);
@@ -70,6 +82,20 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
     const data = await response.body;
 
     return data || [];
+  };
+
+  const updateRowValue = (params, e, name) => {
+    const rowIndex = formik.values[name].findIndex(
+      (entity) => entity.id === params.id
+    );
+    formik.setValues({
+      ...formik.values,
+      [name]: formik.values[name].map((entity, index) =>
+        index === rowIndex
+          ? { ...entity, [params.field]: e.target.value }
+          : entity
+      ),
+    });
   };
 
   // Columns for DataGrid
@@ -103,6 +129,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
               });
               // }, 1500);
             }}
+            inputRef={newRowRef}
             fetchSuggestions={fetchSuggestions}
           />
         );
@@ -114,17 +141,41 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "unitType",
       headerName: "Unit Type",
       flex: 1,
-      editable: true,
-      type: "singleSelect",
-      valueOptions: unitTypeOptions.map((option) => option.value),
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-        <Tooltip title={`${params.row.unitType}`} arrow>
-          <div>{params.value}</div>
+        <Tooltip
+          title={params.value ? `${params.value}` : "This field is empty"}
+          arrow
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {" "}
+            <SelectBox
+              size="small"
+              sx={{
+                marginTop: "0px",
+                marginBottom: "0px",
+                fontSize: "14px",
+              }}
+              options={unitTypeOptions}
+              value={params.value}
+              onChange={(e) =>
+                updateRowValue(params, e, "customerEntityTariffs")
+              }
+            />
+          </div>
         </Tooltip>
       ),
     },
+
     {
       field: "currency",
       headerName: "Currency",
@@ -163,14 +214,37 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "shipmentType",
       headerName: "Shipment Type",
       flex: 1,
-      editable: true,
-      type: "singleSelect",
-      valueOptions: shipmentTypeOptions.map((option) => option.value),
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-        <Tooltip title={`${params.row.shipmentType}`} arrow>
-          <div>{params.value}</div>
+        <Tooltip
+          title={params.value ? `${params.value}` : "This field is empty"}
+          arrow
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {" "}
+            <SelectBox
+              size="small"
+              sx={{
+                marginTop: "0px",
+                marginBottom: "0px",
+                fontSize: "14px",
+              }}
+              options={shipmentTypeOptions}
+              value={params.value}
+              onChange={(e) =>
+                updateRowValue(params, e, "customerEntityTariffs")
+              }
+            />
+          </div>
         </Tooltip>
       ),
     },
@@ -178,12 +252,35 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "unitRate",
       headerName: "Unit Rate",
       flex: 1,
-      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-        <Tooltip title={`${params.row.unitRate}`} arrow>
-          <div>{params.value}</div>
+        <Tooltip
+          title={params.value ? `${params.value}` : "This field is empty"}
+          arrow
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <InputBox
+              size="small"
+              value={params.value}
+              type="number"
+              onChange={(e) =>
+                updateRowValue(params, e, "customerEntityTariffs")
+              }
+              sx={{
+                marginTop: "0px",
+                marginBottom: "5px",
+              }}
+            />
+          </div>
         </Tooltip>
       ),
     },
