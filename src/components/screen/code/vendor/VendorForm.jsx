@@ -40,8 +40,8 @@ export default function VendorForm({ page = "vendor" }) {
   const [getVendor, { isLoading }] = useLazyGetVendorQuery();
   const validationSchema = Yup.object({
     vendorName: Yup.string().required("Vendor Name is required"),
-    tinNo: Yup.string(),
-    vrnNo: Yup.string(),
+    tinNo: Yup.string().nullable(),
+    vrnNo: Yup.string().nullable(),
     // status: Yup.string().required("Status is required"),
     type: Yup.string().required("Type is required"),
     add1: Yup.string().required("Address is required"),
@@ -51,14 +51,7 @@ export default function VendorForm({ page = "vendor" }) {
     telephone1: Yup.string(),
     // telephone2: Yup.string().nullable(),
     fax: Yup.string(),
-    emailId: Yup.string()
-      .required("Email is required")
-      .test("valid-email", "Invalid email format", (value) => {
-        if (!value) return false;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(value);
-      }),
-
+    emailId: Yup.string().email(),
     city: Yup.string(),
     country: Yup.string(),
     creditDays: Yup.number()
@@ -78,16 +71,7 @@ export default function VendorForm({ page = "vendor" }) {
     ),
     vendorEntityEmails: Yup.array().of(
       Yup.object().shape({
-        emailId: Yup.string().test(
-          "multiple-emails",
-          "Invalid email format",
-          (value) => {
-            if (!value) return false;
-            const emails = value.split(",").map((email) => email.trim());
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emails.every((email) => emailRegex.test(email));
-          }
-        ),
+        emailId: Yup.string().email(),
       })
     ),
     // vendorEntityDemurageTariffs: Yup.array(
@@ -167,8 +151,8 @@ export default function VendorForm({ page = "vendor" }) {
     telephone2: "",
     fax: "",
     emailId: "",
-    tinNo: "",
-    vrnNo: "",
+    tinNo: null,
+    vrnNo: null,
     city: "",
     country: "",
     creditDays: 0,
@@ -177,56 +161,11 @@ export default function VendorForm({ page = "vendor" }) {
     contactPerson: "",
     // companyCode: "",
     rejectRemarks: "",
-    vendorEntityTariffs: [
-      {
-        id: Date.now(),
-        chargeName: "",
-        type: "",
-        finalDestination: "",
-        unitType: "",
-        currency: "",
-        unitRate: 0,
-        new: true,
-      },
-    ],
-    vendorEntityDemurageTariffs: [
-      {
-        id: Date.now(),
-        country: "",
-        containerType: "",
-        firstWeek: "",
-        secondWeek: "",
-        thirdWeek: "",
-        new: true,
-      },
-    ],
-    vendorEntityFreeDays: [
-      {
-        id: Date.now(),
-        country: "",
-        noOfFreeDays: 0,
-        new: true,
-      },
-    ],
-    vendorEntityEmails: [
-      {
-        id: Date.now(),
-        designation: "",
-        emailId: "",
-        new: true,
-      },
-    ],
-    vendorBankDetails: [
-      {
-        id: Date.now(),
-        bankName: "",
-        bankAddress: "",
-        currency: "",
-        swiftCode: "",
-        vendorId: 0,
-        new: true,
-      },
-    ],
+    vendorEntityTariffs: [],
+    vendorEntityDemurageTariffs: [],
+    vendorEntityFreeDays: [],
+    vendorEntityEmails: [],
+    vendorBankDetails: [],
   };
 
   const formik = useFormik({
@@ -302,7 +241,7 @@ export default function VendorForm({ page = "vendor" }) {
               ))}
             </TabList>
           </Box>
-          <TabPanel value={1}>
+          <TabPanel value={1} sx={{padding:"0px"}} >
             {isLoading ? (
               <Loader />
             ) : (
@@ -316,7 +255,7 @@ export default function VendorForm({ page = "vendor" }) {
               />
             )}
           </TabPanel>
-          <TabPanel value={2}>
+          <TabPanel value={2} sx={{padding:"0px"}} >
             <UploadFile
               customer_id={id}
               sourceType="VENDOR"
@@ -325,7 +264,7 @@ export default function VendorForm({ page = "vendor" }) {
               dropdownData={vendorSettingsData?.body?.documentType}
             />
           </TabPanel>
-          <TabPanel value={3}>
+          <TabPanel value={3}sx={{padding:"0px"}} >
             <AuditTimeLine
               auditDetails={AuditData}
               reloadDataHandler={fetchUserAudit}

@@ -31,8 +31,8 @@ export default function VendorFilterForm() {
             })
         );
     };
-    const StatusOptions = [{ value: "Active" }, { value: "InActive" }, { value: "New" }, { value: "Pendind Doc" }, { value: "Rejected" }];
-    const StatusOptionsDoc = [{ value: "Pending" }, { value: "Available" }];
+    const StatusOptions = [{ value: "Active" }, { value: "InActive" }, { value: "New" }, { value: "Pending_Documents" }, { value: "Rejected" }];
+    const StatusOptionsDoc = [{ value: false, label: "Pending" }, { value: true, label: "Available" }];
     return (
         <div>
             <Stack
@@ -75,7 +75,7 @@ export default function VendorFilterForm() {
                     <div style={{ width: "48%", marginLeft: "0px" }}>
                         <SelectBox
                             label="Doc Status"
-                            id="doc_status"
+                            id="isDoc"
                             options={StatusOptionsDoc}
                             value={formik.values.doc_status}
                             onChange={formik.handleChange}
@@ -110,11 +110,6 @@ export default function VendorFilterForm() {
                             borderRadius: '12px',
                             padding: '6px 16px',
                             textTransform: 'capitalize',
-                            backgroundColor: '#1976d2',
-                            color: '#fff',
-                            '&:hover': {
-                                backgroundColor: '#1565c0',
-                            },
                         }}
                     >
                         Apply

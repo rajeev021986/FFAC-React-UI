@@ -34,6 +34,9 @@ import PDFViewer from "./common/FileViewer/PDFViewer";
 import WordViewer from "./common/FileViewer/WordViewer";
 import TextViewer from "./common/FileViewer/TextViewer";
 import { StyledDataGrid } from "./common/Grid/styles";
+import UploadFilesDialog from "./UploadFilesDialog";
+import toast, { LoaderIcon } from "react-hot-toast";
+import CustomToast from "./common/Toast/CustomToast";
 // Custom styled drop zone
 const DropZone = styled(Box)(({ theme }) => ({
   border: "2px dashed #ccc",
@@ -58,6 +61,8 @@ const UploadFile = ({
   dropdownData,
   sourceType = null,
 }) => {
+  const [viewloader, setViewloader] = useState(false);
+  const [viewloaderId, setViewLoaderId] = useState();
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [deleteData, setDeleteData] = useState({});
@@ -70,8 +75,9 @@ const UploadFile = ({
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [viewDocument, setViewDocument] = useState({});
   const [fileData, setFileDaat] = useState({});
-  console.log(listData, "formData");
   const handleView = async (event, id, source, sourceId, documentType) => {
+    setViewloader(true);
+    setViewLoaderId(id);
     event.preventDefault();
     try {
       let source = sourceType;
@@ -102,6 +108,7 @@ const UploadFile = ({
     } catch (error) {
       console.log(error);
     }
+    setViewloader(false)
   };
 
   const handleViewDialogClose = () => {
@@ -129,12 +136,23 @@ const UploadFile = ({
   };
 
   const handleFileDrop = (event) => {
-    const files = event.target.files || event.dataTransfer.files;
-    if (files.length > 0) {
-      setUploadedFile(files[0]);
-      setDialogOpen(true);
+    const file = (event.target.files || event.dataTransfer.files)[0];
+    if (!file) return;
+    const maxFileSize = 10 * 1024 * 1024;
+    const invalidExtensions = ["zip", "exe"];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if (file.size > maxFileSize || invalidExtensions.includes(fileExtension)) {
+
+      return toast.custom(<CustomToast message={file.size > maxFileSize
+        ? "File size must be less than 10 MB."
+        : `.${fileExtension} files are not allowed.`} toast="error" />, {
+        closeButton: false,
+      });
     }
+    setUploadedFile(file);
+    setDialogOpen(true);
   };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -303,18 +321,19 @@ const UploadFile = ({
             height: "100%",
           }}
         >
-          <Visibility
-            style={{ cursor: "pointer", color: "#1976d2" }}
-            onClick={(event) =>
-              handleView(
-                event,
-                params.row.id,
-                params.row.source,
-                params.row.sourceId,
-                params.row.fileName
-              )
-            }
-          />
+          {viewloader && viewloaderId == params.id ? <LoaderIcon /> :
+            <Visibility
+              style={{ cursor: "pointer", color: "#1976d2" }}
+              onClick={(event) =>
+                handleView(
+                  event,
+                  params.row.id,
+                  params.row.source,
+                  params.row.sourceId,
+                  params.row.fileName
+                )
+              }
+            />}
           <Delete
             style={{ cursor: "pointer", color: "red" }}
             onClick={() => {
@@ -419,18 +438,19 @@ const UploadFile = ({
             height: "100%",
           }}
         >
-          <Visibility
-            style={{ cursor: "pointer", color: "#1976d2" }}
-            onClick={(event) =>
-              handleView(
-                event,
-                params.row.id,
-                params.row.source,
-                params.row.sourceId,
-                params.row.fileName
-              )
-            }
-          />
+          {viewloader && viewloaderId == params.id ? <LoaderIcon /> :
+            <Visibility
+              style={{ cursor: "pointer", color: "#1976d2" }}
+              onClick={(event) =>
+                handleView(
+                  event,
+                  params.row.id,
+                  params.row.source,
+                  params.row.sourceId,
+                  params.row.fileName
+                )
+              }
+            />}
           <Delete
             style={{ cursor: "pointer", color: "red" }}
             onClick={() => {
@@ -516,7 +536,10 @@ const UploadFile = ({
                   id="file-input"
                   type="file"
                   style={{ display: "none" }}
-                  onChange={handleFileDrop}
+                  onChange={(e) => {
+                    handleFileDrop(e);
+                    e.target.value = "";
+                  }}
                   disabled={disabled}
                 />
               </DropZone>
@@ -538,203 +561,24 @@ const UploadFile = ({
             </Box>
           </Grid>
 
-          <Dialog
-            open={dialogOpen}
-            onClose={handleDialogClose}
-            maxWidth="sm"
-            fullWidth
-          >
-            <DialogTitle>
-              <Typography variant="h6" component="div">
-                File Details
-              </Typography>
-            </DialogTitle>
-            <DialogContent dividers>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <SelectBox
-                    label="Document Type"
-                    id="documentType"
-                    options={dropdownData}
-                    value={formData.documentType}
-                    onChange={handleInputChange}
-                    error={!!formErrors.documentType}
-                    helperText={formErrors.documentType}
-                  />
-                </Grid>
-                {sourceType == "CUSTOMER" && (
-                  <Grid item xs={12}>
-                    <TextField
-                      margin="dense"
-                      label="Issue Date"
-                      name="issueDate"
-                      type="date"
-                      fullWidth
-                      value={formData.issueDate}
-                      onChange={handleInputChange}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                )}
-                {sourceType == "CUSTOMER" && (
-                  <Grid item xs={12}>
-                    <TextField
-                      margin="dense"
-                      label="Number"
-                      name="number"
-                      fullWidth
-                      value={formData.number}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                )}
-                {sourceType == "CUSTOMER" && (
-                  <Grid item xs={12}>
-                    <TextField
-                      margin="dense"
-                      label="Expiry Date"
-                      name="expiryDate"
-                      type="date"
-                      fullWidth
-                      value={formData.expiryDate}
-                      onChange={handleInputChange}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                )}
-              </Grid>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleDialogClose} color="secondary">
-                Cancel
-              </Button>
-              <Button onClick={handleDialogSave} color="primary">
-                Save
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog
-            open={openConfirmation}
-            onClose={onCloseConfiramtion}
-            PaperProps={{
-              sx: {
-                padding: 2,
-                borderRadius: 4,
-                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-              },
-            }}
-          >
-            <DialogTitle
-              sx={{
-                textAlign: "center",
-                fontWeight: "bold",
-                color: "primary.main",
-                borderBottom: "1px solid #ddd",
-                pb: 2,
-              }}
-            >
-              Are you sure you want to delete it?
-            </DialogTitle>
-            <DialogContent
-              sx={{
-                textAlign: "center",
-                color: "text.secondary",
-                fontSize: "1rem",
-              }}
-            >
-              <p>
-                <strong>{deleteData.fileName}</strong>
-              </p>
-              <p>This action cannot be undone.</p>
-            </DialogContent>
-            <DialogActions
-              sx={{
-                padding: 0,
-                marginX: 5,
-                justifyContent: "space-around",
-              }}
-            >
-              <Button
-                onClick={onCloseConfiramtion}
-                color="primary"
-                variant="outlined"
-                sx={{
-                  minWidth: 100,
-                  borderRadius: 50,
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={onDelete}
-                variant="contained"
-                sx={{
-                  minWidth: 100,
-                  borderRadius: 50,
-                  backgroundColor: "red",
-                  color: "white",
-                }}
-              >
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog
-            open={viewDialogOpen}
-            onClose={handleViewDialogClose}
-            maxWidth="lg"
-            fullWidth
-          >
-            <DialogTitle>{viewDocument.documentType}</DialogTitle>
-            <DialogContent>
-              {fileData.documentType == "XL" && (
-                <ExcelViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-              {fileData.documentType == "IMG" && (
-                <ImageViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-              {fileData.documentType == "PDF" && (
-                <PDFViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-              {fileData.documentType == "MSW" && (
-                <WordViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-              {fileData.documentType == "TXT" && (
-                <TextViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleViewDialogClose} color="secondary">
-                Close
-              </Button>
-              <Button
-                onClick={() => {
-                  const link = document.createElement("a");
-                  link.href = viewDocument.url;
-                  link.download = viewDocument.documentType;
-                  link.click();
-                }}
-                color="primary"
-              >
-                Download
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <UploadFilesDialog
+            dialogOpen={dialogOpen}
+            handleDialogClose={handleDialogClose}
+            dropdownData={dropdownData}
+            formData={formData}
+            handleInputChange={handleInputChange}
+            formErrors={formErrors}
+            sourceType={sourceType}
+            handleDialogSave={handleDialogSave}
+            openConfirmation={openConfirmation}
+            onCloseConfiramtion={onCloseConfiramtion}
+            deleteData={deleteData}
+            onDelete={onDelete}
+            viewDialogOpen={viewDialogOpen}
+            handleViewDialogClose={handleViewDialogClose}
+            viewDocument={viewDocument}
+            fileData={fileData}
+          />
         </Grid>
       )}
     </>

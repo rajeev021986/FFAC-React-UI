@@ -43,7 +43,7 @@ export default function VendorEditGrid({
     } else if (inputId === "currency") {
       inputId = "CURRENCY";
     } else if (inputId === "country") {
-      inputId = "COUNTRY";
+      inputId = "PORT_COUNTRY";
     }
     if (!inputValue) return [];
     const response = await ApiManager.fetchVesselSuggestions(
@@ -338,15 +338,14 @@ export default function VendorEditGrid({
       },
       columns: [
         {
-          field: "country",
-          headerName: "Country",
+          field: "freeTime",
+          headerName: "Free Time",
           width: 200,
           renderCell: (params) => (
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
-              <InputBox
+              <TextField
                 size="small"
                 value={params.value}
-                type="number"
                 onChange={(e) => OnChange(params, e, "vendorEntityDemurageTariffs")}
                 sx={{
                   marginTop: "0px",
@@ -356,58 +355,8 @@ export default function VendorEditGrid({
               />
             </div>
           ),
-          renderCell: (params) => {
-            return (
-              <AutoCompleteInput
-                id="country"
-                suggestionName="country_name"
-                value={params.value}
-                error={
-                  formik.errors.vendorEntityDemurageTariffs?.[params.rowIndex]
-                    ?.chargeName
-                }
-                onChange={(newValue) => {
-                  const rowIndex = formik.values.vendorEntityDemurageTariffs.findIndex(
-                    (entity) => entity.id === params.id
-                  );
-                  // setTimeout(() => {
-                  formik.setValues({
-                    ...formik.values,
-                    vendorEntityDemurageTariffs: formik.values.vendorEntityDemurageTariffs.map(
-                      (entity, index) =>
-                        index === rowIndex
-                          ? { ...entity, chargeName: newValue }
-                          : entity
-                    ),
-                  });
-                  // }, 1500);
-                }}
-                fetchSuggestions={fetchSuggestions}
-              />
-            );
-          },
         },
-        {
-          field: "containerType",
-          headerName: "Container Type",
-          width: 200,
-          renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}> <SelectBox
-              size="small"
-              sx={{
-                marginTop: "0px",
-                marginBottom: "0px"
-              }}
-              options={vendorSettingsData?.body?.container}
-              value={params.value}
-              onChange={(e) => OnChange(params, e, "vendorEntityDemurageTariffs")}
-            /></div>
-          ),
-        },
-        ...["firstWeek",
-          "secondWeek",
-          "thirdWeek",
-          "freeTime",
+        ...[
           "freeTimeType",
           "t1Start",
           "t1End",

@@ -47,7 +47,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
 import ApiManager from "../../services/ApiManager";
 import DeleteDialog from "../../components/common/DeleteDialog";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import CustomToast from "../../components/common/Toast/CustomToast";
 
@@ -56,6 +56,7 @@ export default function CustomerScreen({ page }) {
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
@@ -72,10 +73,10 @@ export default function CustomerScreen({ page }) {
   };
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
+    ? [{ name: "New Customer" }, { name: "Copy" }, { name: exportLoader ? <LoaderIcon /> : "Export" }]
     : page === "customerApprove"
-    ? [{ name: "Export" }]
-    : [{ name: "New Customer" }, { name: "Export" }];
+      ? [{ name: "Export" }]
+      : [{ name: "New Customer" }, { name: exportLoader ? <LoaderIcon /> : "Export" }];
   const query = {
     page: codeCustomerSelector?.pagination?.page + 1,
     size: codeCustomerSelector?.pagination?.pageSize,
@@ -162,6 +163,7 @@ export default function CustomerScreen({ page }) {
       });
     }
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
         const blob = await ApiManager.fetchCustomerDatasExcel(
           query,
@@ -184,6 +186,7 @@ export default function CustomerScreen({ page }) {
           }
         );
       }
+      setExportLoader(false);
     }
   };
 
@@ -323,7 +326,7 @@ export default function CustomerScreen({ page }) {
             handlePage={handlePage}
             data={CustomerData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
+            columnVisibilityHandler={() => { }}
             paginationModel={codeCustomerSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={codeCustomerSelector.sortModel}

@@ -1,9 +1,9 @@
 export function StatusChip(status, field) {
     if (field === "document") {
         switch (status) {
-            case true:
-                return <div style={{ ...styles.chip, backgroundColor: "#fdf2e9", borderColor: "#e67e22", color: "#e67e22" }}>PENDING</div>
             case false:
+                return <div style={{ ...styles.chip, backgroundColor: "#fdf2e9", borderColor: "#e67e22", color: "#e67e22" }}>PENDING</div>
+            case true:
                 return <div style={{ ...styles.chip, backgroundColor: "#e9f7ef", borderColor: "#27ae60", color: "#27ae60" }}>AVAILABLE</div>
         }
     }

@@ -28,11 +28,12 @@ import { VENDOR_SORT_OPTIONS } from "../../data/options";
 import CardsView from "../../components/common/Cards/CardsView";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import DeleteDialog from "../../components/common/DeleteDialog";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import ApiManager from "../../services/ApiManager";
 
 export default function VendorScreen({ page }) {
   const vendorSelector = useSelector((state) => state.vendor);
+  const [exportLoader, setExportLoader] = useState(false);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -72,7 +73,7 @@ export default function VendorScreen({ page }) {
   const dispatch = useDispatch();
   const nav = useNavigate();
   const payload = Object.entries(vendorSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       return {
         fieldName: key,
@@ -81,6 +82,7 @@ export default function VendorScreen({ page }) {
         logicalOperator: "and",
       };
     });
+  console.log(payload, "payload")
   const query = {
     page: vendorSelector?.pagination?.page + 1,
     size: vendorSelector?.pagination?.pageSize,
@@ -122,8 +124,8 @@ export default function VendorScreen({ page }) {
       actions: Actions,
     });
   const actions = seletectBox
-    ? [{ name: "New Vendor" }, { name: "Copy" }, { name: "Export" }]
-    : page == "vendor" ? [{ name: "New Vendor" }, { name: "Export" }] : [{ name: "Export" }];
+    ? [{ name: "New Vendor" }, { name: "Copy" }, { name: exportLoader ? <LoaderIcon /> : "Export" }]
+    : page == "vendor" ? [{ name: "New Vendor" }, { name: exportLoader ? <LoaderIcon /> : "Export" }] : [{ name: exportLoader ? <LoaderIcon /> : "Export" }];
   const handleActionClick = async (actionName) => {
     if (actionName === "New Vendor") {
       nav("addVendor", {
@@ -134,6 +136,7 @@ export default function VendorScreen({ page }) {
       nav("addVendor", { state: { id: seletectBox, type: "copy" } });
     }
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
         const blob = await ApiManager.fetchCustomerDatasExcel(query, payload, "vendor");
         const url = window.URL.createObjectURL(blob);
@@ -147,6 +150,7 @@ export default function VendorScreen({ page }) {
       } catch (error) {
         console.error('Download failed:', error);
       }
+      setExportLoader(false);
     }
   };
   return (
