@@ -105,9 +105,7 @@ const UploadFile = ({
       const url = URL.createObjectURL(blob);
       setViewDocument({ url, documentType });
       setViewDialogOpen(true);
-    } catch (error) {
-
-    }
+    } catch (error) {}
     setViewloader(false);
   };
 
@@ -130,7 +128,6 @@ const UploadFile = ({
       reloadDataHandler();
       setLoading(false);
     } catch (error) {
-
       setLoading(false);
     }
   };
@@ -201,7 +198,6 @@ const UploadFile = ({
       reloadDataHandler();
       setLoading(false);
     } catch (error) {
-
       setLoading(false);
       setDialogOpen(false);
     }
@@ -491,7 +487,6 @@ const UploadFile = ({
       setListData(res.body);
       setLoading(false);
     } catch (error) {
-
       setLoading(false);
     }
   };
@@ -508,14 +503,20 @@ const UploadFile = ({
           <Loader />
         </Grid>
       ) : (
-        <Grid container spacing={2} padding={1} marginTop={1}>
+        <Grid
+          container
+          spacing={2}
+          paddingLeft={1}
+          paddingRight={1}
+          marginTop={1}
+        >
           <Typography
             variant="h5"
             gutterBottom
             style={{
               width: "100%",
-              marginLeft: "15px",
               margin: "0px ! important",
+              paddingLeft: "16px",
             }}
           >
             Select Files

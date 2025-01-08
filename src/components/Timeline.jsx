@@ -35,9 +35,15 @@ function TimelineComponent({ data }) {
 
   return (
     <>
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          marginBottom: "8px",
+        }}
+      >
         {data?.length > 0 ? (
-          <Timeline sx={{ padding: 0 }}>
+          <Timeline sx={{ padding: 0, margin: 0 }}>
             {data?.map((entry, index) => (
               <div style={{ display: "flex", padding: "0px" }} key={index}>
                 <TimelineItem

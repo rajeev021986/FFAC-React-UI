@@ -292,7 +292,6 @@ export default function CustomerScreen({ page }) {
                   options={CUSTOMER_SORT_OPTIONS}
                   value={codeCustomerSelector.sortBy}
                   onChange={(event) => {
-
                     dispatch(setSortBy(event.target.value));
                   }}
                   sx={{
@@ -372,8 +371,8 @@ export default function CustomerScreen({ page }) {
             zIndex: 1301,
           }}
         >
-          <Box sx={{ p: 2 }}>
-            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+          <Box>
+            <Typography variant="h6" component="div" margin="8px">
               Customer Audit Logs
             </Typography>
             <AuditTimeLine
