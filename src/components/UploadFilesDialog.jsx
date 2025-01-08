@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -34,8 +35,9 @@ export default function UploadFilesDialog({
   handleViewDialogClose,
   viewDocument,
   fileData,
+  downloadIntgater,
+  setFormData,
 }) {
-  const [typeField, setTypeField] = useState(false);
   return (
     <>
       <Dialog
@@ -51,40 +53,35 @@ export default function UploadFilesDialog({
         </DialogTitle>
         <DialogContent dividers>
           <Grid container spacing={2}>
-            {typeField ? (
-              <Grid item xs={12}>
-                <TextField
-                  label="Document Type"
-                  id="documentType"
-                  name="documentType"
-                  value={formData.documentType}
-                  onChange={handleInputChange}
-                  error={!!formErrors.documentType}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-            ) : (
-              <Grid item xs={12}>
-                <SelectBox
-                  label="Document Type"
-                  id="documentType"
-                  options={[
-                    ...(Array.isArray(dropdownData) ? dropdownData : []),
-                    { value: "Other" },
-                  ]}
-                  value={formData.documentType}
-                  onChange={(e) => {
-                    handleInputChange(e);
-                    if (e.target.value == "Other") {
-                      setTypeField(true);
-                    }
-                  }}
-                  error={!!formErrors.documentType}
-                  helperText={formErrors.documentType}
-                />
-              </Grid>
-            )}
+            <Grid item xs={12}>
+              <Autocomplete
+                id="documentType"
+                name="documentType"
+                value={formData.documentType}
+                size="small"
+                onChange={(event, newValue) => {
+                  setFormData((p) => ({ ...p, documentType: newValue }));
+                }}
+                inputValue={formData.documentType}
+                onInputChange={(event, newValue) => {
+                  setFormData((p) => ({ ...p, documentType: newValue }));
+                }}
+                error={!!formErrors.documentType}
+                helperText={formErrors.documentType}
+                options={dropdownData?.map((a) => a.value) || []}
+                freeSolo
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Document Type"
+                    name="documentType"
+                    variant="outlined"
+                    error={!!formErrors.documentType}
+                    helperText={formErrors.documentType}
+                  />
+                )}
+              />
+            </Grid>
             {sourceType == "CUSTOMER" && (
               <Grid item xs={12}>
                 <TextField
@@ -192,6 +189,7 @@ export default function UploadFilesDialog({
               link.href = viewDocument.url;
               link.download = viewDocument.documentType;
               link.click();
+              downloadIntgater();
             }}
             color="primary"
           >

@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import Loader from "../../../common/Loader/Loader";
 import { useLocation } from "react-router-dom";
 import UploadFile from "../../../UploadFile";
-import { Box, Grid, Stack, Tab } from "@mui/material";
+import { Box, Card, Grid, Stack, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import ScreenToolbar from "../../../common/ScreenToolbar";
@@ -104,12 +104,10 @@ export default function VendorForm({ page = "vendor" }) {
     //   })
     // ).required("Vendor Bank Details are required"),
   });
-  const { data: optionsSettingsData } =
+  const { data: optionsSettingsData, isLoading: dropLoadco } =
     useGetOptionsSettingsQuery("common_settings");
-  const { data: vendorSettingsData } =
+  const { data: vendorSettingsData, isLoading: dropLoadven } =
     useGetOptionsSettingsQuery("vendor_settings");
-  const { data: customerSettingsData } =
-    useGetOptionsSettingsQuery("customer_settings");
 
   useEffect(() => {
     const handleFetchVendor = async () => {
@@ -192,7 +190,9 @@ export default function VendorForm({ page = "vendor" }) {
       };
       if (type == "copy" || type == "new") {
         try {
-          updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest ? 0 : 1;
+          updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest
+            ? 0
+            : 1;
           let res = await addVendor(updatedValue).unwrap();
           if (res.success) {
             toast.success(res.message);
@@ -203,8 +203,10 @@ export default function VendorForm({ page = "vendor" }) {
         }
       } else {
         try {
-          Boolean(updatedValue.status == "Active") && (updatedValue.isApproved = 1);
-          Boolean(updatedValue.status == "Inactive") && (updatedValue.isApproved = -2);
+          Boolean(updatedValue.status == "Active") &&
+            (updatedValue.isApproved = 1);
+          Boolean(updatedValue.status == "Inactive") &&
+            (updatedValue.isApproved = -2);
           let res = await updateVendor(updatedValue).unwrap();
           if (res.success) {
             toast.success(res.message);
@@ -225,51 +227,65 @@ export default function VendorForm({ page = "vendor" }) {
   };
   return (
     <>
-      <Box sx={{ width: "100%", typography: "body1" }}>
-        <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
-        <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              {tabs.map((a) => (
-                <Tab
-                  sx={{ fontSize: "1rem", textTransform: "capitalize" }}
-                  label={a.label}
-                  value={a.value}
+      <Box
+        sx={{
+          width: "100%",
+          typography: "body1",
+          padding: "0px",
+          margin: "0px",
+        }}
+      >
+        <Stack sx={{ padding: "8px 0px" }}>
+          <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
+        </Stack>
+        {isLoading || dropLoadven || dropLoadco ? (
+          <Loader />
+        ) : (
+          <Card>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  {tabs.map((a) => (
+                    <Tab
+                      sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                      label={a.label}
+                      value={a.value}
+                    />
+                  ))}
+                </TabList>
+              </Box>
+              <TabPanel value={1} sx={{ padding: "0px" }}>
+                <VendorFormInput
+                  formik={formik}
+                  type={type}
+                  disabled={page == "vendorApproval"}
+                  optionsSettingsData={optionsSettingsData}
+                  vendorSettingsData={vendorSettingsData}
+                  page={page}
                 />
-              ))}
-            </TabList>
-          </Box>
-          <TabPanel value={1} sx={{padding:"0px"}} >
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <VendorFormInput
-                formik={formik}
-                type={type}
-                disabled={page == "vendorApproval"}
-                optionsSettingsData={optionsSettingsData}
-                vendorSettingsData={vendorSettingsData}
-                page={page}
-              />
-            )}
-          </TabPanel>
-          <TabPanel value={2} sx={{padding:"0px"}} >
-            <UploadFile
-              customer_id={id}
-              sourceType="VENDOR"
-              page={page}
-              disabled={page == "vendorApproval"}
-              dropdownData={vendorSettingsData?.body?.documentType}
-            />
-          </TabPanel>
-          <TabPanel value={3}sx={{padding:"0px"}} >
-            <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
-            />
-          </TabPanel>
-        </TabContext>
+              </TabPanel>
+              <TabPanel value={2} sx={{ padding: "0px" }}>
+                <UploadFile
+                  customer_id={id}
+                  sourceType="VENDOR"
+                  page={page}
+                  disabled={page == "vendorApproval"}
+                  dropdownData={vendorSettingsData?.body?.documentType}
+                />
+              </TabPanel>
+              <TabPanel value={3} sx={{ padding: "0px" }}>
+                <AuditTimeLine
+                  auditDetails={AuditData}
+                  reloadDataHandler={fetchUserAudit}
+                  loading={isLoadingAudit}
+                />
+              </TabPanel>
+            </TabContext>
+          </Card>
+        )}
       </Box>
     </>
   );

@@ -75,6 +75,11 @@ const UploadFile = ({
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [viewDocument, setViewDocument] = useState({});
   const [fileData, setFileDaat] = useState({});
+  const downloadIntgater = async () => {
+    await ApiManager.fileDownloadIntegater(viewloaderId)
+      .then((e) => toast.success(e.message))
+      .catch((e) => toast.error(e.message));
+  };
   const handleView = async (event, id, source, sourceId, documentType) => {
     setViewloader(true);
     setViewLoaderId(id);
@@ -105,10 +110,11 @@ const UploadFile = ({
       const url = URL.createObjectURL(blob);
       setViewDocument({ url, documentType });
       setViewDialogOpen(true);
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Some thing went Wrong");
+    }
     setViewloader(false);
   };
-
   const handleViewDialogClose = () => {
     setViewDialogOpen(false);
     setViewDocument({});
@@ -165,11 +171,11 @@ const UploadFile = ({
   const handleDialogClose = () => {
     setDialogOpen(false);
     setUploadedFile(null);
+    setFormData({});
   };
   const onCloseConfiramtion = () => {
     setOpenConfirmation(false);
   };
-
   const validateForm = () => {
     const errors = {};
     if (!formData.documentType) {
@@ -201,6 +207,7 @@ const UploadFile = ({
       setLoading(false);
       setDialogOpen(false);
     }
+    setFormData({});
   };
 
   const handleDate = (date) => {
@@ -595,6 +602,8 @@ const UploadFile = ({
             handleViewDialogClose={handleViewDialogClose}
             viewDocument={viewDocument}
             fileData={fileData}
+            downloadIntgater={downloadIntgater}
+            setFormData={setFormData}
           />
         </Grid>
       )}

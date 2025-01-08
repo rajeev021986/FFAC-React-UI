@@ -36,7 +36,7 @@ export default function VendorEditGrid({
         newRowRef.current.focus();
       }
     }, 1000);
-  }
+  };
   const fetchSuggestions = async (inputValue, inputId) => {
     if (inputId === "chargeName") {
       inputId = "CHARGE";
@@ -60,14 +60,13 @@ export default function VendorEditGrid({
     );
     formik.setValues({
       ...formik.values,
-      [name]: formik.values[name].map(
-        (entity, index) =>
-          index === rowIndex
-            ? { ...entity, [params.field]: e.target.value }
-            : entity
+      [name]: formik.values[name].map((entity, index) =>
+        index === rowIndex
+          ? { ...entity, [params.field]: e.target.value }
+          : entity
       ),
     });
-  }
+  };
 
   const TabsHosts = [
     {
@@ -159,16 +158,27 @@ export default function VendorEditGrid({
           headerName: "Type",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}> <SelectBox
-              size="small"
-              sx={{
-                marginTop: "0px",
-                marginBottom: "0px"
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
               }}
-              options={vendorSettingsData?.body?.tarifType}
-              value={params.value}
-              onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
-            /></div>
+            >
+              {" "}
+              <SelectBox
+                size="small"
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px",
+                }}
+                options={vendorSettingsData?.body?.tarifType}
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
+              />
+            </div>
           ),
         },
         {
@@ -176,14 +186,22 @@ export default function VendorEditGrid({
           headerName: "Final Destination",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <TextField
                 size="small"
                 value={params.value}
                 onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
               />
             </div>
@@ -194,16 +212,27 @@ export default function VendorEditGrid({
           headerName: "Unit Type",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}> <SelectBox
-              size="small"
-              sx={{
-                marginTop: "0px",
-                marginBottom: "0px"
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
               }}
-              options={vendorSettingsData?.body?.unitType}
-              value={params.value}
-              onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
-            /></div>
+            >
+              {" "}
+              <SelectBox
+                size="small"
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px",
+                }}
+                options={vendorSettingsData?.body?.unitType}
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
+              />
+            </div>
           ),
         },
         {
@@ -246,7 +275,15 @@ export default function VendorEditGrid({
           headerName: "Unit Rate",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <InputBox
                 size="small"
                 value={params.value}
@@ -254,7 +291,7 @@ export default function VendorEditGrid({
                 onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
               />
             </div>
@@ -342,14 +379,24 @@ export default function VendorEditGrid({
           headerName: "Free Time",
           width: 200,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <TextField
                 size="small"
                 value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorEntityDemurageTariffs")}
+                onChange={(e) =>
+                  OnChange(params, e, "vendorEntityDemurageTariffs")
+                }
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
                 inputRef={newRowRef}
               />
@@ -369,28 +416,47 @@ export default function VendorEditGrid({
           "t3Start",
           "t3End",
           "t3Type",
-          "t3Rate"].map((a) => {
-            return {
-              field: a,
-              headerName: a.replace(/([a-z])([A-Z])/g, '$1 $2').charAt(0).toUpperCase() + a.slice(1),
-              // flex: 1,
-              width: 100,
-              headerName: a.replace(/([a-z])([A-Z])/g, '$1 $2').charAt(0).toUpperCase() + a.slice(1),
-              renderCell: (params) => (
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
-                  <TextField
-                    size="small"
-                    value={params.value}
-                    onChange={(e) => OnChange(params, e, "vendorEntityDemurageTariffs")}
-                    sx={{
-                      marginTop: "0px",
-                      marginBottom: "0px"
-                    }}
-                  />
-                </div>
-              ),
-            }
-          }),
+          "t3Rate",
+        ].map((a) => {
+          return {
+            field: a,
+            headerName:
+              a
+                .replace(/([a-z])([A-Z])/g, "$1 $2")
+                .charAt(0)
+                .toUpperCase() + a.slice(1),
+            // flex: 1,
+            width: 100,
+            headerName:
+              a
+                .replace(/([a-z])([A-Z])/g, "$1 $2")
+                .charAt(0)
+                .toUpperCase() + a.slice(1),
+            renderCell: (params) => (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <TextField
+                  size="small"
+                  value={params.value}
+                  onChange={(e) =>
+                    OnChange(params, e, "vendorEntityDemurageTariffs")
+                  }
+                  sx={{
+                    marginTop: "0px",
+                    marginBottom: "0px",
+                  }}
+                />
+              </div>
+            ),
+          };
+        }),
 
         {
           field: "actions",
@@ -460,28 +526,53 @@ export default function VendorEditGrid({
         {
           field: "country",
           headerName: "Country",
-          flex: 1,
-          renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
-              <TextField
-                size="small"
+          flex: 2,
+          renderCell: (params) => {
+            return (
+              <AutoCompleteInput
+                id="country"
+                suggestionName="country"
                 value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorEntityFreeDays")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px"
+                error={
+                  formik.errors.vendorEntityFreeDays?.[params.rowIndex]
+                    ?.chargeName
+                }
+                onChange={(newValue) => {
+                  const rowIndex = formik.values.vendorEntityFreeDays.findIndex(
+                    (entity) => entity.id === params.id
+                  );
+                  // setTimeout(() => {
+                  formik.setValues({
+                    ...formik.values,
+                    vendorEntityFreeDays:
+                      formik.values.vendorEntityFreeDays.map((entity, index) =>
+                        index === rowIndex
+                          ? { ...entity, country: newValue }
+                          : entity
+                      ),
+                  });
+                  // }, 1500);
                 }}
                 inputRef={newRowRef}
+                fetchSuggestions={fetchSuggestions}
               />
-            </div>
-          ),
+            );
+          },
         },
         {
           field: "noOfFreeDays",
           headerName: "No Of Free Days",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <TextField
                 size="small"
                 type="number"
@@ -489,11 +580,11 @@ export default function VendorEditGrid({
                 onChange={(e) => OnChange(params, e, "vendorEntityFreeDays")}
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
               />
             </div>
-          )
+          ),
         },
         {
           field: "actions",
@@ -565,32 +656,51 @@ export default function VendorEditGrid({
           headerName: "Designation",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}> <SelectBox
-              size="small"
-              sx={{
-                marginTop: "0px",
-                marginBottom: "0px"
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
               }}
-              options={designation}
-              value={params.value}
-              onChange={(e) => OnChange(params, e, "vendorEntityEmails")}
-              inputRef={newRowRef}
-            /></div>
-          )
+            >
+              {" "}
+              <SelectBox
+                size="small"
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px",
+                }}
+                options={designation}
+                value={params.value}
+                onChange={(e) => OnChange(params, e, "vendorEntityEmails")}
+                inputRef={newRowRef}
+              />
+            </div>
+          ),
         },
         {
           field: "emailId",
           headerName: "Email",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <TextField
                 size="small"
                 value={params.value}
                 onChange={(e) => OnChange(params, e, "vendorEntityEmails")}
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
               />
             </div>
@@ -669,14 +779,22 @@ export default function VendorEditGrid({
           headerName: "Bank Name",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <TextField
                 size="small"
                 value={params.value}
                 onChange={(e) => OnChange(params, e, "vendorBankDetails")}
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
                 inputRef={newRowRef}
               />
@@ -688,14 +806,22 @@ export default function VendorEditGrid({
           headerName: "Bank Address",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <TextField
                 size="small"
                 value={params.value}
                 onChange={(e) => OnChange(params, e, "vendorBankDetails")}
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
               />
             </div>
@@ -706,14 +832,22 @@ export default function VendorEditGrid({
           headerName: "accountNo",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <TextField
                 size="small"
                 value={params.value}
                 onChange={(e) => OnChange(params, e, "vendorBankDetails")}
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
               />
             </div>
@@ -724,14 +858,22 @@ export default function VendorEditGrid({
           headerName: "Currency",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <TextField
                 size="small"
                 value={params.value}
                 onChange={(e) => OnChange(params, e, "vendorBankDetails")}
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
               />
             </div>
@@ -742,14 +884,22 @@ export default function VendorEditGrid({
           headerName: "Swift Code",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <TextField
                 size="small"
                 value={params.value}
                 onChange={(e) => OnChange(params, e, "vendorBankDetails")}
                 sx={{
                   marginTop: "0px",
-                  marginBottom: "0px"
+                  marginBottom: "0px",
                 }}
               />
             </div>
@@ -795,7 +945,7 @@ export default function VendorEditGrid({
       >
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example" >
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
               {TabsHosts.map((value, index) => (
                 <Tab
                   sx={{ fontSize: "1rem", textTransform: "capitalize" }}

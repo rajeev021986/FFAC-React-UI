@@ -1,48 +1,61 @@
-
-
 const ENDPOINTS = {
-    LOGIN: () => `/auth-service/auth/login`,
-    ADD_USER: () => `/users`,
-    GET_USERS: (limit, page) => `/users?limit=${limit}&page=${page}`,
-    GET_VESSEL_OPTIONS: (search) => `/vessel?vessel=${search}`,
-    GET_MENU: () => `/admin-service/v1/menu/submenu/permissions?userId=admin`,
-    POL_POD_OPTION: (search) => `/getPolPOD?search=${search}`,
-    FINAL_DESTI_OPTION: (search) => `/getFinalDestination?search=${search}`,
-    Company_OPTION: (role, search) => `/company?role=${role}&search=${search}`,
-    CHECK_USER: () => `/auth/check_user`,
-    REJECT_USER: () => '/users/reject_request',
-    OTM_BOL: (bol) => `/otm_bol?bol=${bol}`,
-    GET_SALES_OPTIONS: (name, search) => `/getAutoComplete?name=${name}&search=${search}`,
-    GET_CITY_OPTIONS: (name, search) => `/getAutoComplete?name=${name}&search=${search}`,
-    GET_COMMON_OPTIONS: (name, search) => `/getAutoComplete?name=${name}&search=${search}`,
-    GET_CUSTOMER_AUDIT: (id) => `/entity-service/v1/customer/audit/${id}`,
-    GET_CUSTOMER_DOCUMENT_FILE: (source, id) => `/entity-service/v1/file?source=${source}&sourceId=${id}`,
-    DOWNLOAD_DOCUMENT: (id, source, sourceId) => `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
-    DOCUMENT_DELETE: (id, source, sourceId) => `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
-    GET_CUSTOMER_DETAILS: (id) => `/entity-service/v1/customer/${id}`,
-    CUSTOMER_APPROVE_REQUEST: (id, type) => `/entity-service/v1/approval/approved/${type}/${id}`,
-    CUSTOMER_REJECT_REQUEST: (id, type) => `/entity-service/v1/approval/rejected/${type}/${id}`,
-    FETCH_CUSTOMER_DATA_EXCEL: (queryString, source) => `/entity-service/v1/${source}/export?${queryString}`,
-    FETCH_PORT_DATA_EXCEL: (queryString, source) => `/master-service/v1/${source}/export?${queryString}`,
-    GET_USER_DATA: (id) => `/admin-service/v1/user/${id}`,
-    ADD_USER_DATA: () => `/admin-service/v1/user`,
-    UPDATE_USER_DATA: () => `/admin-service/v1/user`,
-    DELETE_ROLE: (id) => `/admin-service/v1/role/${id}`,
-    REMOVE_ASSIGNED_USER: (params) => `/admin-service/v1/${params}`,
-    ADD_ROLE: () => `/admin-service/v1/role`,
-    GET_ROLE_PERMISSIONS: (id) => `/admin-service/v1/menu/submenu/permissions/role/${id}`,
-    DELETE_USER: (id) => `/admin-service/v1/user/${id}`,
-    GET_ROLES: () => `/admin-service/v1/role`,
-    UPDATE_ROLE_PERMISSIONS: () => `/admin-service/v1/role/permissions/update`,
-    USER_PASS_RESET: () => `/admin-service/v1/user/update/password`,
-    UPDATE_USER_PROFILE: () => `/admin-service/v1/profile`,
-    UPDATE_USER_PROFILE_IMAGE: (id) => `/admin-service/v1/profile/image?id=${id}`,
-    USER_PASS_RESET: () => `/admin-service/v1/user/update/password`,
-    GET_EDIT_VESSEL: (id) => `/master-service/v1/vessel/${id}`,
-    FETCH_VESSEL_DATA_EXCEL: (queryString) => `/master-service/v1/vessel/export?${queryString}`,
-    FETCH_VESSEL_SUGGESTIONS: (inputValue, id) => `/admin-service/v1/data?pattern=${inputValue}&type=${id}`,
-    FETCH_VOYAGE_DATA_EXCEL: (queryString) => `/master-service/v1/vessel/voyage/export?${queryString}`,
-    GET_EDIT_VOYAGE: (id) => `/master-service/v1/vessel/voyage/${id}`,
-}
+  LOGIN: () => `/auth-service/auth/login`,
+  ADD_USER: () => `/users`,
+  GET_USERS: (limit, page) => `/users?limit=${limit}&page=${page}`,
+  GET_VESSEL_OPTIONS: (search) => `/vessel?vessel=${search}`,
+  GET_MENU: () => `/admin-service/v1/menu/submenu/permissions?userId=admin`,
+  POL_POD_OPTION: (search) => `/getPolPOD?search=${search}`,
+  FINAL_DESTI_OPTION: (search) => `/getFinalDestination?search=${search}`,
+  Company_OPTION: (role, search) => `/company?role=${role}&search=${search}`,
+  CHECK_USER: () => `/auth/check_user`,
+  REJECT_USER: () => "/users/reject_request",
+  OTM_BOL: (bol) => `/otm_bol?bol=${bol}`,
+  GET_SALES_OPTIONS: (name, search) =>
+    `/getAutoComplete?name=${name}&search=${search}`,
+  GET_CITY_OPTIONS: (name, search) =>
+    `/getAutoComplete?name=${name}&search=${search}`,
+  GET_COMMON_OPTIONS: (name, search) =>
+    `/getAutoComplete?name=${name}&search=${search}`,
+  GET_CUSTOMER_AUDIT: (id) => `/entity-service/v1/customer/audit/${id}`,
+  GET_CUSTOMER_DOCUMENT_FILE: (source, id) =>
+    `/entity-service/v1/file?source=${source}&sourceId=${id}`,
+  DOWNLOAD_DOCUMENT: (id, source, sourceId) =>
+    `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
+  DOCUMENT_DELETE: (id, source, sourceId) =>
+    `/entity-service/v1/file/${id}?source=${source}&sourceId=${sourceId}`,
+  GET_CUSTOMER_DETAILS: (id) => `/entity-service/v1/customer/${id}`,
+  CUSTOMER_APPROVE_REQUEST: (id, type) =>
+    `/entity-service/v1/approval/approved/${type}/${id}`,
+  CUSTOMER_REJECT_REQUEST: (id, type) =>
+    `/entity-service/v1/approval/rejected/${type}/${id}`,
+  FETCH_CUSTOMER_DATA_EXCEL: (queryString, source) =>
+    `/entity-service/v1/${source}/export?${queryString}`,
+  FETCH_PORT_DATA_EXCEL: (queryString, source) =>
+    `/master-service/v1/${source}/export?${queryString}`,
+  GET_USER_DATA: (id) => `/admin-service/v1/user/${id}`,
+  ADD_USER_DATA: () => `/admin-service/v1/user`,
+  UPDATE_USER_DATA: () => `/admin-service/v1/user`,
+  DELETE_ROLE: (id) => `/admin-service/v1/role/${id}`,
+  REMOVE_ASSIGNED_USER: (params) => `/admin-service/v1/${params}`,
+  ADD_ROLE: () => `/admin-service/v1/role`,
+  GET_ROLE_PERMISSIONS: (id) =>
+    `/admin-service/v1/menu/submenu/permissions/role/${id}`,
+  DELETE_USER: (id) => `/admin-service/v1/user/${id}`,
+  GET_ROLES: () => `/admin-service/v1/role`,
+  UPDATE_ROLE_PERMISSIONS: () => `/admin-service/v1/role/permissions/update`,
+  USER_PASS_RESET: () => `/admin-service/v1/user/update/password`,
+  UPDATE_USER_PROFILE: () => `/admin-service/v1/profile`,
+  UPDATE_USER_PROFILE_IMAGE: (id) => `/admin-service/v1/profile/image?id=${id}`,
+  USER_PASS_RESET: () => `/admin-service/v1/user/update/password`,
+  GET_EDIT_VESSEL: (id) => `/master-service/v1/vessel/${id}`,
+  FETCH_VESSEL_DATA_EXCEL: (queryString) =>
+    `/master-service/v1/vessel/export?${queryString}`,
+  FETCH_VESSEL_SUGGESTIONS: (inputValue, id) =>
+    `/admin-service/v1/data?pattern=${inputValue}&type=${id}`,
+  FETCH_VOYAGE_DATA_EXCEL: (queryString) =>
+    `/master-service/v1/vessel/voyage/export?${queryString}`,
+  GET_EDIT_VOYAGE: (id) => `/master-service/v1/vessel/voyage/${id}`,
+  FILE_DOWNLOAD_INTEGATER: (id) => `/entity-service/v1/file/audit/${id}`,
+};
 
 export default ENDPOINTS;
