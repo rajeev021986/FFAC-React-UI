@@ -6,7 +6,7 @@ export const getChargesListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
+
         nav(`editcharges`, {
           state: { type: "Edit", id: params.row.id },
         });

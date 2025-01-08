@@ -214,7 +214,6 @@ export default function CustomerScreen({ page }) {
       handleClose();
     } catch (error) {
       toast.error("Failed to delete customer.");
-      console.error("Delete Error:", error);
     }
   };
 
@@ -292,7 +291,6 @@ export default function CustomerScreen({ page }) {
                   options={CUSTOMER_SORT_OPTIONS}
                   value={codeCustomerSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event);
 
                     dispatch(setSortBy(event.target.value));
                   }}

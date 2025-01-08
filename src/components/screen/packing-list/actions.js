@@ -6,7 +6,6 @@ export const getPackingListGridActions = (nav, setModal) => {
     {
       label: "BOL",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
         if (params.row.bl_no === "" && params.row.pl_status === "FINAL") {
           nav(`/app/spr/packing_list/bol`, {
             state: {
@@ -30,7 +29,6 @@ export const getPackingListGridActions = (nav, setModal) => {
     {
       label: "PL",
       onClick: (params) => {
-        console.log("PL clicked for", params.row);
         nav(`/app/spr/packing_list/form`, {
           state: { formAction: "edit", initialValues: params.row },
         });
@@ -40,8 +38,6 @@ export const getPackingListGridActions = (nav, setModal) => {
     {
       label: "Aduit",
       onClick: (params) => {
-        console.log("Audit clicked for", params.row);
-        console.log("setModal", setModal);
         setModal({ open: true, type: "audit", data: params.row });
       },
       icon: <EditIcon />,

@@ -18,7 +18,6 @@ import { useEffect } from "react";
 export function VesselHeader() {
   const dispatch = useDispatch();
   const vesselSelector = useSelector((state) => state.vesselStore);
-  console.log(vesselSelector, "vesselSelector");
   useEffect(() => {
     if (!vesselSelector.view) {
       dispatch(vesselSetView("card"));
@@ -42,7 +41,6 @@ export function VesselHeader() {
               options={VESSEL_SORT_OPTIONS}
               value={vesselSelector.sortBy}
               onChange={(event) => {
-                console.log(event);
                 dispatch(setSortBy(event.target.value));
               }}
               sx={{

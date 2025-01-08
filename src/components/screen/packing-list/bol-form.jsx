@@ -24,7 +24,6 @@ const BLDetailsFields = ({ initialValues }) => {
         setOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
   const handlePolOptionChange = async (query) => {
@@ -33,7 +32,6 @@ const BLDetailsFields = ({ initialValues }) => {
         setPOLOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
   const handlePodOptionChange = async (query) => {
@@ -42,7 +40,6 @@ const BLDetailsFields = ({ initialValues }) => {
         setPODOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
   
@@ -52,7 +49,6 @@ const BLDetailsFields = ({ initialValues }) => {
         setoptionsFinalDestiptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
   const formik = useFormik({

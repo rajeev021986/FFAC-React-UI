@@ -4,7 +4,7 @@ import { Button, Grid } from "@mui/material";
 import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import Loader from "./common/Loader/Loader";
 function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
-  console.log(auditDetails, "auditDetails");
+
   useEffect(() => {
     reloadDataHandler();
   }, []);

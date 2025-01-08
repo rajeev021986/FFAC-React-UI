@@ -18,7 +18,6 @@ export default function DashboardSearchForm() {
       mblno : inputs?.mblno || "",
     },
     onSubmit: (values) => {
-      console.log(values);
       dispatch(dashboardUpdateInput(values));
     }
   });

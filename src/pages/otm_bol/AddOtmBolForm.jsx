@@ -15,11 +15,9 @@ import VirtualGrid from "../../components/common/Grid/VirtualGrid";
 
 const AddOtmBolForm = ({ payload, detailsPayload }) => {
   const handleFormSubmit = (value, { setSubmitting, setErrors }) => {
-    console.log(value);
     setSubmitting(false);
   };
 
-  console.log("values.details : ",payload?.details)
 
   // const columns = [
   //   {
@@ -264,7 +262,6 @@ const AddOtmBolForm = ({ payload, detailsPayload }) => {
       accessorKey: 'hts_code_secondary',
       size: 150,
       // cell: ({ row }) => {
-      //   console.log("Row : ",row);
         
       //   return <button>Edit</button>
       // }

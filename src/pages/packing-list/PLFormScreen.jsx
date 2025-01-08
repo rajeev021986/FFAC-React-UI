@@ -25,7 +25,6 @@ export default function PLFormScreen() {
     isError,
   } = useFetchPackingListDetailsQuery(state.initialValues?.serial_id);
 
-  console.log("PLDeatils", PLDeatils);
   return (
     <Box>
       <ScreenToolbar

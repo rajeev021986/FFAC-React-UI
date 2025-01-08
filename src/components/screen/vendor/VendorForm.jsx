@@ -42,7 +42,6 @@ export default function VendorForm({ modal, setModal }) {
     },
     validationSchema: vendorValidation,
     onSubmit: async (values) => {
-      console.log(values);
 
       try {
         let response =

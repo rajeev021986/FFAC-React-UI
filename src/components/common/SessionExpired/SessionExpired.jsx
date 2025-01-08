@@ -41,13 +41,13 @@ const SessionExpired = () => {
         );
         setOpen(false)
         toast.success("login successFull");
-        console.log("Logged in successfully with token:", res.body.jwtToken);
+
       } else {
         setError("Invalid response from server. Please try again.");
       }
     } catch (err) {
       setError("Login failed. Please check your credentials and try again.");
-      console.error("Login error:", err);
+
     }
   };
 

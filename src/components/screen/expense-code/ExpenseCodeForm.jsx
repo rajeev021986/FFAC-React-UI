@@ -34,7 +34,6 @@ export default function ExpenseCodeForm({ modal, setModal }) {
     },
     validationSchema: expenseCodeValidation,
     onSubmit: async (values) => {
-      console.log(values);
 
       try {
         let response =

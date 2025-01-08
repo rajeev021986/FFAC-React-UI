@@ -30,7 +30,6 @@ export const chargesDataApi = createApi({
         }),
         updateCharge: builder.mutation({
             query: (params) => {
-                console.log(params, "params")
                 return { url: `admin-service/v1/charge`, method: "PUT", body: params, headers: getAppHeaders() };
             },
             invalidatesTags: ["Charges"],

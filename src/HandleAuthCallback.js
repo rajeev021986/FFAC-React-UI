@@ -13,7 +13,6 @@ const HandleAuthCallback = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (isAuthenticated) {
-      console.log(user);
       (async () => {
         try {
           const token = await getIdTokenClaims();
@@ -22,7 +21,6 @@ const HandleAuthCallback = () => {
             firstname: user.given_name,
             lastname: user.family_name,
           });
-          console.log("result : ", result);
 
           if (result.status === "error") throw new Error(result.message,{cause : 'registered'});
           else if (result.status === "success" && !result.isLogin)
@@ -35,11 +33,9 @@ const HandleAuthCallback = () => {
               authtype: "auth0",
             })
           );
-          console.log("Login Success : ",result);
           
           navigate("/app");
         } catch (error) {
-          console.log(error.cause);
           navigate("/register_user", {
             state: {
               message: error.message,

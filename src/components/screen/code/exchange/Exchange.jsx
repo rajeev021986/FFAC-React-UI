@@ -16,7 +16,6 @@ import toast from 'react-hot-toast';
 export default function Exchange() {
     const location = useLocation();
     const { id, type } = location.state;
-    console.log(id, type, "dfghjk")
     const nav = useNavigate();
     const [value, setValue] = React.useState(1);
     const handleChange = (event, newValue) => {
@@ -47,7 +46,6 @@ export default function Exchange() {
         } else {
             try {
                 let res = await updateExahangeRate(values).unwrap();
-                console.log(res.success, "res.success")
                 if (res.success) {
                     toast.success(res.message);
                     nav(-1);
@@ -73,7 +71,6 @@ export default function Exchange() {
                 toast.error("Failed to fetch Charge data");
             }
         } catch (error) {
-            console.error("Error fetching ExchangeRate data:", error);
             toast.error("Error fetching ExchangeRate data");
         }
     };

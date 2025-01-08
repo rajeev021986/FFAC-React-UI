@@ -64,7 +64,6 @@ export default function VendorScreen({ page }) {
       handleClose();
     } catch (error) {
       toast.error('Failed to delete vendor.');
-      console.error('Delete Error:', error);
     }
   };
   const [getVendorAudit, { data: AuditData,
@@ -82,7 +81,6 @@ export default function VendorScreen({ page }) {
         logicalOperator: "and",
       };
     });
-  console.log(payload, "payload")
   const query = {
     page: vendorSelector?.pagination?.page + 1,
     size: vendorSelector?.pagination?.pageSize,
@@ -148,7 +146,6 @@ export default function VendorScreen({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {
-        console.error('Download failed:', error);
       }
       setExportLoader(false);
     }
@@ -230,7 +227,6 @@ export default function VendorScreen({ page }) {
                   options={VENDOR_SORT_OPTIONS}
                   value={vendorSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event);
 
                     dispatch(setSortBy(event.target.value));
                   }}

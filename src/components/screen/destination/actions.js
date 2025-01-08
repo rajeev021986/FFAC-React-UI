@@ -8,7 +8,6 @@ export const getDestinationGridActions = (setModal) => {
         {
           label: 'Edit',
           onClick: (params) => {
-            console.log('PL clicked for', params.row);
             setModal(
               { open: true, type: 'edit', data: params.row }
             )
@@ -18,7 +17,6 @@ export const getDestinationGridActions = (setModal) => {
         {
           label: 'Audit',
           onClick: (params) => {
-            console.log('Audit clicked for', params.row);
             setModal(
               { open: true, type: 'audit', data: params.row }
             )

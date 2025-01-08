@@ -106,7 +106,7 @@ const UploadFile = ({
       setViewDocument({ url, documentType });
       setViewDialogOpen(true);
     } catch (error) {
-      console.log(error);
+
     }
     setViewloader(false)
   };
@@ -130,7 +130,7 @@ const UploadFile = ({
       reloadDataHandler();
       setLoading(false);
     } catch (error) {
-      console.log(error);
+
       setLoading(false);
     }
   };
@@ -195,7 +195,7 @@ const UploadFile = ({
       reloadDataHandler();
       setLoading(false);
     } catch (error) {
-      console.error("Error uploading file:", error);
+
       setLoading(false);
       setDialogOpen(false);
     }
@@ -205,7 +205,7 @@ const UploadFile = ({
     if (!date) {
       return "";
     }
-    console.log(date.split("T")[0], "datesplit");
+
     return date.split("T")[0];
   };
 
@@ -479,7 +479,7 @@ const UploadFile = ({
       setListData(res.body);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+
       setLoading(false);
     }
   };

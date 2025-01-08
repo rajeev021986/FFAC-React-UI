@@ -23,7 +23,7 @@ const AppAutocomplete = ({ label, id, value, formik, options, sx, onChange, erro
       id={id}
       value={findSelectedOption()} // Pass the correct option or null
       onChange={(event, newValue) => {
-        console.log('newValue', newValue);
+
         const selectedValue = newValue?.value || ''; // Get the selected value
         if (onChange) {
           onChange(selectedValue);

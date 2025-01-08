@@ -9,7 +9,6 @@ import ApiManager from "../../services/ApiManager";
 
 export function VesselFormScreen() {
   const { state } = useLocation();
-  console.log(state.formAction, "state");
 
   const [loading, setLoading] = useState(true);
   const [vesselEditData, setVesselEditData] = useState({});
@@ -42,9 +41,7 @@ export function VesselFormScreen() {
           vesselLineEntities: response?.body?.vesselLineEntities || [],
         });
         setLoading(false);
-        console.log(response, "response");
       } catch (error) {
-        console.error(error, "error");
       }
     };
     if (state?.initialValues?.id) {

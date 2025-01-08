@@ -272,7 +272,6 @@ export function VesselBody({ selectBox, setSelectBox }) {
     payload: payload,
   });
 
-  console.log("vesselData", vesselData);
 
   return (
     <>

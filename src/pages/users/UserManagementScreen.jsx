@@ -58,7 +58,6 @@ export default function UserManagementScreen() {
     type: "",
     data: {},
   });
-  console.log("modalmodal", modal);
 
   const query = {
     page: userManagementSelector?.pagination?.page + 1,
@@ -72,7 +71,6 @@ export default function UserManagementScreen() {
         ? userManagementSelector?.sortModel[0]?.sort
         : userManagementSelector?.sortBy?.split("*")[1] || "",
   };
-  console.log("userManagementSelector?.formData", userManagementSelector?.formData);
   const payload = Object.entries(userManagementSelector?.formData)
     .filter(([key, value]) => value)
     .map(([key, value]) => {
@@ -113,7 +111,6 @@ export default function UserManagementScreen() {
     fetchAudit({
       userId: modal.data.id,
     })
-    console.log('first')
   }
   return (
     <Box>

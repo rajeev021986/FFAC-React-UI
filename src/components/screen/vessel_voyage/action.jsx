@@ -6,7 +6,6 @@ export const getVoyageListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
         nav(`editvoyage`, {
           state: { formAction: "edit", initialValues: params.row },
         });

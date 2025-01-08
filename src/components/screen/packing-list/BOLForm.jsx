@@ -87,7 +87,6 @@ export default function BOLForm({
         setOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
 
@@ -215,7 +214,6 @@ export default function BOLForm({
         navigate("/app/spr/packing_list");
       }
     } catch (err) {
-      console.error("Error", err);
       toast.error(err.message);
     } finally {
       setLoader(false);

@@ -47,7 +47,6 @@ export default function PLForm({
     onSubmit: async (values) => {
       if (values.pl_status === "SUBMIT" || values.pl_status === "BOOKED") {
         try {
-          console.log("values", values);
           const response = await editPLDetails(values).unwrap();
           if (response.status === "success") {
             toast.success(response.message);
@@ -62,7 +61,6 @@ export default function PLForm({
           message: "You can update data only for PL Status : SUBMIT OR BOOKED",
           severity: "warning",
           onConfirm: () => {
-            console.log("Confirmed!");
             setAlertConfig({ ...alertConfig, open: false });
           },
           onClose: () => setAlertConfig({ ...alertConfig, open: false }),
@@ -72,13 +70,11 @@ export default function PLForm({
   });
 
   const handleVesselOptionChange = async (query) => {
-    console.log(query);
     ApiManager.getVesselOptions(query)
       .then((response) => {
         setOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
   const handleAuditModal = () => {

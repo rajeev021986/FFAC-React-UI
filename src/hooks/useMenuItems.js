@@ -15,7 +15,6 @@ export const useMenuSetting = () => {
     const [menuItems, setMenuItems] = useState([]);
    
     const role = JSON.parse(localStorage.getItem('user')).role || "";
-    console.log(">>>>>>>>>>>role>>>>>>>>>>>>",role);
     
     useEffect(() => {
         const fetchData = async () => {

@@ -8,7 +8,6 @@ import ApiManager from "../../services/ApiManager";
 
 export function VesselVoyageFormScreen() {
   const { state } = useLocation();
-  console.log(state?.formAction, "state");
 
   const [loading, setLoading] = useState(true);
   const [voyageEditData, setVoyageEditData] = useState({});
@@ -61,9 +60,7 @@ export function VesselVoyageFormScreen() {
           portOperator: response?.body?.portOperator || "",
         });
         setLoading(false);
-        console.log(response, "response");
       } catch (error) {
-        console.error(error, "error");
       }
     };
     if (state?.initialValues?.id) {

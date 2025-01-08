@@ -16,7 +16,7 @@ const WordViewer = ({ base64Data, mimeType }) => {
                 const result = await mammoth.convertToHtml({ arrayBuffer: uint8Array });
                 setHtmlContent(result.value);
             } catch (error) {
-                console.error("Error converting Word document:", error);
+
             }
         };
 

@@ -14,7 +14,6 @@ export default function CustomerFormScreen({ page }) {
   const [loading, setLoading] = useState(true);
   const { state } = useLocation();
 
-  console.log(state, "state");
   const [initialValues, setInitialValues] = React.useState({
     id: "",
     customerName: "",
@@ -58,7 +57,6 @@ export default function CustomerFormScreen({ page }) {
           status =
             res.body?.status.charAt(0).toUpperCase() +
             res.body?.status.slice(1).toLowerCase();
-          console.log(status, "status");
         }
         setInitialValues({
           id: res.body?.id || "",

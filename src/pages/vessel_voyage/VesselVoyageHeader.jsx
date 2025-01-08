@@ -19,7 +19,6 @@ import {
 export function VesselVoyageHeader() {
   const dispatch = useDispatch();
   const voyageSelector = useSelector((state) => state.vesselVoyageStore);
-  console.log(voyageSelector, "voyageSelector");
   useEffect(() => {
     if (!voyageSelector.view) {
       dispatch(voyageSetView("card"));
@@ -43,7 +42,6 @@ export function VesselVoyageHeader() {
               options={VOYAGE_SORT_OPTIONS}
               value={voyageSelector.sortBy}
               onChange={(event) => {
-                console.log(event);
                 dispatch(setSortBy(event.target.value));
               }}
               sx={{

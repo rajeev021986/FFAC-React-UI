@@ -350,7 +350,6 @@ export default function AddEditRole() {
                     let menuIds = tableData.filter((menu) => menu.parentId === menuId).map((menu) => menu.subMenuId)
                     setTableData(prev => [...prev.filter(item => !menuIds.includes(item.subMenuId))])
                     setCheckedItems(prev => {
-                        console.log("gana1")
                         const newValues = { ...prev };
                         delete newValues[menuId];
                         menuIds.forEach((id) => {

@@ -60,15 +60,15 @@ export default function AgentForm({
   });
 
   const handleCityOptionChange = async (query) => {
-    console.log(query);
+
     ApiManager.getCityOptions('city',query)
       .then((response) => {
-        console.log("Newwwwwwwwwwwwww",response.data);
+
         
         setOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
+
       });
   };
 

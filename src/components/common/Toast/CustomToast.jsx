@@ -3,7 +3,7 @@ import ErrorIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 function CustomToast({ message, toast }) {
-  console.log(toast, "toast");
+
   const toastStyle =
     toast === "warn"
       ? { ...styles.warn }

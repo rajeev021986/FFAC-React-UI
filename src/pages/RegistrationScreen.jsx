@@ -28,7 +28,6 @@ export default function RegistrationScreen() {
     emailid: "",
   });
   const { user, isAuthenticated } = useAuth0();
-  console.log("user : ",user);
   
   useEffect(() => {
     if (isAuthenticated) {

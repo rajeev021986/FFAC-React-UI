@@ -129,7 +129,6 @@ export default function VendorForm({ page = "vendor" }) {
           toast.error("Failed to fetch vendor data");
         }
       } catch (error) {
-        console.error("Error fetching vendor data:", error);
         toast.error("Error fetching vendor data");
       }
     };
@@ -207,7 +206,6 @@ export default function VendorForm({ page = "vendor" }) {
           Boolean(updatedValue.status == "Active") && (updatedValue.isApproved = 1);
           Boolean(updatedValue.status == "Inactive") && (updatedValue.isApproved = -2);
           let res = await updateVendor(updatedValue).unwrap();
-          console.log(res.success, "res.success");
           if (res.success) {
             toast.success(res.message);
             nav(-1);

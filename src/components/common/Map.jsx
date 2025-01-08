@@ -40,7 +40,7 @@ export default function Map({
         getGeoLocation(locations, setGeoLocations)
     }, [locations, type]);
 
-    console.log('geoLocations', geoLocations);
+
     return (
         <>
             {isLoaded ? (<GoogleMap
@@ -122,6 +122,6 @@ const getGeoLocation = async (locations, setGeoLocations) => {
             geocodeDataArr
         );
     } catch (error) {
-        console.error("Error fetching geocode data:", error.message);
+
     }
 }

@@ -204,24 +204,20 @@ export default function CustomerForm({
   });
 
   const handleSalesOptionChange = async (query) => {
-    console.log(query);
     ApiManager.getSalesOptions("salesname", query)
       .then((response) => {
         setOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
 
   const handleCityOptionChange = async (query) => {
-    console.log(query);
     ApiManager.getCityOptions("city", query)
       .then((response) => {
         setCityOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
 
@@ -235,7 +231,6 @@ export default function CustomerForm({
       setEnquiryAuditDetails(res);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -245,7 +240,6 @@ export default function CustomerForm({
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
 
-  console.log(optionsSettingsData, "optionsSettingsData");
 
   useEffect(() => {
     if (optionsSettingsData?.body || customerSettingsData?.body) {

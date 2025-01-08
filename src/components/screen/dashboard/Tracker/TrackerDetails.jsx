@@ -31,7 +31,6 @@ export default function TrackerDetails({trackingData}) {
             trackingPathArr.push({address : pod, icon : './images/m1.png'});
         }
         trackingPathArr.push({address : destination, icon : './images/m1.png'});
-        console.log('trackingPathArr',trackingPathArr)
         setTrackingPath(trackingPathArr);
     },[trackingData])
 

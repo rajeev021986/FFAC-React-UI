@@ -42,7 +42,6 @@ const DsoOrderScreen = () => {
 
   const dispatch = useDispatch();
   // const nav = useNavigate();
-  console.log("dsoOrderSelector.sortBy : ",dsoOrderSelector.sortBy);
   
   const {
     data: DsoOrderData,
@@ -84,7 +83,6 @@ const DsoOrderScreen = () => {
   useEffect(()=>{
 
   },[])
-console.log("isFetching : ",isFetching);
 
   return (
     <Box>

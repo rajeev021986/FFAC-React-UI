@@ -12,7 +12,6 @@ export const getVendorGridActions = (nav, setModal) => {
     {
       label: 'Edit',
       onClick: (params) => {
-        console.log('PL clicked for', params.row.id);
         nav("editVendor", { state: { id: params.row.id, type: "Edit" } })
       },
       icon: <EditIcon />,
@@ -20,7 +19,6 @@ export const getVendorGridActions = (nav, setModal) => {
     {
       label: 'Audit',
       onClick: (params) => {
-        console.log('Audit clicked for', params.row);
         setModal(
           { open: true, type: 'audit', data: params.row }
         )
@@ -57,7 +55,6 @@ export const getVendorApproveGridActions = (nav, setModal) => {
     {
       label: 'Edit',
       onClick: (params) => {
-        console.log('PL clicked for', params.row.id);
         nav("editVendorApprove", { state: { id: params.row.id, type: "Approve" } })
       },
       icon: <EditIcon />,
@@ -65,7 +62,6 @@ export const getVendorApproveGridActions = (nav, setModal) => {
     {
       label: 'Audit',
       onClick: (params) => {
-        console.log('Audit clicked for', params.row);
         setModal(
           { open: true, type: 'audit', data: params.row }
         )

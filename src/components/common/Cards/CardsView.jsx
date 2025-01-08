@@ -17,7 +17,7 @@ export default function CardsView({
   page,
 }) {
   const handleCardPagination = (event, page) => {
-    console.log(page);
+
     handlePage({
       page: page,
       pageSize: paginationModel.pageSize,

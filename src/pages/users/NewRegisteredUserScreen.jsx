@@ -69,7 +69,6 @@ export default function NewRegisteredUserScreen() {
     status: userManagementSelector.status.join(","),
     ...userManagementSelector.formData,
   });
-  console.log("userManagementSelector : ",userManagementSelector);
   
   const [modal, setModal] = useState({
     open: false,
@@ -101,7 +100,6 @@ export default function NewRegisteredUserScreen() {
         data: {},
       })
     } catch (error) {
-      console.log(error);
       let errors = {}
       error.cause.forEach((item) => {
         errors[item.path] = item.message;
@@ -147,7 +145,6 @@ export default function NewRegisteredUserScreen() {
                   options={NEW_USER_SORT_OPTIONS}
                   value={userManagementSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event.target.value);
                     
                     dispatch(setSortBy(event.target.value));
                   }}
@@ -193,7 +190,6 @@ export default function NewRegisteredUserScreen() {
             loading={isLoading || isFetching}
             sortModel={userManagementSelector.sortModel}
             onSortModelChange={(sortModel) => {
-              console.log("sortModel : ",sortModel);
               
               dispatch(setSortModel(sortModel))
             }}

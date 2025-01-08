@@ -34,7 +34,6 @@ export default function PartyForm({
     enableReinitialize: true,
     validationSchema: PartyValidationSchema(),
     onSubmit: async (values) => {
-      console.log("Form values:", values);
       const formData = new FormData();
 
       Object.keys(values).forEach((key) => {
@@ -61,13 +60,11 @@ export default function PartyForm({
   });
 
   const handleCityOptionChange = async (query) => {
-    console.log(query);
     ApiManager.getCityOptions('city',query)
       .then((response) => {
         setOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
 

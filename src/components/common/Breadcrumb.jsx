@@ -55,8 +55,8 @@ const Routes = {
 const ThemedBreadcrumb = () => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
-  console.log(pathnames, "pathnames");
 
+  
   return (
     <MUIBreadcrumbs aria-label="breadcrumb">
       {/* <Link

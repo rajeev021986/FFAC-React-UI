@@ -24,17 +24,17 @@ function AutoCompleteInput({
   const tooltipMessage = value ? value : "This field is empty";
 
   const handleInputChange = async (event, newValue) => {
-    console.log("newValue", newValue);
+
     setLoading(true);
     try {
       const data = await fetchSuggestions(newValue, id);
       if (data) {
         const array = data.map((obj) => obj[suggestionName]);
-        console.log(array, "array");
+
         setSuggestions(array);
       }
     } catch (error) {
-      console.error("Error fetching suggestions:", error);
+
       setSuggestions([]);
     } finally {
       setLoading(false);

@@ -55,17 +55,13 @@ export default function LoginScreen() {
 
        
 
-        console.log(res.body.jwtToken)
-        console.log("Successful login");
         nav("/app");
         
       } else {
 
-        console.log("Login not successful");
         toast.error(res.message);
       }
     } catch (err) {
-      console.error("Error during login:", err);
       toast.error("Something went wrong");
     } finally {
       setLoader(false); // Ensures loader stops even if there's an error

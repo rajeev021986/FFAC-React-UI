@@ -9,7 +9,7 @@ import SelectBox from '../../../common/SelectBox';
 import { OutlinedButton, ThemeButton } from '../../../common/Button';
 
 export default function ChatgeInputs({ formik, ChargeSettingsData, type, nav }) {
-    console.log(type,"type")
+
     const addNewRow = () => {
         const hasEmptyFields = formik.values.mappingDetails.some((row) =>
             Object.values(row).some((value) => value === '' || value === null || value === undefined)

@@ -22,14 +22,12 @@ const CustomerSetting = () => {
         setApprovalRequest(data?.body.approvalRequest)
         setDocumentType(data?.body.documentType || [])
         setDesignation(data?.body.designation || [])
-        console.log(data, "data")
     }, [data, geterror]);
 
 
     const Postdata = async () => {
         const filteredData = { approvalRequest, unitType: unitType.filter(item => !item.value.includes('Type the')), creditDays: creditDays.filter(item => !item.value.includes('Type the')), documentType: documentType.filter(item => !item.value.includes('Type the')), designation: designation.filter(item => !item.value.includes('Type the')) }
         setIsLoading(true);
-        await addOptons({ body: { customer_settings: filteredData }, type: "customer_setting" }).then((res) => { if (res.error) { toast.error(res.error.data.error) } else { toast.success(`setting Updated Successufully`) } }).catch(() => console.log("filteredData"))
         refetch();
         setIsLoading(false);
     };
