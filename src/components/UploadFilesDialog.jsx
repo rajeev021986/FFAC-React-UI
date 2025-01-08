@@ -15,6 +15,7 @@ import ImageViewer from "./common/FileViewer/ImageViewer";
 import PDFViewer from "./common/FileViewer/PDFViewer";
 import WordViewer from "./common/FileViewer/WordViewer";
 import TextViewer from "./common/FileViewer/TextViewer";
+import DeleteDialog from "./common/DeleteDialog";
 
 export default function UploadFilesDialog({
   dialogOpen,
@@ -135,72 +136,13 @@ export default function UploadFilesDialog({
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={openConfirmation}
-        onClose={onCloseConfiramtion}
-        PaperProps={{
-          sx: {
-            padding: 2,
-            borderRadius: 4,
-            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-          },
-        }}
-      >
-        <DialogTitle
-          sx={{
-            textAlign: "center",
-            fontWeight: "bold",
-            color: "primary.main",
-            borderBottom: "1px solid #ddd",
-            pb: 2,
-          }}
-        >
-          Are you sure you want to delete it?
-        </DialogTitle>
-        <DialogContent
-          sx={{
-            textAlign: "center",
-            color: "text.secondary",
-            fontSize: "1rem",
-          }}
-        >
-          <p>
-            <strong>{deleteData.fileName}</strong>
-          </p>
-          <p>This action cannot be undone.</p>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            padding: 0,
-            marginX: 5,
-            justifyContent: "space-around",
-          }}
-        >
-          <Button
-            onClick={onCloseConfiramtion}
-            color="primary"
-            variant="outlined"
-            sx={{
-              minWidth: 100,
-              borderRadius: 50,
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={onDelete}
-            variant="contained"
-            sx={{
-              minWidth: 100,
-              borderRadius: 50,
-              backgroundColor: "red",
-              color: "white",
-            }}
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteDialog
+        source="file"
+        sourceName={deleteData.fileName}
+        handleClose={onCloseConfiramtion}
+        handleDelete={onDelete}
+        handleOpen={openConfirmation}
+      />
       <Dialog
         open={viewDialogOpen}
         onClose={handleViewDialogClose}

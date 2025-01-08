@@ -386,9 +386,11 @@ export default function CustomerScreen({ page }) {
         </Drawer>
       )}
       <DeleteDialog
-        modal={modal}
+        source="customer"
+        sourceName={modal?.data?.deleteName}
         handleClose={handleClose}
         handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
       />
     </Box>
   );
