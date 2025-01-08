@@ -343,7 +343,7 @@ export default function CustomerForm({
       {type == "add" ? (
         <>
           {" "}
-          <Grid container paddingBottom={2}>
+          <Grid container sx={{ padding: 0, margin: 0, paddingRight: "8px" }}>
             <Grid container>
               <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <Tooltip
@@ -626,6 +626,7 @@ export default function CustomerForm({
               sx={{
                 border: "1px solid #ccc",
                 borderRadius: "10px",
+                margin: "0px 8px",
               }}
             >
               <ThemeTabs
@@ -648,7 +649,7 @@ export default function CustomerForm({
             </Box>
           </Grid>
           {page == "customer" && (
-            <Grid item xs={12} sx={{ marginTop: 2 }}>
+            <Grid item xs={12} sx={{ margin: 1 }}>
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
                   sx={{ fontWeight: "500" }}
@@ -692,7 +693,9 @@ export default function CustomerForm({
         </>
       ) : (
         <>
-          <Box sx={{ width: "100%", typography: "body1", margin: 0 }}>
+          <Box
+            sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}
+          >
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
@@ -718,7 +721,7 @@ export default function CustomerForm({
               </Box>
               <TabPanel value="1" sx={{ padding: "0px" }}>
                 {" "}
-                <Grid container>
+                <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
                   <Grid container>
                     <Grid
                       item
@@ -1176,6 +1179,7 @@ export default function CustomerForm({
                         borderBottom: 1,
                         border: "1px solid #0000001f",
                         borderRadius: "10px",
+                        marginLeft: "8px",
                       }}
                     >
                       <ThemeTabs
@@ -1199,7 +1203,7 @@ export default function CustomerForm({
                   </Grid>
                   {formik.values.status.toLowerCase() === "rejected" ||
                   page == "customerApprove" ? (
-                    <Grid item xs={12} marginTop={2}>
+                    <Grid item xs={12} paddingLeft={1} paddingTop={1}>
                       <TextField
                         label="Reject Remarks"
                         name="rejectRemarks"
@@ -1225,7 +1229,7 @@ export default function CustomerForm({
                   )}
 
                   {page == "customer" && (
-                    <Grid item xs={12} sx={{ marginTop: 2 }}>
+                    <Grid item xs={12} sx={{ margin: 1 }}>
                       <Stack
                         direction="row"
                         spacing={2}
@@ -1257,7 +1261,7 @@ export default function CustomerForm({
                         direction="row"
                         spacing={2}
                         justifyContent="space-between"
-                        marginTop={2}
+                        margin={1}
                       >
                         <Stack direction="row" spacing={2}>
                           <OutlinedButton

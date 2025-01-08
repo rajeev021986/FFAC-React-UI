@@ -108,7 +108,7 @@ const UploadFile = ({
     } catch (error) {
 
     }
-    setViewloader(false)
+    setViewloader(false);
   };
 
   const handleViewDialogClose = () => {
@@ -142,17 +142,23 @@ const UploadFile = ({
     const invalidExtensions = ["zip", "exe"];
     const fileExtension = file.name.split(".").pop().toLowerCase();
     if (file.size > maxFileSize || invalidExtensions.includes(fileExtension)) {
-
-      return toast.custom(<CustomToast message={file.size > maxFileSize
-        ? "File size must be less than 10 MB."
-        : `.${fileExtension} files are not allowed.`} toast="error" />, {
-        closeButton: false,
-      });
+      return toast.custom(
+        <CustomToast
+          message={
+            file.size > maxFileSize
+              ? "File size must be less than 10 MB."
+              : `.${fileExtension} files are not allowed.`
+          }
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
     }
     setUploadedFile(file);
     setDialogOpen(true);
   };
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -321,7 +327,9 @@ const UploadFile = ({
             height: "100%",
           }}
         >
-          {viewloader && viewloaderId == params.id ? <LoaderIcon /> :
+          {viewloader && viewloaderId == params.id ? (
+            <LoaderIcon />
+          ) : (
             <Visibility
               style={{ cursor: "pointer", color: "#1976d2" }}
               onClick={(event) =>
@@ -333,7 +341,8 @@ const UploadFile = ({
                   params.row.fileName
                 )
               }
-            />}
+            />
+          )}
           <Delete
             style={{ cursor: "pointer", color: "red" }}
             onClick={() => {
@@ -438,7 +447,9 @@ const UploadFile = ({
             height: "100%",
           }}
         >
-          {viewloader && viewloaderId == params.id ? <LoaderIcon /> :
+          {viewloader && viewloaderId == params.id ? (
+            <LoaderIcon />
+          ) : (
             <Visibility
               style={{ cursor: "pointer", color: "#1976d2" }}
               onClick={(event) =>
@@ -450,7 +461,8 @@ const UploadFile = ({
                   params.row.fileName
                 )
               }
-            />}
+            />
+          )}
           <Delete
             style={{ cursor: "pointer", color: "red" }}
             onClick={() => {
@@ -496,11 +508,15 @@ const UploadFile = ({
           <Loader />
         </Grid>
       ) : (
-        <Grid container spacing={2} marginTop={1}>
+        <Grid container spacing={2} padding={1} marginTop={1}>
           <Typography
             variant="h5"
             gutterBottom
-            style={{ width: "100%", marginLeft: "15px", marginBottom: "8px" }}
+            style={{
+              width: "100%",
+              marginLeft: "15px",
+              margin: "0px ! important",
+            }}
           >
             Select Files
           </Typography>

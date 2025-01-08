@@ -1,4 +1,11 @@
-import { Box, Card, CardContent, CardHeader, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
@@ -109,20 +116,30 @@ export default function CustomerFormScreen({ page }) {
   }, [state?.initialValues?.id]);
 
   return (
-    <Box>
-      <ScreenToolbar
-        leftComps={
-          <div>
-            <ThemedBreadcrumb />
-          </div>
-        }
-        rightComps={<div></div>}
-      />
+    <Box sx={{ padding: 0, margin: 0 }}>
+      <Stack sx={{ padding: "8px 0px" }}>
+        <ScreenToolbar
+          leftComps={
+            <div>
+              <ThemedBreadcrumb />
+            </div>
+          }
+          rightComps={<div></div>}
+        />
+      </Stack>
+
       {loading ? (
         <Loader />
       ) : (
-        <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-          <CardContent>
+        <Card
+          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
+        >
+          <CardContent
+            sx={{
+              margin: "0px",
+              padding: "0px ! important",
+            }}
+          >
             <CustomerForm
               initialValues={initialValues}
               type={state?.formAction}

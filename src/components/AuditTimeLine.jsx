@@ -13,7 +13,7 @@ function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
       {loading ? (
         <Loader />
       ) : (
-        <div style={{ minHeight: "55vh" }}>
+        <div style={{ minHeight: "55vh", padding: 0, margin: "0px 8px" }}>
           <Grid
             container
             justifyContent="flex-end"

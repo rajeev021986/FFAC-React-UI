@@ -73,7 +73,7 @@ const ThemedGrid = (props) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: "calc(100vh - 250px)",
+        height: "calc(100vh - 190px)",
         overflowY: "auto",
       }}
     >
@@ -97,7 +97,7 @@ const ThemedGrid = (props) => {
         disableColumnFilter
         slots={{
           toolbar: () => (
-            <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", p: 0 }}>
               <GridToolbarColumnsButton />
             </Box>
           ),
