@@ -198,6 +198,12 @@ class ApiManager {
         return ApiMethods.postBlob(url, payload);
     }
 
+    static fetchIcdDatasExcel = async (params, payload,source) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = ENDPOINTS.FETCH_ICD_DATA_EXCEL(queryString,source);
+        return ApiMethods.postBlob(url, payload);
+    }
+
     static fetchVesselSuggestions = (inputValue, id) => {
         const url = ENDPOINTS.FETCH_VESSEL_SUGGESTIONS(inputValue, id);
         return ApiMethods.get(url);

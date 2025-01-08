@@ -149,20 +149,19 @@ export default function ShipperScreen({ page }) {
     }
     
     if (actionName === "Export") {
-      const response = await fetch("http://localhost:9083/entity-service/shipper/export?page=1&size=10&sortBy=&sortOrder=", {   
-        responseType: "blob",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        }
-      })
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `${Date.now()}.xlsx`);
-      document.body.appendChild(link);
-      link.click();
+      try {
+        const blob = await ApiManager.fetchIcdDatasExcel(query, payload, "shipper");
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'shipper-data.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Download failed:', error);
+    }
     }
   }
   return (

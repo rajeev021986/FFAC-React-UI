@@ -10,7 +10,7 @@ export const shipperDataApi = createApi({
         fetchShipper: builder.query({
             query: (params) => {
                 const queryString = new URLSearchParams(params).toString();
-                return { url: `/entity-service/shipper`, method: "GET", headers: getAppHeaders() };
+                return { url: `/master-service/v1/shipper`, method: "GET", headers: getAppHeaders() };
             },
             providesTags: ["Shipper"],
         }),
@@ -22,7 +22,7 @@ export const shipperDataApi = createApi({
                 };
 
 
-                return { url: `entity-service/shipper`, method: "POST", body: params, headers: headers };
+                return { url: `master-service/v1/shipper`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Shipper"],
         }),
@@ -33,7 +33,7 @@ export const shipperDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `entity-service/shipper`, method: "PUT", body: params, headers: headers };
+                return { url: `master-service/v1/shipper`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Shipper"],
         }),
@@ -49,7 +49,7 @@ export const shipperDataApi = createApi({
                 };
 
                 return {
-                    url: `/entity-service/file/upload`,
+                    url: `/master-service/v1/file/upload`,
                     method: "POST",
                     body: formData,
                     headers: headers
@@ -61,7 +61,7 @@ export const shipperDataApi = createApi({
                 const headers = {
                     'Authorization': getAppHeaders()['Authorization']
                 };
-                return { url: `/entity-service/file/get`, method: "POST", body: params, headers: headers };
+                return { url: `/master-service/v1/file/get`, method: "POST", body: params, headers: headers };
             },
         }),
         downloadDocumnent: builder.mutation({
@@ -77,7 +77,7 @@ export const shipperDataApi = createApi({
                     Authorization: getAppHeaders()['Authorization'],
                 };
                 return {
-                    url: `/entity-service/${page}?${queryString}`,
+                    url: `/master-service/v1/${page}?${queryString}`,
                     method: "POST",
                     body: payload,
                     headers,

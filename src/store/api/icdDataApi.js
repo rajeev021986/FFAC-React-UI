@@ -1,6 +1,6 @@
 import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
-const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
+// const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const icdDataApi = createApi({
     reducerPath: "icdDataApi",
@@ -10,7 +10,7 @@ export const icdDataApi = createApi({
         fetchIcd: builder.query({
             query: (params) => {
                 const queryString = new URLSearchParams(params).toString();
-                return { url: `/entity-service/icd`, method: "GET", headers: getAppHeaders() };
+                return { url: `/master-service/v1/icd`, method: "GET", headers: getAppHeaders() };
             },
             providesTags: ["Icd"],
         }),
@@ -22,7 +22,7 @@ export const icdDataApi = createApi({
                 };
 
 
-                return { url: `entity-service/icd`, method: "POST", body: params, headers: headers };
+                return { url: `master-service/v1/icd`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Icd"],
         }),
@@ -33,7 +33,7 @@ export const icdDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `entity-service/icd`, method: "PUT", body: params, headers: headers };
+                return { url: `master-service/v1/icd`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Icd"],
         }),
@@ -49,7 +49,7 @@ export const icdDataApi = createApi({
                 };
 
                 return {
-                    url: `/entity-service/file/upload`,
+                    url: `/master-service/v1/file/upload`,
                     method: "POST",
                     body: formData,
                     headers: headers
@@ -61,7 +61,7 @@ export const icdDataApi = createApi({
                 const headers = {
                     'Authorization': getAppHeaders()['Authorization']
                 };
-                return { url: `/entity-service/file/get`, method: "POST", body: params, headers: headers };
+                return { url: `/master-service/v1/file/get`, method: "POST", body: params, headers: headers };
             },
         }),
         downloadDocumnent: builder.mutation({
@@ -77,7 +77,7 @@ export const icdDataApi = createApi({
                     Authorization: getAppHeaders()['Authorization'],
                 };
                 return {
-                    url: `/entity-service/${page}?${queryString}`,
+                    url: `/master-service/v1/${page}?${queryString}`,
                     method: "POST",
                     body: payload,
                     headers,
