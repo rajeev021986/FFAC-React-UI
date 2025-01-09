@@ -7,6 +7,7 @@ import { FormHelperText } from "@mui/material";
 
 export default function SelectBox({
   placeholder = false,
+  inputRef,
   sx,
   value,
   onChange,
@@ -43,6 +44,7 @@ export default function SelectBox({
           },
         }}
         {...props}
+        inputRef={inputRef}
       >
         <MenuItem value="" sx={{ fontSize: "14px" }}>
           <em>None</em>

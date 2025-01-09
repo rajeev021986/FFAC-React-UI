@@ -7,7 +7,7 @@ import {
 } from "../../store/api/vesselDataApi";
 import { useFormik } from "formik";
 import { useLocation, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { VesselValidation } from "../../components/screen/vessel/validation";
 import toast from "react-hot-toast";
 import { OutlinedButton, ThemeButton } from "../../components/common/Button";
@@ -18,6 +18,7 @@ import { Tab } from "@mui/material";
 import ApiManager from "../../services/ApiManager";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
+import SelectBox from "../../components/common/SelectBox";
 
 export function VesselForm({ initialValues, type }) {
   const location = useLocation();
@@ -25,6 +26,7 @@ export function VesselForm({ initialValues, type }) {
   const disabled = false;
   const [addVessel, { isLoading }] = useAddVesselMutation();
   const [updateVessel] = useUpdateVesselMutation();
+  const [dropdownData, setDropdownData] = useState({});
 
   const [value, setValue] = React.useState("1");
 
@@ -32,9 +34,15 @@ export function VesselForm({ initialValues, type }) {
     setValue(newValue);
   };
 
+  const ownerOptions = [
+    { label: "Yes", value: "yes" },
+    { label: "No", value: "no" },
+  ];
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
+    validateOnChange: false,
     validationSchema: VesselValidation(),
     onSubmit: async (values) => {
       if (type == "copy" || type == "add") {
@@ -98,8 +106,19 @@ export function VesselForm({ initialValues, type }) {
 
     return data || [];
   };
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
   const { data: vesselSettingsData } =
     useGetOptionsSettingsQuery("vessel_settings");
+
+  useEffect(() => {
+    if (optionsSettingsData?.body || vesselSettingsData?.body) {
+      setDropdownData({
+        ...optionsSettingsData?.body,
+        ...vesselSettingsData?.body,
+      });
+    }
+  }, [optionsSettingsData, vesselSettingsData]);
   return (
     <>
       {type == "copy" || type == "add" ? (
@@ -146,10 +165,20 @@ export function VesselForm({ initialValues, type }) {
                   fetchSuggestions={fetchSuggestions}
                 ></FormAutoComplete>
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-                <InputBox
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <SelectBox
                   label="Vessel Owner"
                   id="vesselOwner"
+                  options={ownerOptions}
                   value={formik.values.vesselOwner}
                   error={formik.errors.vesselOwner}
                   onChange={formik.handleChange}
@@ -160,7 +189,7 @@ export function VesselForm({ initialValues, type }) {
                 <InputBox
                   label="Status"
                   id="status"
-                  value={formik.values.status}
+                  disabled={true}
                   error={formik.errors.status}
                   onChange={formik.handleChange}
                 />
@@ -276,23 +305,47 @@ export function VesselForm({ initialValues, type }) {
                         onChange={formik.handleChange}
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                    >
-                      <InputBox
-                        label="Status"
-                        id="status"
-                        value={formik.values.status}
-                        error={formik.errors.status}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
+                    {initialValues.statusCode == -2 ||
+                    initialValues.statusCode == 1 ? (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                        sx={{ marginTop: 2 }}
+                        paddingLeft={1}
+                      >
+                        <SelectBox
+                          label="Status"
+                          id="status"
+                          options={optionsSettingsData?.body.status}
+                          value={formik.values.status}
+                          error={formik.errors.status}
+                          onChange={formik.handleChange}
+                        />
+                      </Grid>
+                    ) : (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                        paddingLeft={1}
+                      >
+                        <InputBox
+                          label="Status"
+                          id="status"
+                          disabled={true}
+                          value={formik.values.status}
+                          error={formik.errors.status}
+                          onChange={formik.handleChange}
+                        />
+                      </Grid>
+                    )}
                   </Grid>
 
                   <Grid

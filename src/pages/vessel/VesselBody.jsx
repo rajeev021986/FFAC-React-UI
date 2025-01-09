@@ -257,7 +257,7 @@ export function VesselBody({ selectBox, setSelectBox }) {
         fieldName: fieldname,
         operator: "=",
         value: value,
-        logicalOperator: "or",
+        logicalOperator: "and",
       };
     });
 
@@ -271,7 +271,6 @@ export function VesselBody({ selectBox, setSelectBox }) {
     params: query,
     payload: payload,
   });
-
 
   return (
     <>

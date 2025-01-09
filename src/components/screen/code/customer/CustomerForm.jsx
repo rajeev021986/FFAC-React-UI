@@ -46,6 +46,7 @@ import UploadFile from "../../../UploadFile";
 import { UploadFileOutlined } from "@mui/icons-material";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
+import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 
 export default function CustomerForm({
   initialValues,
@@ -320,6 +321,29 @@ export default function CustomerForm({
     return null;
   };
 
+  const fetchSuggestions = async (inputValue, inputId) => {
+    inputId = "PORT_COUNTRY";
+    if (!inputValue) return [];
+
+    try {
+      const response = await ApiManager.fetchVesselSuggestions(
+        inputValue,
+        inputId
+      );
+      const data = await response.body;
+
+      const uniqueSuggestions = data.reduce((acc, item) => {
+        const exists = acc.some((entry) => entry.country === item.country);
+        if (!exists) acc.push(item);
+        return acc;
+      }, []);
+
+      return uniqueSuggestions;
+    } catch (error) {
+      return [];
+    }
+  };
+
   const currentError = getFirstError(formik.errors);
 
   const customerNameRef = useRef(null);
@@ -454,15 +478,25 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-                <InputBox
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <FormAutoComplete
                   label="Country"
                   id="country"
+                  suggestionName="country"
                   value={formik.values.country}
                   error={formik.errors.country}
                   onChange={formik.handleChange}
-                  disabled={disabled}
-                />
+                  fetchSuggestions={fetchSuggestions}
+                ></FormAutoComplete>
               </Grid>
             </Grid>
             <Grid container>
@@ -529,10 +563,20 @@ export default function CustomerForm({
                 />
               </Grid>
               {/* customer type */}
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-                <InputBox
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <SelectBox
                   label="Customer Type"
                   id="customerType"
+                  options={customerSettingsData?.body.customerType}
                   value={formik.values.customerType}
                   error={formik.errors.customerType}
                   onChange={formik.handleChange}
@@ -950,15 +994,17 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
-                      <InputBox
+                      <FormAutoComplete
                         label="Country"
                         id="country"
+                        suggestionName="country"
                         value={formik.values.country}
                         error={formik.errors.country}
                         onChange={formik.handleChange}
-                        disabled={disabled}
-                      />
+                        fetchSuggestions={fetchSuggestions}
+                      ></FormAutoComplete>
                     </Grid>
                   </Grid>
                   <Grid container>
@@ -1081,10 +1127,12 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
-                      <InputBox
+                      <SelectBox
                         label="Customer Type"
                         id="customerType"
+                        options={customerSettingsData?.body.customerType}
                         value={formik.values.customerType}
                         error={formik.errors.customerType}
                         onChange={formik.handleChange}
@@ -1273,7 +1321,10 @@ export default function CustomerForm({
                             Cancel
                           </OutlinedButton>
                           <ThemeButton
-                            onClick={formik.handleSubmit}
+                            onClick={(event) => {
+                              setRejectError(false);
+                              formik.handleSubmit(event.target.value);
+                            }}
                             sx={{ fontWeight: "500" }}
                           >
                             {isLoading && (
