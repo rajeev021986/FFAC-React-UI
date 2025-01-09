@@ -95,7 +95,7 @@ export default function FilterForm() {
               label="Status"
               id="isApproved"
               options={statusOptions}
-              value={formik.values.status}
+              value={formik.values.isApproved}
               onChange={formik.handleChange}
               sx={{ marginLeft: "0px !important" }}
             />
