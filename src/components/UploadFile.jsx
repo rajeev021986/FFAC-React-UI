@@ -232,7 +232,7 @@ const UploadFile = ({
     },
     {
       field: "fileName",
-      headerName: "Name",
+      headerName: "File Name",
       flex: 1,
       headerAlign: "center",
       renderCell: (params) => (
@@ -377,7 +377,7 @@ const UploadFile = ({
     },
     {
       field: "fileName",
-      headerName: "Name",
+      headerName: "File Name",
       flex: 1,
       headerAlign: "center",
       renderCell: (params) => (

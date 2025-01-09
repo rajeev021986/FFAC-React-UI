@@ -57,15 +57,11 @@ export default function CustomerForm({
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
-  const [uploadedFiles, setUploadedFiles] = useState(initialValues.files || []);
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
   const [loading, setLoading] = useState(false);
-  const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateCustomer] = useUpdateCustomerMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const location = useLocation();
   const [rejectError, setRejectError] = useState(false);
-
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
 

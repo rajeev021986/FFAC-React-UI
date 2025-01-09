@@ -1,4 +1,4 @@
-import { Button, Grid, Stack, TextField } from "@mui/material";
+import { badgeClasses, Button, Grid, Stack, TextField } from "@mui/material";
 import InputBox from "../../../common/InputBox";
 import { Typography } from "@mui/material";
 import VendorEditGrid from "./VendorEditGrid";
@@ -118,21 +118,41 @@ export default function VendorFormInput({
   };
 
   const fetchSuggestions = async (inputValue, inputId) => {
-    if (inputId === "chargeName") {
-      inputId = "CHARGE";
-    } else if (inputId === "currency") {
-      inputId = "CURRENCY";
-    } else {
-      inputId = "PORT_COUNTRY";
+    // Map inputId to the expected parameter values
+    switch (inputId) {
+      case "chargeName":
+        inputId = "CHARGE";
+        break;
+      case "currency":
+        inputId = "CURRENCY";
+        break;
+      default:
+        inputId = "PORT_COUNTRY";
     }
-    if (!inputValue) return [];
-    const response = await ApiManager.fetchVesselSuggestions(
-      inputValue,
-      inputId
-    );
-    const data = await response.body;
 
-    return data || [];
+    // Return an empty array if the input value is falsy
+    if (!inputValue) return [];
+
+    try {
+      // Fetch data using ApiManager
+      const response = await ApiManager.fetchVesselSuggestions(
+        inputValue,
+        inputId
+      );
+      const data = await response.body;
+
+      // Ensure data exists and deduplicate based on the 'country' property
+      const uniqueSuggestions = data.reduce((acc, item) => {
+        const exists = acc.some((entry) => entry.country === item.country);
+        if (!exists) acc.push(item);
+        return acc;
+      }, []);
+
+      return uniqueSuggestions;
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      return [];
+    }
   };
 
   const getFirstError = (errors) => {
@@ -323,7 +343,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <FormAutoComplete
               label="Country"
               id="country"
