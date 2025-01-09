@@ -20,13 +20,11 @@ function FormAutoComplete({
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = async (event, newValue) => {
-    console.log("newValue", newValue);
     setLoading(true);
     try {
       const data = await fetchSuggestions(newValue, id);
       if (data) {
         const array = data.map((obj) => obj[suggestionName]);
-        console.log(array, "array");
         setSuggestions(array);
       }
     } catch (error) {

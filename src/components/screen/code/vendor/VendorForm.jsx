@@ -47,13 +47,30 @@ export default function VendorForm({ page = "vendor" }) {
     alias: Yup.string(),
     telephone1: Yup.number(),
     fax: Yup.string(),
-    emailId: Yup.string().email(),
-    city: Yup.string(),
+    emailId: Yup.string().test(
+      "valid-email",
+      "Invalid email format",
+      (value) => {
+        if (!value) return true;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+      }
+    ),
+    city: Yup.string().matches(
+      /^[A-Za-z\s]+$/,
+      "City must only contain letters"
+    ),
     country: Yup.string(),
     creditDays: Yup.number().min(0, "Credit Days cannot be negative"),
-    province: Yup.string(),
+    province: Yup.string().matches(
+      /^[A-Za-z\s]+$/,
+      "Province must only contain letters"
+    ),
     poNo: Yup.number(),
-    contactPerson: Yup.string(),
+    contactPerson: Yup.string().matches(
+      /^[A-Za-z\s]+$/,
+      "Contact Person must only contain letters"
+    ),
     vendorEntityTariffs: Yup.array().of(
       Yup.object().shape({
         unitRate: Yup.number()
@@ -90,10 +107,16 @@ export default function VendorForm({ page = "vendor" }) {
     vendorBankDetails: Yup.array(
       Yup.object({
         id: Yup.number(),
-        bankName: Yup.string(),
+        bankName: Yup.string().matches(
+          /^[A-Za-z\s]+$/,
+          "Bank name must only contain letters"
+        ),
         accountNo: Yup.number(),
         bankAddress: Yup.string(),
-        currency: Yup.string(),
+        currency: Yup.string().matches(
+          /^[A-Za-z\s]+$/,
+          "Currency must only contain letters"
+        ),
         swiftCode: Yup.string(),
       })
     ),

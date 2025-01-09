@@ -24,8 +24,7 @@ function PortForm() {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    const tabs = [{ label: "Port Details", value: 1 },
-    { label: "Document Details", value: 2 }
+    const tabs = [{ label: "Port Details", value: 1 }
     ];
     const { data: optionsSettingsData } = useGetOptionsSettingsQuery("common_settings");
     const { data: customerSettingsData } = useGetOptionsSettingsQuery("port_settings");

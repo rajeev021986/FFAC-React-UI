@@ -357,8 +357,8 @@ export default function VendorFormInput({
               label="Country"
               id="country"
               suggestionName="country"
-              value={formik.values.vesselName}
-              error={formik.errors.vesselName}
+              value={formik.values.country}
+              error={formik.errors.country}
               onChange={formik.handleChange}
               fetchSuggestions={fetchSuggestions}
             ></FormAutoComplete>
@@ -437,7 +437,7 @@ export default function VendorFormInput({
         </Grid>
         {formik.values.status.toLowerCase() === "rejected" ||
         page == "vendorApproval" ? (
-          <Grid item xs={12}>
+          <Grid item xs={12}  sx={{padding:"10px 3px",margin:"auto"}}>
             <TextField
               label="Reject Remarks"
               name="rejectRemarks"
@@ -455,7 +455,7 @@ export default function VendorFormInput({
           <></>
         )}
         {!disable ? (
-          <Grid item xs={12}>
+          <Grid item xs={12}  sx={{padding:"10px 3px"}}>
             <Stack direction="row" spacing={2} justifyContent="space-between">
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
@@ -477,7 +477,7 @@ export default function VendorFormInput({
             </Stack>
           </Grid>
         ) : (
-          <Grid item xs={12}>
+          <Grid item xs={12}  sx={{padding:"10px 3px"}}>
             <Stack direction="row" spacing={2} justifyContent="space-between">
               <Stack direction="row" spacing={2}>
                 <OutlinedButton

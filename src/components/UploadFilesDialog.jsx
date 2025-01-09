@@ -1,5 +1,4 @@
 import {
-  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -35,7 +34,6 @@ export default function UploadFilesDialog({
   handleViewDialogClose,
   viewDocument,
   fileData,
-  downloadIntgater,
   setFormData,
 }) {
   return (
@@ -54,34 +52,39 @@ export default function UploadFilesDialog({
         <DialogContent dividers>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Autocomplete
+              <SelectBox
+                label="Document Type"
                 id="documentType"
-                name="documentType"
+                options={dropdownData}
                 value={formData.documentType}
-                size="small"
-                onChange={(event, newValue) => {
-                  setFormData((p) => ({ ...p, documentType: newValue }));
-                }}
-                inputValue={formData.documentType}
-                onInputChange={(event, newValue) => {
-                  setFormData((p) => ({ ...p, documentType: newValue }));
+                onChange={(e) => {
+                  handleInputChange(e);
+                  if (e.target.value !== "Other") {
+                    setFormData((prev) => ({
+                      ...prev,
+                      other: null,
+                    }));
+                  }
                 }}
                 error={!!formErrors.documentType}
                 helperText={formErrors.documentType}
-                options={dropdownData?.map((a) => a.value) || []}
-                freeSolo
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Document Type"
-                    name="documentType"
-                    variant="outlined"
-                    error={!!formErrors.documentType}
-                    helperText={formErrors.documentType}
-                  />
-                )}
               />
             </Grid>
+            {formData.documentType == "Other" && (
+              <Grid item xs={12}>
+                <TextField
+                  label="Other"
+                  id="other"
+                  name="other"
+                  value={formData.other}
+                  onChange={handleInputChange}
+                  error={formErrors.other}
+                  helperText={formErrors.other}
+                  fullWidth
+                  size="small"
+                />
+              </Grid>
+            )}
             {sourceType == "CUSTOMER" && (
               <Grid item xs={12}>
                 <TextField
@@ -189,7 +192,6 @@ export default function UploadFilesDialog({
               link.href = viewDocument.url;
               link.download = viewDocument.documentType;
               link.click();
-              downloadIntgater();
             }}
             color="primary"
           >

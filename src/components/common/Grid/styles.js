@@ -10,8 +10,7 @@ export const Cell = styled(TableCell)(({ theme }) => ({
 
 export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   width: "100%",
-  minHeight: "60vh",
-  border: "none",
+  minHeight: "100%",
   borderRadius: "5px !important",
   "& .MuiDataGrid-columnHeader": {
     backgroundColor: theme.palette.primary.main,

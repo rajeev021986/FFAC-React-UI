@@ -939,7 +939,6 @@ export default function VendorEditGrid({
           borderBottom: 1,
           border: "1px solid",
           borderColor: "divider",
-          marginBottom: 2,
           borderRadius: "10px",
         }}
       >

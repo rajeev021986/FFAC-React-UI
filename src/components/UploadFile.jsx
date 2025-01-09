@@ -18,21 +18,8 @@ import { CloudDownload, Delete, Visibility } from "@mui/icons-material"; // Add 
 import moment from "moment";
 import Uploadimg from "../assets/images/upload-placeholder.png";
 import ApiManager from "../services/ApiManager";
-import {
-  useAddAgentMutation,
-  useDownloadDocumnentMutation,
-  useGetCustomerFileListMutation,
-  useUploadCustomerFileMutation,
-} from "../store/api/codeDataApi";
+import { useUploadCustomerFileMutation } from "../store/api/codeDataApi";
 import Loader from "./common/Loader/Loader";
-import { useGetOptionsSettingsQuery } from "../store/api/settingsApi";
-import SelectBox from "./common/SelectBox";
-import { appDateFormat } from "./utils/date";
-import ExcelViewer from "./common/FileViewer/ExcelViewer";
-import ImageViewer from "./common/FileViewer/ImageViewer";
-import PDFViewer from "./common/FileViewer/PDFViewer";
-import WordViewer from "./common/FileViewer/WordViewer";
-import TextViewer from "./common/FileViewer/TextViewer";
 import { StyledDataGrid } from "./common/Grid/styles";
 import UploadFilesDialog from "./UploadFilesDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
@@ -181,6 +168,12 @@ const UploadFile = ({
     if (!formData.documentType) {
       errors.documentType = "Document Type is required";
     }
+    if (formData.documentType == "Other") {
+      if (!formData.other) {
+        errors.other = "Other Type is required";
+      }
+    }
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };

@@ -241,7 +241,7 @@ export default function CustomerForm({
         ...customerSettingsData?.body,
       });
     }
-  }, [optionsSettingsData]);
+  }, [optionsSettingsData, customerSettingsData]);
   const handleApproveRequest = async () => {
     setRejectError(false);
     try {
@@ -329,7 +329,6 @@ export default function CustomerForm({
       customerNameRef.current.focus();
     }
   }, []);
-
   return (
     <>
       {currentError && <div style={{ color: "red" }}>{currentError}</div>}
