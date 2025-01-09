@@ -1,13 +1,22 @@
-import React from "react";
-import { Add } from "@mui/icons-material";
-import { Box, Button } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import React, { useRef } from "react";
+import { Box, Button, IconButton } from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AutoCompleteInput from "../../components/common/AutoCompletInput";
+import { StyledDataGrid } from "../../components/common/Grid/styles";
 
 export function VesselMapping({ formik, disabled, fetchSuggestions }) {
   const vesselLineEntity = formik.values.vesselLineEntities || [
     { id: 1, vesselName: "", shippingLine: "" },
   ];
+
+  const newRowRef = useRef(null);
+  const setFocus = () => {
+    setTimeout(() => {
+      if (newRowRef.current) {
+        newRowRef.current.focus();
+      }
+    }, 1000);
+  };
   // Handler to add a new row
   const addRow = () => {
     const newRow = {
@@ -17,6 +26,7 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
       new: true,
     };
     formik.setFieldValue("vesselLineEntities", [...vesselLineEntity, newRow]);
+    setFocus();
   };
 
   // Handler to delete a row
@@ -31,17 +41,32 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
       field: "vesselName",
       headerName: "Vessel Name",
       flex: 1,
-      editable: true,
-      renderEditCell: (params) => (
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
         <AutoCompleteInput
           id="vesselName"
           suggestionName="vessel_name"
           value={params.value}
           error={
-            formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
+            formik.errors.vesselLineEntities?.[params.rowIndex]?.vesselName
           }
-          onChange={formik.handleChange}
-          fetchSuggestions={fetchSuggestions} // Pass the function for fetching suggestions
+          onChange={(newValue) => {
+            const rowIndex = formik.values.vesselLineEntities.findIndex(
+              (entity) => entity.id === params.id
+            );
+            formik.setValues({
+              ...formik.values,
+              vesselLineEntities: formik.values.vesselLineEntities.map(
+                (entity, index) =>
+                  index === rowIndex
+                    ? { ...entity, vesselName: newValue }
+                    : entity
+              ),
+            });
+          }}
+          inputRef={newRowRef}
+          fetchSuggestions={fetchSuggestions}
         />
       ),
     },
@@ -49,8 +74,9 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
       field: "shippingLine",
       headerName: "Shipping Line",
       flex: 1,
-      editable: true,
-      renderEditCell: (params) => (
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
         <AutoCompleteInput
           id="shippingLine"
           suggestionName="name"
@@ -58,8 +84,22 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
           error={
             formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
           }
-          onChange={formik.handleChange}
-          fetchSuggestions={fetchSuggestions} // Pass the function for fetching suggestions
+          onChange={(newValue) => {
+            const rowIndex = formik.values.vesselLineEntities.findIndex(
+              (entity) => entity.id === params.id
+            );
+            formik.setValues({
+              ...formik.values,
+              vesselLineEntities: formik.values.vesselLineEntities.map(
+                (entity, index) =>
+                  index === rowIndex
+                    ? { ...entity, shippingLine: newValue }
+                    : entity
+              ),
+            });
+          }}
+          inputRef={newRowRef}
+          fetchSuggestions={fetchSuggestions}
         />
       ),
     },
@@ -68,6 +108,13 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
       field: "actions",
       headerName: "Actions",
       sortable: false,
+      headerAlign: "center",
+      align: "center",
+      renderHeader: () => (
+        <IconButton color="white">
+          <AddCircleIcon onClick={addRow} />
+        </IconButton>
+      ),
       renderCell: (params) => (
         <Button
           color="error"
@@ -90,18 +137,9 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
   };
 
   return (
-    <Box sx={{ width: "100%", marginTop: 2 }}>
-      <Button
-        startIcon={<Add />}
-        onClick={addRow}
-        variant="outlined"
-        color="primary"
-        disabled={disabled}
-      >
-        Add Line
-      </Button>
-      <Box sx={{ height: 400, marginTop: 2 }}>
-        <DataGrid
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ height: 400 }}>
+        <StyledDataGrid
           rows={vesselLineEntity}
           columns={columns}
           disableSelectionOnClick

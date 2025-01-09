@@ -15,9 +15,9 @@ import { VesselMapping } from "./VesselMapping";
 import UploadFile from "../../components/UploadFile";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
-import AutoCompleteInput from "../../components/common/AutoCompletInput";
 import ApiManager from "../../services/ApiManager";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 
 export function VesselForm({ initialValues, type }) {
   const location = useLocation();
@@ -86,8 +86,8 @@ export function VesselForm({ initialValues, type }) {
       inputId === "vesselName"
         ? "VESSEL"
         : inputId === "lineName"
-          ? "LINE"
-          : "SHIPPER";
+        ? "LINE"
+        : "SHIPPER";
     if (!inputValue) return [];
 
     const response = await ApiManager.fetchVesselSuggestions(
@@ -98,70 +98,73 @@ export function VesselForm({ initialValues, type }) {
 
     return data || [];
   };
-  const { data: vesselSettingsData } = useGetOptionsSettingsQuery("vessel_settings");
+  const { data: vesselSettingsData } =
+    useGetOptionsSettingsQuery("vessel_settings");
   return (
     <>
       {type == "copy" || type == "add" ? (
         <>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <AutoCompleteInput
-                label="Vessel Name"
-                id="vesselName"
-                suggestionName="vessel_name"
-                value={formik.values.vesselName}
-                error={formik.errors.vesselName}
-                onChange={formik.handleChange}
-                fetchSuggestions={fetchSuggestions}
-              ></AutoCompleteInput>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <AutoCompleteInput
-                label="Line Name"
-                id="lineName"
-                value={formik.values.lineName}
-                error={formik.errors.lineName}
-                onChange={formik.handleChange}
-                suggestionName="line_name"
-                fetchSuggestions={fetchSuggestions}
-              ></AutoCompleteInput>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Vessel Owner"
-                id="vesselOwner"
-                value={formik.values.vesselOwner}
-                error={formik.errors.vesselOwner}
-                onChange={formik.handleChange}
-              />
-            </Grid>
+          <Grid container sx={{ padding: 0, margin: 0, paddingRight: "8px" }}>
+            <Grid container>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <FormAutoComplete
+                  label="Vessel Name"
+                  id="vesselName"
+                  suggestionName="vessel_name"
+                  value={formik.values.vesselName}
+                  error={formik.errors.vesselName}
+                  onChange={formik.handleChange}
+                  fetchSuggestions={fetchSuggestions}
+                ></FormAutoComplete>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <FormAutoComplete
+                  label="Line Name"
+                  id="lineName"
+                  value={formik.values.lineName}
+                  error={formik.errors.lineName}
+                  onChange={formik.handleChange}
+                  suggestionName="line_name"
+                  fetchSuggestions={fetchSuggestions}
+                ></FormAutoComplete>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <InputBox
+                  label="Vessel Owner"
+                  id="vesselOwner"
+                  value={formik.values.vesselOwner}
+                  error={formik.errors.vesselOwner}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Vessel Master"
-                id="vesselMaster"
-                value={formik.values.vesselMaster}
-                error={formik.errors.vesselMaster}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Status"
-                id="status"
-                value={formik.values.status}
-                error={formik.errors.status}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Mode"
-                id="mode"
-                value={formik.values.mode}
-                error={formik.errors.mode}
-                onChange={formik.handleChange}
-              />
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <InputBox
+                  label="Status"
+                  id="status"
+                  value={formik.values.status}
+                  error={formik.errors.status}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
             </Grid>
 
             <Grid item xs={12}>
@@ -169,7 +172,6 @@ export function VesselForm({ initialValues, type }) {
                 sx={{
                   borderBottom: 1,
                   borderColor: "divider",
-                  marginBottom: 2,
                 }}
               >
                 <VesselMapping
@@ -191,7 +193,7 @@ export function VesselForm({ initialValues, type }) {
                   sx={{ fontWeight: "500", borderRadius: "12px" }}
                 >
                   {isLoading && <CircularProgress size={20} color="white" />}{" "}
-                  Save
+                  Add
                 </ThemeButton>
               </Stack>
             </Grid>
@@ -210,75 +212,101 @@ export function VesselForm({ initialValues, type }) {
                   <Tab label="Upload Documents" value="2" />
                 </TabList>
               </Box>
-              <TabPanel value="1">
+              <TabPanel value="1" sx={{ margin: 0, padding: 0 }}>
                 {" "}
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <AutoCompleteInput
-                      label="Vessel Name"
-                      id="vesselName"
-                      suggestionName="vessel_name"
-                      value={formik.values.vesselName}
-                      error={formik.errors.vesselName}
-                      onChange={formik.handleChange}
-                      fetchSuggestions={fetchSuggestions}
-                    ></AutoCompleteInput>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <AutoCompleteInput
-                      label="Line Name"
-                      id="lineName"
-                      value={formik.values.lineName}
-                      error={formik.errors.lineName}
-                      onChange={formik.handleChange}
-                      suggestionName="line_name"
-                      fetchSuggestions={fetchSuggestions}
-                    ></AutoCompleteInput>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Vessel Owner"
-                      id="vesselOwner"
-                      value={formik.values.vesselOwner}
-                      error={formik.errors.vesselOwner}
-                      onChange={formik.handleChange}
-                    />
+                <Grid
+                  container
+                  sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
+                >
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <FormAutoComplete
+                        label="Vessel Name"
+                        id="vesselName"
+                        suggestionName="vessel_name"
+                        value={formik.values.vesselName}
+                        error={formik.errors.vesselName}
+                        onChange={formik.handleChange}
+                        fetchSuggestions={fetchSuggestions}
+                      ></FormAutoComplete>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <FormAutoComplete
+                        label="Line Name"
+                        id="lineName"
+                        value={formik.values.lineName}
+                        error={formik.errors.lineName}
+                        onChange={formik.handleChange}
+                        suggestionName="line_name"
+                        fetchSuggestions={fetchSuggestions}
+                      ></FormAutoComplete>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Vessel Owner"
+                        id="vesselOwner"
+                        value={formik.values.vesselOwner}
+                        error={formik.errors.vesselOwner}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Status"
+                        id="status"
+                        value={formik.values.status}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Vessel Master"
-                      id="vesselMaster"
-                      value={formik.values.vesselMaster}
-                      error={formik.errors.vesselMaster}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Status"
-                      id="status"
-                      value={formik.values.status}
-                      error={formik.errors.status}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Mode"
-                      id="mode"
-                      value={formik.values.mode}
-                      error={formik.errors.mode}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      margin: "0px ! important",
+                      padding: "0px ! important",
+                    }}
+                  >
                     <Box
                       sx={{
                         borderBottom: 1,
                         borderColor: "divider",
-                        marginBottom: 2,
                       }}
                     >
                       <VesselMapping
@@ -302,13 +330,13 @@ export function VesselForm({ initialValues, type }) {
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
-                        Save
+                        Update
                       </ThemeButton>
                     </Stack>
                   </Grid>
                 </Grid>
               </TabPanel>{" "}
-              <TabPanel value="2">
+              <TabPanel value="2" sx={{ margin: 0, padding: 0 }}>
                 <UploadFile
                   customer_id={initialValues.id}
                   disabled={disabled}

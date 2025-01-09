@@ -167,6 +167,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
               }}
               options={unitTypeOptions}
               value={params.value}
+              placeholder={true}
               onChange={(e) =>
                 updateRowValue(params, e, "customerEntityTariffs")
               }
@@ -240,6 +241,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
               }}
               options={shipmentTypeOptions}
               value={params.value}
+              placeholder={true}
               onChange={(e) =>
                 updateRowValue(params, e, "customerEntityTariffs")
               }

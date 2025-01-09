@@ -103,8 +103,7 @@ export function VesselScreen() {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 
@@ -164,7 +163,10 @@ export function VesselScreen() {
         }
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        <CardHeader title={<VesselHeader></VesselHeader>} />
+        <CardHeader
+          sx={{ margin: 0, padding: 1 }}
+          title={<VesselHeader></VesselHeader>}
+        />
         <VesselBody
           selectBox={selectBox}
           setSelectBox={setSelectBox}

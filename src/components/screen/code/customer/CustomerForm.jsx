@@ -208,8 +208,7 @@ export default function CustomerForm({
       .then((response) => {
         setOptions(response.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
 
   const handleCityOptionChange = async (query) => {
@@ -217,8 +216,7 @@ export default function CustomerForm({
       .then((response) => {
         setCityOptions(response.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
 
   let shouldShowTabs = Object.values(formik.values?.customerName).some(
@@ -239,7 +237,6 @@ export default function CustomerForm({
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
-
 
   useEffect(() => {
     if (optionsSettingsData?.body || customerSettingsData?.body) {
@@ -567,6 +564,10 @@ export default function CustomerForm({
                   value={formik.values.paymentType}
                   // onChange={formik.handleChange}
                   onChange={(e) => {
+                    formik.setFieldValue("creditAmount", "");
+                    formik.setFieldValue("creditDays", "");
+                    formik.setFieldError("creditAmount", "");
+                    formik.setFieldError("creditDays", "");
                     formik.setFieldValue("paymentType", e.target.value);
                   }}
                   disabled={disabled}
@@ -1113,7 +1114,13 @@ export default function CustomerForm({
                         id="paymentType"
                         name="paymentType" // add name attribute here
                         value={formik.values.paymentType}
-                        onChange={formik.handleChange}
+                        onChange={(e) => {
+                          formik.setFieldValue("creditAmount", "");
+                          formik.setFieldValue("creditDays", "");
+                          formik.setFieldError("creditAmount", "");
+                          formik.setFieldError("creditDays", "");
+                          formik.setFieldValue("paymentType", e.target.value);
+                        }}
                         disabled={disabled}
                         row
                       >

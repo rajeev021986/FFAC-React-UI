@@ -41,8 +41,7 @@ export function VesselFormScreen() {
           vesselLineEntities: response?.body?.vesselLineEntities || [],
         });
         setLoading(false);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     if (state?.initialValues?.id) {
       fetchVesselDetails();
@@ -62,7 +61,9 @@ export function VesselFormScreen() {
         rightComps={<div></div>}
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        <CardContent>
+        <CardContent
+          sx={{ margin: "0px ! important", padding: "0px ! important" }}
+        >
           <VesselForm initialValues={initialValues} type={state?.formAction} />
         </CardContent>
       </Card>

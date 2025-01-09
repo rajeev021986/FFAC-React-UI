@@ -187,6 +187,9 @@ export default function VendorForm({ page = "vendor" }) {
           updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest
             ? 0
             : 1;
+          updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest
+            ? 0
+            : 1;
           let res = await addVendor(updatedValue).unwrap();
           if (res.success) {
             toast.success(res.message);

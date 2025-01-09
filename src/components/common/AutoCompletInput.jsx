@@ -24,7 +24,6 @@ function AutoCompleteInput({
   const tooltipMessage = value ? value : "This field is empty";
 
   const handleInputChange = async (event, newValue) => {
-
     setLoading(true);
     try {
       const data = await fetchSuggestions(newValue, id);
@@ -34,7 +33,6 @@ function AutoCompleteInput({
         setSuggestions(array);
       }
     } catch (error) {
-
       setSuggestions([]);
     } finally {
       setLoading(false);
@@ -82,6 +80,7 @@ function AutoCompleteInput({
             <TextField
               {...params}
               label={label}
+              placeholder="Type to search"
               error={Boolean(error)}
               helperText={error}
               variant="standard"

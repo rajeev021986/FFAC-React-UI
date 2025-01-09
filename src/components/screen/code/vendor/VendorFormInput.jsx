@@ -11,6 +11,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 import { useEffect, useState } from "react";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
+import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 const customToast = () => (
   <div
     style={{
@@ -115,6 +116,25 @@ export default function VendorFormInput({
       );
     }
   };
+
+  const fetchSuggestions = async (inputValue, inputId) => {
+    if (inputId === "chargeName") {
+      inputId = "CHARGE";
+    } else if (inputId === "currency") {
+      inputId = "CURRENCY";
+    } else {
+      inputId = "PORT_COUNTRY";
+    }
+    if (!inputValue) return [];
+    const response = await ApiManager.fetchVesselSuggestions(
+      inputValue,
+      inputId
+    );
+    const data = await response.body;
+
+    return data || [];
+  };
+
   const getFirstError = (errors) => {
     for (const key in errors) {
       if (Array.isArray(errors[key])) {
@@ -135,7 +155,7 @@ export default function VendorFormInput({
   const disable = type == "Approve";
   return (
     <>
-      <Grid container  sx={{ margin: 0, padding: 0, paddingRight: 1 }} >
+      <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
         <Grid container>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
@@ -175,7 +195,8 @@ export default function VendorFormInput({
                 disabled
               />
             </Grid>
-          ) : formik.values.isApproved == -2 || formik.values.isApproved == 1 ? (
+          ) : formik.values.isApproved == -2 ||
+            formik.values.isApproved == 1 ? (
             <Grid
               item
               xs={12}
@@ -185,7 +206,6 @@ export default function VendorFormInput({
               xl={2}
               sx={{ marginTop: 2 }}
               paddingLeft={1}
-              
             >
               <SelectBox
                 label="Status"
@@ -193,7 +213,7 @@ export default function VendorFormInput({
                 options={optionsSettingsData?.body.status}
                 value={
                   formik.values.status == "ACTIVE" ||
-                    formik.values.status == "Active"
+                  formik.values.status == "Active"
                     ? "Active"
                     : formik.values.status
                 }
@@ -264,7 +284,7 @@ export default function VendorFormInput({
           </Grid>
         </Grid>
 
-        <Grid container >
+        <Grid container>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Address 3"
@@ -284,7 +304,7 @@ export default function VendorFormInput({
             />
           </Grid>
         </Grid>
-        <Grid container >
+        <Grid container>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="City"
@@ -303,18 +323,20 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-            <InputBox
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <FormAutoComplete
               label="Country"
               id="country"
-              value={formik.values.country}
-              error={formik.errors.country}
+              suggestionName="country"
+              value={formik.values.vesselName}
+              error={formik.errors.vesselName}
               onChange={formik.handleChange}
-            />
+              fetchSuggestions={fetchSuggestions}
+            ></FormAutoComplete>
           </Grid>
         </Grid>
 
-        <Grid container >
+        <Grid container>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Contact Person"
@@ -385,7 +407,7 @@ export default function VendorFormInput({
           />
         </Grid>
         {formik.values.status.toLowerCase() === "rejected" ||
-          page == "vendorApproval" ? (
+        page == "vendorApproval" ? (
           <Grid item xs={12}>
             <TextField
               label="Reject Remarks"

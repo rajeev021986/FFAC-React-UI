@@ -42,7 +42,7 @@ export default function VendorEditGrid({
       inputId = "CHARGE";
     } else if (inputId === "currency") {
       inputId = "CURRENCY";
-    } else if (inputId === "country") {
+    } else {
       inputId = "PORT_COUNTRY";
     }
     if (!inputValue) return [];

@@ -5,6 +5,7 @@ const styles = {
   root: {
     "& .MuiInputBase-root": {
       borderRadius: "10px",
+      fontSize: "14px",
     },
   },
 };
