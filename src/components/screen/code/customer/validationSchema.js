@@ -32,13 +32,15 @@ export const CustomerValidationSchema = () =>
         return emailRegex.test(value);
       }
     ),
-    telephone: Yup.number(),
+    telephone: Yup.number().typeError('Telephone must be a valid number')
+      .positive('Telephone must be positive'),
     // fax: Yup.string().required("Fax is required"),
     bankName: Yup.string().matches(
       /^[A-Za-z\s]+$/,
       "Bank name must only contain letters"
     ),
-    accountNo: Yup.number(),
+    accountNo: Yup.number().typeError('Account number must be a valid number')
+      .positive('Account number must be positive'),
     // customerType: Yup.string().required("Customer Type is required"),
     // companyCode: Yup.string().required("Company Code is required"),
     paymentType: Yup.string().required("Payment Type is required"),
@@ -66,7 +68,6 @@ export const CustomerValidationSchema = () =>
       Yup.object().shape({
         unitRate: Yup.number()
           .positive("Unit Rate must be a positive number")
-          .min(0.01, "Unit Rate must be greater than 0"),
       })
     ),
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Box, Button, TextField, Tooltip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
@@ -14,6 +14,15 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
     { id: 1, emailId: "", designation: "" },
   ];
 
+  const newRowRef = useRef(null);
+  const setFocus = () => {
+    setTimeout(() => {
+      if (newRowRef.current) {
+        newRowRef.current.focus();
+      }
+    }, 1000);
+  };
+
   // Handler to add a new row
   const addNewRow = () => {
     const newRow = { id: Date.now(), emailId: "", designation: "", new: true };
@@ -21,6 +30,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
       ...customerEntityEmailsIds,
       newRow,
     ]);
+    setFocus();
   };
 
   // Handler to delete a row
@@ -76,6 +86,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
           >
             {" "}
             <SelectBox
+              placeholder={true}
               size="small"
               sx={{
                 marginTop: "0px",
@@ -87,6 +98,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
               onChange={(e) =>
                 updateRowValue(params, e, "customerEntityEmailsIds")
               }
+              inputRef={newRowRef}
             />
           </div>
         </Tooltip>
@@ -114,6 +126,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
             }}
           >
             <TextField
+              placeholder="Enter emails separated by commas"
               size="small"
               value={params.value}
               onChange={(e) =>
@@ -131,6 +144,11 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
                 fontSize: "14px",
                 width: "90%",
                 input: { textAlign: "center" },
+              }}
+              InputProps={{
+                style: {
+                  fontSize: "14px",
+                },
               }}
             />
           </div>
