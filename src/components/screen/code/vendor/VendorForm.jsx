@@ -40,28 +40,20 @@ export default function VendorForm({ page = "vendor" }) {
   const [getVendor, { isLoading }] = useLazyGetVendorQuery();
   const validationSchema = Yup.object({
     vendorName: Yup.string().required("Vendor Name is required"),
-    tinNo: Yup.string().nullable(),
-    vrnNo: Yup.string().nullable(),
-    // status: Yup.string().required("Status is required"),
+    tinNo: Yup.number().nullable(),
+    vrnNo: Yup.number().nullable(),
     type: Yup.string().required("Type is required"),
     add1: Yup.string().required("Address is required"),
-    // add2: Yup.string().nullable(),
-    // add3: Yup.string().nullable(),
     alias: Yup.string(),
-    telephone1: Yup.string(),
-    // telephone2: Yup.string().nullable(),
+    telephone1: Yup.number(),
     fax: Yup.string(),
     emailId: Yup.string().email(),
     city: Yup.string(),
     country: Yup.string(),
-    creditDays: Yup.number()
-      .required("Credit Days is required")
-      .min(0, "Credit Days cannot be negative"),
+    creditDays: Yup.number().min(0, "Credit Days cannot be negative"),
     province: Yup.string(),
-    poNo: Yup.string(),
+    poNo: Yup.number(),
     contactPerson: Yup.string(),
-    // companyCode: Yup.string().nullable(),
-    // rejectRemarks: Yup.string().nullable(),
     vendorEntityTariffs: Yup.array().of(
       Yup.object().shape({
         unitRate: Yup.number()
@@ -84,25 +76,27 @@ export default function VendorForm({ page = "vendor" }) {
     //     thirdWeek: Yup.string().required("Third Week is required"),
     //   })
     // ).required("Vendor Entity Demurage Tariffs are required"),
-    // vendorEntityFreeDays: Yup.array(
-    //   Yup.object({
-    //     id: Yup.number().required("ID is required"),
-    //     country: Yup.string().required("Country is required"),
-    //     noOfFreeDays: Yup.number()
-    //       .required("Number of Free Days is required")
-    //       .min(0, "Number of Free Days cannot be negative"),
-    //   })
-    // ).required("Vendor Entity Free Days are required"),
+    vendorEntityFreeDays: Yup.array(
+      Yup.object({
+        id: Yup.number(),
+        country: Yup.string(),
+        noOfFreeDays: Yup.number().min(
+          0,
+          "Number of Free Days cannot be negative"
+        ),
+      })
+    ),
 
-    // vendorBankDetails: Yup.array(
-    //   Yup.object({
-    //     id: Yup.number().required("ID is required"),
-    //     bankName: Yup.string().required("Bank Name is required"),
-    //     bankAddress: Yup.string().required("Bank Address is required"),
-    //     currency: Yup.string().required("Currency is required"),
-    //     swiftCode: Yup.string().required("SWIFT Code is required"),
-    //   })
-    // ).required("Vendor Bank Details are required"),
+    vendorBankDetails: Yup.array(
+      Yup.object({
+        id: Yup.number(),
+        bankName: Yup.string(),
+        accountNo: Yup.number(),
+        bankAddress: Yup.string(),
+        currency: Yup.string(),
+        swiftCode: Yup.string(),
+      })
+    ),
   });
   const { data: optionsSettingsData, isLoading: dropLoadco } =
     useGetOptionsSettingsQuery("common_settings");

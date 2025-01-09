@@ -829,7 +829,7 @@ export default function VendorEditGrid({
         },
         {
           field: "accountNo",
-          headerName: "accountNo",
+          headerName: "AccountNo",
           flex: 1,
           renderCell: (params) => (
             <div
