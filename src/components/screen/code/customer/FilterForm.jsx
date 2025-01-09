@@ -12,7 +12,7 @@ export default function FilterForm() {
   const inputs = useSelector((state) => state.codeCustomer.formData);
 
   const formik = useFormik({
-    initialValues: {
+    initialValues: inputs || {
       customerName: inputs.customerName || "",
       tinNo: inputs.tinNo || "",
       vatNo: inputs.vatNo || "",
@@ -24,7 +24,6 @@ export default function FilterForm() {
     },
   });
   const handleReset = () => {
-    formik.resetForm();
     dispatch(
       updateInput({
         customerName: "",
@@ -34,13 +33,19 @@ export default function FilterForm() {
         isDoc: "",
       })
     );
+    formik.setValues({
+      customerName: "",
+      tinNo: "",
+      vatNo: "",
+      isApproved: "",
+      isDoc: "",
+    });
   };
 
   const statusOptions = [
     { value: 1, label: "Active" },
     { value: -2, label: "InActive" },
-    { value: 0, label: "New" },
-    { value: 0, label: "Pending_Documents" },
+    { value: 0, label: "New & Pen Doc" },
     { value: -1, label: "Rejected" },
   ];
   const documentOptions = [

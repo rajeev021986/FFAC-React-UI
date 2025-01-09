@@ -12,30 +12,39 @@ export default function VendorFilterForm() {
   const inputs = useSelector((state) => state.vendor.formData);
 
   const formik = useFormik({
-    initialValues: {
+    initialValues: inputs || {
       tinNo: inputs.tinNo || "",
       vendorName: inputs.vendorName || "",
       vrnNo: inputs.country || "",
+      isApproved: inputs.isApproved || "",
+      isDoc: inputs.isDoc || "",
     },
     onSubmit: (values) => {
       dispatch(updateVendorInput(values));
     },
   });
   const handleReset = () => {
-    formik.resetForm();
     dispatch(
       updateVendorInput({
         tinNo: "",
         vendorName: "",
         vrnNo: "",
+        isApproved: "",
+        isDoc: "",
       })
     );
+    formik.setValues({
+      tinNo: "",
+      vendorName: "",
+      vrnNo: "",
+      isApproved: "",
+      isDoc: "",
+    });
   };
   const StatusOptions = [
     { label: "Active", value: 1 },
     { label: "InActive", value: -2 },
-    { label: "New", value: 0 },
-    { label: "Pending Documents", value: 0 },
+    { label: "New & Pen Doc", value: 0 },
     { label: "Rejected", value: -1 },
   ];
   const StatusOptionsDoc = [
@@ -78,7 +87,7 @@ export default function VendorFilterForm() {
               label="Status"
               id="isApproved"
               options={StatusOptions}
-              value={formik.values.status}
+              value={formik.values.isApproved}
               onChange={formik.handleChange}
               sx={{ marginLeft: "0px !important" }}
             />
@@ -88,7 +97,7 @@ export default function VendorFilterForm() {
               label="Doc Status"
               id="isDoc"
               options={StatusOptionsDoc}
-              value={formik.values.doc_status}
+              value={formik.values.isDoc}
               onChange={formik.handleChange}
               sx={{ marginLeft: "0px !important" }}
             />

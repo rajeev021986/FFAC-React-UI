@@ -14,7 +14,7 @@ const Chips = {
     chipvalues: [
       { value: 1, label: "Active" },
       { value: -2, label: "In Active" },
-      { value: 0, label: "Pending Document" },
+      { value: 0, label: "New & Pen Doc" },
       { value: -1, label: "Rejected" },
     ],
   },

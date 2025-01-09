@@ -78,7 +78,7 @@ export default function VendorEditGrid({
             (value) => value === "" || value === null || value === undefined
           )
         );
-        if (hasEmptyFields) {
+        if (false) {
           toast.error("Please fill in all fields before adding a new row.", {
             position: "top-right",
             autoClose: 3000,
@@ -336,7 +336,7 @@ export default function VendorEditGrid({
           )
         );
 
-        if (hasEmptyFields) {
+        if (false) {
           toast.error("Please fill in all fields before adding a new row.", {
             position: "top-right",
             autoClose: 3000,
@@ -488,7 +488,7 @@ export default function VendorEditGrid({
           )
         );
 
-        if (hasEmptyFields) {
+        if (false) {
           toast.error("Please fill in all fields before adding a new row.", {
             position: "top-right",
             autoClose: 3000,
@@ -616,7 +616,7 @@ export default function VendorEditGrid({
           )
         );
 
-        if (hasEmptyFields) {
+        if (false) {
           toast.error("Please fill in all fields before adding a new row.", {
             position: "top-right",
             autoClose: 3000,
@@ -736,7 +736,7 @@ export default function VendorEditGrid({
           )
         );
 
-        if (hasEmptyFields) {
+        if (false) {
           toast.error("Please fill in all fields before adding a new row.", {
             position: "top-right",
             autoClose: 3000,
