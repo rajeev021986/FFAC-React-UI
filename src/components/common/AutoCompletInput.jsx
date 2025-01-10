@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   TextField,
   Autocomplete,
@@ -17,23 +17,22 @@ function AutoCompleteInput({
   error,
   onChange,
   fetchSuggestions,
+  ...props
 }) {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const tooltipMessage = value ? value : "This field is empty";
 
   const handleInputChange = async (event, newValue) => {
-    console.log("newValue", newValue);
     setLoading(true);
     try {
       const data = await fetchSuggestions(newValue, id);
       if (data) {
         const array = data.map((obj) => obj[suggestionName]);
-        console.log(array, "array");
+
         setSuggestions(array);
       }
     } catch (error) {
-      console.error("Error fetching suggestions:", error);
       setSuggestions([]);
     } finally {
       setLoading(false);
@@ -55,6 +54,8 @@ function AutoCompleteInput({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        paddingTop: "5px",
+        paddingBottom: "8px",
       }}
     >
       <Autocomplete
@@ -70,12 +71,16 @@ function AutoCompleteInput({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          border: "1px solid #ccc",
+          borderRadius: "10px",
+          paddingLeft: "5px",
         }}
         renderInput={(params) => (
           <Tooltip title={tooltipMessage} arrow>
             <TextField
               {...params}
               label={label}
+              placeholder="Type to search"
               error={Boolean(error)}
               helperText={error}
               variant="standard"
@@ -83,7 +88,10 @@ function AutoCompleteInput({
               InputProps={{
                 disableUnderline: true,
                 ...params.InputProps,
-                style: { border: "none", fontSize: "14px" },
+                style: {
+                  border: "none",
+                  fontSize: "14px",
+                },
                 endAdornment: (
                   <>
                     {loading ? (
@@ -93,6 +101,7 @@ function AutoCompleteInput({
                   </>
                 ),
               }}
+              {...props}
             />
           </Tooltip>
         )}

@@ -28,7 +28,6 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
   });
 
   const fetchUserAudit = () => {
-    console.log(modal.data.id, "modal");
     fetchAudit({
       id: modal?.data?.id,
     });

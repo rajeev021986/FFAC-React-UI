@@ -35,7 +35,7 @@ export default function UserCard({ setDraweropen }) {
         }
     ]
 
-    useEffect(() => {   
+    useEffect(() => {
 
         MENU_ITEMS.push({
             label: 'Settings',
@@ -55,19 +55,19 @@ export default function UserCard({ setDraweropen }) {
             </IconButton>
             <TMenu
                 buttonIcon={<Avatar alt="Remy Sharp" sx={styles.avater}>
-                    A
+                    {localStorage.getItem("userId").charAt(0).toUpperCase()}
                 </Avatar>}
                 buttonProps={{ p: 0 }}
                 menuItems={MENU_ITEMS}
             />
             <Typography variant="subtitle1" style={{ fontWeight: 500 }}>
-                Gana
+                {localStorage.getItem("userId").split(" ")
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                    .join(" ")}
             </Typography>
             <IconButton onClick={() => handleLogout()}>
                 <LogoutOutlined />
-
             </IconButton>
-
         </Box>
     )
 }

@@ -11,7 +11,6 @@ const AddOtmBolScreen = () => {
   const { state } = useLocation();
   const [payload,setPayload] = useState(null);
   const [detailsPayload,setDetailsPayload] = useState(null);
-  console.log(state);
   const [fetch, { isLoading, data }] = useLazyFetchOTMBOLPayLoadQuery();
   useEffect(() => {
     (async () => {
@@ -39,16 +38,12 @@ const AddOtmBolScreen = () => {
         duty_amount: "",
         ...item,
       }));
-      console.log("details : ",details);
       
       const payloadData = {...data.headerData,details : details.slice(0,100)}
       const totalGrossWeight = data.details.reduce((sum, item) => sum + parseFloat(item.gross_weight), 0);
       
-      console.log("totalGrossWeight : ",totalGrossWeight);
       
       setPayload(payloadData)
-      console.log("payload : ",payloadData);
-      console.log("data.details : ",data.details);
     })();
   }, []);
 

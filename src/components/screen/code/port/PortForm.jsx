@@ -21,12 +21,10 @@ function PortForm() {
     const [addPort, isLoading] = useAddPortMutation();
     const [updatePort] = useUpdatePortMutation();
     const { id, type } = location.state;
-    console.log(type, id, "type")
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    const tabs = [{ label: "Port Details", value: 1 },
-    { label: "Document Details", value: 2 }
+    const tabs = [{ label: "Port Details", value: 1 }
     ];
     const { data: optionsSettingsData } = useGetOptionsSettingsQuery("common_settings");
     const { data: customerSettingsData } = useGetOptionsSettingsQuery("port_settings");
@@ -52,7 +50,6 @@ function PortForm() {
                 toast.error("Failed to fetch Port data");
             }
         } catch (error) {
-            console.error("Error fetching Port data:", error);
             toast.error("Error fetching Port data");
         }
     };
@@ -85,9 +82,7 @@ function PortForm() {
             if (type == "copy" || type == "new") {
                 try {
                     const result = await addPort({ ...values, id: null }).unwrap();
-                    console.log("Success:", result);
                 } catch (error) {
-                    console.error("Error:", error);
                 }
             } else {
                 try {

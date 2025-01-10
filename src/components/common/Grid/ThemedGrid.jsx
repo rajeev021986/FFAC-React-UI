@@ -45,7 +45,18 @@ const ThemedGrid = (props) => {
         headerAlign: "center",
         align: "center",
         renderCell: (params) => {
-          return StatusChip(params.row.status.toLowerCase());
+          return StatusChip(params.row.status.toLowerCase(), "status");
+        },
+      };
+    } else if (a.field === "isDoc") {
+      return {
+        field: "isDoc",
+        headerName: "Document",
+        width: 150,
+        headerAlign: "center",
+        align: "center",
+        renderCell: (params) => {
+          return StatusChip(params.row.isDoc, "document");
         },
       };
     } else {
@@ -62,7 +73,7 @@ const ThemedGrid = (props) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: "calc(100vh - 250px)",
+        height: "calc(100vh - 190px)",
         overflowY: "auto",
       }}
     >
@@ -86,7 +97,7 @@ const ThemedGrid = (props) => {
         disableColumnFilter
         slots={{
           toolbar: () => (
-            <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", p: 0 }}>
               <GridToolbarColumnsButton />
             </Box>
           ),

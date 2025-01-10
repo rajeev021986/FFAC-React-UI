@@ -59,7 +59,7 @@ export default function AddCard() {
     const fetchUserData = async () => {
       try {
         const res = await ApiManager.getUserData(id);
-        console.log(res, "dfghjkl");
+
         if (formikRef.current) {
           formikRef.current.setFieldValue("defaultLocation", res.body.defaultLocation);
           formikRef.current.setFieldValue("status", res.body.status);

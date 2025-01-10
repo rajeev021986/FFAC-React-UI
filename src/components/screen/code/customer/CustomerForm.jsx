@@ -8,11 +8,12 @@ import {
   RadioGroup,
   Stack,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { useFormik } from "formik";
 import WarningIcon from "@mui/icons-material/Warning";
 import { useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import AppAutocomplete from "../../../common/AppAutocomplete";
@@ -45,6 +46,7 @@ import UploadFile from "../../../UploadFile";
 import { UploadFileOutlined } from "@mui/icons-material";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
+import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 
 export default function CustomerForm({
   initialValues,
@@ -56,14 +58,11 @@ export default function CustomerForm({
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
-  const [uploadedFiles, setUploadedFiles] = useState(initialValues.files || []);
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
   const [loading, setLoading] = useState(false);
-  const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateCustomer] = useUpdateCustomerMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const location = useLocation();
-
+  const [rejectError, setRejectError] = useState(false);
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
 
@@ -82,6 +81,7 @@ export default function CustomerForm({
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
+    validateOnChange: false,
     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
@@ -95,10 +95,13 @@ export default function CustomerForm({
           delete values.id;
           values.isApproved = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
+
           if (values.paymentType === "cash") {
             delete values.creditAmount;
             delete values.creditDays;
           }
+          values.tinNo = values.tinNo.trim() || null;
+          values.vatNo = values.vatNo.trim() || null;
           let response = await addCustomer({
             ...values,
             customerEntityEmailsIds: emails,
@@ -111,15 +114,15 @@ export default function CustomerForm({
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
-            nav("/app/entity/customer");
+            nav(-1);
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
               closeButton: false,
             });
           }
         } catch (error) {
-          const message = error.data.message;
           if (error.status === 409) {
+            const message = error.data.message;
             toast.custom(<CustomToast message={message} toast="error" />, {
               closeButton: false,
             });
@@ -137,10 +140,13 @@ export default function CustomerForm({
         }
       } else {
         try {
+          setRejectError(false);
           if (values.paymentType === "cash") {
             delete values.creditAmount;
             delete values.creditDays;
           }
+          values.tinNo = values.tinNo.trim() || null;
+          values.vatNo = values.vatNo.trim() || null;
 
           let emails = values.customerEntityEmailsIds.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
@@ -162,15 +168,15 @@ export default function CustomerForm({
             toast.custom(<CustomToast message={message} toast="success" />, {
               closeButton: false,
             });
-            nav("/app/entity/customer");
+            nav(-1);
           } else {
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
           }
         } catch (error) {
-          const message = error.data.message;
           if (error.status === 409) {
+            const message = error.data.message;
             toast.custom(
               <CustomToast message={message} toast="error" />,
 
@@ -195,25 +201,19 @@ export default function CustomerForm({
   });
 
   const handleSalesOptionChange = async (query) => {
-    console.log(query);
     ApiManager.getSalesOptions("salesname", query)
       .then((response) => {
         setOptions(response.data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   const handleCityOptionChange = async (query) => {
-    console.log(query);
     ApiManager.getCityOptions("city", query)
       .then((response) => {
         setCityOptions(response.data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   let shouldShowTabs = Object.values(formik.values?.customerName).some(
@@ -226,7 +226,6 @@ export default function CustomerForm({
       setEnquiryAuditDetails(res);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -236,8 +235,6 @@ export default function CustomerForm({
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
 
-  console.log(optionsSettingsData, "optionsSettingsData");
-
   useEffect(() => {
     if (optionsSettingsData?.body || customerSettingsData?.body) {
       setDropdownData({
@@ -245,17 +242,9 @@ export default function CustomerForm({
         ...customerSettingsData?.body,
       });
     }
-  }, [optionsSettingsData]);
+  }, [optionsSettingsData, customerSettingsData]);
   const handleApproveRequest = async () => {
-    if (formik.values.status == "Pending_Documents") {
-      toast.custom(
-        <CustomToast message="Document is Pending!" toast="warn" />,
-        {
-          closeButton: false,
-        }
-      );
-      return;
-    }
+    setRejectError(false);
     try {
       const response = await ApiManager.approveCustomerApprove(
         initialValues.id,
@@ -280,6 +269,7 @@ export default function CustomerForm({
   };
   const handleRejectRequest = async () => {
     if (!formik.values.rejectRemarks) {
+      setRejectError(true);
       toast.custom(
         <CustomToast message="Reject remarks to be filled!" toast="warn" />,
         {
@@ -312,7 +302,8 @@ export default function CustomerForm({
       );
     }
   };
-  const disabled = page == "customer" ? false : true;
+  const disabled =
+    page == "customer" || page == "customerApprove" ? false : true;
   const getFirstError = (errors) => {
     for (const key in errors) {
       if (Array.isArray(errors[key])) {
@@ -330,27 +321,65 @@ export default function CustomerForm({
     return null;
   };
 
+  const fetchSuggestions = async (inputValue, inputId) => {
+    inputId = "PORT_COUNTRY";
+    if (!inputValue) return [];
+
+    try {
+      const response = await ApiManager.fetchVesselSuggestions(
+        inputValue,
+        inputId
+      );
+      const data = await response.body;
+
+      const uniqueSuggestions = data.reduce((acc, item) => {
+        const exists = acc.some((entry) => entry.country === item.country);
+        if (!exists) acc.push(item);
+        return acc;
+      }, []);
+
+      return uniqueSuggestions;
+    } catch (error) {
+      return [];
+    }
+  };
+
   const currentError = getFirstError(formik.errors);
 
+  const customerNameRef = useRef(null);
+
+  useEffect(() => {
+    if (customerNameRef.current) {
+      customerNameRef.current.focus();
+    }
+  }, []);
   return (
     <>
       {currentError && <div style={{ color: "red" }}>{currentError}</div>}
-      {!shouldShowTabs || type == "copy" ? (
+      {type == "add" ? (
         <>
           {" "}
-          <Grid container paddingBottom={2}>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
-                <InputBox
-                  label="Customer Name"
-                  id="customerName"
-                  value={formik.values.customerName}
-                  disabled={disabled}
-                  error={formik.errors.customerName}
-                  onChange={formik.handleChange}
-                />
+          <Grid container sx={{ padding: 0, margin: 0, paddingRight: "8px" }}>
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <Tooltip
+                  title={
+                    !formik.values.customerName ? "Field is mandatory" : ""
+                  }
+                  arrow
+                >
+                  <InputBox
+                    label="Customer Name*"
+                    id="customerName"
+                    value={formik.values.customerName}
+                    disabled={disabled}
+                    error={formik.errors.customerName}
+                    onChange={formik.handleChange}
+                    inputRef={customerNameRef}
+                  />
+                </Tooltip>
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="TIN No."
                   id="tinNo"
@@ -360,7 +389,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="VAT No."
                   id="vatNo"
@@ -370,7 +399,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Status"
                   id="status"
@@ -381,18 +410,23 @@ export default function CustomerForm({
                 />
               </Grid>
             </Grid>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
-                <InputBox
-                  label="Address 1."
-                  id="add1"
-                  value={formik.values.add1}
-                  error={formik.errors.add1}
-                  onChange={formik.handleChange}
-                  disabled={disabled}
-                />
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <Tooltip
+                  title={!formik.values.add1 ? "Field is mandatory" : ""}
+                  arrow
+                >
+                  <InputBox
+                    label="Address 1.*"
+                    id="add1"
+                    value={formik.values.add1}
+                    error={formik.errors.add1}
+                    onChange={formik.handleChange}
+                    disabled={disabled}
+                  />
+                </Tooltip>
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Address 2."
                   id="add2"
@@ -402,7 +436,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Address 3."
                   id="add3"
@@ -412,7 +446,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="PoNo"
                   id="poNo"
@@ -423,8 +457,8 @@ export default function CustomerForm({
                 />
               </Grid>
             </Grid>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="City"
                   id="city"
@@ -434,7 +468,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Province"
                   id="province"
@@ -444,19 +478,29 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
-                <InputBox
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <FormAutoComplete
                   label="Country"
                   id="country"
+                  suggestionName="country"
                   value={formik.values.country}
                   error={formik.errors.country}
                   onChange={formik.handleChange}
-                  disabled={disabled}
-                />
+                  fetchSuggestions={fetchSuggestions}
+                ></FormAutoComplete>
               </Grid>
             </Grid>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Contact Person"
                   id="contactPerson"
@@ -466,7 +510,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Email Id "
                   id="emailId"
@@ -476,7 +520,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Telephone"
                   id="telephone"
@@ -486,7 +530,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Fax"
                   id="fax"
@@ -497,8 +541,8 @@ export default function CustomerForm({
                 />
               </Grid>
             </Grid>
-            <Grid container paddingTop={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+            <Grid container>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Bank Name"
                   id="bankName"
@@ -508,7 +552,7 @@ export default function CustomerForm({
                   disabled={disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Account No."
                   id="accountNo"
@@ -519,18 +563,6 @@ export default function CustomerForm({
                 />
               </Grid>
               {/* customer type */}
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
-                <InputBox
-                  label="Customer Type"
-                  id="customerType"
-                  value={formik.values.customerType}
-                  error={formik.errors.customerType}
-                  onChange={formik.handleChange}
-                  disabled={disabled}
-                />
-              </Grid>
-            </Grid>
-            <Grid container paddingTop={2}>
               <Grid
                 item
                 xs={12}
@@ -538,7 +570,29 @@ export default function CustomerForm({
                 md={4}
                 lg={3}
                 xl={2}
-                paddingLeft={2}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <SelectBox
+                  label="Customer Type"
+                  id="customerType"
+                  options={customerSettingsData?.body.customerType}
+                  value={formik.values.customerType}
+                  error={formik.errors.customerType}
+                  onChange={formik.handleChange}
+                  disabled={disabled}
+                />
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                paddingLeft={1}
                 container
                 justifyContent="start"
                 alignItems="center"
@@ -549,6 +603,10 @@ export default function CustomerForm({
                   value={formik.values.paymentType}
                   // onChange={formik.handleChange}
                   onChange={(e) => {
+                    formik.setFieldValue("creditAmount", "");
+                    formik.setFieldValue("creditDays", "");
+                    formik.setFieldError("creditAmount", "");
+                    formik.setFieldError("creditDays", "");
                     formik.setFieldValue("paymentType", e.target.value);
                   }}
                   disabled={disabled}
@@ -573,7 +631,7 @@ export default function CustomerForm({
                   />
                 </RadioGroup>
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Credit Days"
                   id="creditDays"
@@ -587,7 +645,7 @@ export default function CustomerForm({
                   disabled={formik.values.paymentType === "cash" || disabled}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                 <InputBox
                   label="Credit Amount"
                   id="creditAmount"
@@ -606,15 +664,15 @@ export default function CustomerForm({
           <Grid item xs={12}>
             <Box
               sx={{
-                borderBottom: 1,
-                border: "1px solid #0000001f",
+                border: "1px solid #ccc",
                 borderRadius: "10px",
+                margin: "0px 8px",
               }}
             >
               <ThemeTabs
                 tabData={[
-                  { label: "TARIFFS", value: "1", disable: false },
-                  { label: "EMAIL", value: "2", disable: false },
+                  { label: "Tariffs", value: "1", disable: false },
+                  { label: "Email", value: "2", disable: false },
                 ]}
               >
                 <AddMapping
@@ -631,10 +689,11 @@ export default function CustomerForm({
             </Box>
           </Grid>
           {page == "customer" && (
-            <Grid item xs={12} sx={{ marginTop: 2 }}>
+            <Grid item xs={12} sx={{ margin: 1 }}>
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
-                  sx={{ fontWeight: "500", borderRadius: "12px" }}
+                  sx={{ fontWeight: "500" }}
+                  onClick={() => nav("/app/entity/customer")}
                 >
                   Cancel
                 </OutlinedButton>
@@ -657,14 +716,14 @@ export default function CustomerForm({
                     onClick={() => handleRejectRequest()}
                   >
                     {isLoading && <CircularProgress size={20} color="white" />}{" "}
-                    Approve reject
+                    Reject
                   </ThemeButton>
                   <ThemeButton
                     sx={{ fontWeight: "500" }}
                     onClick={() => handleApproveRequest()}
                   >
                     {isLoading && <CircularProgress size={20} color="white" />}{" "}
-                    Approve request
+                    Approve
                   </ThemeButton>
                 </Stack>
               </Stack>
@@ -674,7 +733,9 @@ export default function CustomerForm({
         </>
       ) : (
         <>
-          <Box sx={{ width: "100%", typography: "body1" }}>
+          <Box
+            sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}
+          >
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
@@ -684,20 +745,24 @@ export default function CustomerForm({
                   <Tab
                     label="Edit Customer"
                     value="1"
-                    sx={{ fontSize: "1rem" }}
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
                   />
                   <Tab
                     label="Upload Documents"
                     value="2"
-                    sx={{ fontSize: "1rem" }}
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
                   />
-                  <Tab label="Audit Logs" value="3" sx={{ fontSize: "1rem" }} />
+                  <Tab
+                    label="Audit Logs"
+                    value="3"
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  />
                 </TabList>
               </Box>
-              <TabPanel value="1">
+              <TabPanel value="1" sx={{ padding: "0px" }}>
                 {" "}
-                <Grid container spacing={2}>
-                  <Grid container paddingTop={2}>
+                <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -705,16 +770,25 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
-                      <InputBox
-                        label="Customer Name"
-                        id="customerName"
-                        value={formik.values.customerName}
-                        disabled={disabled}
-                        error={formik.errors.customerName}
-                        onChange={formik.handleChange}
-                      />
+                      <Tooltip
+                        title={
+                          !formik.values.customerName
+                            ? "Field is mandatory"
+                            : ""
+                        }
+                        arrow
+                      >
+                        <InputBox
+                          label="Customer Name*"
+                          id="customerName"
+                          value={formik.values.customerName}
+                          disabled={disabled}
+                          error={formik.errors.customerName}
+                          onChange={formik.handleChange}
+                        />
+                      </Tooltip>
                     </Grid>
                     <Grid
                       item
@@ -723,7 +797,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="TIN No."
@@ -741,7 +815,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="VAT No."
@@ -763,7 +837,7 @@ export default function CustomerForm({
                         lg={3}
                         xl={2}
                         sx={{ marginTop: 2 }}
-                        paddingLeft={2}
+                        paddingLeft={1}
                       >
                         <SelectBox
                           label="Status"
@@ -783,7 +857,7 @@ export default function CustomerForm({
                         md={4}
                         lg={3}
                         xl={2}
-                        paddingLeft={2}
+                        paddingLeft={1}
                       >
                         <InputBox
                           label="Status"
@@ -796,7 +870,7 @@ export default function CustomerForm({
                       </Grid>
                     )}
                   </Grid>
-                  <Grid container paddingTop={2}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -804,16 +878,21 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
-                      <InputBox
-                        label="Address 1."
-                        id="add1"
-                        value={formik.values.add1}
-                        error={formik.errors.add1}
-                        onChange={formik.handleChange}
-                        disabled={disabled}
-                      />
+                      <Tooltip
+                        title={!formik.values.add1 ? "Field is mandatory" : ""}
+                        arrow
+                      >
+                        <InputBox
+                          label="Address 1.*"
+                          id="add1"
+                          value={formik.values.add1}
+                          error={formik.errors.add1}
+                          onChange={formik.handleChange}
+                          disabled={disabled}
+                        />
+                      </Tooltip>
                     </Grid>
                     <Grid
                       item
@@ -822,7 +901,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Address 2."
@@ -840,7 +919,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Address 3."
@@ -858,7 +937,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="PoNo"
@@ -870,7 +949,7 @@ export default function CustomerForm({
                       />
                     </Grid>
                   </Grid>
-                  <Grid container paddingTop={2}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -878,7 +957,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="City"
@@ -896,25 +975,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
-                    >
-                      <InputBox
-                        label="Country"
-                        id="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
-                        onChange={formik.handleChange}
-                        disabled={disabled}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Province"
@@ -925,8 +986,6 @@ export default function CustomerForm({
                         disabled={disabled}
                       />
                     </Grid>
-                  </Grid>
-                  <Grid container paddingTop={2}>
                     <Grid
                       item
                       xs={12}
@@ -934,7 +993,29 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <FormAutoComplete
+                        label="Country"
+                        id="country"
+                        suggestionName="country"
+                        value={formik.values.country}
+                        error={formik.errors.country}
+                        onChange={formik.handleChange}
+                        fetchSuggestions={fetchSuggestions}
+                      ></FormAutoComplete>
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Contact Person"
@@ -952,7 +1033,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Email Id "
@@ -970,7 +1051,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Telephone"
@@ -988,7 +1069,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Fax"
@@ -1000,7 +1081,7 @@ export default function CustomerForm({
                       />
                     </Grid>
                   </Grid>
-                  <Grid container paddingTop={2}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -1008,7 +1089,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Bank Name"
@@ -1026,7 +1107,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Account No."
@@ -1045,11 +1126,13 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
+                      marginTop={2}
                     >
-                      <InputBox
+                      <SelectBox
                         label="Customer Type"
                         id="customerType"
+                        options={customerSettingsData?.body.customerType}
                         value={formik.values.customerType}
                         error={formik.errors.customerType}
                         onChange={formik.handleChange}
@@ -1057,7 +1140,7 @@ export default function CustomerForm({
                       />
                     </Grid>
                   </Grid>
-                  <Grid container paddingTop={2}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
@@ -1068,13 +1151,19 @@ export default function CustomerForm({
                       container
                       justifyContent="start"
                       alignItems="center"
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <RadioGroup
                         id="paymentType"
                         name="paymentType" // add name attribute here
                         value={formik.values.paymentType}
-                        onChange={formik.handleChange}
+                        onChange={(e) => {
+                          formik.setFieldValue("creditAmount", "");
+                          formik.setFieldValue("creditDays", "");
+                          formik.setFieldError("creditAmount", "");
+                          formik.setFieldError("creditDays", "");
+                          formik.setFieldValue("paymentType", e.target.value);
+                        }}
                         disabled={disabled}
                         row
                       >
@@ -1099,7 +1188,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Credit Days"
@@ -1119,7 +1208,7 @@ export default function CustomerForm({
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={2}
+                      paddingLeft={1}
                     >
                       <InputBox
                         label="Credit Amount"
@@ -1140,12 +1229,13 @@ export default function CustomerForm({
                         borderBottom: 1,
                         border: "1px solid #0000001f",
                         borderRadius: "10px",
+                        marginLeft: "8px",
                       }}
                     >
                       <ThemeTabs
                         tabData={[
-                          { label: "TARIFFS", value: "1", disable: false },
-                          { label: "EMAIL", value: "2", disable: false },
+                          { label: "Tariffs", value: "1", disable: false },
+                          { label: "Email", value: "2", disable: false },
                         ]}
                       >
                         <AddMapping
@@ -1163,14 +1253,21 @@ export default function CustomerForm({
                   </Grid>
                   {formik.values.status.toLowerCase() === "rejected" ||
                   page == "customerApprove" ? (
-                    <Grid item xs={12}>
+                    <Grid item xs={12} paddingLeft={1} paddingTop={1}>
                       <TextField
                         label="Reject Remarks"
                         name="rejectRemarks"
                         value={formik.values.rejectRemarks}
-                        error={formik.errors.rejectRemarks}
+                        error={rejectError}
+                        helperText={
+                          rejectError
+                            ? "Reject remarks are required when rejecting a customer*."
+                            : formik.errors.rejectRemarks
+                        }
                         onChange={formik.handleChange}
-                        disabled={!disabled}
+                        disabled={
+                          page === "customerApprove" ? disabled : !disabled
+                        }
                         multiline
                         rows={4}
                         variant="outlined"
@@ -1182,14 +1279,17 @@ export default function CustomerForm({
                   )}
 
                   {page == "customer" && (
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sx={{ margin: 1 }}>
                       <Stack
                         direction="row"
                         spacing={2}
                         justifyContent="space-between"
                       >
                         <Stack direction="row" spacing={2}>
-                          <OutlinedButton sx={{ fontWeight: "500" }}>
+                          <OutlinedButton
+                            sx={{ fontWeight: "500" }}
+                            onClick={() => nav(-1)}
+                          >
                             Cancel
                           </OutlinedButton>
                           <ThemeButton
@@ -1211,6 +1311,7 @@ export default function CustomerForm({
                         direction="row"
                         spacing={2}
                         justifyContent="space-between"
+                        margin={1}
                       >
                         <Stack direction="row" spacing={2}>
                           <OutlinedButton
@@ -1220,13 +1321,25 @@ export default function CustomerForm({
                             Cancel
                           </OutlinedButton>
                           <ThemeButton
+                            onClick={(event) => {
+                              setRejectError(false);
+                              formik.handleSubmit(event.target.value);
+                            }}
+                            sx={{ fontWeight: "500" }}
+                          >
+                            {isLoading && (
+                              <CircularProgress size={20} color="white" />
+                            )}{" "}
+                            Update
+                          </ThemeButton>
+                          <ThemeButton
                             sx={{ fontWeight: "500", backgroundColor: "red" }}
                             onClick={() => handleRejectRequest()}
                           >
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
-                            Approve reject
+                            Reject
                           </ThemeButton>
                           <ThemeButton
                             sx={{ fontWeight: "500" }}
@@ -1235,7 +1348,7 @@ export default function CustomerForm({
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
-                            Approve request
+                            Approve
                           </ThemeButton>
                         </Stack>
                       </Stack>
@@ -1245,7 +1358,7 @@ export default function CustomerForm({
                   <PopupAlert alertConfig={alertConfig} />
                 </Grid>
               </TabPanel>
-              <TabPanel value="2">
+              <TabPanel value="2" sx={{ padding: "0px" }}>
                 <UploadFile
                   customer_id={initialValues.id}
                   disabled={disabled}
@@ -1253,7 +1366,7 @@ export default function CustomerForm({
                   sourceType="CUSTOMER"
                 />
               </TabPanel>
-              <TabPanel value="3">
+              <TabPanel value="3" sx={{ padding: "0px" }}>
                 <AuditTimeline
                   auditDetails={enquiryAuditDetails}
                   reloadDataHandler={reloadDataHandler}

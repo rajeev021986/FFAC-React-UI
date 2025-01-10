@@ -1,4 +1,11 @@
-import { Box, Card, CardContent, CardHeader, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
@@ -8,12 +15,12 @@ import { useFetchCustomerQuery } from "../../store/api/codeDataApi";
 import ApiManager from "../../services/ApiManager";
 import Loader from "../../components/common/Loader/Loader";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+import toast from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export default function CustomerFormScreen({ page }) {
-  const [customerDatas, setcustomerDatas] = useState({});
   const [loading, setLoading] = useState(true);
-  const [settingsLoaded, setSettingsLoaded] = useState(false);
   const { state } = useLocation();
-  // console.log(state, 'state')
+
   const [initialValues, setInitialValues] = React.useState({
     id: "",
     customerName: "",
@@ -44,28 +51,6 @@ export default function CustomerFormScreen({ page }) {
     customerEntityTariffs: [],
     customerEntityEmailsIds: [],
   });
-  // const {
-  //   data: mappingData,
-  //   isError,
-  //   isLoading,
-  //   error,
-  //   isFetching,
-  // } = useFetchCustomerQuery({
-  //   acode: state?.initialValues?.acode
-  // });
-
-  // Move settings queries to the top
-  const { data: optionsSettingsData, isLoading: optionsLoading } =
-    useGetOptionsSettingsQuery("common_settings");
-  const { data: customerSettingsData, isLoading: customerSettingsLoading } =
-    useGetOptionsSettingsQuery("customer_settings");
-
-  // First useEffect to handle settings loading
-  useEffect(() => {
-    if (!optionsLoading && !customerSettingsLoading) {
-      setSettingsLoaded(true);
-    }
-  }, [optionsLoading, customerSettingsLoading]);
 
   // Only fetch customer details after settings are loaded
   useEffect(() => {
@@ -74,13 +59,11 @@ export default function CustomerFormScreen({ page }) {
         const res = await ApiManager.getCustomerDeatils(
           state?.initialValues?.id
         );
-        setcustomerDatas(res.body);
         let status = "";
         if (res.body?.status) {
           status =
             res.body?.status.charAt(0).toUpperCase() +
             res.body?.status.slice(1).toLowerCase();
-          console.log(status, "status");
         }
         setInitialValues({
           id: res.body?.id || "",
@@ -113,75 +96,53 @@ export default function CustomerFormScreen({ page }) {
           customerEntityEmailsIds: res.body?.customerEntityEmailsIds || [],
         });
         setLoading(false);
-        console.log(res, "res");
       } catch (error) {
-        console.error(error, "error");
-        // setLoading(false)
+        toast.custom(
+          <CustomToast
+            message="Error occurred while loading form"
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
       }
     };
-    if (settingsLoaded && state?.initialValues?.id) {
+    if (state?.initialValues?.id) {
       fetchCustomerDetails();
     } else {
       setLoading(false);
     }
-  }, [settingsLoaded, state?.initialValues?.id]);
+  }, [state?.initialValues?.id]);
 
-  // React.useEffect(() => {
-  //   if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityTariffs) {
-  //     setInitialValues((prevValues) => ({
-  //       ...prevValues,
-  //       customerEntityTariffs: mappingData.data[0]?.customerEntityTariffs || []
-  //     }));
-  //   }
-  //   else {
-  //     setInitialValues((prevValues) => ({
-  //       ...prevValues,
-  //       customerEntityTariffs: [{ chargeName: "", unitType: "", currency: "", unitRate: "" }]
-  //     }));
-  //   }
-
-  // }, [mappingData, isLoading, isError]);
-
-  // React.useEffect(() => {
-  //   if (!isLoading && !isError && mappingData?.data?.length > 0 && mappingData?.data[0]?.customerEntityEmailsIds) {
-  //     setInitialValues((prevValues) => ({
-  //       ...prevValues,
-  //       customerEntityEmailsIds: mappingData.data[0]?.customerEntityEmailsIds || []
-  //     }));
-  //   }
-  //   else {
-  //     setInitialValues((prevValues) => ({
-  //       ...prevValues,
-  //       customerEntityEmailsIds: [{ designation: "" }]
-  //     }));
-  //   }
-
-  // }, [mappingData, isLoading, isError]);
   return (
-    <Box>
-      <ScreenToolbar
-        leftComps={
-          <div>
-            <ThemedBreadcrumb />
-          </div>
-        }
-        rightComps={<div></div>}
-      />
-      {loading || optionsLoading || customerSettingsLoading ? (
+    <Box sx={{ padding: 0, margin: 0 }}>
+      <Stack sx={{ padding: "8px 0px" }}>
+        <ScreenToolbar
+          leftComps={
+            <div>
+              <ThemedBreadcrumb />
+            </div>
+          }
+          rightComps={<div></div>}
+        />
+      </Stack>
+
+      {loading ? (
         <Loader />
       ) : (
-        <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-          {/* <CardHeader title={
-          <Box display="flex" justifyContent={"space-between"}>
-            <Typography variant='subtitle3' component='div'>Customer</Typography>
-          </Box>
-        } /> */}
-          <CardContent>
+        <Card
+          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
+        >
+          <CardContent
+            sx={{
+              margin: "0px",
+              padding: "0px ! important",
+            }}
+          >
             <CustomerForm
-              optionsSettingsData={optionsSettingsData}
-              customerSettingsData={customerSettingsData}
               initialValues={initialValues}
-              type={state?.type}
+              type={state?.formAction}
               page={page}
             />
           </CardContent>

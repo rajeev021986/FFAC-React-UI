@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import Loader from "../../../common/Loader/Loader";
 import { useLocation } from "react-router-dom";
 import UploadFile from "../../../UploadFile";
-import { Box, Grid, Stack, Tab } from "@mui/material";
+import { Box, Card, Grid, Stack, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import ScreenToolbar from "../../../common/ScreenToolbar";
@@ -40,35 +40,37 @@ export default function VendorForm({ page = "vendor" }) {
   const [getVendor, { isLoading }] = useLazyGetVendorQuery();
   const validationSchema = Yup.object({
     vendorName: Yup.string().required("Vendor Name is required"),
-    tinNo: Yup.string().required("TIN Number is required"),
-    vrnNo: Yup.string().required("VRN Number is required"),
-    // status: Yup.string().required("Status is required"),
+    tinNo: Yup.number().nullable(),
+    vrnNo: Yup.number().nullable(),
     type: Yup.string().required("Type is required"),
     add1: Yup.string().required("Address is required"),
-    // add2: Yup.string().nullable(),
-    // add3: Yup.string().nullable(),
-    alias: Yup.string().required("Alias is required"),
-    telephone1: Yup.string().required("Telephone1 is required"),
-    // telephone2: Yup.string().nullable(),
-    fax: Yup.string().required("Fax is required"),
-    emailId: Yup.string()
-      .required("Email is required")
-      .test("valid-email", "Invalid email format", (value) => {
-        if (!value) return false;
+    alias: Yup.string(),
+    telephone1: Yup.number(),
+    fax: Yup.string(),
+    emailId: Yup.string().test(
+      "valid-email",
+      "Invalid email format",
+      (value) => {
+        if (!value) return true;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(value);
-      }),
-
-    city: Yup.string().required("City is required"),
-    country: Yup.string().required("Country is required"),
-    creditDays: Yup.number()
-      .required("Credit Days is required")
-      .min(0, "Credit Days cannot be negative"),
-    province: Yup.string().required("Province is required"),
-    poNo: Yup.string().required("Post is required"),
-    contactPerson: Yup.string().required("Person is required"),
-    // companyCode: Yup.string().nullable(),
-    // rejectRemarks: Yup.string().nullable(),
+      }
+    ),
+    city: Yup.string().matches(
+      /^[A-Za-z\s]+$/,
+      "City must only contain letters"
+    ),
+    country: Yup.string(),
+    creditDays: Yup.number().min(0, "Credit Days cannot be negative"),
+    province: Yup.string().matches(
+      /^[A-Za-z\s]+$/,
+      "Province must only contain letters"
+    ),
+    poNo: Yup.number(),
+    contactPerson: Yup.string().matches(
+      /^[A-Za-z\s]+$/,
+      "Contact Person must only contain letters"
+    ),
     vendorEntityTariffs: Yup.array().of(
       Yup.object().shape({
         unitRate: Yup.number()
@@ -78,16 +80,7 @@ export default function VendorForm({ page = "vendor" }) {
     ),
     vendorEntityEmails: Yup.array().of(
       Yup.object().shape({
-        emailId: Yup.string().test(
-          "multiple-emails",
-          "Invalid email format",
-          (value) => {
-            if (!value) return false;
-            const emails = value.split(",").map((email) => email.trim());
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emails.every((email) => emailRegex.test(email));
-          }
-        ),
+        emailId: Yup.string().email(),
       })
     ),
     // vendorEntityDemurageTariffs: Yup.array(
@@ -100,32 +93,38 @@ export default function VendorForm({ page = "vendor" }) {
     //     thirdWeek: Yup.string().required("Third Week is required"),
     //   })
     // ).required("Vendor Entity Demurage Tariffs are required"),
-    // vendorEntityFreeDays: Yup.array(
-    //   Yup.object({
-    //     id: Yup.number().required("ID is required"),
-    //     country: Yup.string().required("Country is required"),
-    //     noOfFreeDays: Yup.number()
-    //       .required("Number of Free Days is required")
-    //       .min(0, "Number of Free Days cannot be negative"),
-    //   })
-    // ).required("Vendor Entity Free Days are required"),
+    vendorEntityFreeDays: Yup.array(
+      Yup.object({
+        id: Yup.number(),
+        country: Yup.string(),
+        noOfFreeDays: Yup.number().min(
+          0,
+          "Number of Free Days cannot be negative"
+        ),
+      })
+    ),
 
-    // vendorBankDetails: Yup.array(
-    //   Yup.object({
-    //     id: Yup.number().required("ID is required"),
-    //     bankName: Yup.string().required("Bank Name is required"),
-    //     bankAddress: Yup.string().required("Bank Address is required"),
-    //     currency: Yup.string().required("Currency is required"),
-    //     swiftCode: Yup.string().required("SWIFT Code is required"),
-    //   })
-    // ).required("Vendor Bank Details are required"),
+    vendorBankDetails: Yup.array(
+      Yup.object({
+        id: Yup.number(),
+        bankName: Yup.string().matches(
+          /^[A-Za-z\s]+$/,
+          "Bank name must only contain letters"
+        ),
+        accountNo: Yup.number(),
+        bankAddress: Yup.string(),
+        currency: Yup.string().matches(
+          /^[A-Za-z\s]+$/,
+          "Currency must only contain letters"
+        ),
+        swiftCode: Yup.string(),
+      })
+    ),
   });
-  const { data: optionsSettingsData } =
+  const { data: optionsSettingsData, isLoading: dropLoadco } =
     useGetOptionsSettingsQuery("common_settings");
-  const { data: vendorSettingsData } =
+  const { data: vendorSettingsData, isLoading: dropLoadven } =
     useGetOptionsSettingsQuery("vendor_settings");
-  const { data: customerSettingsData } =
-    useGetOptionsSettingsQuery("customer_settings");
 
   useEffect(() => {
     const handleFetchVendor = async () => {
@@ -145,7 +144,6 @@ export default function VendorForm({ page = "vendor" }) {
           toast.error("Failed to fetch vendor data");
         }
       } catch (error) {
-        console.error("Error fetching vendor data:", error);
         toast.error("Error fetching vendor data");
       }
     };
@@ -167,8 +165,8 @@ export default function VendorForm({ page = "vendor" }) {
     telephone2: "",
     fax: "",
     emailId: "",
-    tinNo: "",
-    vrnNo: "",
+    tinNo: null,
+    vrnNo: null,
     city: "",
     country: "",
     creditDays: 0,
@@ -177,61 +175,17 @@ export default function VendorForm({ page = "vendor" }) {
     contactPerson: "",
     // companyCode: "",
     rejectRemarks: "",
-    vendorEntityTariffs: [
-      {
-        id: Date.now(),
-        chargeName: "",
-        type: "",
-        finalDestination: "",
-        unitType: "",
-        currency: "",
-        unitRate: 0,
-        new: true,
-      },
-    ],
-    vendorEntityDemurageTariffs: [
-      {
-        id: Date.now(),
-        country: "",
-        containerType: "",
-        firstWeek: "",
-        secondWeek: "",
-        thirdWeek: "",
-        new: true,
-      },
-    ],
-    vendorEntityFreeDays: [
-      {
-        id: Date.now(),
-        country: "",
-        noOfFreeDays: 0,
-        new: true,
-      },
-    ],
-    vendorEntityEmails: [
-      {
-        id: Date.now(),
-        designation: "",
-        emailId: "",
-        new: true,
-      },
-    ],
-    vendorBankDetails: [
-      {
-        id: Date.now(),
-        bankName: "",
-        bankAddress: "",
-        currency: "",
-        swiftCode: "",
-        vendorId: 0,
-        new: true,
-      },
-    ],
+    vendorEntityTariffs: [],
+    vendorEntityDemurageTariffs: [],
+    vendorEntityFreeDays: [],
+    vendorEntityEmails: [],
+    vendorBankDetails: [],
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
+    validateOnChange: false,
     onSubmit: async (values) => {
       let updatedValue = {
         ...values,
@@ -253,7 +207,12 @@ export default function VendorForm({ page = "vendor" }) {
       };
       if (type == "copy" || type == "new") {
         try {
-          updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest ? 0 : 1;
+          updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest
+            ? 0
+            : 1;
+          updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest
+            ? 0
+            : 1;
           let res = await addVendor(updatedValue).unwrap();
           if (res.success) {
             toast.success(res.message);
@@ -264,10 +223,11 @@ export default function VendorForm({ page = "vendor" }) {
         }
       } else {
         try {
-          Boolean(updatedValue.status == "Active") && (updatedValue.isApproved = 1);
-          Boolean(updatedValue.status == "Inactive") && (updatedValue.isApproved = -2);
+          Boolean(updatedValue.status == "Active") &&
+            (updatedValue.isApproved = 1);
+          Boolean(updatedValue.status == "Inactive") &&
+            (updatedValue.isApproved = -2);
           let res = await updateVendor(updatedValue).unwrap();
-          console.log(res.success, "res.success");
           if (res.success) {
             toast.success(res.message);
             nav(-1);
@@ -287,51 +247,65 @@ export default function VendorForm({ page = "vendor" }) {
   };
   return (
     <>
-      <Box sx={{ width: "100%", typography: "body1" }}>
-        <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
-        <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              {tabs.map((a) => (
-                <Tab
-                  sx={{ fontSize: "1rem" }}
-                  label={a.label}
-                  value={a.value}
+      <Box
+        sx={{
+          width: "100%",
+          typography: "body1",
+          padding: "0px",
+          margin: "0px",
+        }}
+      >
+        <Stack sx={{ padding: "8px 0px" }}>
+          <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
+        </Stack>
+        {isLoading || dropLoadven || dropLoadco ? (
+          <Loader />
+        ) : (
+          <Card>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  {tabs.map((a) => (
+                    <Tab
+                      sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                      label={a.label}
+                      value={a.value}
+                    />
+                  ))}
+                </TabList>
+              </Box>
+              <TabPanel value={1} sx={{ padding: "0px" }}>
+                <VendorFormInput
+                  formik={formik}
+                  type={type}
+                  disabled={page == "vendorApproval"}
+                  optionsSettingsData={optionsSettingsData}
+                  vendorSettingsData={vendorSettingsData}
+                  page={page}
                 />
-              ))}
-            </TabList>
-          </Box>
-          <TabPanel value={1}>
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <VendorFormInput
-                formik={formik}
-                type={type}
-                disabled={page == "vendorApproval"}
-                optionsSettingsData={optionsSettingsData}
-                vendorSettingsData={vendorSettingsData}
-                page={page}
-              />
-            )}
-          </TabPanel>
-          <TabPanel value={2}>
-            <UploadFile
-              customer_id={id}
-              sourceType="VENDOR"
-              page={page}
-              disabled={page == "vendorApproval"}
-              dropdownData={vendorSettingsData?.body?.documentType}
-            />
-          </TabPanel>
-          <TabPanel value={3}>
-            <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
-            />
-          </TabPanel>
-        </TabContext>
+              </TabPanel>
+              <TabPanel value={2} sx={{ padding: "0px" }}>
+                <UploadFile
+                  customer_id={id}
+                  sourceType="VENDOR"
+                  page={page}
+                  disabled={page == "vendorApproval"}
+                  dropdownData={vendorSettingsData?.body?.documentType}
+                />
+              </TabPanel>
+              <TabPanel value={3} sx={{ padding: "0px" }}>
+                <AuditTimeLine
+                  auditDetails={AuditData}
+                  reloadDataHandler={fetchUserAudit}
+                  loading={isLoadingAudit}
+                />
+              </TabPanel>
+            </TabContext>
+          </Card>
+        )}
       </Box>
     </>
   );

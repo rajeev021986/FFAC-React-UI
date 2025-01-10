@@ -1,29 +1,4 @@
 export const CARD_VESSEL_COLUMNS = [
-
-    {
-        field: 'vesselName',
-        headerName: 'Vessel Name',
-        width: 150,
-        headerAlign: 'center',
-        align: 'center',
-        editable: true
-    },
-    {
-        field: 'lineName',
-        headerName: 'Line Name',
-        width: 150,
-        headerAlign: 'center',
-        align: 'center',
-        editable: true
-    },
-    {
-        field: 'vesselOwner',
-        headerName: 'Vessel Owner',
-        width: 150,
-        headerAlign: 'center',
-        align: 'center',
-        editable: true
-    },
     {
         flex: 1,
         field: 'status',
@@ -32,6 +7,61 @@ export const CARD_VESSEL_COLUMNS = [
         headerAlign: 'center',
         align: 'center',
         editable: true
+    },
+
+    {
+        flex: 1,
+        field: 'vesselName',
+        headerName: 'Vessel Name',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: true
+    },
+    {
+        flex: 1,
+        field: 'lineName',
+        headerName: 'Line Name',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: true
+    },
+    {
+        flex: 1,
+        field: 'createdBy',
+        headerName: 'Created By',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'createdDate',
+        headerName: 'Created Date',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'modifiedBy',
+        headerName: 'Modified By',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'modifiedDate',
+        headerName: 'Modified Date',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
     },
 
 ]

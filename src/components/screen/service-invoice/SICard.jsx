@@ -16,7 +16,6 @@ export default function SICard({
 }) {
 
     const handleCardPagination = (event, page) => {
-        console.log(page)
         handlePage({
             page: page,
             pageSize: paginationModel.pageSize

@@ -107,7 +107,6 @@ import { getAgentListGridActions } from "../../components/screen/code/agent/acti
                     options={AGENT_SORT_OPTIONS}
                     value={codeAgentSelector.sortBy}
                     onChange={(event) => {
-                        console.log(event);
                         
                       dispatch(setSortBy(event.target.value));
                     }}

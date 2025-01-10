@@ -24,11 +24,9 @@ export default function AddVesselForm({setOpen}) {
         vessel: Yup.string().required('Required'),
     }),
     onSubmit: (values) => {
-      console.log(values);
       setLoader(true);
         addVesselDetails(values)
         .then((res)=>{
-          console.log(res)
             if(res.data.status === 'success'){
                 toast.success(res.data.message);
                 formik.resetForm();
@@ -38,7 +36,6 @@ export default function AddVesselForm({setOpen}) {
             }
         })
         .catch((err)=>{
-            console.log(err)
             toast.error(err.message);
         })
         .finally(()=>{

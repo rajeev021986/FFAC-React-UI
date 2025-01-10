@@ -5,7 +5,7 @@ export const getAgentListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
+
         nav(`/app/code/agent/form`, {state: {formAction: "edit", initialValues: params.row},
         });
       },

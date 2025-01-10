@@ -9,7 +9,6 @@ export const getPortGridActions = (nav, setModal) => {
         {
             label: 'Edit',
             onClick: (params) => {
-                console.log('PL clicked for', params.row.id);
                 nav("editPort", { state: { id: params.row.id, type: "Edit" } })
             },
             icon: <EditIcon />,
@@ -17,7 +16,6 @@ export const getPortGridActions = (nav, setModal) => {
         {
             label: 'Audit',
             onClick: (params) => {
-              console.log('Audit clicked for', params.row);
               setModal(
                 { open: true, type: 'audit', data: params.row }
               )

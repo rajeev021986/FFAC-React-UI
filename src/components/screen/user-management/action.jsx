@@ -10,7 +10,6 @@ export const getUserListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        console.log("Tsting", params.row);
         nav(`/app/admin/users/editUser/${params.row.userId}`, {
           state: { formAction: "edit", initialValues: params.row },
         });
@@ -20,7 +19,6 @@ export const getUserListGridActions = (nav, setModal) => {
     {
       label: "Audit",
       onClick: (params) => {
-        console.log("Audit clicked for", params.row);
         setModal({ open: true, type: "audit", data: params.row });
       },
       icon: <BiotechIcon />,
@@ -28,7 +26,6 @@ export const getUserListGridActions = (nav, setModal) => {
     {
       label: "Delete",
       onClick: (params) => {
-        console.log("Delete Tsting for", params.row);
         setModal({ open: true, type: "delete", data: params.row.id });
       },
       icon: <GridDeleteIcon />,
@@ -36,7 +33,6 @@ export const getUserListGridActions = (nav, setModal) => {
     {
       label: "Reset Pass",
       onClick: (params) => {
-        console.log("Reset Tsting clicked for", params.row);
         setModal({ open: true, type: "reset", data: params.row });
       },
       icon: <KeyOutlined />,
@@ -51,7 +47,6 @@ export const newUserListGridActions = (nav, setModal) => {
     {
       label: "Approve",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
         // userid : params.row.emailid
         let data = { ...params.row, }
         if (data.status !== "APPROVED") {

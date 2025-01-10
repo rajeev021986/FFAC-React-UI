@@ -17,7 +17,7 @@ export default function CardsView({
   page,
 }) {
   const handleCardPagination = (event, page) => {
-    console.log(page);
+
     handlePage({
       page: page,
       pageSize: paginationModel.pageSize,
@@ -70,10 +70,10 @@ export default function CardsView({
       sx={{
         maxWidth: "100%",
         borderRadius: "5px",
-        height: "calc(100vh - 250px)",
+        height: "calc(100vh - 190px)",
         overflowY: "auto",
         position: "relative",
-        pt: 2,
+        pt: 1,
         backgroundColor: "white.main",
         display: "flex",
         flexWrap: "wrap",

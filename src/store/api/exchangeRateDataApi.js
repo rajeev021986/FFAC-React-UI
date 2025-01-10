@@ -30,7 +30,6 @@ export const exchangeRateDataApi = createApi({
         }),
         updateExahangeRate: builder.mutation({
             query: (params) => {
-                console.log(params, "params")
                 return { url: `admin-service/v1/exchange-rate`, method: "PUT", body: params, headers: getAppHeaders() };
             },
             invalidatesTags: ["Charges"],

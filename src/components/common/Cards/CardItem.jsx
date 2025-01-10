@@ -15,22 +15,6 @@ export default function CardItem({
   icon,
   page,
 }) {
-  const handleCheckboxChange = (event) => {
-    if (event.target.checked) {
-      // setSelectedBox((prev) => {
-      //   const updated = [...prev, uniqueId];
-      //   console.log("Selected IDs after adding:", updated);
-      //   return updated;
-      return setSelectedBox(uniqueId);
-    } else {
-      // setSelectedBox((prev) => {
-      //   const updated = prev.filter((id) => id !== uniqueId);
-      //   console.log("Selected IDs after removing:", updated);
-      //   return updated;
-      // });
-      setSelectedBox("");
-    }
-  };
   // Remove id and action columns
   columns = columns.filter(
     (column) => column.field !== "id" && column.field !== "action"
@@ -49,32 +33,6 @@ export default function CardItem({
     />
   ) : (
     <Box sx={styles.root_item}>
-      {/* Checkbox at the start */}
-      {page == "customer" && (
-        <Box
-          sx={{ ...styles.card_left_box, margin: 0, padding: 0, width: "30px" }}
-        >
-          <Checkbox
-            checked={selectedBox == uniqueId}
-            onChange={handleCheckboxChange}
-            color="primary"
-          />
-        </Box>
-      )}
-
-      {/* Icon and details */}
-      <Box
-        sx={{
-          ...styles.card_left_box,
-          padding: 0,
-          width: "30px",
-        }}
-      >
-        {/* <Box sx={{ ...styles.icon, margin: 0, padding: 0 }} elevation={1}>
-            {icon ? icon : <VerifiedUserOutlined color="primary" />}
-          </Box> */}
-      </Box>
-
       <Grid container spacing={1} sx={styles.card_right_box}>
         {columns.map((column, index) => (
           <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
@@ -106,13 +64,14 @@ const styles = {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    width: "98%",
+    width: "98.5%",
     padding: "10px",
     backgroundColor: "white.lightDark",
     boxShadow:
       "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
     // margin: "auto",
-    marginBottom: "16px",
+    marginBottom: "8px",
+    marginLeft: "8px",
     borderRadius: "10px",
     height: "fit-content",
   },
@@ -128,7 +87,6 @@ const styles = {
   card_right_box: {
     width: "calc(100% - 150px)",
     height: "100%",
-    paddingBottom: "10px",
   },
   icon: {
     backgroundColor: "primary.light",

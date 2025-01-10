@@ -7,7 +7,6 @@ export const getUserListGridActions = (nav, setModal) => {
         {
             label: "Edit",
             onClick: (params="null") => {
-                console.log("Edit user for", params);
                 // nav(`edituser`, {
                 //     state: { formAction: "edit", initialValues: params.row },
                 // });
@@ -17,7 +16,6 @@ export const getUserListGridActions = (nav, setModal) => {
         {
             label: "Delete",
             onClick: (params) => {
-                console.log("Delete user for", params);
                 // nav(`edituser`, {
                 //     state: { formAction: "edit", initialValues: params.row },
                 // });
@@ -27,7 +25,6 @@ export const getUserListGridActions = (nav, setModal) => {
         {
             label: "Reset pass",
             onClick: (params) => {
-                console.log("Reset pass user for", params);
                 // nav(`edituser`, {
                 //     state: { formAction: "edit", initialValues: params.row },
                 // });

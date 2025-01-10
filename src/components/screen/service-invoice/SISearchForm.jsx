@@ -22,7 +22,6 @@ export default function SISearchForm() {
       toDate: inputs?.toDate,
     },
     onSubmit: (values) => {
-      console.log(values);
       values.fromDate = appDateFormat(values.fromDate);
       values.toDate = appDateFormat(values.toDate);
       dispatch(updateServiceInvoiceInput(values));

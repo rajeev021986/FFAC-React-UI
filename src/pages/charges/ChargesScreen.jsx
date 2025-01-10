@@ -149,7 +149,6 @@ export function ChargesScreen({ page }) {
     //     link.remove();
     //     window.URL.revokeObjectURL(url);
     //   } catch (error) {
-    //     console.error("Download failed:", error);
     //   }
     // }
   };
@@ -171,7 +170,6 @@ export function ChargesScreen({ page }) {
   //       handleClose();
   //     } catch (error) {
   //       toast.error("Failed to delete customer.");
-  //       console.error("Delete Error:", error);
   //     }
   //   };
 
@@ -249,7 +247,6 @@ export function ChargesScreen({ page }) {
                   options={CHARGES_SORT_OPTIONS}
                   value={chargesSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event);
 
                     dispatch(setSortBy(event.target.value));
                   }}

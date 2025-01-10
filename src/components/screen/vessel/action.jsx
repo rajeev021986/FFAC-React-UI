@@ -6,7 +6,6 @@ export const getVesselListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
         nav(`editvessel`, {
           state: { formAction: "edit", initialValues: params.row },
         });
@@ -16,7 +15,6 @@ export const getVesselListGridActions = (nav, setModal) => {
     {
       label: "Audit",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
         // nav(`editvessel`, {
         //   state: { formAction: "edit", initialValues: params.row },
         // });

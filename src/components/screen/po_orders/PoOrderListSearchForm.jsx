@@ -21,7 +21,6 @@ export default function PoOrderListSearchForm() {
       profoma_po: inputs.profoma_po || "",
     },
     onSubmit: (values) => {
-      console.log(values);
       // values.fromDate = appDateFormat(values.fromDate);
       // values.toDate = appDateFormat(values.toDate);
       dispatch(updatePoOrderListInput(values));

@@ -50,7 +50,6 @@ const ProfileScreen = () => {
             defaultLocation: Yup.string().required('Default Location is required'),
         }),
         onSubmit: async (values) => {
-            console.log('Form submitted:', values);
             const res = await ApiManager.updateUserProfile({ ...values, locations: [values.defaultLocation] }).then((res) => {
                 toast.success("Profile updated successfully");
             })
@@ -83,7 +82,6 @@ const ProfileScreen = () => {
             setProfilePicture(URL.createObjectURL(files[0]));
         }
     };
-    console.log(isLoading, "asdf")
 
     return (
         <Box sx={{ py: 1 }}>

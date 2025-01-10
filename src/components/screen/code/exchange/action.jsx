@@ -6,7 +6,6 @@ export const getExchangeRateListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
         nav("editexchangerate", {
           state: { type: "edit", id: params.row.id },
         });

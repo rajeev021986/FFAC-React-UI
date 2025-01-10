@@ -4,6 +4,7 @@ import { updateInput } from "../../store/freatures/VesselSlice";
 import { Button, Stack } from "@mui/material";
 import InputBox from "../../components/common/InputBox";
 import { OutlinedButton } from "../../components/common/Button";
+import SelectBox from "../../components/common/SelectBox";
 
 export function VesselFilters() {
   const dispatch = useDispatch();
@@ -30,15 +31,15 @@ export function VesselFilters() {
     );
   };
 
+  const statusOptions = [
+    { value: 1, label: "Active" },
+    { value: -2, label: "InActive" },
+    { value: 0, label: "Pending" },
+  ];
+
   return (
     <div>
       <Stack spacing={3} direction="column" justifyContent="space-between">
-        {/* <InputBox
-                  label="Code"
-                  id="acode"
-                  value={formik.values.acode}
-                  onChange={formik.handleChange}
-                /> */}
         <Stack direction="row" spacing={2}>
           <InputBox
             label="Vessel Name"
@@ -51,12 +52,16 @@ export function VesselFilters() {
             id="lname"
             value={formik.values.lname}
             onChange={formik.handleChange}
+            sx={{ marginLeft: "5px !important" }}
           />
-          <InputBox
+
+          <SelectBox
             label="Status"
             id="status"
+            options={statusOptions}
             value={formik.values.status}
             onChange={formik.handleChange}
+            sx={{ marginLeft: "5px !important" }}
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>

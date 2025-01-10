@@ -17,7 +17,6 @@ export const vesselDataApi = createApi({
 
         fetchAuditVessel: builder.query({
             query: ({ id }) => {
-                console.log("id", id);
                 return { url: `/master-service/v1/vessel/audit/${id}`, method: "GET", headers: getAppHeaders() };
 
             },
@@ -26,7 +25,6 @@ export const vesselDataApi = createApi({
 
         addVessel: builder.mutation({
             query: (params) => {
-                console.log(params, "params");
                 const headers = {
                     'Authorization': getAppHeaders()['Authorization']
                 };

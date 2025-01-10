@@ -9,49 +9,49 @@ class ApiManager {
         return ApiMethods.post(url, payload);
     }
 
-    static addUser = async (payload) => {
-        const url = ENDPOINTS.ADD_USER();
-        return ApiMethods.post(url, payload);
-    }
+  static addUser = async (payload) => {
+    const url = ENDPOINTS.ADD_USER();
+    return ApiMethods.post(url, payload);
+  };
 
-    static getUsers = async (limit, page) => {
-        const url = ENDPOINTS.GET_USERS(limit, page);
-        return ApiMethods.get(url);
-    }
+  static getUsers = async (limit, page) => {
+    const url = ENDPOINTS.GET_USERS(limit, page);
+    return ApiMethods.get(url);
+  };
 
-    static getVesselOptions = async (search) => {
-        const url = ENDPOINTS.GET_VESSEL_OPTIONS(search);
-        return ApiMethods.get(url);
-    }
+  static getVesselOptions = async (search) => {
+    const url = ENDPOINTS.GET_VESSEL_OPTIONS(search);
+    return ApiMethods.get(url);
+  };
 
-    static getMenu = async () => {
-        const url = ENDPOINTS.GET_MENU();
+  static getMenu = async () => {
+    const url = ENDPOINTS.GET_MENU();
 
-        return ApiMethods.get(url);
-    }
+    return ApiMethods.get(url);
+  };
 
-    static getPolPodOptions = async (search) => {
-        const url = ENDPOINTS.POL_POD_OPTION(search);
-        return ApiMethods.get(url);
-    }
-    static getfinalDestOptions = async (search) => {
-        const url = ENDPOINTS.FINAL_DESTI_OPTION(search);
-        return ApiMethods.get(url);
-    }
+  static getPolPodOptions = async (search) => {
+    const url = ENDPOINTS.POL_POD_OPTION(search);
+    return ApiMethods.get(url);
+  };
+  static getfinalDestOptions = async (search) => {
+    const url = ENDPOINTS.FINAL_DESTI_OPTION(search);
+    return ApiMethods.get(url);
+  };
 
-    static CheckUser = async (payload) => {
-        const url = ENDPOINTS.CHECK_USER();
-        return ApiMethods.post(url, payload);
-    }
+  static CheckUser = async (payload) => {
+    const url = ENDPOINTS.CHECK_USER();
+    return ApiMethods.post(url, payload);
+  };
 
-    static rejectUser = async (payload) => {
-        const url = ENDPOINTS.REJECT_USER();
-        return ApiMethods.post(url, payload);
-    }
-    static getCompanyOptions = async (role, search) => {
-        const url = ENDPOINTS.Company_OPTION(role, search);
-        return ApiMethods.get(url);
-    }
+  static rejectUser = async (payload) => {
+    const url = ENDPOINTS.REJECT_USER();
+    return ApiMethods.post(url, payload);
+  };
+  static getCompanyOptions = async (role, search) => {
+    const url = ENDPOINTS.Company_OPTION(role, search);
+    return ApiMethods.get(url);
+  };
 
     static getPLPOByBol = async (bol) => {
         const url = ENDPOINTS.OTM_BOL(bol);
@@ -187,10 +187,10 @@ class ApiManager {
         return ApiMethods.put(url, payload);
     }
 
-    static fetchEditVessel = (id) => {
-        const url = ENDPOINTS.GET_EDIT_VESSEL(id);
-        return ApiMethods.get(url);
-    }
+  static fetchEditVessel = (id) => {
+    const url = ENDPOINTS.GET_EDIT_VESSEL(id);
+    return ApiMethods.get(url);
+  };
 
     static fetchVesselDatasExcel = async (params, payload) => {
         const queryString = new URLSearchParams(params).toString();
@@ -204,32 +204,30 @@ class ApiManager {
         return ApiMethods.postBlob(url, payload);
     }
 
-    static fetchVesselSuggestions = (inputValue, id) => {
-        const url = ENDPOINTS.FETCH_VESSEL_SUGGESTIONS(inputValue, id);
-        return ApiMethods.get(url);
-    }
+  static fetchVesselSuggestions = (inputValue, id) => {
+    const url = ENDPOINTS.FETCH_VESSEL_SUGGESTIONS(inputValue, id);
+    return ApiMethods.get(url);
+  };
 
+  static updateUserProfile = async (payload) => {
+    const url = ENDPOINTS.UPDATE_USER_PROFILE();
+    return ApiMethods.put(url, payload);
+  };
+  static updateUserProfileImage = async (payload, id) => {
+    const url = ENDPOINTS.UPDATE_USER_PROFILE_IMAGE(id);
+    return ApiMethods.put(url, payload);
+  };
 
-    static updateUserProfile = async (payload) => {
-        const url = ENDPOINTS.UPDATE_USER_PROFILE();
-        return ApiMethods.put(url, payload);
-    }
-    static updateUserProfileImage = async (payload, id) => {
-        const url = ENDPOINTS.UPDATE_USER_PROFILE_IMAGE(id);
-        return ApiMethods.put(url, payload);
-    }
+  static fetchVoyageDatasExcel = async (params, payload) => {
+    const queryString = new URLSearchParams(params).toString();
+    const url = ENDPOINTS.FETCH_VOYAGE_DATA_EXCEL(queryString);
+    return ApiMethods.postBlob(url, payload);
+  };
 
-    static fetchVoyageDatasExcel = async (params, payload) => {
-        const queryString = new URLSearchParams(params).toString();
-        const url = ENDPOINTS.FETCH_VOYAGE_DATA_EXCEL(queryString);
-        return ApiMethods.postBlob(url, payload);
-    }
-
-    static fetchEditVoyage = (id) => {
-        const url = ENDPOINTS.GET_EDIT_VOYAGE(id);
-        return ApiMethods.get(url);
-    }
+  static fetchEditVoyage = (id) => {
+    const url = ENDPOINTS.GET_EDIT_VOYAGE(id);
+    return ApiMethods.get(url);
+  };
 }
-
 
 export default ApiManager;

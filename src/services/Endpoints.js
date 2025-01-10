@@ -1,5 +1,3 @@
-
-
 const ENDPOINTS = {
     LOGIN: () => `/auth-service/auth/login`,
     ADD_USER: () => `/users`,

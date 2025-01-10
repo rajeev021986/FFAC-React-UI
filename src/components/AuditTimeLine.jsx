@@ -4,7 +4,6 @@ import { Button, Grid } from "@mui/material";
 import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import Loader from "./common/Loader/Loader";
 function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
-  console.log(auditDetails, "auditDetails");
   useEffect(() => {
     reloadDataHandler();
   }, []);
@@ -13,8 +12,8 @@ function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
       {loading ? (
         <Loader />
       ) : (
-        <div style={{ minHeight: "55vh" }}>
-          <Grid container justifyContent="flex-end" marginBottom={2}>
+        <div style={{ minHeight: "55vh", padding: 0, margin: "0px 8px" }}>
+          <Grid container justifyContent="flex-end" marginTop={1}>
             <Button
               variant="contained"
               color="primary"

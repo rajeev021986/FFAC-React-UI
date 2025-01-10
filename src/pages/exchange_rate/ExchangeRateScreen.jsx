@@ -151,7 +151,6 @@ export function ExchangeRate({ page }) {
     //     link.remove();
     //     window.URL.revokeObjectURL(url);
     //   } catch (error) {
-    //     console.error("Download failed:", error);
     //   }
     // }
   };
@@ -173,7 +172,6 @@ export function ExchangeRate({ page }) {
   //       handleClose();
   //     } catch (error) {
   //       toast.error("Failed to delete customer.");
-  //       console.error("Delete Error:", error);
   //     }
   //   };
 
@@ -253,7 +251,6 @@ export function ExchangeRate({ page }) {
                   options={EXCHANGE_RATE_SORT_OPTIONS}
                   value={exchangeRateSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event);
 
                     dispatch(setSortBy(event.target.value));
                   }}

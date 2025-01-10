@@ -1,38 +1,58 @@
-import { Box, Card, CardHeader, Drawer, IconButton, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardHeader,
+  Drawer,
+  IconButton,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
-import { OutlinedButton } from "../../components/common/Button";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
-import { AddCircleOutlineOutlined, GridOnOutlined, FormatListBulletedOutlined } from "@mui/icons-material";
+import {
+  GridOnOutlined,
+  FormatListBulletedOutlined,
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   setVendorPagination,
   updateVendorInput,
 } from "../../store/freatures/vendorSlice";
-import { useDeleteVendorMutation, useFetchVendorQuery, useLazyGetVendorAuditQuery } from "../../store/api/vendorDataApi";
+import {
+  useDeleteVendorMutation,
+  useFetchVendorQuery,
+  useLazyGetVendorAuditQuery,
+} from "../../store/api/vendorDataApi";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { VENDOR_COLUMNS } from "../../data/columns/vendor";
-import { getVendorGridActions, getVendorApproveGridActions } from "../../components/screen/vendor/actions";
+import {
+  getVendorGridActions,
+  getVendorApproveGridActions,
+} from "../../components/screen/vendor/actions";
 import GridActions from "../../components/common/Grid/GridActions";
-import ThemedModal from "../../components/common/ThemedModal";
-import VendorForm from "../../components/screen/vendor/VendorForm";
-import KeywordSearch from "../../components/common/KeywordSearch";
-import ReusableRightDrawer from "../../components/common/CommonDrawer";
-import { COMMON } from "../../data/columns/audit";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import VendorFilterForm from "../../components/screen/code/vendor/vendorFilter";
-import { setSortBy, setSortModel, setView } from "../../store/freatures/vendorSlice";
+import {
+  setSortBy,
+  setSortModel,
+  setView,
+} from "../../store/freatures/vendorSlice";
 import SelectBox from "../../components/common/SelectBox";
 import { VENDOR_SORT_OPTIONS } from "../../data/options";
 import CardsView from "../../components/common/Cards/CardsView";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import DeleteDialog from "../../components/common/DeleteDialog";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import ApiManager from "../../services/ApiManager";
 
 export default function VendorScreen({ page }) {
   const vendorSelector = useSelector((state) => state.vendor);
+  const [exportLoader, setExportLoader] = useState(false);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -51,7 +71,7 @@ export default function VendorScreen({ page }) {
   const handleClose = () => {
     setModal({
       open: false,
-      type: '',
+      type: "",
       data: {},
     });
   };
@@ -59,20 +79,19 @@ export default function VendorScreen({ page }) {
   const handleDelete = async () => {
     try {
       await deleteVendor(modal.data.id).unwrap();
-      toast.success('Vendor deleted successfully!');
+      toast.success("Vendor deleted successfully!");
       handleClose();
     } catch (error) {
-      toast.error('Failed to delete vendor.');
-      console.error('Delete Error:', error);
+      toast.error("Failed to delete vendor.");
     }
   };
-  const [getVendorAudit, { data: AuditData,
-    isLoading: isLoadingAudit }] = useLazyGetVendorAuditQuery();
+  const [getVendorAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetVendorAuditQuery();
   const [seletectBox, setSelectedBox] = useState();
   const dispatch = useDispatch();
   const nav = useNavigate();
   const payload = Object.entries(vendorSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       return {
         fieldName: key,
@@ -92,7 +111,7 @@ export default function VendorScreen({ page }) {
       vendorSelector.sortModel.length > 0
         ? vendorSelector?.sortModel[0]?.sort
         : vendorSelector?.sortBy?.split("*")[1] || "",
-  }
+  };
 
   const {
     data: VendorData,
@@ -103,27 +122,37 @@ export default function VendorScreen({ page }) {
   } = useFetchVendorQuery({
     params: query,
     payload,
-    page
-  }
-  );
+    page,
+  });
   const fetchUserAudit = () => {
     getVendorAudit({
       id: modal.data.id,
     });
-  }
+  };
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setVendorPagination({ page, pageSize }));
   };
-  const Actions = page == "vendor" ? getVendorGridActions(nav, setModal) : getVendorApproveGridActions(nav, setModal);
+  const Actions =
+    page == "vendor"
+      ? getVendorGridActions(nav, setModal)
+      : getVendorApproveGridActions(nav, setModal);
 
-  VENDOR_COLUMNS[VENDOR_COLUMNS.length - 1].renderCell =
-    GridActions({
-      actions: Actions,
-    });
+  VENDOR_COLUMNS[VENDOR_COLUMNS.length - 1].renderCell = GridActions({
+    actions: Actions,
+  });
   const actions = seletectBox
-    ? [{ name: "New Vendor" }, { name: "Copy" }, { name: "Export" }]
-    : page == "vendor" ? [{ name: "New Vendor" }, { name: "Export" }] : [{ name: "Export" }];
+    ? [
+        { name: "New Vendor" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
+    : page == "vendor"
+    ? [
+        { name: "New Vendor" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
+    : [{ name: exportLoader ? <LoaderIcon /> : "Export" }];
   const handleActionClick = async (actionName) => {
     if (actionName === "New Vendor") {
       nav("addVendor", {
@@ -134,19 +163,23 @@ export default function VendorScreen({ page }) {
       nav("addVendor", { state: { id: seletectBox, type: "copy" } });
     }
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(query, payload, "vendor");
+        const blob = await ApiManager.fetchCustomerDatasExcel(
+          query,
+          payload,
+          "vendor"
+        );
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', 'customer-data.xlsx');
+        link.setAttribute("download", "customer-data.xlsx");
         document.body.appendChild(link);
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error('Download failed:', error);
-      }
+      } catch (error) {}
+      setExportLoader(false);
     }
   };
   return (
@@ -181,7 +214,7 @@ export default function VendorScreen({ page }) {
                     backgroundColor: "#f0f0f0",
                     color: "black",
                     boxShadow: 3,
-                    borderRadius: '20px 19px 19px 20px',
+                    borderRadius: "20px 19px 19px 20px",
                     "&:hover": {
                       backgroundColor: "#e0e0e0",
                     },
@@ -205,6 +238,7 @@ export default function VendorScreen({ page }) {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
+          sx={{ margin: "0px", padding: "8px" }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -226,8 +260,6 @@ export default function VendorScreen({ page }) {
                   options={VENDOR_SORT_OPTIONS}
                   value={vendorSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event);
-
                     dispatch(setSortBy(event.target.value));
                   }}
                   sx={{
@@ -240,18 +272,14 @@ export default function VendorScreen({ page }) {
                 <IconButton onClick={() => dispatch(setView("card"))}>
                   <FormatListBulletedOutlined
                     color={
-                      vendorSelector.view === "card"
-                        ? "primary"
-                        : "secondary"
+                      vendorSelector.view === "card" ? "primary" : "secondary"
                     }
                   />
                 </IconButton>
                 <IconButton onClick={() => dispatch(setView("grid"))}>
                   <GridOnOutlined
                     color={
-                      vendorSelector.view === "grid"
-                        ? "primary"
-                        : "secondary"
+                      vendorSelector.view === "grid" ? "primary" : "secondary"
                     }
                   />
                 </IconButton>
@@ -260,35 +288,34 @@ export default function VendorScreen({ page }) {
           }
         />
 
-        {vendorSelector.view === "grid" ? (<ThemedGrid
-          columns={VENDOR_COLUMNS}
-          uniqueId="id"
-          data={VendorData?.body?.data}
-          count={VendorData?.body?.totalElements}
-          handlePage={handlePage}
-          columnVisibility={{}}
-          columnVisibilityHandler={() => { }}
-          paginationModel={vendorSelector.pagination}
-          loading={isLoading || isFetching}
-          disableColumnMenu
-          disableColumnSorting
-          sortModel={vendorSelector.sortModel}
-          onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
-        />) : (<CardsView
-          uniqueId="id"
-          columns={VENDOR_COLUMNS}
-          count={VendorData?.body?.totalElements || 0}
-          handlePage={handlePage}
-          data={VendorData?.body?.data}
-          paginationModel={vendorSelector?.pagination}
-          loading={isLoading || isFetching}
-          actions={Actions}
-          setSelectedBox={setSelectedBox}
-          seletectBox={seletectBox}
-          page={page == "vendor" ? "customer" : ""}
-        />)}
-
-
+        {vendorSelector.view === "grid" ? (
+          <ThemedGrid
+            columns={VENDOR_COLUMNS}
+            uniqueId="id"
+            data={VendorData?.body?.data}
+            count={VendorData?.body?.totalElements}
+            handlePage={handlePage}
+            columnVisibility={{}}
+            columnVisibilityHandler={() => {}}
+            paginationModel={vendorSelector.pagination}
+            loading={isLoading || isFetching}
+            disableColumnMenu
+            disableColumnSorting
+            sortModel={vendorSelector.sortModel}
+            onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
+          />
+        ) : (
+          <CardsView
+            uniqueId="id"
+            columns={VENDOR_COLUMNS}
+            count={VendorData?.body?.totalElements || 0}
+            handlePage={handlePage}
+            data={VendorData?.body?.data}
+            paginationModel={vendorSelector?.pagination}
+            loading={isLoading || isFetching}
+            actions={Actions}
+          />
+        )}
       </Card>
       {/* {modal.type !== "audit" && (
         <ThemedModal
@@ -311,25 +338,29 @@ export default function VendorScreen({ page }) {
           sx={{ zIndex: 2, position: "absolute" }} // Higher zIndex for the drawer
         />
       )} */}
-      {modal.type === 'audit' && (
+      {modal.type === "audit" && (
         <Drawer
           anchor="right"
           open={modal?.open}
           onClose={() => setModal({ open: false, type: "", data: {} })}
           sx={{
             width: "50vw",
-            // maxWidth: "50vw",  
+            // maxWidth: "50vw",
             display: "flex",
             flexDirection: "column",
             // zIndex: isFrontmost ? 1301 : 1300, // Adjust z-index based on isFrontmost,
-            zIndex: 1301
+            zIndex: 1301,
           }}
         >
           <Box sx={{ p: 2 }}>
             <Typography variant="h6" component="div" sx={{ mb: 2 }}>
               Vendor Audit Logs
             </Typography>
-            <AuditTimeLine auditDetails={AuditData} reloadDataHandler={fetchUserAudit} loading={isLoadingAudit} />
+            <AuditTimeLine
+              auditDetails={AuditData}
+              reloadDataHandler={fetchUserAudit}
+              loading={isLoadingAudit}
+            />
           </Box>
         </Drawer>
       )}

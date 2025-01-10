@@ -7,7 +7,6 @@ export const getOtmBolGridActions = (nav, setModal) => {
     {
       label: "Download XML",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
         if (params.row.bl_no === "" && params.row.pl_status === "FINAL") {
           nav(`/app/spr/packing_list/bol`, {
             state: {
@@ -31,7 +30,6 @@ export const getOtmBolGridActions = (nav, setModal) => {
     {
       label: "Send XML",
       onClick: (params) => {
-        console.log("PL clicked for", params.row);
         nav(`/app/spr/packing_list/form`, {
           state: { formAction: "edit", initialValues: params.row },
         });
@@ -41,8 +39,6 @@ export const getOtmBolGridActions = (nav, setModal) => {
     {
       label: "BOL",
       onClick: (params) => {
-        console.log("Audit clicked for", params.row);
-        console.log("setModal", setModal);
         nav(`/app/spr/otm_bol/edit`, {
           state: { formAction: "edit", initialValues: params.row },
         });

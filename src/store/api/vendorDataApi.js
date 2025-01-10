@@ -23,7 +23,6 @@ export const vendorDataApi = createApi({
         }),
         updateVendor: builder.mutation({
             query: (params) => {
-                console.log(params, "params")
                 return { url: `entity-service/v1/vendor`, method: "PUT", body: params, headers: getAppHeaders() };
             },
             invalidatesTags: ["Vendor"],
@@ -35,7 +34,6 @@ export const vendorDataApi = createApi({
         }),
         getVendorAudit: builder.query({
             query: (params) => {
-                console.log(params, "params")
                 return { url: `entity-service/v1/vendor/audit/${params.id}`, method: "GET", body: params.body, headers: getAppHeaders() };
             },
         }),

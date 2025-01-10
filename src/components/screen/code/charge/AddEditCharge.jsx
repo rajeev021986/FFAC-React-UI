@@ -85,10 +85,10 @@ const AddEditCharge = () => {
                 toast.error(error.data.message)
             }
         } else {
-            console.log(updatedValue, "updatedValue")
+
             try {
                 let res = await updateCharge(updatedValue).unwrap();
-                console.log(res.success, "res.success")
+
                 if (res.success) {
                     toast.success(res.message);
                     nav(-1);
@@ -120,7 +120,7 @@ const AddEditCharge = () => {
                 toast.error("Failed to fetch Charge data");
             }
         } catch (error) {
-            console.error("Error fetching vendor data:", error);
+
             toast.error("Error fetching vendor data");
         }
     };

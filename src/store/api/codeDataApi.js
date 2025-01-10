@@ -136,7 +136,6 @@ export const codeDataApi = createApi({
         }),
         getCustomerAudit: builder.query({
             query: (params) => {
-                console.log(params, "params")
                 return { url: `entity-service/v1/customer/audit/${params.id}`, method: "GET", body: params.body, headers: getAppHeaders() };
             },
         }),

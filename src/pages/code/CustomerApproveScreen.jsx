@@ -116,7 +116,6 @@ export default function CustomerApproveScreen({ page }) {
 
   const handleActionClick = (actionName) => {
     if (actionName === "New Customer") {
-      console.log("Navigating to New Client...");
       nav(ADD_NEW_CUSTOMER_PATH, {
         replace: true,
         state: { formAction: "add" },
@@ -144,7 +143,6 @@ export default function CustomerApproveScreen({ page }) {
                     options={CUSTOMER_SORT_OPTIONS}
                     value={codeCustomerSelector.sortBy}
                     onChange={(event) => {
-                      console.log(event);
 
                       dispatch(setSortBy(event.target.value));
                     }}

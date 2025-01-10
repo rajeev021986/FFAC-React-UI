@@ -106,7 +106,6 @@ import PartyFilters from "../../components/screen/code/party/PartyFilters";
                     options={PARTY_SORT_OPTIONS}
                     value={codePartySelector.sortBy}
                     onChange={(event) => {
-                        console.log(event);
                         
                       dispatch(setSortBy(event.target.value));
                     }}

@@ -36,7 +36,6 @@ function UserManagementModules({ modal, setModal, refetch }) {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            console.log(`Password reset for:`, modal.data.userId, formik.values);
             let payload = {
                 username: modal.data.userId,
                 password: formik.values.password,
@@ -57,7 +56,6 @@ function UserManagementModules({ modal, setModal, refetch }) {
     };
 
     const handleDelete = async () => {
-        console.log(`User deleted`, modal.data);
         const res = await ApiManager.deleteUser(modal.data).then((res) => {
             toast.success("User deleted successfully");
             handleClose();

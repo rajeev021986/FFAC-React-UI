@@ -46,7 +46,6 @@ export function VesselVoyageForm({ initialValues, type }) {
             toast.error(response.message);
           }
         } catch (error) {
-          console.error("Error submitting form:", error);
           toast.error("An error occurred while submitting the form.");
         }
       } else {
@@ -62,7 +61,6 @@ export function VesselVoyageForm({ initialValues, type }) {
             toast.error(response.message);
           }
         } catch (error) {
-          console.error("Error submitting form:", error);
           toast.error("An error occurred while submitting the form.");
         }
       }

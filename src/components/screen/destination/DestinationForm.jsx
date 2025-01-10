@@ -38,7 +38,6 @@ export default function DestinationForm({ modal, setModal }) {
     },
     validationSchema: destinationValidation,
     onSubmit: async (values) => {
-      console.log(values);
 
       try {
         let response =

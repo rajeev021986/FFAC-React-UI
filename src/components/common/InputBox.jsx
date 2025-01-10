@@ -1,37 +1,47 @@
-import { TextField } from '@mui/material'
-import React from 'react'
+import { TextField } from "@mui/material";
+import React from "react";
 
 const styles = {
-  root : {
-    '& .MuiInputBase-root':{
-      borderRadius: '10px',
-    }
-  }
-}
+  root: {
+    "& .MuiInputBase-root": {
+      borderRadius: "10px",
+      fontSize: "14px",
+    },
+  },
+};
 
 /*
     @param value : string
     @param onChange : function
 */
-export default function InputBox({sx,value,disabled=false,onChange,label,id,error,...props}) {
+export default function InputBox({
+  sx,
+  value,
+  disabled = false,
+  onChange,
+  inputRef,
+  label,
+  id,
+  error,
+  ...props
+}) {
   return (
     <TextField
-        id={id}
-        name={id}
-        label={label}
-        variant="outlined"
-        margin="normal"
-        fullWidth
-        disabled = {disabled}
-        size="small"
-        value={value}
-        onChange={onChange}
-        helperText={error}
-        error={error ? true : false}
-        sx={{...styles.root,...sx}}
-        {...props}
+      id={id}
+      name={id}
+      label={label}
+      variant="outlined"
+      margin="normal"
+      fullWidth
+      disabled={disabled}
+      size="small"
+      value={value}
+      onChange={onChange}
+      inputRef={inputRef}
+      helperText={error}
+      error={error ? true : false}
+      sx={{ ...styles.root, ...sx }}
+      {...props}
     />
-  )
+  );
 }
-
-

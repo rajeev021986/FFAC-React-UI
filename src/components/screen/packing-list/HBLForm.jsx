@@ -6,7 +6,6 @@ import AppDatePicker from "../../common/AppDatePicker";
 
 export default function HBLForm({ data, onChange }) {
   const [hblRows, setHblRows] = useState([{ hbl: "", hblDate: "" }]);
-  console.log("hblDatahblDatahblData", data);
 
   useEffect(() => {
     if (data && data.length > 0) {

@@ -8,7 +8,6 @@ import { appDateFormat } from '../../../utils/date';
 export default function TrackerStepper({
     trackingData
 }) {
-    console.log(trackingData)
     return (
         <Grid item xs={12} mt={4} >
             {

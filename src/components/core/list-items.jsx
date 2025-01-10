@@ -48,8 +48,8 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
       <Collapse in={hover ? open : false} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {items.map((item) => {
-            console.log(item.iconKey, "qwefg", item.label);
-            return item.items?.length > 0 ? (
+
+return item.items?.length > 0 ? (
               // Recursively handle nested items
               <ListItem
                 sx={{

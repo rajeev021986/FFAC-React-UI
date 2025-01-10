@@ -1,4 +1,4 @@
-import { Button, Grid, Stack, TextField } from "@mui/material";
+import { badgeClasses, Button, Grid, Stack, TextField } from "@mui/material";
 import InputBox from "../../../common/InputBox";
 import { Typography } from "@mui/material";
 import VendorEditGrid from "./VendorEditGrid";
@@ -11,6 +11,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 import { useEffect, useState } from "react";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
+import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 const customToast = () => (
   <div
     style={{
@@ -115,6 +116,45 @@ export default function VendorFormInput({
       );
     }
   };
+
+  const fetchSuggestions = async (inputValue, inputId) => {
+    // Map inputId to the expected parameter values
+    switch (inputId) {
+      case "chargeName":
+        inputId = "CHARGE";
+        break;
+      case "currency":
+        inputId = "CURRENCY";
+        break;
+      default:
+        inputId = "PORT_COUNTRY";
+    }
+
+    // Return an empty array if the input value is falsy
+    if (!inputValue) return [];
+
+    try {
+      // Fetch data using ApiManager
+      const response = await ApiManager.fetchVesselSuggestions(
+        inputValue,
+        inputId
+      );
+      const data = await response.body;
+
+      // Ensure data exists and deduplicate based on the 'country' property
+      const uniqueSuggestions = data.reduce((acc, item) => {
+        const exists = acc.some((entry) => entry.country === item.country);
+        if (!exists) acc.push(item);
+        return acc;
+      }, []);
+
+      return uniqueSuggestions;
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      return [];
+    }
+  };
+
   const getFirstError = (errors) => {
     for (const key in errors) {
       if (Array.isArray(errors[key])) {
@@ -135,40 +175,37 @@ export default function VendorFormInput({
   const disable = type == "Approve";
   return (
     <>
-      <Grid container paddingBottom={2}>
-        <Grid container paddingTop={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+      <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
+        <Grid container>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
-              label="Vendor Name"
+              label="Vendor Name *"
               id="vendorName"
               value={formik.values.vendorName}
               error={formik.errors.vendorName}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="TIN No"
               id="tinNo"
               value={formik.values.tinNo}
               error={formik.errors.tinNo}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="VRN No"
               id="vrnNo"
               value={formik.values.vrnNo}
               error={formik.errors.vrnNo}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           {type == "copy" || type == "new" ? (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Status"
                 id="status"
@@ -178,7 +215,8 @@ export default function VendorFormInput({
                 disabled
               />
             </Grid>
-          ) : formik.values.isApproved == -2 || formik.values.isApproved == 1 ? (
+          ) : formik.values.isApproved == -2 ||
+            formik.values.isApproved == 1 ? (
             <Grid
               item
               xs={12}
@@ -187,16 +225,15 @@ export default function VendorFormInput({
               lg={3}
               xl={2}
               sx={{ marginTop: 2 }}
-              paddingLeft={2}
+              paddingLeft={1}
             >
               <SelectBox
                 label="Status"
                 id="status"
-                disabled={disable}
                 options={optionsSettingsData?.body.status}
                 value={
                   formik.values.status == "ACTIVE" ||
-                    formik.values.status == "Active"
+                  formik.values.status == "Active"
                     ? "Active"
                     : formik.values.status
                 }
@@ -205,7 +242,7 @@ export default function VendorFormInput({
               />
             </Grid>
           ) : (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Status"
                 id="status"
@@ -218,15 +255,14 @@ export default function VendorFormInput({
           )}
         </Grid>
 
-        <Grid container paddingTop={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+        <Grid container>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Alias"
               id="alias"
               value={formik.values.alias}
               error={formik.errors.alias}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
           <Grid
@@ -237,156 +273,153 @@ export default function VendorFormInput({
             lg={3}
             xl={2}
             sx={{ marginTop: 2 }}
-            paddingLeft={2}
+            paddingLeft={1}
           >
             <SelectBox
-              label="Vendor Type"
+              label="Vendor Type *"
               id="type"
               options={vendorSettingsData?.body.vendorType}
               value={formik.values.type}
               error={formik.errors.type}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
-              label="Address 1"
+              label="Address 1 *"
               id="add1"
               value={formik.values.add1}
               error={formik.errors.add1}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Address 2"
               id="add2"
               value={formik.values.add2}
               error={formik.errors.add2}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
         </Grid>
 
-        <Grid container xs={12} paddingTop={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+        <Grid container>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Address 3"
               id="add3"
               value={formik.values.add3}
               error={formik.errors.add3}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="PO No"
               id="poNo"
               value={formik.values.poNo}
               error={formik.errors.poNo}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
         </Grid>
-        <Grid container paddingTop={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+        <Grid container>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="City"
               id="city"
               value={formik.values.city}
               error={formik.errors.city}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Province"
               id="province"
               value={formik.values.province}
               error={formik.errors.province}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
-            <InputBox
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
+            <FormAutoComplete
               label="Country"
               id="country"
+              suggestionName="country"
               value={formik.values.country}
               error={formik.errors.country}
               onChange={formik.handleChange}
-              disabled={disable}
-            />
+              fetchSuggestions={fetchSuggestions}
+            ></FormAutoComplete>
           </Grid>
         </Grid>
 
-        <Grid container paddingTop={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+        <Grid container>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Contact Person"
               id="contactPerson"
               value={formik.values.contactPerson}
               error={formik.errors.contactPerson}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Email Id"
               id="emailId"
               value={formik.values.emailId}
               error={formik.errors.emailId}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Phone 1"
               id="telephone1"
               value={formik.values.telephone1}
               error={formik.errors.telephone1}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Phone 2"
               id="telephone2"
               value={formik.values.telephone2}
               error={formik.errors.telephone2}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Fax"
               id="fax"
               value={formik.values.fax}
               error={formik.errors.fax}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
         </Grid>
-        <Grid container paddingTop={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={2}>
+        <Grid container>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <InputBox
               label="Credit Days"
               id="creditDays"
               value={formik.values.creditDays}
               error={formik.errors.creditDays}
               onChange={formik.handleChange}
-              disabled={disable}
             />
           </Grid>
         </Grid>
@@ -398,14 +431,13 @@ export default function VendorFormInput({
         <Grid item xs={12}>
           <VendorEditGrid
             formik={formik}
-            disabled={disable}
             vendorSettingsData={vendorSettingsData}
             dropdownData={dropdownData}
           />
         </Grid>
         {formik.values.status.toLowerCase() === "rejected" ||
-          page == "vendorApproval" ? (
-          <Grid item xs={12}>
+        page == "vendorApproval" ? (
+          <Grid item xs={12}  sx={{padding:"10px 3px",margin:"auto"}}>
             <TextField
               label="Reject Remarks"
               name="rejectRemarks"
@@ -423,7 +455,7 @@ export default function VendorFormInput({
           <></>
         )}
         {!disable ? (
-          <Grid item xs={12}>
+          <Grid item xs={12}  sx={{padding:"10px 3px"}}>
             <Stack direction="row" spacing={2} justifyContent="space-between">
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
@@ -445,7 +477,7 @@ export default function VendorFormInput({
             </Stack>
           </Grid>
         ) : (
-          <Grid item xs={12}>
+          <Grid item xs={12}  sx={{padding:"10px 3px"}}>
             <Stack direction="row" spacing={2} justifyContent="space-between">
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
@@ -455,13 +487,22 @@ export default function VendorFormInput({
                   Cancel
                 </OutlinedButton>
                 <ThemeButton
+                  onClick={formik.handleSubmit}
+                  sx={{ fontWeight: "500" }}
+                >
+                  {/* {isLoading && (
+                                <CircularProgress size={20} color="white" />
+                            )}{" "} */}
+                  Update
+                </ThemeButton>
+                <ThemeButton
                   sx={{ fontWeight: "500", backgroundColor: "red" }}
                   onClick={() => handleRejectRequest()}
                 >
                   {/* {isLoading && (
                                 <CircularProgress size={20} color="white" />
                             )}{" "} */}
-                  Approve reject
+                  Reject
                 </ThemeButton>
                 <ThemeButton
                   sx={{ fontWeight: "500" }}
@@ -470,7 +511,7 @@ export default function VendorFormInput({
                   {/* {isLoading && (
                                 <CircularProgress size={20} color="white" />
                             )}{" "} */}
-                  Approve request
+                  Approve
                 </ThemeButton>
               </Stack>
             </Stack>

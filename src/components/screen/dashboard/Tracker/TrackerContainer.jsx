@@ -16,7 +16,6 @@ export default function TrackerContainer({ data }) {
     mblno: data.mblno
   });
 
-  console.log("trackingData", trackingData)
 
   return (
     <Grid container spacing={2} width={'60vw'} >

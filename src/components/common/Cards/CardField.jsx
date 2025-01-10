@@ -25,8 +25,12 @@ export default function CardField({ title, subtitle, icon, ...props }) {
       </Grid>
       <Grid item xs={8}>
         {title === "Status" ? (
-          <div style={{ marginLeft: "5px" }}>
-            {StatusChip(subtitle.toLowerCase())}
+          <div style={{ marginLeft: "10px" }}>
+            {StatusChip(subtitle.toLowerCase(), "status")}
+          </div>
+        ) : title === "Document" ? (
+          <div style={{ marginLeft: "10px" }}>
+            {StatusChip(subtitle, "document")}
           </div>
         ) : (
           <Tooltip title={subtitle} arrow>

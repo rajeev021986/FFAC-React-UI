@@ -19,7 +19,6 @@ export const SIActions = {
         }
         try {
             const resp = await verifyStatus(payload).unwrap();
-            console.log(resp);
             if (resp.status === 'success') {
                 toast.success(resp.message);
             }
@@ -29,7 +28,6 @@ export const SIActions = {
     },
     save: async (params, saveServiceInvoice) => {
         // ** to save the data in 'save' button click **
-        console.log('save : ', params);
         if (!validation(params)) {
             return;
         }
@@ -51,7 +49,6 @@ export const SIActions = {
         };
         try {
             const resp = await saveServiceInvoice(payload).unwrap();
-            console.log(resp);
             if (resp.status === 'success') {
                 toast.success(resp.message);
             }
@@ -105,7 +102,6 @@ function validation(params) {
     const invoice_date = moment(params.invoice_date);
     const today = moment();
     const diff = today.diff(invoice_date, 'days');
-    console.log({diff,today,invoice_date})
     /*
     Invoice date should not be greater than 15 days in future 
     &

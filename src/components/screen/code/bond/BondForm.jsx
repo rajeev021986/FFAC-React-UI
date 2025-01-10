@@ -17,7 +17,6 @@ export default function BondForm() {
     const location = useLocation();
     const nav = useNavigate();
     const { id, type } = location.state;
-    console.log(id, type,"asdf")
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -50,7 +49,6 @@ export default function BondForm() {
                 toast.error("Failed to fetch Bond data");
             }
         } catch (error) {
-            console.error("Error fetching Bond data:", error);
             toast.error("Error fetching Bond data");
         }
     };
@@ -98,9 +96,7 @@ export default function BondForm() {
                         bondPurchaseDetailsEntities: values.bondPurchaseDetailsEntities.map((a) => ({ ...a, id: null })),
                         id: null 
                     }).unwrap();
-                    console.log("Success:", result);
                 } catch (error) {
-                    console.error("Error:", error);
                 }
             } else {
                 try {

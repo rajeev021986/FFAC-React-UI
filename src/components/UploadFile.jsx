@@ -13,27 +13,17 @@ import {
   MenuItem,
   Tooltip,
 } from "@mui/material";
-import { styled } from "@mui/system";
+import { margin, styled } from "@mui/system";
 import { CloudDownload, Delete, Visibility } from "@mui/icons-material"; // Add Visibility icon
 import moment from "moment";
 import Uploadimg from "../assets/images/upload-placeholder.png";
 import ApiManager from "../services/ApiManager";
-import {
-  useAddAgentMutation,
-  useDownloadDocumnentMutation,
-  useGetCustomerFileListMutation,
-  useUploadCustomerFileMutation,
-} from "../store/api/codeDataApi";
+import { useUploadCustomerFileMutation } from "../store/api/codeDataApi";
 import Loader from "./common/Loader/Loader";
-import { useGetOptionsSettingsQuery } from "../store/api/settingsApi";
-import SelectBox from "./common/SelectBox";
-import { appDateFormat } from "./utils/date";
-import ExcelViewer from "./common/FileViewer/ExcelViewer";
-import ImageViewer from "./common/FileViewer/ImageViewer";
-import PDFViewer from "./common/FileViewer/PDFViewer";
-import WordViewer from "./common/FileViewer/WordViewer";
-import TextViewer from "./common/FileViewer/TextViewer";
 import { StyledDataGrid } from "./common/Grid/styles";
+import UploadFilesDialog from "./UploadFilesDialog";
+import toast, { LoaderIcon } from "react-hot-toast";
+import CustomToast from "./common/Toast/CustomToast";
 // Custom styled drop zone
 const DropZone = styled(Box)(({ theme }) => ({
   border: "2px dashed #ccc",
@@ -58,6 +48,8 @@ const UploadFile = ({
   dropdownData,
   sourceType = null,
 }) => {
+  const [viewloader, setViewloader] = useState(false);
+  const [viewloaderId, setViewLoaderId] = useState();
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [deleteData, setDeleteData] = useState({});
@@ -70,7 +62,14 @@ const UploadFile = ({
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [viewDocument, setViewDocument] = useState({});
   const [fileData, setFileDaat] = useState({});
+  const downloadIntgater = async () => {
+    await ApiManager.fileDownloadIntegater(viewloaderId)
+      .then((e) => toast.success(e.message))
+      .catch((e) => toast.error(e.message));
+  };
   const handleView = async (event, id, source, sourceId, documentType) => {
+    setViewloader(true);
+    setViewLoaderId(id);
     event.preventDefault();
     try {
       let source = sourceType;
@@ -99,10 +98,10 @@ const UploadFile = ({
       setViewDocument({ url, documentType });
       setViewDialogOpen(true);
     } catch (error) {
-      console.log(error);
+      toast.error("Some thing went Wrong");
     }
+    setViewloader(false);
   };
-
   const handleViewDialogClose = () => {
     setViewDialogOpen(false);
     setViewDocument({});
@@ -122,17 +121,33 @@ const UploadFile = ({
       reloadDataHandler();
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
 
   const handleFileDrop = (event) => {
-    const files = event.target.files || event.dataTransfer.files;
-    if (files.length > 0) {
-      setUploadedFile(files[0]);
-      setDialogOpen(true);
+    const file = (event.target.files || event.dataTransfer.files)[0];
+    if (!file) return;
+    const maxFileSize = 10 * 1024 * 1024;
+    const invalidExtensions = ["zip", "exe"];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if (file.size > maxFileSize || invalidExtensions.includes(fileExtension)) {
+      return toast.custom(
+        <CustomToast
+          message={
+            file.size > maxFileSize
+              ? "File size must be less than 10 MB."
+              : `.${fileExtension} files are not allowed.`
+          }
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
     }
+    setUploadedFile(file);
+    setDialogOpen(true);
   };
 
   const handleInputChange = (e) => {
@@ -143,16 +158,22 @@ const UploadFile = ({
   const handleDialogClose = () => {
     setDialogOpen(false);
     setUploadedFile(null);
+    setFormData({});
   };
   const onCloseConfiramtion = () => {
     setOpenConfirmation(false);
   };
-
   const validateForm = () => {
     const errors = {};
     if (!formData.documentType) {
       errors.documentType = "Document Type is required";
     }
+    if (formData.documentType == "Other") {
+      if (!formData.other) {
+        errors.other = "Other Type is required";
+      }
+    }
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -176,30 +197,76 @@ const UploadFile = ({
       reloadDataHandler();
       setLoading(false);
     } catch (error) {
-      console.error("Error uploading file:", error);
       setLoading(false);
       setDialogOpen(false);
     }
+    setFormData({});
   };
+
+  const handleDate = (date) => {
+    if (!date) {
+      return "";
+    }
+
+    return date.split("T")[0];
+  };
+
   const cusColumns = [
     {
       field: "documentType",
       headerName: "Type",
       flex: 1,
       headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
-    { field: "number", headerName: "Number", flex: 1, headerAlign: "center" },
+    {
+      field: "fileName",
+      headerName: "File Name",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
+    },
+
+    {
+      field: "number",
+      headerName: "Number",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
+    },
     {
       field: "createdBy",
       headerName: "Created By",
       flex: 1,
       headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "modifiedBy",
       headerName: "Modified By",
       flex: 1,
       headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "createdDate",
@@ -208,7 +275,11 @@ const UploadFile = ({
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
-        return <div>{appDateFormat(params.value)}</div>;
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>
+          </Tooltip>
+        );
       },
     },
     {
@@ -216,18 +287,26 @@ const UploadFile = ({
       headerName: "Issue Date",
       flex: 1,
       headerAlign: "center",
-      renderCell: (params) => (
-        <span>{moment(params.value).format("DD-MM-YYYY")}</span>
-      ),
+      renderCell: (params) => {
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       field: "expiredDate",
       headerName: "Expiry Date",
       flex: 1,
       headerAlign: "center",
-      renderCell: (params) => (
-        <span>{moment(params.value).format("DD-MM-YYYY")}</span>
-      ),
+      renderCell: (params) => {
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       field: "actions",
@@ -244,18 +323,22 @@ const UploadFile = ({
             height: "100%",
           }}
         >
-          <Visibility
-            style={{ cursor: "pointer", color: "#1976d2" }}
-            onClick={(event) =>
-              handleView(
-                event,
-                params.row.id,
-                params.row.source,
-                params.row.sourceId,
-                params.row.fileName
-              )
-            }
-          />
+          {viewloader && viewloaderId == params.id ? (
+            <LoaderIcon />
+          ) : (
+            <Visibility
+              style={{ cursor: "pointer", color: "#1976d2" }}
+              onClick={(event) =>
+                handleView(
+                  event,
+                  params.row.id,
+                  params.row.source,
+                  params.row.sourceId,
+                  params.row.fileName
+                )
+              }
+            />
+          )}
           <Delete
             style={{ cursor: "pointer", color: "red" }}
             onClick={() => {
@@ -263,6 +346,7 @@ const UploadFile = ({
                 id: params.row.id,
                 source: params.row.source,
                 sourceId: params.row.sourceId,
+                fileName: params.row.fileName,
               });
               setOpenConfirmation(true);
             }}
@@ -276,6 +360,17 @@ const UploadFile = ({
     {
       field: "documentType",
       headerName: "Type",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.value}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
+    },
+    {
+      field: "fileName",
+      headerName: "File Name",
       flex: 1,
       headerAlign: "center",
       renderCell: (params) => (
@@ -312,11 +407,13 @@ const UploadFile = ({
       width: 130,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => (
-        <Tooltip title={`${params.row.createdDate}`} arrow>
-          <div>{appDateFormat(params.value)}</div>;
-        </Tooltip>
-      ),
+      renderCell: (params) => {
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>;
+          </Tooltip>
+        );
+      },
     },
     {
       field: "modifiedDate",
@@ -324,11 +421,13 @@ const UploadFile = ({
       width: 130,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => (
-        <Tooltip title={`${params.row.modifiedDate}`} arrow>
-          <div>{appDateFormat(params.value)}</div>;
-        </Tooltip>
-      ),
+      renderCell: (params) => {
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div>{handleDate(params.value)}</div>;
+          </Tooltip>
+        );
+      },
     },
     {
       field: "actions",
@@ -344,18 +443,22 @@ const UploadFile = ({
             height: "100%",
           }}
         >
-          <Visibility
-            style={{ cursor: "pointer", color: "#1976d2" }}
-            onClick={(event) =>
-              handleView(
-                event,
-                params.row.id,
-                params.row.source,
-                params.row.sourceId,
-                params.row.fileName
-              )
-            }
-          />
+          {viewloader && viewloaderId == params.id ? (
+            <LoaderIcon />
+          ) : (
+            <Visibility
+              style={{ cursor: "pointer", color: "#1976d2" }}
+              onClick={(event) =>
+                handleView(
+                  event,
+                  params.row.id,
+                  params.row.source,
+                  params.row.sourceId,
+                  params.row.fileName
+                )
+              }
+            />
+          )}
           <Delete
             style={{ cursor: "pointer", color: "red" }}
             onClick={() => {
@@ -363,6 +466,7 @@ const UploadFile = ({
                 id: params.row.id,
                 source: params.row.source,
                 sourceId: params.row.sourceId,
+                fileName: params.row.fileName,
               });
               setOpenConfirmation(true);
             }}
@@ -383,7 +487,6 @@ const UploadFile = ({
       setListData(res.body);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -400,15 +503,25 @@ const UploadFile = ({
           <Loader />
         </Grid>
       ) : (
-        <Grid container spacing={2}>
+        <Grid
+          container
+          spacing={2}
+          paddingLeft={1}
+          paddingRight={1}
+          marginTop={1}
+        >
           <Typography
             variant="h5"
             gutterBottom
-            style={{ width: "100%", marginLeft: "15px" }}
+            style={{
+              width: "100%",
+              margin: "0px ! important",
+              paddingLeft: "16px",
+            }}
           >
             Select Files
           </Typography>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} margin={0} padding={0}>
             <Box display="flex" flexDirection="column" height="100%" gap={2}>
               <DropZone
                 onClick={() => document.getElementById("file-input").click()}
@@ -440,7 +553,10 @@ const UploadFile = ({
                   id="file-input"
                   type="file"
                   style={{ display: "none" }}
-                  onChange={handleFileDrop}
+                  onChange={(e) => {
+                    handleFileDrop(e);
+                    e.target.value = "";
+                  }}
                   disabled={disabled}
                 />
               </DropZone>
@@ -462,199 +578,26 @@ const UploadFile = ({
             </Box>
           </Grid>
 
-          <Dialog
-            open={dialogOpen}
-            onClose={handleDialogClose}
-            maxWidth="sm"
-            fullWidth
-          >
-            <DialogTitle>
-              <Typography variant="h6" component="div">
-                File Details
-              </Typography>
-            </DialogTitle>
-            <DialogContent dividers>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <SelectBox
-                    label="Document Type"
-                    id="documentType"
-                    options={dropdownData}
-                    value={formData.documentType}
-                    onChange={handleInputChange}
-                    error={!!formErrors.documentType}
-                    helperText={formErrors.documentType}
-                  />
-                </Grid>
-                {sourceType == "CUSTOMER" && (
-                  <Grid item xs={12}>
-                    <TextField
-                      margin="dense"
-                      label="Issue Date"
-                      name="issueDate"
-                      type="date"
-                      fullWidth
-                      value={formData.issueDate}
-                      onChange={handleInputChange}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                )}
-                {sourceType == "CUSTOMER" && (
-                  <Grid item xs={12}>
-                    <TextField
-                      margin="dense"
-                      label="Number"
-                      name="number"
-                      fullWidth
-                      value={formData.number}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                )}
-                {sourceType == "CUSTOMER" && (
-                  <Grid item xs={12}>
-                    <TextField
-                      margin="dense"
-                      label="Expiry Date"
-                      name="expiryDate"
-                      type="date"
-                      fullWidth
-                      value={formData.expiryDate}
-                      onChange={handleInputChange}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                )}
-              </Grid>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleDialogClose} color="secondary">
-                Cancel
-              </Button>
-              <Button onClick={handleDialogSave} color="primary">
-                Save
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog
-            open={openConfirmation}
-            onClose={onCloseConfiramtion}
-            PaperProps={{
-              sx: {
-                padding: 2,
-                borderRadius: 4,
-                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-              },
-            }}
-          >
-            <DialogTitle
-              sx={{
-                textAlign: "center",
-                fontWeight: "bold",
-                color: "primary.main",
-                borderBottom: "1px solid #ddd",
-                pb: 2,
-              }}
-            >
-              Are you sure you want to delete it?
-            </DialogTitle>
-            <DialogContent
-              sx={{
-                textAlign: "center",
-                color: "text.secondary",
-                fontSize: "1rem",
-                mt: 2,
-              }}
-            >
-              <p>This action cannot be undone.</p>
-            </DialogContent>
-            <DialogActions
-              sx={{
-                justifyContent: "center",
-                pt: 2,
-              }}
-            >
-              <Button
-                onClick={onCloseConfiramtion}
-                color="primary"
-                variant="outlined"
-                sx={{
-                  minWidth: 100,
-                  borderRadius: 50,
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={onDelete}
-                color="secondary"
-                variant="contained"
-                sx={{
-                  minWidth: 100,
-                  borderRadius: 50,
-                }}
-              >
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog
-            open={viewDialogOpen}
-            onClose={handleViewDialogClose}
-            maxWidth="lg"
-            fullWidth
-          >
-            <DialogTitle>{viewDocument.documentType}</DialogTitle>
-            <DialogContent>
-              {fileData.documentType == "XL" && (
-                <ExcelViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-              {fileData.documentType == "IMG" && (
-                <ImageViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-              {fileData.documentType == "PDF" && (
-                <PDFViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-              {fileData.documentType == "MSW" && (
-                <WordViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-              {fileData.documentType == "TXT" && (
-                <TextViewer
-                  mimeType={fileData.mimeType}
-                  base64Data={fileData.base64Data}
-                />
-              )}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleViewDialogClose} color="secondary">
-                Close
-              </Button>
-              <Button
-                onClick={() => {
-                  const link = document.createElement("a");
-                  link.href = viewDocument.url;
-                  link.download = viewDocument.documentType;
-                  link.click();
-                }}
-                color="primary"
-              >
-                Download
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <UploadFilesDialog
+            dialogOpen={dialogOpen}
+            handleDialogClose={handleDialogClose}
+            dropdownData={dropdownData}
+            formData={formData}
+            handleInputChange={handleInputChange}
+            formErrors={formErrors}
+            sourceType={sourceType}
+            handleDialogSave={handleDialogSave}
+            openConfirmation={openConfirmation}
+            onCloseConfiramtion={onCloseConfiramtion}
+            deleteData={deleteData}
+            onDelete={onDelete}
+            viewDialogOpen={viewDialogOpen}
+            handleViewDialogClose={handleViewDialogClose}
+            viewDocument={viewDocument}
+            fileData={fileData}
+            downloadIntgater={downloadIntgater}
+            setFormData={setFormData}
+          />
         </Grid>
       )}
     </>

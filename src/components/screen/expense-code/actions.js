@@ -8,7 +8,6 @@ export const getExpenseCodeGridActions = (setModal) => {
         {
           label: 'Edit',
           onClick: (params) => {
-            console.log('PL clicked for', params.row);
             setModal(
               { open: true, type: 'edit', data: params.row }
             )
@@ -18,7 +17,6 @@ export const getExpenseCodeGridActions = (setModal) => {
         {
           label: 'Aduit',
           onClick: (params) => {
-            console.log('PL clicked for', params.row);
             setModal(
               { open: true, type: 'audit', data: params.row }
             )

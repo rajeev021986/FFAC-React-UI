@@ -36,16 +36,20 @@ function TimelineComponent({ data }) {
   return (
     <>
       <div
-        style={{ display: "flex", flexDirection: "column", padding: "20px" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          marginBottom: "8px",
+        }}
       >
         {data?.length > 0 ? (
-          <Timeline>
+          <Timeline sx={{ padding: 0, margin: 0 }}>
             {data?.map((entry, index) => (
-              <div style={{ display: "flex" }} key={index}>
+              <div style={{ display: "flex", padding: "0px" }} key={index}>
                 <TimelineItem
                   position="left"
                   sx={{
-                    width: "30%",
+                    width: "25%",
                     "&::before": {
                       content: "none",
                     },
@@ -59,19 +63,26 @@ function TimelineComponent({ data }) {
                         backgroundColor: "primary.main",
                       }}
                     />
+                    {/* <TimelineContent>
+                      <Typography variant="body1" color="textSecondary">
+                        {new Date(entry.date).toLocaleString()}
+                      </Typography>
+                    </TimelineContent> */}
                     <TimelineDot sx={{ backgroundColor: "primary.main" }} />
-                    {index < data.length - 1 && (
-                      <TimelineConnector
-                        sx={{
-                          height: "100%",
-                          backgroundColor: "primary.main",
-                        }}
-                      />
-                    )}
+                    <TimelineConnector
+                      sx={{
+                        height: "100%",
+                        backgroundColor: "primary.main",
+                      }}
+                    />
                   </TimelineSeparator>
                   <TimelineOppositeContent
-                    sx={{ m: "auto 0" }}
-                    align="right"
+                    sx={{
+                      m: "auto 0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                     variant="body2"
                     color="text.secondary"
                   >
@@ -86,7 +97,7 @@ function TimelineComponent({ data }) {
                   </TimelineContent> */}
                 </TimelineItem>
                 <div
-                  style={{ marginTop: "10px", width: "70%" }}
+                  style={{ marginTop: "10px", width: "75%" }}
                   onClick={() => handleButtonClick(index + 1)}
                 >
                   <Accordion sx={{ width: "100%" }}>

@@ -30,7 +30,6 @@ const UserFilterForm = () => {
   };
 
   const handleApply = () => {
-    console.log("Filters applied:", filters);
   };
 
   return (

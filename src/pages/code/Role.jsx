@@ -215,7 +215,6 @@ const Role = () => {
     setFilteredRoles(data?.body || []);
   }, [data]);
   const [filteredRoles, setFilteredRoles] = useState(roles);
-  console.log(filteredRoles,"filteredRoles")
   const [refresh, setRefresh] = useState(false);
   const [loader, setLoader] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -259,7 +258,6 @@ const Role = () => {
       await ApiManager.removeAssignedUser(queryParams).then(() => toast.success("User Removed successfully!")).then(() => refetch()).catch(() => toast.error("Failed to Remove User"))
       setRefresh((prev) => !prev);
     } catch (error) {
-      console.error("Error removing user:", error);
       toast.error("Failed to remove user");
     }
     setOpenDialog(false);
@@ -325,19 +323,16 @@ const Role = () => {
         setRoles(updatedRoles);
         setFilteredRoles(updatedRoles);
         const result = await ApiManager.deleteRole(dialogConfig.roleId).then((res) => {
-          console.log(res);
           toast.success("Role deleted successfully!");
         }).then((res) => {
           setRefresh((prev) => !prev);
         }).catch((error) => {
-          console.log(error);
           toast.error("Failed to delete role");
         });
       } else {
         setRefresh((prev) => !prev);
       }
     } catch (error) {
-      console.error("Error:", error);
       toast.error(
         `Failed to ${dialogConfig.type === "role" ? "delete role" : "remove user"
         }`
@@ -431,7 +426,6 @@ const Role = () => {
       label: "Requested",
       width: "15%",
       render: (record) => {
-        console.log(record, "record");
         // Check for update permission
         const userPermission = adminMenuData.find(
           (item) => item.subMenu === "Role"

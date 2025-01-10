@@ -47,14 +47,16 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
 import ApiManager from "../../services/ApiManager";
 import DeleteDialog from "../../components/common/DeleteDialog";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
@@ -71,10 +73,17 @@ export default function CustomerScreen({ page }) {
   };
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New Customer" }, { name: "Copy" }, { name: "Export" }]
+    ? [
+        { name: "New Customer" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
     : page === "customerApprove"
-    ? [{ name: "Export" }]
-    : [{ name: "New Customer" }, { name: "Export" }];
+    ? [{ name:  exportLoader ? <LoaderIcon /> : "Export"  }]
+    : [
+        { name: "New Customer" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ];
   const query = {
     page: codeCustomerSelector?.pagination?.page + 1,
     size: codeCustomerSelector?.pagination?.pageSize,
@@ -97,7 +106,7 @@ export default function CustomerScreen({ page }) {
     query.sortBy = "customerName";
   }
   const payload = Object.entries(codeCustomerSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
       Boolean(key == "cname") && (fieldname = "customerName");
@@ -105,7 +114,7 @@ export default function CustomerScreen({ page }) {
         fieldName: fieldname,
         operator: "=",
         value: value,
-        logicalOperator: "or",
+        logicalOperator: "and",
       };
     });
 
@@ -161,6 +170,7 @@ export default function CustomerScreen({ page }) {
       });
     }
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
         const blob = await ApiManager.fetchCustomerDatasExcel(
           query,
@@ -176,8 +186,14 @@ export default function CustomerScreen({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {
-        console.error("Download failed:", error);
+        toast.custom(
+          <CustomToast message="Something went wrong" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
+      setExportLoader(false);
     }
   };
 
@@ -198,7 +214,6 @@ export default function CustomerScreen({ page }) {
       handleClose();
     } catch (error) {
       toast.error("Failed to delete customer.");
-      console.error("Delete Error:", error);
     }
   };
 
@@ -261,8 +276,9 @@ export default function CustomerScreen({ page }) {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
+          sx={{ padding: "8px" }}
           title={
-            <Stack spacing={2} direction="row" justifyContent="space-between">
+            <Stack direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
                   filters={codeCustomerSelector?.formData}
@@ -276,8 +292,6 @@ export default function CustomerScreen({ page }) {
                   options={CUSTOMER_SORT_OPTIONS}
                   value={codeCustomerSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event);
-
                     dispatch(setSortBy(event.target.value));
                   }}
                   sx={{
@@ -342,7 +356,6 @@ export default function CustomerScreen({ page }) {
             // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
-            page={page}
           />
         )}
       </Card>
@@ -358,8 +371,8 @@ export default function CustomerScreen({ page }) {
             zIndex: 1301,
           }}
         >
-          <Box sx={{ p: 2 }}>
-            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+          <Box>
+            <Typography variant="h6" component="div" margin="8px">
               Customer Audit Logs
             </Typography>
             <AuditTimeLine
@@ -371,9 +384,11 @@ export default function CustomerScreen({ page }) {
         </Drawer>
       )}
       <DeleteDialog
-        modal={modal}
+        source="customer"
+        sourceName={modal?.data?.deleteName}
         handleClose={handleClose}
         handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
       />
     </Box>
   );

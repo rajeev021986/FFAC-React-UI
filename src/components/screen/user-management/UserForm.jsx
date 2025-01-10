@@ -25,7 +25,6 @@ import AppAutocomplete from "../../common/AppAutocomplete";
 const BACK_BUTTON_PATH = "/app/admin_master/user_management";
 
 export default function UserForm({ initialValues, formAction, refetch }) {
-  console.log("initialValuesinitialValues", initialValues);
 
   const [loader, setLoader] = React.useState(false);
   const nav = useNavigate();
@@ -56,7 +55,6 @@ export default function UserForm({ initialValues, formAction, refetch }) {
               }).unwrap() : ApiManager.addUser(payload);
             await apiCall
         .then((response) => {
-          console.log(response);
           if (response?.status === "error") {
             toast.error(
               response?.message + ": " + response?.errors[0]?.message
@@ -103,14 +101,12 @@ export default function UserForm({ initialValues, formAction, refetch }) {
   }, [formik.values.role, formik.setFieldValue]);
   const handleCompanyOptionChange = async (query) => {
     const role = formik.values.role;
-    console.log("rolerolerolerole", role);
 
     ApiManager.getCompanyOptions(role, query)
       .then((response) => {
         setOptions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
 

@@ -35,7 +35,6 @@ export default function UserFormScreen() {
     send_pan_alert : state.initialValues?.send_pan_alert || ''
   });
 
-  console.log(state);
   return (
     <Box>
       <ScreenToolbar leftComps={<div><ThemedBreadcrumb/></div>} rightComps={<div></div>} />

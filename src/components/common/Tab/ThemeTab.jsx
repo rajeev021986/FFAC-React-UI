@@ -26,7 +26,7 @@ const ThemeTabs = ({ tabData, tabCounts, children }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: 4,
+            marginBottom: 1,
           }}
         >
           <Box sx={tabStyle.container}>
