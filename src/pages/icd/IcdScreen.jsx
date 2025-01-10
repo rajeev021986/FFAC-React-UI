@@ -168,7 +168,6 @@ export default function IcdScreen({ page }) {
         rightComps={
           <>
             <Backdrop open={open} />
-            {page == "icd" && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
@@ -214,7 +213,7 @@ export default function IcdScreen({ page }) {
                   ></SpeedDialAction>
                 ))}
               </SpeedDial>
-            )}
+           
           </>
         }
       />
@@ -300,7 +299,6 @@ export default function IcdScreen({ page }) {
             // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
-            page={page}
           />
         )}
       </Card>
