@@ -296,7 +296,7 @@ const UploadFile = ({
       },
     },
     {
-      field: "expiredDate",
+      field: "expiryDate",
       headerName: "Expiry Date",
       flex: 1,
       headerAlign: "center",
