@@ -41,6 +41,7 @@ const CustomerSetting = () => {
   }, [data, geterror]);
 
   const Postdata = async () => {
+    setIsLoading(true);
     const filteredData = {
       approvalRequest,
       unitType: unitType.filter((item) => !item.value.includes("Type the")),
@@ -67,7 +68,6 @@ const CustomerSetting = () => {
         }
       })
       .catch((e) => toast.error(e?.message));
-    setIsLoading(true);
     refetch();
     setIsLoading(false);
   };
@@ -131,7 +131,7 @@ const CustomerSetting = () => {
         }}
       >
         <OutlinedButton color="primary" size="small" onClick={Postdata}>
-          {saveLoading ? "Saving..." : "Save"}
+          {isLoadingsave ? "Saving..." : "Save"}
         </OutlinedButton>
       </Grid>
     </div>
