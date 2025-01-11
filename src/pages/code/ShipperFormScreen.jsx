@@ -21,6 +21,7 @@ export default function ShipperFormScreen({ page }) {
     address3: "",
     city: "",
     name: "",
+    status: "",
     country: "",
     email: "",
     contactName: "",
@@ -68,6 +69,7 @@ export default function ShipperFormScreen({ page }) {
           address3: res.body?.address3 || "",
           city: res.body?.city || "",
           name: res.body?.name || "",
+          status: res.body?.status || "",
           country: res.body?.country || "",
           email: res.body?.email || "",
           contactName: res.body?.contactName || "",
@@ -81,8 +83,8 @@ export default function ShipperFormScreen({ page }) {
           modified_by: res.body?.modified_by || "",
           created_date: res.body?.created_date || "",
           modified_date: res.body?.modified_date || "",
-          ctypelist: "SHIPPER",
-          files: [],
+         // ctypelist: "SHIPPER",
+         // files: [],
         });
         setLoading(false);
         console.log(res, "res");

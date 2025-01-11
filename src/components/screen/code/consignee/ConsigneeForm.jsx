@@ -6,11 +6,11 @@ import React, { useEffect, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import ApiManager from "../../../../services/ApiManager";
-import PopupAlert from "../../../common/Alert/PopupAlert";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
+import SelectBox from '../../../common/SelectBox'
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import {
@@ -22,13 +22,24 @@ import ThemeTabs from "../../../common/Tab/ThemeTab";
 import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import {useLazyGetConsigneeAuditQuery } from '../../../../store/api/consigneeDataApi';
 
 export default function ConsigneeForm({
   initialValues,
   page,
-  type = "notcopy",
+  type,
   id,
 }) {
+  const tabs = [
+    { label: "Consignee Details", value: 1 },
+    { label: "Document Details", value: 2 },
+    { label: "Audit logs", value: 3 },
+  ];
+  const [modal, setModal] = React.useState({
+        open: false,
+        type: "",
+        data: {},
+      });
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
@@ -41,7 +52,7 @@ export default function ConsigneeForm({
   const location = useLocation();
 
   const nav = useNavigate();
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = React.useState(1);
   const validationSchema = Yup.object({
     consigneeName: Yup.string().required("Name is required"),
     address1: Yup.string().required("Address1 is required"),
@@ -50,14 +61,7 @@ export default function ConsigneeForm({
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [alertConfig, setAlertConfig] = useState({
-    open: false,
-    title: "",
-    message: "",
-    severity: "info",
-    onConfirm: null,
-    onClose: () => setAlertConfig({ ...alertConfig, open: false }),
-  });
+  
   console.log("optionsCity", optionsCity);
   console.log("id" + initialValues.id);
 
@@ -73,8 +77,8 @@ export default function ConsigneeForm({
         try {
           delete values.id;
 
-          values.status = "New";
-          values.isApproved = !dropdownData?.approvalRequest;
+          //values.status = "New";
+          //values.isApproved = !dropdownData?.approvalRequest;
           let response = await addConsignee({
             ...values,
             consigneeEntityFreeDays: freeDays,
@@ -113,22 +117,14 @@ export default function ConsigneeForm({
       }
     },
   });
-
-  let shouldShowTabs = Object.values(formik.values?.consigneeName).some(
-    (value) => value !== ""
-  );
-  const reloadDataHandler = async () => {
-    try {
-      setLoading(true);
-      console.log("id" + id);
-      const res = await ApiManager.getConsigneeAuditDetails(initialValues.id);
-      setEnquiryAuditDetails(res);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
+ const [getConsigneeAudit, { data: AuditData,
+      isLoading: isLoadingAudit }] =  useLazyGetConsigneeAuditQuery();
+  const fetchAuditData = () => {
+      getConsigneeAudit(
+        {id:initialValues.id}
+      );
+  }
+  
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: consigneeSettingsData } =
@@ -144,12 +140,11 @@ export default function ConsigneeForm({
   }, [optionsSettingsData]);
   const disabled = page == "consignee" ? false : true;
 
-  const disableStatus =
-    page === "consignee" && location.pathname.includes("/new") ? true : false;
+  
 
   return (
     <>
-      {!shouldShowTabs || type == "copy" ? (
+      {type == "new" ? (
         <>
           {" "}
           <Grid container spacing={2}>
@@ -163,6 +158,24 @@ export default function ConsigneeForm({
                 onChange={formik.handleChange}
               />
             </Grid>
+             <Grid
+                                        item
+                                        xs={12}
+                                        sm={6}
+                                        md={4}
+                                        lg={3}
+                                        xl={2}
+                                        sx={{ marginTop: 2 }}
+                                    >
+                                        <SelectBox
+                                            label="Status"
+                                            id="status"
+                                            options={optionsSettingsData?.body?.status}
+                                            value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                                            error={formik.errors.status}
+                                            onChange={formik.handleChange}
+                                        />
+                                    </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
                 label="Address1"
@@ -243,7 +256,7 @@ export default function ConsigneeForm({
                 />
               </Box>
             </Grid>
-            {page == "consignee" && (
+            
               <Grid item xs={12}>
                 <Stack direction="row" spacing={2}>
                   <OutlinedButton
@@ -256,13 +269,13 @@ export default function ConsigneeForm({
                     sx={{ fontWeight: "500", borderRadius: "12px" }}
                   >
                     {isLoading && <CircularProgress size={20} color="white" />}{" "}
-                    Save
+                    Add
                   </ThemeButton>
                 </Stack>
               </Grid>
-            )}
+            
 
-            <PopupAlert alertConfig={alertConfig} />
+            
           </Grid>
         </>
       ) : (
@@ -274,12 +287,11 @@ export default function ConsigneeForm({
                   onChange={handleChange}
                   aria-label="lab API tabs example"
                 >
-                  <Tab label="Edit Consignee" value="1" />
-                  <Tab label="Upload Documents" value="2" />
-                  <Tab label="Audit Logs" value="3" />
+                  {tabs.map((a) => <Tab label={a.label} value={a.value} />)}
+
                 </TabList>
               </Box>
-              <TabPanel value="1">
+              <TabPanel value={1}>
                 {" "}
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -292,6 +304,24 @@ export default function ConsigneeForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
+                  <Grid
+                                                    item
+                                                    xs={12}
+                                                    sm={6}
+                                                    md={4}
+                                                    lg={3}
+                                                    xl={2}
+                                                    sx={{ marginTop: 2 }}
+                                                >
+                                                    <SelectBox
+                                                        label="Status"
+                                                        id="status"
+                                                        options={optionsSettingsData?.body?.status}
+                                                        value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                                                        error={formik.errors.status}
+                                                        onChange={formik.handleChange}
+                                                    />
+                                                </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Address1"
@@ -386,7 +416,7 @@ export default function ConsigneeForm({
                       />
                     </Box>
                   </Grid>
-                  {page == "consignee" && (
+                  
                     <Grid item xs={12}>
                       <Stack
                         direction="row"
@@ -408,30 +438,25 @@ export default function ConsigneeForm({
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
-                            Save
+                            Update
                           </ThemeButton>
                         </Stack>
                       </Stack>
                     </Grid>
-                  )}
+                  
 
-                  <PopupAlert alertConfig={alertConfig} />
+                  
                 </Grid>
               </TabPanel>
-              <TabPanel value="2">
-                <UploadFile
-                  consignee_id={initialValues.id}
-                  disabled={disabled}
+              <TabPanel value={2}>
+              <UploadFile
+                  customer_id={initialValues.id}
                   dropdownData={consigneeSettingsData?.body?.documentType}
-                  source="CONSIGNEE"
+                  sourceType="CONSIGNEE"
                 />
               </TabPanel>
-              <TabPanel value="3">
-                <AuditTimeline
-                  auditDetails={enquiryAuditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={loading}
-                />
+              <TabPanel value={3}>
+              <AuditTimeline auditDetails={AuditData} reloadDataHandler={fetchAuditData} loading={isLoadingAudit} />
               </TabPanel>
             </TabContext>
           </Box>

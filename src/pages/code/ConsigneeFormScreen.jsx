@@ -21,6 +21,7 @@ export default function ConsigneeFormScreen({ page }) {
     address3: "",
     city: "",
     consigneeName: "",
+    status: "",
     country: "",
     standardFreeDays: "",
     standardRate: "",
@@ -28,9 +29,9 @@ export default function ConsigneeFormScreen({ page }) {
     modifiedBy: "",
     createdDate: "",
     modifiedDate: "",
-    consigneeEntityFreeDays: [],
-    ctypelist: 'CONSIGNEE',
-    files: []
+    consigneeMasterFreeDays: [],
+    //ctypelist: 'CONSIGNEE',
+    //files: []
   });
   
 
@@ -64,6 +65,7 @@ export default function ConsigneeFormScreen({ page }) {
           address3: res.body?.address3 || "",
           city: res.body?.city || "",
           consigneeName: res.body?.consigneeName || "",
+          status: res.body?.status || "",
           country: res.body?.country || "",
           standardFreeDays: res.body?.standardFreeDays || "",
           standardRate: res.body?.standardRate || "",
@@ -72,8 +74,8 @@ export default function ConsigneeFormScreen({ page }) {
           createdDate: res.body?.createdDate || "",
           modifiedDate: res.body?.modifiedDate || "",
           consigneeEntityFreeDays: res.body?.consigneeEntityFreeDays || [],
-          ctypelist: "CONSIGNEE",
-          files: [],
+          // ctypelist: "CONSIGNEE",
+          // files: [],
         });
         setLoading(false);
         console.log(res, "res");

@@ -12,6 +12,14 @@ export const CONSIGNEE_COLUMNS = [
         editable: true
     },
     {
+        field: 'status',
+        headerName: 'Status',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',
+        editable: true
+    },
+    {
         field: 'address1',
         headerName: 'Address',
         width: 110,
@@ -52,7 +60,7 @@ export const CONSIGNEE_COLUMNS = [
     },
     {
         flex: 1,
-        field: 'created_by',
+        field: 'createdBy',
         headerName: 'Created By',
         width: 110,
         headerAlign: 'center',
@@ -60,11 +68,33 @@ export const CONSIGNEE_COLUMNS = [
     },
     {
         flex: 1,
-        field: 'modified_by',
+        field: 'modifiedBy',
         headerName: 'Modified By',
         width: 110,
         headerAlign: 'center',
         align : 'center',editable: true
+    },
+    {
+        flex: 1,
+        field: 'createdDate',
+        headerName: 'Created Date',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true,
+        renderCell: (params) => {
+            return <div>{appDateFormat(params.value)}</div>
+        }
+    },
+    {
+        flex: 1,
+        field: 'modifiedDate',
+        headerName: 'Modified Date',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',editable: true,
+        renderCell: (params) => {
+            return <div>{appDateFormat(params.value)}</div>
+        }
     },
     
     {

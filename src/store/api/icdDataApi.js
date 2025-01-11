@@ -1,6 +1,6 @@
 import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
-// const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
+//  const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const icdDataApi = createApi({
     reducerPath: "icdDataApi",
@@ -85,6 +85,11 @@ export const icdDataApi = createApi({
             },
             providesTags: ["Icd"],
         }),
+        getIcdAudit: builder.query({
+            query: (params) => {
+                return { url: `master-service/v1/icd/audit/${params.id}`, method: "GET", headers: getAppHeaders() };
+            },
+        }),
         
         
     }),
@@ -97,5 +102,6 @@ export const {
     useUploadIcdFileMutation, 
     useGetIcdFileListMutation, 
     useDownloadDocumnentMutation,
-    useFetchIcdDatasQuery
+    useFetchIcdDatasQuery,
+    useLazyGetIcdAuditQuery,
 } = icdDataApi;

@@ -12,6 +12,14 @@ export const ICD_COLUMNS = [
         editable: true
     },
     {
+        field: 'status',
+        headerName: 'Status',
+        width: 110,
+        headerAlign: 'center',
+        align : 'center',
+        editable: true
+    },
+    {
         field: 'icdCode',
         headerName: 'Code',
         width: 110,

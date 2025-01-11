@@ -2,15 +2,11 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import {
-  Box,
-  Card,
-  CardHeader,
-  IconButton,
-  Stack,
-} from "@mui/material";
+import { Box, Card, CardHeader, Drawer, IconButton, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack, Typography } from '@mui/material';
 import React, { useState } from "react";
 import CardsView from "../../components/common/Cards/CardsView";
+import AuditTimeLine from '../../components/AuditTimeLine';
+import {useLazyGetConsigneeAuditQuery } from '../../store/api/consigneeDataApi';
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
@@ -38,9 +34,6 @@ import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { useEffect } from "react";
 
 import Backdrop from "@mui/material/Backdrop";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { getConsigneeListGridActionsConsigneeApprovel } from "../../components/screen/code/consignee/action copy";
 import ApiManager from "../../services/ApiManager";
 
@@ -105,7 +98,7 @@ export default function ConsigneeScreen({ page }) {
   } = useFetchConsigneeDatasQuery({
     params: query,
     payload,
-    page: page == "consignee" ? "consignee/filter" : "approval/filter/consignee",
+    page:"consignee/filter",
   });
   useEffect(() => {
     refetch();
@@ -117,10 +110,8 @@ export default function ConsigneeScreen({ page }) {
 
   CONSIGNEE_COLUMNS[CONSIGNEE_COLUMNS.length - 1].renderCell =
     GridActions({
-      actions:
-        page == "consignee"
-          ? getConsigneeListGridActions(nav, setModal)
-          : getConsigneeListGridActionsConsigneeApprovel((nav, setModal)),
+      actions:getConsigneeListGridActions(nav, setModal)
+          
     });
   
   useEffect(() => {
@@ -135,7 +126,7 @@ export default function ConsigneeScreen({ page }) {
     if (actionName === "New") {
       nav(ADD_NEW_CONSIGNEE_PATH, {
         replace: true,
-        state: { formAction: "add" },
+        state: { formAction: "add", type: "new" },
     });
   }
     if (actionName === "Copy") {
@@ -163,6 +154,13 @@ export default function ConsigneeScreen({ page }) {
         console.error('Download failed:', error);
     }
     }
+  }
+  const [getConsigneeAudit, { data: AuditData,
+      isLoading: isLoadingAudit }] =  useLazyGetConsigneeAuditQuery();
+  const fetchAuditData = () => {
+      getConsigneeAudit({
+          id: modal.data.id,
+      });
   }
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
@@ -296,10 +294,7 @@ export default function ConsigneeScreen({ page }) {
             data={ConsigneeData?.body?.data}
             paginationModel={consigneeSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={
-              page == "consignee"
-                ? getConsigneeListGridActions(nav, setModal)
-                : getConsigneeListGridActionsConsigneeApprovel(nav, setModal)
+            actions={getConsigneeListGridActions(nav, setModal)
             }
             // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
@@ -308,6 +303,29 @@ export default function ConsigneeScreen({ page }) {
           />
         )}
       </Card>
+      {modal.type === 'audit' && (
+                <Drawer
+                    anchor="right"
+                    open={modal?.open}
+                    onClose={() => setModal({ open: false, type: "", data: {} })}
+                    sx={{
+                        width: "50vw",
+                        // maxWidth: "50vw",  
+                        display: "flex",
+                        flexDirection: "column",
+                        // zIndex: isFrontmost ? 1301 : 1300, // Adjust z-index based on isFrontmost,
+                        zIndex: 1301
+                    }}
+                >
+                    <Box sx={{ p: 2 }}>
+                        <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+                            Consignee Audit Logs
+                        </Typography>
+                        <AuditTimeLine auditDetails={AuditData} reloadDataHandler={fetchAuditData} loading={isLoadingAudit} />
+                    </Box>
+                </Drawer>
+            )}
+
 
     </Box>
   );

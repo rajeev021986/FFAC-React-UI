@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
-import ApiManager from "../../../../services/ApiManager";
+import {useLazyGetShipperAuditQuery } from '../../../../store/api/shipperDataApi';
 import PopupAlert from "../../../common/Alert/PopupAlert";
 import * as Yup from 'yup';
 import toast from "react-hot-toast";
@@ -15,6 +15,7 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
+import SelectBox from '../../../common/SelectBox'
 import TabPanel from "@mui/lab/TabPanel";
 import {
   useAddShipperMutation,
@@ -28,22 +29,25 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 export default function ShipperForm({
   initialValues,
   page,
-  type = "notcopy",
+  type,
   id,
 }) {
-  const [options, setOptions] = useState([]);
-  const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
-  const [optionsCity, setCityOptions] = useState([]);
-  const [uploadedFiles, setUploadedFiles] = useState(initialValues.files || []);
+  const tabs = [
+    { label: "Shipper Details", value: 1 },
+    { label: "Document Details", value: 2 },
+    { label: "Audit logs", value: 3 },
+  ];
   const [addShipper, { isLoading }] = useAddShipperMutation();
-  const [loading, setLoading] = useState(false);
-  const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateShipper] = useUpdateShipperMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const location = useLocation();
-
+  const [modal, setModal] = React.useState({
+      open: false,
+      type: "",
+      data: {},
+    });
+    
   const nav = useNavigate();
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = React.useState(1);
   const validationSchema = Yup.object({
       name: Yup.string().required("Name is required"),
       address1: Yup.string().required("Address1 is required"),
@@ -53,16 +57,7 @@ export default function ShipperForm({
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [alertConfig, setAlertConfig] = useState({
-    open: false,
-    title: "",
-    message: "",
-    severity: "info",
-    onConfirm: null,
-    onClose: () => setAlertConfig({ ...alertConfig, open: false }),
-  });
-  console.log("optionsCity", optionsCity);
-  console.log("id"+initialValues.id);
+  
 
   const formik = useFormik({
     initialValues,
@@ -75,8 +70,7 @@ export default function ShipperForm({
         try {
           delete values.id;
          
-          values.status = "New"
-          values.isApproved = !dropdownData?.approvalRequest;
+          // values.status = "New"
           let response = await addShipper({ ...values}).unwrap();
 
           // Handle response and display toast messages
@@ -109,21 +103,14 @@ export default function ShipperForm({
       }
     },
   });
-  let shouldShowTabs = Object.values(formik.values?.name).some(
-    (value) => value !== ""
-  );
-  const reloadDataHandler = async () => {
-    try {
-      setLoading(true);
-      console.log("id"+id);
-      const res = await ApiManager.getShipperAuditDetails(initialValues.id);
-      setEnquiryAuditDetails(res);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
+  console.log(initialValues.id);
+  const [getShipperAudit, { data: AuditData,
+      isLoading: isLoadingAudit }] =  useLazyGetShipperAuditQuery();
+  const fetchAuditData = () => {
+      getShipperAudit(
+        {id:initialValues.id}
+      );
+  }
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: shipperSettingsData } =
@@ -139,15 +126,10 @@ export default function ShipperForm({
   }, [optionsSettingsData]);
     const disabled = page == "shipper" ? false : true;
 
-  const disableStatus =
-    page === "shipper" && location.pathname.includes("/new") ? true : false;
-
   return (
     <>
-
-      {!shouldShowTabs || type == "copy" ? (
+      {type == "new" ? (
         <>
-          {" "}
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
@@ -159,6 +141,24 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
+             <Grid
+                            item
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            lg={3}
+                            xl={2}
+                            sx={{ marginTop: 2 }}
+                        >
+                            <SelectBox
+                                label="Status"
+                                id="status"
+                                options={optionsSettingsData?.body?.status}
+                                value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                                error={formik.errors.status}
+                                onChange={formik.handleChange}
+                            />
+                        </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
                 label="Address1"
@@ -289,7 +289,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            {page == "shipper" && (
+            
               <Grid item xs={12}>
                 <Stack direction="row" spacing={2}>
                   <OutlinedButton
@@ -305,13 +305,10 @@ export default function ShipperForm({
                     {isLoading && (
                       <CircularProgress size={20} color="white" />
                     )}{" "}
-                    Save
+                    Add
                   </ThemeButton>
                 </Stack>
               </Grid>
-            )}
-            
-            <PopupAlert alertConfig={alertConfig} />
           </Grid>
         </>
       ) : (
@@ -323,13 +320,10 @@ export default function ShipperForm({
                   onChange={handleChange}
                   aria-label="lab API tabs example"
                 >
-                  <Tab label="Edit Shipper" value="1" />
-                  <Tab label="Upload Documents" value="2" />
-                  <Tab label="Audit Logs" value="3" />
+                  {tabs.map((a) => <Tab label={a.label} value={a.value} />)}
                 </TabList>
               </Box>
-              <TabPanel value="1">
-                {" "}
+              <TabPanel value={1}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
@@ -341,6 +335,24 @@ export default function ShipperForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
+                  <Grid
+                                  item
+                                  xs={12}
+                                  sm={6}
+                                  md={4}
+                                  lg={3}
+                                  xl={2}
+                                  sx={{ marginTop: 2 }}
+                              >
+                                  <SelectBox
+                                      label="Status"
+                                      id="status"
+                                      options={optionsSettingsData?.body?.status}
+                                      value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                                      error={formik.errors.status}
+                                      onChange={formik.handleChange}
+                                  />
+                              </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Address1"
@@ -484,7 +496,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-                  {page == "shipper" && (
+                  
                     <Grid item xs={12}>
                       <Stack
                         direction="row"
@@ -505,30 +517,23 @@ export default function ShipperForm({
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
-                            Save
+                            Update
                           </ThemeButton>
                         </Stack>
                       </Stack>
                     </Grid>
-                  )}
-                 
-                  <PopupAlert alertConfig={alertConfig} />
+                  
                 </Grid>
               </TabPanel>
-              <TabPanel value="2">
-                <UploadFile
-                  shipper_id={initialValues.id}
-                  disabled={disabled}
+              <TabPanel value={2}>
+              <UploadFile
+                  customer_id={initialValues.id}
                   dropdownData={shipperSettingsData?.body?.documentType}
-                  source="SHIPPER"
+                  sourceType="SHIPPER"
                 />
               </TabPanel>
-              <TabPanel value="3">
-                <AuditTimeline
-                  auditDetails={enquiryAuditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={loading}
-                />
+              <TabPanel value={3}>
+              <AuditTimeline auditDetails={AuditData} reloadDataHandler={fetchAuditData} loading={isLoadingAudit} />
               </TabPanel>
             </TabContext>
           </Box>

@@ -7,11 +7,13 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
+import {useLazyGetIcdAuditQuery } from '../../../../store/api/icdDataApi';
 import ApiManager from "../../../../services/ApiManager";
 import PopupAlert from "../../../common/Alert/PopupAlert";
 import * as Yup from 'yup';
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
+import SelectBox from '../../../common/SelectBox'
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -28,9 +30,14 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 export default function IcdForm({
   initialValues,
   page,
-  type = "notcopy",
+  type,
   id,
 }) {
+  const tabs = [
+    { label: "ICD Details", value: 1 },
+    { label: "Document Details", value: 2 },
+    { label: "Audit logs", value: 3 },
+  ];
   console.log("initialValues.id"+initialValues.id);
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
@@ -41,10 +48,15 @@ export default function IcdForm({
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateIcd] = useUpdateIcdMutation();
   const [dropdownData, setDropdownData] = useState({});
+  const [modal, setModal] = React.useState({
+    open: false,
+    type: "",
+    data: {},
+  });
   const location = useLocation();
 
   const nav = useNavigate();
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = React.useState(1);
   const validationSchema = Yup.object({
       icd_name: Yup.string().required("Name is required"),
       address1: Yup.string().required("Address1 is required"),
@@ -76,8 +88,8 @@ export default function IcdForm({
         try {
           delete values.id;
          
-          values.status = "New"
-          values.isApproved = !dropdownData?.approvalRequest;
+          // values.status = "New"
+          // values.isApproved = !dropdownData?.approvalRequest;
           let response = await addIcd({ ...values}).unwrap();
 
           // Handle response and display toast messages
@@ -111,9 +123,7 @@ export default function IcdForm({
     },
   });
 
-  let shouldShowTabs = Object.values(formik.values?.icd_name).some(
-    (value) => value !== ""
-  );
+  
   const reloadDataHandler = async () => {
     try {
       setLoading(true);
@@ -127,6 +137,13 @@ export default function IcdForm({
       setLoading(false);
     }
   };
+  const [getIcdAudit, { data: AuditData,
+    isLoading: isLoadingAudit }] =  useLazyGetIcdAuditQuery();
+const fetchAuditData = () => {
+    getIcdAudit(
+      {id:initialValues.id}
+    );
+}
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: icdSettingsData } =
@@ -142,13 +159,12 @@ export default function IcdForm({
   }, [optionsSettingsData]);
     const disabled = page == "icd" ? false : true;
 
-  const disableStatus =
-    page === "icd" && location.pathname.includes("/new") ? true : false;
+  
 
   return (
     <>
 
-      {!shouldShowTabs || type == "copy" ? (
+      {type == "new" ? (
         <>
           {" "}
           <Grid container spacing={2}>
@@ -162,6 +178,24 @@ export default function IcdForm({
                 onChange={formik.handleChange}
               />
             </Grid>
+            <Grid
+                                          item
+                                          xs={12}
+                                          sm={6}
+                                          md={4}
+                                          lg={3}
+                                          xl={2}
+                                          sx={{ marginTop: 2 }}
+                                      >
+                                          <SelectBox
+                                              label="Status"
+                                              id="status"
+                                              options={optionsSettingsData?.body?.status}
+                                              value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                                              error={formik.errors.status}
+                                              onChange={formik.handleChange}
+                                          />
+                                      </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
                 label="Address1"
@@ -271,7 +305,7 @@ export default function IcdForm({
               </Grid>
             )}
             
-            <PopupAlert alertConfig={alertConfig} />
+            
           </Grid>
         </>
       ) : (
@@ -283,12 +317,10 @@ export default function IcdForm({
                   onChange={handleChange}
                   aria-label="lab API tabs example"
                 >
-                  <Tab label="Edit Icd" value="1" />
-                  <Tab label="Upload Documents" value="2" />
-                  <Tab label="Audit Logs" value="3" />
+                  {tabs.map((a) => <Tab label={a.label} value={a.value} />)}
                 </TabList>
               </Box>
-              <TabPanel value="1">
+              <TabPanel value={1}>
                 {" "}
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -301,6 +333,24 @@ export default function IcdForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
+                  <Grid
+                                              item
+                                              xs={12}
+                                              sm={6}
+                                              md={4}
+                                              lg={3}
+                                              xl={2}
+                                              sx={{ marginTop: 2 }}
+                                          >
+                                              <SelectBox
+                                                  label="Status"
+                                                  id="status"
+                                                  options={optionsSettingsData?.body?.status}
+                                                  value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                                                  error={formik.errors.status}
+                                                  onChange={formik.handleChange}
+                                              />
+                                          </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Address1"
@@ -393,7 +443,7 @@ export default function IcdForm({
                 />
                   </Grid>
                  
-                  {page == "icd" && (
+                  
                     <Grid item xs={12}>
                       <Stack
                         direction="row"
@@ -419,25 +469,20 @@ export default function IcdForm({
                         </Stack>
                       </Stack>
                     </Grid>
-                  )}
+                
                  
-                  <PopupAlert alertConfig={alertConfig} />
+                  
                 </Grid>
               </TabPanel>
-              <TabPanel value="2">
-                <UploadFile
-                  shipper_id={initialValues.id}
-                  disabled={disabled}
+              <TabPanel value={2}>
+              <UploadFile
+                  customer_id={initialValues.id}
                   dropdownData={icdSettingsData?.body?.documentType}
-                  source="ICD"
+                  sourceType="ICD"
                 />
               </TabPanel>
-              <TabPanel value="3">
-                <AuditTimeline
-                  auditDetails={enquiryAuditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={loading}
-                />
+              <TabPanel value={3}>
+              <AuditTimeline auditDetails={AuditData} reloadDataHandler={fetchAuditData} loading={isLoadingAudit} />
               </TabPanel>
             </TabContext>
           </Box>
