@@ -21,6 +21,7 @@ import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 import SelectBox from "../../components/common/SelectBox";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import getFirstError from "../../components/common/FieldToastError";
 
 export function VesselForm({ initialValues, type }) {
   const location = useLocation();
@@ -117,6 +118,9 @@ export function VesselForm({ initialValues, type }) {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    getFirstError(formik.errors);
+  }, [formik.errors]);
 
   return (
     <>

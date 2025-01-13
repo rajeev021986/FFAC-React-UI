@@ -320,43 +320,33 @@ export default function VendorEditGrid({
         return newRow;
       },
       columns: [
-        {
-          field: "freeTime",
-          headerName: "Free Time",
-          width: 200,
-          editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
-        },
         ...[
-          "freeTimeType",
-          "t1Start",
-          "t1End",
-          "t1Type",
-          "t1Rate",
-          "t2Start",
-          "t2End",
-          "t2Type",
-          "t2Rate",
-          "t3Start",
-          "t3End",
-          "t3Type",
-          "t3Rate",
+          { FieldLabel: "freeTime" },
+          { FieldLabel: "freeTimeType" },
+          { FieldLabel: "t1Start" },
+          { FieldLabel: "t1End" },
+          { FieldLabel: "t1Type" },
+          { FieldLabel: "t1Rate" },
+          { FieldLabel: "t2Start" },
+          { FieldLabel: "t2End" },
+          { FieldLabel: "t2Type" },
+          { FieldLabel: "t2Rate" },
+          { FieldLabel: "t3Start" },
+          { FieldLabel: "t3End" },
+          { FieldLabel: "t3Type" },
+          { FieldLabel: "t3Rate" },
         ].map((a) => {
           return {
-            field: a,
+            field: a.FieldLabel,
             headerName:
-              a
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
+              a.FieldLabel.replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
-                .toUpperCase() + a.slice(1),
-            // flex: 1,
+                .toUpperCase() + a.FieldLabel.slice(1),
             width: 100,
             headerName:
-              a
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
+              a.FieldLabel.replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
-                .toUpperCase() + a.slice(1),
+                .toUpperCase() + a.FieldLabel.slice(1),
             editable: true,
             renderCell: (params) => <InputBoxForGrid {...params} />,
             renderEditCell: (params) => <InputBoxForGrid {...params} />,
@@ -595,7 +585,7 @@ export default function VendorEditGrid({
     },
     {
       tabLable: "Bank Details",
-      value: formik.values.vendorBankDetails || [],
+      value: formik.values.bankDetails || [],
       addNewRow: () => {
         const hasEmptyFields = TabsHosts[4].value.some((row) =>
           Object.values(row).some(
@@ -623,7 +613,7 @@ export default function VendorEditGrid({
           vendorId: 0,
           new: true,
         };
-        formik.setFieldValue("vendorBankDetails", [
+        formik.setFieldValue("bankDetails", [
           ...TabsHosts[4].value,
           newRow,
         ]);
@@ -631,13 +621,13 @@ export default function VendorEditGrid({
       },
       deleteRow: (id) => {
         const updatedRows = TabsHosts[4].value.filter((row) => row.id !== id);
-        formik.setFieldValue("vendorBankDetails", updatedRows);
+        formik.setFieldValue("bankDetails", updatedRows);
       },
       handleProcessRowUpdate: (newRow, oldRow) => {
         const updatedRows = TabsHosts[4].value.map((row) =>
           row.id === newRow.id ? { ...row, ...newRow } : row
         );
-        formik.setFieldValue("vendorBankDetails", updatedRows);
+        formik.setFieldValue("bankDetails", updatedRows);
         return newRow;
       },
       columns: [

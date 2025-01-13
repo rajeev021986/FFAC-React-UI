@@ -47,6 +47,7 @@ import { UploadFileOutlined } from "@mui/icons-material";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
+import getFirstError from "../../../common/FieldToastError";
 
 export default function CustomerForm({
   initialValues,
@@ -304,25 +305,9 @@ export default function CustomerForm({
   };
   const disabled =
     page == "customer" || page == "customerApprove" ? false : true;
-  const getFirstError = (errors) => {
-    for (const key in errors) {
-      if (Array.isArray(errors[key])) {
-        for (const item of errors[key]) {
-          const nestedError = getFirstError(item);
-          if (nestedError) return nestedError;
-        }
-      } else if (typeof errors[key] === "object") {
-        const nestedError = getFirstError(errors[key]);
-        if (nestedError) return nestedError;
-      } else {
-        return errors[key];
-      }
-    }
-    return null;
-  };
-
-  const currentError = getFirstError(formik.errors);
-
+  useEffect(() => {
+    getFirstError(formik.errors);
+  }, [formik.errors]);
   const customerNameRef = useRef(null);
 
   useEffect(() => {
@@ -332,7 +317,6 @@ export default function CustomerForm({
   }, []);
   return (
     <>
-      {currentError && <div style={{ color: "red" }}>{currentError}</div>}
       {type == "add" ? (
         <>
           {" "}

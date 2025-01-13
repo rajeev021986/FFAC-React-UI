@@ -14,7 +14,7 @@ export function StatusChip(status, field) {
             case "new":
                 return <div style={{ ...styles.chip, backgroundColor: "#ebf5fb", borderColor: "#3498db", color: "#3498db" }}>NEW</div>
             case "inactive":
-                return <div style={{ ...styles.chip, backgroundColor: "#f8f9f9", borderColor: "#bdc3c7", color: "#bdc3c7" }}>INACTIVE</div>
+                return <div style={{ ...styles.chip, backgroundColor: "#f9ebea", borderColor: "#c0392b", color: "#c0392b" }}>INACTIVE</div>
             case "pending_documents":
                 return <div style={{ ...styles.chip, backgroundColor: "#fdf2e9", borderColor: "#e67e22", color: "#e67e22" }}>PENDING DOC</div>
             case "rejected":

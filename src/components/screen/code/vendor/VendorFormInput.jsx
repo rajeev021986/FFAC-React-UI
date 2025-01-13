@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
+import getFirstError from "../../../common/FieldToastError";
 const customToast = () => (
   <div
     style={{
@@ -117,23 +118,9 @@ export default function VendorFormInput({
     }
   };
 
-  const getFirstError = (errors) => {
-    for (const key in errors) {
-      if (Array.isArray(errors[key])) {
-        for (const item of errors[key]) {
-          const nestedError = getFirstError(item);
-          if (nestedError) return nestedError;
-        }
-      } else if (typeof errors[key] === "object") {
-        const nestedError = getFirstError(errors[key]);
-        if (nestedError) return nestedError;
-      } else {
-        return errors[key];
-      }
-    }
-    return null;
-  };
-  const currentError = getFirstError(formik.errors);
+  useEffect(() => {
+    getFirstError(formik.errors);
+  }, [formik.errors]);
   const disable = type == "Approve";
   return (
     <>
@@ -384,11 +371,11 @@ export default function VendorFormInput({
             />
           </Grid>
         </Grid>
-        {currentError && (
+        {/* {currentError && (
           <Grid item xs={12} style={{ color: "red" }}>
             {currentError}
           </Grid>
-        )}
+        )} */}
         <Grid item xs={12}>
           <VendorEditGrid
             formik={formik}

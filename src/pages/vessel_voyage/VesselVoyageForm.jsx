@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { VesselVoyageValidation } from "../../components/screen/vessel_voyage/validation";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -18,6 +18,7 @@ import DateField from "../../components/common/DateTime/DateField";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 import SelectBox from "../../components/common/SelectBox";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import getFirstError from "../../components/common/FieldToastError";
 
 export function VesselVoyageForm({ initialValues, type }) {
   const disabled = false;
@@ -94,6 +95,9 @@ export function VesselVoyageForm({ initialValues, type }) {
     { label: "Close", value: "close" },
     { label: "Open", value: "open" },
   ];
+  useEffect(() => {
+    getFirstError(formik.errors);
+  }, [formik.errors]);
 
   return (
     <>

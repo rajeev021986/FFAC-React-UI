@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material";
 
-export const getTheme = ( primaryColor = "#026de0",mode) => {
+export const getTheme = (primaryColor = "#026de0", mode) => {
   if (typeof primaryColor !== "string" || primaryColor.trim() === "") {
     primaryColor = "#026de0"; // Fallback to default color if invalid
   }
@@ -9,7 +9,7 @@ export const getTheme = ( primaryColor = "#026de0",mode) => {
   const isDarkMode = mode;
   return createTheme({
     palette: {
-      mode:isDarkMode?"dark":"light",
+      mode: isDarkMode ? "dark" : "light",
       primary: {
         main: primaryColor,
         light: isDarkMode ? "#263859" : "#e3f2fd",
@@ -46,8 +46,8 @@ export const getTheme = ( primaryColor = "#026de0",mode) => {
         extlight: isDarkMode ? "#444444" : "#f5f9fc",
       },
       white: {
-        main: isDarkMode?"#000000":"#ffffff",
-        lightDark: isDarkMode?"#353131":"#f3f3f3",
+        main: isDarkMode ? "#000000" : "#ffffff",
+        lightDark: isDarkMode ? "#353131" : "#f3f3f3",
       },
       text: {
         primary: isDarkMode ? "#ffffff" : "#041238",
@@ -97,10 +97,31 @@ export const getTheme = ( primaryColor = "#026de0",mode) => {
           },
         },
       },
+      MuiSpeedDialIcon: {
+        styleOverrides: {
+          root: {
+            color: "white", 
+          },
+        },
+      },
+      MuiSpeedDialAction: {
+        styleOverrides: {
+          fab: {
+            backgroundColor: primaryColor,
+            color: "white",
+            "&:hover": {
+              backgroundColor: primaryColor,
+              opacity: 0.6,
+            },
+          },
+        },
+      },
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            borderBottom: isDarkMode ? "1px solid #ffffff1f" : "1px solid #0000001f",
+            borderBottom: isDarkMode
+              ? "1px solid #ffffff1f"
+              : "1px solid #0000001f",
             "& .MuiCardHeader-title": {
               fontSize: "1rem",
               fontWeight: 500,

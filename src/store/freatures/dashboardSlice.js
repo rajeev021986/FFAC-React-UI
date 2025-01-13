@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   view: "card",
@@ -9,23 +9,23 @@ const initialState = {
   shipper: [],
   pol: [],
   pod: [],
-  sortBy: '',
-  theme: "#800080",
+  sortBy: "",
+  theme: "#BF77F6",
   mode: false,
-  sessionExpiredmodule: false
+  sessionExpiredmodule: false,
 };
 
 const dashboardSlice = createSlice({
-  name: 'dashboard',
+  name: "dashboard",
   initialState,
   reducers: {
     dashboardToggleFilter: (state, action) => {
-      const { category, value, type = 'checkbox' } = action.payload;
+      const { category, value, type = "checkbox" } = action.payload;
 
       const currentValues = state[category];
       const isSelected = currentValues.includes(value);
 
-      if (type === 'radio') {
+      if (type === "radio") {
         state[category] = isSelected ? [] : [value];
       } else {
         if (isSelected) {
@@ -58,9 +58,8 @@ const dashboardSlice = createSlice({
     },
     setSessionExpiredmodule: (state, action) => {
       state.sessionExpiredmodule = action.payload;
-    }
-
-  }
+    },
+  },
 });
 
 export const {
@@ -72,6 +71,6 @@ export const {
   dashboardSetSortModel,
   setTheme,
   setMode,
-  setSessionExpiredmodule
+  setSessionExpiredmodule,
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

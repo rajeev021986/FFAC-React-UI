@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import { updateVendorInput } from "../../../../store/freatures/vendorSlice";
 import SelectBox from "../../../common/SelectBox";
 
-export default function VendorFilterForm() {
+export default function VendorFilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.vendor.formData);
 
@@ -24,6 +24,7 @@ export default function VendorFilterForm() {
     },
   });
   const handleReset = () => {
+    setFilterOpen(false);
     dispatch(
       updateVendorInput({
         tinNo: "",

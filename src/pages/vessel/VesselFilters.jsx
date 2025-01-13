@@ -6,7 +6,7 @@ import InputBox from "../../components/common/InputBox";
 import { OutlinedButton } from "../../components/common/Button";
 import SelectBox from "../../components/common/SelectBox";
 
-export function VesselFilters() {
+export function VesselFilters({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.vesselStore.formData);
 
@@ -21,6 +21,7 @@ export function VesselFilters() {
     },
   });
   const handleReset = () => {
+    setFilterOpen(false);
     dispatch(
       updateInput({
         vname: "",
