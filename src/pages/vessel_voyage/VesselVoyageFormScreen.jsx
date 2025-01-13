@@ -1,22 +1,23 @@
-import { Box, Card, CardContent } from "@mui/material";
+import { Box, Card, CardContent, Stack } from "@mui/material";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { VesselVoyageForm } from "./VesselVoyageForm";
 import ApiManager from "../../services/ApiManager";
+import Loader from "../../components/common/Loader/Loader";
+import toast from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export function VesselVoyageFormScreen() {
   const { state } = useLocation();
 
   const [loading, setLoading] = useState(true);
-  const [voyageEditData, setVoyageEditData] = useState({});
 
   const [initialValues, setInitialValues] = React.useState({
     id: "",
     status: "",
-    vesselVoyage: "",
-    mode: "",
+    vessel: "",
     voyageInBound: "",
     voyageOutBound: "",
     eta: "",
@@ -38,12 +39,16 @@ export function VesselVoyageFormScreen() {
         const response = await ApiManager.fetchEditVoyage(
           state?.initialValues?.id
         );
-        setVoyageEditData(response?.body);
+        let status = "";
+        if (response.body?.status) {
+          status =
+            response.body?.status.charAt(0).toUpperCase() +
+            response.body?.status.slice(1).toLowerCase();
+        }
         setInitialValues({
           id: response?.body?.id || "",
-          status: response?.body?.status || "",
-          vesselVoyage: response?.body?.vesselVoyage || "",
-          mode: response?.body?.mode || "",
+          status: status || "",
+          vessel: response?.body?.vessel || "",
           voyageInBound: response?.body?.voyageInBound || "",
           voyageOutBound: response?.body?.voyageOutBound || "",
           eta: response?.body?.eta || "",
@@ -61,6 +66,15 @@ export function VesselVoyageFormScreen() {
         });
         setLoading(false);
       } catch (error) {
+        toast.custom(
+          <CustomToast
+            message="Error occurred while loading form"
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
       }
     };
     if (state?.initialValues?.id) {
@@ -71,23 +85,33 @@ export function VesselVoyageFormScreen() {
   }, [state?.initialValues?.id]);
 
   return (
-    <Box>
-      <ScreenToolbar
-        leftComps={
-          <div>
-            <ThemedBreadcrumb />
-          </div>
-        }
-        rightComps={<div></div>}
-      />
-      <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        <CardContent>
-          <VesselVoyageForm
-            initialValues={initialValues}
-            type={state?.formAction}
-          />
-        </CardContent>
-      </Card>
+    <Box sx={{ padding: 0, margin: 0 }}>
+      <Stack sx={{ padding: "8px 0px" }}>
+        <ScreenToolbar
+          leftComps={
+            <div>
+              <ThemedBreadcrumb />
+            </div>
+          }
+          rightComps={<div></div>}
+        />
+      </Stack>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Card
+          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
+        >
+          <CardContent
+            sx={{ margin: "0px !important", padding: "0px !important" }}
+          >
+            <VesselVoyageForm
+              initialValues={initialValues}
+              type={state?.formAction}
+            />
+          </CardContent>
+        </Card>
+      )}
     </Box>
   );
 }

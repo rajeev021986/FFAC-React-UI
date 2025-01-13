@@ -1,11 +1,9 @@
 import { Box, CircularProgress, Grid, Stack, Tab } from "@mui/material";
 import InputBox from "../../components/common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../components/common/Button";
-import { VesselVoyageMapping } from "./VesselVoyageMapping";
 import { useFormik } from "formik";
 import { VesselVoyageValidation } from "../../components/screen/vessel_voyage/validation";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import UploadFile from "../../components/UploadFile";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +12,12 @@ import {
   useAddVoyageMutation,
   useUpdateVoyageMutation,
 } from "../../store/api/vesselVoyageDataApi";
+import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
+import ApiManager from "../../services/ApiManager";
+import DateField from "../../components/common/DateTime/DateField";
+import DateTimeField from "../../components/common/DateTime/DateTimeField";
+import SelectBox from "../../components/common/SelectBox";
+import AuditTimeLine from "../../components/AuditTimeLine";
 
 export function VesselVoyageForm({ initialValues, type }) {
   const disabled = false;
@@ -28,9 +32,24 @@ export function VesselVoyageForm({ initialValues, type }) {
   const [addVoyage, { isLoading }] = useAddVoyageMutation();
   const [updateVoyage] = useUpdateVoyageMutation();
 
+  const [loading, setLoading] = useState(false);
+  const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
+
+  const reloadDataHandler = async () => {
+    try {
+      setLoading(true);
+      const res = await ApiManager.getVoyageAudit(initialValues.id);
+      setEnquiryAuditDetails(res);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
+    validateOnChange: false,
     validationSchema: VesselVoyageValidation(),
     onSubmit: async (values) => {
       if (type == "copy" || type == "add") {
@@ -71,79 +90,176 @@ export function VesselVoyageForm({ initialValues, type }) {
     "vessel_voyage_settings"
   );
 
+  const gateOptions = [
+    { label: "Close", value: "close" },
+    { label: "Open", value: "open" },
+  ];
+
   return (
     <>
       {type == "copy" || type == "add" ? (
         <>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Vessel Voyage"
-                id="vesselVoyage"
-                value={formik.values.vesselVoyage}
-                error={formik.errors.vesselVoyage}
-                onChange={formik.handleChange}
-              />
+          <Grid container sx={{ padding: 0, margin: 0, paddingRight: "8px" }}>
+            <Grid container sx={{ margin: 0 }}>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <FormAutoComplete
+                  label="Vessel"
+                  id="vessel"
+                  suggestionName="voyage_name"
+                  value={formik.values.vessel}
+                  error={formik.errors.vessel}
+                  onChange={formik.handleChange}
+                ></FormAutoComplete>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <InputBox
+                  label="Voyage InBound"
+                  id="voyageInBound"
+                  value={formik.values.voyageInBound}
+                  error={formik.errors.voyageInBound}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <InputBox
+                  label="Voyage OutBound"
+                  id="voyageOutBound"
+                  value={formik.values.voyageOutBound}
+                  error={formik.errors.voyageOutBound}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <InputBox
+                  label="Status"
+                  id="status"
+                  disabled={true}
+                  error={formik.errors.status}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Status"
-                id="status"
-                value={formik.values.status}
-                error={formik.errors.status}
-                onChange={formik.handleChange}
-              />
+            <Grid container sx={{ marginTop: 2, marginBottom: 1 }}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <DateField
+                  label="Eta"
+                  id="eta"
+                  value={formik.values.eta}
+                  error={formik.errors.eta}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <DateTimeField
+                  label="Sailing Date"
+                  id="sailingDateEtd"
+                  value={formik.values.sailingDateEtd}
+                  error={formik.errors.sailingDateEtd}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <DateField
+                  label="Arrival Date"
+                  id="arrivalDatePilotStation"
+                  value={formik.values.arrivalDatePilotStation}
+                  error={formik.errors.arrivalDatePilotStation}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <DateField
+                  label="Document Deadline"
+                  id="documentDeadLine"
+                  value={formik.values.documentDeadLine}
+                  error={formik.errors.documentDeadLine}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+            </Grid>
+            <Grid container sx={{ marginTop: 2, marginBottom: 1 }}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <DateField
+                  label="Payment Cutoff"
+                  id="paymentCutOff"
+                  value={formik.values.paymentCutOff}
+                  error={formik.errors.paymentCutOff}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <DateTimeField
+                  label="Berthing Date"
+                  id="berthingDate"
+                  value={formik.values.berthingDate}
+                  error={formik.errors.berthingDate}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <DateTimeField
+                  label="Manifest Kra"
+                  id="manifestReady_kra"
+                  value={formik.values.manifestReady_kra}
+                  error={formik.errors.manifestReady_kra}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <DateTimeField
+                  label="Manifest Invoice"
+                  id="manifestReady_invoice"
+                  value={formik.values.manifestReady_invoice}
+                  error={formik.errors.manifestReady_invoice}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+            </Grid>
+            <Grid container sx={{ marginTop: 2, marginBottom: 1 }}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <DateField
+                  label="Last Sling Date"
+                  id="vesselLast_SlingDate"
+                  value={formik.values.vesselLast_SlingDate}
+                  error={formik.errors.vesselLast_SlingDate}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <SelectBox
+                  label="Gate Status"
+                  id="gateStatus"
+                  options={gateOptions}
+                  value={formik.values.gateStatus}
+                  error={formik.errors.gateStatus}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                <SelectBox
+                  label="Post Operator"
+                  id="portOperator"
+                  options={gateOptions}
+                  value={formik.values.portOperator}
+                  error={formik.errors.portOperator}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Voyage InBound"
-                id="voyageInBound"
-                value={formik.values.voyageInBound}
-                error={formik.errors.voyageInBound}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Voyage OutBound"
-                id="voyageOutBound"
-                value={formik.values.voyageOutBound}
-                error={formik.errors.voyageOutBound}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Gate Status"
-                id="gateStatus"
-                value={formik.values.gateStatus}
-                error={formik.errors.gateStatus}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Post Operator"
-                id="portOperator"
-                value={formik.values.portOperator}
-                error={formik.errors.portOperator}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <InputBox
-                label="Mode"
-                id="mode"
-                value={formik.values.mode}
-                error={formik.errors.mode}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ margin: "0px 8px 8px 8px" }}>
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
                   sx={{ fontWeight: "500", borderRadius: "12px" }}
@@ -155,7 +271,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                   sx={{ fontWeight: "500", borderRadius: "12px" }}
                 >
                   {isLoading && <CircularProgress size={20} color="white" />}{" "}
-                  Save
+                  Add
                 </ThemeButton>
               </Stack>
             </Grid>
@@ -171,81 +287,287 @@ export function VesselVoyageForm({ initialValues, type }) {
                   aria-label="lab API tabs example"
                 >
                   <Tab label="Edit Voyage" value="1" />
-                  <Tab label="Upload Documents" value="2" />
+                  <Tab label="Audit Logs" value="2" />
                 </TabList>
               </Box>
-              <TabPanel value="1">
+              <TabPanel value="1" sx={{ margin: 0, padding: 0 }}>
                 {" "}
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Vessel Voyage"
-                      id="vesselVoyage"
-                      value={formik.values.vesselVoyage}
-                      error={formik.errors.vesselVoyage}
-                      onChange={formik.handleChange}
-                    />
+                <Grid
+                  container
+                  sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
+                >
+                  <Grid container sx={{ margin: 0 }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <FormAutoComplete
+                        label="Vessel"
+                        id="vessel"
+                        suggestionName="voyage_name"
+                        value={formik.values.vessel}
+                        error={formik.errors.vessel}
+                        onChange={formik.handleChange}
+                      ></FormAutoComplete>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Voyage InBound"
+                        id="voyageInBound"
+                        value={formik.values.voyageInBound}
+                        error={formik.errors.voyageInBound}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Voyage OutBound"
+                        id="voyageOutBound"
+                        value={formik.values.voyageOutBound}
+                        error={formik.errors.voyageOutBound}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Status"
+                        id="status"
+                        disabled={true}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container sx={{ marginTop: 2, marginBottom: 1 }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <DateField
+                        label="Eta"
+                        id="eta"
+                        value={formik.values.eta}
+                        error={formik.errors.eta}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <DateTimeField
+                        label="Sailing Date"
+                        id="sailingDateEtd"
+                        value={formik.values.sailingDateEtd}
+                        error={formik.errors.sailingDateEtd}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <DateField
+                        label="Arrival Date"
+                        id="arrivalDatePilotStation"
+                        value={formik.values.arrivalDatePilotStation}
+                        error={formik.errors.arrivalDatePilotStation}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <DateField
+                        label="Document Deadline"
+                        id="documentDeadLine"
+                        value={formik.values.documentDeadLine}
+                        error={formik.errors.documentDeadLine}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container sx={{ marginTop: 2, marginBottom: 1 }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <DateField
+                        label="Payment Cutoff"
+                        id="paymentCutOff"
+                        value={formik.values.paymentCutOff}
+                        error={formik.errors.paymentCutOff}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <DateTimeField
+                        label="Berthing Date"
+                        id="berthingDate"
+                        value={formik.values.berthingDate}
+                        error={formik.errors.berthingDate}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <DateTimeField
+                        label="Manifest Kra"
+                        id="manifestReady_kra"
+                        value={formik.values.manifestReady_kra}
+                        error={formik.errors.manifestReady_kra}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <DateTimeField
+                        label="Manifest Invoice"
+                        id="manifestReady_invoice"
+                        value={formik.values.manifestReady_invoice}
+                        error={formik.errors.manifestReady_invoice}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container sx={{ marginTop: 2, marginBottom: 1 }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <DateField
+                        label="Last Sling Date"
+                        id="vesselLast_SlingDate"
+                        value={formik.values.vesselLast_SlingDate}
+                        error={formik.errors.vesselLast_SlingDate}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <SelectBox
+                        label="Gate Status"
+                        id="gateStatus"
+                        options={gateOptions}
+                        value={formik.values.gateStatus}
+                        error={formik.errors.gateStatus}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <SelectBox
+                        label="Post Operator"
+                        id="portOperator"
+                        options={gateOptions}
+                        value={formik.values.portOperator}
+                        error={formik.errors.portOperator}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Status"
-                      id="status"
-                      value={formik.values.status}
-                      error={formik.errors.status}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Voyage InBound"
-                      id="voyageInBound"
-                      value={formik.values.voyageInBound}
-                      error={formik.errors.voyageInBound}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Voyage OutBound"
-                      id="voyageOutBound"
-                      value={formik.values.voyageOutBound}
-                      error={formik.errors.voyageOutBound}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Gate Status"
-                      id="gateStatus"
-                      value={formik.values.gateStatus}
-                      error={formik.errors.gateStatus}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Post Operator"
-                      id="portOperator"
-                      value={formik.values.portOperator}
-                      error={formik.errors.portOperator}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <InputBox
-                      label="Mode"
-                      id="mode"
-                      value={formik.values.mode}
-                      error={formik.errors.mode}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sx={{ margin: "0px 8px 8px 8px" }}>
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
                         sx={{ fontWeight: "500", borderRadius: "12px" }}
@@ -259,18 +581,17 @@ export function VesselVoyageForm({ initialValues, type }) {
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
-                        Save
+                        Update
                       </ThemeButton>
                     </Stack>
                   </Grid>
                 </Grid>
               </TabPanel>{" "}
-              <TabPanel value="2">
-                <UploadFile
-                  customer_id={initialValues.id}
-                  disabled={disabled}
-                  sourceType="VOYAGE"
-                  dropdownData={voyageSettingsData?.body?.documentType}
+              <TabPanel value="2" sx={{ margin: 0, padding: 0 }}>
+                <AuditTimeLine
+                  auditDetails={enquiryAuditDetails}
+                  reloadDataHandler={reloadDataHandler}
+                  loading={loading}
                 />
               </TabPanel>
             </TabContext>

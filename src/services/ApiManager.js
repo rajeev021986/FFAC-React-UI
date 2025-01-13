@@ -204,8 +204,8 @@ class ApiManager {
         return ApiMethods.postBlob(url, payload);
     }
 
-  static fetchVesselSuggestions = (inputValue, id) => {
-    const url = ENDPOINTS.FETCH_VESSEL_SUGGESTIONS(inputValue, id);
+  static fetchAutoCompleteData = (inputValue, id) => {
+    const url = ENDPOINTS.FETCH_AUTOCOMPLETE_DATA(inputValue, id);
     return ApiMethods.get(url);
   };
 

@@ -321,29 +321,6 @@ export default function CustomerForm({
     return null;
   };
 
-  const fetchSuggestions = async (inputValue, inputId) => {
-    inputId = "PORT_COUNTRY";
-    if (!inputValue) return [];
-
-    try {
-      const response = await ApiManager.fetchVesselSuggestions(
-        inputValue,
-        inputId
-      );
-      const data = await response.body;
-
-      const uniqueSuggestions = data.reduce((acc, item) => {
-        const exists = acc.some((entry) => entry.country === item.country);
-        if (!exists) acc.push(item);
-        return acc;
-      }, []);
-
-      return uniqueSuggestions;
-    } catch (error) {
-      return [];
-    }
-  };
-
   const currentError = getFirstError(formik.errors);
 
   const customerNameRef = useRef(null);
@@ -495,7 +472,6 @@ export default function CustomerForm({
                   value={formik.values.country}
                   error={formik.errors.country}
                   onChange={formik.handleChange}
-                  fetchSuggestions={fetchSuggestions}
                 ></FormAutoComplete>
               </Grid>
             </Grid>
@@ -1003,7 +979,6 @@ export default function CustomerForm({
                         value={formik.values.country}
                         error={formik.errors.country}
                         onChange={formik.handleChange}
-                        fetchSuggestions={fetchSuggestions}
                       ></FormAutoComplete>
                     </Grid>
                   </Grid>

@@ -117,44 +117,6 @@ export default function VendorFormInput({
     }
   };
 
-  const fetchSuggestions = async (inputValue, inputId) => {
-    // Map inputId to the expected parameter values
-    switch (inputId) {
-      case "chargeName":
-        inputId = "CHARGE";
-        break;
-      case "currency":
-        inputId = "CURRENCY";
-        break;
-      default:
-        inputId = "PORT_COUNTRY";
-    }
-
-    // Return an empty array if the input value is falsy
-    if (!inputValue) return [];
-
-    try {
-      // Fetch data using ApiManager
-      const response = await ApiManager.fetchVesselSuggestions(
-        inputValue,
-        inputId
-      );
-      const data = await response.body;
-
-      // Ensure data exists and deduplicate based on the 'country' property
-      const uniqueSuggestions = data.reduce((acc, item) => {
-        const exists = acc.some((entry) => entry.country === item.country);
-        if (!exists) acc.push(item);
-        return acc;
-      }, []);
-
-      return uniqueSuggestions;
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-      return [];
-    }
-  };
-
   const getFirstError = (errors) => {
     for (const key in errors) {
       if (Array.isArray(errors[key])) {
@@ -360,7 +322,6 @@ export default function VendorFormInput({
               value={formik.values.country}
               error={formik.errors.country}
               onChange={formik.handleChange}
-              fetchSuggestions={fetchSuggestions}
             ></FormAutoComplete>
           </Grid>
         </Grid>
@@ -437,7 +398,7 @@ export default function VendorFormInput({
         </Grid>
         {formik.values.status.toLowerCase() === "rejected" ||
         page == "vendorApproval" ? (
-          <Grid item xs={12}  sx={{padding:"10px 3px",margin:"auto"}}>
+          <Grid item xs={12} sx={{ padding: "10px 3px", margin: "auto" }}>
             <TextField
               label="Reject Remarks"
               name="rejectRemarks"
@@ -455,7 +416,7 @@ export default function VendorFormInput({
           <></>
         )}
         {!disable ? (
-          <Grid item xs={12}  sx={{padding:"10px 3px"}}>
+          <Grid item xs={12} sx={{ padding: "10px 3px" }}>
             <Stack direction="row" spacing={2} justifyContent="space-between">
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
@@ -477,7 +438,7 @@ export default function VendorFormInput({
             </Stack>
           </Grid>
         ) : (
-          <Grid item xs={12}  sx={{padding:"10px 3px"}}>
+          <Grid item xs={12} sx={{ padding: "10px 3px" }}>
             <Stack direction="row" spacing={2} justifyContent="space-between">
               <Stack direction="row" spacing={2}>
                 <OutlinedButton

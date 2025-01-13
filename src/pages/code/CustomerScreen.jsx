@@ -79,7 +79,7 @@ export default function CustomerScreen({ page }) {
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ]
     : page === "customerApprove"
-    ? [{ name:  exportLoader ? <LoaderIcon /> : "Export"  }]
+    ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
     : [
         { name: "New Customer" },
         { name: exportLoader ? <LoaderIcon /> : "Export" },

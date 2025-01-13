@@ -38,23 +38,7 @@ export default function VendorEditGrid({
       }
     }, 1000);
   };
-  const fetchSuggestions = async (inputValue, inputId) => {
-    if (inputId === "chargeName") {
-      inputId = "CHARGE";
-    } else if (inputId === "currency") {
-      inputId = "CURRENCY";
-    } else {
-      inputId = "PORT_COUNTRY";
-    }
-    if (!inputValue) return [];
-    const response = await ApiManager.fetchVesselSuggestions(
-      inputValue,
-      inputId
-    );
-    const data = await response.body;
 
-    return data || [];
-  };
   const OnChange = (params, e, name) => {
     const rowIndex = formik.values[name].findIndex(
       (entity) => entity.id === params.id
@@ -149,7 +133,6 @@ export default function VendorEditGrid({
                   // }, 1500);
                 }}
                 inputRef={newRowRef}
-                fetchSuggestions={fetchSuggestions}
               />
             );
           },
@@ -248,7 +231,6 @@ export default function VendorEditGrid({
                   });
                   // }, 1500);
                 }}
-                fetchSuggestions={fetchSuggestions}
               />
             );
           },
@@ -477,7 +459,6 @@ export default function VendorEditGrid({
                   // }, 1500);
                 }}
                 inputRef={newRowRef}
-                fetchSuggestions={fetchSuggestions}
               />
             );
           },
