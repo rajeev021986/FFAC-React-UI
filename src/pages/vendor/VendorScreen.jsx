@@ -376,13 +376,6 @@ export default function VendorScreen({ page }) {
         handleDelete={handleDelete}
         handleOpen={modal.open && modal.type === "delete"}
       />
-      <DeleteDialog
-        source="vendor"
-        sourceName={modal?.data?.deleteName}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-        handleOpen={modal.open && modal.type === "delete"}
-      />
     </Box>
   );
 }
