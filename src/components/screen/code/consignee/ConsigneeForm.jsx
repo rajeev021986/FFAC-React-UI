@@ -62,8 +62,6 @@ export default function ConsigneeForm({
     setValue(newValue);
   };
   
-  console.log("optionsCity", optionsCity);
-  console.log("id" + initialValues.id);
 
   const formik = useFormik({
     initialValues,

@@ -57,7 +57,6 @@ const ShipperUploadFile = ({ shipper_id,source, disabled, dropdownData}) => {
       donloadData(res.body.base64, res.body.mimeType, documentType);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -72,7 +71,6 @@ const ShipperUploadFile = ({ shipper_id,source, disabled, dropdownData}) => {
       reloadDataHandler();
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -99,7 +97,6 @@ const ShipperUploadFile = ({ shipper_id,source, disabled, dropdownData}) => {
   };
 
   const handleDialogSave = async () => {
-    console.log(uploadedFile, "uploadedFile");
     const uploadData = {
       file: uploadedFile,
       entityFile: {
@@ -115,7 +112,6 @@ const ShipperUploadFile = ({ shipper_id,source, disabled, dropdownData}) => {
       reloadDataHandler();
       setLoading(false);
     } catch (error) {
-      console.error("Error uploading file:", error);
       setLoading(false);
       setDialogOpen(false);
     }
@@ -134,7 +130,6 @@ const ShipperUploadFile = ({ shipper_id,source, disabled, dropdownData}) => {
       link.click();
       document.body.removeChild(link);
     } catch (error) {
-      console.error("Error downloading the file:", error);
     }
   };
   const columns = [
@@ -216,7 +211,6 @@ const ShipperUploadFile = ({ shipper_id,source, disabled, dropdownData}) => {
       setListData(res.body);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };

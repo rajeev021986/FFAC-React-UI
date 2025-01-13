@@ -64,7 +64,6 @@ export default function ShipperForm({
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      console.log("Form values:", values);
       if (!values.id || type == "copy") {
         
         try {
@@ -81,7 +80,6 @@ export default function ShipperForm({
             toast.error(response.message);
           }
         } catch (error) {
-          console.error("Error submitting form:", error);
           toast.error("An error occurred while submitting the form.");
         }
       } else {
@@ -97,13 +95,11 @@ export default function ShipperForm({
             toast.error(response.message);
           }
         } catch (error) {
-          console.error("Error submitting form:", error);
           toast.error("An error occurred while submitting the form.");
         }
       }
     },
   });
-  console.log(initialValues.id);
   const [getShipperAudit, { data: AuditData,
       isLoading: isLoadingAudit }] =  useLazyGetShipperAuditQuery();
   const fetchAuditData = () => {
