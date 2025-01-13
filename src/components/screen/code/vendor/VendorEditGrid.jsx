@@ -37,8 +37,8 @@ export default function VendorEditGrid({
         newRowRef.current.focus();
       }
     }, 1000);
-  };
-
+    };
+  console.log(formik.values,"asdfg")
   const OnChange = (params, e, name) => {
     const rowIndex = formik.values[name].findIndex(
       (entity) => entity.id === params.id
@@ -321,20 +321,36 @@ export default function VendorEditGrid({
       },
       columns: [
         ...[
-          { FieldLabel: "freeTime" },
-          { FieldLabel: "freeTimeType" },
-          { FieldLabel: "t1Start" },
-          { FieldLabel: "t1End" },
-          { FieldLabel: "t1Type" },
-          { FieldLabel: "t1Rate" },
-          { FieldLabel: "t2Start" },
-          { FieldLabel: "t2End" },
-          { FieldLabel: "t2Type" },
-          { FieldLabel: "t2Rate" },
-          { FieldLabel: "t3Start" },
-          { FieldLabel: "t3End" },
-          { FieldLabel: "t3Type" },
-          { FieldLabel: "t3Rate" },
+          { FieldLabel: "freeTime", type: "input" },
+          {
+            FieldLabel: "freeTimeType",
+            type: "dropdown",
+            options: dropdownData.demurageOptions,
+          },
+          { FieldLabel: "t1Start", type: "input" },
+          { FieldLabel: "t1End", type: "input" },
+          {
+            FieldLabel: "t1Type",
+            type: "dropdown",
+            options: dropdownData.demurageOptions,
+          },
+          { FieldLabel: "t1Rate", type: "input" },
+          { FieldLabel: "t2Start", type: "input" },
+          { FieldLabel: "t2End", type: "input" },
+          {
+            FieldLabel: "t2Type",
+            type: "dropdown",
+            options: dropdownData.demurageOptions,
+          },
+          { FieldLabel: "t2Rate", type: "input" },
+          { FieldLabel: "t3Start", type: "input" },
+          { FieldLabel: "t3End", type: "input" },
+          {
+            FieldLabel: "t3Type",
+            type: "dropdown",
+            options: dropdownData.demurageOptions,
+          },
+          { FieldLabel: "t3Rate", type: "input" },
         ].map((a) => {
           return {
             field: a.FieldLabel,
@@ -342,14 +358,26 @@ export default function VendorEditGrid({
               a.FieldLabel.replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
                 .toUpperCase() + a.FieldLabel.slice(1),
-            width: 100,
+            width: 130,
             headerName:
               a.FieldLabel.replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
                 .toUpperCase() + a.FieldLabel.slice(1),
             editable: true,
-            renderCell: (params) => <InputBoxForGrid {...params} />,
-            renderEditCell: (params) => <InputBoxForGrid {...params} />,
+            renderCell: (params) => (
+              <InputBoxForGrid
+                {...params}
+                type={a.type}
+                options={dropdownData.demurageOptions}
+              />
+            ),
+            renderEditCell: (params) => (
+              <InputBoxForGrid
+                {...params}
+                type={a.type}
+                options={dropdownData.demurageOptions}
+              />
+            ),
           };
         }),
 
@@ -613,10 +641,7 @@ export default function VendorEditGrid({
           vendorId: 0,
           new: true,
         };
-        formik.setFieldValue("bankDetails", [
-          ...TabsHosts[4].value,
-          newRow,
-        ]);
+        formik.setFieldValue("bankDetails", [...TabsHosts[4].value, newRow]);
         setFocus();
       },
       deleteRow: (id) => {

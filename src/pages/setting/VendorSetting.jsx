@@ -30,6 +30,7 @@ const VendorSetting = () => {
   const [container, setContainer] = useState([]);
   const [designation, setDesignation] = useState([]);
   const [approvalRequest, setApprovalRequest] = useState(false);
+  const [demurageOptions, setDemurageOptions] = useState([]);
   const [isLoadingsave, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -40,6 +41,7 @@ const VendorSetting = () => {
     setUnitType(data?.body.unitType || []);
     setContainer(data?.body.container || []);
     setDesignation(data?.body.designation || []);
+    setDemurageOptions(data?.body.demurageOptions || []);
   }, [data, geterror]);
 
   const Postdata = async () => {
@@ -52,6 +54,9 @@ const VendorSetting = () => {
       unitType: unitType.filter((item) => !item.value.includes("Type the")),
       container: container.filter((item) => !item.value.includes("Type the")),
       vendorType: vendorType.filter((item) => !item.value.includes("Type the")),
+      demurageOptions: demurageOptions.filter(
+        (item) => !item.value.includes("Type the")
+      ),
       designation: designation.filter(
         (item) => !item.value.includes("Type the")
       ),
@@ -124,6 +129,11 @@ const VendorSetting = () => {
             value={designation}
             setvalue={setDesignation}
             title="Designation"
+          />
+          <GlobalDrrpdownSetting
+            value={demurageOptions}
+            setvalue={setDemurageOptions}
+            title="Demurage Options"
           />
         </Grid>
       )}
