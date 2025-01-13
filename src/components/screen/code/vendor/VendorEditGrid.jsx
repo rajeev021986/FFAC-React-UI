@@ -22,6 +22,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import SelectBox from "../../../common/SelectBox";
 import InputBox from "../../../common/InputBox";
+import InputBoxForGrid from "../../../common/InputBoxForGrid";
 export default function VendorEditGrid({
   formik,
   disabled = false,
@@ -185,27 +186,9 @@ export default function VendorEditGrid({
           field: "finalDestination",
           headerName: "Final Destination",
           flex: 1,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
-                size="small"
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "unitType",
@@ -274,28 +257,9 @@ export default function VendorEditGrid({
           field: "unitRate",
           headerName: "Unit Rate",
           flex: 1,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <InputBox
-                size="small"
-                value={params.value}
-                type="number"
-                onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "actions",
@@ -378,30 +342,9 @@ export default function VendorEditGrid({
           field: "freeTime",
           headerName: "Free Time",
           width: 200,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
-                size="small"
-                value={params.value}
-                onChange={(e) =>
-                  OnChange(params, e, "vendorEntityDemurageTariffs")
-                }
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-                inputRef={newRowRef}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         ...[
           "freeTimeType",
@@ -432,29 +375,9 @@ export default function VendorEditGrid({
                 .replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
                 .toUpperCase() + a.slice(1),
-            renderCell: (params) => (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  height: "100%",
-                }}
-              >
-                <TextField
-                  size="small"
-                  value={params.value}
-                  onChange={(e) =>
-                    OnChange(params, e, "vendorEntityDemurageTariffs")
-                  }
-                  sx={{
-                    marginTop: "0px",
-                    marginBottom: "0px",
-                  }}
-                />
-              </div>
-            ),
+            editable: true,
+            renderCell: (params) => <InputBoxForGrid {...params} />,
+            renderEditCell: (params) => <InputBoxForGrid {...params} />,
           };
         }),
 
@@ -563,28 +486,9 @@ export default function VendorEditGrid({
           field: "noOfFreeDays",
           headerName: "No Of Free Days",
           flex: 1,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
-                size="small"
-                type="number"
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorEntityFreeDays")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "actions",
@@ -684,27 +588,9 @@ export default function VendorEditGrid({
           field: "emailId",
           headerName: "Email",
           flex: 1,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
-                size="small"
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorEntityEmails")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "actions",
@@ -778,132 +664,41 @@ export default function VendorEditGrid({
           field: "bankName",
           headerName: "Bank Name",
           flex: 1,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
-                size="small"
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-                inputRef={newRowRef}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "bankAddress",
           headerName: "Bank Address",
           flex: 1,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
-                size="small"
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "accountNo",
           headerName: "AccountNo",
           flex: 1,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
-                size="small"
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "currency",
           headerName: "Currency",
           flex: 1,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
-                size="small"
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "swiftCode",
           headerName: "Swift Code",
           flex: 1,
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
-                size="small"
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorBankDetails")}
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-              />
-            </div>
-          ),
+          editable: true,
+          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "actions",

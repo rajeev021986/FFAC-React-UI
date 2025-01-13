@@ -10,7 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import {
@@ -18,7 +18,7 @@ import {
   FormatListBulletedOutlined,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   setVendorPagination,
   updateVendorInput,
@@ -52,6 +52,7 @@ import ApiManager from "../../services/ApiManager";
 
 export default function VendorScreen({ page }) {
   const vendorSelector = useSelector((state) => state.vendor);
+  const location = useLocation();
   const [exportLoader, setExportLoader] = useState(false);
   const [modal, setModal] = React.useState({
     open: false,
@@ -119,11 +120,16 @@ export default function VendorScreen({ page }) {
     isLoading,
     error,
     isFetching,
+    refetch,
   } = useFetchVendorQuery({
     params: query,
     payload,
     page,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [location.pathname]);
   const fetchUserAudit = () => {
     getVendorAudit({
       id: modal.data.id,
@@ -365,9 +371,18 @@ export default function VendorScreen({ page }) {
         </Drawer>
       )}
       <DeleteDialog
-        modal={modal}
+        source="vendor"
+        sourceName={modal?.data?.deleteName}
         handleClose={handleClose}
         handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
+      <DeleteDialog
+        source="vendor"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
       />
     </Box>
   );
