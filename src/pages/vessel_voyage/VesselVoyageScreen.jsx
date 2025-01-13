@@ -91,8 +91,7 @@ export function VesselVoyageScreen() {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
   return (
@@ -151,7 +150,10 @@ export function VesselVoyageScreen() {
         }
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        <CardHeader title={<VesselVoyageHeader></VesselVoyageHeader>} />
+        <CardHeader
+          title={<VesselVoyageHeader></VesselVoyageHeader>}
+          sx={{ margin: 0, padding: 1 }}
+        />
         <VesselVoyageBody
           selectBox={selectBox}
           setSelectBox={setSelectBox}

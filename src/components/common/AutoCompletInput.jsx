@@ -8,6 +8,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { GridToolbarColumnsButton } from "@mui/x-data-grid";
+import { GetAutoCompleteData } from "../utils/GetAutoCompleteData";
 
 function AutoCompleteInput({
   label,
@@ -16,7 +17,6 @@ function AutoCompleteInput({
   value,
   error,
   onChange,
-  fetchSuggestions,
   ...props
 }) {
   const [suggestions, setSuggestions] = useState([]);
@@ -26,7 +26,7 @@ function AutoCompleteInput({
   const handleInputChange = async (event, newValue) => {
     setLoading(true);
     try {
-      const data = await fetchSuggestions(newValue, id);
+      const data = await GetAutoCompleteData(newValue, id);
       if (data) {
         const array = data.map((obj) => obj[suggestionName]);
 

@@ -1,30 +1,4 @@
 export const CARD_VOYAGE_COLUMNS = [
-
-    {
-        field: 'vesselVoyage',
-        headerName: 'Vessel Voyage',
-        width: 150,
-        headerAlign: 'center',
-        align: 'center',
-        editable: true
-    },
-
-    {
-        field: 'voyageInBound',
-        headerName: 'Voyage InBound',
-        width: 150,
-        headerAlign: 'center',
-        align: 'center',
-        editable: true
-    },
-    {
-        field: 'voyageOutBound',
-        headerName: 'Voyage OutBound',
-        width: 150,
-        headerAlign: 'center',
-        align: 'center',
-        editable: true
-    },
     {
         flex: 1,
         field: 'status',
@@ -32,8 +6,80 @@ export const CARD_VOYAGE_COLUMNS = [
         width: 110,
         headerAlign: 'center',
         align: 'center',
-        editable: true
+        editable: false
     },
 
+    {
+        flex: 1,
+        field: 'vesselVoyage',
+        headerName: 'Vessel Voyage',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
 
+    {
+        flex: 1,
+        field: 'voyageInBound',
+        headerName: 'Voyage InBound',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'voyageOutBound',
+        headerName: 'Voyage OutBound',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'eta',
+        headerName: 'Eta',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'createdBy',
+        headerName: 'Created By',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'createdDate',
+        headerName: 'Created Date',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'modifiedBy',
+        headerName: 'Modified By',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'modifiedDate',
+        headerName: 'Modified Date',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
 ]

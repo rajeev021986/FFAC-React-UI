@@ -30,12 +30,12 @@ const Routes = {
   approveRequest: { label: "ApproveRequest", disabled: false },
   code: { label: "Code", disabled: true },
   customer: { label: "Customer", disabled: false },
-  editvoyage: { lable: "Edit Voyage", disabled: false },
   vessel: { label: "Vessel", disabled: false },
   editvessel: { label: "Edit Vessel", disabled: false },
   newvessel: { label: "Create Vessel", disabled: false },
   vesselVoyage: { label: "Vessel Voyage", disabled: false },
   newvoyage: { label: "Create Voyage", disabled: false },
+  editvoyage: { label: "Edit Voyage", disabled: false },
   party: { label: "Party", disabled: false },
   agent: { label: "Agent", disabled: false },
   roles: { label: "Roles", disabled: false },
@@ -56,7 +56,6 @@ const ThemedBreadcrumb = () => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
 
-  
   return (
     <MUIBreadcrumbs aria-label="breadcrumb">
       {/* <Link

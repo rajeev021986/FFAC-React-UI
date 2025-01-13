@@ -17,179 +17,6 @@ import {
 import { Box, Drawer, Typography } from "@mui/material";
 import AuditTimeLine from "../../components/AuditTimeLine";
 
-// const vesselData = json.body;
-
-// const vesselData = [
-//   {
-//     vesselName: "VesselName1",
-//     lineName: "LineName1",
-//     vesselOwner: "Owner1",
-//     status: true,
-//     id: 1,
-//   },
-//   {
-//     vesselName: "VesselName2",
-//     lineName: "LineName2",
-//     vesselOwner: "Owner2",
-//     status: false,
-//     id: 2,
-//   },
-//   {
-//     vesselName: "VesselName3",
-//     lineName: "LineName3",
-//     vesselOwner: "Owner3",
-//     status: true,
-//     id: 3,
-//   },
-//   {
-//     vesselName: "VesselName4",
-//     lineName: "LineName4",
-//     vesselOwner: "Owner4",
-//     status: false,
-//     id: 4,
-//   },
-//   {
-//     vesselName: "VesselName5",
-//     lineName: "LineName5",
-//     vesselOwner: "Owner5",
-//     status: true,
-//     id: 5,
-//   },
-//   {
-//     vesselName: "VesselName6",
-//     lineName: "LineName6",
-//     vesselOwner: "Owner6",
-//     status: false,
-//     id: 6,
-//   },
-//   {
-//     vesselName: "VesselName7",
-//     lineName: "LineName7",
-//     vesselOwner: "Owner7",
-//     status: true,
-//     id: 7,
-//   },
-//   {
-//     vesselName: "VesselName8",
-//     lineName: "LineName8",
-//     vesselOwner: "Owner8",
-//     status: false,
-//     id: 8,
-//   },
-//   {
-//     vesselName: "VesselName9",
-//     lineName: "LineName9",
-//     vesselOwner: "Owner9",
-//     status: true,
-//     id: 9,
-//   },
-//   {
-//     vesselName: "VesselName10",
-//     lineName: "LineName10",
-//     vesselOwner: "Owner10",
-//     status: false,
-//     id: 10,
-//   },
-//   {
-//     vesselName: "VesselName11",
-//     lineName: "LineName11",
-//     vesselOwner: "Owner11",
-//     status: true,
-//     id: 11,
-//   },
-//   {
-//     vesselName: "VesselName12",
-//     lineName: "LineName12",
-//     vesselOwner: "Owner12",
-//     status: false,
-//     id: 12,
-//   },
-//   {
-//     vesselName: "VesselName13",
-//     lineName: "LineName13",
-//     vesselOwner: "Owner13",
-//     status: true,
-//     id: 13,
-//   },
-//   {
-//     vesselName: "VesselName14",
-//     lineName: "LineName14",
-//     vesselOwner: "Owner14",
-//     status: false,
-//     id: 14,
-//   },
-//   {
-//     vesselName: "VesselName15",
-//     lineName: "LineName15",
-//     vesselOwner: "Owner15",
-//     status: true,
-//     id: 15,
-//   },
-//   {
-//     vesselName: "VesselName16",
-//     lineName: "LineName16",
-//     vesselOwner: "Owner16",
-//     status: false,
-//     id: 16,
-//   },
-//   {
-//     vesselName: "VesselName17",
-//     lineName: "LineName17",
-//     vesselOwner: "Owner17",
-//     status: true,
-//     id: 17,
-//   },
-//   {
-//     vesselName: "VesselName18",
-//     lineName: "LineName18",
-//     vesselOwner: "Owner18",
-//     status: false,
-//     id: 18,
-//   },
-//   {
-//     vesselName: "VesselName19",
-//     lineName: "LineName19",
-//     vesselOwner: "Owner19",
-//     status: true,
-//     id: 19,
-//   },
-//   {
-//     vesselName: "VesselName20",
-//     lineName: "LineName20",
-//     vesselOwner: "Owner20",
-//     status: false,
-//     id: 20,
-//   },
-//   {
-//     vesselName: "VesselName21",
-//     lineName: "LineName21",
-//     vesselOwner: "Owner21",
-//     status: false,
-//     id: 21,
-//   },
-//   {
-//     vesselName: "VesselName22",
-//     lineName: "LineName22",
-//     vesselOwner: "Owner22",
-//     status: false,
-//     id: 22,
-//   },
-//   {
-//     vesselName: "VesselName23",
-//     lineName: "LineName23",
-//     vesselOwner: "Owner23",
-//     status: false,
-//     id: 23,
-//   },
-//   {
-//     vesselName: "VesselName24",
-//     lineName: "LineName24",
-//     vesselOwner: "Owner24",
-//     status: false,
-//     id: 24,
-//   },
-// ];
-
 export function VesselBody({ selectBox, setSelectBox }) {
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -207,7 +34,7 @@ export function VesselBody({ selectBox, setSelectBox }) {
     });
   };
 
-  const [fetchAudit, { data: AuditData, isLoading: AuditLoadinng }] =
+  const [fetchAudit, { data: AuditData, isLoading: AuditLoading }] =
     useLazyFetchAuditVesselQuery();
 
   const handlePage = (params) => {
@@ -326,7 +153,7 @@ export function VesselBody({ selectBox, setSelectBox }) {
             <AuditTimeLine
               auditDetails={AuditData}
               reloadDataHandler={fetchUserAudit}
-              loading={AuditLoadinng}
+              loading={AuditLoading}
             />
           </Box>
         </Drawer>

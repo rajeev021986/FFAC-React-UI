@@ -71,18 +71,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
     const updatedRows = customerEntityTariffs.filter((row) => row.id !== id);
     formik.setFieldValue("customerEntityTariffs", updatedRows);
   };
-  const fetchSuggestions = async (inputValue, inputId) => {
-    inputId = inputId === "chargeName" ? "CHARGE" : "CURRENCY";
-    if (!inputValue) return [];
-
-    const response = await ApiManager.fetchVesselSuggestions(
-      inputValue,
-      inputId
-    );
-    const data = await response.body;
-
-    return data || [];
-  };
 
   const updateRowValue = (params, e, name) => {
     const rowIndex = formik.values[name].findIndex(
@@ -130,7 +118,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
               // }, 1500);
             }}
             inputRef={newRowRef}
-            fetchSuggestions={fetchSuggestions}
           />
         );
       },
@@ -204,7 +191,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
                 ),
               });
             }}
-            fetchSuggestions={fetchSuggestions}
           />
         );
       },

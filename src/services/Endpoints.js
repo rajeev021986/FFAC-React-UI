@@ -17,6 +17,8 @@ const ENDPOINTS = {
   GET_COMMON_OPTIONS: (name, search) =>
     `/getAutoComplete?name=${name}&search=${search}`,
   GET_CUSTOMER_AUDIT: (id) => `/entity-service/v1/customer/audit/${id}`,
+  GET_VESSEL_AUDIT: (id) => `/master-service/v1/vessel/audit/${id}`,
+  GET_VOYAGE_AUDIT: (id) => `/master-service/v1/vessel/voyage/audit/${id}`,
   GET_CUSTOMER_DOCUMENT_FILE: (source, id) =>
     `/entity-service/v1/file?source=${source}&sourceId=${id}`,
   DOWNLOAD_DOCUMENT: (id, source, sourceId) =>
@@ -50,7 +52,7 @@ const ENDPOINTS = {
   GET_EDIT_VESSEL: (id) => `/master-service/v1/vessel/${id}`,
   FETCH_VESSEL_DATA_EXCEL: (queryString) =>
     `/master-service/v1/vessel/export?${queryString}`,
-  FETCH_VESSEL_SUGGESTIONS: (inputValue, id) =>
+  FETCH_AUTOCOMPLETE_DATA: (inputValue, id) =>
     `/admin-service/v1/data?pattern=${inputValue}&type=${id}`,
   FETCH_VOYAGE_DATA_EXCEL: (queryString) =>
     `/master-service/v1/vessel/voyage/export?${queryString}`,

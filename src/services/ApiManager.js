@@ -71,6 +71,15 @@ class ApiManager {
     const url = ENDPOINTS.GET_CUSTOMER_AUDIT(id);
     return ApiMethods.get(url);
   };
+  static getVesselAudit = async (id) => {
+    const url = ENDPOINTS.GET_VESSEL_AUDIT(id);
+    return ApiMethods.get(url);
+  };
+
+  static getVoyageAudit = async (id) => {
+    const url = ENDPOINTS.GET_VOYAGE_AUDIT(id);
+    return ApiMethods.get(url);
+  };
   static getCustomerFormData = async (source, id) => {
     const url = ENDPOINTS.GET_CUSTOMER_DOCUMENT_FILE(source, id);
     return ApiMethods.get(url);
@@ -166,8 +175,8 @@ class ApiManager {
     return ApiMethods.postBlob(url, payload);
   };
 
-  static fetchVesselSuggestions = (inputValue, id) => {
-    const url = ENDPOINTS.FETCH_VESSEL_SUGGESTIONS(inputValue, id);
+  static fetchAutoCompleteData = (inputValue, id) => {
+    const url = ENDPOINTS.FETCH_AUTOCOMPLETE_DATA(inputValue, id);
     return ApiMethods.get(url);
   };
 

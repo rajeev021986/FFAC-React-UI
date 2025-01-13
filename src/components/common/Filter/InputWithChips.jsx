@@ -40,6 +40,14 @@ const Chips = {
   vrnNo: {
     chipLabel: "VRN NO",
   },
+  statusCode: {
+    chipLabel: "Status",
+    chipvalues: [
+      { value: 1, label: "Active" },
+      { value: -2, label: "In Active" },
+      { value: 0, label: "Pending" },
+    ],
+  },
 };
 
 const InputWithChips = ({

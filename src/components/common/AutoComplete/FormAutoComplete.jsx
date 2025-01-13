@@ -6,6 +6,7 @@ import {
   CircularProgress,
   MenuItem,
 } from "@mui/material";
+import { GetAutoCompleteData } from "../../utils/GetAutoCompleteData";
 
 function FormAutoComplete({
   label,
@@ -14,7 +15,6 @@ function FormAutoComplete({
   value,
   error,
   onChange,
-  fetchSuggestions,
 }) {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ function FormAutoComplete({
   const handleInputChange = async (event, newValue) => {
     setLoading(true);
     try {
-      const data = await fetchSuggestions(newValue, id);
+      const data = await GetAutoCompleteData(newValue, id);
       if (data) {
         const array = data.map((obj) => obj[suggestionName]);
         setSuggestions(array);

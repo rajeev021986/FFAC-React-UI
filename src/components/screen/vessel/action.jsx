@@ -1,5 +1,8 @@
 import { Biotech } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
+import { GridDeleteIcon } from "@mui/x-data-grid";
+import CustomToast from "../../common/Toast/CustomToast";
+import toast from "react-hot-toast";
 
 export const getVesselListGridActions = (nav, setModal) => {
   return [
@@ -21,6 +24,31 @@ export const getVesselListGridActions = (nav, setModal) => {
         setModal({ type: "audit", open: true, data: params.row });
       },
       icon: <Biotech />,
+    },
+    {
+      label: "Delete",
+      onClick: (params) => {
+        if (params.row.statusCode == -2) {
+          setModal({
+            open: true,
+            type: "delete",
+            data: {
+              who: "Vessel",
+              deleteName: params.row.vesselName,
+              id: params.row.id,
+            },
+          });
+        } else {
+          toast.custom(
+            <CustomToast message="Only for Inactive Vessel" toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
+          return;
+        }
+      },
+      icon: <GridDeleteIcon />,
     },
   ];
 };
