@@ -124,19 +124,7 @@ export default function IcdForm({
   });
 
   
-  const reloadDataHandler = async () => {
-    try {
-      setLoading(true);
-      console.log("id"+id);
-      const res = await ApiManager.getIcdAuditDetails(initialValues.id);
-      console.log("audit details", res);
-      setEnquiryAuditDetails(res);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
+  
   const [getIcdAudit, { data: AuditData,
     isLoading: isLoadingAudit }] =  useLazyGetIcdAuditQuery();
 const fetchAuditData = () => {
@@ -283,7 +271,7 @@ const fetchAuditData = () => {
               />
             </Grid>
             
-            {page == "icd" && (
+            
               <Grid item xs={12}>
                 <Stack direction="row" spacing={2}>
                   <OutlinedButton
@@ -303,7 +291,7 @@ const fetchAuditData = () => {
                   </ThemeButton>
                 </Stack>
               </Grid>
-            )}
+          
             
             
           </Grid>

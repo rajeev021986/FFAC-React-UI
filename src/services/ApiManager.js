@@ -203,6 +203,11 @@ class ApiManager {
         const url = ENDPOINTS.FETCH_ICD_DATA_EXCEL(queryString,source);
         return ApiMethods.postBlob(url, payload);
     }
+    static fetchShipperDatasExcel = async (params, payload,source) => {
+      const queryString = new URLSearchParams(params).toString();
+      const url = ENDPOINTS.FETCH_SHIPPER_DATA_EXCEL(queryString,source);
+      return ApiMethods.postBlob(url, payload);
+  }
 
   static fetchVesselSuggestions = (inputValue, id) => {
     const url = ENDPOINTS.FETCH_VESSEL_SUGGESTIONS(inputValue, id);

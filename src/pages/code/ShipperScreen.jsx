@@ -133,7 +133,7 @@ export default function ShipperScreen({ page }) {
     
     if (actionName === "Export") {
       try {
-        const blob = await ApiManager.fetchIcdDatasExcel(query, payload, "shipper");
+        const blob = await ApiManager.fetchShipperDatasExcel(query, payload, "shipper");
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;

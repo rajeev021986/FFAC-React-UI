@@ -1,6 +1,6 @@
 import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
-//  const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
+  //const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const consigneeDataApi = createApi({
     reducerPath: "consigneeDataApi",
@@ -10,7 +10,7 @@ export const consigneeDataApi = createApi({
         fetchConsignee: builder.query({
             query: (params) => {
                 const queryString = new URLSearchParams(params).toString();
-                return { url: `/master-service/v1/consignee`, method: "GET", headers: getAppHeaders() };
+                return { url: `/entity-service/v1/consignee`, method: "GET", headers: getAppHeaders() };
             },
             providesTags: ["Consignee"],
         }),
@@ -22,7 +22,7 @@ export const consigneeDataApi = createApi({
                 };
 
 
-                return { url: `master-service/v1/consignee`, method: "POST", body: params, headers: headers };
+                return { url: `entity-service/v1/consignee`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Consignee"],
         }),
@@ -33,7 +33,7 @@ export const consigneeDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `master-service/v1/consignee`, method: "PUT", body: params, headers: headers };
+                return { url: `entity-service/v1/consignee`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Consignee"],
         }),
@@ -49,7 +49,7 @@ export const consigneeDataApi = createApi({
                 };
 
                 return {
-                    url: `/master-service/v1/file/upload`,
+                    url: `/entity-service/v1/file/upload`,
                     method: "POST",
                     body: formData,
                     headers: headers
@@ -61,7 +61,7 @@ export const consigneeDataApi = createApi({
                 const headers = {
                     'Authorization': getAppHeaders()['Authorization']
                 };
-                return { url: `/master-service/v1/file/get`, method: "POST", body: params, headers: headers };
+                return { url: `/entity-service/v1/file/get`, method: "POST", body: params, headers: headers };
             },
         }),
         downloadDocumnent: builder.mutation({
@@ -77,7 +77,7 @@ export const consigneeDataApi = createApi({
                     Authorization: getAppHeaders()['Authorization'],
                 };
                 return {
-                    url: `/master-service/v1/${page}?${queryString}`,
+                    url: `/entity-service/v1/${page}?${queryString}`,
                     method: "POST",
                     body: payload,
                     headers,
@@ -87,7 +87,7 @@ export const consigneeDataApi = createApi({
         }),
         getConsigneeAudit: builder.query({
             query: (params) => {
-                return { url: `master-service/v1/consignee/audit/${params.id}`, method: "GET", headers: getAppHeaders() };
+                return { url: `/entity-service/v1/consignee/audit/${params.id}`, method: "GET", headers: getAppHeaders() };
             },
         }),
         

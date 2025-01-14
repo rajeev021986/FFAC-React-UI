@@ -187,7 +187,7 @@ function App() {
             />
 
 
-            <Route path="maser/icd" element={<IcdScreen page="icd"/>} />
+            <Route path="master/icd" element={<IcdScreen page="icd"/>} />
             <Route path="master/icd/new_icd" element={<IcdFormScreen page="icd" />} />
             <Route path="master/icd/editIcd" element={<IcdFormScreen page="icd" />} />
           </Route>

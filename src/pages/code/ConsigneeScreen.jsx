@@ -141,7 +141,7 @@ export default function ConsigneeScreen({ page }) {
     
     if (actionName === "Export") {
       try {
-        const blob = await ApiManager.fetchIcdDatasExcel(query, payload, "consignee");
+        const blob = await ApiManager.fetchShipperDatasExcel(query, payload, "consignee");
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
