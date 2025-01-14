@@ -13,7 +13,6 @@ export default function ConsigneeFormScreen({ page }) {
   const [loading, setLoading] = useState(true);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const { state } = useLocation();
-  // console.log(state, 'state')
   const [initialValues, setInitialValues] = React.useState({
     id: "",
     address1: "",
@@ -51,7 +50,6 @@ export default function ConsigneeFormScreen({ page }) {
   // Only fetch customer details after settings are loaded
   useEffect(() => {
     const fetchConsigneeDetails = async () => {
-      console.log("Fetching");
       try {
         const res = await ApiManager.getConsigneeDeatils(
           state?.initialValues?.id
@@ -78,9 +76,7 @@ export default function ConsigneeFormScreen({ page }) {
           // files: [],
         });
         setLoading(false);
-        console.log(res, "res");
       } catch (error) {
-        console.error(error, "error");
       
       }
     };

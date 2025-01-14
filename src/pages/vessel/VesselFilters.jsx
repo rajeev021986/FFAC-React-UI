@@ -6,7 +6,7 @@ import InputBox from "../../components/common/InputBox";
 import { OutlinedButton } from "../../components/common/Button";
 import SelectBox from "../../components/common/SelectBox";
 
-export function VesselFilters() {
+export function VesselFilters({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.vesselStore.formData);
 
@@ -21,7 +21,7 @@ export function VesselFilters() {
     },
   });
   const handleReset = () => {
-    formik.resetForm();
+    setFilterOpen(false);
     dispatch(
       updateInput({
         vname: "",
@@ -29,6 +29,11 @@ export function VesselFilters() {
         status: "",
       })
     );
+    formik.setValues({
+      vname: "",
+      lname: "",
+      status: "",
+    });
   };
 
   const statusOptions = [
@@ -57,9 +62,9 @@ export function VesselFilters() {
 
           <SelectBox
             label="Status"
-            id="status"
+            id="statusCode"
             options={statusOptions}
-            value={formik.values.status}
+            value={formik.values.statusCode}
             onChange={formik.handleChange}
             sx={{ marginLeft: "5px !important" }}
           />

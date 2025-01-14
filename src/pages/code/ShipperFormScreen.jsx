@@ -13,7 +13,6 @@ export default function ShipperFormScreen({ page }) {
   const [loading, setLoading] = useState(true);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const { state } = useLocation();
-  // console.log(state, 'state')
   const [initialValues, setInitialValues] = React.useState({
     id: "",
     address1: "",
@@ -55,7 +54,6 @@ export default function ShipperFormScreen({ page }) {
   // Only fetch customer details after settings are loaded
   useEffect(() => {
     const fetchShipperDetails = async () => {
-      console.log("Fetching");
       try {
         const res = await ApiManager.getShipperDeatils(
           state?.initialValues?.id
@@ -87,9 +85,7 @@ export default function ShipperFormScreen({ page }) {
          // files: [],
         });
         setLoading(false);
-        console.log(res, "res");
       } catch (error) {
-        console.error(error, "error");
       
       }
     };

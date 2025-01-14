@@ -3,8 +3,9 @@ import { Box, Button, IconButton } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AutoCompleteInput from "../../components/common/AutoCompletInput";
 import { StyledDataGrid } from "../../components/common/Grid/styles";
+import { Delete } from "@mui/icons-material";
 
-export function VesselMapping({ formik, disabled, fetchSuggestions }) {
+export function VesselMapping({ formik, disabled }) {
   const vesselLineEntity = formik.values.vesselLineEntities || [
     { id: 1, vesselName: "", shippingLine: "" },
   ];
@@ -66,7 +67,6 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
             });
           }}
           inputRef={newRowRef}
-          fetchSuggestions={fetchSuggestions}
         />
       ),
     },
@@ -98,8 +98,6 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
               ),
             });
           }}
-          inputRef={newRowRef}
-          fetchSuggestions={fetchSuggestions}
         />
       ),
     },
@@ -119,9 +117,9 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
         <Button
           color="error"
           onClick={() => deleteRow(params.row.id)}
-          disabled={disabled || vesselLineEntity.length === 1}
+          disabled={disabled}
         >
-          Delete
+          <Delete />
         </Button>
       ),
     },
@@ -137,7 +135,7 @@ export function VesselMapping({ formik, disabled, fetchSuggestions }) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", marginTop: "8px" }}>
       <Box sx={{ height: 400 }}>
         <StyledDataGrid
           rows={vesselLineEntity}

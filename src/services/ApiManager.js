@@ -2,12 +2,10 @@ import ENDPOINTS from "./Endpoints";
 import ApiMethods from "./ApiMethods";
 
 class ApiManager {
- 
-   
-    static login = async (payload) => {
-        const url = ENDPOINTS.LOGIN();
-        return ApiMethods.post(url, payload);
-    }
+  static login = async (payload) => {
+    const url = ENDPOINTS.LOGIN();
+    return ApiMethods.post(url, payload);
+  };
 
   static addUser = async (payload) => {
     const url = ENDPOINTS.ADD_USER();
@@ -53,150 +51,151 @@ class ApiManager {
     return ApiMethods.get(url);
   };
 
-    static getPLPOByBol = async (bol) => {
-        const url = ENDPOINTS.OTM_BOL(bol);
-        return ApiMethods.get(url);
-    }
-    static getSalesOptions = async (name, search) => {
-        const url = ENDPOINTS.GET_SALES_OPTIONS(name, search);
-        return ApiMethods.get(url);
-    }
-    static getCityOptions = async (name, search) => {
-        const url = ENDPOINTS.GET_CITY_OPTIONS(name, search);
-        return ApiMethods.get(url);
-    }
-    static getCommonOptions = async (name, search) => {
-        const url = ENDPOINTS.GET_COMMON_OPTIONS(name, search);
-        return ApiMethods.get(url);
-    }
-    static getAuditDetails = async (id) => {
-        const url = ENDPOINTS.GET_CUSTOMER_AUDIT(id);
-        return ApiMethods.get(url);
-    }
-    static getShipperAuditDetails = async (id) => {
-        const url = ENDPOINTS.GET_SHIPPER_AUDIT(id);
-       
-        return ApiMethods.get(url);
-    }
-    static getConsigneeAuditDetails = async (id) => {
-        const url = ENDPOINTS.GET_CONSIGNEE_AUDIT(id);
-       
-        return ApiMethods.get(url);
-    }
-    static getIcdAuditDetails = async (id) => {
-        const url = ENDPOINTS.GET_ICD_AUDIT(id);
-       
-        return ApiMethods.get(url);
-    }
-    static getCustomerFormData = async (source, id) => {
-        const url = ENDPOINTS.GET_CUSTOMER_DOCUMENT_FILE(source, id);
-        return ApiMethods.get(url);
-    }
-    static getShipperFormData = async (source, id) => {
-        const url = ENDPOINTS.GET_SHIPPER_DOCUMENT_FILE(source, id);
-        return ApiMethods.get(url);
-    }
-    static getCustomerDeatils = async (id) => {
-        const url = ENDPOINTS.GET_CUSTOMER_DETAILS(id);
-        return ApiMethods.get(url);
-    }
-    static getShipperDeatils = async (id) => {
-        const url = ENDPOINTS.GET_SHIPPER_DETAILS(id);
-        const page="shipper";
-        return ApiMethods.get(url,page);
-    }
-    static getConsigneeDeatils = async (id) => {
-        const url = ENDPOINTS.GET_CONSIGNEE_DETAILS(id);
-        const page="consignee";
-        return ApiMethods.get(url,page);
-    }
-    static getIcdDeatils = async (id) => {
-        const url = ENDPOINTS.GET_ICD_DETAILS(id);
-        const page="shipper";
-        return ApiMethods.get(url,page);
-    }
-    static downloadDocumnent = async (id, source, sourceId) => {
-        const url = ENDPOINTS.DOWNLOAD_DOCUMENT(id, source, sourceId);
-        return ApiMethods.get(url);
-    }
-    static deleteDocument = async (id, source, sourceId) => {
-        const url = ENDPOINTS.DOCUMENT_DELETE(id, source, sourceId);
-        return ApiMethods.delete(url);
-    }
-    static approveCustomerApprove = async (id, type) => {
-        const url = ENDPOINTS.CUSTOMER_APPROVE_REQUEST(id, type);
-        return ApiMethods.put(url);
-    }
-    static rejectCustomerApprove = async (id, type, remarkMessage) => {
-        let payload = { remarks: remarkMessage }
-        const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id, type);
-        return ApiMethods.put(url, payload);
-    }
-    static fetchCustomerDatasExcel = async (params, payload, source) => {
-        const queryString = new URLSearchParams(params).toString();
-        const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString, source);
-        return ApiMethods.postBlob(url, payload);
-    }
-    static fetchCustomerDatasExcelPort = async (params, payload, source) => {
-        const queryString = new URLSearchParams(params).toString();
-        const url = ENDPOINTS.FETCH_PORT_DATA_EXCEL(queryString, source);
-        return ApiMethods.postBlob(url, payload);
-    }
-    static getUserData = async (id) => {
-        const url = ENDPOINTS.GET_USER_DATA(id);
-        return ApiMethods.get(url);
-    }
-    static deleteUser = async (id) => {
-        const url = ENDPOINTS.DELETE_USER(id);
-        return ApiMethods.delete(url);
-    }
-    static addUserData = async (payload) => {
-        const url = ENDPOINTS.ADD_USER_DATA();
-        return ApiMethods.post(url, payload);
-    }
-    static updateUserData = async (payload) => {
-        const url = ENDPOINTS.UPDATE_USER_DATA();
-        return ApiMethods.put(url, payload);
-    }
-    static deleteRole = async (id) => {
-        const url = ENDPOINTS.DELETE_ROLE(id);
-        return ApiMethods.delete(url);
-    }
-    static addRole = async (payload) => {
-        const url = ENDPOINTS.ADD_ROLE();
-        return ApiMethods.post(url, payload);
-    }
-    static removeAssignedUser = (params) => {
-        const url = ENDPOINTS.REMOVE_ASSIGNED_USER(params);
-        return ApiMethods.delete(url);
-    }
-    static getRolepermissions = (id) => {
-        const url = ENDPOINTS.GET_ROLE_PERMISSIONS(id);
-        return ApiMethods.get(url);
-    }
-    static getRoles = () => {
-        const url = ENDPOINTS.GET_ROLES();
-        return ApiMethods.get(url);
-    }
-    static updateRolePermissions = async (payload) => {
-        const url = ENDPOINTS.UPDATE_ROLE_PERMISSIONS();
-        return ApiMethods.put(url, payload);
-    }
-    static userPassReset = async (payload) => {
-        const url = ENDPOINTS.USER_PASS_RESET();
-        return ApiMethods.put(url, payload);
-    }
+  static getPLPOByBol = async (bol) => {
+    const url = ENDPOINTS.OTM_BOL(bol);
+    return ApiMethods.get(url);
+  };
+  static getSalesOptions = async (name, search) => {
+    const url = ENDPOINTS.GET_SALES_OPTIONS(name, search);
+    return ApiMethods.get(url);
+  };
+  static getCityOptions = async (name, search) => {
+    const url = ENDPOINTS.GET_CITY_OPTIONS(name, search);
+    return ApiMethods.get(url);
+  };
+  static getCommonOptions = async (name, search) => {
+    const url = ENDPOINTS.GET_COMMON_OPTIONS(name, search);
+    return ApiMethods.get(url);
+  };
+  static getAuditDetails = async (id) => {
+    const url = ENDPOINTS.GET_CUSTOMER_AUDIT(id);
+    return ApiMethods.get(url);
+  };
+  static getShipperAuditDetails = async (id) => {
+    const url = ENDPOINTS.GET_SHIPPER_AUDIT(id);
+
+    return ApiMethods.get(url);
+  };
+  static getConsigneeAuditDetails = async (id) => {
+    const url = ENDPOINTS.GET_CONSIGNEE_AUDIT(id);
+
+    return ApiMethods.get(url);
+  };
+  static getIcdAuditDetails = async (id) => {
+    const url = ENDPOINTS.GET_ICD_AUDIT(id);
+
+    return ApiMethods.get(url);
+  };
+  static getCustomerFormData = async (source, id) => {
+    const url = ENDPOINTS.GET_CUSTOMER_DOCUMENT_FILE(source, id);
+    return ApiMethods.get(url);
+  };
+  static getShipperFormData = async (source, id) => {
+    const url = ENDPOINTS.GET_SHIPPER_DOCUMENT_FILE(source, id);
+    return ApiMethods.get(url);
+  };
+  static getCustomerDeatils = async (id) => {
+    const url = ENDPOINTS.GET_CUSTOMER_DETAILS(id);
+    return ApiMethods.get(url);
+  };
+  static getShipperDeatils = async (id) => {
+    const url = ENDPOINTS.GET_SHIPPER_DETAILS(id);
+    const page = "shipper";
+    return ApiMethods.get(url, page);
+  };
+  static getConsigneeDeatils = async (id) => {
+    const url = ENDPOINTS.GET_CONSIGNEE_DETAILS(id);
+    const page = "consignee";
+    return ApiMethods.get(url, page);
+  };
+  static getIcdDeatils = async (id) => {
+    const url = ENDPOINTS.GET_ICD_DETAILS(id);
+    const page = "shipper";
+    return ApiMethods.get(url, page);
+  };
+  static downloadDocumnent = async (id, source, sourceId) => {
+    const url = ENDPOINTS.DOWNLOAD_DOCUMENT(id, source, sourceId);
+    return ApiMethods.get(url);
+  };
+  static deleteDocument = async (id, source, sourceId) => {
+    const url = ENDPOINTS.DOCUMENT_DELETE(id, source, sourceId);
+    return ApiMethods.delete(url);
+  };
+  static approveCustomerApprove = async (id, type) => {
+    const url = ENDPOINTS.CUSTOMER_APPROVE_REQUEST(id, type);
+    return ApiMethods.put(url);
+  };
+  static rejectCustomerApprove = async (id, type, remarkMessage) => {
+    let payload = { remarks: remarkMessage };
+    const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id, type);
+    return ApiMethods.put(url, payload);
+  };
+  static fetchCustomerDatasExcel = async (params, payload, source) => {
+    const queryString = new URLSearchParams(params).toString();
+    const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString, source);
+    return ApiMethods.postBlob(url, payload);
+  };
+  static fetchCustomerDatasExcelPort = async (params, payload, source) => {
+    const queryString = new URLSearchParams(params).toString();
+    const url = ENDPOINTS.FETCH_PORT_DATA_EXCEL(queryString, source);
+    return ApiMethods.postBlob(url, payload);
+  };
+  static getUserData = async (id) => {
+    const url = ENDPOINTS.GET_USER_DATA(id);
+    return ApiMethods.get(url);
+  };
+  static deleteUser = async (id) => {
+    const url = ENDPOINTS.DELETE_USER(id);
+    return ApiMethods.delete(url);
+  };
+  static addUserData = async (payload) => {
+    const url = ENDPOINTS.ADD_USER_DATA();
+    return ApiMethods.post(url, payload);
+  };
+  static updateUserData = async (payload) => {
+    const url = ENDPOINTS.UPDATE_USER_DATA();
+    return ApiMethods.put(url, payload);
+  };
+  static deleteRole = async (id) => {
+    const url = ENDPOINTS.DELETE_ROLE(id);
+    return ApiMethods.delete(url);
+  };
+  static addRole = async (payload) => {
+    const url = ENDPOINTS.ADD_ROLE();
+    return ApiMethods.post(url, payload);
+  };
+  static removeAssignedUser = (params) => {
+    const url = ENDPOINTS.REMOVE_ASSIGNED_USER(params);
+    return ApiMethods.delete(url);
+  };
+  static getRolepermissions = (id) => {
+    const url = ENDPOINTS.GET_ROLE_PERMISSIONS(id);
+    return ApiMethods.get(url);
+  };
+  static getRoles = () => {
+    const url = ENDPOINTS.GET_ROLES();
+    return ApiMethods.get(url);
+  };
+  static updateRolePermissions = async (payload) => {
+    const url = ENDPOINTS.UPDATE_ROLE_PERMISSIONS();
+    return ApiMethods.put(url, payload);
+  };
+  static userPassReset = async (payload) => {
+    const url = ENDPOINTS.USER_PASS_RESET();
+    return ApiMethods.put(url, payload);
+  };
 
   static fetchEditVessel = (id) => {
     const url = ENDPOINTS.GET_EDIT_VESSEL(id);
     return ApiMethods.get(url);
   };
 
-    static fetchVesselDatasExcel = async (params, payload) => {
-        const queryString = new URLSearchParams(params).toString();
-        const url = ENDPOINTS.FETCH_VESSEL_DATA_EXCEL(queryString);
-        return ApiMethods.postBlob(url, payload);
-    }
+  static fetchVesselDatasExcel = async (params, payload) => {
+    const queryString = new URLSearchParams(params).toString();
+    const url = ENDPOINTS.FETCH_VESSEL_DATA_EXCEL(queryString);
+    return ApiMethods.postBlob(url, payload);
+  };
+
 
     static fetchIcdDatasExcel = async (params, payload,source) => {
         const queryString = new URLSearchParams(params).toString();
@@ -209,8 +208,20 @@ class ApiManager {
       return ApiMethods.postBlob(url, payload);
   }
 
+ 
+  static fileDownloadIntegater = async (id) => {
+    const url = ENDPOINTS.FILE_DOWNLOAD_INTEGATER(id);
+    return ApiMethods.post(url);
+  };
+
+
   static fetchVesselSuggestions = (inputValue, id) => {
     const url = ENDPOINTS.FETCH_VESSEL_SUGGESTIONS(inputValue, id);
+    return ApiMethods.get(url);
+  };
+
+  static fetchAutoCompleteData = (inputValue, id) => {
+    const url = ENDPOINTS.FETCH_AUTOCOMPLETE_DATA(inputValue, id);
     return ApiMethods.get(url);
   };
 

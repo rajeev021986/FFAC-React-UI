@@ -37,24 +37,8 @@ export default function VendorEditGrid({
         newRowRef.current.focus();
       }
     }, 1000);
-  };
-  const fetchSuggestions = async (inputValue, inputId) => {
-    if (inputId === "chargeName") {
-      inputId = "CHARGE";
-    } else if (inputId === "currency") {
-      inputId = "CURRENCY";
-    } else {
-      inputId = "PORT_COUNTRY";
-    }
-    if (!inputValue) return [];
-    const response = await ApiManager.fetchVesselSuggestions(
-      inputValue,
-      inputId
-    );
-    const data = await response.body;
-
-    return data || [];
-  };
+    };
+  console.log(formik.values,"asdfg")
   const OnChange = (params, e, name) => {
     const rowIndex = formik.values[name].findIndex(
       (entity) => entity.id === params.id
@@ -149,7 +133,6 @@ export default function VendorEditGrid({
                   // }, 1500);
                 }}
                 inputRef={newRowRef}
-                fetchSuggestions={fetchSuggestions}
               />
             );
           },
@@ -248,7 +231,6 @@ export default function VendorEditGrid({
                   });
                   // }, 1500);
                 }}
-                fetchSuggestions={fetchSuggestions}
               />
             );
           },
@@ -338,46 +320,64 @@ export default function VendorEditGrid({
         return newRow;
       },
       columns: [
-        {
-          field: "freeTime",
-          headerName: "Free Time",
-          width: 200,
-          editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
-        },
         ...[
-          "freeTimeType",
-          "t1Start",
-          "t1End",
-          "t1Type",
-          "t1Rate",
-          "t2Start",
-          "t2End",
-          "t2Type",
-          "t2Rate",
-          "t3Start",
-          "t3End",
-          "t3Type",
-          "t3Rate",
+          { FieldLabel: "freeTime", type: "input" },
+          {
+            FieldLabel: "freeTimeType",
+            type: "dropdown",
+            options: dropdownData.demurageOptions,
+          },
+          { FieldLabel: "t1Start", type: "input" },
+          { FieldLabel: "t1End", type: "input" },
+          {
+            FieldLabel: "t1Type",
+            type: "dropdown",
+            options: dropdownData.demurageOptions,
+          },
+          { FieldLabel: "t1Rate", type: "input" },
+          { FieldLabel: "t2Start", type: "input" },
+          { FieldLabel: "t2End", type: "input" },
+          {
+            FieldLabel: "t2Type",
+            type: "dropdown",
+            options: dropdownData.demurageOptions,
+          },
+          { FieldLabel: "t2Rate", type: "input" },
+          { FieldLabel: "t3Start", type: "input" },
+          { FieldLabel: "t3End", type: "input" },
+          {
+            FieldLabel: "t3Type",
+            type: "dropdown",
+            options: dropdownData.demurageOptions,
+          },
+          { FieldLabel: "t3Rate", type: "input" },
         ].map((a) => {
           return {
-            field: a,
+            field: a.FieldLabel,
             headerName:
-              a
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
+              a.FieldLabel.replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
-                .toUpperCase() + a.slice(1),
-            // flex: 1,
-            width: 100,
+                .toUpperCase() + a.FieldLabel.slice(1),
+            width: 130,
             headerName:
-              a
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
+              a.FieldLabel.replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
-                .toUpperCase() + a.slice(1),
+                .toUpperCase() + a.FieldLabel.slice(1),
             editable: true,
-            renderCell: (params) => <InputBoxForGrid {...params} />,
-            renderEditCell: (params) => <InputBoxForGrid {...params} />,
+            renderCell: (params) => (
+              <InputBoxForGrid
+                {...params}
+                type={a.type}
+                options={dropdownData.demurageOptions}
+              />
+            ),
+            renderEditCell: (params) => (
+              <InputBoxForGrid
+                {...params}
+                type={a.type}
+                options={dropdownData.demurageOptions}
+              />
+            ),
           };
         }),
 
@@ -477,7 +477,6 @@ export default function VendorEditGrid({
                   // }, 1500);
                 }}
                 inputRef={newRowRef}
-                fetchSuggestions={fetchSuggestions}
               />
             );
           },
@@ -614,7 +613,7 @@ export default function VendorEditGrid({
     },
     {
       tabLable: "Bank Details",
-      value: formik.values.vendorBankDetails || [],
+      value: formik.values.bankDetails || [],
       addNewRow: () => {
         const hasEmptyFields = TabsHosts[4].value.some((row) =>
           Object.values(row).some(
@@ -642,21 +641,18 @@ export default function VendorEditGrid({
           vendorId: 0,
           new: true,
         };
-        formik.setFieldValue("vendorBankDetails", [
-          ...TabsHosts[4].value,
-          newRow,
-        ]);
+        formik.setFieldValue("bankDetails", [...TabsHosts[4].value, newRow]);
         setFocus();
       },
       deleteRow: (id) => {
         const updatedRows = TabsHosts[4].value.filter((row) => row.id !== id);
-        formik.setFieldValue("vendorBankDetails", updatedRows);
+        formik.setFieldValue("bankDetails", updatedRows);
       },
       handleProcessRowUpdate: (newRow, oldRow) => {
         const updatedRows = TabsHosts[4].value.map((row) =>
           row.id === newRow.id ? { ...row, ...newRow } : row
         );
-        formik.setFieldValue("vendorBankDetails", updatedRows);
+        formik.setFieldValue("bankDetails", updatedRows);
         return newRow;
       },
       columns: [

@@ -118,7 +118,6 @@ export default function IcdScreen({ page }) {
   }, [icdSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
-    console.log("action name:"+actionName);
     // }
     if (actionName === "New") {
       nav(ADD_NEW_ICD_PATH, {
@@ -149,7 +148,6 @@ export default function IcdScreen({ page }) {
           link.remove();
           window.URL.revokeObjectURL(url);
       } catch (error) {
-          console.error('Download failed:', error);
       }
     }
   }
@@ -233,7 +231,6 @@ export default function IcdScreen({ page }) {
                   options={ICD_SORT_OPTIONS}
                   value={icdSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event);
 
                     dispatch(setSortBy(event.target.value));
                   }}

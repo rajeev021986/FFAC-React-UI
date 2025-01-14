@@ -113,8 +113,6 @@ export default function ShipperScreen({ page }) {
   }, [shipperSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
-    console.log("action name:"+actionName);
-    // }
     if (actionName === "New") {
       nav(ADD_NEW_SHIPPER_PATH, {
         replace: true,
@@ -143,7 +141,6 @@ export default function ShipperScreen({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
     } catch (error) {
-        console.error('Download failed:', error);
     }
     }
   }
@@ -228,7 +225,6 @@ const fetchAuditData = () => {
                   options={SHIPPER_SORT_OPTIONS}
                   value={shipperSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event);
 
                     dispatch(setSortBy(event.target.value));
                   }}

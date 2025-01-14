@@ -121,7 +121,6 @@ export default function ConsigneeScreen({ page }) {
   }, [consigneeSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
-    console.log("action name:"+actionName);
     // }
     if (actionName === "New") {
       nav(ADD_NEW_CONSIGNEE_PATH, {
@@ -151,7 +150,6 @@ export default function ConsigneeScreen({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
     } catch (error) {
-        console.error('Download failed:', error);
     }
     }
   }
@@ -236,7 +234,6 @@ export default function ConsigneeScreen({ page }) {
                   options={CONSIGNEE_SORT_OPTIONS}
                   value={consigneeSelector.sortBy}
                   onChange={(event) => {
-                    console.log(event);
 
                     dispatch(setSortBy(event.target.value));
                   }}

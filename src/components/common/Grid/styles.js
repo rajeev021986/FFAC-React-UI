@@ -17,11 +17,13 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     lineHeight: 10,
   },
   "& .MuiDataGrid-columnHeaderTitle": {
-    color: 'white',
-    fontSize: '15px'
+    color: "white",
+    fontSize: "15px",
   },
-  // "& .MuiPopper-root": {
-  //   overflowY: "hidden",
-  //   backgroundColor: theme.palette.primary.main,
-  // },
+  "& .MuiDataGrid-iconButtonContainer": {
+    color: "white",
+  },
+  "& .MuiDataGrid-sortIcon": {
+    color: "white",
+  },
 }));

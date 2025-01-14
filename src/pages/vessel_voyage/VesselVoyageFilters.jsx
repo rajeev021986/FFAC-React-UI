@@ -5,7 +5,7 @@ import { Button, Stack } from "@mui/material";
 import InputBox from "../../components/common/InputBox";
 import { OutlinedButton } from "../../components/common/Button";
 
-export function VesselVoyageFilters() {
+export function VesselVoyageFilters({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.vesselVoyageStore.formData);
 
@@ -19,6 +19,7 @@ export function VesselVoyageFilters() {
     },
   });
   const handleReset = () => {
+    setFilterOpen(false);
     formik.resetForm();
     dispatch(
       updateInput({

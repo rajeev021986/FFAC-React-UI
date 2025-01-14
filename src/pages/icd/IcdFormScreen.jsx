@@ -13,7 +13,6 @@ export default function IcdFormScreen({ page }) {
   const [loading, setLoading] = useState(true);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const { state } = useLocation();
-  // console.log(state, 'state')
   const [initialValues, setInitialValues] = React.useState({
     id: "",
     icd_code: "",
@@ -49,7 +48,6 @@ export default function IcdFormScreen({ page }) {
   // Only fetch customer details after settings are loaded
   useEffect(() => {
     const fetchIcdDetails = async () => {
-      console.log("Fetching");
       try {
         const res = await ApiManager.getIcdDeatils(
           state?.initialValues?.id
@@ -76,9 +74,7 @@ export default function IcdFormScreen({ page }) {
           files: [],
         });
         setLoading(false);
-        console.log(res, "res");
       } catch (error) {
-        console.error(error, "error");
       
       }
     };

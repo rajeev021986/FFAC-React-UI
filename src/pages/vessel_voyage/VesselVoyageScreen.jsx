@@ -91,8 +91,7 @@ export function VesselVoyageScreen() {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
   return (
@@ -125,13 +124,8 @@ export function VesselVoyageScreen() {
                     alignItems: "center",
                     padding: 2,
                     borderRadius: 1,
-                    backgroundColor: "#f0f0f0",
-                    color: "black",
                     boxShadow: 3,
                     borderRadius: "20px 19px 19px 20px",
-                    "&:hover": {
-                      backgroundColor: "#e0e0e0",
-                    },
                     width: 72,
                     minWidth: 92,
                     "& .MuiSvgIcon-root": {
@@ -151,7 +145,10 @@ export function VesselVoyageScreen() {
         }
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        <CardHeader title={<VesselVoyageHeader></VesselVoyageHeader>} />
+        <CardHeader
+          title={<VesselVoyageHeader></VesselVoyageHeader>}
+          sx={{ margin: 0, padding: 1 }}
+        />
         <VesselVoyageBody
           selectBox={selectBox}
           setSelectBox={setSelectBox}
