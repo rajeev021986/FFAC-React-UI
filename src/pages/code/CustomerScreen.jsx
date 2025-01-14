@@ -50,6 +50,7 @@ import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import FilterForm from "../../components/screen/code/customer/FilterForm";
 
 export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
@@ -209,7 +210,9 @@ export default function CustomerScreen({ page }) {
 
   const handleDelete = async () => {
     try {
-      await deleteCustomer(modal.data.id).unwrap();
+      await deleteCustomer(modal.data.id)
+        .unwrap()
+        .then(() => refetch());
       toast.success("Customer deleted successfully!");
       handleClose();
     } catch (error) {
@@ -248,13 +251,8 @@ export default function CustomerScreen({ page }) {
                       alignItems: "center",
                       padding: 2,
                       borderRadius: 1,
-                      backgroundColor: "#f0f0f0",
-                      color: "black",
                       boxShadow: 3,
                       borderRadius: "20px 19px 19px 20px",
-                      "&:hover": {
-                        backgroundColor: "#e0e0e0",
-                      },
                       width: 72,
                       minWidth: 92,
                       "& .MuiSvgIcon-root": {
@@ -285,20 +283,22 @@ export default function CustomerScreen({ page }) {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <CustomerFilters filterInfo={CustomerData?.counts || []} />
+                  <FilterForm />
                 </GridSearchInput>
-                <SelectBox
-                  label="Sort By"
-                  options={CUSTOMER_SORT_OPTIONS}
-                  value={codeCustomerSelector.sortBy}
-                  onChange={(event) => {
-                    dispatch(setSortBy(event.target.value));
-                  }}
-                  sx={{
-                    borderRadius: "20px",
-                    width: "150px",
-                  }}
-                />
+                {codeCustomerSelector.view === "card" && (
+                  <SelectBox
+                    label="Sort By"
+                    options={CUSTOMER_SORT_OPTIONS}
+                    value={codeCustomerSelector.sortBy}
+                    onChange={(event) => {
+                      dispatch(setSortBy(event.target.value));
+                    }}
+                    sx={{
+                      borderRadius: "20px",
+                      width: "150px",
+                    }}
+                  />
+                )}
               </Box>
               <Box>
                 <IconButton onClick={() => dispatch(customerSetView("card"))}>

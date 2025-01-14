@@ -9,7 +9,6 @@ import { useFormik } from "formik";
 export default function FilterForm() {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.shipper.formData);
-  console.log("city",inputs.city) 
 
 
   const formik = useFormik({

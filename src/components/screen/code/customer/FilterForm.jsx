@@ -7,7 +7,7 @@ import { OutlinedButton } from "../../../common/Button";
 import { useFormik } from "formik";
 import SelectBox from "../../../common/SelectBox";
 
-export default function FilterForm() {
+export default function FilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.codeCustomer.formData);
 
@@ -24,6 +24,7 @@ export default function FilterForm() {
     },
   });
   const handleReset = () => {
+    setFilterOpen(false);
     dispatch(
       updateInput({
         customerName: "",

@@ -7,7 +7,6 @@ export const getIcdListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
         nav(`editicd`, {state: {formAction: "edit", initialValues: params.row},
   
         });
@@ -17,7 +16,6 @@ export const getIcdListGridActions = (nav, setModal) => {
     {
       label: 'Audit',
       onClick: (params) => {
-        console.log('Audit clicked for', params.row);
         setModal(
           { open: true, type: 'audit', data: params.row }
         )

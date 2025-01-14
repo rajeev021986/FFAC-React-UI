@@ -21,6 +21,8 @@ import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 import SelectBox from "../../components/common/SelectBox";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import ThemeTabs from "../../components/common/Tab/ThemeTab";
+import getFirstError from "../../components/common/FieldToastError";
 
 export function VesselForm({ initialValues, type }) {
   const location = useLocation();
@@ -117,111 +119,164 @@ export function VesselForm({ initialValues, type }) {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    getFirstError(formik.errors);
+  }, [formik.errors]);
 
   return (
     <>
       {type == "copy" || type == "add" ? (
         <>
-          <Grid container sx={{ padding: 0, margin: 0, paddingRight: "8px" }}>
-            <Grid container sx={{ margin: 0 }}>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-                paddingLeft={1}
-                marginTop={2}
-              >
-                <FormAutoComplete
-                  label="Vessel Name"
-                  id="vesselName"
-                  suggestionName="vessel_name"
-                  value={formik.values.vesselName}
-                  error={formik.errors.vesselName}
-                  onChange={formik.handleChange}
-                ></FormAutoComplete>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-                paddingLeft={1}
-                marginTop={2}
-              >
-                <FormAutoComplete
-                  label="Line Name"
-                  id="lineName"
-                  value={formik.values.lineName}
-                  error={formik.errors.lineName}
-                  onChange={formik.handleChange}
-                  suggestionName="line_name"
-                ></FormAutoComplete>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-                paddingLeft={1}
-                marginTop={2}
-              >
-                <SelectBox
-                  label="Vessel Owner"
-                  id="vesselOwner"
-                  options={ownerOptions}
-                  value={formik.values.vesselOwner}
-                  error={formik.errors.vesselOwner}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-                paddingLeft={1}
-                margin={0}
-              >
-                <InputBox
-                  label="Status"
-                  id="status"
-                  disabled={true}
-                  error={formik.errors.status}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12} sx={{ marginTop: 1, marginLeft: 1 }}>
-              <VesselMapping disabled={disabled} formik={formik} />
-            </Grid>
-            <Grid item xs={12} sx={{ margin: 1, padding: 0 }}>
-              <Stack direction="row" spacing={2}>
-                <OutlinedButton
-                  sx={{ fontWeight: "500", borderRadius: "12px" }}
+          <Box sx={{ width: "100%", typography: "body1" }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
                 >
-                  Cancel
-                </OutlinedButton>
-                <ThemeButton
-                  onClick={formik.handleSubmit}
-                  sx={{ fontWeight: "500", borderRadius: "12px" }}
+                  <Tab
+                    label="Vessel Details"
+                    value="1"
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  />
+                </TabList>
+              </Box>
+              <TabPanel value="1" sx={{ margin: 0, padding: 0 }}>
+                {" "}
+                <Grid
+                  container
+                  sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                 >
-                  {isLoading && <CircularProgress size={20} color="white" />}{" "}
-                  Add
-                </ThemeButton>
-              </Stack>
-            </Grid>
-          </Grid>
+                  <Grid container sx={{ margin: 0 }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Vessel Name*"
+                        id="vesselName"
+                        value={formik.values.vesselName}
+                        error={formik.errors.vesselName}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <FormAutoComplete
+                        label="Line Name*"
+                        id="lineName"
+                        value={formik.values.lineName}
+                        error={formik.errors.lineName}
+                        onChange={formik.handleChange}
+                        suggestionName="vendorName"
+                      ></FormAutoComplete>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <SelectBox
+                        label="Vessel Owner"
+                        id="vesselOwner"
+                        options={ownerOptions}
+                        value={formik.values.vesselOwner}
+                        error={formik.errors.vesselOwner}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      margin={0}
+                    >
+                      <InputBox
+                        label="Status"
+                        id="status"
+                        disabled={true}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      typography: "body1",
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      margin: "0px 8px",
+                    }}
+                  >
+                    <TabContext value={value}>
+                      <Box>
+                        <TabList
+                          onChange={handleChange}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab
+                            label="Line"
+                            value="1"
+                            sx={{
+                              fontSize: "1rem",
+                              textTransform: "capitalize",
+                            }}
+                          />
+                        </TabList>
+                      </Box>
+                      <TabPanel value="1" sx={{ margin: 0, padding: 0 }}>
+                        {" "}
+                        <VesselMapping disabled={disabled} formik={formik} />
+                      </TabPanel>
+                    </TabContext>
+                  </Box>
+
+                  <Grid item xs={12} sx={{ margin: 1, padding: 0 }}>
+                    <Stack direction="row" spacing={2}>
+                      <OutlinedButton
+                        sx={{ fontWeight: "500", borderRadius: "12px" }}
+                      >
+                        Cancel
+                      </OutlinedButton>
+                      <ThemeButton
+                        onClick={formik.handleSubmit}
+                        sx={{ fontWeight: "500", borderRadius: "12px" }}
+                      >
+                        {isLoading && (
+                          <CircularProgress size={20} color="white" />
+                        )}{" "}
+                        Add
+                      </ThemeButton>
+                    </Stack>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+            </TabContext>
+          </Box>
         </>
       ) : (
         <>
@@ -232,8 +287,16 @@ export function VesselForm({ initialValues, type }) {
                   onChange={handleChange}
                   aria-label="lab API tabs example"
                 >
-                  <Tab label="Edit Vessel" value="1" />
-                  <Tab label="Audit Logs" value="2" />
+                  <Tab
+                    label="Vessel Details"
+                    value="1"
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  />
+                  <Tab
+                    label="Audit Logs"
+                    value="2"
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  />
                 </TabList>
               </Box>
               <TabPanel value="1" sx={{ margin: 0, padding: 0 }}>
@@ -251,16 +314,14 @@ export function VesselForm({ initialValues, type }) {
                       lg={3}
                       xl={2}
                       paddingLeft={1}
-                      marginTop={2}
                     >
-                      <FormAutoComplete
-                        label="Vessel Name"
+                      <InputBox
+                        label="Vessel Name*"
                         id="vesselName"
-                        suggestionName="vessel_name"
                         value={formik.values.vesselName}
                         error={formik.errors.vesselName}
                         onChange={formik.handleChange}
-                      ></FormAutoComplete>
+                      />
                     </Grid>
                     <Grid
                       item
@@ -273,12 +334,12 @@ export function VesselForm({ initialValues, type }) {
                       marginTop={2}
                     >
                       <FormAutoComplete
-                        label="Line Name"
+                        label="Line Name*"
                         id="lineName"
                         value={formik.values.lineName}
                         error={formik.errors.lineName}
                         onChange={formik.handleChange}
-                        suggestionName="line_name"
+                        suggestionName="vendorName"
                       ></FormAutoComplete>
                     </Grid>
                     <Grid
@@ -343,17 +404,37 @@ export function VesselForm({ initialValues, type }) {
                     )}
                   </Grid>
 
-                  <Grid
-                    item
-                    xs={12}
+                  <Box
                     sx={{
-                      marginTop: 1,
-                      marginLeft: 1,
-                      padding: "0px ! important",
+                      width: "100%",
+                      typography: "body1",
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      margin: "0px 8px",
                     }}
                   >
-                    <VesselMapping disabled={disabled} formik={formik} />
-                  </Grid>
+                    <TabContext value={value}>
+                      <Box>
+                        <TabList
+                          onChange={handleChange}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab
+                            label="Line"
+                            value="1"
+                            sx={{
+                              fontSize: "1rem",
+                              textTransform: "capitalize",
+                            }}
+                          />
+                        </TabList>
+                      </Box>
+                      <TabPanel value="1" sx={{ margin: 0, padding: 0 }}>
+                        {" "}
+                        <VesselMapping disabled={disabled} formik={formik} />
+                      </TabPanel>
+                    </TabContext>
+                  </Box>
                   <Grid item xs={12} sx={{ margin: 1, padding: 0 }}>
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton

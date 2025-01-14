@@ -38,7 +38,6 @@ export default function IcdForm({
     { label: "Document Details", value: 2 },
     { label: "Audit logs", value: 3 },
   ];
-  console.log("initialValues.id"+initialValues.id);
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
@@ -74,15 +73,12 @@ export default function IcdForm({
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
-  console.log("optionsCity", optionsCity);
-  console.log("id"+initialValues.id);
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      console.log("Form values:", values);
       if (!values.id || type == "copy") {
         
         try {
@@ -100,7 +96,6 @@ export default function IcdForm({
             toast.error(response.message);
           }
         } catch (error) {
-          console.error("Error submitting form:", error);
           toast.error("An error occurred while submitting the form.");
         }
       } else {
@@ -116,7 +111,6 @@ export default function IcdForm({
             toast.error(response.message);
           }
         } catch (error) {
-          console.error("Error submitting form:", error);
           toast.error("An error occurred while submitting the form.");
         }
       }
@@ -127,13 +121,10 @@ export default function IcdForm({
   const reloadDataHandler = async () => {
     try {
       setLoading(true);
-      console.log("id"+id);
       const res = await ApiManager.getIcdAuditDetails(initialValues.id);
-      console.log("audit details", res);
       setEnquiryAuditDetails(res);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };

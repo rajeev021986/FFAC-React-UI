@@ -35,18 +35,20 @@ export function VesselVoyageHeader() {
         >
           <VesselVoyageFilters />
         </GridSearchInput>
-        <SelectBox
-          label="Sort By"
-          options={VOYAGE_SORT_OPTIONS}
-          value={voyageSelector.sortBy}
-          onChange={(event) => {
-            dispatch(setSortBy(event.target.value));
-          }}
-          sx={{
-            borderRadius: "20px",
-            width: "150px",
-          }}
-        />
+        {voyageSelector.view === "card" && (
+          <SelectBox
+            label="Sort By"
+            options={VOYAGE_SORT_OPTIONS}
+            value={voyageSelector.sortBy}
+            onChange={(event) => {
+              dispatch(setSortBy(event.target.value));
+            }}
+            sx={{
+              borderRadius: "20px",
+              width: "150px",
+            }}
+          />
+        )}
         <IconButton onClick={() => dispatch(voyageSetView("card"))}>
           <FormatListBulletedOutlined
             color={voyageSelector.view === "card" ? "primary" : "secondary"}

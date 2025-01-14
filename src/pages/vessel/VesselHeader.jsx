@@ -34,18 +34,20 @@ export function VesselHeader() {
         >
           <VesselFilters />
         </GridSearchInput>
-        <SelectBox
-          label="Sort By"
-          options={VESSEL_SORT_OPTIONS}
-          value={vesselSelector.sortBy}
-          onChange={(event) => {
-            dispatch(setSortBy(event.target.value));
-          }}
-          sx={{
-            borderRadius: "20px",
-            width: "150px",
-          }}
-        />
+        {vesselSelector.view === "card" && (
+          <SelectBox
+            label="Sort By"
+            options={VESSEL_SORT_OPTIONS}
+            value={vesselSelector.sortBy}
+            onChange={(event) => {
+              dispatch(setSortBy(event.target.value));
+            }}
+            sx={{
+              borderRadius: "20px",
+              width: "150px",
+            }}
+          />
+        )}
         <IconButton onClick={() => dispatch(vesselSetView("card"))}>
           <FormatListBulletedOutlined
             color={vesselSelector.view === "card" ? "primary" : "secondary"}

@@ -8,7 +8,6 @@ export const getConsigneeListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        console.log("Edit clicked for", params.row);
         nav(`editconsignee`, {state: {formAction: "edit", initialValues: params.row},
   
         });
@@ -18,7 +17,6 @@ export const getConsigneeListGridActions = (nav, setModal) => {
     {
       label: 'Audit',
       onClick: (params) => {
-        console.log('Audit clicked for', params.row);
         setModal(
           { open: true, type: 'audit', data: params.row }
         )

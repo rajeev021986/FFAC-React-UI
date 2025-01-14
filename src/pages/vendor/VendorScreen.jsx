@@ -79,7 +79,9 @@ export default function VendorScreen({ page }) {
 
   const handleDelete = async () => {
     try {
-      await deleteVendor(modal.data.id).unwrap();
+      await deleteVendor(modal.data.id)
+        .unwrap()
+        .then(() => refetch());
       toast.success("Vendor deleted successfully!");
       handleClose();
     } catch (error) {
@@ -129,7 +131,7 @@ export default function VendorScreen({ page }) {
 
   useEffect(() => {
     refetch();
-  }, [location.pathname]);
+  }, [location.pathname, modal]);
   const fetchUserAudit = () => {
     getVendorAudit({
       id: modal.data.id,
@@ -217,13 +219,8 @@ export default function VendorScreen({ page }) {
                     alignItems: "center",
                     padding: 2,
                     borderRadius: 1,
-                    backgroundColor: "#f0f0f0",
-                    color: "black",
                     boxShadow: 3,
                     borderRadius: "20px 19px 19px 20px",
-                    "&:hover": {
-                      backgroundColor: "#e0e0e0",
-                    },
                     width: 72,
                     minWidth: 92,
                     "& .MuiSvgIcon-root": {
@@ -261,18 +258,20 @@ export default function VendorScreen({ page }) {
                 >
                   <VendorFilterForm />
                 </GridSearchInput>
-                <SelectBox
-                  label="Sort By"
-                  options={VENDOR_SORT_OPTIONS}
-                  value={vendorSelector.sortBy}
-                  onChange={(event) => {
-                    dispatch(setSortBy(event.target.value));
-                  }}
-                  sx={{
-                    borderRadius: "20px",
-                    width: "150px",
-                  }}
-                />
+                {vendorSelector.view === "card" && (
+                  <SelectBox
+                    label="Sort By"
+                    options={VENDOR_SORT_OPTIONS}
+                    value={vendorSelector.sortBy}
+                    onChange={(event) => {
+                      dispatch(setSortBy(event.target.value));
+                    }}
+                    sx={{
+                      borderRadius: "20px",
+                      width: "150px",
+                    }}
+                  />
+                )}
               </Box>
               <Box>
                 <IconButton onClick={() => dispatch(setView("card"))}>
@@ -370,13 +369,6 @@ export default function VendorScreen({ page }) {
           </Box>
         </Drawer>
       )}
-      <DeleteDialog
-        source="vendor"
-        sourceName={modal?.data?.deleteName}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-        handleOpen={modal.open && modal.type === "delete"}
-      />
       <DeleteDialog
         source="vendor"
         sourceName={modal?.data?.deleteName}

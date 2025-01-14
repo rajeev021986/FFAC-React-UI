@@ -104,7 +104,7 @@ export default function VendorForm({ page = "vendor" }) {
       })
     ),
 
-    vendorBankDetails: Yup.array(
+    bankDetails: Yup.array(
       Yup.object({
         id: Yup.number(),
         bankName: Yup.string().matches(
@@ -179,7 +179,7 @@ export default function VendorForm({ page = "vendor" }) {
     vendorEntityDemurageTariffs: [],
     vendorEntityFreeDays: [],
     vendorEntityEmails: [],
-    vendorBankDetails: [],
+    bankDetails: [],
   };
 
   const formik = useFormik({
@@ -201,7 +201,7 @@ export default function VendorForm({ page = "vendor" }) {
         vendorEntityEmails: values.vendorEntityEmails.map((s) =>
           s.new ? { ...s, new: null, id: null } : s
         ),
-        vendorBankDetails: values.vendorBankDetails.map((s) =>
+        bankDetails: values.bankDetails.map((s) =>
           s.new ? { ...s, new: null, id: null } : s
         ),
       };

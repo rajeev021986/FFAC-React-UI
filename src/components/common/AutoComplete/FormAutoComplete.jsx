@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Autocomplete,
@@ -16,25 +16,34 @@ function FormAutoComplete({
   error,
   onChange,
 }) {
-  const [suggestions, setSuggestions] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
 
-  const handleInputChange = async (event, newValue) => {
-    setLoading(true);
-    try {
-      const data = await GetAutoCompleteData(newValue, id);
-      if (data) {
-        const array = data.map((obj) => obj[suggestionName]);
-        setSuggestions(array);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await GetAutoCompleteData(suggestionName, id);
+        setOptions(data);
+        setFilteredOptions(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-      setSuggestions([]);
-    } finally {
-      setLoading(false);
-    }
+    };
 
-    //onChange({ target: { name: id, value: newValue } });
+    fetchData();
+  }, []);
+
+  const handleInputChange = (event, newValue) => {
+    setLoading(false);
+    const filtered = options.filter((option) =>
+      option.toLowerCase().includes(newValue.toLowerCase())
+    );
+
+    setFilteredOptions(filtered);
   };
 
   const handleSelectionChange = (event, newValue) => {
@@ -52,7 +61,7 @@ function FormAutoComplete({
         value={value}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
-        options={suggestions}
+        options={filteredOptions} // Use the filtered options
         getOptionLabel={(option) => option || ""}
         renderInput={(params) => (
           <TextField
@@ -88,7 +97,7 @@ function FormAutoComplete({
           </MenuItem>
         )}
         noOptionsText={
-          suggestions.length === 0 ? "No data available" : "Loading..."
+          filteredOptions.length === 0 ? "No data available" : "Loading..."
         }
       />
     </Box>

@@ -135,7 +135,7 @@ export function VesselMapping({ formik, disabled }) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", marginTop: "8px" }}>
       <Box sx={{ height: 400 }}>
         <StyledDataGrid
           rows={vesselLineEntity}

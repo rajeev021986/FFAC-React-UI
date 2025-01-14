@@ -10,22 +10,17 @@ const suggestionName = {
     shippingLine: "SHIPPER",
 };
 
-export const GetAutoCompleteData = async (inputValue, inputId) => {
+export const GetAutoCompleteData = async (dataKey, inputId) => {
     inputId = suggestionName[inputId];
-    if (!inputValue) return [];
 
     try {
         const response = await ApiManager.fetchAutoCompleteData(
-            inputValue,
+            "",
             inputId
         );
         const data = await response.body;
 
-        const uniqueSuggestions = data.reduce((acc, item) => {
-            const exists = acc.some((entry) => entry.country === item.country);
-            if (!exists) acc.push(item);
-            return acc;
-        }, []);
+        const uniqueSuggestions = [...new Set(data.map((obj) => obj[dataKey]))];
 
         return uniqueSuggestions;
     } catch (error) {

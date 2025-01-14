@@ -124,13 +124,8 @@ export function VesselVoyageScreen() {
                     alignItems: "center",
                     padding: 2,
                     borderRadius: 1,
-                    backgroundColor: "#f0f0f0",
-                    color: "black",
                     boxShadow: 3,
                     borderRadius: "20px 19px 19px 20px",
-                    "&:hover": {
-                      backgroundColor: "#e0e0e0",
-                    },
                     width: 72,
                     minWidth: 92,
                     "& .MuiSvgIcon-root": {
