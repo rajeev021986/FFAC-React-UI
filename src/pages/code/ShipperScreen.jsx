@@ -131,6 +131,7 @@ export default function ShipperScreen({ page }) {
     
     if (actionName === "Export") {
       try {
+        console.log("Inside export");
         const blob = await ApiManager.fetchShipperDatasExcel(query, payload, "shipper");
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');

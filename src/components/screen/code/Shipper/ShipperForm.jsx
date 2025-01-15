@@ -149,8 +149,7 @@ export default function ShipperForm({
                             <SelectBox
                                 label="Status"
                                 id="status"
-                                options={optionsSettingsData?.body?.status}
-                                value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                                disabled={true}
                                 error={formik.errors.status}
                                 onChange={formik.handleChange}
                             />
@@ -331,6 +330,8 @@ export default function ShipperForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
+                  {initialValues.statusCode == -2 ||
+                    initialValues.statusCode == 1 ? (
                   <Grid
                                   item
                                   xs={12}
@@ -344,11 +345,32 @@ export default function ShipperForm({
                                       label="Status"
                                       id="status"
                                       options={optionsSettingsData?.body?.status}
-                                      value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
+                                      value={formik.values.status}
                                       error={formik.errors.status}
                                       onChange={formik.handleChange}
                                   />
                               </Grid>
+                    ) : (
+                      
+                    <Grid
+                                            item
+                                            xs={12}
+                                            sm={6}
+                                            md={4}
+                                            lg={3}
+                                            xl={2}
+                                            paddingLeft={1}
+                                          >
+                                            <InputBox
+                                              label="Status"
+                                              id="status"
+                                              disabled={true}
+                                              value={formik.values.status}
+                                              error={formik.errors.status}
+                                              onChange={formik.handleChange}
+                                            />
+                                          </Grid>
+                                        )}
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <InputBox
                       label="Address1"

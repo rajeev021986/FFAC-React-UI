@@ -20,7 +20,8 @@ export default function ShipperFormScreen({ page }) {
     address3: "",
     city: "",
     name: "",
-    status: "",
+    status: "ACTIVE",
+    statusCode: "",
     country: "",
     email: "",
     contactName: "",
@@ -58,6 +59,12 @@ export default function ShipperFormScreen({ page }) {
         const res = await ApiManager.getShipperDeatils(
           state?.initialValues?.id
         );
+        let status = "";
+        if (res.body?.status) {
+          status =
+            res.body?.status.charAt(0).toUpperCase() +
+            res.body?.status.slice(1).toLowerCase();
+        }
 
         setshipperDatas(res.body);
         setInitialValues({
@@ -67,7 +74,8 @@ export default function ShipperFormScreen({ page }) {
           address3: res.body?.address3 || "",
           city: res.body?.city || "",
           name: res.body?.name || "",
-          status: res.body?.status || "",
+          status: status || "",
+          statusCode: res?.body?.statusCode || "",
           country: res.body?.country || "",
           email: res.body?.email || "",
           contactName: res.body?.contactName || "",

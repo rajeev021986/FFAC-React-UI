@@ -20,7 +20,8 @@ export default function ConsigneeFormScreen({ page }) {
     address3: "",
     city: "",
     consigneeName: "",
-    status: "",
+    status: "ACTIVE",
+    statusCode: "",
     country: "",
     standardFreeDays: "",
     standardRate: "",
@@ -54,6 +55,12 @@ export default function ConsigneeFormScreen({ page }) {
         const res = await ApiManager.getConsigneeDeatils(
           state?.initialValues?.id
         );
+        let status = "";
+        if (res.body?.status) {
+          status =
+            res.body?.status.charAt(0).toUpperCase() +
+            res.body?.status.slice(1).toLowerCase();
+        }
 
         setconsigneeDatas(res.body);
         setInitialValues({
@@ -63,7 +70,8 @@ export default function ConsigneeFormScreen({ page }) {
           address3: res.body?.address3 || "",
           city: res.body?.city || "",
           consigneeName: res.body?.consigneeName || "",
-          status: res.body?.status || "",
+          status: status || "",
+          statusCode: res?.body?.statusCode || "",
           country: res.body?.country || "",
           standardFreeDays: res.body?.standardFreeDays || "",
           standardRate: res.body?.standardRate || "",

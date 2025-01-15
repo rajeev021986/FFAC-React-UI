@@ -17,7 +17,8 @@ export default function IcdFormScreen({ page }) {
     id: "",
     icd_code: "",
     icd_name: "",
-    status: "",
+    status: "ACTIVE",
+    statusCode: "",
     address1: "",
     address2: "",
     address3: "",
@@ -52,13 +53,20 @@ export default function IcdFormScreen({ page }) {
         const res = await ApiManager.getIcdDeatils(
           state?.initialValues?.id
         );
+        let status = "";
+        if (res.body?.status) {
+          status =
+            res.body?.status.charAt(0).toUpperCase() +
+            res.body?.status.slice(1).toLowerCase();
+        }
 
         seticdDatas(res.body);
         setInitialValues({
           id: res.body?.id || "",
           icd_code: res.body?.icd_code || "",
           icd_name:res.body?.icd_name || "",
-          status: res.body?.status || "",
+          status: status || "",
+          statusCode: res?.body?.statusCode || "",
           address1: res.body?.address1 || "",
           address2: res.body?.address2 || "",
           address3: res.body?.address3 || "",
