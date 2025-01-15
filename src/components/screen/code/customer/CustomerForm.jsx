@@ -1379,6 +1379,7 @@ export default function CustomerForm({
                         tabData={[
                           { label: "Tariffs", value: "1", disable: false },
                           { label: "Email", value: "2", disable: false },
+                          { label: "Bank Details", value: "3", disable: false },
                         ]}
                       >
                         <AddMapping
