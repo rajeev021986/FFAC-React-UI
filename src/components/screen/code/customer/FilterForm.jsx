@@ -23,6 +23,12 @@ export default function FilterForm({ setFilterOpen }) {
       dispatch(updateInput(values));
     },
   });
+
+  const handleApply = (event) => {
+    setFilterOpen(false);
+    formik.handleSubmit(event);
+  };
+
   const handleReset = () => {
     setFilterOpen(false);
     dispatch(
@@ -133,7 +139,7 @@ export default function FilterForm({ setFilterOpen }) {
           <OutlinedButton
             color="primary"
             size="small"
-            onClick={formik.handleSubmit}
+            onClick={(e) => handleApply(e)}
             sx={{ borderRadius: "12px" }}
           >
             Apply

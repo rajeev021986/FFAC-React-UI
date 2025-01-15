@@ -55,7 +55,7 @@ export function VesselForm({ initialValues, type }) {
         let line = values.vesselLineEntities.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
         );
-
+        
         try {
           delete values.id;
           let response = await addVessel({
@@ -77,6 +77,9 @@ export function VesselForm({ initialValues, type }) {
           let line = values.vesselLineEntities.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           );
+          Boolean(values.status == "Active") && (values.statusCode = 1);
+          Boolean(values.status == "Inactive") && (values.statusCode = -2);
+
           let response = await updateVessel({
             ...values,
             vesselLineEntities: line,
