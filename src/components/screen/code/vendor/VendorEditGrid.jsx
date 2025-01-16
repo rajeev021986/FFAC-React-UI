@@ -113,7 +113,7 @@ export default function VendorEditGrid({
           field: "chargeName",
           headerName: "Charge Name",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => {
             return (
               <AutoCompleteInput
@@ -149,7 +149,7 @@ export default function VendorEditGrid({
           field: "type",
           headerName: "Type",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <div
               style={{
@@ -179,7 +179,7 @@ export default function VendorEditGrid({
           field: "finalDestination",
           headerName: "Final Destination",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <InputBoxForGrid
               {...params}
@@ -197,7 +197,7 @@ export default function VendorEditGrid({
           field: "unitType",
           headerName: "Unit Type",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <div
               style={{
@@ -227,7 +227,7 @@ export default function VendorEditGrid({
           field: "currency",
           headerName: "Currency",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => {
             return (
               <AutoCompleteInput
@@ -262,7 +262,7 @@ export default function VendorEditGrid({
           field: "unitRate",
           headerName: "Unit Rate",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => <InputBoxForGrid {...params} />,
           renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
@@ -391,7 +391,7 @@ export default function VendorEditGrid({
                 .replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
                 .toUpperCase() + a.field.slice(1),
-            editable: true,
+
             renderCell: (params) => (
               <InputBoxForGrid
                 {...params}
@@ -496,7 +496,7 @@ export default function VendorEditGrid({
           field: "country",
           headerName: "Country",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => {
             return (
               <AutoCompleteInput
@@ -532,7 +532,7 @@ export default function VendorEditGrid({
           field: "noOfFreeDays",
           headerName: "No Of Free Days",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <InputBoxForGrid {...params} placeholder="Number of free days" />
           ),
@@ -608,7 +608,7 @@ export default function VendorEditGrid({
           field: "designation",
           headerName: "Designation",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <div
               style={{
@@ -639,7 +639,7 @@ export default function VendorEditGrid({
           field: "emailId",
           headerName: "Email",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <InputBoxForGrid
               {...params}
@@ -723,7 +723,7 @@ export default function VendorEditGrid({
           field: "bankName",
           headerName: "Bank Name",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <InputBoxForGrid {...params} placeholder="Enter bank name" />
           ),
@@ -735,7 +735,7 @@ export default function VendorEditGrid({
           field: "bankAddress",
           headerName: "Bank Address",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <InputBoxForGrid {...params} placeholder="Enter bank address" />
           ),
@@ -747,7 +747,7 @@ export default function VendorEditGrid({
           field: "accountNo",
           headerName: "AccountNo",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <InputBoxForGrid {...params} placeholder="Enter account number" />
           ),
@@ -759,7 +759,7 @@ export default function VendorEditGrid({
           field: "currency",
           headerName: "Currency",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <InputBoxForGrid {...params} placeholder="Enter currency" />
           ),
@@ -771,7 +771,7 @@ export default function VendorEditGrid({
           field: "swiftCode",
           headerName: "Swift Code",
           flex: 1,
-          editable: true,
+
           renderCell: (params) => (
             <InputBoxForGrid {...params} placeholder="Enter swift code" />
           ),

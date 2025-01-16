@@ -62,7 +62,6 @@ export default function CustomerBankDetails({
       flex: 1,
       headerAlign: "center",
       align: "center",
-      editable: true,
       renderCell: (params) => (
         <InputBoxForGrid
           {...params}
@@ -84,7 +83,6 @@ export default function CustomerBankDetails({
       flex: 1,
       headerAlign: "center",
       align: "center",
-      editable: true,
       renderCell: (params) => (
         <InputBoxForGrid {...params} placeholder="Enter bank address" />
       ),
@@ -96,7 +94,6 @@ export default function CustomerBankDetails({
       field: "accountNo",
       headerName: "Account No",
       flex: 1,
-      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -113,7 +110,6 @@ export default function CustomerBankDetails({
       flex: 1,
       headerAlign: "center",
       align: "center",
-      editable: true,
       renderCell: (params) => (
         <InputBoxForGrid {...params} placeholder="Enter currency" />
       ),
@@ -126,7 +122,6 @@ export default function CustomerBankDetails({
       field: "swiftCode",
       headerName: "Swift Code",
       flex: 1,
-      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
