@@ -14,7 +14,7 @@ export function VesselFilters({ setFilterOpen }) {
     initialValues: {
       lname: inputs.lname || "",
       vname: inputs.vname || "",
-      status: inputs.status || "",
+      statusCode: inputs.statusCode || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -26,13 +26,13 @@ export function VesselFilters({ setFilterOpen }) {
       updateInput({
         vname: "",
         lname: "",
-        status: "",
+        statusCode: "",
       })
     );
     formik.setValues({
       vname: "",
       lname: "",
-      status: "",
+      statusCode: "",
     });
   };
 
@@ -74,7 +74,16 @@ export function VesselFilters({ setFilterOpen }) {
             color="primary"
             size="small"
             onClick={handleReset}
-            sx={{ borderRadius: "12px" }}
+            sx={{
+              borderRadius: "12px",
+              padding: "6px 16px",
+              textTransform: "capitalize",
+              backgroundColor: "#f5f5f5",
+              color: "#333",
+              "&:hover": {
+                backgroundColor: "#e0e0e0",
+              },
+            }}
           >
             reset
           </Button>
@@ -84,7 +93,7 @@ export function VesselFilters({ setFilterOpen }) {
             onClick={formik.handleSubmit}
             sx={{ borderRadius: "12px" }}
           >
-            apply
+            Apply
           </OutlinedButton>
         </Stack>
       </Stack>

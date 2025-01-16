@@ -50,6 +50,7 @@ export default function CustomerFormScreen({ page }) {
     agreementExpiryDate: "",
     customerEntityTariffs: [],
     customerEntityEmailsIds: [],
+    bankDetails: [],
   });
 
   // Only fetch customer details after settings are loaded
@@ -94,6 +95,7 @@ export default function CustomerFormScreen({ page }) {
           agreementExpiryDate: res.body?.agreementExpiryDate || "",
           customerEntityTariffs: res.body?.customerEntityTariffs || [],
           customerEntityEmailsIds: res.body?.customerEntityEmailsIds || [],
+          bankDetails: res.body?.bankDetails || [],
         });
         setLoading(false);
       } catch (error) {

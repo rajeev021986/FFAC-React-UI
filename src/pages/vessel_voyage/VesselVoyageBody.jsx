@@ -64,6 +64,19 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
     query.sortBy = "vesselVoyage";
   }
 
+  const payload = Object.entries(voyageSelector?.formData)
+    .filter(([key, value]) => value)
+    .map(([key, value]) => {
+      let fieldname = key;
+      Boolean(key == "vessel") && (fieldname = "vessel");
+      return {
+        fieldName: fieldname,
+        operator: "=",
+        value: value,
+        logicalOperator: "and",
+      };
+    });
+
   const {
     data: voyageData,
     isLoading,
@@ -72,6 +85,7 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
     refetch,
   } = useFetchVoyageQuery({
     params: query,
+    payload: payload,
   });
 
   return (

@@ -30,7 +30,7 @@ export function VesselVoyageForm({ initialValues, type }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const [dropdownData, setDropdownData] = useState({});
   const [addVoyage, { isLoading }] = useAddVoyageMutation();
   const [updateVoyage] = useUpdateVoyageMutation();
 
@@ -88,9 +88,20 @@ export function VesselVoyageForm({ initialValues, type }) {
     },
   });
 
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
   const { data: voyageSettingsData } = useGetOptionsSettingsQuery(
     "vessel_voyage_settings"
   );
+
+  useEffect(() => {
+    if (optionsSettingsData?.body || voyageSettingsData?.body) {
+      setDropdownData({
+        ...optionsSettingsData?.body,
+        ...voyageSettingsData?.body,
+      });
+    }
+  }, [optionsSettingsData, voyageSettingsData]);
 
   const gateOptions = [
     { label: "Close", value: "close" },
@@ -534,24 +545,47 @@ export function VesselVoyageForm({ initialValues, type }) {
                         onChange={formik.handleChange}
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      margin={0}
-                    >
-                      <InputBox
-                        label="Status"
-                        id="status"
-                        disabled={true}
-                        error={formik.errors.status}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
+                    {initialValues.statusCode == -2 ||
+                    initialValues.statusCode == 1 ? (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                        sx={{ marginTop: 2 }}
+                        paddingLeft={1}
+                      >
+                        <SelectBox
+                          label="Status"
+                          id="status"
+                          options={optionsSettingsData?.body.status}
+                          value={formik.values.status}
+                          error={formik.errors.status}
+                          onChange={formik.handleChange}
+                        />
+                      </Grid>
+                    ) : (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                        paddingLeft={1}
+                      >
+                        <InputBox
+                          label="Status"
+                          id="status"
+                          disabled={true}
+                          value={formik.values.status}
+                          error={formik.errors.status}
+                          onChange={formik.handleChange}
+                        />
+                      </Grid>
+                    )}
                   </Grid>
                   <Grid container>
                     <Grid

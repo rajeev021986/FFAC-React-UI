@@ -6,8 +6,8 @@ const initialState = {
     pagination: { page: 0, pageSize: 10 },
     sortModel: [],
     formData: {
-        vvoyage: '',
-        status: ''
+        vessel: '',
+        statusCode: ''
     },
     sortBy: ''
 };

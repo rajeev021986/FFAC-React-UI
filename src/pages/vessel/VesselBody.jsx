@@ -10,12 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getVesselListGridActions } from "../../components/screen/vessel/action";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import {
+  useDeleteVesselMutation,
   useFetchAuditVesselQuery,
   useFetchVesselQuery,
   useLazyFetchAuditVesselQuery,
 } from "../../store/api/vesselDataApi";
 import { Box, Drawer, Typography } from "@mui/material";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import DeleteDialog from "../../components/common/DeleteDialog";
+import toast from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export function VesselBody({ selectBox, setSelectBox }) {
   const nav = useNavigate();
@@ -99,6 +103,39 @@ export function VesselBody({ selectBox, setSelectBox }) {
     payload: payload,
   });
 
+  const [deleteVessel] = useDeleteVesselMutation();
+
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteVessel(modal.data.id)
+        .unwrap()
+        .then(() => refetch());
+      toast.custom(
+        <CustomToast message="Vessel deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
+      handleClose();
+    } catch (error) {
+      toast.custom(
+        <CustomToast message="Failed to delete vessel." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
+      handleClose();
+    }
+  };
+
   return (
     <>
       {vesselSelector.view === "grid" ? (
@@ -158,6 +195,13 @@ export function VesselBody({ selectBox, setSelectBox }) {
           </Box>
         </Drawer>
       )}
+      <DeleteDialog
+        source="vessel"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
     </>
   );
 }

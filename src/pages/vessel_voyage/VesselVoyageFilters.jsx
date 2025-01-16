@@ -4,6 +4,7 @@ import { updateInput } from "../../store/freatures/VesselVoyageSlice";
 import { Button, Stack } from "@mui/material";
 import InputBox from "../../components/common/InputBox";
 import { OutlinedButton } from "../../components/common/Button";
+import SelectBox from "../../components/common/SelectBox";
 
 export function VesselVoyageFilters({ setFilterOpen }) {
   const dispatch = useDispatch();
@@ -11,8 +12,8 @@ export function VesselVoyageFilters({ setFilterOpen }) {
 
   const formik = useFormik({
     initialValues: {
-      lname: inputs.vvoyage || "",
-      status: inputs.status || "",
+      vessel: inputs.vessel || "",
+      statusCode: inputs.statusCode || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -23,27 +24,39 @@ export function VesselVoyageFilters({ setFilterOpen }) {
     formik.resetForm();
     dispatch(
       updateInput({
-        vvoyage: "",
-        status: "",
+        vessel: "",
+        statusCode: "",
       })
     );
+    formik.setValues({
+      vessel: "",
+      statusCode: "",
+    });
   };
+
+  const statusOptions = [
+    { value: 1, label: "Active" },
+    { value: -2, label: "InActive" },
+    { value: 0, label: "Pending" },
+  ];
 
   return (
     <div>
       <Stack spacing={3} direction="column" justifyContent="space-between">
         <Stack direction="row" spacing={2}>
           <InputBox
-            label="Vessel Voyage"
-            id="vvoyage"
-            value={formik.values.vvoyage}
+            label="Vessel"
+            id="vessel"
+            value={formik.values.vessel}
             onChange={formik.handleChange}
           />
-          <InputBox
+          <SelectBox
             label="Status"
-            id="status"
-            value={formik.values.status}
+            id="statusCode"
+            options={statusOptions}
+            value={formik.values.statusCode}
             onChange={formik.handleChange}
+            sx={{ marginLeft: "5px !important" }}
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
@@ -51,7 +64,16 @@ export function VesselVoyageFilters({ setFilterOpen }) {
             color="primary"
             size="small"
             onClick={handleReset}
-            sx={{ borderRadius: "12px" }}
+            sx={{
+              borderRadius: "12px",
+              padding: "6px 16px",
+              textTransform: "capitalize",
+              backgroundColor: "#f5f5f5",
+              color: "#333",
+              "&:hover": {
+                backgroundColor: "#e0e0e0",
+              },
+            }}
           >
             reset
           </Button>
@@ -61,7 +83,7 @@ export function VesselVoyageFilters({ setFilterOpen }) {
             onClick={formik.handleSubmit}
             sx={{ borderRadius: "12px" }}
           >
-            apply
+            Apply
           </OutlinedButton>
         </Stack>
       </Stack>

@@ -88,7 +88,7 @@ export default function VendorEditGrid({
           finalDestination: "",
           unitType: "",
           currency: "",
-          unitRate: 0,
+          unitRate: "0",
           new: true,
         };
         formik.setFieldValue("vendorEntityTariffs", [
@@ -112,7 +112,8 @@ export default function VendorEditGrid({
         {
           field: "chargeName",
           headerName: "Charge Name",
-          flex: 2,
+          flex: 1,
+          editable: true,
           renderCell: (params) => {
             return (
               <AutoCompleteInput
@@ -148,6 +149,7 @@ export default function VendorEditGrid({
           field: "type",
           headerName: "Type",
           flex: 1,
+          editable: true,
           renderCell: (params) => (
             <div
               style={{
@@ -160,6 +162,7 @@ export default function VendorEditGrid({
             >
               {" "}
               <SelectBox
+                placeholder={true}
                 size="small"
                 sx={{
                   marginTop: "0px",
@@ -177,13 +180,24 @@ export default function VendorEditGrid({
           headerName: "Final Destination",
           flex: 1,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+          renderCell: (params) => (
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter final destination"
+            />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter final destination"
+            />
+          ),
         },
         {
           field: "unitType",
           headerName: "Unit Type",
           flex: 1,
+          editable: true,
           renderCell: (params) => (
             <div
               style={{
@@ -196,6 +210,7 @@ export default function VendorEditGrid({
             >
               {" "}
               <SelectBox
+                placeholder={true}
                 size="small"
                 sx={{
                   marginTop: "0px",
@@ -212,6 +227,7 @@ export default function VendorEditGrid({
           field: "currency",
           headerName: "Currency",
           flex: 1,
+          editable: true,
           renderCell: (params) => {
             return (
               <AutoCompleteInput
@@ -253,6 +269,7 @@ export default function VendorEditGrid({
         {
           field: "actions",
           sortable: false,
+          flex: 0,
           renderHeader: () => (
             <IconButton color="white" onClick={TabsHosts[0].addNewRow}>
               <AddCircleIcon />
@@ -396,6 +413,7 @@ export default function VendorEditGrid({
           field: "actions",
           headerName: "Actions",
           sortable: false,
+          flex: 0,
           renderHeader: () => (
             <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[1].addNewRow} />
@@ -477,7 +495,8 @@ export default function VendorEditGrid({
         {
           field: "country",
           headerName: "Country",
-          flex: 2,
+          flex: 1,
+          editable: true,
           renderCell: (params) => {
             return (
               <AutoCompleteInput
@@ -514,13 +533,16 @@ export default function VendorEditGrid({
           headerName: "No Of Free Days",
           flex: 1,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Number of free days" />
+          ),
           renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "actions",
           headerName: "Actions",
           sortable: false,
+          flex: 0,
           renderHeader: () => (
             <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[2].addNewRow} />
@@ -586,6 +608,7 @@ export default function VendorEditGrid({
           field: "designation",
           headerName: "Designation",
           flex: 1,
+          editable: true,
           renderCell: (params) => (
             <div
               style={{
@@ -598,6 +621,7 @@ export default function VendorEditGrid({
             >
               {" "}
               <SelectBox
+                placeholder={true}
                 size="small"
                 sx={{
                   marginTop: "0px",
@@ -616,13 +640,24 @@ export default function VendorEditGrid({
           headerName: "Email",
           flex: 1,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+          renderCell: (params) => (
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter emails separated by commas"
+            />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter emails separated by commas"
+            />
+          ),
         },
         {
           field: "actions",
           headerName: "Actions",
           sortable: false,
+          flex: 0,
           renderHeader: () => (
             <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[3].addNewRow} />
@@ -689,45 +724,66 @@ export default function VendorEditGrid({
           headerName: "Bank Name",
           flex: 1,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter bank name" />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter bank name" />
+          ),
         },
         {
           field: "bankAddress",
           headerName: "Bank Address",
           flex: 1,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter bank address" />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter bank address" />
+          ),
         },
         {
           field: "accountNo",
           headerName: "AccountNo",
           flex: 1,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter account number" />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter account number" />
+          ),
         },
         {
           field: "currency",
           headerName: "Currency",
           flex: 1,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter currency" />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter currency" />
+          ),
         },
         {
           field: "swiftCode",
           headerName: "Swift Code",
           flex: 1,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter swift code" />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter swift code" />
+          ),
         },
         {
           field: "actions",
           headerName: "Actions",
           sortable: false,
+          flex: 0,
           renderHeader: () => (
             <IconButton color="white">
               <AddCircleIcon onClick={TabsHosts[4].addNewRow} />

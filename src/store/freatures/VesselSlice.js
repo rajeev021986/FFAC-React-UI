@@ -8,7 +8,7 @@ const initialState = {
     formData: {
         lname: '',
         vname: '',
-        status: ''
+        statusCode: ''
     },
     sortBy: ''
 };

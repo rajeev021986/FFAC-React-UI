@@ -8,6 +8,7 @@ import ApiManager from "../../../../services/ApiManager";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import SelectBox from "../../../common/SelectBox";
 import InputBox from "../../../common/InputBox";
+import InputBoxForGrid from "../../../common/InputBoxForGrid";
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     {
@@ -92,6 +93,9 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "chargeName",
       headerName: "Charge Name",
       flex: 1,
+      editable: true,
+      headerAlign: "center",
+      align: "center",
       renderCell: (params) => {
         return (
           <AutoCompleteInput
@@ -121,13 +125,12 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
           />
         );
       },
-      headerAlign: "center",
-      align: "center",
     },
     {
       field: "unitType",
       headerName: "Unit Type",
       flex: 1,
+      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -168,6 +171,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "currency",
       headerName: "Currency",
       flex: 1,
+      editable: true,
       renderCell: (params) => {
         return (
           <AutoCompleteInput
@@ -201,6 +205,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "shipmentType",
       headerName: "Shipment Type",
       flex: 1,
+      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -240,6 +245,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "unitRate",
       headerName: "Unit Rate",
       flex: 1,
+      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -247,28 +253,15 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
           title={params.value ? `${params.value}` : "This field is empty"}
           arrow
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            <InputBox
-              size="small"
-              value={params.value}
-              type="number"
-              onChange={(e) =>
-                updateRowValue(params, e, "customerEntityTariffs")
-              }
-              sx={{
-                marginTop: "0px",
-                marginBottom: "5px",
-              }}
-            />
-          </div>
+          <InputBoxForGrid {...params} fieldType="number" />
+        </Tooltip>
+      ),
+      renderEditCell: (params) => (
+        <Tooltip
+          title={params.value ? `${params.value}` : "This field is empty"}
+          arrow
+        >
+          <InputBoxForGrid {...params} fieldType="number" />
         </Tooltip>
       ),
     },
@@ -276,6 +269,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "actions",
       headerName: "Actions",
       sortable: false,
+      flex: 0,
       renderHeader: () => (
         <IconButton color="white">
           <AddCircleIcon onClick={addRow} />

@@ -67,7 +67,7 @@ export const CustomerValidationSchema = () =>
     customerEntityTariffs: Yup.array().of(
       Yup.object().shape({
         unitRate: Yup.number()
-          .positive("Unit Rate must be a positive number")
+          .min(0, "Unit Rate must be a positive number")
       })
     ),
 

@@ -17,6 +17,7 @@ export function VesselVoyageFormScreen() {
   const [initialValues, setInitialValues] = React.useState({
     id: "",
     status: "",
+    statusCode: "",
     vessel: "",
     voyageInBound: "",
     voyageOutBound: "",
@@ -48,6 +49,7 @@ export function VesselVoyageFormScreen() {
         setInitialValues({
           id: response?.body?.id || "",
           status: status || "",
+          statusCode: response?.body?.statusCode || "",
           vessel: response?.body?.vessel || "",
           voyageInBound: response?.body?.voyageInBound || "",
           voyageOutBound: response?.body?.voyageOutBound || "",

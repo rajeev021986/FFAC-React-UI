@@ -48,6 +48,7 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import getFirstError from "../../../common/FieldToastError";
+import CustomerBankDetails from "./BankDetails";
 import EditIcon from "@mui/icons-material/Edit";
 import DescriptionIcon from "@mui/icons-material/Description";
 import HistoryIcon from "@mui/icons-material/History";
@@ -812,6 +813,7 @@ export default function CustomerForm({
                       tabData={[
                         { label: "Tariffs", value: "1", disable: false },
                         { label: "Email", value: "2", disable: false },
+                        { label: "Bank Details", value: "3", disable: false },
                       ]}
                     >
                       <AddMapping
@@ -820,6 +822,11 @@ export default function CustomerForm({
                         dropdownData={dropdownData}
                       />
                       <FileScreen
+                        formik={formik}
+                        disabled={disabled}
+                        dropdownData={dropdownData}
+                      />
+                      <CustomerBankDetails
                         formik={formik}
                         disabled={disabled}
                         dropdownData={dropdownData}
@@ -1415,6 +1422,11 @@ export default function CustomerForm({
                           dropdownData={dropdownData}
                         />
                         <FileScreen
+                          formik={formik}
+                          disabled={disabled}
+                          dropdownData={dropdownData}
+                        />
+                        <CustomerBankDetails
                           formik={formik}
                           disabled={disabled}
                           dropdownData={dropdownData}

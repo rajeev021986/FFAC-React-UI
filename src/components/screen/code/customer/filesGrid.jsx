@@ -7,6 +7,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import SelectBox from "../../../common/SelectBox";
+import InputBoxForGrid from "../../../common/InputBoxForGrid";
 
 export default function FilesGrid({ formik, disabled, dropdownData }) {
   const designation = dropdownData?.designation;
@@ -108,7 +109,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
       field: "emailId",
       headerName: "Email",
       flex: 1,
-      // editable: true,
+      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -116,42 +117,21 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
           title={params.value ? `${params.value}` : "This field is empty"}
           arrow
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            <TextField
-              placeholder="Enter emails separated by commas"
-              size="small"
-              value={params.value}
-              onChange={(e) =>
-                updateRowValue(params, e, "customerEntityEmailsIds")
-              }
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    border: "1px solid #ccc",
-                    borderRadius: "10px",
-                  },
-                },
-                marginTop: "5px",
-                marginBottom: "10px",
-                fontSize: "14px",
-                width: "90%",
-                input: { textAlign: "center" },
-              }}
-              InputProps={{
-                style: {
-                  fontSize: "14px",
-                },
-              }}
-            />
-          </div>
+          <InputBoxForGrid
+            {...params}
+            placeholder="Enter emails separated by commas"
+          />
+        </Tooltip>
+      ),
+      renderEditCell: (params) => (
+        <Tooltip
+          title={params.value ? `${params.value}` : "This field is empty"}
+          arrow
+        >
+          <InputBoxForGrid
+            {...params}
+            placeholder="Enter emails separated by commas"
+          />
         </Tooltip>
       ),
     },
@@ -159,6 +139,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
       field: "actions",
       headerName: "Actions",
       sortable: false,
+      flex: 0,
       renderHeader: () => (
         <IconButton color="white">
           <AddCircleIcon onClick={addNewRow} />

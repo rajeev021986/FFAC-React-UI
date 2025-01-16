@@ -43,10 +43,20 @@ export const vesselDataApi = createApi({
             },
             invalidatesTags: ["Vessel"],
         }),
+        deleteVessel: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `/master-service/v1/vessel/${id}`,
+                    method: "DELETE",
+                    headers: getAppHeaders()
+                };
+            },
+            invalidatesTags: ["Code"],
+        }),
 
     })
 })
 
 export const { useAddVesselMutation
-    , useFetchVesselQuery, useLazyFetchAuditVesselQuery, useUpdateVesselMutation
+    , useFetchVesselQuery, useLazyFetchAuditVesselQuery, useUpdateVesselMutation, useDeleteVesselMutation
 } = vesselDataApi;

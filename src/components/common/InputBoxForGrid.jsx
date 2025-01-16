@@ -1,8 +1,21 @@
 import React, { useState } from "react";
-import { MenuItem, Select, TextField } from "@mui/material";
+import { MenuItem, Select, TextField, Tooltip } from "@mui/material";
 
 export default function InputBoxForGrid(props) {
-  const { id, value, field, api, type, options, onChange } = props;
+  const {
+    id,
+    value,
+    field,
+    api,
+    type,
+    options,
+    onChange,
+    placeholder,
+    fieldType = "text",
+    inputRef,
+  } = props;
+
+  const tooltipMessage = value ? value : "This field is empty";
   const [inputValue, setInputValue] = useState(value || "");
 
   const handleChange = (event) => {
@@ -54,17 +67,33 @@ export default function InputBoxForGrid(props) {
             );
           default:
             return (
-              <TextField
-                size="small"
-                type="text"
-                value={inputValue}
-                onChange={handleChange}
-                sx={{
-                  marginBottom: "0px",
-                  marginTop: "0px",
-                  width: "90%",
-                }}
-              />
+              <Tooltip title={tooltipMessage} arrow>
+                <TextField
+                  size="small"
+                  type={fieldType}
+                  fullWidth={true}
+                  value={inputValue}
+                  onChange={handleChange}
+                  inputRef={inputRef}
+                  placeholder={placeholder}
+                  InputProps={{
+                    disableUnderline: true,
+                    style: {
+                      border: "none",
+                      fontSize: "14px",
+                      borderRadius: "10px",
+                      textAlign: "center",
+                      marginTop: "5px",
+                      marginBottom: "8px",
+                    },
+                  }}
+                  inputProps={{
+                    style: {
+                      textAlign: "center", // Center the placeholder text as well
+                    },
+                  }}
+                />
+              </Tooltip>
             );
         }
       })()}
