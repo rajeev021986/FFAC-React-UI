@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import toast from "react-hot-toast";
 import Tab from "@mui/material/Tab";
@@ -23,6 +24,7 @@ import { StyledDataGrid } from "../../../common/Grid/styles";
 import SelectBox from "../../../common/SelectBox";
 import InputBox from "../../../common/InputBox";
 import InputBoxForGrid from "../../../common/InputBoxForGrid";
+import EditRowDialog from "../../../common/EditRowDialog";
 export default function VendorEditGrid({
   formik,
   disabled = false,
@@ -30,6 +32,8 @@ export default function VendorEditGrid({
   dropdownData,
 }) {
   const designation = dropdownData?.designation;
+  const [editDialogData, setEditDialogData] = useState();
+  const [EditRowDialogopen, setEditRowDialogOpen] = useState(false);
   const newRowRef = useRef(null);
   const setFocus = () => {
     setTimeout(() => {
@@ -37,8 +41,7 @@ export default function VendorEditGrid({
         newRowRef.current.focus();
       }
     }, 1000);
-    };
-  console.log(formik.values,"asdfg")
+  };
   const OnChange = (params, e, name) => {
     const rowIndex = formik.values[name].findIndex(
       (entity) => entity.id === params.id
@@ -51,6 +54,10 @@ export default function VendorEditGrid({
           : entity
       ),
     });
+  };
+  const handleClose = () => {
+    setEditRowDialogOpen(false);
+    setEditDialogData({});
   };
 
   const TabsHosts = [
@@ -321,48 +328,52 @@ export default function VendorEditGrid({
       },
       columns: [
         ...[
-          { FieldLabel: "freeTime", type: "input" },
+          { field: "freeTime", type: "input" },
           {
-            FieldLabel: "freeTimeType",
+            field: "freeTimeType",
             type: "dropdown",
             options: dropdownData.demurageOptions,
           },
-          { FieldLabel: "t1Start", type: "input" },
-          { FieldLabel: "t1End", type: "input" },
+          { field: "t1Start", type: "input" },
+          { field: "t1End", type: "input" },
           {
-            FieldLabel: "t1Type",
+            field: "t1Type",
             type: "dropdown",
             options: dropdownData.demurageOptions,
           },
-          { FieldLabel: "t1Rate", type: "input" },
-          { FieldLabel: "t2Start", type: "input" },
-          { FieldLabel: "t2End", type: "input" },
+          { field: "t1Rate", type: "input" },
+          { field: "t2Start", type: "input" },
+          { field: "t2End", type: "input" },
           {
-            FieldLabel: "t2Type",
+            field: "t2Type",
             type: "dropdown",
             options: dropdownData.demurageOptions,
           },
-          { FieldLabel: "t2Rate", type: "input" },
-          { FieldLabel: "t3Start", type: "input" },
-          { FieldLabel: "t3End", type: "input" },
+          { field: "t2Rate", type: "input" },
+          { field: "t3Start", type: "input" },
+          { field: "t3End", type: "input" },
           {
-            FieldLabel: "t3Type",
+            field: "t3Type",
             type: "dropdown",
             options: dropdownData.demurageOptions,
           },
-          { FieldLabel: "t3Rate", type: "input" },
+          { field: "t3Rate", type: "input" },
         ].map((a) => {
           return {
-            field: a.FieldLabel,
+            field: a.field,
             headerName:
-              a.FieldLabel.replace(/([a-z])([A-Z])/g, "$1 $2")
+              a.field
+                .replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
-                .toUpperCase() + a.FieldLabel.slice(1),
+                .toUpperCase() + a.field.slice(1),
             width: 130,
+            type: a.type,
+            options: a.options,
             headerName:
-              a.FieldLabel.replace(/([a-z])([A-Z])/g, "$1 $2")
+              a.field
+                .replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
-                .toUpperCase() + a.FieldLabel.slice(1),
+                .toUpperCase() + a.field.slice(1),
             editable: true,
             renderCell: (params) => (
               <InputBoxForGrid
@@ -391,15 +402,32 @@ export default function VendorEditGrid({
             </IconButton>
           ),
           renderCell: (params) => (
-            <IconButton
-              color="error"
-              onClick={() => TabsHosts[1].deleteRow(params.row.id)}
-            >
-              <DeleteIcon />
-            </IconButton>
+            <>
+              <IconButton
+                color="primary"
+                onClick={() => TabsHosts[1].editRow(params.row)}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                color="error"
+                onClick={() => TabsHosts[1].deleteRow(params.row.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </>
           ),
         },
       ],
+      editRow: (data) => {
+        setEditDialogData({
+          formik: formik,
+          data: data,
+          tabName: "vendorEntityDemurageTariffs",
+          columns: TabsHosts[1].columns,
+        });
+        setEditRowDialogOpen(true);
+      },
     },
     {
       tabLable: "FreeDays",
@@ -768,6 +796,12 @@ export default function VendorEditGrid({
           ))}
         </TabContext>
       </Box>
+      <EditRowDialog
+        state={editDialogData}
+        EditRowDialogopen={EditRowDialogopen}
+        setEditRowDialogOpen={setEditRowDialogOpen}
+        handleClose={handleClose}
+      />
     </Box>
   );
 }

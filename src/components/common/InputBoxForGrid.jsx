@@ -21,12 +21,16 @@ export default function InputBoxForGrid(props) {
         height: "100%",
       }}
       onMouseEnter={() => {
-        api.startCellEditMode({ id, field });
-        console.log("Hovered over cell", id, props?.cellMode);
+        if (props?.cellMode === "view") {
+          api.startCellEditMode({ id, field });
+          console.log("Hovered over cell", id, props?.cellMode);
+        }
       }}
       onMouseLeave={() => {
-        console.log("Hover left cell", id, props?.cellMode);
-        api.stopCellEditMode({ id, field });
+        if (props?.cellMode === "edit") {
+          api.stopCellEditMode({ id, field });
+          console.log("Hover left cell", id, props?.cellMode);
+        }
       }}
     >
       {(() => {
