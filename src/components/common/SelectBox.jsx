@@ -45,9 +45,9 @@ export default function SelectBox({
         }}
         {...props}
         inputRef={inputRef}
-        MenuProps={{
-          disablePortal: true,
-        }}
+        // MenuProps={{
+        //   disablePortal: true,
+        // }}
       >
         <MenuItem value="" sx={{ fontSize: "14px" }}>
           <em>None</em>

@@ -91,6 +91,9 @@ export default function VendorFilterForm({ setFilterOpen }) {
               value={formik.values.isApproved}
               onChange={formik.handleChange}
               sx={{ marginLeft: "0px !important" }}
+              MenuProps={{
+                disablePortal: true,
+              }}
             />
           </div>
           <div style={{ width: "48%", marginLeft: "0px" }}>
@@ -101,6 +104,9 @@ export default function VendorFilterForm({ setFilterOpen }) {
               value={formik.values.isDoc}
               onChange={formik.handleChange}
               sx={{ marginLeft: "0px !important" }}
+              MenuProps={{
+                disablePortal: true,
+              }}
             />
           </div>
         </Stack>

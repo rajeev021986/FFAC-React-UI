@@ -31,6 +31,12 @@ const Chips = {
   tinNo: {
     chipLabel: "TIN NO",
   },
+  bondType: {
+    chipLabel: "Bond Type",
+  },
+  bondNumber: {
+    chipLabel: "Bond Number",
+  },
   vatNo: {
     chipLabel: "VAT NO",
   },

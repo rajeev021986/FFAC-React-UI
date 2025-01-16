@@ -60,7 +60,7 @@ export default function BondScreen() {
     dispatch(setBondPagination({ page, pageSize }));
   };
   const payload = Object.entries(bondSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       return {
         fieldName: key,
@@ -88,7 +88,7 @@ export default function BondScreen() {
     isLoading,
     error,
     isFetching,
-    refetch
+    refetch,
   } = useFetchbondQuery({
     params: query,
     payload,

@@ -5,28 +5,28 @@ export const BOND_COLUMNS = [
     {
         field: 'bondNumber',
         headerName: 'Bond Number',
-        width: 130,
+        flex:1,
         headerAlign: 'center',
         align: 'center'
     },
     {
         field: 'bondType',
         headerName: 'Bond Type',
-        width: 130,
+        flex:1,
         headerAlign: 'center',
         align: 'center'
     },
     {
         field: 'status',
         headerName: 'Status',
-        width: 130,
+        flex:1,
         headerAlign: 'center',
         align: 'center'
     },
     {
         field: 'lastmodifieddate',
         headerName: 'Modified Date',
-        width: 130,
+        flex:1,
         headerAlign: 'center',
         align: 'center',
         renderCell: (params) => {
@@ -36,7 +36,7 @@ export const BOND_COLUMNS = [
     {
         field: 'action',
         headerName: 'Action',
-        width: 130,
+        flex:1,
         headerAlign: 'center',
         align: 'center',
     }

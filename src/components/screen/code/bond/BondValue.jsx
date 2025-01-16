@@ -78,9 +78,6 @@ export default function BondValue({ formik, optionsSettingsData, type }) {
               onClick={formik.handleSubmit}
               sx={{ fontWeight: "500" }}
             >
-              {/* {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                            )}{" "} */}
               {type == "Edit" ? "Update" : "Add"}
             </ThemeButton>
           </Stack>
