@@ -62,6 +62,9 @@ const Routes = {
   exchangeRate: { label: "Exchange Rate", disabled: false },
   newExchangeRate: { label: "New Exchange Rate", disabled: false },
   editExchangeRate: { label: "Edit Exchange Rate", disabled: false },
+  bond: { label: "Bond", disabled: false },
+  bondAdd: { label: "Add Bond", disabled: false },
+  editBond: { label: "Edit Bond", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {

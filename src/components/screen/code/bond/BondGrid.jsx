@@ -1,18 +1,18 @@
 import React from "react";
-import { Box, Button, colors, Typography } from "@mui/material";
-import { DataGrid, GridEditDateCell } from "@mui/x-data-grid";
+import { Box, Button, Typography, TextField, IconButton } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import toast from "react-hot-toast";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
+import dayjs from "dayjs";
 import InputBoxForGrid from "../../../common/InputBoxForGrid";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { GridDeleteIcon } from "@mui/x-data-grid";
+import { StyledDataGrid } from "../../../common/Grid/styles";
 
 export default function BondEditGrid({ formik, disabled }) {
   const TabsHosts = [
     {
-      tabLable: "Bond Purchase Details",
+      tabLabel: "Bond Purchase Details",
       value: formik.values.bondPurchaseDetailsEntities || [],
       addNewRow: () => {
         const hasEmptyFields = TabsHosts[0].value.some((row) =>
@@ -20,6 +20,7 @@ export default function BondEditGrid({ formik, disabled }) {
             (value) => value === "" || value === null || value === undefined
           )
         );
+
         if (hasEmptyFields) {
           toast.error("Please fill in all fields before adding a new row.", {
             position: "top-right",
@@ -31,6 +32,7 @@ export default function BondEditGrid({ formik, disabled }) {
           });
           return;
         }
+
         const newRow = {
           id: Date.now(),
           policyNo: "",
@@ -39,6 +41,7 @@ export default function BondEditGrid({ formik, disabled }) {
           validUpToDate: "",
           new: true,
         };
+
         formik.setFieldValue("bondPurchaseDetailsEntities", [
           ...TabsHosts[0].value,
           newRow,
@@ -58,102 +61,233 @@ export default function BondEditGrid({ formik, disabled }) {
       columns: [
         {
           field: "policyNo",
-          headerName: "policyNo",
+          headerName: "Policy No",
           flex: 1,
           editable: true,
+          headerAlign: "center",
           renderCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Policy NO"
-              fieldType="number"
-            />
+            <InputBoxForGrid {...params} placeholder="Enter Policy No" />
           ),
           renderEditCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Policy NO"
-              fieldType="number"
-            />
+            <InputBoxForGrid {...params} placeholder="Enter Policy No" />
           ),
         },
         {
           field: "date",
-          headerName: "date",
+          headerName: "Date",
           flex: 1,
           editable: true,
+          headerAlign: "center",
           renderCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Date"
-              fieldType="date"
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <TextField
+                value={params.value}
+                size="small"
+                fullWidth={true}
+                onMouseEnter={() => {
+                  if (params.cellMode === "view") {
+                    params.api.startCellEditMode({
+                      id: params.id,
+                      field: params.field,
+                    });
+                  }
+                }}
+                onChange={(event) => {
+                  params.api.setEditCellValue({
+                    id: params.id,
+                    field: params.field,
+                    value: event.target.value,
+                  });
+                }}
+                placeholder="Select Date"
+                inputProps={{
+                  style: {
+                    textAlign: "center",
+                  },
+                }}
+              />
+            </div>
           ),
           renderEditCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Date"
-              fieldType="date"
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <TextField
+                type="datetime-local"
+                value={params.value}
+                size="small"
+                onChange={(event) => {
+                  params.api.setEditCellValue({
+                    id: params.id,
+                    field: params.field,
+                    value: event.target.value,
+                  });
+                }}
+                fullWidth={true}
+                placeholder="Select Date"
+                inputProps={{
+                  style: {
+                    textAlign: "center",
+                  },
+                }}
+              />
+            </div>
           ),
         },
         {
           field: "amount",
-          headerName: "amount",
+          headerName: "Amount",
           flex: 1,
           editable: true,
+          headerAlign: "center",
           renderCell: (params) => (
             <InputBoxForGrid
               {...params}
-              placeholder="Enter  Amount"
+              placeholder="Enter Amount"
               fieldType="number"
             />
           ),
           renderEditCell: (params) => (
             <InputBoxForGrid
               {...params}
-              placeholder="Enter Enter  Amount"
+              placeholder="Enter Amount"
               fieldType="number"
             />
           ),
         },
         {
           field: "validUpToDate",
-          headerName: "validUpToDate",
+          headerName: "Valid Up To Date",
           flex: 1,
           editable: true,
+          headerAlign: "center",
           renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter Validation" fieldType="date"/>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <TextField
+                value={params.value}
+                size="small"
+                fullWidth={true}
+                onMouseEnter={() => {
+                  if (params.cellMode === "view") {
+                    params.api.startCellEditMode({
+                      id: params.id,
+                      field: params.field,
+                    });
+                  }
+                }}
+                onChange={(event) => {
+                  params.api.setEditCellValue({
+                    id: params.id,
+                    field: params.field,
+                    value: event.target.value,
+                  });
+                }}
+                placeholder="Select Date"
+                inputProps={{
+                  style: {
+                    textAlign: "center",
+                  },
+                }}
+              />
+            </div>
           ),
           renderEditCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter Validation" fieldType="date"/>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <TextField
+                type="datetime-local"
+                value={params.value}
+                size="small"
+                onChange={(event) => {
+                  params.api.setEditCellValue({
+                    id: params.id,
+                    field: params.field,
+                    value: event.target.value,
+                  });
+                }}
+                fullWidth={true}
+                placeholder="Select Date"
+                inputProps={{
+                  style: {
+                    textAlign: "center",
+                  },
+                }}
+              />
+            </div>
           ),
         },
+        // {
+        //   field: "actions",
+        //   headerName: "Actions",
+        //   sortable: false,
+        //   headerAlign: "center",
+        //   renderCell: (params) => (
+        //     <Button
+        //       color="error"
+        //       onClick={() => TabsHosts[0].deleteRow(params.row.id)}
+        //     >
+        //       Remove
+        //     </Button>
+        //   ),
+        // },
         {
           field: "actions",
           headerName: "Actions",
           sortable: false,
+          headerAlign: "center",
+          align: "center",
+          renderHeader: () => (
+            <IconButton color="white">
+              <AddCircleIcon onClick={TabsHosts[0].addNewRow} />
+            </IconButton>
+          ),
           renderCell: (params) => (
-            <Button
+            <IconButton
               color="error"
               onClick={() => TabsHosts[0].deleteRow(params.row.id)}
             >
-              Remove
-            </Button>
+              <GridDeleteIcon />
+            </IconButton>
           ),
         },
       ],
     },
   ];
-  const [value, setValue] = React.useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
   return (
     <Box sx={{ width: "100%", marginTop: 2 }}>
       <Box sx={{ width: "100%", typography: "body1" }}>
         {TabsHosts.map((ob, index) => (
           <Box sx={{ width: "100%" }} key={index}>
-            <Box
+            {/* <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -168,11 +302,11 @@ export default function BondEditGrid({ formik, disabled }) {
                 onClick={ob.addNewRow}
                 sx={{ borderRadius: "17px 18px 18px 17px", margin: "5px" }}
               >
-                Add {ob.tabLable}
+                Add {ob.tabLabel}
               </Button>
-            </Box>
+            </Box> */}
             <Box sx={{ height: 400 }}>
-              <DataGrid
+              <StyledDataGrid
                 rows={ob.value}
                 columns={ob.columns}
                 disableSelectionOnClick

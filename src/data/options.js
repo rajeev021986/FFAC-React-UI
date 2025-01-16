@@ -14,10 +14,11 @@ export const USER_STATUS_OPTIONS = [
   { value: UserStatusEnum.INACTIVE, label: "Inactive" },
 ];
 export const BOND_SORT_OPTIONS = [
-  { value: UserStatusEnum.ACTIVE, label: "Active" },
-  { value: UserStatusEnum.INACTIVE, label: "Inactive" },
+  { value: "bondNumber*asc", label: "Bond Number Ascending" },
+  { value: "bondNumber*desc", label: "Bond Number Descending" },
+  { value: "bondType*asc", label: "Bond Type Ascending" },
+  { value: "bondType*desc", label: "Bond Type Descending" },
 ];
-
 
 export const PAYMENTTYPE_OPTIONS = [
   { label: "cash", value: "Cash" },
@@ -26,7 +27,7 @@ export const PAYMENTTYPE_OPTIONS = [
 
 export const ACCOUNT_TYPE_OPTIONS = [
   { value: "local", label: "Local" },
-  { value: "transit", label: "Transit" }
+  { value: "transit", label: "Transit" },
 ];
 
 export const USER_SORT_OPTIONS = [
@@ -39,7 +40,6 @@ export const USER_SORT_OPTIONS = [
   { value: "userId*asc", label: "User ID Ascending" },
   { value: "userId*desc", label: "User ID Descending" },
 ];
-
 
 export const NEW_USER_SORT_OPTIONS = [
   { value: "firstname*asc", label: "First Name Ascending" },
@@ -112,8 +112,7 @@ export const DASHBAORD_SORT_OPTIONS = [
   { value: "pol*desc", label: "POL Descending" },
   { value: "shipper*asc", label: "Shipper Ascending" },
   { value: "shipper*desc", label: "Shipper Descending" },
-]
-
+];
 
 export const OTM_BOL_SORT_OPTIONS = [
   { value: "bol*asc", label: "BOL No. Ascending" },
@@ -125,7 +124,6 @@ export const OTM_BOL_SORT_OPTIONS = [
   { value: "pod*asc", label: "POD Ascending" },
   { value: "pod*desc", label: "POD Descending" },
 ];
-
 
 export const CUSTOMER_SORT_OPTIONS = [
   // { value: "acode*asc", label: "Code Ascending" },
@@ -193,28 +191,26 @@ export const AGENT_SORT_OPTIONS = [
   { value: "cname*desc", label: "Agent Descending" },
   { value: "country*asc", label: "Country Ascending" },
   { value: "country*desc", label: "Country Descending" },
-
 ];
 
 export const VESSEL_SORT_OPTIONS = [
   { value: "vname*asc", label: "Vessel Ascending" },
   { value: "vname*desc", label: "Vessel Descending" },
   { value: "lname*asc", label: "Line Ascending" },
-  { value: "lname*desc", label: "Line Descending" }
+  { value: "lname*desc", label: "Line Descending" },
 ];
 
 export const VOYAGE_SORT_OPTIONS = [
   { value: "vvoyage*asc", label: "Voyage Ascending" },
-  { value: "vvoyage*desc", label: "Voyage Descending" }
-
-]
+  { value: "vvoyage*desc", label: "Voyage Descending" },
+];
 
 export const CHARGES_SORT_OPTIONS = [
   { value: "cname*asc", label: "Charges Ascending" },
   { value: "cname*desc", label: "Charges Descending" },
-]
+];
 
 export const EXCHANGE_RATE_SORT_OPTIONS = [
   { value: "currency*asc", label: "Currency Ascending" },
   { value: "currency*desc", label: "Currency Descending" },
-]
+];

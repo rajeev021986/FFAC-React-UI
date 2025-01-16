@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { BOND_COLUMNS } from "../../data/columns/bond";
@@ -37,7 +37,7 @@ import {
 import BondFilterForm from "../../components/screen/code/bond/BondFilterForm";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import { getBondGridActions } from "../../components/screen/code/bond/bond";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ApiManager from "../../services/ApiManager";
 import GridActions from "../../components/common/Grid/GridActions";
@@ -47,6 +47,7 @@ import DeleteDialog from "../../components/common/DeleteDialog";
 export default function BondScreen() {
   const bondSelector = useSelector((state) => state.bond);
   const nav = useNavigate();
+  const location = useLocation();
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -126,13 +127,14 @@ export default function BondScreen() {
       } catch (error) {}
     }
   };
-  const [getbondAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+  const [getbondAudit, { data: AuditData, isFetching: isLoadingAudit }] =
     useLazyGetbondAuditQuery();
   const fetchUserAudit = () => {
     getbondAudit({
       id: modal.data.id,
     });
   };
+  console.log(isLoadingAudit, "isLoadingAudit");
   const handleClose = () => {
     setModal({
       open: false,
@@ -140,6 +142,9 @@ export default function BondScreen() {
       data: {},
     });
   };
+  useEffect(() => {
+    refetch();
+  }, [location.pathname]);
   const handleDelete = async () => {
     try {
       await deleteBond(modal.data.id)

@@ -4,7 +4,6 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  Grid,
   Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -15,10 +14,15 @@ import {
   TimelineSeparator,
   TimelineDot,
   TimelineConnector,
-  TimelineContent,
   TimelineOppositeContent,
 } from "@mui/lab";
 import GridTable from "./GridTable";
+
+// Utility function to convert UTC date to local date
+function convertUTCDateToLocalDate(date) {
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return localDate;
+}
 
 function TimelineComponent({ data }) {
   const [isActive, setIsActive] = useState([]);
@@ -44,7 +48,7 @@ function TimelineComponent({ data }) {
       >
         {data?.length > 0 ? (
           <Timeline sx={{ padding: 0, margin: 0 }}>
-            {data?.map((entry, index) => (
+            {data.map((entry, index) => (
               <div style={{ display: "flex", padding: "0px" }} key={index}>
                 <TimelineItem
                   position="left"
@@ -63,11 +67,6 @@ function TimelineComponent({ data }) {
                         backgroundColor: "primary.main",
                       }}
                     />
-                    {/* <TimelineContent>
-                      <Typography variant="body1" color="textSecondary">
-                        {new Date(entry.date).toLocaleString()}
-                      </Typography>
-                    </TimelineContent> */}
                     <TimelineDot sx={{ backgroundColor: "primary.main" }} />
                     <TimelineConnector
                       sx={{
@@ -87,21 +86,23 @@ function TimelineComponent({ data }) {
                     color="text.secondary"
                   >
                     <Typography variant="body1" color="textSecondary">
-                      {new Date(entry.date).toLocaleString()}
+                      {convertUTCDateToLocalDate(new Date(entry.date)).toLocaleString()}
                     </Typography>
                   </TimelineOppositeContent>
-                  {/* <TimelineContent>
-                    <Typography variant="body1" color="textSecondary">
-                      {new Date(entry.date).toLocaleString()}
-                    </Typography>
-                  </TimelineContent> */}
                 </TimelineItem>
                 <div
                   style={{ marginTop: "10px", width: "75%" }}
-                  onClick={() => handleButtonClick(index + 1)}
+                  onClick={() => handleButtonClick(index)}
                 >
                   <Accordion sx={{ width: "100%" }}>
-                    <AccordionSummary>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
                       <Typography sx={{ flexGrow: 1, color: "primary.main" }}>
                         {entry.label}
                       </Typography>
@@ -121,7 +122,7 @@ function TimelineComponent({ data }) {
                         <ArrowForwardIosIcon
                           fontSize="small"
                           sx={{
-                            transform: isActive.includes(index + 1)
+                            transform: isActive.includes(index)
                               ? "rotate(-90deg)"
                               : "rotate(90deg)",
                           }}

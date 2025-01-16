@@ -34,7 +34,10 @@ export default function BondForm() {
   const tabs =
     type == "new"
       ? [{ label: "Bond Details", value: 1, icon: EditIcon }]
-      : [{ label: "Bond Details", value: 1, icon: EditIcon }];
+      : [
+          { label: "Bond Details", value: 1, icon: EditIcon },
+          { label: "Audit Logs", value: 2, icon: HistoryIcon },
+        ];
   const { data: StatusDropdown } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: optionsSettingsData } =
@@ -72,13 +75,13 @@ export default function BondForm() {
       status: "",
       remark: "",
       bondPurchaseDetailsEntities: [
-        {
-          id: Date.now(),
-          policyNo: "",
-          date: "",
-          amount: "",
-          validUpToDate: "",
-        },
+        // {
+        //   id: Date.now(),
+        //   policyNo: "",
+        //   date: "",
+        //   amount: "",
+        //   validUpToDate: "",
+        // },
       ],
     },
     validationSchema: Yup.object({
