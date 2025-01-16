@@ -5,9 +5,9 @@ const initialState = {
     view: "grid",
     pagination: { page: 0, pageSize: 10 },
     formData: {
-        // city: "",
-        // portName: "",
-        // country: "",
+        newPortName: "",
+        countryName: "",
+        statusCode: ""
     },
     sortBy: "",
     sortModel: [],

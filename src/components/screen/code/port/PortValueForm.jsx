@@ -1,143 +1,244 @@
-import React from 'react'
-import InputBox from '../../../common/InputBox'
-import { Grid, Stack, TextField } from '@mui/material'
-import { OutlinedButton, ThemeButton } from '../../../common/Button'
-import { useNavigate } from 'react-router-dom';
-import SelectBox from '../../../common/SelectBox';
+import React from "react";
+import InputBox from "../../../common/InputBox";
+import { Grid, Stack, TextField } from "@mui/material";
+import { OutlinedButton, ThemeButton } from "../../../common/Button";
+import { useNavigate } from "react-router-dom";
+import SelectBox from "../../../common/SelectBox";
+import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 
 export default function PortValueForm({ formik, type, optionsSettingsData }) {
-    const nav = useNavigate();
-    return (
-        <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                    label="newPortName"
-                    id="newPortName"
-                    value={formik.values.newPortName}
-                    error={formik.errors.newPortName}
-                    onChange={formik.handleChange}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                    label="countryName"
-                    id="countryName"
-                    value={formik.values.countryName}
-                    error={formik.errors.countryName}
-                    onChange={formik.handleChange}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                    label="Custom Code"
-                    id="customCode"
-                    value={formik.values.customCode}
-                    error={formik.errors.customCode}
-                    onChange={formik.handleChange}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                    label="region"
-                    id="region"
-                    value={formik.values.region}
-                    error={formik.errors.region}
-                    onChange={formik.handleChange}
-                />
-            </Grid>
-            <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-                sx={{ marginTop: 2 }}
-            >
-                <SelectBox
-                    label="Status"
-                    id="status"
-                    options={optionsSettingsData?.body?.status}
-                    value={formik.values.status == "ACTIVE" || formik.values.status == "Active" ? "Active" : formik.values.status}
-                    error={formik.errors.status}
-                    onChange={formik.handleChange}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                    label="basePort"
-                    id="basePort"
-                    value={formik.values.basePort}
-                    error={formik.errors.basePort}
-                    onChange={formik.handleChange}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                    label="type"
-                    id="type"
-                    value={formik.values.type}
-                    error={formik.errors.type}
-                    onChange={formik.handleChange}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                    label="iotaCode"
-                    id="iotaCode"
-                    value={formik.values.iotaCode}
-                    error={formik.errors.iotaCode}
-                    onChange={formik.handleChange}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <InputBox
-                    label="unCode"
-                    id="unCode"
-                    value={formik.values.unCode}
-                    error={formik.errors.unCode}
-                    onChange={formik.handleChange}
-                />
-            </Grid>
-            <TextField
-                id="portDetails"
-                name="portDetails"
-                label="portDetails"
-                variant="outlined"
-                multiline
-                rows={4}
-                value={formik.values.portDetails}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.portDetails && Boolean(formik.errors.portDetails)}
-                helperText={formik.touched.portDetails && formik.errors.portDetails}
-                fullWidth
-                margin="normal"
+  const nav = useNavigate();
+  return (
+    <Grid container sx={{ padding: 0, margin: 0, paddingRight: "8px" }}>
+      <Grid container sx={{ margin: 0 }}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          paddingLeft={1}
+          marginTop={2}
+        >
+          <InputBox
+            label="Port Name"
+            id="newPortName"
+            value={formik.values.newPortName}
+            error={formik.errors.newPortName}
+            onChange={formik.handleChange}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          paddingLeft={1}
+          marginTop={2}
+        >
+          <InputBox
+            label="Base Port"
+            id="basePort"
+            value={formik.values.basePort}
+            error={formik.errors.basePort}
+            onChange={formik.handleChange}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          paddingLeft={1}
+          marginTop={2}
+        >
+          <InputBox
+            label="Type"
+            id="type"
+            value={formik.values.type}
+            error={formik.errors.type}
+            onChange={formik.handleChange}
+          />
+        </Grid>
+        {formik.values.statusCode == -2 || formik.values.statusCode == 1 ? (
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            sx={{ marginTop: 2 }}
+            paddingLeft={1}
+          >
+            <SelectBox
+              label="Status"
+              id="status"
+              options={optionsSettingsData?.body.status}
+              value={formik.values.status}
+              error={formik.errors.status}
+              onChange={formik.handleChange}
             />
-            <Grid item xs={12}>
-                <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="space-between"
-                >
-                    <Stack direction="row" spacing={2}>
-                        <OutlinedButton sx={{ fontWeight: "500" }} onClick={() => nav(-1)}>
-                            Cancel
-                        </OutlinedButton>
-                        <ThemeButton
-                            onClick={formik.handleSubmit}
-                            sx={{ fontWeight: "500" }}
-                        >
-                            {/* {isLoading && (
+          </Grid>
+        ) : (
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
+            <InputBox
+              label="Status"
+              id="status"
+              disabled={true}
+              value={formik.values.status}
+              error={formik.errors.status}
+              onChange={formik.handleChange}
+            />
+          </Grid>
+        )}
+      </Grid>
+      <Grid container sx={{ margin: 0 }}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          paddingLeft={1}
+          marginTop={2}
+        >
+          <InputBox
+            label="Custom Code"
+            id="customCode"
+            value={formik.values.customCode}
+            error={formik.errors.customCode}
+            onChange={formik.handleChange}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          paddingLeft={1}
+          marginTop={2}
+        >
+          <InputBox
+            label="IotaCode"
+            id="iotaCode"
+            value={formik.values.iotaCode}
+            error={formik.errors.iotaCode}
+            onChange={formik.handleChange}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          paddingLeft={1}
+          marginTop={2}
+        >
+          <InputBox
+            label="UnCode"
+            id="unCode"
+            value={formik.values.unCode}
+            error={formik.errors.unCode}
+            onChange={formik.handleChange}
+          />
+        </Grid>
+      </Grid>
+      <Grid container sx={{ margin: 0 }}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          paddingLeft={1}
+          marginTop={2}
+        >
+          <FormAutoComplete
+            label="Country"
+            id="country"
+            suggestionName="country"
+            value={formik.values.countryName}
+            error={formik.errors.countryName}
+            onChange={formik.handleChange}
+          ></FormAutoComplete>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          paddingLeft={1}
+          marginTop={2}
+        >
+          <InputBox
+            label="Region"
+            id="region"
+            value={formik.values.region}
+            error={formik.errors.region}
+            onChange={formik.handleChange}
+          />
+        </Grid>
+      </Grid>
+      <Grid container sx={{ marginTop: 2, paddingLeft: 1 }}>
+        <TextField
+          id="portDetails"
+          name="portDetails"
+          label="Port Details"
+          variant="outlined"
+          multiline
+          rows={4}
+          value={formik.values.portDetails}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.portDetails && Boolean(formik.errors.portDetails)
+          }
+          helperText={formik.touched.portDetails && formik.errors.portDetails}
+          fullWidth
+          InputProps={{ sx: { borderRadius: "10px" } }}
+        />
+      </Grid>
+      <Grid item xs={12} sx={{ margin: 1 }}>
+        <Stack direction="row" spacing={2} justifyContent="space-between">
+          <Stack direction="row" spacing={2}>
+            <OutlinedButton sx={{ fontWeight: "500" }} onClick={() => nav(-1)}>
+              Cancel
+            </OutlinedButton>
+            <ThemeButton
+              onClick={formik.handleSubmit}
+              sx={{ fontWeight: "500", color: "white !important" }}
+            >
+              {/* {isLoading && (
                                 <CircularProgress size={20} color="white" />
                             )}{" "} */}
-                            {type == "Edit" ? "Update" : "Add"}
-                        </ThemeButton>
-                    </Stack>
-                </Stack>
-            </Grid>
-        </Grid>
-
-
-    )
+              {type == "Edit" ? "Update" : "Add"}
+            </ThemeButton>
+          </Stack>
+        </Stack>
+      </Grid>
+    </Grid>
+  );
 }

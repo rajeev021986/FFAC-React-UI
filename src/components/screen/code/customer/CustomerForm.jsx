@@ -351,7 +351,7 @@ export default function CustomerForm({
                   container
                   sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                 >
-                  <Grid container>
+                  <Grid container sx={{ margin: 0 }}>
                     <Grid
                       item
                       xs={12}
@@ -360,6 +360,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <Tooltip
                         title={
@@ -388,6 +389,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="TIN No."
@@ -406,6 +408,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="VAT No."
@@ -424,6 +427,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Status"
@@ -435,7 +439,7 @@ export default function CustomerForm({
                       />
                     </Grid>
                   </Grid>
-                  <Grid container>
+                  <Grid container sx={{ margin: 0 }}>
                     <Grid
                       item
                       xs={12}
@@ -444,6 +448,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <Tooltip
                         title={!formik.values.add1 ? "Field is mandatory" : ""}
@@ -467,6 +472,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Address 2."
@@ -485,6 +491,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Address 3."
@@ -503,6 +510,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="PoNo"
@@ -523,6 +531,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="City"
@@ -541,6 +550,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Province"
@@ -580,6 +590,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Contact Person"
@@ -598,6 +609,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Email Id "
@@ -616,6 +628,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Telephone"
@@ -634,6 +647,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Fax"
@@ -654,6 +668,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Bank Name"
@@ -672,6 +687,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Account No."
@@ -713,6 +729,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                       container
                       justifyContent="start"
                       alignItems="center"
@@ -759,6 +776,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Credit Days"
@@ -783,6 +801,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Credit Amount"
@@ -806,7 +825,7 @@ export default function CustomerForm({
                     sx={{
                       border: "1px solid #ccc",
                       borderRadius: "10px",
-                      margin: "0px 8px",
+                      margin: "8px 8px 0px 8px",
                     }}
                   >
                     <ThemeTabs
@@ -845,7 +864,11 @@ export default function CustomerForm({
                       </OutlinedButton>
                       <ThemeButton
                         onClick={formik.handleSubmit}
-                        sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        sx={{
+                          fontWeight: "500",
+                          borderRadius: "12px",
+                          color: "white !important",
+                        }}
                       >
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
@@ -864,7 +887,11 @@ export default function CustomerForm({
                     >
                       <Stack direction="row" spacing={2}>
                         <ThemeButton
-                          sx={{ fontWeight: "500", backgroundColor: "red" }}
+                          sx={{
+                            fontWeight: "500",
+                            backgroundColor: "red",
+                            color: "white !important",
+                          }}
                           onClick={() => handleRejectRequest()}
                         >
                           {isLoading && (
@@ -873,7 +900,7 @@ export default function CustomerForm({
                           Reject
                         </ThemeButton>
                         <ThemeButton
-                          sx={{ fontWeight: "500" }}
+                          sx={{ fontWeight: "500", color: "white !important" }}
                           onClick={() => handleApproveRequest()}
                         >
                           {isLoading && (
@@ -949,6 +976,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <Tooltip
                         title={
@@ -976,6 +1004,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="TIN No."
@@ -994,6 +1023,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="VAT No."
@@ -1036,6 +1066,7 @@ export default function CustomerForm({
                         lg={3}
                         xl={2}
                         paddingLeft={1}
+                        marginTop={2}
                       >
                         <InputBox
                           label="Status"
@@ -1057,6 +1088,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <Tooltip
                         title={!formik.values.add1 ? "Field is mandatory" : ""}
@@ -1080,6 +1112,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Address 2."
@@ -1098,6 +1131,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Address 3."
@@ -1116,6 +1150,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="PoNo"
@@ -1136,6 +1171,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="City"
@@ -1154,6 +1190,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Province"
@@ -1193,6 +1230,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Contact Person"
@@ -1211,6 +1249,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Email Id "
@@ -1229,6 +1268,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Telephone"
@@ -1247,6 +1287,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Fax"
@@ -1267,6 +1308,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Bank Name"
@@ -1285,6 +1327,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Account No."
@@ -1329,6 +1372,7 @@ export default function CustomerForm({
                       justifyContent="start"
                       alignItems="center"
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <RadioGroup
                         id="paymentType"
@@ -1366,6 +1410,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Credit Days"
@@ -1386,6 +1431,7 @@ export default function CustomerForm({
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Credit Amount"
@@ -1406,7 +1452,7 @@ export default function CustomerForm({
                         borderBottom: 1,
                         border: "1px solid #0000001f",
                         borderRadius: "10px",
-                        marginLeft: "8px",
+                        margin: "8px 8px 0px 8px",
                       }}
                     >
                       <ThemeTabs
@@ -1477,7 +1523,10 @@ export default function CustomerForm({
                           </OutlinedButton>
                           <ThemeButton
                             onClick={formik.handleSubmit}
-                            sx={{ fontWeight: "500" }}
+                            sx={{
+                              fontWeight: "500",
+                              color: "white !important",
+                            }}
                           >
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
@@ -1508,7 +1557,10 @@ export default function CustomerForm({
                               setRejectError(false);
                               formik.handleSubmit(event.target.value);
                             }}
-                            sx={{ fontWeight: "500" }}
+                            sx={{
+                              fontWeight: "500",
+                              color: "white !important",
+                            }}
                           >
                             {isLoading && (
                               <CircularProgress size={20} color="white" />
@@ -1516,7 +1568,11 @@ export default function CustomerForm({
                             Update
                           </ThemeButton>
                           <ThemeButton
-                            sx={{ fontWeight: "500", backgroundColor: "red" }}
+                            sx={{
+                              fontWeight: "500",
+                              backgroundColor: "red",
+                              color: "white !important",
+                            }}
                             onClick={() => handleRejectRequest()}
                           >
                             {isLoading && (
@@ -1525,7 +1581,10 @@ export default function CustomerForm({
                             Reject
                           </ThemeButton>
                           <ThemeButton
-                            sx={{ fontWeight: "500" }}
+                            sx={{
+                              fontWeight: "500",
+                              color: "white !important",
+                            }}
                             onClick={() => handleApproveRequest()}
                           >
                             {isLoading && (

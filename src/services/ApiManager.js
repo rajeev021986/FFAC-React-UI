@@ -71,6 +71,14 @@ class ApiManager {
     const url = ENDPOINTS.GET_CUSTOMER_AUDIT(id);
     return ApiMethods.get(url);
   };
+  static getVesselAudit = async (id) => {
+    const url = ENDPOINTS.GET_VESSEL_AUDIT(id);
+    return ApiMethods.get(url);
+  };
+  static getVoyageAudit = async (id) => {
+    const url = ENDPOINTS.GET_VOYAGE_AUDIT(id);
+    return ApiMethods.get(url);
+  };
   static getShipperAuditDetails = async (id) => {
     const url = ENDPOINTS.GET_SHIPPER_AUDIT(id);
 
@@ -197,18 +205,18 @@ class ApiManager {
   };
 
 
-    static fetchIcdDatasExcel = async (params, payload,source) => {
-        const queryString = new URLSearchParams(params).toString();
-        const url = ENDPOINTS.FETCH_ICD_DATA_EXCEL(queryString,source);
-        return ApiMethods.postBlob(url, payload);
-    }
-    static fetchShipperDatasExcel = async (params, payload,source) => {
-      const queryString = new URLSearchParams(params).toString();
-      const url = ENDPOINTS.FETCH_SHIPPER_DATA_EXCEL(queryString,source);
-      return ApiMethods.postBlob(url, payload);
+  static fetchIcdDatasExcel = async (params, payload, source) => {
+    const queryString = new URLSearchParams(params).toString();
+    const url = ENDPOINTS.FETCH_ICD_DATA_EXCEL(queryString, source);
+    return ApiMethods.postBlob(url, payload);
+  }
+  static fetchShipperDatasExcel = async (params, payload, source) => {
+    const queryString = new URLSearchParams(params).toString();
+    const url = ENDPOINTS.FETCH_SHIPPER_DATA_EXCEL(queryString, source);
+    return ApiMethods.postBlob(url, payload);
   }
 
- 
+
   static fileDownloadIntegater = async (id) => {
     const url = ENDPOINTS.FILE_DOWNLOAD_INTEGATER(id);
     return ApiMethods.post(url);

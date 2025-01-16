@@ -1,5 +1,5 @@
 const ENDPOINTS = {
-  
+
 
   LOGIN: () => `/auth-service/auth/login`,
   ADD_USER: () => `/users`,
@@ -46,7 +46,7 @@ const ENDPOINTS = {
     `/master-service/v1/${source}/export?${queryString}`,
   FETCH_SHIPPER_DATA_EXCEL: (queryString, source) =>
     `/entity-service/v1/${source}/export?${queryString}`,
-  
+
   GET_USER_DATA: (id) => `/admin-service/v1/user/${id}`,
   ADD_USER_DATA: () => `/admin-service/v1/user`,
   UPDATE_USER_DATA: () => `/admin-service/v1/user`,

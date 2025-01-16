@@ -24,6 +24,7 @@ function FormAutoComplete({
     const fetchData = async () => {
       setLoading(true);
       try {
+        console.log(suggestionName, id, "country");
         const data = await GetAutoCompleteData(suggestionName, id);
         setOptions(data);
         setFilteredOptions(data);

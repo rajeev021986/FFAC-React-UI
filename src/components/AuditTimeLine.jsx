@@ -19,7 +19,10 @@ function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
               color="primary"
               startIcon={<RefreshOutlinedIcon />}
               onClick={reloadDataHandler}
-              sx={{ borderRadius: "17px 18px 18px 17px" }}
+              sx={{
+                borderRadius: "17px 18px 18px 17px",
+                color: "white !important",
+              }}
             >
               Refresh
             </Button>

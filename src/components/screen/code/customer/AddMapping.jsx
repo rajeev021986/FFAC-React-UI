@@ -93,7 +93,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "chargeName",
       headerName: "Charge Name",
       flex: 1,
-      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
@@ -130,7 +129,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "unitType",
       headerName: "Unit Type",
       flex: 1,
-      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -171,7 +169,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "currency",
       headerName: "Currency",
       flex: 1,
-      editable: true,
       renderCell: (params) => {
         return (
           <AutoCompleteInput
@@ -205,7 +202,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "shipmentType",
       headerName: "Shipment Type",
       flex: 1,
-      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -245,7 +241,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "unitRate",
       headerName: "Unit Rate",
       flex: 1,
-      editable: true,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (

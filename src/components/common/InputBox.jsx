@@ -31,7 +31,6 @@ export default function InputBox({
       name={id}
       label={label}
       variant="outlined"
-      margin="normal"
       fullWidth
       disabled={disabled}
       size="small"

@@ -3,6 +3,7 @@
 
 export const CODE_CUSTOMER_COLUMNS = [
     {
+        flex: 1,
         field: 'status',
         headerName: 'Status',
         width: 110,
@@ -11,6 +12,7 @@ export const CODE_CUSTOMER_COLUMNS = [
         editable: false
     },
     {
+        flex: 1,
         field: 'isDoc',
         headerName: 'Document',
         width: 110,
@@ -20,6 +22,7 @@ export const CODE_CUSTOMER_COLUMNS = [
     },
 
     {
+        flex: 1,
         field: 'customerName',
         headerName: 'Customer Name',
         width: 110,
@@ -28,6 +31,7 @@ export const CODE_CUSTOMER_COLUMNS = [
         editable: false
     },
     {
+        flex: 1,
         field: 'tinNo',
         headerName: 'TIN NO.',
         width: 110,
@@ -35,6 +39,7 @@ export const CODE_CUSTOMER_COLUMNS = [
         align: 'center', editable: false
     },
     {
+        flex: 1,
         field: 'vatNo',
         headerName: 'VAT NO.',
         width: 110,
@@ -42,6 +47,7 @@ export const CODE_CUSTOMER_COLUMNS = [
         align: 'center', editable: false
     },
     {
+        flex: 1,
         field: 'add1',
         headerName: 'Address',
         width: 110,
@@ -49,6 +55,7 @@ export const CODE_CUSTOMER_COLUMNS = [
         align: 'center', editable: false
     },
     {
+        flex: 1,
         field: 'createdBy',
         headerName: 'Created By',
         width: 110,
@@ -57,6 +64,7 @@ export const CODE_CUSTOMER_COLUMNS = [
         editable: false
     },
     {
+        flex: 1,
         field: 'createdDate',
         headerName: 'Created Date',
         width: 110,
@@ -65,6 +73,7 @@ export const CODE_CUSTOMER_COLUMNS = [
         editable: false
     },
     {
+        flex: 1,
         field: 'modifiedBy',
         headerName: 'Modified By',
         width: 110,
@@ -73,6 +82,7 @@ export const CODE_CUSTOMER_COLUMNS = [
         editable: false
     },
     {
+        flex: 1,
         field: 'modifiedDate',
         headerName: 'Modified Date',
         width: 110,

@@ -20,7 +20,7 @@ import ApiManager from "../../services/ApiManager";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 import SelectBox from "../../components/common/SelectBox";
-import AuditTimeLine from "../../components/AuditTimeLine"; 
+import AuditTimeLine from "../../components/AuditTimeLine";
 import getFirstError from "../../components/common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
@@ -165,6 +165,7 @@ export function VesselForm({ initialValues, type }) {
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Vessel Name*"
@@ -190,7 +191,7 @@ export function VesselForm({ initialValues, type }) {
                         value={formik.values.lineName}
                         error={formik.errors.lineName}
                         onChange={formik.handleChange}
-                        suggestionName="vendorName"
+                        suggestionName="vendor_name"
                       ></FormAutoComplete>
                     </Grid>
                     <Grid
@@ -221,7 +222,7 @@ export function VesselForm({ initialValues, type }) {
                       lg={3}
                       xl={2}
                       paddingLeft={1}
-                      margin={0}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Status"
@@ -238,7 +239,7 @@ export function VesselForm({ initialValues, type }) {
                       typography: "body1",
                       border: "1px solid #ccc",
                       borderRadius: "10px",
-                      margin: "0px 8px",
+                      margin: "8px 8px 0px 8px",
                     }}
                   >
                     <TabContext value={value}>
@@ -273,7 +274,11 @@ export function VesselForm({ initialValues, type }) {
                       </OutlinedButton>
                       <ThemeButton
                         onClick={formik.handleSubmit}
-                        sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        sx={{
+                          fontWeight: "500",
+                          borderRadius: "12px",
+                          color: "white !important",
+                        }}
                       >
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
@@ -326,7 +331,7 @@ export function VesselForm({ initialValues, type }) {
                   container
                   sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                 >
-                  <Grid container>
+                  <Grid container sx={{ margin: 0 }}>
                     <Grid
                       item
                       xs={12}
@@ -335,6 +340,7 @@ export function VesselForm({ initialValues, type }) {
                       lg={3}
                       xl={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Vessel Name*"
@@ -360,7 +366,7 @@ export function VesselForm({ initialValues, type }) {
                         value={formik.values.lineName}
                         error={formik.errors.lineName}
                         onChange={formik.handleChange}
-                        suggestionName="vendorName"
+                        suggestionName="vendor_name"
                       ></FormAutoComplete>
                     </Grid>
                     <Grid
@@ -412,6 +418,7 @@ export function VesselForm({ initialValues, type }) {
                         lg={3}
                         xl={2}
                         paddingLeft={1}
+                        marginTop={2}
                       >
                         <InputBox
                           label="Status"
@@ -431,7 +438,7 @@ export function VesselForm({ initialValues, type }) {
                       typography: "body1",
                       border: "1px solid #ccc",
                       borderRadius: "10px",
-                      margin: "0px 8px",
+                      margin: "8px 8px 0px 8px",
                     }}
                   >
                     <TabContext value={value}>
@@ -465,7 +472,11 @@ export function VesselForm({ initialValues, type }) {
                       </OutlinedButton>
                       <ThemeButton
                         onClick={formik.handleSubmit}
-                        sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        sx={{
+                          fontWeight: "500",
+                          borderRadius: "12px",
+                          color: "white !important",
+                        }}
                       >
                         {isLoading && (
                           <CircularProgress size={20} color="white" />

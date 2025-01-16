@@ -145,10 +145,10 @@ function App() {
             <Route path="master/bond/bondAdd" element={<BondForm />} />
             <Route path="master/bond/editBond" element={<BondForm />} />
             <Route path="master/bond" element={<BondScreen />} />
-            <Route path="master/port/portAdd" element={<PortForm />} />
+            <Route path="master/port/newport" element={<PortForm />} />
             <Route path="admin/charges/newcharges" element={<AddEditCharge />} />
             <Route path="admin/charges/editcharges" element={<AddEditCharge />} />
-            <Route path="master/port/editPort" element={<PortForm />} />
+            <Route path="master/port/editport" element={<PortForm />} />
             <Route
               path="master/vesselVoyage"
               element={<VesselVoyageScreen />}
@@ -187,7 +187,7 @@ function App() {
             />
 
 
-            <Route path="master/icd" element={<IcdScreen page="icd"/>} />
+            <Route path="master/icd" element={<IcdScreen page="icd" />} />
             <Route path="master/icd/new_icd" element={<IcdFormScreen page="icd" />} />
             <Route path="master/icd/editIcd" element={<IcdFormScreen page="icd" />} />
           </Route>

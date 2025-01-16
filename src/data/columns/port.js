@@ -3,57 +3,88 @@ import { appDateFormat } from "../../components/utils/date"
 
 export const PORT_COLUMNS = [
     {
-        field: 'newPortName',
-        headerName: 'Port Name',
-        width: 130,
-        headerAlign: 'center',
-        align: 'center'
-    },
-    {
-        field: 'countryName',
-        headerName: 'Country Name',
-        width: 130,
-        headerAlign: 'center',
-        align: 'center'
-    },
-    {
-        field: 'region',
-        headerName: 'Region',
-        width: 130,
-        headerAlign: 'center',
-        align: 'center'
-    },
-    {
+        flex: 1,
         field: 'status',
         headerName: 'Status',
-        width: 130,
+        width: 110,
         headerAlign: 'center',
         align: 'center'
     },
     {
-        field: 'lastmodifieddate',
+        flex: 1,
+        field: 'newPortName',
+        headerName: 'Port Name',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center'
+    },
+    {
+        flex: 1,
+        field: 'basePort',
+        headerName: 'Base Port',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center'
+    },
+    {
+        flex: 1,
+        field: 'countryName',
+        headerName: 'Country Name',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center'
+    },
+    {
+        flex: 1,
+        field: 'region',
+        headerName: 'Region',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center'
+    },
+
+    {
+        flex: 1,
+        field: 'createdBy',
+        headerName: 'Created By',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'createdDate',
+        headerName: 'Created Date',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'modifiedBy',
+        headerName: 'Modified By',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'modifiedDate',
         headerName: 'Modified Date',
-        width: 130,
+        width: 110,
         headerAlign: 'center',
         align: 'center',
-        renderCell: (params) => {
-            return <div>{appDateFormat(params.value)}</div>
-        }
+        editable: false
     },
+
     {
-        field: 'unCode',
-        headerName: 'UN Code',
-        width: 130,
-        headerAlign: 'center',
-        align: 'center',
-        renderCell: (params) => {
-            return <div>{appDateFormat(params.value)}</div>
-        }
-    },
-    {
+        flex: 1,
         field: 'action',
         headerName: 'Action',
-        width: 130,
+        width: 110,
         headerAlign: 'center',
         align: 'center',
     }

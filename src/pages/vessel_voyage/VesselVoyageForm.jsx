@@ -169,7 +169,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       lg={3}
                       xl={2}
                       paddingLeft={1}
-                      margin={0}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Voyage InBound*"
@@ -188,7 +188,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       lg={3}
                       xl={2}
                       paddingLeft={1}
-                      margin={0}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Voyage OutBound"
@@ -206,7 +206,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       lg={3}
                       xl={2}
                       paddingLeft={1}
-                      margin={0}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Status"
@@ -435,7 +435,11 @@ export function VesselVoyageForm({ initialValues, type }) {
                       </OutlinedButton>
                       <ThemeButton
                         onClick={formik.handleSubmit}
-                        sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        sx={{
+                          fontWeight: "500",
+                          borderRadius: "12px",
+                          color: "white !important",
+                        }}
                       >
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
@@ -516,7 +520,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       lg={3}
                       xl={2}
                       paddingLeft={1}
-                      margin={0}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Voyage InBound*"
@@ -535,7 +539,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       lg={3}
                       xl={2}
                       paddingLeft={1}
-                      margin={0}
+                      marginTop={2}
                     >
                       <InputBox
                         label="Voyage OutBound"
@@ -575,6 +579,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         lg={3}
                         xl={2}
                         paddingLeft={1}
+                        marginTop={2}
                       >
                         <InputBox
                           label="Status"
@@ -587,7 +592,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       </Grid>
                     )}
                   </Grid>
-                  <Grid container>
+                  <Grid container sx={{ margin: 0 }}>
                     <Grid
                       item
                       xs={12}
@@ -661,7 +666,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       />
                     </Grid>
                   </Grid>
-                  <Grid container>
+                  <Grid container sx={{ margin: 0 }}>
                     <Grid
                       item
                       xs={12}
@@ -735,7 +740,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       />
                     </Grid>
                   </Grid>
-                  <Grid container>
+                  <Grid container sx={{ margin: 0 }}>
                     <Grid
                       item
                       xs={12}
@@ -804,7 +809,11 @@ export function VesselVoyageForm({ initialValues, type }) {
                       </OutlinedButton>
                       <ThemeButton
                         onClick={formik.handleSubmit}
-                        sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        sx={{
+                          fontWeight: "500",
+                          borderRadius: "12px",
+                          color: "white !important",
+                        }}
                       >
                         {isLoading && (
                           <CircularProgress size={20} color="white" />

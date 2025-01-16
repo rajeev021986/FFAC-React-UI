@@ -125,8 +125,17 @@ export default function VendorFormInput({
   return (
     <>
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
-        <Grid container>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+        <Grid container sx={{ margin: 0 }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Vendor Name *"
               id="vendorName"
@@ -135,7 +144,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="TIN No"
               id="tinNo"
@@ -144,7 +162,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="VRN No"
               id="vrnNo"
@@ -154,7 +181,16 @@ export default function VendorFormInput({
             />
           </Grid>
           {type == "copy" || type == "new" ? (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              xl={2}
+              paddingLeft={1}
+              marginTop={2}
+            >
               <InputBox
                 label="Status"
                 id="status"
@@ -191,7 +227,16 @@ export default function VendorFormInput({
               />
             </Grid>
           ) : (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              xl={2}
+              paddingLeft={1}
+              marginTop={2}
+            >
               <InputBox
                 label="Status"
                 id="status"
@@ -205,7 +250,16 @@ export default function VendorFormInput({
         </Grid>
 
         <Grid container>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Alias"
               id="alias"
@@ -233,7 +287,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Address 1 *"
               id="add1"
@@ -242,7 +305,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Address 2"
               id="add2"
@@ -254,7 +326,16 @@ export default function VendorFormInput({
         </Grid>
 
         <Grid container>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Address 3"
               id="add3"
@@ -263,7 +344,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="PO No"
               id="poNo"
@@ -274,7 +364,16 @@ export default function VendorFormInput({
           </Grid>
         </Grid>
         <Grid container>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="City"
               id="city"
@@ -283,7 +382,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Province"
               id="province"
@@ -314,7 +422,16 @@ export default function VendorFormInput({
         </Grid>
 
         <Grid container>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Contact Person"
               id="contactPerson"
@@ -323,7 +440,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Email Id"
               id="emailId"
@@ -332,7 +458,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Phone 1"
               id="telephone1"
@@ -341,7 +476,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Phone 2"
               id="telephone2"
@@ -350,7 +494,16 @@ export default function VendorFormInput({
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Fax"
               id="fax"
@@ -361,7 +514,16 @@ export default function VendorFormInput({
           </Grid>
         </Grid>
         <Grid container>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
             <InputBox
               label="Credit Days"
               id="creditDays"
@@ -414,7 +576,7 @@ export default function VendorFormInput({
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}
-                  sx={{ fontWeight: "500" }}
+                  sx={{ fontWeight: "500", color: "white !important" }}
                 >
                   {/* {isLoading && (
                                 <CircularProgress size={20} color="white" />
@@ -436,7 +598,7 @@ export default function VendorFormInput({
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}
-                  sx={{ fontWeight: "500" }}
+                  sx={{ fontWeight: "500", color: "white !important" }}
                 >
                   {/* {isLoading && (
                                 <CircularProgress size={20} color="white" />
@@ -444,7 +606,11 @@ export default function VendorFormInput({
                   Update
                 </ThemeButton>
                 <ThemeButton
-                  sx={{ fontWeight: "500", backgroundColor: "red" }}
+                  sx={{
+                    fontWeight: "500",
+                    backgroundColor: "red",
+                    color: "white !important",
+                  }}
                   onClick={() => handleRejectRequest()}
                 >
                   {/* {isLoading && (
@@ -453,7 +619,7 @@ export default function VendorFormInput({
                   Reject
                 </ThemeButton>
                 <ThemeButton
-                  sx={{ fontWeight: "500" }}
+                  sx={{ fontWeight: "500", color: "white !important" }}
                   onClick={() => handleApproveRequest()}
                 >
                   {/* {isLoading && (

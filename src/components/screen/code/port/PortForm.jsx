@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Box, Tab } from "@mui/material";
+import { Box, Card, CardContent, Stack, Tab } from "@mui/material";
 import ScreenToolbar from "../../../common/ScreenToolbar";
 import ThemedBreadcrumb from "../../../common/Breadcrumb";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
@@ -24,6 +24,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import AuditTimeLine from "../../../AuditTimeLine";
 function PortForm() {
   const [value, setValue] = React.useState(1);
+  const [dropdownData, setDropdownData] = useState({});
   const location = useLocation();
   const nav = useNavigate();
   const [getPort, { isLoading: isFetchingPort }] = useLazyGetPortQuery();
@@ -35,21 +36,26 @@ function PortForm() {
   };
   const tabs =
     type == "new"
-      ? [{ label: "Bond Details", value: 1, icon: EditIcon }]
+      ? [{ label: "Port Details", value: 1, icon: EditIcon }]
       : [
-          { label: "Bond Details", value: 1, icon: EditIcon },
+          { label: "Port Details", value: 1, icon: EditIcon },
           { label: "Audit logs", value: 2, icon: HistoryIcon },
         ];
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
-  const { data: customerSettingsData } =
+  const { data: portSettingsData } =
     useGetOptionsSettingsQuery("port_settings");
 
   useEffect(() => {
-    if (id && optionsSettingsData) {
+    if (optionsSettingsData?.body || portSettingsData?.body) {
       handleFetchPort();
+      setDropdownData({
+        ...optionsSettingsData?.body,
+        ...portSettingsData?.body,
+      });
     }
-  }, [optionsSettingsData]);
+  }, [optionsSettingsData, portSettingsData]);
+
   const handleFetchPort = async () => {
     try {
       const response = await getPort({ id });
@@ -62,14 +68,13 @@ function PortForm() {
         } else {
           formik.setValues(response.data.body);
         }
-      } else {
-        toast.error("Failed to fetch Port data");
       }
     } catch (error) {
       toast.error("Error fetching Port data");
     }
   };
   const formik = useFormik({
+    validateOnChange: false,
     initialValues: {
       status: "",
       portDetails: "",
@@ -83,16 +88,16 @@ function PortForm() {
       iotaCode: "",
     },
     validationSchema: Yup.object({
-      status: Yup.string().required("Status is required"),
-      portDetails: Yup.string().nullable(),
-      unCode: Yup.string().nullable(),
-      customCode: Yup.string().nullable(),
-      newPortName: Yup.string().nullable(),
-      countryName: Yup.string().nullable(),
-      region: Yup.string().nullable(),
-      basePort: Yup.string().nullable(),
-      type: Yup.string().nullable(),
-      iotaCode: Yup.string().nullable(),
+      newPortName: Yup.string().required("Port name is required"),
+      // type: Yup.string().nullable(),
+      // status: Yup.string().nullable(),
+      // portDetails: Yup.string().nullable(),
+      // unCode: Yup.string().nullable(),
+      // customCode: Yup.string().nullable(),
+      // countryName: Yup.string().nullable(),
+      // region: Yup.string().nullable(),
+      // basePort: Yup.string().nullable(),
+      // iotaCode: Yup.string().nullable(),
     }),
     onSubmit: async (values) => {
       if (type == "copy" || type == "new") {
@@ -123,44 +128,59 @@ function PortForm() {
   return (
     <>
       <Box sx={{ width: "100%", typography: "body1" }}>
-        <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
-        <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              {tabs.map((a) => (
-                <Tab
-                  label={a.label}
-                  value={a.value}
-                  sx={{
-                    fontSize: "1rem",
-                    textTransform: "capitalize",
-                    minHeight: "50px",
-                  }}
-                  icon={<a.icon />}
-                  iconPosition="start"
+        <Stack sx={{ padding: "8px 0px" }}>
+          <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
+        </Stack>
+
+        <Card
+          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
+        >
+          <CardContent
+            sx={{ margin: "0px !important", padding: "0px !important" }}
+          >
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  {tabs.map((a) => (
+                    <Tab
+                      label={a.label}
+                      value={a.value}
+                      sx={{
+                        fontSize: "1rem",
+                        textTransform: "capitalize",
+                        minHeight: "50px",
+                      }}
+                      icon={<a.icon />}
+                      iconPosition="start"
+                    />
+                  ))}
+                </TabList>
+              </Box>
+
+              <TabPanel value={1} sx={{ padding: "0px" }}>
+                {isFetchingPort ? (
+                  <Loader />
+                ) : (
+                  <PortValueForm
+                    formik={formik}
+                    type={type}
+                    optionsSettingsData={optionsSettingsData}
+                  />
+                )}
+              </TabPanel>
+              <TabPanel value={2} sx={{ padding: "0px" }}>
+                <AuditTimeLine
+                  auditDetails={AuditData}
+                  reloadDataHandler={fetchUserAudit}
+                  loading={isLoadingAudit}
                 />
-              ))}
-            </TabList>
-          </Box>
-          <TabPanel value={1}>
-            {isFetchingPort ? (
-              <Loader />
-            ) : (
-              <PortValueForm
-                formik={formik}
-                type={type}
-                optionsSettingsData={optionsSettingsData}
-              />
-            )}
-          </TabPanel>
-          <TabPanel value={2} sx={{ padding: "0px" }}>
-            <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
-            />
-          </TabPanel>
-        </TabContext>
+              </TabPanel>
+            </TabContext>
+          </CardContent>
+        </Card>
       </Box>
     </>
   );

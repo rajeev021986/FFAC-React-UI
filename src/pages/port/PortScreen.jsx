@@ -88,7 +88,7 @@ export default function PortScreen() {
     isLoading,
     error,
     isFetching,
-    refetch
+    refetch,
   } = useFetchPortQuery({
     params: query,
     payload,
@@ -96,18 +96,16 @@ export default function PortScreen() {
   PORT_COLUMNS[PORT_COLUMNS.length - 1].renderCell = GridActions({
     actions: getPortGridActions(nav, setModal),
   });
-  const actions = seletectBox
-    ? [{ name: "New Port" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New Port" }, { name: "Export" }];
+  const actions = [{ name: "New Port" }, { name: "Export" }];
   const handleActionClick = async (actionName) => {
     if (actionName === "New Port") {
-      nav("portAdd", {
+      nav("newport", {
         state: { id: null, type: "new" },
       });
     }
-    if (actionName === "Copy") {
-      nav("portAdd", { state: { id: seletectBox, type: "copy" } });
-    }
+    // if (actionName === "Copy") {
+    //   nav("portAdd", { state: { id: seletectBox, type: "copy" } });
+    // }
     if (actionName === "Export") {
       try {
         const blob = await ApiManager.fetchCustomerDatasExcelPort(
@@ -201,6 +199,7 @@ export default function PortScreen() {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
+          sx={{ margin: 0, padding: 1 }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -273,7 +272,6 @@ export default function PortScreen() {
             actions={getPortGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
-            page="customer"
           />
         )}
       </Card>
@@ -303,11 +301,6 @@ export default function PortScreen() {
           </Box>
         </Drawer>
       )}
-      {/* <DeleteDialog
-                modal={modal}
-                handleClose={handleClose}
-                handleDelete={handleDelete}
-            /> */}
       <DeleteDialog
         source="port"
         sourceName={modal?.data?.deleteName}

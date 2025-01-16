@@ -5,6 +5,7 @@ import InputBox from "../../../common/InputBox";
 import { OutlinedButton } from "../../../common/Button";
 import { useFormik } from "formik";
 import { updatePortInput } from "../../../../store/freatures/portSlice";
+import SelectBox from "../../../common/SelectBox";
 
 export default function PortFilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
@@ -12,9 +13,9 @@ export default function PortFilterForm({ setFilterOpen }) {
 
   const formik = useFormik({
     initialValues: {
-      portName: inputs.portName || "",
-      city: inputs.city || "",
-      country: inputs.country || "",
+      portName: inputs.newPortName || "",
+      city: inputs.countryName || "",
+      country: inputs.statusCode || "",
     },
     onSubmit: (values) => {
       dispatch(updatePortInput(values));
@@ -25,40 +26,49 @@ export default function PortFilterForm({ setFilterOpen }) {
     formik.resetForm();
     dispatch(
       updatePortInput({
-        portName: "",
-        city: "",
-        country: "",
+        newPortName: "",
+        countryName: "",
+        statusCode: "",
       })
     );
+    formik.setValues({
+      newPortName: "",
+      countryName: "",
+      statusCode: "",
+    });
   };
+
+  const statusOptions = [
+    { value: 1, label: "Active" },
+    { value: -2, label: "InActive" },
+    { value: 0, label: "Pending" },
+  ];
 
   return (
     <div>
       <Stack spacing={3} direction="column" justifyContent="space-between">
-        {/* <InputBox
-            label="Code"
-            id="acode"
-            value={formik.values.acode}
-            onChange={formik.handleChange}
-          /> */}
         <Stack direction="row" spacing={2}>
           <InputBox
             label="Port Name"
-            id="portName"
-            value={formik.values.portName}
+            id="newPortName"
+            value={formik.values.newPortName}
             onChange={formik.handleChange}
           />
           <InputBox
-            label="City"
-            id="city"
-            value={formik.values.city}
+            label="Country Name"
+            id="countryName"
+            value={formik.values.countryName}
             onChange={formik.handleChange}
+            sx={{ marginLeft: "5px !important" }}
           />
-          <InputBox
-            label="Country"
-            id="country"
-            value={formik.values.country}
+
+          <SelectBox
+            label="Status"
+            id="statusCode"
+            options={statusOptions}
+            value={formik.values.statusCode}
             onChange={formik.handleChange}
+            sx={{ marginLeft: "5px !important" }}
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
