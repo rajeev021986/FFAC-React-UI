@@ -39,44 +39,47 @@ const GridSearchInput = ({
       />
 
       {/* Filter Popup Box */}
+
       {filterOpen && (
-        <Paper
-          elevation={3}
-          sx={{
-            position: "absolute",
-            zIndex: 10,
-            top: "100%",
-            left: 0,
-            mt: 1,
-            width,
-            height,
-            overflowY: "auto",
-            ...styles.paper,
-          }}
-        >
-          {/* Close Button */}
-          <Box
+        <ClickAwayListener onClickAway={() => setFilterOpen(false)}>
+          <Paper
+            elevation={3}
             sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              // p: 1,
-              borderBottom: "1px solid #e0e0e0",
-              marginBottom: "10px",
+              position: "absolute",
+              zIndex: 10,
+              top: "100%",
+              left: 0,
+              mt: 1,
+              width,
+              height,
+              overflowY: "auto",
+              ...styles.paper,
             }}
           >
-            <IconButton
-              size="small"
-              onClick={() => setFilterOpen(false)} // Close the popup
+            {/* Close Button */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                // p: 1,
+                borderBottom: "1px solid #e0e0e0",
+                marginBottom: "10px",
+              }}
             >
-              <GridCloseIcon />
-            </IconButton>
-          </Box>
+              <IconButton
+                size="small"
+                onClick={() => setFilterOpen(false)} // Close the popup
+              >
+                <GridCloseIcon />
+              </IconButton>
+            </Box>
 
-          {/* Popup Content */}
-          {React.Children.map(children, (child) =>
-            React.cloneElement(child, { setFilterOpen })
-          )}
-        </Paper>
+            {/* Popup Content */}
+            {React.Children.map(children, (child) =>
+              React.cloneElement(child, { setFilterOpen })
+            )}
+          </Paper>
+        </ClickAwayListener>
       )}
     </Box>
   );
