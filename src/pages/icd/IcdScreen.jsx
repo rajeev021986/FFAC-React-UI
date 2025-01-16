@@ -34,6 +34,8 @@ import { useEffect } from "react";
 
 import Backdrop from "@mui/material/Backdrop";
 import ApiManager from "../../services/ApiManager";
+import toast, { LoaderIcon } from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 const ADD_NEW_ICD_PATH = "new_icd";
 
@@ -43,6 +45,7 @@ export default function IcdScreen({ page }) {
   const icdSelector = useSelector((state) => state.icd);
   const location = useLocation();
   const nav = useNavigate();
+  const [exportLoader, setExportLoader] = useState(false);
   const dispatch = useDispatch();
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
@@ -52,8 +55,8 @@ export default function IcdScreen({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New" }, { name: "Export" }];
+    ? [{ name: "New Icd" }, { name: "Copy" }, { name: exportLoader ? <LoaderIcon /> : "Export" },]
+    : [{ name: "New Icd" }, { name: exportLoader ? <LoaderIcon /> : "Export" },];
   const query = {
     page: icdSelector?.pagination?.page + 1,
     size: icdSelector?.pagination?.pageSize,
@@ -119,7 +122,7 @@ export default function IcdScreen({ page }) {
 
   const handleActionClick = async (actionName) => {
     // }
-    if (actionName === "New") {
+    if (actionName === "New Icd") {
       nav(ADD_NEW_ICD_PATH, {
         replace: true,
         state: { formAction: "add", type: "new" },
@@ -137,6 +140,7 @@ export default function IcdScreen({ page }) {
     
     if (actionName === "Export") 
       {
+        setExportLoader(true);
         try {
           const blob = await ApiManager.fetchIcdDatasExcel(query, payload, "icd");
           const url = window.URL.createObjectURL(blob);
@@ -148,7 +152,14 @@ export default function IcdScreen({ page }) {
           link.remove();
           window.URL.revokeObjectURL(url);
       } catch (error) {
+        toast.custom(
+          <CustomToast message="Something went wrong" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
+      setExportLoader(false);
     }
   }
   const [getIcdAudit, { data: AuditData,
@@ -188,13 +199,11 @@ export default function IcdScreen({ page }) {
                       alignItems: "center",
                       padding: 2,
                       borderRadius: 1,
-                      backgroundColor: "#f0f0f0",
-                      color: "black",
                       boxShadow: 3,
                       borderRadius: '20px 19px 19px 20px',
-                      "&:hover": {
-                        backgroundColor: "#e0e0e0",
-                      },
+                      // "&:hover": {
+                      //   backgroundColor: "#e0e0e0",
+                      // },
                       width: 72,
                       minWidth: 92,
                       "& .MuiSvgIcon-root": {
@@ -216,6 +225,7 @@ export default function IcdScreen({ page }) {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
+        sx={{ padding: "8px" }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>

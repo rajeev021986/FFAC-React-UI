@@ -1,8 +1,8 @@
-import { CircularProgress, Grid, Stack } from "@mui/material";
+import { CircularProgress, Grid, Stack,Tooltip } from "@mui/material";
 import { useFormik } from "formik";
 import AddMapping from "./AddMapping";
 import * as Yup from "yup";
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useRef, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import ApiManager from "../../../../services/ApiManager";
@@ -61,7 +61,7 @@ export default function ConsigneeForm({
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  
+   const consigneeNameRef = useRef(null);
 
   const formik = useFormik({
     initialValues,
@@ -136,25 +136,60 @@ export default function ConsigneeForm({
       });
     }
   }, [optionsSettingsData]);
+  useEffect(() => {
+        if (consigneeNameRef.current) {
+          consigneeNameRef.current.focus();
+        }
+      }, []);
   const disabled = page == "consignee" ? false : true;
 
   
 
   return (
     <>
+    
       {type == "new" ? (
         <>
-          {" "}
+          <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab
+                    label=" Add Consignee"
+                    value={1}
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  />
+                </TabList>
+              </Box>
+          <TabPanel value={1} sx={{ padding: "0px"}}>
+            {" "}
+             <Grid
+                              container
+                              sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
+                            >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+               <Tooltip
+                                                    title={
+                                                      !formik.values.consigneeName
+                                                        ? "Field is mandatory"
+                                                        : ""
+                                                    }
+                                                    arrow
+                                                  >
               <InputBox
-                label="Consignee Name"
+                label="Consignee Name*"
                 id="consigneeName"
                 value={formik.values.consigneeName}
                 disabled={disabled}
                 error={formik.errors.consigneeName}
                 onChange={formik.handleChange}
+                inputRef={consigneeNameRef}
               />
+              </Tooltip>
             </Grid>
              <Grid
                                         item
@@ -174,13 +209,22 @@ export default function ConsigneeForm({
                                         />
                                     </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Tooltip
+                                                    title={
+                                                      !formik.values.consigneeName
+                                                        ? "Field is mandatory"
+                                                        : ""
+                                                    }
+                                                    arrow
+                                                  >
               <InputBox
-                label="Address1"
+                label="Address1 *"
                 id="address1"
                 value={formik.values.address1}
                 error={formik.errors.address1}
                 onChange={formik.handleChange}
               />
+              </Tooltip>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
@@ -241,16 +285,22 @@ export default function ConsigneeForm({
             <Grid item xs={12}>
               <Box
                 sx={{
-                  borderBottom: 1,
-                  borderColor: "divider",
-                  marginBottom: 2,
+                  border: "1px solid #ccc",
+                  borderRadius: "10px",
+                  margin: "0px 8px",
                 }}
               >
+                 {/* <ThemeTabs
+                      tabData={[
+                        { label: "Free Days", value: "1", disable: false }
+                      ]}
+                    > */}
                 <AddMapping
                   formik={formik}
                   disabled={disabled}
                   dropdownData={dropdownData}
                 />
+                {/* </ThemeTabs> */}
               </Box>
             </Grid>
             
@@ -270,10 +320,11 @@ export default function ConsigneeForm({
                   </ThemeButton>
                 </Stack>
               </Grid>
-            
-
-            
           </Grid>
+          </Grid>
+          </TabPanel>
+          </TabContext>
+          </Box>
         </>
       ) : (
         <>
@@ -292,14 +343,23 @@ export default function ConsigneeForm({
                 {" "}
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <Tooltip
+                                                          title={
+                                                            !formik.values.name
+                                                              ? "Field is mandatory"
+                                                              : ""
+                                                          }
+                                                          arrow
+                                                        >
                     <InputBox
-                      label="Consignee Name"
+                      label="Consignee Name*"
                       id="consigneeName"
                       disabled={disabled}
                       value={formik.values.consigneeName}
                       error={formik.errors.consigneeName}
                       onChange={formik.handleChange}
                     />
+                    </Tooltip>
                   </Grid>
                   {initialValues.statusCode == -2 ||
                     initialValues.statusCode == 1 ? (

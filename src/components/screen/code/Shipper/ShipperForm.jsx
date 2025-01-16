@@ -2,9 +2,10 @@ import {
   CircularProgress,
   Grid,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useRef, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import {useLazyGetShipperAuditQuery } from '../../../../store/api/shipperDataApi';
@@ -57,7 +58,7 @@ export default function ShipperForm({
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  
+  const shipperNameRef = useRef(null);
 
   const formik = useFormik({
     initialValues,
@@ -120,22 +121,58 @@ export default function ShipperForm({
       });
     }
   }, [optionsSettingsData]);
+  useEffect(() => {
+      if (shipperNameRef.current) {
+        shipperNameRef.current.focus();
+      }
+    }, []);
     const disabled = page == "shipper" ? false : true;
 
   return (
     <>
       {type == "new" ? (
         <>
+        
+        <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab
+                    label=" Add Shipper"
+                    value={1}
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  />
+                </TabList>
+              </Box>
+          <TabPanel value={1} sx={{ padding: "0px"}}>
+            {" "}
+            <Grid
+                  container
+                  sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
+                >
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} >
+              <Tooltip
+                                      title={
+                                        !formik.values.name
+                                          ? "Field is mandatory"
+                                          : ""
+                                      }
+                                      arrow
+                                    >
               <InputBox
-                label="Shipper Name"
+                label="Shipper Name*"
                 id="name"
                 value={formik.values.name}
                 disabled={disabled}
                 error={formik.errors.name}
                 onChange={formik.handleChange}
+                inputRef={shipperNameRef}
               />
+              </Tooltip>
             </Grid>
              <Grid
                             item
@@ -145,6 +182,7 @@ export default function ShipperForm({
                             lg={3}
                             xl={2}
                             sx={{ marginTop: 2 }}
+                            paddingLeft={1}
                         >
                             <SelectBox
                                 label="Status"
@@ -154,16 +192,25 @@ export default function ShipperForm({
                                 onChange={formik.handleChange}
                             />
                         </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
+            <Tooltip
+                                      title={
+                                        !formik.values.address1
+                                          ? "Field is mandatory"
+                                          : ""
+                                      }
+                                      arrow
+                                    >
               <InputBox
-                label="Address1"
+                label="Address1 *"
                 id="address1"
                 value={formik.values.address1}
                 error={formik.errors.address1}
                 onChange={formik.handleChange}
               />
+              </Tooltip>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Address2"
                 id="address2"
@@ -172,7 +219,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Address3"
                 id="address3"
@@ -189,7 +236,7 @@ export default function ShipperForm({
               md={4}
               lg={3}
               xl={2}
-              
+              paddingLeft={1}
             >
              
               <InputBox
@@ -201,7 +248,7 @@ export default function ShipperForm({
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Country."
                 id="country"
@@ -210,7 +257,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Email"
                 id="email"
@@ -219,7 +266,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Contact Name"
                 id="contactName"
@@ -228,7 +275,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Designation"
                 id="designation"
@@ -237,7 +284,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Telephone"
                 id="tel_No"
@@ -247,7 +294,7 @@ export default function ShipperForm({
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Extn. No."
                 id="extn_No"
@@ -256,7 +303,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Fax number"
                 id="fax_No"
@@ -266,7 +313,7 @@ export default function ShipperForm({
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="Mobile Number"
                 id="mobile"
@@ -275,7 +322,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="IE CODE"
                 id="ieCode"
@@ -305,10 +352,14 @@ export default function ShipperForm({
                 </Stack>
               </Grid>
           </Grid>
+          </Grid>
+          </TabPanel>
+          </TabContext>
+          </Box>
         </>
       ) : (
         <>
-          <Box sx={{ width: "100%", typography: "body1" }}>
+          <Box sx={{ width: "100%", typography: "body1" , margin:0, padding:0}}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
@@ -320,15 +371,24 @@ export default function ShipperForm({
               </Box>
               <TabPanel value={1}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
+                  <Tooltip
+                                      title={
+                                        !formik.values.name
+                                          ? "Field is mandatory"
+                                          : ""
+                                      }
+                                      arrow
+                                    >
                     <InputBox
-                      label="Shipper Name"
+                      label="Shipper Name*"
                       id="name"
                       disabled={disabled}
                       value={formik.values.name}
                       error={formik.errors.name}
                       onChange={formik.handleChange}
                     />
+                    </Tooltip>
                   </Grid>
                   {initialValues.statusCode == -2 ||
                     initialValues.statusCode == 1 ? (
@@ -371,17 +431,26 @@ export default function ShipperForm({
                                             />
                                           </Grid>
                                         )}
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                  <Tooltip
+                                      title={
+                                        !formik.values.name
+                                          ? "Field is mandatory"
+                                          : ""
+                                      }
+                                      arrow
+                                    >
                     <InputBox
-                      label="Address1"
+                      label="Address1*"
                       id="address1"
                       disabled={disabled}
                       value={formik.values.address1}
                       error={formik.errors.address1}
                       onChange={formik.handleChange}
                     />
+                    </Tooltip>
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
                     <InputBox
                       label="Address2"
                       id="address2"
@@ -400,6 +469,7 @@ export default function ShipperForm({
                     lg={3}
                     xl={2}
                     // sx={{ marginTop: 2 }}
+                    paddingLeft={1}
                   >
                     <InputBox
                       label="Address 3"
@@ -422,7 +492,7 @@ export default function ShipperForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
                     <InputBox
                       label="Country"
                       id="country"
@@ -432,7 +502,7 @@ export default function ShipperForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
                     <InputBox
                       label="Email"
                       id="email"
@@ -442,7 +512,7 @@ export default function ShipperForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
                     <InputBox
                       label="Contact Name"
                       id="contactName"
@@ -452,7 +522,7 @@ export default function ShipperForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
                     <InputBox
                       label="Designation"
                       id="designation"
@@ -463,7 +533,7 @@ export default function ShipperForm({
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
                     <InputBox
                       label="Telephone"
                       id="tel_No"
@@ -473,7 +543,7 @@ export default function ShipperForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
                     <InputBox
                       label="Extn.No."
                       id="extn_No"
@@ -484,7 +554,7 @@ export default function ShipperForm({
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
                     <InputBox
                       label="Fax Number"
                       id="fax_No"
@@ -495,7 +565,7 @@ export default function ShipperForm({
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
                     
                     <InputBox
                 label="Mobile Number"
@@ -505,7 +575,7 @@ export default function ShipperForm({
                 onChange={formik.handleChange}
                 />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1}>
               <InputBox
                 label="IE CODE"
                 id="ieCode"

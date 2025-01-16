@@ -1,6 +1,6 @@
 import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
-  // const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
+// const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const shipperDataApi = createApi({
     reducerPath: "shipperDataApi",
@@ -58,6 +58,16 @@ export const shipperDataApi = createApi({
                 return { url: `entity-service/v1/shipper/audit/${params.id}`, method: "GET", headers: getAppHeaders() };
             },
         }),
+        DeleteShipper: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `entity-service/v1/shipper/${id}`,
+                    method: "DELETE",
+                    headers: getAppHeaders()
+                };
+            },
+            // invalidatesTags: ["Vendor"],
+        }),
         
         
     }),
@@ -69,4 +79,5 @@ export const {
     useUpdateShipperMutation,
     useFetchShipperDatasQuery,
     useLazyGetShipperAuditQuery,
+    useDeleteShipperMutation,
 } = shipperDataApi;

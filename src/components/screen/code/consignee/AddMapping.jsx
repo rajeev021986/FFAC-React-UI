@@ -1,7 +1,10 @@
-import React from "react";
-import { Box, Button } from "@mui/material";
+import React,{ useRef }from "react";
+import { Box, Button,IconButton } from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { Delete } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
+import { StyledDataGrid } from "../../../common/Grid/styles";
 
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const consigneeEntityFreeDays = formik.values.consigneeEntityFreeDays || [
@@ -14,6 +17,14 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
     { label: "ELECTROLYTE", value: "ELECTROLYTE"},
     { label: "COPPER CEMENT", value: "COPPER CEMENT" },
   ];
+  const newRowRef = useRef(null);
+    const setFocus = () => {
+      setTimeout(() => {
+        if (newRowRef.current) {
+          newRowRef.current.focus();
+        }
+      }, 1000);
+    };
 
   // Handler to add a new row
   const addRow = () => {
@@ -58,15 +69,23 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "actions",
       headerName: "Actions",
       sortable: false,
+      renderHeader: () => (
+        <IconButton color="white">
+          <AddCircleIcon onClick={addRow} />
+        </IconButton>
+      ),
       renderCell: (params) => (
         <Button
+          disabled={disabled}
           color="error"
           onClick={() => deleteRow(params.row.id)}
-          disabled={disabled || consigneeEntityFreeDays.length === 1}
+          // disabled={disabled || customerEntityTariffs.length === 1}
         >
-          Delete
+          <Delete />
         </Button>
       ),
+      headerAlign: "center",
+      align: "center",
     },
   ];
 
@@ -80,7 +99,12 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   };
 
   return (
-    <Box sx={{ width: "100%", marginTop: 2 }}>
+    <Box sx={{ width: "100%", textAlign:"right" }}>
+      <Box
+              sx={{
+                height: 400,
+              }}
+            >
       <Button
         startIcon={<Add />}
         onClick={addRow}
@@ -91,7 +115,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
         Add Free Days
       </Button>
       <Box sx={{ height: 400, marginTop: 2 }}>
-        <DataGrid
+        <StyledDataGrid
           rows={consigneeEntityFreeDays}
           columns={columns}
           disableSelectionOnClick
@@ -100,6 +124,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
           getRowId={(row) => row.id}
           disableColumnMenu
         />
+      </Box>
       </Box>
     </Box>
   );
