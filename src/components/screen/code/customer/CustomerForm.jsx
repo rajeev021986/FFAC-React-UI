@@ -48,13 +48,14 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import getFirstError from "../../../common/FieldToastError";
+import EditIcon from "@mui/icons-material/Edit";
+import DescriptionIcon from "@mui/icons-material/Description";
+import HistoryIcon from "@mui/icons-material/History";
 
 export default function CustomerForm({
   initialValues,
   page,
   type = "notcopy",
-  // optionsSettingsData,
-  // customerSettingsData,
 }) {
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
@@ -328,11 +329,18 @@ export default function CustomerForm({
                 <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"
+                  sx={{ padding: "0px" }}
                 >
                   <Tab
                     label="Customer Details"
                     value="1"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<EditIcon />}
+                    iconPosition="start"
                   />
                 </TabList>
               </Box>
@@ -885,21 +893,40 @@ export default function CustomerForm({
                 <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"
+                  sx={{ padding: "0px" }}
                 >
                   <Tab
                     label="Customer Details"
                     value="1"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<EditIcon />}
+                    iconPosition="start"
                   />
                   <Tab
                     label="Document Details"
                     value="2"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<DescriptionIcon />}
+                    iconPosition="start"
                   />
                   <Tab
                     label="Audit Logs"
                     value="3"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<HistoryIcon />}
+                    iconPosition="start"
                   />
                 </TabList>
               </Box>

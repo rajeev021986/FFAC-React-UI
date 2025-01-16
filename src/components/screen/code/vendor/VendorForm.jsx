@@ -20,6 +20,9 @@ import ThemedBreadcrumb from "../../../common/Breadcrumb";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import { useNavigate } from "react-router-dom";
 import AuditTimeLine from "../../../AuditTimeLine";
+import EditIcon from "@mui/icons-material/Edit";
+import DescriptionIcon from "@mui/icons-material/Description";
+import HistoryIcon from "@mui/icons-material/History";
 
 export default function VendorForm({ page = "vendor" }) {
   const [value, setValue] = React.useState(1);
@@ -28,9 +31,9 @@ export default function VendorForm({ page = "vendor" }) {
     setValue(newValue);
   };
   const tabs = [
-    { label: "Vendor Details", value: 1 },
-    { label: "Document Details", value: 2 },
-    { label: "Audit logs", value: 3 },
+    { label: "Vendor Details", value: 1, icon: <EditIcon /> },
+    { label: "Document Details", value: 2, icon: <DescriptionIcon /> },
+    { label: "Audit logs", value: 3, icon: <HistoryIcon /> },
   ];
   const location = useLocation();
   const { id, type } = location.state;
@@ -267,12 +270,22 @@ export default function VendorForm({ page = "vendor" }) {
                 <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"
+                  sx={{
+                    padding: 0,
+                  }}
                 >
                   {tabs.map((a) => (
                     <Tab
-                      sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                      sx={{
+                        fontSize: "1rem",
+                        textTransform: "capitalize",
+                        padding: "0px 12px",
+                        minHeight: "50px",
+                      }}
                       label={a.label}
                       value={a.value}
+                      icon={a.icon}
+                      iconPosition="start"
                     />
                   ))}
                 </TabList>

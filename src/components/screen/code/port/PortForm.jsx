@@ -9,6 +9,7 @@ import Loader from "../../../common/Loader/Loader";
 import PortValueForm from "./PortValueForm";
 import {
   useAddPortMutation,
+  useLazyGetPortAuditQuery,
   useLazyGetPortQuery,
   useUpdatePortMutation,
 } from "../../../../store/api/portDataApi";
@@ -18,6 +19,9 @@ import { useLocation } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import { useNavigate } from "react-router-dom";
 import getFirstError from "../../../common/FieldToastError";
+import EditIcon from "@mui/icons-material/Edit";
+import HistoryIcon from "@mui/icons-material/History";
+import AuditTimeLine from "../../../AuditTimeLine";
 function PortForm() {
   const [value, setValue] = React.useState(1);
   const location = useLocation();
@@ -29,7 +33,13 @@ function PortForm() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const tabs = [{ label: "Port Details", value: 1 }];
+  const tabs =
+    type == "new"
+      ? [{ label: "Bond Details", value: 1, icon: EditIcon }]
+      : [
+          { label: "Bond Details", value: 1, icon: EditIcon },
+          { label: "Audit logs", value: 2, icon: HistoryIcon },
+        ];
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -74,15 +84,15 @@ function PortForm() {
     },
     validationSchema: Yup.object({
       status: Yup.string().required("Status is required"),
-      portDetails: Yup.string(),
-      unCode: Yup.string(),
-      customCode: Yup.string(),
-      newPortName: Yup.string(),
-      countryName: Yup.string(),
-      region: Yup.string(),
-      basePort: Yup.string(),
-      type: Yup.string(),
-      iotaCode: Yup.string(),
+      portDetails: Yup.string().nullable(),
+      unCode: Yup.string().nullable(),
+      customCode: Yup.string().nullable(),
+      newPortName: Yup.string().nullable(),
+      countryName: Yup.string().nullable(),
+      region: Yup.string().nullable(),
+      basePort: Yup.string().nullable(),
+      type: Yup.string().nullable(),
+      iotaCode: Yup.string().nullable(),
     }),
     onSubmit: async (values) => {
       if (type == "copy" || type == "new") {
@@ -103,7 +113,13 @@ function PortForm() {
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
-
+  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetPortAuditQuery();
+  const fetchUserAudit = () => {
+    getPortAudit({
+      id: id,
+    });
+  };
   return (
     <>
       <Box sx={{ width: "100%", typography: "body1" }}>
@@ -112,7 +128,17 @@ function PortForm() {
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               {tabs.map((a) => (
-                <Tab label={a.label} value={a.value} />
+                <Tab
+                  label={a.label}
+                  value={a.value}
+                  sx={{
+                    fontSize: "1rem",
+                    textTransform: "capitalize",
+                    minHeight: "50px",
+                  }}
+                  icon={<a.icon />}
+                  iconPosition="start"
+                />
               ))}
             </TabList>
           </Box>
@@ -127,11 +153,11 @@ function PortForm() {
               />
             )}
           </TabPanel>
-          <TabPanel value={2}>
-            <UploadFile
-              customer_id={id}
-              sourceType="PORT"
-              dropdownData={customerSettingsData?.body?.documentType}
+          <TabPanel value={2} sx={{ padding: "0px" }}>
+            <AuditTimeLine
+              auditDetails={AuditData}
+              reloadDataHandler={fetchUserAudit}
+              loading={isLoadingAudit}
             />
           </TabPanel>
         </TabContext>

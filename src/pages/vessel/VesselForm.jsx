@@ -20,10 +20,10 @@ import ApiManager from "../../services/ApiManager";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 import SelectBox from "../../components/common/SelectBox";
-import AuditTimeLine from "../../components/AuditTimeLine";
-import ThemeTabs from "../../components/common/Tab/ThemeTab";
+import AuditTimeLine from "../../components/AuditTimeLine"; 
 import getFirstError from "../../components/common/FieldToastError";
-
+import EditIcon from "@mui/icons-material/Edit";
+import HistoryIcon from "@mui/icons-material/History";
 export function VesselForm({ initialValues, type }) {
   const location = useLocation();
   const nav = useNavigate();
@@ -55,7 +55,7 @@ export function VesselForm({ initialValues, type }) {
         let line = values.vesselLineEntities.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
         );
-        
+
         try {
           delete values.id;
           let response = await addVessel({
@@ -140,7 +140,13 @@ export function VesselForm({ initialValues, type }) {
                   <Tab
                     label="Vessel Details"
                     value="1"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<EditIcon />}
+                    iconPosition="start"
                   />
                 </TabList>
               </Box>
@@ -293,12 +299,24 @@ export function VesselForm({ initialValues, type }) {
                   <Tab
                     label="Vessel Details"
                     value="1"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<EditIcon />}
+                    iconPosition="start"
                   />
                   <Tab
                     label="Audit Logs"
                     value="2"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<HistoryIcon />}
+                    iconPosition="start"
                   />
                 </TabList>
               </Box>

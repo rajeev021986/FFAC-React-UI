@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { PORT_COLUMNS } from "../../data/columns/port";
 import {
+  useDeletePortMutation,
   useFetchPortQuery,
   useLazyGetPortAuditQuery,
 } from "../../store/api/portDataApi";
@@ -41,9 +42,12 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ApiManager from "../../services/ApiManager";
 import GridActions from "../../components/common/Grid/GridActions";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import DeleteDialog from "../../components/common/DeleteDialog";
+import toast from "react-hot-toast";
 export default function PortScreen() {
   const portSelector = useSelector((state) => state.port);
   const nav = useNavigate();
+  const [deletePort] = useDeletePortMutation();
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -84,6 +88,7 @@ export default function PortScreen() {
     isLoading,
     error,
     isFetching,
+    refetch
   } = useFetchPortQuery({
     params: query,
     payload,
@@ -127,6 +132,24 @@ export default function PortScreen() {
     getPortAudit({
       id: modal.data.id,
     });
+  };
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+  const handleDelete = async () => {
+    try {
+      await deletePort(modal.data.id)
+        .unwrap()
+        .then(() => refetch());
+      toast.success("Port deleted successfully!");
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to delete Port.");
+    }
   };
   return (
     <Box>
@@ -285,6 +308,13 @@ export default function PortScreen() {
                 handleClose={handleClose}
                 handleDelete={handleDelete}
             /> */}
+      <DeleteDialog
+        source="port"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
     </Box>
   );
 }

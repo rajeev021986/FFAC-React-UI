@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { BOND_COLUMNS } from "../../data/columns/bond";
 import {
+  useDeleteBondMutation,
   useFetchbondQuery,
   useLazyGetbondAuditQuery,
 } from "../../store/api/bondDataApi";
@@ -41,6 +42,8 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ApiManager from "../../services/ApiManager";
 import GridActions from "../../components/common/Grid/GridActions";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import toast from "react-hot-toast";
+import DeleteDialog from "../../components/common/DeleteDialog";
 export default function BondScreen() {
   const bondSelector = useSelector((state) => state.bond);
   const nav = useNavigate();
@@ -49,6 +52,7 @@ export default function BondScreen() {
     type: "",
     data: {},
   });
+  const [deleteBond] = useDeleteBondMutation();
   const [seletectBox, setSelectedBox] = useState();
   const dispatch = useDispatch();
   const handlePage = (params) => {
@@ -84,6 +88,7 @@ export default function BondScreen() {
     isLoading,
     error,
     isFetching,
+    refetch
   } = useFetchbondQuery({
     params: query,
     payload,
@@ -127,6 +132,24 @@ export default function BondScreen() {
     getbondAudit({
       id: modal.data.id,
     });
+  };
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+  const handleDelete = async () => {
+    try {
+      await deleteBond(modal.data.id)
+        .unwrap()
+        .then(() => refetch());
+      toast.success("Bond deleted successfully!");
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to delete Bond.");
+    }
   };
   return (
     <Box>
@@ -280,11 +303,13 @@ export default function BondScreen() {
           </Box>
         </Drawer>
       )}
-      {/* <DeleteDialog
-                modal={modal}
-                handleClose={handleClose}
-                handleDelete={handleDelete}
-            /> */}
+      <DeleteDialog
+        source="bond"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
     </Box>
   );
 }

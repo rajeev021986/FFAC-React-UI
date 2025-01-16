@@ -19,7 +19,8 @@ import DateTimeField from "../../components/common/DateTime/DateTimeField";
 import SelectBox from "../../components/common/SelectBox";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import getFirstError from "../../components/common/FieldToastError";
-
+import EditIcon from "@mui/icons-material/Edit";
+import HistoryIcon from "@mui/icons-material/History";
 export function VesselVoyageForm({ initialValues, type }) {
   const disabled = false;
   const nav = useNavigate();
@@ -113,7 +114,13 @@ export function VesselVoyageForm({ initialValues, type }) {
                   <Tab
                     label="Voyage Details"
                     value="1"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<EditIcon />}
+                    iconPosition="start"
                   />
                 </TabList>
               </Box>
@@ -443,12 +450,24 @@ export function VesselVoyageForm({ initialValues, type }) {
                   <Tab
                     label="Voyage Details"
                     value="1"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<EditIcon />}
+                    iconPosition="start"
                   />
                   <Tab
                     label="Audit Logs"
                     value="2"
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<HistoryIcon />}
+                    iconPosition="start"
                   />
                 </TabList>
               </Box>
