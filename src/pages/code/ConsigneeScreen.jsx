@@ -11,9 +11,11 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
+import DeleteDialog from "../../components/common/DeleteDialog";
 
 import {
   useFetchConsigneeDatasQuery,
+  useDeleteConsigneeMutation,
 } from "../../store/api/consigneeDataApi";
 import ConsigneeFilters from "../../components/screen/code/consignee/ConsigneeFilters";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,6 +38,8 @@ import { useEffect } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import { getConsigneeListGridActionsConsigneeApprovel } from "../../components/screen/code/consignee/action copy";
 import ApiManager from "../../services/ApiManager";
+import toast, { LoaderIcon } from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 const ADD_NEW_CONSIGNEE_PATH = "new_consignee";
 
@@ -46,6 +50,7 @@ export default function ConsigneeScreen({ page }) {
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
@@ -54,8 +59,8 @@ export default function ConsigneeScreen({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New" }, { name: "Export" }];
+    ? [{ name: "New Consignee" }, { name: "Copy" }, { name: exportLoader ? <LoaderIcon /> : "Export" },]
+    : [{ name: "New Consignee" }, { name: exportLoader ? <LoaderIcon /> : "Export" },];
   const query = {
     page: consigneeSelector?.pagination?.page + 1,
     size: consigneeSelector?.pagination?.pageSize,
@@ -113,6 +118,25 @@ export default function ConsigneeScreen({ page }) {
       actions:getConsigneeListGridActions(nav, setModal)
           
     });
+    const [deleteConsignee] = useDeleteConsigneeMutation();
+    const handleClose = () => {
+      setModal({
+        open: false,
+        type: "",
+        data: {},
+      });
+    };
+    const handleDelete = async () => {
+      try {
+        await deleteConsignee(modal.data.id)
+          .unwrap()
+          .then(() => refetch());
+        toast.success("Consignee deleted successfully!");
+        handleClose();
+      } catch (error) {
+        toast.error("Failed to delete consignee.");
+      }
+    };
   
   useEffect(() => {
     if (!consigneeSelector.view) {
@@ -122,7 +146,7 @@ export default function ConsigneeScreen({ page }) {
 
   const handleActionClick = async (actionName) => {
     // }
-    if (actionName === "New") {
+    if (actionName === "New Consignee") {
       nav(ADD_NEW_CONSIGNEE_PATH, {
         replace: true,
         state: { formAction: "add", type: "new" },
@@ -139,6 +163,7 @@ export default function ConsigneeScreen({ page }) {
     }
     
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
         const blob = await ApiManager.fetchShipperDatasExcel(query, payload, "consignee");
         const url = window.URL.createObjectURL(blob);
@@ -150,7 +175,14 @@ export default function ConsigneeScreen({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
     } catch (error) {
+      toast.custom(
+        <CustomToast message="Something went wrong" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
+    setExportLoader(false);
     }
   }
   const [getConsigneeAudit, { data: AuditData,
@@ -191,13 +223,11 @@ export default function ConsigneeScreen({ page }) {
                       alignItems: "center",
                       padding: 2,
                       borderRadius: 1,
-                      backgroundColor: "#f0f0f0",
-                      color: "black",
                       boxShadow: 3,
                       borderRadius: '20px 19px 19px 20px',
-                      "&:hover": {
-                        backgroundColor: "#e0e0e0",
-                      },
+                      // "&:hover": {
+                      //   backgroundColor: "#e0e0e0",
+                      // },
                       width: 72,
                       minWidth: 92,
                       "& .MuiSvgIcon-root": {
@@ -219,6 +249,7 @@ export default function ConsigneeScreen({ page }) {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
+        sx={{ padding: "8px" }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -322,7 +353,13 @@ export default function ConsigneeScreen({ page }) {
                     </Box>
                 </Drawer>
             )}
-
+    <DeleteDialog
+        source="consignee"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
 
     </Box>
   );

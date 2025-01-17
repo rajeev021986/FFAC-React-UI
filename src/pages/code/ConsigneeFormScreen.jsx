@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardHeader, Typography,Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
@@ -97,7 +97,8 @@ export default function ConsigneeFormScreen({ page }) {
 
  
   return (
-    <Box>
+    <Box sx={{ padding: 0, margin: 0 }}>
+      <Stack sx={{ padding: "8px 0px" }}>
       <ScreenToolbar
         leftComps={
           <div>
@@ -106,12 +107,13 @@ export default function ConsigneeFormScreen({ page }) {
         }
         rightComps={<div></div>}
       />
+      </Stack>
       {loading || optionsLoading || consigneeSettingsLoading ? (
         <Loader />
       ) : (
-        <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+        <Card sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}>
           
-          <CardContent>
+          <CardContent sx={{ margin: "0px !important", padding: "0px !important" }}>
             <ConsigneeForm
               optionsSettingsData={optionsSettingsData}
               consigneeSettingsData={consigneeSettingsData}

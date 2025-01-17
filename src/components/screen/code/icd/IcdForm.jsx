@@ -2,9 +2,10 @@ import {
   CircularProgress,
   Grid,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import {useLazyGetIcdAuditQuery } from '../../../../store/api/icdDataApi';
@@ -47,6 +48,7 @@ export default function IcdForm({
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateIcd] = useUpdateIcdMutation();
   const [dropdownData, setDropdownData] = useState({});
+  const icdNameRef = useRef(null);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -116,6 +118,11 @@ export default function IcdForm({
       }
     },
   });
+  useEffect(() => {
+        if (icdNameRef.current) {
+          icdNameRef.current.focus();
+        }
+      }, []);
 
   
   const [getIcdAudit, { data: AuditData,
@@ -148,8 +155,37 @@ const fetchAuditData = () => {
       {type == "new" ? (
         <>
           {" "}
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Box sx={{ width: "100%", typography: "body1"}}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab
+                    label="Add ICD"
+                    value={1}
+                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  />
+                </TabList>
+              </Box>
+              <TabPanel value={1} sx={{ padding: 0 }}>
+                {" "}
+                <Grid
+                  container
+                  sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
+                >
+          
+          <Grid container sx={{margin:0}}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+            <Tooltip
+                                      title={
+                                        !formik.values.name
+                                          ? "Field is mandatory"
+                                          : ""
+                                      }
+                                      arrow
+                                    >
               <InputBox
                 label="Icd Name"
                 id="icd_name"
@@ -157,7 +193,9 @@ const fetchAuditData = () => {
                 disabled={disabled}
                 error={formik.errors.icd_name}
                 onChange={formik.handleChange}
+                inputRef={icdNameRef}
               />
+              </Tooltip>
             </Grid>
             <Grid
                                           item
@@ -167,6 +205,7 @@ const fetchAuditData = () => {
                                           lg={3}
                                           xl={2}
                                           sx={{ marginTop: 2 }}
+                                          paddingLeft={1}
                                       >
                                           <SelectBox
                                               label="Status"
@@ -176,7 +215,7 @@ const fetchAuditData = () => {
                                               onChange={formik.handleChange}
                                           />
                                       </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Address1"
                 id="address1"
@@ -185,7 +224,7 @@ const fetchAuditData = () => {
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Address2"
                 id="address2"
@@ -194,7 +233,7 @@ const fetchAuditData = () => {
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Address3"
                 id="address3"
@@ -211,7 +250,7 @@ const fetchAuditData = () => {
               md={4}
               lg={3}
               xl={2}
-              
+              paddingLeft={1}
             >
              
               <InputBox
@@ -223,7 +262,7 @@ const fetchAuditData = () => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Contact Person"
                 id="contact_person"
@@ -232,7 +271,7 @@ const fetchAuditData = () => {
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Email"
                 id="email"
@@ -243,7 +282,7 @@ const fetchAuditData = () => {
             </Grid>
             
             
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Telephone"
                 id="tel_no"
@@ -253,7 +292,7 @@ const fetchAuditData = () => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Mobile Number"
                 id="mobile"
@@ -283,10 +322,11 @@ const fetchAuditData = () => {
                   </ThemeButton>
                 </Stack>
               </Grid>
-          
-            
-            
+              </Grid>
           </Grid>
+          </TabPanel>
+          </TabContext>
+          </Box>
         </>
       ) : (
         <>
@@ -303,7 +343,7 @@ const fetchAuditData = () => {
               <TabPanel value={1}>
                 {" "}
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Icd Name"
                       id="icd_name"
@@ -323,6 +363,7 @@ const fetchAuditData = () => {
                                               lg={3}
                                               xl={2}
                                               sx={{ marginTop: 2 }}
+                                              paddingLeft={1}
                                           >
                                               <SelectBox
                                                   label="Status"
@@ -351,7 +392,7 @@ const fetchAuditData = () => {
                                                       />
                                                     </Grid>)
                   }
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Address1"
                       id="address1"
@@ -361,7 +402,7 @@ const fetchAuditData = () => {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Address2"
                       id="address2"
@@ -378,7 +419,8 @@ const fetchAuditData = () => {
                     md={4}
                     lg={3}
                     xl={2}
-                    // sx={{ marginTop: 2 }}
+                    sx={{ marginTop: 2 }}
+                    paddingLeft={1}
                   >
                     <InputBox
                       label="Address 3"
@@ -391,7 +433,7 @@ const fetchAuditData = () => {
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Icd Code"
                       id="icd_code"
@@ -401,7 +443,7 @@ const fetchAuditData = () => {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Contact Person"
                       id="contact_person"
@@ -411,7 +453,7 @@ const fetchAuditData = () => {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Email"
                       id="email"
@@ -421,7 +463,7 @@ const fetchAuditData = () => {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Telephone"
                       id="tel_no"
@@ -432,7 +474,7 @@ const fetchAuditData = () => {
                     />
                   </Grid>
               
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     
                     <InputBox
                 label="Mobile Number"
