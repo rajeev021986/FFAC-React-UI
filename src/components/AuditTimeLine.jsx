@@ -7,7 +7,6 @@ function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
   useEffect(() => {
     reloadDataHandler();
   }, []);
-  console.log(loading, "loading");
   return (
     <>
       {loading ? (

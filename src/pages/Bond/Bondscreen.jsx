@@ -134,7 +134,6 @@ export default function BondScreen() {
       id: modal.data.id,
     });
   };
-  console.log(isLoadingAudit, "isLoadingAudit");
   const handleClose = () => {
     setModal({
       open: false,

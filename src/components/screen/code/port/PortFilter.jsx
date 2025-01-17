@@ -69,6 +69,9 @@ export default function PortFilterForm({ setFilterOpen }) {
             value={formik.values.statusCode}
             onChange={formik.handleChange}
             sx={{ marginLeft: "5px !important" }}
+            MenuProps={{
+              disablePortal: true,
+            }}
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
