@@ -10,7 +10,7 @@ import InputBox from "../../../common/InputBox";
 
 export default function AddMapping({ formik, dropdownData, disabled }) {
   const consigneeEntityFreeDays = formik.values.consigneeEntityFreeDays || [
-    { id: 1, item: "", freeDays: "", storageRate: ""},
+    // { id: 1, item: "", freeDays: "", storageRate: ""},
   ];
   
 

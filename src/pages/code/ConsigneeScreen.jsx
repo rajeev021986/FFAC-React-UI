@@ -261,19 +261,21 @@ export default function ConsigneeScreen({ page }) {
                 >
                   <ConsigneFilterForm  />
                 </GridSearchInput>
-                <SelectBox
-                  label="Sort By"
-                  options={CONSIGNEE_SORT_OPTIONS}
-                  value={consigneeSelector.sortBy}
-                  onChange={(event) => {
-
-                    dispatch(setSortBy(event.target.value));
-                  }}
-                  sx={{
-                    borderRadius: "20px",
-                    width: "150px",
-                  }}
-                />
+                {consigneeSelector.view === "card" && (
+                  <SelectBox
+                    label="Sort By"
+                    options={CONSIGNEE_SORT_OPTIONS}
+                    value={consigneeSelector.sortBy}
+                    onChange={(event) => {
+                      dispatch(setSortBy(event.target.value));
+                    }}
+                    sx={{
+                      borderRadius: "20px",
+                      width: "150px",
+                    }}
+                  />
+                )}
+                
               </Box>
               <Box>
                 <IconButton onClick={() => dispatch(consigneeSetView("card"))}>

@@ -164,7 +164,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                   container
                   sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                 >
-                  <Grid container sx={{ margin: 0 }}>
+                  <Grid container>
                     <Grid
                       item
                       xs={12}
