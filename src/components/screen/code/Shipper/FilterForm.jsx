@@ -6,10 +6,9 @@ import { updateInput } from "../../../../store/freatures/shipperSlice";
 import { OutlinedButton } from "../../../common/Button";
 import { useFormik } from "formik";
 
-export default function FilterForm() {
+export default function ShpperFilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.shipper.formData);
-
 
   const formik = useFormik({
     initialValues: {
@@ -19,9 +18,11 @@ export default function FilterForm() {
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
+      setFilterOpen(false);
     },
   });
   const handleReset = () => {
+    setFilterOpen(false);
     formik.resetForm();
     dispatch(
       updateInput({
@@ -35,7 +36,6 @@ export default function FilterForm() {
   return (
     <div>
       <Stack spacing={3} direction="column" justifyContent="space-between">
-       
         <Stack direction="row" spacing={2}>
           <InputBox
             label="Shipper Name"
@@ -57,14 +57,19 @@ export default function FilterForm() {
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
-          <Button color="primary" size="small" onClick={handleReset} sx={{borderRadius: '12px'}}>
+          <Button
+            color="primary"
+            size="small"
+            onClick={handleReset}
+            sx={{ borderRadius: "12px" }}
+          >
             reset
           </Button>
           <OutlinedButton
             color="primary"
             size="small"
             onClick={formik.handleSubmit}
-            sx={{borderRadius: '12px'}}
+            sx={{ borderRadius: "12px" }}
           >
             apply
           </OutlinedButton>

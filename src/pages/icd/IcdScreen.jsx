@@ -38,6 +38,7 @@ import ApiManager from "../../services/ApiManager";
 import toast, { LoaderIcon } from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import DeleteDialog from "../../components/common/DeleteDialog";
+import IcdFilterForm from "../../components/screen/code/icd/FilterForm";
 
 
 const ADD_NEW_ICD_PATH = "new_icd";
@@ -258,7 +259,7 @@ export default function IcdScreen({ page }) {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <IcdFilters filterInfo={IcdData?.counts || []} />
+                  <IcdFilterForm/>
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"

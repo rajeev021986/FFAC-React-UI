@@ -1,6 +1,8 @@
 import EditIcon from "@mui/icons-material/Edit";
 import BiotechIcon from "@mui/icons-material/Biotech";
 import { GridDeleteIcon } from "@mui/x-data-grid";
+import CustomToast from "../../../common/Toast/CustomToast";
+import toast from "react-hot-toast";
 
 export const getBondGridActions = (nav, setModal) => {
   return [
@@ -21,15 +23,28 @@ export const getBondGridActions = (nav, setModal) => {
     {
       label: "Delete Bond",
       onClick: (params) => {
-        setModal({
-          open: true,
-          type: "delete",
-          data: {
-            who: "Bond",
-            deleteName: params.row.bondNumber,
-            id: params.row.id,
-          },
-        });
+        if (params.row.statusCode == -2 || params.row.statusCode == -1) {
+          setModal({
+            open: true,
+            type: "delete",
+            data: {
+              who: "Bond",
+              deleteName: params.row.bondNumber,
+              id: params.row.id,
+            },
+          });
+        } else {
+          toast.custom(
+            <CustomToast
+              message="Only for Inactive and Rejected bond"
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
+          return;
+        }
       },
       icon: <GridDeleteIcon />,
     },

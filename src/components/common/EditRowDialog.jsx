@@ -41,16 +41,17 @@ const EditRowDialog = ({ state, EditRowDialogopen, handleClose }) => {
             ?.filter((field) => field.field !== "actions")
             .map((field) => (
               <div key={field.field} style={{ marginTop: "16px" }}>
-                {field.type === "input" && (
+                {field.fieldType === "input" && (
                   <TextField
                     label={field.headerName}
                     fullWidth
                     size="small"
                     value={formValues[field.field] || ""}
                     onChange={(e) => handleChange(field.field, e.target.value)}
+                    {...field}
                   />
                 )}
-                {field.type === "dropdown" && (
+                {field.fieldType === "dropdown" && (
                   <TextField
                     label={field.headerName}
                     fullWidth
@@ -58,6 +59,7 @@ const EditRowDialog = ({ state, EditRowDialogopen, handleClose }) => {
                     size="small"
                     value={formValues[field.field] || ""}
                     onChange={(e) => handleChange(field.field, e.target.value)}
+                    {...field}
                   >
                     {field.options.map((option) => (
                       <MenuItem key={option.id} value={option.value}>

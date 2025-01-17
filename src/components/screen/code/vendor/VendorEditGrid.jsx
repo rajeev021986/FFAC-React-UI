@@ -8,7 +8,7 @@ import {
   Tooltip,
   TextField,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, renderEditInputCell } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,6 +25,7 @@ import SelectBox from "../../../common/SelectBox";
 import InputBox from "../../../common/InputBox";
 import InputBoxForGrid from "../../../common/InputBoxForGrid";
 import EditRowDialog from "../../../common/EditRowDialog";
+import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
 export default function VendorEditGrid({
   formik,
   disabled = false,
@@ -259,8 +260,10 @@ export default function VendorEditGrid({
           headerName: "Unit Rate",
           flex: 1,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} />,
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+          renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
+          renderEditCell: (params) => (
+            <InputBoxForGrid {...params} type="number" />
+          ),
         },
         {
           field: "actions",
@@ -380,33 +383,30 @@ export default function VendorEditGrid({
                 .charAt(0)
                 .toUpperCase() + a.field.slice(1),
             width: 130,
-            type: a.type,
+            type: a?.fieldType,
+            fieldType: a?.type,
             options: a.options,
             headerName:
               a.field
                 .replace(/([a-z])([A-Z])/g, "$1 $2")
                 .charAt(0)
                 .toUpperCase() + a.field.slice(1),
-            editable: true,
+            editable: false,
             renderCell: (params) => (
-              <InputBoxForGrid
-                {...params}
-                type={a.type}
-                options={dropdownData.demurageOptions}
-                fieldType={a.fieldType || null}
-              />
-            ),
-            renderEditCell: (params) => (
-              <InputBoxForGrid
-                {...params}
-                type={a.type}
-                options={dropdownData.demurageOptions}
-                fieldType={a.fieldType || null}
+              <InputBoxForGridTab
+                value={params.value}
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="vendorEntityDemurageTariffs"
+                type={a.fieldType || null}
+                fieldType={a.type || null}
+                options={a.options || null}
               />
             ),
           };
         }),
-
         {
           field: "actions",
           headerName: "Actions",
@@ -719,69 +719,93 @@ export default function VendorEditGrid({
           field: "bankName",
           headerName: "Bank Name",
           flex: 1,
-          editable: true,
-          renderCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter bank name"
-              inputRef={newRowRef}
-            />
-          ),
-          renderEditCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter bank name"
-              inputRef={newRowRef}
-            />
-          ),
+          editable: false,
+          renderCell: (params) => {
+            return (
+              <InputBoxForGridTab
+                value={params.value}
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bankDetails"
+                inputRef={newRowRef}
+              />
+            );
+          },
         },
         {
           field: "bankAddress",
           headerName: "Bank Address",
           flex: 1,
-          editable: true,
-          renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter bank address" />
-          ),
-          renderEditCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter bank address" />
-          ),
+          editable: false,
+          renderCell: (params) => {
+            return (
+              <InputBoxForGridTab
+                value={params.value}
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bankDetails"
+              />
+            );
+          },
         },
         {
           field: "accountNo",
           headerName: "AccountNo",
           flex: 1,
-          editable: true,
-          renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter account number" />
-          ),
-          renderEditCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter account number" />
-          ),
+          editable: false,
+          renderCell: (params) => {
+            return (
+              <InputBoxForGridTab
+                value={params.value}
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bankDetails"
+                type="number"
+              />
+            );
+          },
         },
         {
           field: "currency",
           headerName: "Currency",
           flex: 1,
-          editable: true,
-          renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter currency" />
-          ),
-          renderEditCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter currency" />
-          ),
+          editable: false,
+          renderCell: (params) => {
+            return (
+              <InputBoxForGridTab
+                value={params.value}
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bankDetails"
+              />
+            );
+          },
         },
         {
           field: "swiftCode",
           headerName: "Swift Code",
           flex: 1,
-          editable: true,
-          renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter swift code" />
-          ),
-          renderEditCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter swift code" />
-          ),
+          editable: false,
+          renderCell: (params) => {
+            return (
+              <InputBoxForGridTab
+                value={params.value}
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bankDetails"
+              />
+            );
+          },
         },
         {
           field: "actions",

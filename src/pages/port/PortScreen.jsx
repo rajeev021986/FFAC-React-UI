@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { PORT_COLUMNS } from "../../data/columns/port";
@@ -37,7 +37,7 @@ import {
 import PortFilterForm from "../../components/screen/code/port/PortFilter";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import { getPortGridActions } from "../../components/screen/code/port/port";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ApiManager from "../../services/ApiManager";
 import GridActions from "../../components/common/Grid/GridActions";
@@ -47,6 +47,7 @@ import toast from "react-hot-toast";
 export default function PortScreen() {
   const portSelector = useSelector((state) => state.port);
   const nav = useNavigate();
+  const location = useLocation();
   const [deletePort] = useDeletePortMutation();
   const [modal, setModal] = React.useState({
     open: false,
@@ -93,6 +94,9 @@ export default function PortScreen() {
     params: query,
     payload,
   });
+  useEffect(() => {
+    refetch();
+  }, [location.pathname]);
   PORT_COLUMNS[PORT_COLUMNS.length - 1].renderCell = GridActions({
     actions: getPortGridActions(nav, setModal),
   });

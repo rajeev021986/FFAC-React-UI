@@ -36,6 +36,7 @@ import Backdrop from "@mui/material/Backdrop";
 import ApiManager from "../../services/ApiManager";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import DeleteDialog from "../../components/common/DeleteDialog";
+import ShpperFilterForm from "../../components/screen/code/Shipper/FilterForm";
 
 
 const ADD_NEW_SHIPPER_PATH = "new_shipper";
@@ -252,7 +253,7 @@ const handleDelete = async () => {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <ShipperFilters filterInfo={ShipperData?.counts || []} />
+                  <ShpperFilterForm  />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"

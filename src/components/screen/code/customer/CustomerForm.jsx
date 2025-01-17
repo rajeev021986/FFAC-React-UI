@@ -103,8 +103,8 @@ export default function CustomerForm({
             delete values.creditAmount;
             delete values.creditDays;
           }
-          values.tinNo = values.tinNo.trim() || null;
-          values.vatNo = values.vatNo.trim() || null;
+          values.tinNo = values?.tinNo?.trim() || null;
+          values.vatNo = values?.vatNo?.trim() || null;
           let response = await addCustomer({
             ...values,
             customerEntityEmailsIds: emails,

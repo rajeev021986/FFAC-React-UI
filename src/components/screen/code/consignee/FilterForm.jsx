@@ -6,10 +6,9 @@ import { updateInput } from "../../../../store/freatures/consigneeSlice";
 import { OutlinedButton } from "../../../common/Button";
 import { useFormik } from "formik";
 
-export default function FilterForm() {
+export default function ConsigneFilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.consignee.formData);
-
 
   const formik = useFormik({
     initialValues: {
@@ -19,10 +18,12 @@ export default function FilterForm() {
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
+      setFilterOpen(false);
     },
   });
   const handleReset = () => {
     formik.resetForm();
+    setFilterOpen(false);
     dispatch(
       updateInput({
         city: "",
@@ -35,7 +36,6 @@ export default function FilterForm() {
   return (
     <div>
       <Stack spacing={3} direction="column" justifyContent="space-between">
-       
         <Stack direction="row" spacing={2}>
           <InputBox
             label="Consignee Name"
@@ -57,14 +57,19 @@ export default function FilterForm() {
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
-          <Button color="primary" size="small" onClick={handleReset} sx={{borderRadius: '12px'}}>
+          <Button
+            color="primary"
+            size="small"
+            onClick={handleReset}
+            sx={{ borderRadius: "12px" }}
+          >
             reset
           </Button>
           <OutlinedButton
             color="primary"
             size="small"
             onClick={formik.handleSubmit}
-            sx={{borderRadius: '12px'}}
+            sx={{ borderRadius: "12px" }}
           >
             apply
           </OutlinedButton>

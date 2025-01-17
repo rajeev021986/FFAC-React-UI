@@ -40,6 +40,7 @@ import { getConsigneeListGridActionsConsigneeApprovel } from "../../components/s
 import ApiManager from "../../services/ApiManager";
 import toast, { LoaderIcon } from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import ConsigneFilterForm from "../../components/screen/code/consignee/FilterForm";
 
 const ADD_NEW_CONSIGNEE_PATH = "new_consignee";
 
@@ -258,7 +259,7 @@ export default function ConsigneeScreen({ page }) {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <ConsigneeFilters filterInfo={ConsigneeData?.counts || []} />
+                  <ConsigneFilterForm  />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"

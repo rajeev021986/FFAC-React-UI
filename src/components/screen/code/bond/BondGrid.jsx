@@ -8,6 +8,7 @@ import InputBoxForGrid from "../../../common/InputBoxForGrid";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import { StyledDataGrid } from "../../../common/Grid/styles";
+import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
 
 export default function BondEditGrid({ formik, disabled }) {
   const TabsHosts = [
@@ -63,187 +64,80 @@ export default function BondEditGrid({ formik, disabled }) {
           field: "policyNo",
           headerName: "Policy No",
           flex: 1,
-          editable: true,
           headerAlign: "center",
-          renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter Policy No" />
-          ),
-          renderEditCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter Policy No" />
-          ),
+          editable: false,
+          renderCell: (params) => {
+            return (
+              <InputBoxForGridTab
+                value={params.value}
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bondPurchaseDetailsEntities"
+              />
+            );
+          },
         },
         {
           field: "date",
           headerName: "Date",
           flex: 1,
-          editable: true,
           headerAlign: "center",
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
+          editable: false,
+          renderCell: (params) => {
+            return (
+              <InputBoxForGridTab
                 value={params.value}
-                size="small"
-                fullWidth={true}
-                onMouseEnter={() => {
-                  if (params.cellMode === "view") {
-                    params.api.startCellEditMode({
-                      id: params.id,
-                      field: params.field,
-                    });
-                  }
-                }}
-                onChange={(event) => {
-                  params.api.setEditCellValue({
-                    id: params.id,
-                    field: params.field,
-                    value: event.target.value,
-                  });
-                }}
-                placeholder="Select Date"
-                inputProps={{
-                  style: {
-                    textAlign: "center",
-                  },
-                }}
-              />
-            </div>
-          ),
-          renderEditCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bondPurchaseDetailsEntities"
                 type="datetime-local"
-                value={params.value}
-                size="small"
-                onChange={(event) => {
-                  params.api.setEditCellValue({
-                    id: params.id,
-                    field: params.field,
-                    value: event.target.value,
-                  });
-                }}
-                fullWidth={true}
-                placeholder="Select Date"
-                inputProps={{
-                  style: {
-                    textAlign: "center",
-                  },
-                }}
               />
-            </div>
-          ),
+            );
+          },
         },
         {
           field: "amount",
           headerName: "Amount",
           flex: 1,
-          editable: true,
           headerAlign: "center",
-          renderCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Amount"
-              fieldType="number"
-            />
-          ),
-          renderEditCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Amount"
-              fieldType="number"
-            />
-          ),
+          editable: false,
+          renderCell: (params) => {
+            return (
+              <InputBoxForGridTab
+                value={params.value}
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bondPurchaseDetailsEntities"
+                type="number"
+              />
+            );
+          },
         },
         {
           field: "validUpToDate",
           headerName: "Valid Up To Date",
           flex: 1,
-          editable: true,
           headerAlign: "center",
-          renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
+          editable: false,
+          renderCell: (params) => {
+            return (
+              <InputBoxForGridTab
                 value={params.value}
-                size="small"
-                fullWidth={true}
-                onMouseEnter={() => {
-                  if (params.cellMode === "view") {
-                    params.api.startCellEditMode({
-                      id: params.id,
-                      field: params.field,
-                    });
-                  }
-                }}
-                onChange={(event) => {
-                  params.api.setEditCellValue({
-                    id: params.id,
-                    field: params.field,
-                    value: event.target.value,
-                  });
-                }}
-                placeholder="Select Date"
-                inputProps={{
-                  style: {
-                    textAlign: "center",
-                  },
-                }}
-              />
-            </div>
-          ),
-          renderEditCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <TextField
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bondPurchaseDetailsEntities"
                 type="datetime-local"
-                value={params.value}
-                size="small"
-                onChange={(event) => {
-                  params.api.setEditCellValue({
-                    id: params.id,
-                    field: params.field,
-                    value: event.target.value,
-                  });
-                }}
-                fullWidth={true}
-                placeholder="Select Date"
-                inputProps={{
-                  style: {
-                    textAlign: "center",
-                  },
-                }}
               />
-            </div>
-          ),
+            );
+          },
         },
         // {
         //   field: "actions",

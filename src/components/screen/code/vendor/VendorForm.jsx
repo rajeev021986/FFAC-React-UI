@@ -114,7 +114,6 @@ export default function VendorForm({ page = "vendor" }) {
           /^[A-Za-z\s]+$/,
           "Bank name must only contain letters"
         ),
-        accountNo: Yup.number(),
         bankAddress: Yup.string(),
         currency: Yup.string().matches(
           /^[A-Za-z\s]+$/,
