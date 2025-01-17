@@ -660,44 +660,6 @@ export default function CustomerForm({
                     </Grid>
                   </Grid>
                   <Grid container>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Bank Name"
-                        id="bankName"
-                        value={formik.values.bankName}
-                        error={formik.errors.bankName}
-                        onChange={formik.handleChange}
-                        disabled={disabled}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Account No."
-                        id="accountNo"
-                        value={formik.values.accountNo}
-                        error={formik.errors.accountNo}
-                        onChange={formik.handleChange}
-                        disabled={disabled}
-                      />
-                    </Grid>
                     {/* customer type */}
                     <Grid
                       item
@@ -1300,44 +1262,6 @@ export default function CustomerForm({
                     </Grid>
                   </Grid>
                   <Grid container>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Bank Name"
-                        id="bankName"
-                        value={formik.values.bankName}
-                        error={formik.errors.bankName}
-                        onChange={formik.handleChange}
-                        disabled={disabled}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Account No."
-                        id="accountNo"
-                        value={formik.values.accountNo}
-                        error={formik.errors.accountNo}
-                        onChange={formik.handleChange}
-                        disabled={disabled}
-                      />
-                    </Grid>
                     {/* customer type */}
                     <Grid
                       item
