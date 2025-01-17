@@ -13,6 +13,7 @@ import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import {
   useFetchShipperDatasQuery,
+  useDeleteShipperMutation,
 } from "../../store/api/shipperDataApi";
 import ShipperFilters from "../../components/screen/code/Shipper/ShipperFilters";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,9 +30,13 @@ import GridActions from "../../components/common/Grid/GridActions";
 import { SHIPPER_COLUMNS} from "../../data/columns/shipper"
 import { getShipperListGridActions } from "../../components/screen/code/Shipper/action";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
+import toast, { LoaderIcon } from "react-hot-toast";
 import { useEffect } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import ApiManager from "../../services/ApiManager";
+import CustomToast from "../../components/common/Toast/CustomToast";
+import DeleteDialog from "../../components/common/DeleteDialog";
+
 
 const ADD_NEW_SHIPPER_PATH = "new_shipper";
 export default function ShipperScreen({ page }) {
@@ -39,6 +44,7 @@ export default function ShipperScreen({ page }) {
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
+   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
@@ -47,8 +53,8 @@ export default function ShipperScreen({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New" }, { name: "Export" }];
+    ? [{ name: "New Shipper" }, { name: "Copy" }, { name: exportLoader ? <LoaderIcon /> : "Export" },]
+    : [{ name: "New Shipper" }, { name: exportLoader ? <LoaderIcon /> : "Export" },];
   const query = {
     page: shipperSelector?.pagination?.page + 1,
     size: shipperSelector?.pagination?.pageSize,
@@ -113,7 +119,7 @@ export default function ShipperScreen({ page }) {
   }, [shipperSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
-    if (actionName === "New") {
+    if (actionName === "New Shipper") {
       nav(ADD_NEW_SHIPPER_PATH, {
         replace: true,
         state: { formAction: "add", type: "new" },
@@ -130,6 +136,7 @@ export default function ShipperScreen({ page }) {
     }
     
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
         const blob = await ApiManager.fetchShipperDatasExcel(query, payload, "shipper");
         const url = window.URL.createObjectURL(blob);
@@ -141,7 +148,14 @@ export default function ShipperScreen({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
     } catch (error) {
+      toast.custom(
+        <CustomToast message="Something went wrong" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
+    setExportLoader(false);
     }
   }
   const [getShipperAudit, { data: AuditData,
@@ -150,7 +164,28 @@ const fetchAuditData = () => {
     getShipperAudit({
         id: modal.data.id,
     });
-}
+};
+const [deleteShipper] = useDeleteShipperMutation();
+const handleClose = () => {
+  setModal({
+    open: false,
+    type: "",
+    data: {},
+  });
+};
+
+
+const handleDelete = async () => {
+  try {
+    await deleteShipper(modal.data.id)
+      .unwrap()
+      .then(() => refetch());
+    toast.success("Shipper deleted successfully!");
+    handleClose();
+  } catch (error) {
+    toast.error("Failed to delete shipper.");
+  }
+};
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -182,13 +217,11 @@ const fetchAuditData = () => {
                       alignItems: "center",
                       padding: 2,
                       borderRadius: 1,
-                      backgroundColor: "#f0f0f0",
-                      color: "black",
                       boxShadow: 3,
                       borderRadius: '20px 19px 19px 20px',
-                      "&:hover": {
-                        backgroundColor: "#e0e0e0",
-                      },
+                      // "&:hover": {
+                      //   backgroundColor: "#e0e0e0",
+                      // },
                       width: 72,
                       minWidth: 92,
                       "& .MuiSvgIcon-root": {
@@ -210,6 +243,7 @@ const fetchAuditData = () => {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
+        sx={{ padding: "8px" }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -312,6 +346,13 @@ const fetchAuditData = () => {
                     </Box>
                 </Drawer>
             )}
+            <DeleteDialog
+                    source="shipper"
+                    sourceName={modal?.data?.deleteName}
+                    handleClose={handleClose}
+                    handleDelete={handleDelete}
+                    handleOpen={modal.open && modal.type === "delete"}
+                  />
 
     </Box>
   );

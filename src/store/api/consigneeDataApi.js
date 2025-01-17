@@ -1,6 +1,6 @@
 import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
-  //const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
+ // const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const consigneeDataApi = createApi({
     reducerPath: "consigneeDataApi",
@@ -90,6 +90,16 @@ export const consigneeDataApi = createApi({
                 return { url: `/entity-service/v1/consignee/audit/${params.id}`, method: "GET", headers: getAppHeaders() };
             },
         }),
+        deleteConsignee: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `entity-service/v1/consignee/${id}`,
+                    method: "DELETE",
+                    headers: getAppHeaders()
+                };
+            },
+            // invalidatesTags: ["Vendor"],
+        }),
         
         
     }),
@@ -104,4 +114,5 @@ export const {
     useDownloadDocumnentMutation,
     useFetchConsigneeDatasQuery,
     useLazyGetConsigneeAuditQuery,
+    useDeleteConsigneeMutation,
 } = consigneeDataApi;
