@@ -48,7 +48,9 @@ function PortForm() {
 
   useEffect(() => {
     if (optionsSettingsData?.body || portSettingsData?.body) {
-      handleFetchPort();
+      if (id) {
+        handleFetchPort();
+      }
       setDropdownData({
         ...optionsSettingsData?.body,
         ...portSettingsData?.body,
@@ -60,7 +62,7 @@ function PortForm() {
     try {
       const response = await getPort({ id });
       if (response?.data) {
-        if (type === "copy" || type === "new") {
+        if (type === "new") {
           formik.setValues({
             ...response.data.body,
             // isApproved: !customerSettingsData?.approvalRequest,
@@ -89,7 +91,7 @@ function PortForm() {
     },
     validationSchema: Yup.object({
       newPortName: Yup.string().required("Port name is required"),
-      // type: Yup.string().nullable(),
+      type: Yup.string().required("Port type is required"),
       // status: Yup.string().nullable(),
       // portDetails: Yup.string().nullable(),
       // unCode: Yup.string().nullable(),
@@ -115,9 +117,7 @@ function PortForm() {
       nav(-1);
     },
   });
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
+
   const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
     useLazyGetPortAuditQuery();
   const fetchUserAudit = () => {

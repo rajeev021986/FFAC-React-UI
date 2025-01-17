@@ -87,21 +87,21 @@ export default function BondForm() {
     validationSchema: Yup.object({
       bondNumber: Yup.string().required("Bond Number is required"),
       bondType: Yup.string().required("Bond Type is required"),
-      openingBalance: Yup.number()
-        .required("Opening Balance is required")
-        .typeError("Opening Balance must be a number"),
-      status: Yup.string().required("Status is required"),
-      remark: Yup.string(),
-      bondPurchaseDetailsEntities: Yup.array().of(
-        Yup.object({
-          policyNo: Yup.string().required("Policy Number is required"),
-          date: Yup.date().required("Date is required"),
-          amount: Yup.number()
-            .required("Amount is required")
-            .typeError("Amount must be a number"),
-          validUpToDate: Yup.date().required("Valid Up To Date is required"),
-        })
-      ),
+      // openingBalance: Yup.number()
+      //   .required("Opening Balance is required")
+      //   .typeError("Opening Balance must be a number"),
+      // status: Yup.string().required("Status is required"),
+      // remark: Yup.string(),
+      // bondPurchaseDetailsEntities: Yup.array().of(
+      //   Yup.object({
+      //     policyNo: Yup.string().required("Policy Number is required"),
+      //     date: Yup.date().required("Date is required"),
+      //     amount: Yup.number()
+      //       .required("Amount is required")
+      //       .typeError("Amount must be a number"),
+      //     validUpToDate: Yup.date().required("Valid Up To Date is required"),
+      //   })
+      // ),
     }),
     onSubmit: async (values) => {
       if (type == "copy" || type == "new") {
