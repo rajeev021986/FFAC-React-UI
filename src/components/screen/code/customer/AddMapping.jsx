@@ -243,6 +243,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       flex: 1,
       headerAlign: "center",
       align: "center",
+      editable: true,
       renderCell: (params) => (
         <Tooltip
           title={params.value ? `${params.value}` : "This field is empty"}
