@@ -15,6 +15,7 @@ export default function BondFilterForm({ setFilterOpen }) {
     initialValues: { ...inputs },
     onSubmit: (values) => {
       dispatch(updateBondInput(values));
+      setFilterOpen(false);
     },
   });
   const handleReset = () => {

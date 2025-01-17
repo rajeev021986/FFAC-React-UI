@@ -18,6 +18,7 @@ export function VesselFilters({ setFilterOpen }) {
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
+      setFilterOpen(false)
     },
   });
   const handleReset = () => {

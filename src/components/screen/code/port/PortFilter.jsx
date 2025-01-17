@@ -20,6 +20,7 @@ export default function PortFilterForm({ setFilterOpen }) {
     },
     onSubmit: (values) => {
       dispatch(updatePortInput(values));
+      setFilterOpen(false);
     },
   });
   const handleReset = () => {
