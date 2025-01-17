@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MenuItem, Select, TextField, Tooltip } from "@mui/material";
 
 export default function InputBoxForGrid(props) {
@@ -17,7 +17,11 @@ export default function InputBoxForGrid(props) {
 
   const tooltipMessage = value ? value : "This field is empty";
   const [inputValue, setInputValue] = useState(value || "");
-
+  useEffect(() => {
+    if (props?.cellMode === "view") {
+      setInputValue(props.value);
+    }
+  }, [props.value]);
   const handleChange = (event) => {
     const newValue = event.target.value;
     setInputValue(newValue);
@@ -56,7 +60,13 @@ export default function InputBoxForGrid(props) {
                   marginBottom: "0px",
                   marginTop: "0px",
                   width: "90%",
+                  fontSize: "14px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  marginTop: "5px",
+                  marginBottom: "8px",
                 }}
+                {...props}
               >
                 {options?.map((a) => (
                   <MenuItem value={a.value}>{a.value}</MenuItem>
@@ -87,9 +97,10 @@ export default function InputBoxForGrid(props) {
                   }}
                   inputProps={{
                     style: {
-                      textAlign: "center", // Center the placeholder text as well
+                      textAlign: "center", 
                     },
                   }}
+                  {...props}
                 />
               </Tooltip>
             );

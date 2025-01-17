@@ -11,6 +11,9 @@ import {
   CircularProgress,
   Drawer,
   IconButton,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
   Stack,
   Typography,
 } from "@mui/material";
@@ -37,22 +40,23 @@ import SelectBox from "../../components/common/SelectBox";
 import { USER_SORT_OPTIONS } from "../../data/options";
 import { exportUserManagement } from "../../components/screen/user-management/export";
 import GridActions from "../../components/common/Grid/GridActions";
-import { getUserListGridActions } from '../../components/screen/user-management/action'
+import { getUserListGridActions } from "../../components/screen/user-management/action";
 // import EditIcon from "@mui/icons-material/Edit";
 import ReusableRightDrawer from "../../components/common/CommonDrawer";
 import { COMMON } from "../../data/columns/audit";
 import UserManagementModules from "./UserManagementModules";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import { useLazyFetchAuditQuery } from "../../store/api/common";
-
+import ApiManager from "../../services/ApiManager";
+import CustomToast from "../../components/common/Toast/CustomToast";
+import toast, { LoaderIcon } from "react-hot-toast";
 const ADD_NEW_USER_PATH = "/app/admin/users/addUser";
 
 export default function UserManagementScreen() {
   const userManagementSelector = useSelector((state) => state.userManagement);
   const nav = useNavigate();
   const dispatch = useDispatch();
-  //   const [drawerOpen, setDrawerOpen] = useState(false);
-  //   const [drawerData, setDrawerData] = useState(null);
+  const [exportLoader, setExportLoader] = useState();
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -81,7 +85,13 @@ export default function UserManagementScreen() {
         logicalOperator: "and",
       };
     });
-  Boolean(userManagementSelector?.status.length>0) && (payload.push({ fieldName: "status", operator: "=", value: userManagementSelector?.status[0], logicalOperator: "and" }))
+  Boolean(userManagementSelector?.status.length > 0) &&
+    payload.push({
+      fieldName: "status",
+      operator: "=",
+      value: userManagementSelector?.status[0],
+      logicalOperator: "and",
+    });
 
   const {
     data: UserData,
@@ -89,20 +99,21 @@ export default function UserManagementScreen() {
     isLoading,
     error,
     isFetching,
-    refetch
+    refetch,
   } = useFetchUsersQuery({
     params: query,
     payload,
   });
-  const [fetchAudit, {
-    data: AuditData,
-    isLoading: AuditLoadinng
-  }] = useLazyFetchAuditQuery();
+  const [fetchAudit, { data: AuditData, isLoading: AuditLoadinng }] =
+    useLazyFetchAuditQuery();
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
-
+  const actions = [
+    { name: "New User" },
+    { name: exportLoader ? <LoaderIcon /> : "Export" },
+  ];
   USER_MANAGEMENT_COLUMNS[USER_MANAGEMENT_COLUMNS.length - 1].renderCell =
     GridActions({
       actions: getUserListGridActions(nav, setModal),
@@ -110,8 +121,39 @@ export default function UserManagementScreen() {
   const fetchUserAudit = () => {
     fetchAudit({
       userId: modal.data.id,
-    })
-  }
+    });
+  };
+  const handleActionClick = async (actionName) => {
+    if (actionName === "New User") {
+      nav(ADD_NEW_USER_PATH, { state: { formAction: "add" } });
+    }
+    if (actionName === "Export") {
+      setExportLoader(true);
+      try {
+        const blob = await ApiManager.fetchCustomerDatasExcel(
+          query,
+          payload,
+          "user"
+        );
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "user-data.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        toast.custom(
+          <CustomToast message="Something went wrong" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
+      }
+      setExportLoader(false);
+    }
+  };
   return (
     <Box>
       <ScreenToolbar
@@ -125,7 +167,47 @@ export default function UserManagementScreen() {
             >
               <FileDownloadOutlined fontSize="small" /> Export
             </OutlinedButton> */}
-            <OutlinedButton
+            <SpeedDial
+              ariaLabel="Text-only  SpeedDial"
+              sx={{
+                "& .MuiFab-root": {
+                  width: 50,
+                  height: 50,
+                  minHeight: 50,
+                },
+              }}
+              icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
+              direction="left"
+            >
+              {actions.map((action) => (
+                <SpeedDialAction
+                  key={action.name}
+                  tooltipTitle=""
+                  sx={{
+                    display: "flex",
+                    // width: "150px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 2,
+                    borderRadius: 1,
+                    boxShadow: 3,
+                    borderRadius: "20px 19px 19px 20px",
+                    width: 72,
+                    minWidth: 92,
+                    "& .MuiSvgIcon-root": {
+                      fontSize: 16,
+                    },
+                  }}
+                  icon={
+                    <span style={{ fontSize: "12px", fontWeight: "bold" }}>
+                      {action.name}
+                    </span>
+                  }
+                  onClick={() => handleActionClick(action.name)}
+                ></SpeedDialAction>
+              ))}
+            </SpeedDial>
+            {/* <OutlinedButton
               color="primary"
               size="small"
               onClick={() =>
@@ -133,7 +215,7 @@ export default function UserManagementScreen() {
               }
             >
               <AddCircleOutlineOutlined fontSize="small" /> New User
-            </OutlinedButton>
+            </OutlinedButton> */}
           </>
         }
       />
@@ -193,7 +275,7 @@ export default function UserManagementScreen() {
             handlePage={handlePage}
             data={UserData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => { }}
+            columnVisibilityHandler={() => {}}
             paginationModel={userManagementSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={userManagementSelector.sortModel}
@@ -213,7 +295,11 @@ export default function UserManagementScreen() {
           />
         )}
       </Card>
-      <UserManagementModules refetch={refetch} modal={modal} setModal={setModal} />
+      <UserManagementModules
+        refetch={refetch}
+        modal={modal}
+        setModal={setModal}
+      />
       {/* {modal.type === 'audit' && (
         <ReusableRightDrawer
           open={modal?.open}
@@ -224,25 +310,29 @@ export default function UserManagementScreen() {
           sx={{ zIndex: 2, position: "absolute" }}
         />
       )} */}
-      {modal.type === 'audit' && (
+      {modal.type === "audit" && (
         <Drawer
           anchor="right"
           open={modal?.open}
           onClose={() => setModal({ open: false, type: "", data: {} })}
           sx={{
             width: "50vw",
-            // maxWidth: "50vw",  
+            // maxWidth: "50vw",
             display: "flex",
             flexDirection: "column",
             // zIndex: isFrontmost ? 1301 : 1300, // Adjust z-index based on isFrontmost,
-            zIndex: 1301
+            zIndex: 1301,
           }}
         >
           <Box sx={{ p: 2 }}>
-            <Typography variant="h6" component="div" sx={{ mb: 2 }}> 
+            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
               User Audit Logs
             </Typography>
-            <AuditTimeLine auditDetails={AuditData} reloadDataHandler={fetchUserAudit} loading={AuditLoadinng} />
+            <AuditTimeLine
+              auditDetails={AuditData}
+              reloadDataHandler={fetchUserAudit}
+              loading={AuditLoadinng}
+            />
           </Box>
         </Drawer>
       )}

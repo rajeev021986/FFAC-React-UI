@@ -341,36 +341,36 @@ export default function VendorEditGrid({
       },
       columns: [
         ...[
-          { field: "freeTime", type: "input" },
+          { field: "freeTime", type: "input", fieldType: "number" },
           {
             field: "freeTimeType",
             type: "dropdown",
             options: dropdownData.demurageOptions,
           },
-          { field: "t1Start", type: "input" },
-          { field: "t1End", type: "input" },
+          { field: "t1Start", type: "input", fieldType: "number" },
+          { field: "t1End", type: "input", fieldType: "number" },
           {
             field: "t1Type",
             type: "dropdown",
             options: dropdownData.demurageOptions,
           },
-          { field: "t1Rate", type: "input" },
-          { field: "t2Start", type: "input" },
-          { field: "t2End", type: "input" },
+          { field: "t1Rate", type: "input", fieldType: "number" },
+          { field: "t2Start", type: "input", fieldType: "number" },
+          { field: "t2End", type: "input", fieldType: "number" },
           {
             field: "t2Type",
             type: "dropdown",
             options: dropdownData.demurageOptions,
           },
-          { field: "t2Rate", type: "input" },
-          { field: "t3Start", type: "input" },
-          { field: "t3End", type: "input" },
+          { field: "t2Rate", type: "input", fieldType: "number" },
+          { field: "t3Start", type: "input", fieldType: "number" },
+          { field: "t3End", type: "input", fieldType: "number" },
           {
             field: "t3Type",
             type: "dropdown",
             options: dropdownData.demurageOptions,
           },
-          { field: "t3Rate", type: "input" },
+          { field: "t3Rate", type: "input", fieldType: "number" },
         ].map((a) => {
           return {
             field: a.field,
@@ -393,6 +393,7 @@ export default function VendorEditGrid({
                 {...params}
                 type={a.type}
                 options={dropdownData.demurageOptions}
+                fieldType={a.fieldType || null}
               />
             ),
             renderEditCell: (params) => (
@@ -400,6 +401,7 @@ export default function VendorEditGrid({
                 {...params}
                 type={a.type}
                 options={dropdownData.demurageOptions}
+                fieldType={a.fieldType || null}
               />
             ),
           };
@@ -719,10 +721,18 @@ export default function VendorEditGrid({
           flex: 1,
           editable: true,
           renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter bank name" />
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter bank name"
+              inputRef={newRowRef}
+            />
           ),
           renderEditCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter bank name" />
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter bank name"
+              inputRef={newRowRef}
+            />
           ),
         },
         {

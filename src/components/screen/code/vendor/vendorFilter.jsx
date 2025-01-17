@@ -21,6 +21,7 @@ export default function VendorFilterForm({ setFilterOpen }) {
     },
     onSubmit: (values) => {
       dispatch(updateVendorInput(values));
+      setFilterOpen(false);
     },
   });
   const handleReset = () => {
