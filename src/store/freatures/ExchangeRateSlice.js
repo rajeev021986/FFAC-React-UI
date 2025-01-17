@@ -6,7 +6,7 @@ const initialState = {
     formData: {
         currency: '',
         usdExchange: '',
-        ugxExchange: '',
+        statusCode: '',
     },
     sortBy: ''
 };

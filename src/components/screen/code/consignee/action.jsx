@@ -9,25 +9,23 @@ export const getConsigneeListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        nav(`editconsignee`, {state: {formAction: "edit", initialValues: params.row},
-  
+        nav(`editconsignee`, {
+          state: { formAction: "edit", initialValues: params.row },
         });
       },
       icon: <EditIcon />,
     },
     {
-      label: 'Audit',
+      label: "Audit",
       onClick: (params) => {
-        setModal(
-          { open: true, type: 'audit', data: params.row }
-        )
+        setModal({ open: true, type: "audit", data: params.row });
       },
       icon: <BiotechIcon />,
     },
     {
       label: "Delete",
       onClick: (params) => {
-        if (params.row.isApproved == -2 || params.row.isApproved == -1) {
+        if (params.row.statusCode == -2 || params.row.statusCode == -1) {
           setModal({
             open: true,
             type: "delete",

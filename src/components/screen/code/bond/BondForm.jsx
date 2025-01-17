@@ -106,6 +106,8 @@ export default function BondForm() {
     onSubmit: async (values) => {
       if (type == "copy" || type == "new") {
         try {
+          values.status = "";
+          values.statusCode = 1;
           const result = await addBond({
             ...values,
             bondPurchaseDetailsEntities: values.bondPurchaseDetailsEntities.map(
@@ -116,6 +118,8 @@ export default function BondForm() {
         } catch (error) {}
       } else {
         try {
+          Boolean(values.status == "Active") && (values.statusCode = 1);
+          Boolean(values.status == "Inactive") && (values.statusCode = -2);
           const result = await updateBond({ ...values }).unwrap();
           toast.success(result.message);
         } catch (error) {
@@ -134,7 +138,13 @@ export default function BondForm() {
   };
   return (
     <>
-      <Box sx={{ width: "100%", typography: "body1" }}>
+      <Box
+        sx={{
+          width: "100%",
+          typography: "body1",
+          height: "calc(100vh - 65px)",
+        }}
+      >
         <Stack sx={{ padding: "8px 0px" }}>
           <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
         </Stack>

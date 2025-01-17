@@ -58,7 +58,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       if (!values.id || type == "copy") {
         try {
           delete values.id;
-
+          values.status = "";
           values.statusCode = 1;
           let response = await addShipper({ ...values }).unwrap();
 
@@ -124,14 +124,15 @@ export default function ShipperForm({ initialValues, page, type, id }) {
     <>
       {type == "new" ? (
         <>
-        
-        <Box sx={{ width: "100%", typography: "body1",margin:0,padding:0}}>
+          <Box
+            sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}
+          >
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"
-                  sx={{padding:"0px"}}
+                  sx={{ padding: "0px" }}
                 >
                   <Tab
                     label=" Add Shipper"
@@ -146,217 +147,327 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                   container
                   sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                 >
-          <Grid container sx={{ padding: "0px"}}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  marginTop={2} paddingLeft={1}>
-              <Tooltip
-                                      title={
-                                        !formik.values.name
-                                          ? "Field is mandatory"
-                                          : ""
-                                      }
-                                      arrow
-                                    >
-              <InputBox
-                label="Shipper Name*"
-                id="name"
-                value={formik.values.name}
-                disabled={disabled}
-                error={formik.errors.name}
-                onChange={formik.handleChange}
-                inputRef={shipperNameRef}
-              />
-              </Tooltip>
-            </Grid>
-             <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={3}
-                            xl={2}
-                            //sx={{ marginTop: 2 }}
-                            marginTop={2}
-                            paddingLeft={1}
+                  <Grid container sx={{ padding: "0px" }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <Tooltip
+                        title={!formik.values.name ? "Field is mandatory" : ""}
+                        arrow
+                      >
+                        <InputBox
+                          label="Shipper Name*"
+                          id="name"
+                          value={formik.values.name}
+                          disabled={disabled}
+                          error={formik.errors.name}
+                          onChange={formik.handleChange}
+                          inputRef={shipperNameRef}
+                        />
+                      </Tooltip>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      //sx={{ marginTop: 2 }}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <SelectBox
+                        label="Status"
+                        id="status"
+                        disabled={true}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <Tooltip
+                        title={
+                          !formik.values.address1 ? "Field is mandatory" : ""
+                        }
+                        arrow
+                      >
+                        <InputBox
+                          label="Address1 *"
+                          id="address1"
+                          value={formik.values.address1}
+                          error={formik.errors.address1}
+                          onChange={formik.handleChange}
+                        />
+                      </Tooltip>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Address2"
+                        id="address2"
+                        value={formik.values.address2}
+                        error={formik.errors.address2}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Address3"
+                        id="address3"
+                        value={formik.values.address3}
+                        error={formik.errors.address3}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="City"
+                        id="city"
+                        value={formik.values.city}
+                        error={formik.errors.city}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Country."
+                        id="country"
+                        value={formik.values.country}
+                        error={formik.errors.country}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Email"
+                        id="email"
+                        value={formik.values.email}
+                        error={formik.errors.email}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <InputBox
+                        label="Contact Name"
+                        id="contactName"
+                        value={formik.values.contactName}
+                        error={formik.errors.contactName}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <InputBox
+                        label="Designation"
+                        id="designation"
+                        value={formik.values.designation}
+                        error={formik.errors.designation}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <InputBox
+                        label="Telephone"
+                        id="tel_No"
+                        value={formik.values.tel_No}
+                        error={formik.errors.tel_No}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <InputBox
+                        label="Extn. No."
+                        id="extn_No"
+                        value={formik.values.extn_No}
+                        error={formik.errors.extn_No}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      marginTop={2}
+                    >
+                      <InputBox
+                        label="Fax number"
+                        id="fax_No"
+                        value={formik.values.fax_No}
+                        error={formik.errors.fax_No}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Mobile Number"
+                        id="mobile"
+                        value={formik.values.mobile}
+                        error={formik.errors.mobile}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="IE CODE"
+                        id="ieCode"
+                        value={formik.values.ieCode}
+                        error={formik.errors.ieCode}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid />
+
+                    <Grid item xs={12} sx={{ margin: 1 }}>
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          onClick={() => nav(-1)}
+                          sx={{ fontWeight: "500", borderRadius: "12px" }}
                         >
-                            <SelectBox
-                                label="Status"
-                                id="status"
-                                disabled={true}
-                                error={formik.errors.status}
-                                onChange={formik.handleChange}
-                            />
-                        </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  marginTop={2}  paddingLeft={1}>
-            <Tooltip
-                                      title={
-                                        !formik.values.address1
-                                          ? "Field is mandatory"
-                                          : ""
-                                      }
-                                      arrow
-                                    >
-              <InputBox
-                label="Address1 *"
-                id="address1"
-                value={formik.values.address1}
-                error={formik.errors.address1}
-                onChange={formik.handleChange}
-              />
-              </Tooltip>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  marginTop={2} paddingLeft={1}>
-              <InputBox
-                label="Address2"
-                id="address2"
-                value={formik.values.address2}
-                error={formik.errors.address2}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            </Grid>
-            <Grid container>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2} paddingLeft={1}>
-              <InputBox
-                label="Address3"
-                id="address3"
-                value={formik.values.address3}
-                error={formik.errors.address3}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              lg={3}
-              xl={2}
-              marginTop={2}
-              paddingLeft={1}
-            >
-             
-              <InputBox
-                label="City"
-                id="city"
-                value={formik.values.city}
-                error={formik.errors.city}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2} paddingLeft={1}>
-              <InputBox
-                label="Country."
-                id="country"
-                value={formik.values.country}
-                error={formik.errors.country}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2} paddingLeft={1}>
-              <InputBox
-                label="Email"
-                id="email"
-                value={formik.values.email}
-                error={formik.errors.email}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            </Grid>
-            <Grid container>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1} marginTop={2}>
-              <InputBox
-                label="Contact Name"
-                id="contactName"
-                value={formik.values.contactName}
-                error={formik.errors.contactName}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1} marginTop={2}>
-              <InputBox
-                label="Designation"
-                id="designation"
-                value={formik.values.designation}
-                error={formik.errors.designation}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1} marginTop={2}>
-              <InputBox
-                label="Telephone"
-                id="tel_No"
-                value={formik.values.tel_No}
-                error={formik.errors.tel_No}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1} marginTop={2}>
-              <InputBox
-                label="Extn. No."
-                id="extn_No"
-                value={formik.values.extn_No}
-                error={formik.errors.extn_No}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            </Grid>
-            <Grid container>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  paddingLeft={1} marginTop={2}>
-              <InputBox
-                label="Fax number"
-                id="fax_No"
-                value={formik.values.fax_No}
-                error={formik.errors.fax_No}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2} paddingLeft={1}>
-              <InputBox
-                label="Mobile Number"
-                id="mobile"
-                value={formik.values.mobile}
-                error={formik.errors.mobile}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  marginTop={2} paddingLeft={1}>
-              <InputBox
-                label="IE CODE"
-                id="ieCode"
-                value={formik.values.ieCode}
-                error={formik.errors.ieCode}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid/>
-            
-              <Grid item xs={12} sx={{ margin: 1 }}>
-                <Stack direction="row" spacing={2}>
-                  <OutlinedButton
-                  onClick={()=>nav(-1)}
-                    sx={{ fontWeight: "500", borderRadius: "12px" }}
-                  >
-                    Cancel
-                  </OutlinedButton>
-                  <ThemeButton
-                    onClick={formik.handleSubmit}
-                    sx={{ fontWeight: "500", borderRadius: "12px" }}
-                  >
-                    {isLoading && (
-                      <CircularProgress size={20} color="white" />
-                    )}{" "}
-                    Add
-                  </ThemeButton>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Grid>
-          </TabPanel>
-          </TabContext>
+                          Cancel
+                        </OutlinedButton>
+                        <ThemeButton
+                          onClick={formik.handleSubmit}
+                          sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        >
+                          {isLoading && (
+                            <CircularProgress size={20} color="white" />
+                          )}{" "}
+                          Add
+                        </ThemeButton>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+            </TabContext>
           </Box>
         </>
       ) : (
@@ -401,27 +512,26 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                     </Tooltip>
                   </Grid>
                   {initialValues.statusCode == -2 ||
-                    initialValues.statusCode == 1 ? (
-                  <Grid
-                                  item
-                                  xs={12}
-                                  sm={6}
-                                  md={4}
-                                  lg={3}
-                                  xl={2}
-                                  // sx={{ marginTop: 2 }}
-                              >
-                                  <SelectBox
-                                      label="Status"
-                                      id="status"
-                                      options={optionsSettingsData?.body?.status}
-                                      value={formik.values.status}
-                                      error={formik.errors.status}
-                                      onChange={formik.handleChange}
-                                  />
-                              </Grid>
-                    ) : (
-                      
+                  initialValues.statusCode == 1 ? (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      // sx={{ marginTop: 2 }}
+                    >
+                      <SelectBox
+                        label="Status"
+                        id="status"
+                        options={optionsSettingsData?.body?.status}
+                        value={formik.values.status}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  ) : (
                     <Grid
                       item
                       xs={12}

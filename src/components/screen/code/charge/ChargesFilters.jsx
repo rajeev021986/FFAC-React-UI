@@ -5,6 +5,7 @@ import InputBox from "../../../common/InputBox";
 import { OutlinedButton } from "../../../common/Button";
 import { useFormik } from "formik";
 import { updateInput } from "../../../../store/freatures/ChargesSlice";
+import SelectBox from "../../../common/SelectBox";
 
 export default function ChargesFilters() {
   const dispatch = useDispatch();
@@ -13,8 +14,8 @@ export default function ChargesFilters() {
   const formik = useFormik({
     initialValues: {
       chargeName: inputs.chargeName || "",
-      chargeFor: inputs.chargeFor || "",
       chargeCode: inputs.chargeCode || "",
+      statusCode: inputs.statusCode || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -25,11 +26,22 @@ export default function ChargesFilters() {
     dispatch(
       updateInput({
         chargeName: "",
-        chargeFor: "",
         chargeCode: "",
+        statusCode: "",
       })
     );
+    formik.setValues({
+      chargeName: "",
+      chargeCode: "",
+      statusCode: "",
+    });
   };
+
+  const statusOptions = [
+    { value: 1, label: "Active" },
+    { value: -2, label: "InActive" },
+    { value: 0, label: "Pending" },
+  ];
 
   return (
     <div>
@@ -42,16 +54,21 @@ export default function ChargesFilters() {
             onChange={formik.handleChange}
           />
           <InputBox
-            label="Charge For"
-            id="chargeFor"
-            value={formik.values.chargeFor}
-            onChange={formik.handleChange}
-          />
-          <InputBox
             label="Charge Code"
             id="chargeCode"
             value={formik.values.chargeCode}
             onChange={formik.handleChange}
+          />
+          <SelectBox
+            label="Status"
+            id="statusCode"
+            options={statusOptions}
+            value={formik.values.statusCode}
+            onChange={formik.handleChange}
+            sx={{ marginLeft: "5px !important" }}
+            MenuProps={{
+              disablePortal: true,
+            }}
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
@@ -59,7 +76,16 @@ export default function ChargesFilters() {
             color="primary"
             size="small"
             onClick={handleReset}
-            sx={{ borderRadius: "12px" }}
+            sx={{
+              borderRadius: "12px",
+              padding: "6px 16px",
+              textTransform: "capitalize",
+              backgroundColor: "#f5f5f5",
+              color: "#333",
+              "&:hover": {
+                backgroundColor: "#e0e0e0",
+              },
+            }}
           >
             reset
           </Button>
@@ -69,7 +95,7 @@ export default function ChargesFilters() {
             onClick={formik.handleSubmit}
             sx={{ borderRadius: "12px" }}
           >
-            apply
+            Apply
           </OutlinedButton>
         </Stack>
       </Stack>

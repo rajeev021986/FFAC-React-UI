@@ -5,8 +5,8 @@ const initialState = {
     sortModel: [],
     formData: {
         chargeName: '',
-        chargeFor: '',
         chargeCode: '',
+        statusCode: ''
     },
     sortBy: ''
 };

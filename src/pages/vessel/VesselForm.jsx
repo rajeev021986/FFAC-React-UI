@@ -57,6 +57,8 @@ export function VesselForm({ initialValues, type }) {
         );
 
         try {
+          values.statusCode = 1;
+          values.status = "";
           delete values.id;
           let response = await addVessel({
             ...values,

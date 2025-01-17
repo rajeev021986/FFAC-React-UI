@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateInput } from "../../../../store/freatures/ExchangeRateSlice";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton } from "../../../common/Button";
+import SelectBox from "../../../common/SelectBox";
 
 export default function ExchangeRateFilters() {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ export default function ExchangeRateFilters() {
     initialValues: {
       currency: inputs.currency || "",
       usdExchange: inputs.usdExchange || "",
-      ugxExchange: inputs.ugxExchange || "",
+      statusCode: inputs.statusCode || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -26,10 +27,21 @@ export default function ExchangeRateFilters() {
       updateInput({
         currency: "",
         usdExchange: "",
-        ugxExchange: "",
+        statusCode: "",
       })
     );
+    formik.setValues({
+      currency: "",
+      usdExchange: "",
+      statusCode: "",
+    });
   };
+
+  const statusOptions = [
+    { value: 1, label: "Active" },
+    { value: -2, label: "InActive" },
+    { value: 0, label: "Pending" },
+  ];
 
   return (
     <div>
@@ -47,11 +59,16 @@ export default function ExchangeRateFilters() {
             value={formik.values.usdExchange}
             onChange={formik.handleChange}
           />
-          <InputBox
-            label="Ugx Exchange"
-            id="ugxExchange"
-            value={formik.values.ugxExchange}
+          <SelectBox
+            label="Status"
+            id="statusCode"
+            options={statusOptions}
+            value={formik.values.statusCode}
             onChange={formik.handleChange}
+            sx={{ marginLeft: "5px !important" }}
+            MenuProps={{
+              disablePortal: true,
+            }}
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>

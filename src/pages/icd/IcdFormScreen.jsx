@@ -1,4 +1,11 @@
-import { Box, Card, CardContent, CardHeader, Typography,Stack } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+  Stack,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
@@ -29,9 +36,8 @@ export default function IcdFormScreen({ page }) {
     created_by: "",
     modified_by: "",
     created_date: "",
-    modified_date: ""
+    modified_date: "",
   });
-  
 
   // Move settings queries to the top
   const { data: optionsSettingsData, isLoading: optionsLoading } =
@@ -50,9 +56,7 @@ export default function IcdFormScreen({ page }) {
   useEffect(() => {
     const fetchIcdDetails = async () => {
       try {
-        const res = await ApiManager.getIcdDeatils(
-          state?.initialValues?.id
-        );
+        const res = await ApiManager.getIcdDeatils(state?.initialValues?.id);
         let status = "";
         if (res.body?.status) {
           status =
@@ -64,7 +68,7 @@ export default function IcdFormScreen({ page }) {
         setInitialValues({
           id: res.body?.id || "",
           icd_code: res.body?.icd_code || "",
-          icd_name:res.body?.icd_name || "",
+          icd_name: res.body?.icd_name || "",
           status: status || "",
           statusCode: res?.body?.statusCode || "",
           address1: res.body?.address1 || "",
@@ -82,37 +86,36 @@ export default function IcdFormScreen({ page }) {
           files: [],
         });
         setLoading(false);
-      } catch (error) {
-      
-      }
+      } catch (error) {}
     };
     if (state?.initialValues?.id) {
       fetchIcdDetails();
     } else {
       setLoading(false);
     }
-  }, [ state?.initialValues?.id]);
+  }, [state?.initialValues?.id]);
 
- 
   return (
-    <Box sx={{ padding: 0, margin: 0 }}>
+    <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
       <Stack sx={{ padding: "8px 0px" }}>
-      <ScreenToolbar
-        leftComps={
-          <div>
-            <ThemedBreadcrumb />
-          </div>
-        }
-        rightComps={<div></div>}
-      />
+        <ScreenToolbar
+          leftComps={
+            <div>
+              <ThemedBreadcrumb />
+            </div>
+          }
+          rightComps={<div></div>}
+        />
       </Stack>
       {loading || optionsLoading || icdSettingsLoading ? (
         <Loader />
       ) : (
-        <Card sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}>
-          
-          <CardContent sx={{ margin: "0px !important", padding: "0px !important" }}>
-
+        <Card
+          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
+        >
+          <CardContent
+            sx={{ margin: "0px !important", padding: "0px !important" }}
+          >
             <IcdForm
               optionsSettingsData={optionsSettingsData}
               icdSettingsData={icdSettingsData}
