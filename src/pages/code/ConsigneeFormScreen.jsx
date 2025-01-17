@@ -21,7 +21,7 @@ export default function ConsigneeFormScreen({ page }) {
     city: "",
     consigneeName: "",
     status: "ACTIVE",
-    statusCode: "",
+    statusCode: "1",
     country: "",
     standardFreeDays: "",
     standardRate: "",

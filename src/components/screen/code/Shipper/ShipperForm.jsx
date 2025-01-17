@@ -26,6 +26,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import getFirstError from "../../../common/FieldToastError";
 
 export default function ShipperForm({
   initialValues,
@@ -85,7 +86,9 @@ export default function ShipperForm({
         }
       } else {
         try {
-          
+          Boolean(values.status == "Active") && (values.statusCode = 1);
+          Boolean(values.status == "Inactive") && (values.statusCode = -2);
+
           let response = await updateShipper({ ...values }).unwrap();
 
           // Handle response and display toast messages
@@ -127,6 +130,10 @@ export default function ShipperForm({
       }
     }, []);
     const disabled = page == "shipper" ? false : true;
+    useEffect(() => {
+      getFirstError(formik.errors);
+    }, [formik.errors]);
+  
 
   return (
     <>

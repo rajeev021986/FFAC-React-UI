@@ -23,6 +23,7 @@ import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import {useLazyGetConsigneeAuditQuery } from '../../../../store/api/consigneeDataApi';
+import getFirstError from "../../../common/FieldToastError";
 
 export default function ConsigneeForm({
   initialValues,
@@ -97,6 +98,9 @@ export default function ConsigneeForm({
           let freeDays = values.consigneeEntityFreeDays.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           );
+          Boolean(values.status == "Active") && (values.statusCode = 1);
+          Boolean(values.status == "Inactive") && (values.statusCode = -2);
+
           let response = await updateConsignee({
             ...values,
             consigneeEntityFreeDays: freeDays,
@@ -142,6 +146,9 @@ export default function ConsigneeForm({
         }
       }, []);
   const disabled = page == "consignee" ? false : true;
+  useEffect(() => {
+    getFirstError(formik.errors);
+  }, [formik.errors]);
 
   
 
@@ -314,21 +321,38 @@ export default function ConsigneeForm({
                       </TabPanel>
                     </TabContext>
                   </Box> */}
-            <Grid item xs={12}>
                     <Box
-                      sx={{
-                        borderBottom: 1,
-                        borderColor: "divider",
-                        marginBottom: 2,
-                      }}
-                    >
-                      <AddMapping
-                        formik={formik}
-                        disabled={disabled}
-                        dropdownData={dropdownData}
-                      />
-                    </Box>
-                  </Grid>
+                    sx={{
+                      width: "100%",
+                      typography: "body1",
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      margin: "0px 8px",
+                    }}
+                  >
+                    <TabContext value={value}>
+                      <Box>
+                        <TabList
+                          onChange={handleChange}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab
+                            label="Free Days"
+                            value={1}
+                            sx={{
+                              fontSize: "1rem",
+                              textTransform: "capitalize",
+                            }}
+                          />
+                        </TabList>
+                      </Box>
+                      <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
+                        {" "}
+                        <AddMapping disabled={disabled} formik={formik} />
+                      </TabPanel>
+                    </TabContext>
+                  </Box>
+
             
               <Grid item xs={12}>
                 <Stack direction="row" spacing={2}>
@@ -515,21 +539,37 @@ export default function ConsigneeForm({
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <Box
-                      sx={{
-                        borderBottom: 1,
-                        borderColor: "divider",
-                        marginBottom: 2,
-                      }}
-                    >
-                      <AddMapping
-                        formik={formik}
-                        disabled={disabled}
-                        dropdownData={dropdownData}
-                      />
-                    </Box>
-                  </Grid>
+                   <Box
+                    sx={{
+                      width: "100%",
+                      typography: "body1",
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      margin: "0px 8px",
+                    }}
+                  >
+                    <TabContext value={value}>
+                      <Box>
+                        <TabList
+                          onChange={handleChange}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab
+                            label="Free Days"
+                            value={1}
+                            sx={{
+                              fontSize: "1rem",
+                              textTransform: "capitalize",
+                            }}
+                          />
+                        </TabList>
+                      </Box>
+                      <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
+                        {" "}
+                        <AddMapping disabled={disabled} formik={formik} />
+                      </TabPanel>
+                    </TabContext>
+                  </Box>
                   
                     <Grid item xs={12}>
                       <Stack
