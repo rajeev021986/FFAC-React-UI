@@ -18,7 +18,7 @@ export default function IcdFormScreen({ page }) {
     icd_code: "",
     icd_name: "",
     status: "ACTIVE",
-    statusCode: "",
+    statusCode: "1",
     address1: "",
     address2: "",
     address3: "",

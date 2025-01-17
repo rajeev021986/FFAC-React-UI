@@ -12,7 +12,6 @@ export const getAppHeaders = () => {
 class ApiMethods {
   static apiRequest = async (method, url, body = {}, isBlob = false) => {
      url = API_BASE_URL + url;
-     
     const options = {
       method,
       headers: getAppHeaders(),

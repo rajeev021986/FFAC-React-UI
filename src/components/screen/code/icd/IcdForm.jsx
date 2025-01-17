@@ -27,6 +27,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import getFirstError from "../../../common/FieldToastError";
 
 export default function IcdForm({
   initialValues,
@@ -75,6 +76,10 @@ export default function IcdForm({
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
+  const getStatusCode = () =>
+    {
+      return 1 ;
+    }
 
   const formik = useFormik({
     initialValues,
@@ -103,6 +108,10 @@ export default function IcdForm({
       } else {
         try {
           
+          Boolean(values.status == "Active") && (values.statusCode = 1);
+          Boolean(values.status == "Inactive") && (values.statusCode = -2);
+
+          
           let response = await updateIcd({ ...values }).unwrap();
 
           // Handle response and display toast messages
@@ -123,6 +132,10 @@ export default function IcdForm({
           icdNameRef.current.focus();
         }
       }, []);
+      useEffect(() => {
+        getFirstError(formik.errors);
+      }, [formik.errors]);
+    
 
   
   const [getIcdAudit, { data: AuditData,
