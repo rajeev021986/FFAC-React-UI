@@ -168,12 +168,12 @@ export const VENDOR_SORT_OPTIONS = [
   { value: "tinNo*desc", label: "Country Descending" },
 ];
 export const PORT_SORT_OPTIONS = [
-  { value: "portName*asc", label: "Port Ascending" },
-  { value: "portName*desc", label: "Port Descending" },
+  { value: "newPortName*asc", label: "Port Ascending" },
+  { value: "newPortName*desc", label: "Port Descending" },
   { value: "region*asc", label: "Region Ascending" },
   { value: "region*desc", label: "Region Descending" },
-  { value: "countryName*asc", label: "Country Ascending" },
-  { value: "countryName*desc", label: "Country Descending" },
+  { value: "country*asc", label: "Country Ascending" },
+  { value: "country*desc", label: "Country Descending" },
 ];
 export const PARTY_SORT_OPTIONS = [
   { value: "acode*asc", label: "Code Ascending" },

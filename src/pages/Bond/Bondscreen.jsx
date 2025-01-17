@@ -205,6 +205,7 @@ export default function BondScreen() {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
+          sx={{ padding: "8px", margin: "0px" }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>

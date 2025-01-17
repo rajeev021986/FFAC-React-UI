@@ -6,7 +6,7 @@ const initialState = {
     pagination: { page: 0, pageSize: 10 },
     formData: {
         newPortName: "",
-        countryName: "",
+        country: "",
         statusCode: ""
     },
     sortBy: "",

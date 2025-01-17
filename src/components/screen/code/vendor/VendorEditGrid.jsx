@@ -113,7 +113,6 @@ export default function VendorEditGrid({
           field: "chargeName",
           headerName: "Charge Name",
           flex: 1,
-          // editable: true,
           renderCell: (params) => {
             return (
               <AutoCompleteInput
@@ -149,7 +148,6 @@ export default function VendorEditGrid({
           field: "type",
           headerName: "Type",
           flex: 1,
-          // editable: true,
           renderCell: (params) => (
             <div
               style={{
@@ -197,7 +195,6 @@ export default function VendorEditGrid({
           field: "unitType",
           headerName: "Unit Type",
           flex: 1,
-          // editable: true,
           renderCell: (params) => (
             <div
               style={{
@@ -606,7 +603,6 @@ export default function VendorEditGrid({
           field: "designation",
           headerName: "Designation",
           flex: 1,
-          // editable: true,
           renderCell: (params) => (
             <div
               style={{

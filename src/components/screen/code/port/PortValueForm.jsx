@@ -178,8 +178,8 @@ export default function PortValueForm({ formik, type, optionsSettingsData }) {
             label="Country"
             id="country"
             suggestionName="country"
-            value={formik.values.countryName}
-            error={formik.errors.countryName}
+            value={formik.values.country}
+            error={formik.errors.country}
             onChange={formik.handleChange}
           ></FormAutoComplete>
         </Grid>

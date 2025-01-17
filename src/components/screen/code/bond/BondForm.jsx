@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import BondValue from "./BondValue";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Tab } from "@mui/material";
+import { Box, Card, CardContent, Stack, Tab } from "@mui/material";
 import ScreenToolbar from "../../../common/ScreenToolbar";
 import ThemedBreadcrumb from "../../../common/Breadcrumb";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
@@ -135,44 +135,58 @@ export default function BondForm() {
   return (
     <>
       <Box sx={{ width: "100%", typography: "body1" }}>
-        <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
-        <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              {tabs.map((a) => (
-                <Tab
-                  label={a.label}
-                  value={a.value}
-                  sx={{
-                    fontSize: "1rem",
-                    textTransform: "capitalize",
-                    minHeight: "50px",
-                  }}
-                  icon={<a.icon />}
-                  iconPosition="start"
+        <Stack sx={{ padding: "8px 0px" }}>
+          <ScreenToolbar leftComps={<ThemedBreadcrumb />} />
+        </Stack>
+
+        <Card
+          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
+        >
+          <CardContent
+            sx={{ margin: "0px !important", padding: "0px !important" }}
+          >
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  {tabs.map((a) => (
+                    <Tab
+                      label={a.label}
+                      value={a.value}
+                      sx={{
+                        fontSize: "1rem",
+                        textTransform: "capitalize",
+                        minHeight: "50px",
+                      }}
+                      icon={<a.icon />}
+                      iconPosition="start"
+                    />
+                  ))}
+                </TabList>
+              </Box>
+              <TabPanel value={1} sx={{ padding: 0, margin: 0 }}>
+                {false ? (
+                  <Loader />
+                ) : (
+                  <BondValue
+                    formik={formik}
+                    optionsSettingsData={StatusDropdown}
+                    type={type}
+                  />
+                )}
+              </TabPanel>
+              <TabPanel value={2} sx={{ padding: 0, margin: 0 }}>
+                <AuditTimeLine
+                  auditDetails={AuditData}
+                  reloadDataHandler={fetchUserAudit}
+                  loading={isLoadingAudit}
                 />
-              ))}
-            </TabList>
-          </Box>
-          <TabPanel value={1}>
-            {false ? (
-              <Loader />
-            ) : (
-              <BondValue
-                formik={formik}
-                optionsSettingsData={StatusDropdown}
-                type={type}
-              />
-            )}
-          </TabPanel>
-          <TabPanel value={2} sx={{ padding: "0px" }}>
-            <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
-            />
-          </TabPanel>
-        </TabContext>
+              </TabPanel>
+            </TabContext>
+          </CardContent>
+        </Card>
       </Box>
     </>
   );

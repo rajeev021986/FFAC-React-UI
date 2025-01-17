@@ -28,8 +28,8 @@ export const PORT_COLUMNS = [
     },
     {
         flex: 1,
-        field: 'countryName',
-        headerName: 'Country Name',
+        field: 'country',
+        headerName: 'Country',
         width: 110,
         headerAlign: 'center',
         align: 'center'

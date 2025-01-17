@@ -83,7 +83,16 @@ export default function BondFilterForm({ setFilterOpen }) {
             color="primary"
             size="small"
             onClick={handleReset}
-            sx={{ borderRadius: "12px" }}
+            sx={{
+              borderRadius: "12px",
+              padding: "6px 16px",
+              textTransform: "capitalize",
+              backgroundColor: "#f5f5f5",
+              color: "#333",
+              "&:hover": {
+                backgroundColor: "#e0e0e0",
+              },
+            }}
           >
             reset
           </Button>
@@ -93,7 +102,7 @@ export default function BondFilterForm({ setFilterOpen }) {
             onClick={formik.handleSubmit}
             sx={{ borderRadius: "12px" }}
           >
-            apply
+            Apply
           </OutlinedButton>
         </Stack>
       </Stack>

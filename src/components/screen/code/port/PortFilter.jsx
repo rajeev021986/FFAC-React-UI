@@ -6,6 +6,7 @@ import { OutlinedButton } from "../../../common/Button";
 import { useFormik } from "formik";
 import { updatePortInput } from "../../../../store/freatures/portSlice";
 import SelectBox from "../../../common/SelectBox";
+import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 
 export default function PortFilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
@@ -13,9 +14,9 @@ export default function PortFilterForm({ setFilterOpen }) {
 
   const formik = useFormik({
     initialValues: {
-      portName: inputs.newPortName || "",
-      city: inputs.countryName || "",
-      country: inputs.statusCode || "",
+      newPortName: inputs.newPortName || "",
+      country: inputs.country || "",
+      statusCode: inputs.statusCode || "",
     },
     onSubmit: (values) => {
       dispatch(updatePortInput(values));
@@ -27,13 +28,13 @@ export default function PortFilterForm({ setFilterOpen }) {
     dispatch(
       updatePortInput({
         newPortName: "",
-        countryName: "",
+        country: "",
         statusCode: "",
       })
     );
     formik.setValues({
       newPortName: "",
-      countryName: "",
+      country: "",
       statusCode: "",
     });
   };
@@ -54,13 +55,14 @@ export default function PortFilterForm({ setFilterOpen }) {
             value={formik.values.newPortName}
             onChange={formik.handleChange}
           />
-          <InputBox
-            label="Country Name"
-            id="countryName"
-            value={formik.values.countryName}
+          <FormAutoComplete
+            label="Country"
+            id="country"
+            suggestionName="country"
+            value={formik.values.country}
+            error={formik.errors.country}
             onChange={formik.handleChange}
-            sx={{ marginLeft: "5px !important" }}
-          />
+          ></FormAutoComplete>
 
           <SelectBox
             label="Status"
@@ -79,7 +81,16 @@ export default function PortFilterForm({ setFilterOpen }) {
             color="primary"
             size="small"
             onClick={handleReset}
-            sx={{ borderRadius: "12px" }}
+            sx={{
+              borderRadius: "12px",
+              padding: "6px 16px",
+              textTransform: "capitalize",
+              backgroundColor: "#f5f5f5",
+              color: "#333",
+              "&:hover": {
+                backgroundColor: "#e0e0e0",
+              },
+            }}
           >
             reset
           </Button>
@@ -89,7 +100,7 @@ export default function PortFilterForm({ setFilterOpen }) {
             onClick={formik.handleSubmit}
             sx={{ borderRadius: "12px" }}
           >
-            apply
+            Apply
           </OutlinedButton>
         </Stack>
       </Stack>
