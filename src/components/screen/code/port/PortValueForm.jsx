@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import InputBox from "../../../common/InputBox";
 import { Grid, Stack, TextField } from "@mui/material";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import { useNavigate } from "react-router-dom";
 import SelectBox from "../../../common/SelectBox";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
+import getFirstError from "../../../common/FieldToastError";
 
 export default function PortValueForm({ formik, type, optionsSettingsData }) {
   const nav = useNavigate();
+  useEffect(() => {
+    getFirstError(formik.errors);
+  }, [formik.errors]);
   return (
     <Grid container sx={{ padding: 0, margin: 0, paddingRight: "8px" }}>
       <Grid container sx={{ margin: 0 }}>
@@ -22,10 +26,28 @@ export default function PortValueForm({ formik, type, optionsSettingsData }) {
           marginTop={2}
         >
           <InputBox
-            label="Port Name"
+            label="Port Name*"
             id="newPortName"
             value={formik.values.newPortName}
             error={formik.errors.newPortName}
+            onChange={formik.handleChange}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          paddingLeft={1}
+          marginTop={2}
+        >
+          <InputBox
+            label="Type*"
+            id="type"
+            value={formik.values.type}
+            error={formik.errors.type}
             onChange={formik.handleChange}
           />
         </Grid>
@@ -47,24 +69,7 @@ export default function PortValueForm({ formik, type, optionsSettingsData }) {
             onChange={formik.handleChange}
           />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          xl={2}
-          paddingLeft={1}
-          marginTop={2}
-        >
-          <InputBox
-            label="Type"
-            id="type"
-            value={formik.values.type}
-            error={formik.errors.type}
-            onChange={formik.handleChange}
-          />
-        </Grid>
+
         {formik.values.statusCode == -2 || formik.values.statusCode == 1 ? (
           <Grid
             item

@@ -1,20 +1,15 @@
-import {
-  CircularProgress,
-  Grid,
-  Stack,
-  Tooltip,
-} from "@mui/material";
+import { CircularProgress, Grid, Stack, Tooltip } from "@mui/material";
 import { useFormik } from "formik";
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
-import {useLazyGetIcdAuditQuery } from '../../../../store/api/icdDataApi';
+import { useLazyGetIcdAuditQuery } from "../../../../store/api/icdDataApi";
 import ApiManager from "../../../../services/ApiManager";
 import PopupAlert from "../../../common/Alert/PopupAlert";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
-import SelectBox from '../../../common/SelectBox'
+import SelectBox from "../../../common/SelectBox";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -29,16 +24,10 @@ import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import getFirstError from "../../../common/FieldToastError";
 
-export default function IcdForm({
-  initialValues,
-  page,
-  type,
-  id,
-}) {
+export default function IcdForm({ initialValues, page, type, id }) {
   const tabs = [
     { label: "ICD Details", value: 1 },
-    { label: "Document Details", value: 2 },
-    { label: "Audit logs", value: 3 },
+    { label: "Audit logs", value: 2 },
   ];
   const [options, setOptions] = useState([]);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
@@ -60,10 +49,9 @@ export default function IcdForm({
   const nav = useNavigate();
   const [value, setValue] = React.useState(1);
   const validationSchema = Yup.object({
-      icd_name: Yup.string().required("Name is required"),
-      address1: Yup.string().required("Address1 is required"),
-  
-    });
+    icd_name: Yup.string().required("Name is required"),
+    address1: Yup.string().required("Address1 is required"),
+  });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,10 +64,9 @@ export default function IcdForm({
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
-  const getStatusCode = () =>
-    {
-      return 1 ;
-    }
+  const getStatusCode = () => {
+    return 1;
+  };
 
   const formik = useFormik({
     initialValues,
@@ -87,13 +74,12 @@ export default function IcdForm({
     enableReinitialize: true,
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
-        
         try {
           delete values.id;
-         
+
           // values.status = "New"
           // values.isApproved = !dropdownData?.approvalRequest;
-          let response = await addIcd({ ...values}).unwrap();
+          let response = await addIcd({ ...values }).unwrap();
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
@@ -107,11 +93,9 @@ export default function IcdForm({
         }
       } else {
         try {
-          
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
 
-          
           let response = await updateIcd({ ...values }).unwrap();
 
           // Handle response and display toast messages
@@ -128,27 +112,22 @@ export default function IcdForm({
     },
   });
   useEffect(() => {
-        if (icdNameRef.current) {
-          icdNameRef.current.focus();
-        }
-      }, []);
-      useEffect(() => {
-        getFirstError(formik.errors);
-      }, [formik.errors]);
-    
+    if (icdNameRef.current) {
+      icdNameRef.current.focus();
+    }
+  }, []);
+  useEffect(() => {
+    getFirstError(formik.errors);
+  }, [formik.errors]);
 
-  
-  const [getIcdAudit, { data: AuditData,
-    isLoading: isLoadingAudit }] =  useLazyGetIcdAuditQuery();
-const fetchAuditData = () => {
-    getIcdAudit(
-      {id:initialValues.id}
-    );
-}
+  const [getIcdAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetIcdAuditQuery();
+  const fetchAuditData = () => {
+    getIcdAudit({ id: initialValues.id });
+  };
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
-  const { data: icdSettingsData } =
-    useGetOptionsSettingsQuery("icd_settings");
+  const { data: icdSettingsData } = useGetOptionsSettingsQuery("icd_settings");
 
   useEffect(() => {
     if (optionsSettingsData?.body || icdSettingsData?.body) {
@@ -158,17 +137,14 @@ const fetchAuditData = () => {
       });
     }
   }, [optionsSettingsData]);
-    const disabled = page == "icd" ? false : true;
-
-  
+  const disabled = page == "icd" ? false : true;
 
   return (
     <>
-
       {type == "new" ? (
         <>
           {" "}
-          <Box sx={{ width: "100%", typography: "body1"}}>
+          <Box sx={{ width: "100%", typography: "body1" }}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
@@ -188,157 +164,213 @@ const fetchAuditData = () => {
                   container
                   sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                 >
-          
-          <Grid container sx={{margin:0}}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-            <Tooltip
-                                      title={
-                                        !formik.values.name
-                                          ? "Field is mandatory"
-                                          : ""
-                                      }
-                                      arrow
-                                    >
-              <InputBox
-                label="Icd Name"
-                id="icd_name"
-                value={formik.values.icd_name}
-                disabled={disabled}
-                error={formik.errors.icd_name}
-                onChange={formik.handleChange}
-                inputRef={icdNameRef}
-              />
-              </Tooltip>
-            </Grid>
-            <Grid
-                                          item
-                                          xs={12}
-                                          sm={6}
-                                          md={4}
-                                          lg={3}
-                                          xl={2}
-                                          sx={{ marginTop: 2 }}
-                                          paddingLeft={1}
-                                      >
-                                          <SelectBox
-                                              label="Status"
-                                              id="status"
-                                              disabled={true}
-                                              error={formik.errors.status}
-                                              onChange={formik.handleChange}
-                                          />
-                                      </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-              <InputBox
-                label="Address1"
-                id="address1"
-                value={formik.values.address1}
-                error={formik.errors.address1}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-              <InputBox
-                label="Address2"
-                id="address2"
-                value={formik.values.address2}
-                error={formik.errors.address2}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-              <InputBox
-                label="Address3"
-                id="address3"
-                value={formik.values.address3}
-                error={formik.errors.address3}
-                onChange={formik.handleChange}
-              />
-            </Grid>
+                  <Grid container sx={{ margin: 0 }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <Tooltip
+                        title={!formik.values.name ? "Field is mandatory" : ""}
+                        arrow
+                      >
+                        <InputBox
+                          label="Icd Name"
+                          id="icd_name"
+                          value={formik.values.icd_name}
+                          disabled={disabled}
+                          error={formik.errors.icd_name}
+                          onChange={formik.handleChange}
+                          inputRef={icdNameRef}
+                        />
+                      </Tooltip>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      sx={{ marginTop: 2 }}
+                      paddingLeft={1}
+                    >
+                      <SelectBox
+                        label="Status"
+                        id="status"
+                        disabled={true}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Address1"
+                        id="address1"
+                        value={formik.values.address1}
+                        error={formik.errors.address1}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Address2"
+                        id="address2"
+                        value={formik.values.address2}
+                        error={formik.errors.address2}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Address3"
+                        id="address3"
+                        value={formik.values.address3}
+                        error={formik.errors.address3}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
 
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              lg={3}
-              xl={2}
-              paddingLeft={1}
-            >
-             
-              <InputBox
-                label="Icd Code"
-                id="icd_code"
-                value={formik.values.icd_code}
-                error={formik.errors.icd_code}
-                onChange={formik.handleChange}
-              />
-            </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Icd Code"
+                        id="icd_code"
+                        value={formik.values.icd_code}
+                        error={formik.errors.icd_code}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-              <InputBox
-                label="Contact Person"
-                id="contact_person"
-                value={formik.values.contact_person}
-                error={formik.errors.contact_person}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-              <InputBox
-                label="Email"
-                id="email"
-                value={formik.values.email}
-                error={formik.errors.email}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            
-            
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-              <InputBox
-                label="Telephone"
-                id="tel_no"
-                value={formik.values.tel_no}
-                error={formik.errors.tel_no}
-                onChange={formik.handleChange}
-              />
-            </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Contact Person"
+                        id="contact_person"
+                        value={formik.values.contact_person}
+                        error={formik.errors.contact_person}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Email"
+                        id="email"
+                        value={formik.values.email}
+                        error={formik.errors.email}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-              <InputBox
-                label="Mobile Number"
-                id="mobile"
-                value={formik.values.mobile}
-                error={formik.errors.mobile}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            
-            
-              <Grid item xs={12}>
-                <Stack direction="row" spacing={2}>
-                  <OutlinedButton
-                  onClick={()=>nav(-1)}
-                    sx={{ fontWeight: "500", borderRadius: "12px" }}
-                  >
-                    Cancel
-                  </OutlinedButton>
-                  <ThemeButton
-                    onClick={formik.handleSubmit}
-                    sx={{ fontWeight: "500", borderRadius: "12px" }}
-                  >
-                    {isLoading && (
-                      <CircularProgress size={20} color="white" />
-                    )}{" "}
-                    Add
-                  </ThemeButton>
-                </Stack>
-              </Grid>
-              </Grid>
-          </Grid>
-          </TabPanel>
-          </TabContext>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Telephone"
+                        id="tel_no"
+                        value={formik.values.tel_no}
+                        error={formik.errors.tel_no}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Mobile Number"
+                        id="mobile"
+                        value={formik.values.mobile}
+                        error={formik.errors.mobile}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          onClick={() => nav(-1)}
+                          sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        >
+                          Cancel
+                        </OutlinedButton>
+                        <ThemeButton
+                          onClick={formik.handleSubmit}
+                          sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        >
+                          {isLoading && (
+                            <CircularProgress size={20} color="white" />
+                          )}{" "}
+                          Add
+                        </ThemeButton>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+            </TabContext>
           </Box>
         </>
       ) : (
@@ -350,13 +382,23 @@ const fetchAuditData = () => {
                   onChange={handleChange}
                   aria-label="lab API tabs example"
                 >
-                  {tabs.map((a) => <Tab label={a.label} value={a.value} />)}
+                  {tabs.map((a) => (
+                    <Tab label={a.label} value={a.value} />
+                  ))}
                 </TabList>
               </Box>
               <TabPanel value={1}>
                 {" "}
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
                     <InputBox
                       label="Icd Name"
                       id="icd_name"
@@ -367,45 +409,55 @@ const fetchAuditData = () => {
                     />
                   </Grid>
                   {initialValues.statusCode == -2 ||
-                    initialValues.statusCode == 1 ? (
+                  initialValues.statusCode == 1 ? (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      sx={{ marginTop: 2 }}
+                      paddingLeft={1}
+                    >
+                      <SelectBox
+                        label="Status"
+                        id="status"
+                        options={optionsSettingsData?.body?.status}
+                        value={formik.values.status}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  ) : (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Status"
+                        id="status"
+                        disabled={true}
+                        value={formik.values.status}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  )}
                   <Grid
-                                              item
-                                              xs={12}
-                                              sm={6}
-                                              md={4}
-                                              lg={3}
-                                              xl={2}
-                                              sx={{ marginTop: 2 }}
-                                              paddingLeft={1}
-                                          >
-                                              <SelectBox
-                                                  label="Status"
-                                                  id="status"
-                                                  options={optionsSettingsData?.body?.status}
-                                                  value={formik.values.status}
-                                                  error={formik.errors.status}
-                                                  onChange={formik.handleChange}
-                                              />
-                                          </Grid>):(<Grid
-                                                      item
-                                                      xs={12}
-                                                      sm={6}
-                                                      md={4}
-                                                      lg={3}
-                                                      xl={2}
-                                                      paddingLeft={1}
-                                                    >
-                                                      <InputBox
-                                                        label="Status"
-                                                        id="status"
-                                                        disabled={true}
-                                                        value={formik.values.status}
-                                                        error={formik.errors.status}
-                                                        onChange={formik.handleChange}
-                                                      />
-                                                    </Grid>)
-                  }
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
                     <InputBox
                       label="Address1"
                       id="address1"
@@ -415,7 +467,15 @@ const fetchAuditData = () => {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
                     <InputBox
                       label="Address2"
                       id="address2"
@@ -446,7 +506,15 @@ const fetchAuditData = () => {
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
                     <InputBox
                       label="Icd Code"
                       id="icd_code"
@@ -456,7 +524,15 @@ const fetchAuditData = () => {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
                     <InputBox
                       label="Contact Person"
                       id="contact_person"
@@ -466,7 +542,15 @@ const fetchAuditData = () => {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
                     <InputBox
                       label="Email"
                       id="email"
@@ -476,7 +560,15 @@ const fetchAuditData = () => {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
                     <InputBox
                       label="Telephone"
                       id="tel_no"
@@ -486,58 +578,59 @@ const fetchAuditData = () => {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-              
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
-                    
+
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
                     <InputBox
-                label="Mobile Number"
-                id="mobile"
-                value={formik.values.mobile}
-                error={formik.errors.mobile}
-                onChange={formik.handleChange}
-                />
+                      label="Mobile Number"
+                      id="mobile"
+                      value={formik.values.mobile}
+                      error={formik.errors.mobile}
+                      onChange={formik.handleChange}
+                    />
                   </Grid>
-                 
-                  
-                    <Grid item xs={12}>
-                      <Stack
-                        direction="row"
-                        spacing={2}
-                        justifyContent="space-between"
-                      >
-                        <Stack direction="row" spacing={2}>
-                        <OutlinedButton sx={{ fontWeight: "500" }}
-                                    onClick={() => 
-                                      nav(-1)}
-                                >
-                                    Cancel
-                                </OutlinedButton>
-                          <ThemeButton
-                            onClick={formik.handleSubmit}
-                            sx={{ fontWeight: "500" }}
-                          >
-                            {isLoading && (
-                              <CircularProgress size={20} color="white" />
-                            )}{" "}
-                            Update
-                          </ThemeButton>
-                        </Stack>
+
+                  <Grid item xs={12}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="space-between"
+                    >
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          sx={{ fontWeight: "500" }}
+                          onClick={() => nav(-1)}
+                        >
+                          Cancel
+                        </OutlinedButton>
+                        <ThemeButton
+                          onClick={formik.handleSubmit}
+                          sx={{ fontWeight: "500" }}
+                        >
+                          {isLoading && (
+                            <CircularProgress size={20} color="white" />
+                          )}{" "}
+                          Update
+                        </ThemeButton>
                       </Stack>
-                    </Grid>
-                
-                 
-                  
+                    </Stack>
+                  </Grid>
                 </Grid>
               </TabPanel>
+
               <TabPanel value={2}>
-              <UploadFile
-                  customer_id={initialValues.id}
-                  dropdownData={icdSettingsData?.body?.documentType}
-                  sourceType="ICD"
+                <AuditTimeline
+                  auditDetails={AuditData}
+                  reloadDataHandler={fetchAuditData}
+                  loading={isLoadingAudit}
                 />
-              </TabPanel>
-              <TabPanel value={3}>
-              <AuditTimeline auditDetails={AuditData} reloadDataHandler={fetchAuditData} loading={isLoadingAudit} />
               </TabPanel>
             </TabContext>
           </Box>
@@ -546,4 +639,3 @@ const fetchAuditData = () => {
     </>
   );
 }
-

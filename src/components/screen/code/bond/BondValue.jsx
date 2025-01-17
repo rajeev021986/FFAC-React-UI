@@ -27,7 +27,7 @@ export default function BondValue({ formik, optionsSettingsData, type }) {
           marginTop={2}
         >
           <InputBox
-            label="Bond Number"
+            label="Bond Number*"
             id="bondNumber"
             value={formik.values.bondNumber}
             error={formik.errors.bondNumber}
@@ -45,7 +45,7 @@ export default function BondValue({ formik, optionsSettingsData, type }) {
           marginTop={2}
         >
           <InputBox
-            label="Bond Type"
+            label="Bond Type*"
             id="bondType"
             value={formik.values.bondType}
             error={formik.errors.bondType}
