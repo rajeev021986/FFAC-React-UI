@@ -11,9 +11,11 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
+import DeleteDialog from "../../components/common/DeleteDialog";
 
 import {
   useFetchConsigneeDatasQuery,
+  useDeleteConsigneeMutation,
 } from "../../store/api/consigneeDataApi";
 import ConsigneeFilters from "../../components/screen/code/consignee/ConsigneeFilters";
 import { useDispatch, useSelector } from "react-redux";
@@ -116,6 +118,25 @@ export default function ConsigneeScreen({ page }) {
       actions:getConsigneeListGridActions(nav, setModal)
           
     });
+    const [deleteConsignee] = useDeleteConsigneeMutation();
+    const handleClose = () => {
+      setModal({
+        open: false,
+        type: "",
+        data: {},
+      });
+    };
+    const handleDelete = async () => {
+      try {
+        await deleteConsignee(modal.data.id)
+          .unwrap()
+          .then(() => refetch());
+        toast.success("Consignee deleted successfully!");
+        handleClose();
+      } catch (error) {
+        toast.error("Failed to delete consignee.");
+      }
+    };
   
   useEffect(() => {
     if (!consigneeSelector.view) {
@@ -332,7 +353,13 @@ export default function ConsigneeScreen({ page }) {
                     </Box>
                 </Drawer>
             )}
-
+    <DeleteDialog
+        source="consignee"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
 
     </Box>
   );

@@ -35,6 +35,8 @@ import { useEffect } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import ApiManager from "../../services/ApiManager";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import DeleteDialog from "../../components/common/DeleteDialog";
+
 
 const ADD_NEW_SHIPPER_PATH = "new_shipper";
 export default function ShipperScreen({ page }) {
@@ -172,6 +174,7 @@ const handleClose = () => {
     data: {},
   });
 };
+
 
 const handleDelete = async () => {
   try {
@@ -344,6 +347,13 @@ const handleDelete = async () => {
                     </Box>
                 </Drawer>
             )}
+            <DeleteDialog
+                    source="shipper"
+                    sourceName={modal?.data?.deleteName}
+                    handleClose={handleClose}
+                    handleDelete={handleDelete}
+                    handleOpen={modal.open && modal.type === "delete"}
+                  />
 
     </Box>
   );

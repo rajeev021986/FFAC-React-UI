@@ -133,7 +133,7 @@ export default function ShipperForm({
       {type == "new" ? (
         <>
         
-        <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
+        <Box sx={{ width: "100%", typography: "body1"}}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
@@ -153,8 +153,8 @@ export default function ShipperForm({
                   container
                   sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                 >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} >
+          <Grid container sx={{margin:0}}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <Tooltip
                                       title={
                                         !formik.values.name

@@ -65,7 +65,7 @@ export default function ConsigneeForm({
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
@@ -150,7 +150,7 @@ export default function ConsigneeForm({
     
       {type == "new" ? (
         <>
-          <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
+          <Box sx={{ width: "100%", typography: "body1"}}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
@@ -170,8 +170,8 @@ export default function ConsigneeForm({
                               container
                               sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                             >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid container sx={{margin:0}}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                <Tooltip
                                                     title={
                                                       !formik.values.consigneeName
@@ -199,6 +199,7 @@ export default function ConsigneeForm({
                                         lg={3}
                                         xl={2}
                                         sx={{ marginTop: 2 }}
+                                        paddingLeft={1}
                                     >
                                         <SelectBox
                                             label="Status"
@@ -208,10 +209,10 @@ export default function ConsigneeForm({
                                             onChange={formik.handleChange}
                                         />
                                     </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
             <Tooltip
                                                     title={
-                                                      !formik.values.consigneeName
+                                                      !formik.values.address1
                                                         ? "Field is mandatory"
                                                         : ""
                                                     }
@@ -226,7 +227,7 @@ export default function ConsigneeForm({
               />
               </Tooltip>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Address2"
                 id="address2"
@@ -235,7 +236,7 @@ export default function ConsigneeForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Address3"
                 id="address3"
@@ -245,7 +246,7 @@ export default function ConsigneeForm({
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="City"
                 id="city"
@@ -255,7 +256,7 @@ export default function ConsigneeForm({
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
               <InputBox
                 label="Country"
                 id="country"
@@ -264,7 +265,7 @@ export default function ConsigneeForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Grid item xs={12} sm={6} md={4} lg={3} paddingLeft={1}>
               <InputBox
                 label="Standard Free Days"
                 id="standardFreeDays"
@@ -273,7 +274,7 @@ export default function ConsigneeForm({
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Grid item xs={12} sm={6} md={4} lg={3} paddingLeft={1}>
               <InputBox
                 label="Standard Rate"
                 id="standardRate"
@@ -282,27 +283,52 @@ export default function ConsigneeForm({
                 onChange={formik.handleChange}
               />
             </Grid>
+            {/* <Box
+                    sx={{
+                      width: "100%",
+                      typography: "body1",
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      margin: "0px 8px",
+                    }}
+                  >
+                    <TabContext value={value}>
+                      <Box>
+                        <TabList
+                          onChange={handleChange}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab
+                            label="Line"
+                            value="1"
+                            sx={{
+                              fontSize: "1rem",
+                              textTransform: "capitalize",
+                            }}
+                          />
+                        </TabList>
+                      </Box>
+                      <TabPanel value="1" sx={{ margin: 0, padding: 0 }}>
+                        {" "}
+                        <AddMapping disabled={disabled} dropdownData={dropdownData}/>
+                      </TabPanel>
+                    </TabContext>
+                  </Box> */}
             <Grid item xs={12}>
-              <Box
-                sx={{
-                  border: "1px solid #ccc",
-                  borderRadius: "10px",
-                  margin: "0px 8px",
-                }}
-              >
-                 {/* <ThemeTabs
-                      tabData={[
-                        { label: "Free Days", value: "1", disable: false }
-                      ]}
-                    > */}
-                <AddMapping
-                  formik={formik}
-                  disabled={disabled}
-                  dropdownData={dropdownData}
-                />
-                {/* </ThemeTabs> */}
-              </Box>
-            </Grid>
+                    <Box
+                      sx={{
+                        borderBottom: 1,
+                        borderColor: "divider",
+                        marginBottom: 2,
+                      }}
+                    >
+                      <AddMapping
+                        formik={formik}
+                        disabled={disabled}
+                        dropdownData={dropdownData}
+                      />
+                    </Box>
+                  </Grid>
             
               <Grid item xs={12}>
                 <Stack direction="row" spacing={2}>
@@ -342,7 +368,7 @@ export default function ConsigneeForm({
               <TabPanel value={1}>
                 {" "}
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <Tooltip
                                                           title={
                                                             !formik.values.name
@@ -371,6 +397,7 @@ export default function ConsigneeForm({
                                                     lg={3}
                                                     xl={2}
                                                     sx={{ marginTop: 2 }}
+                                                    paddingLeft={1}
                                                 >
                                                     <SelectBox
                                                         label="Status"
@@ -400,6 +427,14 @@ export default function ConsigneeForm({
                                                                 />
                                                               </Grid>)}
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Tooltip
+                                                    title={
+                                                      !formik.values.address1
+                                                        ? "Field is mandatory"
+                                                        : ""
+                                                    }
+                                                    arrow
+                                                  >
                     <InputBox
                       label="Address1"
                       id="address1"
@@ -408,8 +443,9 @@ export default function ConsigneeForm({
                       error={formik.errors.address1}
                       onChange={formik.handleChange}
                     />
+                    </Tooltip>
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Address2"
                       id="address2"
@@ -428,6 +464,7 @@ export default function ConsigneeForm({
                     lg={3}
                     xl={2}
                     // sx={{ marginTop: 2 }}
+                    paddingLeft={1}
                   >
                     <InputBox
                       label="Address 3"
@@ -439,7 +476,7 @@ export default function ConsigneeForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="City"
                       id="city"
@@ -449,7 +486,7 @@ export default function ConsigneeForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Country"
                       id="country"
@@ -459,7 +496,7 @@ export default function ConsigneeForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Standard Free Days"
                       id="standardFreeDays"
@@ -468,7 +505,7 @@ export default function ConsigneeForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2} paddingLeft={1}>
                     <InputBox
                       label="Standard Rate"
                       id="standardRate"

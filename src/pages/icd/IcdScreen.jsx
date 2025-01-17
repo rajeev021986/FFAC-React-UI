@@ -12,6 +12,7 @@ import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import {
   useFetchIcdDatasQuery,
+  useDeleteIcdMutation,
 } from "../../store/api/icdDataApi";
 import IcdFilters from "../../components/screen/code/icd/IcdFilters";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,6 +37,8 @@ import Backdrop from "@mui/material/Backdrop";
 import ApiManager from "../../services/ApiManager";
 import toast, { LoaderIcon } from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import DeleteDialog from "../../components/common/DeleteDialog";
+
 
 const ADD_NEW_ICD_PATH = "new_icd";
 
@@ -169,6 +172,27 @@ export default function IcdScreen({ page }) {
           id: modal.data.id,
       });
   }
+  const [deleteIcd] = useDeleteIcdMutation();
+
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteIcd(modal.data.id)
+        .unwrap()
+        .then(() => refetch());
+      toast.success("Icd deleted successfully!");
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to delete icd.");
+    }
+  };
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -330,6 +354,13 @@ export default function IcdScreen({ page }) {
                     </Box>
                 </Drawer>
             )}
+             <DeleteDialog
+                    source="icd"
+                    sourceName={modal?.data?.deleteName}
+                    handleClose={handleClose}
+                    handleDelete={handleDelete}
+                    handleOpen={modal.open && modal.type === "delete"}
+                  />
 
     </Box>
   );
