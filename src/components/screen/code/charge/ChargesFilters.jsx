@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import { updateInput } from "../../../../store/freatures/ChargesSlice";
 import SelectBox from "../../../common/SelectBox";
 
-export default function ChargesFilters() {
+export default function ChargesFilters({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.chargesStore.formData);
 
@@ -19,6 +19,7 @@ export default function ChargesFilters() {
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
+      setFilterOpen(false);
     },
   });
   const handleReset = () => {
@@ -35,6 +36,7 @@ export default function ChargesFilters() {
       chargeCode: "",
       statusCode: "",
     });
+    setFilterOpen(false);
   };
 
   const statusOptions = [

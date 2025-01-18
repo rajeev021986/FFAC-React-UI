@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useRef } from "react";
 import InputBox from "../../../common/InputBox";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
@@ -14,7 +14,10 @@ import { toast } from "react-hot-toast";
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import SelectBox from "../../../common/SelectBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ChargeMapping } from "./ChargeMapping";
+import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
+import { StyledDataGrid } from "../../../common/Grid/styles";
 
 export default function ChargeInputs({
   formik,
@@ -22,13 +25,21 @@ export default function ChargeInputs({
   type,
   nav,
 }) {
+  const newRowRef = useRef(null);
+  const setFocus = () => {
+    setTimeout(() => {
+      if (newRowRef.current) {
+        newRowRef.current.focus();
+      }
+    }, 1000);
+  };
   const addNewRow = () => {
     const hasEmptyFields = formik.values.mappingDetails.some((row) =>
       Object.values(row).some(
         (value) => value === "" || value === null || value === undefined
       )
     );
-    if (hasEmptyFields) {
+    if (false) {
       toast.error("Please fill in all fields before adding a new row.", {
         position: "top-right",
         autoClose: 3000,
@@ -49,6 +60,7 @@ export default function ChargeInputs({
       ...formik.values.mappingDetails,
       newRow,
     ]);
+    setFocus();
   };
   const deleteRow = (id) => {
     const updatedRows = formik.values.mappingDetails.filter(
@@ -68,18 +80,49 @@ export default function ChargeInputs({
       field: "directIncome",
       headerName: "Direct Income",
       flex: 1,
-      editable: true,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <InputBoxForGridTab
+            value={params.value}
+            field={params.field}
+            id={params.id}
+            formik={formik}
+            api={params.api}
+            arrayName="mappingDetails"
+            inputRef={newRowRef}
+          />
+        );
+      },
     },
     {
       field: "directExpense",
       headerName: "Direct Expense",
       flex: 1,
-      editable: true,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <InputBoxForGridTab
+            value={params.value}
+            field={params.field}
+            id={params.id}
+            formik={formik}
+            api={params.api}
+            arrayName="mappingDetails"
+          />
+        );
+      },
     },
     {
       field: "actions",
       headerName: "Actions",
       sortable: false,
+      flex: 0,
+      renderHeader: () => (
+        <IconButton color="white">
+          <AddCircleIcon onClick={addNewRow} />
+        </IconButton>
+      ),
       renderCell: (params) => (
         <IconButton color="error" onClick={() => deleteRow(params.row.id)}>
           <GridDeleteIcon />
@@ -201,34 +244,14 @@ export default function ChargeInputs({
                     </TabContext>
                   </Box> */}
 
-        <Box sx={{ width: "100%" }} paddingInline={2}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "reverse",
-              mb: 2,
-            }}
-          >
-            <Typography sx={{ mb: 2 }}>
-              <h2>Mapping Details</h2>
-            </Typography>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={addNewRow}
-              sx={{ borderRadius: "17px 18px 18px 17px", margin: "5px" }}
-            >
-              Add Mapping
-            </Button>
-          </Box>
+        <Box sx={{ width: "100%", marginTop: 2 }} paddingInline={2}>
           <Box sx={{ height: 400 }}>
-            <DataGrid
+            <StyledDataGrid
               rows={formik.values.mappingDetails}
               columns={columns.map((column) => ({
                 ...column,
                 headerAlign: "center",
+                align: "center",
               }))}
               disableSelectionOnClick
               processRowUpdate={handleProcessRowUpdate}

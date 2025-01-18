@@ -9,12 +9,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import {
   useAddChargeMutation,
+  useLazyGetChargeAuditQuery,
   useLazyGetChargeQuery,
   useUpdateChargeMutation,
 } from "../../../../store/api/chargesDataApi";
 import toast from "react-hot-toast";
 import Loader from "../../../common/Loader/Loader";
 import ChargeInputs from "./ChargeInputs";
+import AuditTimeLine from "../../../AuditTimeLine";
 
 const AddEditCharge = () => {
   const location = useLocation();
@@ -87,6 +89,10 @@ const AddEditCharge = () => {
       }
     } else {
       try {
+        Boolean(updatedValue.status == "Active") &&
+          (updatedValue.statusCode = 1);
+        Boolean(updatedValue.status == "Inactive") &&
+          (updatedValue.statusCode = -2);
         let res = await updateCharge(updatedValue).unwrap();
         if (res.success) {
           toast.success(res.message);
@@ -123,7 +129,13 @@ const AddEditCharge = () => {
       handleFetchCharge();
     }
   }, [ChargeSettingsData]);
-
+  const [getChargeAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetChargeAuditQuery();
+  const fetchUserAudit = () => {
+    getChargeAudit({
+      id: id,
+    });
+  };
   return (
     <>
       <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
@@ -171,7 +183,13 @@ const AddEditCharge = () => {
                     />
                   )}
                 </TabPanel>
-                <TabPanel value={2} sx={{ margin: 0, padding: 0 }}></TabPanel>
+                <TabPanel value={2} sx={{ margin: 0, padding: 0 }}>
+                  <AuditTimeLine
+                    auditDetails={AuditData}
+                    reloadDataHandler={fetchUserAudit}
+                    loading={isLoadingAudit}
+                  />
+                </TabPanel>
               </TabContext>
             </CardContent>
           </Card>

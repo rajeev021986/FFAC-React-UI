@@ -3,11 +3,13 @@ import {
   Box,
   Card,
   CardHeader,
+  Drawer,
   IconButton,
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
   Stack,
+  Typography,
 } from "@mui/material";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
@@ -15,7 +17,11 @@ import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { useFetchChargesDatasQuery } from "../../store/api/chargesDataApi";
+import {
+  useDeleteChargeMutation,
+  useFetchChargesDatasQuery,
+  useLazyGetChargeAuditQuery,
+} from "../../store/api/chargesDataApi";
 import {
   chargesSetSortModel,
   chargesSetView,
@@ -35,20 +41,28 @@ import {
 import ChargesFilters from "../../components/screen/code/charge/ChargesFilters";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import CardsView from "../../components/common/Cards/CardsView";
-
+import ApiManager from "../../services/ApiManager";
+import toast, { LoaderIcon } from "react-hot-toast";
+import DeleteDialog from "../../components/common/DeleteDialog";
+import AuditTimeLine from "../../components/AuditTimeLine";
 export function ChargesScreen({ page }) {
   const chargesSelector = useSelector((state) => state.chargesStore);
+  const [exportLoader, setExportLoader] = useState(false);
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [seletectBox, setSelectedBox] = useState("");
+  const [deleteCharge] = useDeleteChargeMutation();
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
   const [open, setOpen] = React.useState(false);
-  const actions = [{ name: "New Charges" }, { name: "Export" }];
+  const actions = [
+    { name: "New Charges" },
+    { name: exportLoader ? <LoaderIcon /> : "Export" },
+  ];
 
   const query = {
     page: chargesSelector?.pagination?.page + 1,
@@ -123,24 +137,44 @@ export function ChargesScreen({ page }) {
         state: { type: "new", id: null },
       });
     }
-    // if (actionName === "Export") {
-    //   try {
-    //     const blob = await ApiManager.fetchCustomerDatasExcel(
-    //       query,
-    //       payload,
-    //       "customer"
-    //     );
-    //     const url = window.URL.createObjectURL(blob);
-    //     const link = document.createElement("a");
-    //     link.href = url;
-    //     link.setAttribute("download", "customer-data.xlsx"); // or whatever filename you want
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     link.remove();
-    //     window.URL.revokeObjectURL(url);
-    //   } catch (error) {
-    //   }
-    // }
+    if (actionName === "Export") {
+      setExportLoader(true);
+      try {
+        const blob = await ApiManager.fetchCustomerDatasExcel(
+          query,
+          payload,
+          "charge"
+        );
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "charge-data.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        toast.error("Somthing Went Wrong");
+      }
+    }
+  };
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+  const handleDelete = async () => {
+    try {
+      await deleteCharge(modal.data.id)
+        .unwrap()
+        .then(() => refetch());
+      toast.success("Charge deleted successfully!");
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to delete Charge.");
+    }
   };
 
   //   const [deleteCustomer] = useDeleteCustomerMutation();
@@ -162,7 +196,13 @@ export function ChargesScreen({ page }) {
   //       toast.error("Failed to delete customer.");
   //     }
   //   };
-
+  const [getChargeAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetChargeAuditQuery();
+  const fetchUserAudit = () => {
+    getChargeAudit({
+      id: modal.data.id,
+    });
+  };
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -231,20 +271,22 @@ export function ChargesScreen({ page }) {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <ChargesFilters filterInfo={ChargesData?.counts || []} />
+                  <ChargesFilters />
                 </GridSearchInput>
-                <SelectBox
-                  label="Sort By"
-                  options={CHARGES_SORT_OPTIONS}
-                  value={chargesSelector.sortBy}
-                  onChange={(event) => {
-                    dispatch(setSortBy(event.target.value));
-                  }}
-                  sx={{
-                    borderRadius: "20px",
-                    width: "150px",
-                  }}
-                />
+                {chargesSelector.view === "card" && (
+                  <SelectBox
+                    label="Sort By"
+                    options={CHARGES_SORT_OPTIONS}
+                    value={chargesSelector.sortBy}
+                    onChange={(event) => {
+                      dispatch(setSortBy(event.target.value));
+                    }}
+                    sx={{
+                      borderRadius: "20px",
+                      width: "150px",
+                    }}
+                  />
+                )}
               </Box>
               <Box>
                 <IconButton onClick={() => dispatch(chargesSetView("card"))}>
@@ -298,11 +340,37 @@ export function ChargesScreen({ page }) {
           />
         )}
       </Card>
-      {/* <DeleteDialog
-        modal={modal}
+      {modal.type === "audit" && (
+        <Drawer
+          anchor="right"
+          open={modal?.open}
+          onClose={() => setModal({ open: false, type: "", data: {} })}
+          sx={{
+            width: "50vw",
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 1301,
+          }}
+        >
+          <Box sx={{ p: 2 }}>
+            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+              Charge Audit Logs
+            </Typography>
+            <AuditTimeLine
+              auditDetails={AuditData}
+              reloadDataHandler={fetchUserAudit}
+              loading={isLoadingAudit}
+            />
+          </Box>
+        </Drawer>
+      )}
+      <DeleteDialog
+        source="charge"
+        sourceName={modal?.data?.deleteName}
         handleClose={handleClose}
         handleDelete={handleDelete}
-      /> */}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
     </Box>
   );
 }

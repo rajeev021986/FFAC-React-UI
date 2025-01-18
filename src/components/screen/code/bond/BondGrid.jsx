@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Box, Button, Typography, TextField, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
@@ -11,6 +11,14 @@ import { StyledDataGrid } from "../../../common/Grid/styles";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
 
 export default function BondEditGrid({ formik, disabled }) {
+  const newRowRef = useRef(null);
+  const setFocus = () => {
+    setTimeout(() => {
+      if (newRowRef.current) {
+        newRowRef.current.focus();
+      }
+    }, 1000);
+  };
   const TabsHosts = [
     {
       tabLabel: "Bond Purchase Details",
@@ -22,7 +30,7 @@ export default function BondEditGrid({ formik, disabled }) {
           )
         );
 
-        if (hasEmptyFields) {
+        if (false) {
           toast.error("Please fill in all fields before adding a new row.", {
             position: "top-right",
             autoClose: 3000,
@@ -47,6 +55,7 @@ export default function BondEditGrid({ formik, disabled }) {
           ...TabsHosts[0].value,
           newRow,
         ]);
+        setFocus();
       },
       deleteRow: (id) => {
         const updatedRows = TabsHosts[0].value.filter((row) => row.id !== id);
@@ -75,6 +84,7 @@ export default function BondEditGrid({ formik, disabled }) {
                 formik={formik}
                 api={params.api}
                 arrayName="bondPurchaseDetailsEntities"
+                inputRef={newRowRef}
               />
             );
           },
