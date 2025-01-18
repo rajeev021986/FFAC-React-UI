@@ -43,10 +43,20 @@ export const vesselVoyageDataApi = createApi({
 
             },
         }),
+        deleteVoyage: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `/master-service/v1/vessel/voyage/${id}`,
+                    method: "DELETE",
+                    headers: getAppHeaders()
+                };
+            },
+            invalidatesTags: ["Code"],
+        }),
 
 
     })
 })
 
-export const { useFetchVoyageQuery, useLazyFetchAuditVoyageQuery, useAddVoyageMutation, useUpdateVoyageMutation } = vesselVoyageDataApi;
+export const { useFetchVoyageQuery, useLazyFetchAuditVoyageQuery, useAddVoyageMutation, useUpdateVoyageMutation, useDeleteVoyageMutation } = vesselVoyageDataApi;
 

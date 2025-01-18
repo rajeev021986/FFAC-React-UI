@@ -87,7 +87,7 @@ export function VesselVoyageFormScreen() {
   }, [state?.initialValues?.id]);
 
   return (
-    <Box sx={{ padding: 0, margin: 0 }}>
+    <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
       <Stack sx={{ padding: "8px 0px" }}>
         <ScreenToolbar
           leftComps={

@@ -1,6 +1,6 @@
 import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
- //  const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
+   //const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const consigneeDataApi = createApi({
     reducerPath: "consigneeDataApi",

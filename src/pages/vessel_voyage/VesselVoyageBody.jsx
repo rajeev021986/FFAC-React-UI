@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  useDeleteVoyageMutation,
   useFetchVoyageQuery,
   useLazyFetchAuditVoyageQuery,
 } from "../../store/api/vesselVoyageDataApi";
@@ -15,6 +16,9 @@ import { Box, Drawer, Typography } from "@mui/material";
 import CardsView from "../../components/common/Cards/CardsView";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import toast from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
+import DeleteDialog from "../../components/common/DeleteDialog";
 
 export function VesselVoyageBody({ selectBox, setSelectBox }) {
   const nav = useNavigate();
@@ -88,6 +92,38 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
     payload: payload,
   });
 
+  const [deleteVoyage] = useDeleteVoyageMutation();
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteVoyage(modal.data.id)
+        .unwrap()
+        .then(() => refetch());
+      toast.custom(
+        <CustomToast message="Voyage deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
+      handleClose();
+    } catch (error) {
+      toast.custom(
+        <CustomToast message="Failed to delete voyage." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
+      handleClose();
+    }
+  };
+
   return (
     <>
       {voyageSelector.view === "grid" ? (
@@ -145,6 +181,13 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
           </Box>
         </Drawer>
       )}
+      <DeleteDialog
+        source="voyage"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
     </>
   );
 }

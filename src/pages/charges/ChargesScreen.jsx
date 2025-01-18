@@ -48,9 +48,7 @@ export function ChargesScreen({ page }) {
     data: {},
   });
   const [open, setOpen] = React.useState(false);
-  const actions = seletectBox
-    ? [{ name: "New Charges" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New Charges" }, { name: "Export" }];
+  const actions = [{ name: "New Charges" }, { name: "Export" }];
 
   const query = {
     page: chargesSelector?.pagination?.page + 1,
@@ -82,7 +80,7 @@ export function ChargesScreen({ page }) {
         fieldName: fieldname,
         operator: "=",
         value: value,
-        logicalOperator: "or",
+        logicalOperator: "and",
       };
     });
 
@@ -123,14 +121,6 @@ export function ChargesScreen({ page }) {
       nav("newcharges", {
         replace: true,
         state: { type: "new", id: null },
-      });
-    }
-    if (actionName === "Copy") {
-      nav("newcharges", {
-        state: {
-          id: seletectBox,
-          type: "copy",
-        },
       });
     }
     // if (actionName === "Export") {
@@ -232,6 +222,7 @@ export function ChargesScreen({ page }) {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
+          sx={{ margin: 0, padding: 1 }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -247,7 +238,6 @@ export function ChargesScreen({ page }) {
                   options={CHARGES_SORT_OPTIONS}
                   value={chargesSelector.sortBy}
                   onChange={(event) => {
-
                     dispatch(setSortBy(event.target.value));
                   }}
                   sx={{
@@ -283,7 +273,7 @@ export function ChargesScreen({ page }) {
             handlePage={handlePage}
             data={ChargesData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => { }}
+            columnVisibilityHandler={() => {}}
             paginationModel={chargesSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={chargesSelector.sortModel}

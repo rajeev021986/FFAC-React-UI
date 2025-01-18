@@ -11,8 +11,8 @@ export const CARD_VOYAGE_COLUMNS = [
 
     {
         flex: 1,
-        field: 'vesselVoyage',
-        headerName: 'Vessel Voyage',
+        field: 'vessel',
+        headerName: 'Vessel',
         width: 110,
         headerAlign: 'center',
         align: 'center',

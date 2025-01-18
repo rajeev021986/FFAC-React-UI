@@ -9,18 +9,16 @@ export const getShipperListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        nav(`editshipper`, {state: {formAction: "edit", initialValues: params.row},
-  
+        nav(`editshipper`, {
+          state: { formAction: "edit", initialValues: params.row },
         });
       },
       icon: <EditIcon />,
     },
     {
-      label: 'Audit',
+      label: "Audit",
       onClick: (params) => {
-        setModal(
-          { open: true, type: 'audit', data: params.row }
-        )
+        setModal({ open: true, type: "audit", data: params.row });
       },
       icon: <BiotechIcon />,
     },

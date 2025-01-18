@@ -49,9 +49,7 @@ export function ExchangeRate({ page }) {
     data: {},
   });
   const [open, setOpen] = React.useState(false);
-  const actions = seletectBox
-    ? [{ name: "New Exchange" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New Exchange" }, { name: "Export" }];
+  const actions = [{ name: "New Exchange" }, { name: "Export" }];
 
   const query = {
     page: exchangeRateSelector?.pagination?.page + 1,
@@ -83,7 +81,7 @@ export function ExchangeRate({ page }) {
         fieldName: fieldname,
         operator: "=",
         value: value,
-        logicalOperator: "or",
+        logicalOperator: "and",
       };
     });
 
@@ -124,15 +122,6 @@ export function ExchangeRate({ page }) {
       nav("newexchangerate", {
         replace: true,
         state: { id: null, type: "new" },
-      });
-    }
-    if (actionName === "Copy") {
-      nav("newexchangerate", {
-        state: {
-          formAction: "edit",
-          initialValues: { id: seletectBox },
-          type: "copy",
-        },
       });
     }
     // if (actionName === "Export") {
@@ -234,6 +223,7 @@ export function ExchangeRate({ page }) {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
+          sx={{ margin: 0, padding: 1 }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -251,7 +241,6 @@ export function ExchangeRate({ page }) {
                   options={EXCHANGE_RATE_SORT_OPTIONS}
                   value={exchangeRateSelector.sortBy}
                   onChange={(event) => {
-
                     dispatch(setSortBy(event.target.value));
                   }}
                   sx={{
@@ -295,7 +284,7 @@ export function ExchangeRate({ page }) {
             handlePage={handlePage}
             data={ExchangeRateData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => { }}
+            columnVisibilityHandler={() => {}}
             paginationModel={exchangeRateSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={exchangeRateSelector.sortModel}

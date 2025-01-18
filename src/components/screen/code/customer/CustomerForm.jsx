@@ -94,6 +94,9 @@ export default function CustomerForm({
         let tariffs = values.customerEntityTariffs.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
         );
+        let bank = values.bankDetails.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
         try {
           delete values.id;
           values.isApproved = dropdownData?.approvalRequest ? 0 : 1;
@@ -109,6 +112,7 @@ export default function CustomerForm({
             ...values,
             customerEntityEmailsIds: emails,
             customerEntityTariffs: tariffs,
+            bankDetails: bank,
           }).unwrap();
 
           // Handle response and display toast messages
@@ -157,12 +161,16 @@ export default function CustomerForm({
           let tariffs = values.customerEntityTariffs.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           );
+          let bank = values.bankDetails.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
           Boolean(values.status == "Active") && (values.isApproved = 1);
           Boolean(values.status == "Inactive") && (values.isApproved = -2);
           let response = await updateCustomer({
             ...values,
             customerEntityEmailsIds: emails,
             customerEntityTariffs: tariffs,
+            bankDetails: bank,
           }).unwrap();
 
           // Handle response and display toast messages

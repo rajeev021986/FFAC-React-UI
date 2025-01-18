@@ -57,6 +57,8 @@ export function VesselVoyageForm({ initialValues, type }) {
       if (type == "copy" || type == "add") {
         try {
           delete values.id;
+          values.statusCode = 1;
+          values.status = "";
           let response = await addVoyage({
             ...values,
           }).unwrap();
@@ -71,6 +73,8 @@ export function VesselVoyageForm({ initialValues, type }) {
         }
       } else {
         try {
+          Boolean(values.status == "Active") && (values.statusCode = 1);
+          Boolean(values.status == "Inactive") && (values.statusCode = -2);
           let response = await updateVoyage({
             ...values,
           }).unwrap();
