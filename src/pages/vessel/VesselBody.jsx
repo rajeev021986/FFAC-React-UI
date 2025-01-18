@@ -80,10 +80,11 @@ export function VesselBody({ selectBox, setSelectBox }) {
   }
 
   const payload = Object.entries(vesselSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
       Boolean(key == "vname") && (fieldname = "vesselName");
+      Boolean(key == "lname") && (fieldname = "lineName");
       return {
         fieldName: fieldname,
         operator: "=",

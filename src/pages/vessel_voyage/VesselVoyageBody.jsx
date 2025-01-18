@@ -61,15 +61,15 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
   if (
     Boolean(
       voyageSelector.sortModel.length > 0
-        ? voyageSelector.sortModel[0].field === "vvoyage"
-        : voyageSelector?.sortBy?.split("*")[0] === "vvoyage"
+        ? voyageSelector.sortModel[0].field === "vessel"
+        : voyageSelector?.sortBy?.split("*")[0] === "vessel"
     )
   ) {
-    query.sortBy = "vesselVoyage";
+    query.sortBy = "vessel";
   }
 
   const payload = Object.entries(voyageSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
       Boolean(key == "vessel") && (fieldname = "vessel");

@@ -61,7 +61,7 @@ export default function PortScreen() {
     dispatch(setPortPagination({ page, pageSize }));
   };
   const payload = Object.entries(portSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       return {
         fieldName: key,

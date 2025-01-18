@@ -1,5 +1,8 @@
 import EditIcon from "@mui/icons-material/Edit";
 import { GridDeleteIcon } from "@mui/x-data-grid";
+import CustomToast from "../../../common/Toast/CustomToast";
+import toast from "react-hot-toast";
+import { Biotech } from "@mui/icons-material";
 
 export const getExchangeRateListGridActions = (nav, setModal) => {
   return [
@@ -13,17 +16,37 @@ export const getExchangeRateListGridActions = (nav, setModal) => {
       icon: <EditIcon />,
     },
     {
+      label: "Audit",
+      onClick: (params) => {
+        setModal({ type: "audit", open: true, data: params.row });
+      },
+      icon: <Biotech />,
+    },
+    {
       label: "Delete",
       onClick: (params) => {
-        setModal({
-          open: true,
-          type: "delete",
-          data: {
-            who: "ExchangeRate",
-            deleteName: "ExchangeRate",
-            id: params.row.id,
-          },
-        });
+        if (params.row.statusCode == -2) {
+          setModal({
+            open: true,
+            type: "delete",
+            data: {
+              who: "Exchange Rate",
+              deleteName: params.row.id,
+              id: params.row.id,
+            },
+          });
+        } else {
+          toast.custom(
+            <CustomToast
+              message="Only for Inactive Exchange Rate"
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
+          return;
+        }
       },
       icon: <GridDeleteIcon />,
     },

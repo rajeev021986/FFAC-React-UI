@@ -3,17 +3,23 @@ import {
   Box,
   Card,
   CardHeader,
+  Drawer,
   IconButton,
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
   Stack,
+  Typography,
 } from "@mui/material";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { useFetchExchangeRateDatasQuery } from "../../store/api/exchangeRateDataApi";
+import {
+  useDeleteExchangeRateMutation,
+  useFetchExchangeRateDatasQuery,
+  useLazyGetExchangeRateAuditQuery,
+} from "../../store/api/exchangeRateDataApi";
 import {
   exchangeRateSetSortModel,
   exchangeRateSetView,
@@ -36,10 +42,15 @@ import GridActions from "../../components/common/Grid/GridActions";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import CardsView from "../../components/common/Cards/CardsView";
+import DeleteDialog from "../../components/common/DeleteDialog";
+import toast from "react-hot-toast";
+import ApiManager from "../../services/ApiManager";
+import AuditTimeLine from "../../components/AuditTimeLine";
 
 export function ExchangeRate({ page }) {
   const exchangeRateSelector = useSelector((state) => state.exchangeRateStore);
   const location = useLocation();
+  const id = location.state;
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [seletectBox, setSelectedBox] = useState("");
@@ -73,7 +84,7 @@ export function ExchangeRate({ page }) {
     query.sortBy = "currency";
   }
   const payload = Object.entries(exchangeRateSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
       Boolean(key == "currency") && (fieldname = "currency");
@@ -124,45 +135,52 @@ export function ExchangeRate({ page }) {
         state: { id: null, type: "new" },
       });
     }
-    // if (actionName === "Export") {
-    //   try {
-    //     const blob = await ApiManager.fetchCustomerDatasExcel(
-    //       query,
-    //       payload,
-    //       "customer"
-    //     );
-    //     const url = window.URL.createObjectURL(blob);
-    //     const link = document.createElement("a");
-    //     link.href = url;
-    //     link.setAttribute("download", "customer-data.xlsx"); // or whatever filename you want
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     link.remove();
-    //     window.URL.revokeObjectURL(url);
-    //   } catch (error) {
-    //   }
-    // }
+    if (actionName === "Export") {
+      try {
+        const blob = await ApiManager.fetchCustomerDatasExcel(
+          query,
+          payload,
+          "exchange_rate"
+        );
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "exchangerate-data.xlsx"); // or whatever filename you want
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {}
+    }
   };
 
-  //   const [deleteCustomer] = useDeleteCustomerMutation();
+  const [deleteExchangeRate] = useDeleteExchangeRateMutation();
 
-  //   const handleClose = () => {
-  //     setModal({
-  //       open: false,
-  //       type: "",
-  //       data: {},
-  //     });
-  //   };
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
 
-  //   const handleDelete = async () => {
-  //     try {
-  //       await deleteCustomer(modal.data.id).unwrap();
-  //       toast.success("Customer deleted successfully!");
-  //       handleClose();
-  //     } catch (error) {
-  //       toast.error("Failed to delete customer.");
-  //     }
-  //   };
+  const handleDelete = async () => {
+    try {
+      await deleteExchangeRate(modal.data.id).unwrap();
+      toast.success("Exchange Rate deleted successfully!");
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to delete exchange rate.");
+    }
+  };
+
+  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetExchangeRateAuditQuery();
+  const fetchUserAudit = () => {
+    getPortAudit({
+      id: id,
+    });
+  };
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
@@ -309,11 +327,37 @@ export function ExchangeRate({ page }) {
           />
         )}
       </Card>
-      {/* <DeleteDialog
-          modal={modal}
-          handleClose={handleClose}
-          handleDelete={handleDelete}
-        /> */}
+      {modal.type === "audit" && (
+        <Drawer
+          anchor="right"
+          open={modal?.open}
+          onClose={() => setModal({ open: false, type: "", data: {} })}
+          sx={{
+            width: "50vw",
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 1301,
+          }}
+        >
+          <Box>
+            <Typography variant="h6" component="div" margin="8px">
+              Exchange Rate Audit Logs
+            </Typography>
+            <AuditTimeLine
+              auditDetails={AuditData}
+              reloadDataHandler={fetchUserAudit}
+              loading={isLoadingAudit}
+            />
+          </Box>
+        </Drawer>
+      )}
+      <DeleteDialog
+        source="exchangerate"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
     </Box>
   );
 }

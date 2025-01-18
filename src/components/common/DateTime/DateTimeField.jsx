@@ -4,7 +4,7 @@ import { DateTimePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-export default function DateField({
+export default function DateTimeField({
   sx,
   value,
   disabled = false,

@@ -17,11 +17,11 @@ export function VesselVoyageFilters({ setFilterOpen }) {
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
+      setFilterOpen(false);
     },
   });
   const handleReset = () => {
     setFilterOpen(false);
-    formik.resetForm();
     dispatch(
       updateInput({
         vessel: "",

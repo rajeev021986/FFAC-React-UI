@@ -121,7 +121,7 @@ export default function CustomerForm({
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
-            nav(-1);
+            nav("/app/entity/customer");
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
               closeButton: false,

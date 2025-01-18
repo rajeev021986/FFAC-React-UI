@@ -39,9 +39,28 @@ export const exchangeRateDataApi = createApi({
                 return { url: `admin-service/v1/exchange-rate/${params.id}`, method: "GET", body: params.body, headers: getAppHeaders() };
             },
         }),
+        deleteExchangeRate: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `admin-service/v1/exchange-rate/${id}`,
+                    method: "DELETE",
+                    headers: getAppHeaders()
+                };
+            },
+            invalidatesTags: ["Code"],
+        }),
+        getExchangeRateAudit: builder.query({
+            query: (params) => {
+                return {
+                    url: `admin-service/v1/exchange-rate/audit/${params.id}`,
+                    method: "GET",
+                    headers: getAppHeaders(),
+                };
+            },
+        }),
 
     })
 
 })
 
-export const { useFetchExchangeRateDatasQuery, useAddExahangeRateMutation, useUpdateExahangeRateMutation, useLazyGetExahangeRateQuery } = exchangeRateDataApi;
+export const { useFetchExchangeRateDatasQuery, useAddExahangeRateMutation, useUpdateExahangeRateMutation, useLazyGetExahangeRateQuery, useDeleteExchangeRateMutation, useLazyGetExchangeRateAuditQuery } = exchangeRateDataApi;
