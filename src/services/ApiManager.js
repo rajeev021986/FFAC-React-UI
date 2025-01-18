@@ -248,6 +248,12 @@ class ApiManager {
     return ApiMethods.postBlob(url, payload);
   };
 
+  static fetchAdminDatasExcel = async (params, payload, source) => {
+    const queryString = new URLSearchParams(params).toString();
+    const url = ENDPOINTS.FETCH_ADMIN_DATA_EXCEL(queryString, source);
+    return ApiMethods.postBlob(url, payload);
+  };
+
   static fetchEditVoyage = (id) => {
     const url = ENDPOINTS.GET_EDIT_VOYAGE(id);
     return ApiMethods.get(url);

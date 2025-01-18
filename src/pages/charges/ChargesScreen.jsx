@@ -140,7 +140,7 @@ export function ChargesScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(
+        const blob = await ApiManager.fetchAdminDatasExcel(
           query,
           payload,
           "charge"
@@ -156,6 +156,7 @@ export function ChargesScreen({ page }) {
       } catch (error) {
         toast.error("Somthing Went Wrong");
       }
+      setExportLoader(false);
     }
   };
   const handleClose = () => {

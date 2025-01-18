@@ -4,6 +4,7 @@ import InputBoxForGrid from "../../../common/InputBoxForGrid";
 import { Delete } from "@mui/icons-material";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
 
 export default function CustomerBankDetails({
   formik,
@@ -60,81 +61,98 @@ export default function CustomerBankDetails({
       field: "bankName",
       headerName: "Bank Name",
       flex: 1,
+      editable: false,
       headerAlign: "center",
-      align: "center",
-      editable: true,
-      renderCell: (params) => (
-        <InputBoxForGrid
-          {...params}
-          placeholder="Enter bank name"
-          inputRef={newRowRef}
-        />
-      ),
-      renderEditCell: (params) => (
-        <InputBoxForGrid
-          {...params}
-          placeholder="Enter bank name"
-          inputRef={newRowRef}
-        />
-      ),
+      renderCell: (params) => {
+        return (
+          <InputBoxForGridTab
+            value={params.value}
+            field={params.field}
+            id={params.id}
+            formik={formik}
+            api={params.api}
+            arrayName="bankDetails"
+            inputRef={newRowRef}
+          />
+        );
+      },
     },
     {
       field: "bankAddress",
       headerName: "Bank Address",
       flex: 1,
+      editable: false,
       headerAlign: "center",
-      align: "center",
-      editable: true,
-      renderCell: (params) => (
-        <InputBoxForGrid {...params} placeholder="Enter bank address" />
-      ),
-      renderEditCell: (params) => (
-        <InputBoxForGrid {...params} placeholder="Enter bank address" />
-      ),
+      renderCell: (params) => {
+        return (
+          <InputBoxForGridTab
+            value={params.value}
+            field={params.field}
+            id={params.id}
+            formik={formik}
+            api={params.api}
+            arrayName="bankDetails"
+          />
+        );
+      },
     },
     {
       field: "accountNo",
-      headerName: "Account No",
+      headerName: "AccountNo",
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
-      align: "center",
-      renderCell: (params) => (
-        <InputBoxForGrid {...params} placeholder="Enter account number" />
-      ),
-      renderEditCell: (params) => (
-        <InputBoxForGrid {...params} placeholder="Enter account number" />
-      ),
+      renderCell: (params) => {
+        return (
+          <InputBoxForGridTab
+            value={params.value}
+            field={params.field}
+            id={params.id}
+            formik={formik}
+            api={params.api}
+            arrayName="bankDetails"
+            type="number"
+          />
+        );
+      },
     },
-
     {
       field: "currency",
       headerName: "Currency",
       flex: 1,
+      editable: false,
       headerAlign: "center",
-      align: "center",
-      editable: true,
-      renderCell: (params) => (
-        <InputBoxForGrid {...params} placeholder="Enter currency" />
-      ),
-      renderEditCell: (params) => (
-        <InputBoxForGrid {...params} placeholder="Enter currency" />
-      ),
+      renderCell: (params) => {
+        return (
+          <InputBoxForGridTab
+            value={params.value}
+            field={params.field}
+            id={params.id}
+            formik={formik}
+            api={params.api}
+            arrayName="bankDetails"
+          />
+        );
+      },
     },
-
     {
       field: "swiftCode",
       headerName: "Swift Code",
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
-      align: "center",
-      renderCell: (params) => (
-        <InputBoxForGrid {...params} placeholder="Enter swift code" />
-      ),
-      renderEditCell: (params) => (
-        <InputBoxForGrid {...params} placeholder="Enter swift code" />
-      ),
+      renderCell: (params) => {
+        return (
+          <InputBoxForGridTab
+            value={params.value}
+            field={params.field}
+            id={params.id}
+            formik={formik}
+            api={params.api}
+            arrayName="bankDetails"
+          />
+        );
+      },
     },
     {
       field: "actions",

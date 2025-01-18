@@ -43,7 +43,7 @@ import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import CardsView from "../../components/common/Cards/CardsView";
 import DeleteDialog from "../../components/common/DeleteDialog";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import ApiManager from "../../services/ApiManager";
 import AuditTimeLine from "../../components/AuditTimeLine";
 
@@ -53,13 +53,17 @@ export function ExchangeRate({ page }) {
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [seletectBox, setSelectedBox] = useState("");
+  const [exportLoader, setExportLoader] = useState(false);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
   const [open, setOpen] = React.useState(false);
-  const actions = [{ name: "New Exchange" }, { name: "Export" }];
+  const actions = [
+    { name: "New Exchange" },
+    { name: exportLoader ? <LoaderIcon /> : "Export" },
+  ];
 
   const query = {
     page: exchangeRateSelector?.pagination?.page + 1,
@@ -135,11 +139,12 @@ export function ExchangeRate({ page }) {
       });
     }
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(
+        const blob = await ApiManager.fetchAdminDatasExcel(
           query,
           payload,
-          "exchange_rate"
+          "exchange-rate"
         );
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -150,6 +155,7 @@ export function ExchangeRate({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {}
+      setExportLoader(false);
     }
   };
 
