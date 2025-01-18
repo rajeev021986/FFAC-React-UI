@@ -107,6 +107,7 @@ const AddEditCharge = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
+    validateOnChange: false,
     onSubmit,
   });
 

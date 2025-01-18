@@ -96,12 +96,6 @@ function TimelineComponent({ data }) {
                 >
                   <Accordion sx={{ width: "100%" }}>
                     <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
                     >
                       <Typography sx={{ flexGrow: 1, color: "primary.main" }}>
                         {entry.label}

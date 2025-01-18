@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import InputBox from "../../../common/InputBox";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,6 +18,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ChargeMapping } from "./ChargeMapping";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
 import { StyledDataGrid } from "../../../common/Grid/styles";
+import getFirstError from "../../../common/FieldToastError";
 
 export default function ChargeInputs({
   formik,
@@ -130,12 +131,15 @@ export default function ChargeInputs({
       ),
     },
   ];
+  useEffect(() => {
+    getFirstError(formik.errors);
+  }, [formik.errors]);
   return (
     <>
       <Grid container spacing={2} sx={{ paddingLeft: 1 }}>
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ marginTop: 2 }}>
           <InputBox
-            label="Charge Name"
+            label="Charge Name *"
             id="chargeName"
             value={formik.values.chargeName}
             error={formik.errors.chargeName}
