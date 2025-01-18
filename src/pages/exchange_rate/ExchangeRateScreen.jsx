@@ -50,7 +50,6 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 export function ExchangeRate({ page }) {
   const exchangeRateSelector = useSelector((state) => state.exchangeRateStore);
   const location = useLocation();
-  const id = location.state;
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [seletectBox, setSelectedBox] = useState("");
@@ -178,7 +177,7 @@ export function ExchangeRate({ page }) {
     useLazyGetExchangeRateAuditQuery();
   const fetchUserAudit = () => {
     getPortAudit({
-      id: id,
+      id: modal.data.id,
     });
   };
 
