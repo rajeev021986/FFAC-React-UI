@@ -27,7 +27,8 @@ export const getShipperListGridActions = (nav, setModal) => {
     {
       label: "Delete",
       onClick: (params) => {
-        if (params.row.isApproved == -2 || params.row.isApproved == -1) {
+        console.log("statusCode"+ params.row.statusCode);
+        if (params.row.statusCode == -2) {
           setModal({
             open: true,
             type: "delete",
@@ -40,7 +41,7 @@ export const getShipperListGridActions = (nav, setModal) => {
         } else {
           toast.custom(
             <CustomToast
-              message="Only for Inactive and Rejected Shipper"
+              message="Only for Inactive Shipper"
               toast="error"
             />,
             {

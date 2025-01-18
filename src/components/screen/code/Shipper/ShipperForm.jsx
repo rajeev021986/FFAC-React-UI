@@ -22,6 +22,7 @@ import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import getFirstError from "../../../common/FieldToastError";
+import EditIcon from "@mui/icons-material/Edit";
 
 export default function ShipperForm({ initialValues, page, type, id }) {
   const tabs = [
@@ -52,6 +53,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
 
   const formik = useFormik({
     initialValues,
+    validateOnChange:false,
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -137,6 +139,8 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                     label=" Add Shipper"
                     value={1}
                     sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    icon={<EditIcon />}
+                    iconPosition="start"
                   />
                 </TabList>
               </Box>
@@ -337,7 +341,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
               <Grid item xs={12} sx={{ margin: 1 }}>
                 <Stack direction="row" spacing={2}>
                   <OutlinedButton
-                  onClick={()=>nav(-1)}
+                 onClick={() => nav("/app/master/shipper")}
                     sx={{ fontWeight: "500", borderRadius: "12px" }}
                   >
                     Cancel
@@ -687,7 +691,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
                           sx={{ fontWeight: "500" }}
-                          onClick={() => nav(-1)}
+                          onClick={() => nav("/app/master/shipper")}
                         >
                           Cancel
                         </OutlinedButton>

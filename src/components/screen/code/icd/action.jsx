@@ -27,7 +27,7 @@ export const getIcdListGridActions = (nav, setModal) => {
     {
       label: "Delete",
       onClick: (params) => {
-        if (params.row.isApproved == -2 || params.row.isApproved == -1) {
+        if (params.row.statusCode == -2) {
           setModal({
             open: true,
             type: "delete",
@@ -40,7 +40,7 @@ export const getIcdListGridActions = (nav, setModal) => {
         } else {
           toast.custom(
             <CustomToast
-              message="Only for Inactive and Rejected Icd"
+              message="Only for Inactive Icd"
               toast="error"
             />,
             {

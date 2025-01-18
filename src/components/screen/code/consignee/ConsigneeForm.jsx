@@ -24,6 +24,8 @@ import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import {useLazyGetConsigneeAuditQuery } from '../../../../store/api/consigneeDataApi';
 import getFirstError from "../../../common/FieldToastError";
+import EditIcon from "@mui/icons-material/Edit";
+
 
 export default function ConsigneeForm({
   initialValues,
@@ -66,7 +68,7 @@ export default function ConsigneeForm({
 
   const formik = useFormik({
     initialValues,
-    validationOnChange: false,
+    validateOnChange: false,
      validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -170,6 +172,8 @@ export default function ConsigneeForm({
                     label=" Add Consignee"
                     value={1}
                     sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    icon={<EditIcon />}
+                    iconPosition="start"
                   />
                 </TabList>
               </Box>
@@ -323,6 +327,7 @@ export default function ConsigneeForm({
                       </TabPanel>
                     </TabContext>
                   </Box> */}
+                  <Grid item xs={12}>
                     <Box
                     sx={{
                       width: "100%",
@@ -356,12 +361,14 @@ export default function ConsigneeForm({
                       </TabPanel>
                     </TabContext>
                   </Box>
+                  </Grid>
 
             
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ margin: 1 }}> 
                 <Stack direction="row" spacing={2}>
                   <OutlinedButton
                     sx={{ fontWeight: "500", borderRadius: "12px" }}
+                    onClick={() => nav("/app/master/consignee")}
                   >
                     Cancel
                   </OutlinedButton>
@@ -424,7 +431,7 @@ export default function ConsigneeForm({
                                                     md={4}
                                                     lg={3}
                                                     xl={2}
-                                                    sx={{ marginTop: 2 }}
+                                                    //sx={{ marginTop: 2 }}
                                                     paddingLeft={1}
                                                 >
                                                     <SelectBox
@@ -443,6 +450,7 @@ export default function ConsigneeForm({
                                                                 md={4}
                                                                 lg={3}
                                                                 xl={2}
+                                                                //sx={{ marginTop: 2 }}
                                                                 paddingLeft={1}
                                                               >
                                                                 <InputBox
@@ -542,7 +550,7 @@ export default function ConsigneeForm({
                       onChange={formik.handleChange}
                     />
                   </Grid>
-
+<Grid item xs={12}>
                    <Box
                     sx={{
                       width: "100%",
@@ -574,6 +582,7 @@ export default function ConsigneeForm({
                       </TabPanel>
                     </TabContext>
                   </Box>
+                  </Grid>
                   
                     <Grid item xs={12}>
                       <Stack
@@ -583,7 +592,7 @@ export default function ConsigneeForm({
                       >
                         <Stack direction="row" spacing={2}>
                           <OutlinedButton
-                            onClick={() => nav(-1)}
+                            onClick={() => nav("/app/master/consignee")}
                             sx={{ fontWeight: "500" }}
                           >
                             Cancel

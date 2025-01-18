@@ -21,7 +21,7 @@ export default function ShipperFormScreen({ page }) {
     city: "",
     name: "",
     status: "ACTIVE",
-    statusCode: "1",
+    statusCode: "",
     country: "",
     email: "",
     contactName: "",

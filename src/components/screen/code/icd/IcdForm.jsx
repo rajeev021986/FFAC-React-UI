@@ -13,6 +13,7 @@ import SelectBox from "../../../common/SelectBox";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
+import EditIcon from "@mui/icons-material/Edit";
 import TabPanel from "@mui/lab/TabPanel";
 import {
   useAddIcdMutation,
@@ -70,6 +71,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
 
   const formik = useFormik({
     initialValues,
+    validateOnChange: false, //
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -144,17 +146,20 @@ export default function IcdForm({ initialValues, page, type, id }) {
       {type == "new" ? (
         <>
           {" "}
-          <Box sx={{ width: "100%", typography: "body1" }}>
+          <Box sx={{ width: "100%", typography: "body1", margin:0, padding:0 }}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"
+                  sx={{padding:"0px"}}
                 >
                   <Tab
                     label="Add ICD"
                     value={1}
                     sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    icon={<EditIcon />}
+                    iconPosition="start"
                   />
                 </TabList>
               </Box>
@@ -164,7 +169,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                   container
                   sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                 >
-                  <Grid container>
+                  <Grid container sx={{padding:"0px"}}>
                     <Grid
                       item
                       xs={12}
@@ -172,6 +177,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
+                      marginTop={2}
                       paddingLeft={1}
                     >
                       <Tooltip
@@ -214,6 +220,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
+                      marginTop={2}
                       paddingLeft={1}
                     >
                       <InputBox
@@ -231,6 +238,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
+                      marginTop={2}
                       paddingLeft={1}
                     >
                       <InputBox
@@ -248,6 +256,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
+                      marginTop={2}
                       paddingLeft={1}
                     >
                       <InputBox
@@ -266,6 +275,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
+                      marginTop={2}
                       paddingLeft={1}
                     >
                       <InputBox
@@ -284,6 +294,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
+                      marginTop={2}
                       paddingLeft={1}
                     >
                       <InputBox
@@ -301,6 +312,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
+                      marginTop={2}
                       paddingLeft={1}
                     >
                       <InputBox
@@ -319,6 +331,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
+                      marginTop={2}
                       paddingLeft={1}
                     >
                       <InputBox
@@ -337,6 +350,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
+                      marginTop={2}
                       paddingLeft={1}
                     >
                       <InputBox
@@ -348,10 +362,10 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       />
                     </Grid>
 
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sx={{ margin: 1 }}>
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
-                          onClick={() => nav(-1)}
+                          onClick={() => nav("/app/master/icd")}
                           sx={{ fontWeight: "500", borderRadius: "12px" }}
                         >
                           Cancel
@@ -606,7 +620,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
                           sx={{ fontWeight: "500" }}
-                          onClick={() => nav(-1)}
+                          onClick={() => nav("/app/master/icd")}
                         >
                           Cancel
                         </OutlinedButton>
