@@ -25,6 +25,8 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import { useLazyGetConsigneeAuditQuery } from "../../../../store/api/consigneeDataApi";
 import getFirstError from "../../../common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
+import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
+import HistoryIcon from "@mui/icons-material/History";
 
 
 export default function ConsigneeForm({ initialValues, page, type, id }) {
@@ -310,16 +312,17 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
-                      marginTop={2}
                       paddingLeft={1}
+                      marginTop={2}
                     >
-                      <InputBox
+                      <FormAutoComplete
                         label="Country"
                         id="country"
+                        suggestionName="country"
                         value={formik.values.country}
                         error={formik.errors.country}
                         onChange={formik.handleChange}
-                      />
+                      ></FormAutoComplete>
                     </Grid>
                     <Grid
                       item
@@ -456,7 +459,14 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                   aria-label="lab API tabs example"
                 >
                   {tabs.map((a) => (
-                    <Tab label={a.label} value={a.value} />
+                    <Tab label={a.label} value={a.value} 
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={a.value === 1 ? <EditIcon /> : <HistoryIcon />}
+                    iconPosition="start"/>
                   ))}
                 </TabList>
               </Box>
@@ -601,23 +611,25 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                     />
                   </Grid>
                   <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    xl={2}
-                    paddingLeft={1}
-                  >
-                    <InputBox
-                      label="Country"
-                      id="country"
-                      disabled={disabled}
-                      value={formik.values.country}
-                      error={formik.errors.country}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      paddingLeft={1}
+                      
+                    >
+                      <FormAutoComplete
+                        label="Country"
+                        id="country"
+                        suggestionName="country"
+                        value={formik.values.country}
+                        error={formik.errors.country}
+                        onChange={formik.handleChange}
+                      ></FormAutoComplete>
+                    </Grid>
+                  
                   <Grid
                     item
                     xs={12}

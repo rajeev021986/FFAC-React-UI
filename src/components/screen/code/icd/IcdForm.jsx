@@ -372,7 +372,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       />
                     </Grid>
 
-                    <Grid item xs={12} sx={{ margin: 1 }}>
+                    
                     <Grid item xs={12} sx={{ margin: 1 }}>
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
@@ -397,7 +397,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       </Stack>
                     </Grid>
                   </Grid>
-                </Grid>
+                
               </TabPanel>
             </TabContext>
           </Box>
@@ -638,6 +638,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                     md={4}
                     lg={3}
                     xl={2}
+                    marginTop={2}
                     paddingLeft={1}
                   >
                     <InputBox
@@ -649,7 +650,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sx={{ margin: 1 }}>
                     <Stack
                       direction="row"
                       spacing={2}
