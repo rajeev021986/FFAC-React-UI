@@ -63,7 +63,12 @@ export default function CustomerForm({
   const [optionsCity, setCityOptions] = useState([]);
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
   const [loading, setLoading] = useState(false);
-  const [updateCustomer] = useUpdateCustomerMutation();
+  const [loaderApprove, setLoaderApprove] = useState({
+    approve: false,
+    reject: false,
+  });
+  const [updateCustomer, { isLoading: loadingUpdate }] =
+    useUpdateCustomerMutation();
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
   const nav = useNavigate();
@@ -257,6 +262,10 @@ export default function CustomerForm({
   const handleApproveRequest = async () => {
     setRejectError(false);
     try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        approve: true,
+      }));
       const response = await ApiManager.approveCustomerApprove(
         initialValues.id,
         "customer"
@@ -277,6 +286,10 @@ export default function CustomerForm({
         }
       );
     }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      approve: false,
+    }));
   };
   const handleRejectRequest = async () => {
     if (!formik.values.rejectRemarks) {
@@ -290,6 +303,10 @@ export default function CustomerForm({
       return;
     }
     try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        reject: true,
+      }));
       const response = await ApiManager.rejectCustomerApprove(
         initialValues.id,
         "customer",
@@ -312,6 +329,10 @@ export default function CustomerForm({
         }
       );
     }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      reject: false,
+    }));
   };
   const disabled =
     page == "customer" || page == "customerApprove" ? false : true;
@@ -864,7 +885,7 @@ export default function CustomerForm({
                           }}
                           onClick={() => handleRejectRequest()}
                         >
-                          {isLoading && (
+                          {loaderApprove.reject && (
                             <CircularProgress size={20} color="white" />
                           )}{" "}
                           Reject
@@ -873,7 +894,7 @@ export default function CustomerForm({
                           sx={{ fontWeight: "500", color: "white !important" }}
                           onClick={() => handleApproveRequest()}
                         >
-                          {isLoading && (
+                          {loaderApprove.approve && (
                             <CircularProgress size={20} color="white" />
                           )}{" "}
                           Approve
@@ -1494,7 +1515,7 @@ export default function CustomerForm({
                               color: "white !important",
                             }}
                           >
-                            {isLoading && (
+                            {loadingUpdate && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
                             Update
@@ -1507,7 +1528,7 @@ export default function CustomerForm({
                             }}
                             onClick={() => handleRejectRequest()}
                           >
-                            {isLoading && (
+                            {loaderApprove.reject && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
                             Reject
@@ -1519,7 +1540,7 @@ export default function CustomerForm({
                             }}
                             onClick={() => handleApproveRequest()}
                           >
-                            {isLoading && (
+                            {loaderApprove.approve && (
                               <CircularProgress size={20} color="white" />
                             )}{" "}
                             Approve

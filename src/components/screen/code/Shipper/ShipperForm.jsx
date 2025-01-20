@@ -32,8 +32,9 @@ export default function ShipperForm({ initialValues, page, type, id }) {
     { label: "Document Details", value: 2 },
     { label: "Audit logs", value: 3 },
   ];
-  const [addShipper, { isLoading }] = useAddShipperMutation();
-  const [updateShipper] = useUpdateShipperMutation();
+  const [addShipper, { isLoading: loadingAdd }] = useAddShipperMutation();
+  const [updateShipper, { isLoading: loadingUpdate }] =
+    useUpdateShipperMutation();
   const [dropdownData, setDropdownData] = useState({});
   const [modal, setModal] = React.useState({
     open: false,
@@ -502,7 +503,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                           onClick={formik.handleSubmit}
                           sx={{ fontWeight: "500", borderRadius: "12px" }}
                         >
-                          {isLoading && (
+                          {loadingAdd && (
                             <CircularProgress size={20} color="white" />
                           )}{" "}
                           Add
@@ -859,7 +860,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                           onClick={formik.handleSubmit}
                           sx={{ fontWeight: "500" }}
                         >
-                          {isLoading && (
+                          {loadingUpdate && (
                             <CircularProgress size={20} color="white" />
                           )}{" "}
                           Update

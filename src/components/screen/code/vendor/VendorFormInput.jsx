@@ -1,4 +1,11 @@
-import { badgeClasses, Button, Grid, Stack, TextField } from "@mui/material";
+import {
+  badgeClasses,
+  Button,
+  CircularProgress,
+  Grid,
+  Stack,
+  TextField,
+} from "@mui/material";
 import InputBox from "../../../common/InputBox";
 import { Typography } from "@mui/material";
 import VendorEditGrid from "./VendorEditGrid";
@@ -34,9 +41,14 @@ export default function VendorFormInput({
   optionsSettingsData,
   vendorSettingsData,
   page,
+  loading,
 }) {
   const nav = useNavigate();
   const [dropdownData, setDropdownData] = useState({});
+  const [loaderApprove, setLoaderApprove] = useState({
+    approve: false,
+    reject: false,
+  });
   const handleApproveRequest = async () => {
     if (formik.values.status == "Pending_Documents") {
       toast.custom(
@@ -48,6 +60,10 @@ export default function VendorFormInput({
       return;
     }
     try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        approve: true,
+      }));
       const response = await ApiManager.approveCustomerApprove(
         formik.values.id,
         "Vendor"
@@ -68,6 +84,10 @@ export default function VendorFormInput({
         }
       );
     }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      approve: false,
+    }));
   };
 
   const { data: optionsSettings } =
@@ -95,6 +115,10 @@ export default function VendorFormInput({
       return;
     }
     try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        reject: true,
+      }));
       const response = await ApiManager.rejectCustomerApprove(
         formik.values.id,
         "Vendor",
@@ -116,6 +140,10 @@ export default function VendorFormInput({
         }
       );
     }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      reject: false,
+    }));
   };
 
   useEffect(() => {
@@ -578,9 +606,7 @@ export default function VendorFormInput({
                   onClick={formik.handleSubmit}
                   sx={{ fontWeight: "500", color: "white !important" }}
                 >
-                  {/* {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                            )}{" "} */}
+                  {loading && <CircularProgress size={20} color="white" />}{" "}
                   {type == "Edit" ? "Update" : "Add"}
                 </ThemeButton>
               </Stack>
@@ -600,9 +626,7 @@ export default function VendorFormInput({
                   onClick={formik.handleSubmit}
                   sx={{ fontWeight: "500", color: "white !important" }}
                 >
-                  {/* {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                            )}{" "} */}
+                  {loading && <CircularProgress size={20} color="white" />}{" "}
                   Update
                 </ThemeButton>
                 <ThemeButton
@@ -613,18 +637,18 @@ export default function VendorFormInput({
                   }}
                   onClick={() => handleRejectRequest()}
                 >
-                  {/* {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                            )}{" "} */}
+                  {loaderApprove.reject && (
+                    <CircularProgress size={20} color="white" />
+                  )}{" "}
                   Reject
                 </ThemeButton>
                 <ThemeButton
                   sx={{ fontWeight: "500", color: "white !important" }}
                   onClick={() => handleApproveRequest()}
                 >
-                  {/* {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                            )}{" "} */}
+                  {loaderApprove.approve && (
+                    <CircularProgress size={20} color="white" />
+                  )}{" "}
                   Approve
                 </ThemeButton>
               </Stack>

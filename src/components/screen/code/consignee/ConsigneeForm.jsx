@@ -47,7 +47,8 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
   const [addConsignee, { isLoading }] = useAddConsigneeMutation();
   const [loading, setLoading] = useState(false);
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
-  const [updateConsignee] = useUpdateConsigneeMutation();
+  const [updateConsignee, { isLoading: loadingUpdate }] =
+    useUpdateConsigneeMutation();
   const [dropdownData, setDropdownData] = useState({});
   const location = useLocation();
 
@@ -164,7 +165,12 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                   <Tab
                     label=" Add Consignee"
                     value={1}
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      padding: "0px 12px",
+                      minHeight: "50px",
+                    }}
                     icon={<EditIcon />}
                     iconPosition="start"
                   />
@@ -412,6 +418,8 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                                 sx={{
                                   fontSize: "1rem",
                                   textTransform: "capitalize",
+                                  padding: "0px 12px",
+                                  minHeight: "50px",
                                 }}
                               />
                             </TabList>
@@ -720,7 +728,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                           onClick={formik.handleSubmit}
                           sx={{ fontWeight: "500" }}
                         >
-                          {isLoading && (
+                          {loadingUpdate && (
                             <CircularProgress size={20} color="white" />
                           )}{" "}
                           Update

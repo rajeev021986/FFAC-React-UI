@@ -38,8 +38,9 @@ export default function VendorForm({ page = "vendor" }) {
   const location = useLocation();
   const { id, type } = location.state;
   Boolean(type == "copy" || type == "new") && tabs.splice(1, 2);
-  const [addVendor] = useAddVendorMutation();
-  const [updateVendor] = useUpdateVendorMutation();
+  const [addVendor, { isLoading: loadingAdd }] = useAddVendorMutation();
+  const [updateVendor, { isLoading: loadingUpdate }] =
+    useUpdateVendorMutation();
   const [getVendor, { isLoading }] = useLazyGetVendorQuery();
   const validationSchema = Yup.object({
     vendorName: Yup.string().required("Vendor Name is required"),
@@ -297,6 +298,7 @@ export default function VendorForm({ page = "vendor" }) {
                   optionsSettingsData={optionsSettingsData}
                   vendorSettingsData={vendorSettingsData}
                   page={page}
+                  loading={loadingAdd || loadingUpdate}
                 />
               </TabPanel>
               <TabPanel value={2} sx={{ padding: "0px" }}>
