@@ -18,7 +18,8 @@ export default function DateField({
   const validValue = value ? dayjs(value) : null;
 
   const handleDateChange = (date) => {
-    onChange(id, date ? date.toISOString() : "");
+    const timeAsDate = dayjs(date).format("YYYY-MM-DD");
+    onChange(id, timeAsDate);
   };
 
   return (
