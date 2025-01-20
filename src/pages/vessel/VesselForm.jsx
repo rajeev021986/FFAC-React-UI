@@ -28,9 +28,10 @@ export function VesselForm({ initialValues, type }) {
   const location = useLocation();
   const nav = useNavigate();
   const disabled = false;
-  const [addVessel, { isLoading }] = useAddVesselMutation();
+  const [addVessel, { isLoading: loadingAdd }] = useAddVesselMutation();
   const [loading, setLoading] = useState(false);
-  const [updateVessel] = useUpdateVesselMutation();
+  const [updateVessel, { isLoading: loadingUpdate }] =
+    useUpdateVesselMutation();
   const [dropdownData, setDropdownData] = useState({});
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
 
@@ -283,7 +284,7 @@ export function VesselForm({ initialValues, type }) {
                           color: "white !important",
                         }}
                       >
-                        {isLoading && (
+                        {loadingAdd && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
                         Add
@@ -482,7 +483,7 @@ export function VesselForm({ initialValues, type }) {
                           color: "white !important",
                         }}
                       >
-                        {isLoading && (
+                        {loadingUpdate && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
                         Update

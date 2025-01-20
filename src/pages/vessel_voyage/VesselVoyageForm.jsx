@@ -31,8 +31,9 @@ export function VesselVoyageForm({ initialValues, type }) {
     setValue(newValue);
   };
   const [dropdownData, setDropdownData] = useState({});
-  const [addVoyage, { isLoading }] = useAddVoyageMutation();
-  const [updateVoyage] = useUpdateVoyageMutation();
+  const [addVoyage, { isLoading: loadingAdd }] = useAddVoyageMutation();
+  const [updateVoyage, { isLoading: loadingUpdate }] =
+    useUpdateVoyageMutation();
 
   const [loading, setLoading] = useState(false);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
@@ -446,7 +447,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                           color: "white !important",
                         }}
                       >
-                        {isLoading && (
+                        {loadingAdd && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
                         Add
@@ -821,7 +822,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                           color: "white !important",
                         }}
                       >
-                        {isLoading && (
+                        {loadingUpdate && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
                         Update
