@@ -237,7 +237,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="eta"
                         value={formik.values.eta}
                         error={formik.errors.eta}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -255,7 +255,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="sailingDateEtd"
                         value={formik.values.sailingDateEtd}
                         error={formik.errors.sailingDateEtd}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -273,7 +273,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="arrivalDatePilotStation"
                         value={formik.values.arrivalDatePilotStation}
                         error={formik.errors.arrivalDatePilotStation}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -291,7 +291,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="documentDeadLine"
                         value={formik.values.documentDeadLine}
                         error={formik.errors.documentDeadLine}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                   </Grid>
@@ -311,7 +311,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="paymentCutOff"
                         value={formik.values.paymentCutOff}
                         error={formik.errors.paymentCutOff}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -329,7 +329,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="berthingDate"
                         value={formik.values.berthingDate}
                         error={formik.errors.berthingDate}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -347,7 +347,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="manifestReady_kra"
                         value={formik.values.manifestReady_kra}
                         error={formik.errors.manifestReady_kra}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -365,7 +365,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="manifestReady_invoice"
                         value={formik.values.manifestReady_invoice}
                         error={formik.errors.manifestReady_invoice}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                   </Grid>
@@ -385,7 +385,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="vesselLast_SlingDate"
                         value={formik.values.vesselLast_SlingDate}
                         error={formik.errors.vesselLast_SlingDate}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
 
@@ -612,7 +612,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="eta"
                         value={formik.values.eta}
                         error={formik.errors.eta}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -630,7 +630,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="sailingDateEtd"
                         value={formik.values.sailingDateEtd}
                         error={formik.errors.sailingDateEtd}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -648,7 +648,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="arrivalDatePilotStation"
                         value={formik.values.arrivalDatePilotStation}
                         error={formik.errors.arrivalDatePilotStation}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -666,7 +666,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="documentDeadLine"
                         value={formik.values.documentDeadLine}
                         error={formik.errors.documentDeadLine}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                   </Grid>
@@ -686,7 +686,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="paymentCutOff"
                         value={formik.values.paymentCutOff}
                         error={formik.errors.paymentCutOff}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -704,7 +704,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="berthingDate"
                         value={formik.values.berthingDate}
                         error={formik.errors.berthingDate}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -722,7 +722,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="manifestReady_kra"
                         value={formik.values.manifestReady_kra}
                         error={formik.errors.manifestReady_kra}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                     <Grid
@@ -740,7 +740,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="manifestReady_invoice"
                         value={formik.values.manifestReady_invoice}
                         error={formik.errors.manifestReady_invoice}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
                   </Grid>
@@ -760,7 +760,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         id="vesselLast_SlingDate"
                         value={formik.values.vesselLast_SlingDate}
                         error={formik.errors.vesselLast_SlingDate}
-                        onChange={formik.handleChange}
+                        onChange={formik.setFieldValue}
                       />
                     </Grid>
 

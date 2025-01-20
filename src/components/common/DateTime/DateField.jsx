@@ -16,13 +16,18 @@ export default function DateField({
   ...props
 }) {
   const validValue = value ? dayjs(value) : null;
+
+  const handleDateChange = (date) => {
+    onChange(id, date ? date.toISOString() : "");
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
         id={id}
         label={label}
         value={validValue}
-        onChange={onchange}
+        onChange={handleDateChange}
         error={error ? true : false}
         helperText={error}
         inputRef={inputRef}
