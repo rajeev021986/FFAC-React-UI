@@ -174,7 +174,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                   sx={{ padding: "0px" }}
                 >
                   <Tab
-                    label=" Add Shipper"
+                    label="Shipper Details"
                     value={1}
                     sx={{
                       fontSize: "1rem",
@@ -501,7 +501,11 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                         </OutlinedButton>
                         <ThemeButton
                           onClick={formik.handleSubmit}
-                          sx={{ fontWeight: "500", borderRadius: "12px" }}
+                          sx={{
+                            fontWeight: "500",
+                            borderRadius: "12px",
+                            color: "white !important",
+                          }}
                         >
                           {loadingAdd && (
                             <CircularProgress size={20} color="white" />
@@ -542,8 +546,8 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                   ))}
                 </TabList>
               </Box>
-              <TabPanel value={1}>
-                <Grid container spacing={2}>
+              <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
+                <Grid container spacing={2} marginTop={1} paddingLeft={1}>
                   <Grid
                     item
                     xs={12}
@@ -858,7 +862,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                         </OutlinedButton>
                         <ThemeButton
                           onClick={formik.handleSubmit}
-                          sx={{ fontWeight: "500" }}
+                          sx={{ fontWeight: "500", color: "white !important" }}
                         >
                           {loadingUpdate && (
                             <CircularProgress size={20} color="white" />
@@ -870,14 +874,14 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                   </Grid>
                 </Grid>
               </TabPanel>
-              <TabPanel value={2}>
+              <TabPanel value={2} sx={{ margin: 0, padding: 0 }}>
                 <UploadFile
                   customer_id={initialValues.id}
                   dropdownData={dropdownData?.designation}
                   sourceType="SHIPPER"
                 />
               </TabPanel>
-              <TabPanel value={3}>
+              <TabPanel value={3} sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeline
                   auditDetails={AuditData}
                   reloadDataHandler={fetchAuditData}

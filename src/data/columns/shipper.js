@@ -2,37 +2,49 @@ import { appDateFormat } from "../../components/utils/date"
 
 
 export const SHIPPER_COLUMNS = [
-
     {
-        field: 'name',
-        headerName: 'Name',
-        width: 110,
-        headerAlign: 'center',
-        align : 'center',
-        editable: true
-    },
-    {
+        flex: 1,
         field: 'status',
         headerName: 'Status',
         width: 110,
         headerAlign: 'center',
-        align : 'center',
-        editable: true
+        align: 'center',
+        editable: false
     },
     {
+        flex: 1,
+        field: 'isDoc',
+        headerName: 'Document',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
+        field: 'name',
+        headerName: 'Name',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+    },
+    {
+        flex: 1,
         field: 'address1',
         headerName: 'Address',
         width: 110,
         headerAlign: 'center',
-        align : 'center',
-        editable: true
+        align: 'center',
+        editable: false
     },
     {
+        flex: 1,
         field: 'city',
         headerName: 'City',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: false
     },
     {
         flex: 1,
@@ -40,32 +52,16 @@ export const SHIPPER_COLUMNS = [
         headerName: 'Country',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: false
     },
-    {
-        flex: 1,
-        field: 'email',
-        headerName: 'Email ',
-        width: 110,
-        headerAlign: 'center',
-        align : 'center',editable: true
-    },
-    {
-        flex: 1,
-        field: 'designation',
-        headerName: 'Designation',
-        width: 110,
-        headerAlign: 'center',
-        align : 'center',editable: true
-    },
-    
+
     {
         flex: 1,
         field: 'createdBy',
         headerName: 'Created By',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: false
     },
     {
         flex: 1,
@@ -73,7 +69,7 @@ export const SHIPPER_COLUMNS = [
         headerName: 'Modified By',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: false
     },
     {
         flex: 1,
@@ -81,10 +77,8 @@ export const SHIPPER_COLUMNS = [
         headerName: 'Created Date',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true,
-        renderCell: (params) => {
-            return <div>{appDateFormat(params.value)}</div>
-        }
+        align: 'center', editable: false
+
     },
     {
         flex: 1,
@@ -92,20 +86,18 @@ export const SHIPPER_COLUMNS = [
         headerName: 'Modified Date',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true,
-        renderCell: (params) => {
-            return <div>{appDateFormat(params.value)}</div>
-        }
+        align: 'center', editable: false,
+
     },
-    
+
     {
         flex: 1,
         field: 'action',
         headerName: 'Action',
         width: 110,
         headerAlign: 'center',
-        align : 'center',editable: true
+        align: 'center', editable: false
     }
-    
-  
+
+
 ]

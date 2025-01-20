@@ -42,7 +42,7 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ApiManager from "../../services/ApiManager";
 import GridActions from "../../components/common/Grid/GridActions";
 import AuditTimeLine from "../../components/AuditTimeLine";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 export default function BondScreen() {
   const bondSelector = useSelector((state) => state.bond);
@@ -97,9 +97,11 @@ export default function BondScreen() {
   BOND_COLUMNS[BOND_COLUMNS.length - 1].renderCell = GridActions({
     actions: getBondGridActions(nav, setModal),
   });
-  const actions = seletectBox
-    ? [{ name: "New Bond" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New Bond" }, { name: "Export" }];
+  const [exportLoader, setExportLoader] = useState(false);
+  const actions = [
+    { name: "New Bond" },
+    { name: exportLoader ? <LoaderIcon /> : "Export" },
+  ];
   const handleActionClick = async (actionName) => {
     if (actionName === "New Bond") {
       nav("bondAdd", {
@@ -110,6 +112,7 @@ export default function BondScreen() {
       nav("bondAdd", { state: { id: seletectBox, type: "copy" } });
     }
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
         const blob = await ApiManager.fetchCustomerDatasExcelPort(
           query,
@@ -125,6 +128,7 @@ export default function BondScreen() {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {}
+      setExportLoader(false);
     }
   };
   const [getbondAudit, { data: AuditData, isFetching: isLoadingAudit }] =

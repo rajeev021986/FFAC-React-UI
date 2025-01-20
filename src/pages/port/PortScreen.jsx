@@ -43,7 +43,7 @@ import ApiManager from "../../services/ApiManager";
 import GridActions from "../../components/common/Grid/GridActions";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import DeleteDialog from "../../components/common/DeleteDialog";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 export default function PortScreen() {
   const portSelector = useSelector((state) => state.port);
   const nav = useNavigate();
@@ -100,7 +100,11 @@ export default function PortScreen() {
   PORT_COLUMNS[PORT_COLUMNS.length - 1].renderCell = GridActions({
     actions: getPortGridActions(nav, setModal),
   });
-  const actions = [{ name: "New Port" }, { name: "Export" }];
+  const [exportLoader, setExportLoader] = useState(false);
+  const actions = [
+    { name: "New Port" },
+    { name: exportLoader ? <LoaderIcon /> : "Export" },
+  ];
   const handleActionClick = async (actionName) => {
     if (actionName === "New Port") {
       nav("newport", {
@@ -111,6 +115,7 @@ export default function PortScreen() {
     //   nav("portAdd", { state: { id: seletectBox, type: "copy" } });
     // }
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
         const blob = await ApiManager.fetchCustomerDatasExcelPort(
           query,
@@ -126,6 +131,7 @@ export default function PortScreen() {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {}
+      setExportLoader(false);
     }
   };
   const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =

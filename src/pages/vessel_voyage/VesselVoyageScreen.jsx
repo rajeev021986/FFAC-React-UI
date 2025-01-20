@@ -15,13 +15,22 @@ import { VesselVoyageHeader } from "./VesselVoyageHeader";
 import { VesselVoyageBody } from "./VesselVoyageBody";
 import ApiManager from "../../services/ApiManager";
 import { useSelector } from "react-redux";
+import { LoaderIcon } from "react-hot-toast";
 const ADD_NEW_VOYAGE_PATH = "newvoyage";
 
 export function VesselVoyageScreen() {
   const [selectBox, setSelectBox] = useState("");
+  const [exportLoader, setExportLoader] = useState(false);
   const actions = selectBox
-    ? [{ name: "New Voyage" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New Voyage" }, { name: "Export" }];
+    ? [
+        { name: "New Voyage" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
+    : [
+        { name: "New Voyage" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ];
   const [open, setOpen] = React.useState(false);
 
   const voyageSelector = useSelector((state) => state.vesselVoyageStore);
@@ -81,6 +90,7 @@ export function VesselVoyageScreen() {
       });
     }
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
         const blob = await ApiManager.fetchVoyageDatasExcel(query, payload);
         const url = window.URL.createObjectURL(blob);
@@ -92,6 +102,7 @@ export function VesselVoyageScreen() {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {}
+      setExportLoader(false);
     }
   };
   return (

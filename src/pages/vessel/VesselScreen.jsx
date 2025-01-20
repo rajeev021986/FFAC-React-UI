@@ -17,14 +17,23 @@ import { VesselHeader } from "./VesselHeader";
 import { VesselBody } from "./VesselBody";
 import ApiManager from "../../services/ApiManager";
 import { useSelector } from "react-redux";
+import { LoaderIcon } from "react-hot-toast";
 
 const ADD_NEW_VESSEL_PATH = "newvessel";
 
 export function VesselScreen() {
   const [selectBox, setSelectBox] = useState("");
+  const [exportLoader, setExportLoader] = useState(false);
   const actions = selectBox
-    ? [{ name: "New Vessel" }, { name: "Copy" }, { name: "Export" }]
-    : [{ name: "New Vessel" }, { name: "Export" }];
+    ? [
+        { name: "New Vessel" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
+    : [
+        { name: "New Vessel" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ];
 
   const [open, setOpen] = React.useState(false);
   const nav = useNavigate();
@@ -93,6 +102,7 @@ export function VesselScreen() {
       });
     }
     if (actionName === "Export") {
+      setExportLoader(true);
       try {
         const blob = await ApiManager.fetchVesselDatasExcel(query, payload);
         const url = window.URL.createObjectURL(blob);
@@ -104,6 +114,7 @@ export function VesselScreen() {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {}
+      setExportLoader(false);
     }
   };
 

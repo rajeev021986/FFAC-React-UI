@@ -1,4 +1,11 @@
-import { Box, Card, CardContent, CardHeader, Typography,Stack } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+  Stack,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
@@ -34,10 +41,8 @@ export default function ShipperFormScreen({ page }) {
     created_by: "",
     modified_by: "",
     created_date: "",
-    modified_date: ""
-    
+    modified_date: "",
   });
-  
 
   // Move settings queries to the top
   const { data: optionsSettingsData, isLoading: optionsLoading } =
@@ -89,40 +94,40 @@ export default function ShipperFormScreen({ page }) {
           modified_by: res.body?.modified_by || "",
           created_date: res.body?.created_date || "",
           modified_date: res.body?.modified_date || "",
-         // ctypelist: "SHIPPER",
-         // files: [],
+          // ctypelist: "SHIPPER",
+          // files: [],
         });
         setLoading(false);
-      } catch (error) {
-      
-      }
+      } catch (error) {}
     };
     if (state?.initialValues?.id) {
       fetchShipperDetails();
     } else {
       setLoading(false);
     }
-  }, [ state?.initialValues?.id]);
+  }, [state?.initialValues?.id]);
 
- 
   return (
-    <Box sx={{ padding: 0, margin: 0 }}>
+    <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
       <Stack sx={{ padding: "8px 0px" }}>
-      <ScreenToolbar
-        leftComps={
-          <div>
-            <ThemedBreadcrumb />
-          </div>
-        }
-        rightComps={<div></div>}
-      />
+        <ScreenToolbar
+          leftComps={
+            <div>
+              <ThemedBreadcrumb />
+            </div>
+          }
+          rightComps={<div></div>}
+        />
       </Stack>
       {loading || optionsLoading || shipperSettingsLoading ? (
         <Loader />
       ) : (
-        <Card sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}>
-          
-          <CardContent sx={{ margin: "0px !important", padding: "0px !important" }}>
+        <Card
+          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
+        >
+          <CardContent
+            sx={{ margin: "0px !important", padding: "0px !important" }}
+          >
             <ShipperForm
               optionsSettingsData={optionsSettingsData}
               shipperSettingsData={shipperSettingsData}

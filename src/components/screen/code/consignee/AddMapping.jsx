@@ -1,5 +1,5 @@
-import React,{ useRef }from "react";
-import { Box, Button,IconButton ,Tooltip} from "@mui/material";
+import React, { useRef } from "react";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Delete } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
@@ -9,27 +9,28 @@ import SelectBox from "../../../common/SelectBox";
 import InputBox from "../../../common/InputBox";
 
 export default function AddMapping({ formik, dropdownData, disabled }) {
-  const consigneeEntityFreeDays = formik.values.consigneeEntityFreeDays || [
-    // { id: 1, item: "", freeDays: "", storageRate: ""},
-  ];
-  
+  const consigneeEntityFreeDays =
+    formik.values.consigneeEntityFreeDays ||
+    [
+      // { id: 1, item: "", freeDays: "", storageRate: ""},
+    ];
 
   // Static options for dropdowns
-  
-  const itemNameOptions = dropdownData?.item ||[
+
+  const itemNameOptions = dropdownData?.item || [
     { label: "Anode", value: "ANODE" },
     { label: "Cathode", value: "CATHODE" },
-    { label: "Electrolyte", value: "ELECTROLYTE"},
+    { label: "Electrolyte", value: "ELECTROLYTE" },
     { label: "Copper Cement", value: "COPPER CEMENT" },
   ];
   const newRowRef = useRef(null);
-    const setFocus = () => {
-      setTimeout(() => {
-        if (newRowRef.current) {
-          newRowRef.current.focus();
-        }
-      }, 1000);
-    };
+  const setFocus = () => {
+    setTimeout(() => {
+      if (newRowRef.current) {
+        newRowRef.current.focus();
+      }
+    }, 1000);
+  };
 
   // Handler to add a new row
   const addRow = () => {
@@ -39,7 +40,10 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       freeDays: "",
       storageRate: "",
     };
-    formik.setFieldValue("consigneeEntityFreeDays", [...consigneeEntityFreeDays, newRow]);
+    formik.setFieldValue("consigneeEntityFreeDays", [
+      ...consigneeEntityFreeDays,
+      newRow,
+    ]);
   };
 
   // Handler to delete a row
@@ -63,47 +67,45 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
 
   // Columns for DataGrid
   const columns = [
-    
-      {
-            field: "item",
-            headerName: "Item",
-            flex: 1,
-            headerAlign: "center",
-            align: "center",
-            renderCell: (params) => (
-              <Tooltip
-                title={params.value ? `${params.value}` : "This field is empty"}
-                arrow
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  {" "}
-                  <SelectBox
-                    size="small"
-                    sx={{
-                      marginTop: "0px",
-                      marginBottom: "0px",
-                      fontSize: "14px",
-                    }}
-                    options={itemNameOptions}
-                    value={params.value}
-                  
-                    placeholder={true}
-                    onChange={(e) =>
-                      updateRowValue(params, e, "consigneeEntityFreeDays")
-                    }
-                  />
-                </div>
-              </Tooltip>
-            ),
-          },
+    {
+      field: "item",
+      headerName: "Item",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
+        <Tooltip
+          title={params.value ? `${params.value}` : "This field is empty"}
+          arrow
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {" "}
+            <SelectBox
+              size="small"
+              sx={{
+                marginTop: "0px",
+                marginBottom: "0px",
+                fontSize: "14px",
+              }}
+              options={itemNameOptions}
+              value={params.value}
+              placeholder={true}
+              onChange={(e) =>
+                updateRowValue(params, e, "consigneeEntityFreeDays")
+              }
+            />
+          </div>
+        </Tooltip>
+      ),
+    },
     {
       field: "freeDays",
       headerName: "Free Days",
@@ -111,35 +113,34 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-              <Tooltip
-                title={params.value ? `${params.value}` : "This field is empty"}
-                arrow
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  <InputBox
-                    size="small"
-                    value={params.value}
-                    type="string"
-                    onChange={(e) =>
-                      updateRowValue(params, e, "consigneeEntityFreeDays")
-                    }
-                    sx={{
-                      marginTop: "0px",
-                      marginBottom: "5px",
-                    }}
-                  />
-                </div>
-              </Tooltip>
+        <Tooltip
+          title={params.value ? `${params.value}` : "This field is empty"}
+          arrow
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <InputBox
+              size="small"
+              value={params.value}
+              type="string"
+              onChange={(e) =>
+                updateRowValue(params, e, "consigneeEntityFreeDays")
+              }
+              sx={{
+                marginTop: "0px",
+                marginBottom: "5px",
+              }}
+            />
+          </div>
+        </Tooltip>
       ),
-      
     },
     {
       field: "storageRate",
@@ -176,7 +177,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
             />
           </div>
         </Tooltip>
-),
+      ),
     },
     {
       field: "actions",
@@ -212,13 +213,13 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   };
 
   return (
-    <Box sx={{ width: "100%", textAlign:"right" }}>
+    <Box sx={{ width: "100%", textAlign: "right" }}>
       <Box
-              sx={{
-                height: 400,
-              }}
-            >
-      {/* <Button
+        sx={{
+          height: 400,
+        }}
+      >
+        {/* <Button
         startIcon={<Add />}
         onClick={addRow}
         variant="outlined"
@@ -227,17 +228,17 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       >
         Add Free Days
       </Button> */}
-      <Box sx={{ height: 400, marginTop: 2 }}>
-        <StyledDataGrid
-          rows={consigneeEntityFreeDays}
-          columns={columns}
-          disableSelectionOnClick
-          processRowUpdate={handleProcessRowUpdate}
-          experimentalFeatures={{ newEditingApi: true }}
-          getRowId={(row) => row.id}
-          disableColumnMenu
-        />
-      </Box>
+        <Box sx={{ height: 400, marginTop: 1 }}>
+          <StyledDataGrid
+            rows={consigneeEntityFreeDays}
+            columns={columns}
+            disableSelectionOnClick
+            processRowUpdate={handleProcessRowUpdate}
+            experimentalFeatures={{ newEditingApi: true }}
+            getRowId={(row) => row.id}
+            disableColumnMenu
+          />
+        </Box>
       </Box>
     </Box>
   );
