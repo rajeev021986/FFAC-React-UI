@@ -37,10 +37,10 @@ export default function IcdForm({ initialValues, page, type, id }) {
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
   // const [uploadedFiles, setUploadedFiles] = useState(initialValues.files || []);
-  const [addIcd, { isLoading }] = useAddIcdMutation();
+  const [addIcd, { isLoading: loaderAdd }] = useAddIcdMutation();
   const [loading, setLoading] = useState(false);
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
-  const [updateIcd] = useUpdateIcdMutation();
+  const [updateIcd, { isLoading: loaderUpdate }] = useUpdateIcdMutation();
   const [dropdownData, setDropdownData] = useState({});
   const icdNameRef = useRef(null);
   const [modal, setModal] = React.useState({
@@ -189,7 +189,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                         arrow
                       >
                         <InputBox
-                          label="Icd Name"
+                          label="Icd Name *"
                           id="icd_name"
                           value={formik.values.icd_name}
                           disabled={disabled}
@@ -383,7 +383,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                           color: "white !important",
                         }}
                       >
-                        {isLoading && (
+                        {loaderAdd && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
                         Add
@@ -437,7 +437,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       marginTop={2}
                     >
                       <InputBox
-                        label="Icd Name"
+                        label="Icd Name *"
                         id="icd_name"
                         disabled={disabled}
                         value={formik.values.icd_name}
@@ -660,7 +660,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                           onClick={formik.handleSubmit}
                           sx={{ fontWeight: "500" }}
                         >
-                          {isLoading && (
+                          {loaderUpdate && (
                             <CircularProgress size={20} color="white" />
                           )}{" "}
                           Update

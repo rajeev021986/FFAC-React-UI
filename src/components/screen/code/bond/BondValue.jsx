@@ -1,4 +1,4 @@
-import { Grid, Stack } from "@mui/material";
+import { CircularProgress, Grid, Stack } from "@mui/material";
 import React, { useEffect } from "react";
 import InputBox from "../../../common/InputBox";
 import BondFilterForm from "./BondFilterForm";
@@ -8,7 +8,12 @@ import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import { useNavigate } from "react-router-dom";
 import getFirstError from "../../../common/FieldToastError";
 
-export default function BondValue({ formik, optionsSettingsData, type }) {
+export default function BondValue({
+  formik,
+  optionsSettingsData,
+  type,
+  loading,
+}) {
   const nav = useNavigate();
   useEffect(() => {
     getFirstError(formik.errors);
@@ -145,6 +150,7 @@ export default function BondValue({ formik, optionsSettingsData, type }) {
               onClick={formik.handleSubmit}
               sx={{ fontWeight: "500", color: "white !important" }}
             >
+              {loading && <CircularProgress size={20} color="white" />}{" "}
               {type == "Edit" ? "Update" : "Add"}
             </ThemeButton>
           </Stack>
