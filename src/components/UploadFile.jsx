@@ -188,6 +188,10 @@ const UploadFile = ({
         ...formData,
         source: sourceType,
         sourceId: customer_id,
+        documentType:
+          formData.documentType == "Other"
+            ? formData.other
+            : formData.documentType
       },
     };
     try {
