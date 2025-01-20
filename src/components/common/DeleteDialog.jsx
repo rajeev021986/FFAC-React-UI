@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Typography,
 } from "@mui/material";
+import { LoaderIcon } from "react-hot-toast";
 
 export default function DeleteDialog({
   source,
@@ -15,6 +17,7 @@ export default function DeleteDialog({
   handleClose,
   handleDelete,
 }) {
+  const [loader, setLoader] = useState(false);
   return (
     <Dialog
       open={handleOpen}
@@ -69,7 +72,10 @@ export default function DeleteDialog({
           Cancel
         </Button>
         <Button
-          onClick={handleDelete}
+          onClick={() => {
+            setLoader(true);
+            handleDelete().then(() => setLoader(false));
+          }}
           variant="contained"
           sx={{
             minWidth: 100,
@@ -78,31 +84,9 @@ export default function DeleteDialog({
             color: "white",
           }}
         >
-          Delete
+          {loader ? <LoaderIcon /> : "Delete"}
         </Button>
       </DialogActions>
     </Dialog>
-    // <Dialog
-    //   open={modal.open && modal.type === "delete"}
-    //   onClose={handleClose}
-    //   aria-labelledby="delete-vendor-title"
-    //   aria-describedby="delete-vendor-description"
-    // >
-    //   <DialogTitle id="delete-vendor-title">{`Delete ${modal?.data?.who}`}</DialogTitle>
-    //   <DialogContent>
-    //     <Typography variant="body1">
-    //       Are you sure you want to delete the {modal?.data?.who}{" "}
-    //       <strong>{modal.data.deleteName || "this vendor"}</strong>?
-    //     </Typography>
-    //   </DialogContent>
-    //   <DialogActions>
-    //     <Button onClick={handleClose} color="primary">
-    //       Cancel
-    //     </Button>
-    //     <Button onClick={handleDelete} color="error">
-    //       Delete
-    //     </Button>
-    //   </DialogActions>
-    // </Dialog>
   );
 }
