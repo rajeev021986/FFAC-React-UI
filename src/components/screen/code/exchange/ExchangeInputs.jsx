@@ -10,11 +10,11 @@ export default function ExchangeInputs({
   nav,
   type,
   ExchageSettingsData,
-  loading
+  loading,
 }) {
   return (
-    <Grid container spacing={2} paddingLeft={1}>
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
+    <Grid container spacing={2} paddingLeft={1} paddingTop={1}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>
         <DateTimeField
           label="From Date"
           id="fromDate"
@@ -23,7 +23,7 @@ export default function ExchangeInputs({
           onChange={formik.handleChange}
         />
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>
         <DateTimeField
           label="To Date"
           id="toDate"
@@ -32,7 +32,7 @@ export default function ExchangeInputs({
           onChange={formik.handleChange}
         />
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>
         <InputBox
           label="Currency*"
           id="currency"
@@ -53,7 +53,7 @@ export default function ExchangeInputs({
           />
         </Grid>
       ) : (
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
+        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>
           <InputBox
             label="Status"
             id="status"
@@ -64,7 +64,7 @@ export default function ExchangeInputs({
           />
         </Grid>
       )}
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>
         <InputBox
           label="USD Exchange"
           id="usdExchange"
@@ -73,7 +73,7 @@ export default function ExchangeInputs({
           onChange={formik.handleChange}
         />
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>
         <InputBox
           label="UGX Exchange"
           id="ugxExchange"
@@ -85,11 +85,17 @@ export default function ExchangeInputs({
       <Grid
         item
         xs={12}
-        sx={{ margin: 1, paddingLeft: "", paddingTop: "0px !important" }}
+        sx={{
+          margin: 1,
+          paddingTop: "0px !important",
+        }}
       >
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <Stack direction="row" spacing={2}>
-            <OutlinedButton sx={{ fontWeight: "500" }} onClick={() => nav(-1)}>
+            <OutlinedButton
+              sx={{ fontWeight: "500" }}
+              onClick={() => nav("/app/admin/exchangeRate")}
+            >
               Cancel
             </OutlinedButton>
             <ThemeButton

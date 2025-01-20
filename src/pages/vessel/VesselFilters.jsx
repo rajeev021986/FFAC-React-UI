@@ -18,7 +18,7 @@ export function VesselFilters({ setFilterOpen }) {
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
-      setFilterOpen(false)
+      setFilterOpen(false);
     },
   });
   const handleReset = () => {
@@ -40,7 +40,6 @@ export function VesselFilters({ setFilterOpen }) {
   const statusOptions = [
     { value: 1, label: "Active" },
     { value: -2, label: "InActive" },
-    { value: 0, label: "Pending" },
   ];
 
   return (

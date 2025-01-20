@@ -37,8 +37,6 @@ export default function BondFilterForm({ setFilterOpen }) {
   const StatusOptions = [
     { label: "Active", value: 1 },
     { label: "InActive", value: -2 },
-    { label: "New & Pen Doc", value: 0 },
-    { label: "Rejected", value: -1 },
   ];
 
   return (

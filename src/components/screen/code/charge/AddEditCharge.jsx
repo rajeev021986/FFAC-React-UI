@@ -17,6 +17,8 @@ import toast from "react-hot-toast";
 import Loader from "../../../common/Loader/Loader";
 import ChargeInputs from "./ChargeInputs";
 import AuditTimeLine from "../../../AuditTimeLine";
+import EditIcon from "@mui/icons-material/Edit";
+import HistoryIcon from "@mui/icons-material/History";
 
 const AddEditCharge = () => {
   const location = useLocation();
@@ -30,8 +32,8 @@ const AddEditCharge = () => {
     useGetOptionsSettingsQuery("common_settings");
 
   const tabs = [
-    { label: "Charge Details", value: 1 },
-    { label: "Audit Logs", value: 2 },
+    { label: "Charge Details", value: 1, icon: <EditIcon /> },
+    { label: "Audit Logs", value: 2, icon: <HistoryIcon /> },
   ];
   Boolean(type == "copy" || type == "new") && tabs.splice(1, 1);
 
@@ -167,11 +169,24 @@ const AddEditCharge = () => {
                     aria-label="lab API tabs example"
                   >
                     {tabs.map((a) => (
-                      <Tab label={a.label} value={a.value} />
+                      <Tab
+                        label={a.label}
+                        value={a.value}
+                        sx={{
+                          fontSize: "1rem",
+                          textTransform: "capitalize",
+                          minHeight: "50px",
+                        }}
+                        icon={a.icon}
+                        iconPosition="start"
+                      />
                     ))}
                   </TabList>
                 </Box>
-                <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
+                <TabPanel
+                  value={1}
+                  sx={{ margin: "0px !important", padding: "0px !important" }}
+                >
                   {isLoading ? (
                     <Loader />
                   ) : (
@@ -186,7 +201,10 @@ const AddEditCharge = () => {
                     />
                   )}
                 </TabPanel>
-                <TabPanel value={2} sx={{ margin: 0, padding: 0 }}>
+                <TabPanel
+                  value={2}
+                  sx={{ margin: "0px !important", padding: "0px !important" }}
+                >
                   <AuditTimeLine
                     auditDetails={AuditData}
                     reloadDataHandler={fetchUserAudit}

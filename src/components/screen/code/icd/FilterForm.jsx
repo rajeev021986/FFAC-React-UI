@@ -36,7 +36,6 @@ export default function IcdFilterForm({ setFilterOpen }) {
   const statusOptions = [
     { value: 1, label: "Active" },
     { value: -2, label: "InActive" },
-    { value: 0, label: "Pending" },
   ];
 
   return (

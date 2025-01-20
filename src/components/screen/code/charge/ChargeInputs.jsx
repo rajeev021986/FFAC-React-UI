@@ -5,6 +5,7 @@ import {
   Grid,
   IconButton,
   Stack,
+  Tab,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useRef } from "react";
@@ -20,6 +21,7 @@ import { ChargeMapping } from "./ChargeMapping";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import getFirstError from "../../../common/FieldToastError";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 export default function ChargeInputs({
   formik,
@@ -35,6 +37,12 @@ export default function ChargeInputs({
         newRowRef.current.focus();
       }
     }, 1000);
+  };
+
+  const [value, setValue] = React.useState("1");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
   const addNewRow = () => {
     const hasEmptyFields = formik.values.mappingDetails.some((row) =>
@@ -138,8 +146,20 @@ export default function ChargeInputs({
   }, [formik.errors]);
   return (
     <>
-      <Grid container spacing={2} sx={{ paddingLeft: 1 }}>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ marginTop: 2 }}>
+      <Grid
+        container
+        spacing={2}
+        sx={{ paddingLeft: 1, paddingRight: 1, paddingTop: 2 }}
+      >
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          sx={{ marginTop: 2, paddingTop: "0px !important" }}
+        >
           <InputBox
             label="Charge Name *"
             id="chargeName"
@@ -148,7 +168,15 @@ export default function ChargeInputs({
             onChange={formik.handleChange}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ marginTop: 2 }}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          sx={{ marginTop: 2, paddingTop: "0px !important" }}
+        >
           <InputBox
             label="Charge For"
             id="chargeFor"
@@ -157,7 +185,15 @@ export default function ChargeInputs({
             onChange={formik.handleChange}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ marginTop: 2 }}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          sx={{ marginTop: 2, paddingTop: "0px !important" }}
+        >
           <InputBox
             label="Charge Code"
             id="chargeCode"
@@ -169,7 +205,15 @@ export default function ChargeInputs({
         {type == "new" &&
         formik.values.statusCode != -2 &&
         formik.values.statusCode != 1 ? (
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ marginTop: 2 }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            sx={{ marginTop: 2, paddingTop: "0px !important" }}
+          >
             <InputBox
               label="Status"
               id="status"
@@ -180,7 +224,15 @@ export default function ChargeInputs({
             />
           </Grid>
         ) : (
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ marginTop: 2 }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            sx={{ marginTop: 2, paddingTop: "0px !important" }}
+          >
             <SelectBox
               label="Status"
               id="status"
@@ -191,7 +243,15 @@ export default function ChargeInputs({
             />
           </Grid>
         )}
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          sx={{ marginTop: 2, paddingTop: "0px !important" }}
+        >
           <InputBox
             label="Mapped Charge"
             id="mappedCharge"
@@ -200,7 +260,15 @@ export default function ChargeInputs({
             onChange={formik.handleChange}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          sx={{ marginTop: 2, paddingTop: "0px !important" }}
+        >
           <InputBox
             label="VAT Applicable"
             id="vatApplicable"
@@ -209,7 +277,15 @@ export default function ChargeInputs({
             onChange={formik.handleChange}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          sx={{ marginTop: 2, paddingTop: "0px !important" }}
+        >
           <InputBox
             label="Charge Details"
             id="chargeDetails"
@@ -218,67 +294,80 @@ export default function ChargeInputs({
             onChange={formik.handleChange}
           />
         </Grid>
-        {/* <Box
-                    sx={{
-                      width: "100%",
-                      typography: "body1",
-                      border: "1px solid #ccc",
-                      borderRadius: "10px",
-                      margin: "8px 8px 0px 8px",
-                    }}
-                  >
-                    <TabContext value={value}>
-                      <Box>
-                        <TabList
-                          onChange={handleChange}
-                          aria-label="lab API tabs example"
-                        >
-                          <Tab
-                            label="Mapping Details"
-                            value="1"
-                            sx={{
-                              fontSize: "1rem",
-                              textTransform: "capitalize",
-                            }}
-                          />
-                        </TabList>
-                      </Box>
-                      <TabPanel value="1" sx={{ margin: 0, padding: 0 }}>
-                        {" "}
-                        <ChargeMapping disabled={disabled} formik={formik} />
-                      </TabPanel>
-                    </TabContext>
-                  </Box> */}
-
-        <Box sx={{ width: "100%", marginTop: 2 }} paddingInline={2}>
-          <Box sx={{ height: 400 }}>
-            <StyledDataGrid
-              rows={formik.values.mappingDetails}
-              columns={columns.map((column) => ({
-                ...column,
-                headerAlign: "center",
-                align: "center",
-              }))}
-              disableSelectionOnClick
-              processRowUpdate={handleProcessRowUpdate}
-              experimentalFeatures={{ newEditingApi: true }}
-              getRowId={(row) => row.id}
-              disableColumnMenu
-            />
-          </Box>
+        <Box
+          sx={{
+            width: "100%",
+            typography: "body1",
+            border: "1px solid #ccc",
+            borderRadius: "10px",
+            margin: "8px 0px 8px 16px",
+          }}
+        >
+          <TabContext value={value}>
+            <Box>
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab
+                  label="Mapping Details"
+                  value="1"
+                  sx={{
+                    fontSize: "1rem",
+                    textTransform: "capitalize",
+                  }}
+                />
+              </TabList>
+            </Box>
+            <TabPanel
+              value="1"
+              sx={{ margin: "0px !important", padding: "0px !important" }}
+            >
+              {" "}
+              <Box
+                sx={{ width: "100%", marginTop: 1, padding: "0px !important" }}
+                paddingInline={2}
+              >
+                <Box sx={{ height: 400 }}>
+                  <StyledDataGrid
+                    rows={formik.values.mappingDetails}
+                    columns={columns.map((column) => ({
+                      ...column,
+                      headerAlign: "center",
+                      align: "center",
+                    }))}
+                    disableSelectionOnClick
+                    processRowUpdate={handleProcessRowUpdate}
+                    experimentalFeatures={{ newEditingApi: true }}
+                    getRowId={(row) => row.id}
+                    disableColumnMenu
+                  />
+                </Box>
+              </Box>
+            </TabPanel>
+          </TabContext>
         </Box>
-        <Grid item xs={12}>
+
+        <Grid
+          item
+          xs={12}
+          sx={{
+            margin: "0px !important",
+            paddingTop: "0px !important",
+            paddingBottom: 1,
+          }}
+        >
           <Stack direction="row" spacing={2} justifyContent="space-between">
             <Stack direction="row" spacing={2}>
               <OutlinedButton
                 sx={{ fontWeight: "500" }}
-                onClick={() => nav(-1)}
+                onClick={() => nav("/app/admin/charges")}
               >
                 Cancel
               </OutlinedButton>
               <ThemeButton
                 onClick={formik.handleSubmit}
-                sx={{ fontWeight: "500" }}
+                sx={{ fontWeight: "500", color: "white !important" }}
               >
                 {loading && <CircularProgress size={20} color="white" />}{" "}
                 {type == "Edit" ? "Update" : "Add"}

@@ -76,7 +76,16 @@ export default function ExchangeRateFilters() {
             color="primary"
             size="small"
             onClick={handleReset}
-            sx={{ borderRadius: "12px" }}
+            sx={{
+              borderRadius: "12px",
+              padding: "6px 16px",
+              textTransform: "capitalize",
+              backgroundColor: "#f5f5f5",
+              color: "#333",
+              "&:hover": {
+                backgroundColor: "#e0e0e0",
+              },
+            }}
           >
             reset
           </Button>
