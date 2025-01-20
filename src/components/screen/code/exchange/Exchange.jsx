@@ -35,8 +35,10 @@ export default function Exchange() {
   ];
   Boolean(type == "copy" || type == "new") && tabs.splice(1, 1);
   const [getExahangeRate, { isLoading }] = useLazyGetExahangeRateQuery();
-  const [addExahangeRate] = useAddExahangeRateMutation();
-  const [updateExahangeRate] = useUpdateExahangeRateMutation();
+  const [addExahangeRate, { isLoading: loadingAdd }] =
+    useAddExahangeRateMutation();
+  const [updateExahangeRate, { isLoading: loadingUpdate }] =
+    useUpdateExahangeRateMutation();
 
   const onSubmit = async (values) => {
     if (type == "copy" || type == "new") {
@@ -54,9 +56,15 @@ export default function Exchange() {
       }
     } else {
       try {
-        Boolean(values.status == "Active") && (values.statusCode = 1);
-        Boolean(values.status == "Inactive") && (values.statusCode = -2);
-        let res = await updateExahangeRate(values).unwrap();
+        let res = await updateExahangeRate({
+          ...values,
+          statusCode:
+            values.status === "Active"
+              ? 1
+              : values.status === "Inactive"
+              ? -2
+              : null,
+        }).unwrap();
         if (res.success) {
           toast.success(res.message);
           nav(-1);
@@ -174,6 +182,7 @@ export default function Exchange() {
                     nav={nav}
                     type={type}
                     ExchageSettingsData={ExchageSettingsData}
+                    loading={loadingAdd || loadingUpdate}
                   />
                 )}
               </TabPanel>

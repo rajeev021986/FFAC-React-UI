@@ -115,7 +115,9 @@ export default function BondForm() {
             ),
             id: null,
           }).unwrap();
-        } catch (error) {}
+        } catch (error) {
+          toast.error(error?.message || "Something went wrong");
+        }
       } else {
         try {
           const updatedValues = {

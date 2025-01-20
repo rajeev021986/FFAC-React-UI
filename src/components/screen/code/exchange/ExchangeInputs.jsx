@@ -1,6 +1,6 @@
 import React from "react";
 import InputBox from "../../../common/InputBox";
-import { Grid, Stack, TextField } from "@mui/material";
+import { CircularProgress, Grid, Stack, TextField } from "@mui/material";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import DateTimeField from "../../../common/DateTime/DateTimeField";
 import SelectBox from "../../../common/SelectBox";
@@ -10,6 +10,7 @@ export default function ExchangeInputs({
   nav,
   type,
   ExchageSettingsData,
+  loading
 }) {
   return (
     <Grid container spacing={2} paddingLeft={1}>
@@ -95,6 +96,7 @@ export default function ExchangeInputs({
               onClick={formik.handleSubmit}
               sx={{ fontWeight: "500", color: "white !important" }}
             >
+              {loading && <CircularProgress size={20} color="white" />}{" "}
               {type == "edit" ? "Update" : "Add"}
             </ThemeButton>
           </Stack>

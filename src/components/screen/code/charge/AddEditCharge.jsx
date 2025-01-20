@@ -36,8 +36,9 @@ const AddEditCharge = () => {
   Boolean(type == "copy" || type == "new") && tabs.splice(1, 1);
 
   const [getCharge, { isLoading }] = useLazyGetChargeQuery();
-  const [addCharge] = useAddChargeMutation();
-  const [updateCharge] = useUpdateChargeMutation();
+  const [addCharge, { isLoading: loadingAdd }] = useAddChargeMutation();
+  const [updateCharge, { isLoading: loadingUpdate }] =
+    useUpdateChargeMutation();
 
   const initialValues = {
     id: "",
@@ -82,7 +83,7 @@ const AddEditCharge = () => {
         let res = await addCharge(updatedValue).unwrap();
         if (res.success) {
           toast.success(res.message);
-          nav(-1);
+          nav("/app/admin/charges");
         }
       } catch (error) {
         toast.error(error.data.message);
@@ -96,7 +97,7 @@ const AddEditCharge = () => {
         let res = await updateCharge(updatedValue).unwrap();
         if (res.success) {
           toast.success(res.message);
-          nav(-1);
+          nav("/app/admin/charges");
         }
       } catch (error) {
         toast.error(error.data.message);
@@ -181,6 +182,7 @@ const AddEditCharge = () => {
                       type={type}
                       value={value}
                       handleChange={handleChange}
+                      loading={loadingAdd || loadingUpdate}
                     />
                   )}
                 </TabPanel>

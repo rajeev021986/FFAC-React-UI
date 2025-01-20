@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Grid,
   IconButton,
   Stack,
@@ -24,6 +25,7 @@ export default function ChargeInputs({
   formik,
   ChargeSettingsData,
   type,
+  loading,
   nav,
 }) {
   const newRowRef = useRef(null);
@@ -278,9 +280,7 @@ export default function ChargeInputs({
                 onClick={formik.handleSubmit}
                 sx={{ fontWeight: "500" }}
               >
-                {/* {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                            )}{" "} */}
+                {loading && <CircularProgress size={20} color="white" />}{" "}
                 {type == "Edit" ? "Update" : "Add"}
               </ThemeButton>
             </Stack>
