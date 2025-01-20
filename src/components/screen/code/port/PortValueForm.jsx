@@ -1,13 +1,18 @@
 import React, { useEffect } from "react";
 import InputBox from "../../../common/InputBox";
-import { Grid, Stack, TextField } from "@mui/material";
+import { CircularProgress, Grid, Stack, TextField } from "@mui/material";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import { useNavigate } from "react-router-dom";
 import SelectBox from "../../../common/SelectBox";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import getFirstError from "../../../common/FieldToastError";
 
-export default function PortValueForm({ formik, type, optionsSettingsData }) {
+export default function PortValueForm({
+  formik,
+  type,
+  optionsSettingsData,
+  loading,
+}) {
   const nav = useNavigate();
   useEffect(() => {
     getFirstError(formik.errors);
@@ -236,9 +241,7 @@ export default function PortValueForm({ formik, type, optionsSettingsData }) {
               onClick={formik.handleSubmit}
               sx={{ fontWeight: "500", color: "white !important" }}
             >
-              {/* {isLoading && (
-                                <CircularProgress size={20} color="white" />
-                            )}{" "} */}
+              {loading && <CircularProgress size={20} color="white" />}{" "}
               {type == "Edit" ? "Update" : "Add"}
             </ThemeButton>
           </Stack>

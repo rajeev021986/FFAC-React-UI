@@ -28,8 +28,8 @@ function PortForm() {
   const location = useLocation();
   const nav = useNavigate();
   const [getPort, { isLoading: isFetchingPort }] = useLazyGetPortQuery();
-  const [addPort, isLoading] = useAddPortMutation();
-  const [updatePort] = useUpdatePortMutation();
+  const [addPort, { isLoading: addLoading }] = useAddPortMutation();
+  const [updatePort, { isLoading: updateLoading }] = useUpdatePortMutation();
   const { id, type } = location.state;
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -110,9 +110,15 @@ function PortForm() {
         } catch (error) {}
       } else {
         try {
-          Boolean(values.status == "Active") && (values.statusCode = 1);
-          Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          const result = await updatePort({ ...values }).unwrap();
+          const result = await updatePort({
+            ...values,
+            statusCode:
+              values.status === "Active"
+                ? 1
+                : values.status === "Inactive"
+                ? -2
+                : null,
+          }).unwrap();
           toast.success(result.message);
         } catch (error) {
           toast.success(error.message);
@@ -178,6 +184,7 @@ function PortForm() {
                     formik={formik}
                     type={type}
                     optionsSettingsData={optionsSettingsData}
+                    loading={addLoading || updateLoading}
                   />
                 )}
               </TabPanel>
