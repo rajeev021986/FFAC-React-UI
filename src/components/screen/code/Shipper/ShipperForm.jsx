@@ -46,7 +46,41 @@ export default function ShipperForm({ initialValues, page, type, id }) {
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     address1: Yup.string().required("Address1 is required"),
-  
+    city: Yup.string().matches(
+      /^[A-Za-z\s]+$/,
+      "City must only contain letters"
+    ),
+    country: Yup.string(),
+    emailId: Yup.string().test(
+      "valid-email",
+      "Invalid email format",
+      (value) => {
+        if (!value) return true;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+      }
+    ),
+    contactPerson: Yup.string().matches(
+      /^[A-Za-z\s]+$/,
+      "Contact Person must only contain letters"
+    ),
+    tel_No: Yup.number()
+      .typeError("That doesn't look like a phone number")
+      .positive("A phone number can't start with a minus")
+      .integer("A phone number can't include a decimal point")
+      .min(8),
+    extn_No: Yup.number().typeError("Extn number must be number"),
+    fax_No: Yup.number().typeError("Fax number must be number"),
+    tel_No: Yup.number()
+      .typeError("phone number must be number")
+      .positive("A phone number can't start with a minus")
+      .integer("A phone number can't include a decimal point")
+      .min(8),
+    mobile: Yup.number()
+      .typeError("Mobile number must be number")
+      .positive("A Mobile number can't start with a minus")
+      .integer("A Mobile number can't include a decimal point")
+      .min(8),
   });
 
   const handleChange = (event, newValue) => {
@@ -67,7 +101,6 @@ export default function ShipperForm({ initialValues, page, type, id }) {
           values.statusCode = 1;
           let response = await addShipper({ ...values }).unwrap();
 
-          // Handle response and display toast messages
           if (response.code == "SUCCESS") {
             toast.success(response.message);
             nav("/app/master/shipper");
@@ -494,14 +527,17 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                   aria-label="lab API tabs example"
                 >
                   {tabs.map((a) => (
-                    <Tab label={a.label} value={a.value}
-                    sx={{
-                      fontSize: "1rem",
-                      textTransform: "capitalize",
-                      minHeight: "50px",
-                    }}
-                    icon={a.value === 1 ? <EditIcon /> : <HistoryIcon />}
-                    iconPosition="start" />
+                    <Tab
+                      label={a.label}
+                      value={a.value}
+                      sx={{
+                        fontSize: "1rem",
+                        textTransform: "capitalize",
+                        minHeight: "50px",
+                      }}
+                      icon={a.value === 1 ? <EditIcon /> : <HistoryIcon />}
+                      iconPosition="start"
+                    />
                   ))}
                 </TabList>
               </Box>
@@ -644,24 +680,23 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                     />
                   </Grid>
                   <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      
-                    >
-                      <FormAutoComplete
-                        label="Country"
-                        id="country"
-                        suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
-                        onChange={formik.handleChange}
-                      ></FormAutoComplete>
-                    </Grid>
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
+                    <FormAutoComplete
+                      label="Country"
+                      id="country"
+                      suggestionName="country"
+                      value={formik.values.country}
+                      error={formik.errors.country}
+                      onChange={formik.handleChange}
+                    ></FormAutoComplete>
+                  </Grid>
                   <Grid
                     item
                     xs={12}
@@ -705,7 +740,6 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                     md={4}
                     lg={3}
                     xl={2}
-                    marginTop={2}
                     paddingLeft={1}
                   >
                     <SelectBox

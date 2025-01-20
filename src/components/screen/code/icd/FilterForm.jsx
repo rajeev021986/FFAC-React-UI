@@ -77,7 +77,7 @@ export default function IcdFilterForm({ setFilterOpen }) {
               options={statusOptions}
               value={formik.values.statusCode}
               onChange={formik.handleChange}
-              sx={{ marginLeft: "5px !important" }}
+              sx={{ marginLeft: "0px !important" }}
               MenuProps={{
                 disablePortal: true,
               }}
