@@ -1,7 +1,7 @@
 import { CARD_VESSEL_COLUMNS } from "../../data/columns/vessel";
 import CardsView from "../../components/common/Cards/CardsView";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   setPagination,
   vesselSetSortModel,
@@ -23,6 +23,7 @@ import CustomToast from "../../components/common/Toast/CustomToast";
 
 export function VesselBody({ selectBox, setSelectBox }) {
   const nav = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const vesselSelector = useSelector((state) => state.vesselStore);
 
@@ -103,6 +104,10 @@ export function VesselBody({ selectBox, setSelectBox }) {
     params: query,
     payload: payload,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [location.pathname]);
 
   const [deleteVessel] = useDeleteVesselMutation();
 

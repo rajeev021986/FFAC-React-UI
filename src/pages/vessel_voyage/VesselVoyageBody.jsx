@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   useDeleteVoyageMutation,
   useFetchVoyageQuery,
@@ -23,6 +23,7 @@ import DeleteDialog from "../../components/common/DeleteDialog";
 export function VesselVoyageBody({ selectBox, setSelectBox }) {
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const voyageSelector = useSelector((state) => state.vesselVoyageStore);
 
   const [modal, setModal] = React.useState({
@@ -91,6 +92,10 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
     params: query,
     payload: payload,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [location.pathname]);
 
   const [deleteVoyage] = useDeleteVoyageMutation();
   const handleClose = () => {

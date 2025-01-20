@@ -16,6 +16,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
+import DateTimeField from "../../../common/DateTime/DateTimeField";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 export default function BondEditGrid({ formik, disabled }) {
@@ -109,15 +110,24 @@ export default function BondEditGrid({ formik, disabled }) {
           editable: false,
           renderCell: (params) => {
             return (
-              <InputBoxForGridTab
-                value={params.value}
-                field={params.field}
-                id={params.id}
-                formik={formik}
-                api={params.api}
-                arrayName="bondPurchaseDetailsEntities"
-                type="datetime-local"
-              />
+              <div style={{ paddingTop: "5px" }}>
+                <DateTimeField
+                  value={params.value}
+                  onChange={(_, value) => {
+                    const updatedBondPurchaseDetails =
+                      formik.values.bondPurchaseDetailsEntities.map((a) => {
+                        if (a.id === params.id) {
+                          return { ...a, date: value };
+                        }
+                        return a;
+                      });
+                    formik.setFieldValue(
+                      "bondPurchaseDetailsEntities",
+                      updatedBondPurchaseDetails
+                    );
+                  }}
+                />
+              </div>
             );
           },
         },
@@ -149,15 +159,34 @@ export default function BondEditGrid({ formik, disabled }) {
           editable: false,
           renderCell: (params) => {
             return (
-              <InputBoxForGridTab
-                value={params.value}
-                field={params.field}
-                id={params.id}
-                formik={formik}
-                api={params.api}
-                arrayName="bondPurchaseDetailsEntities"
-                type="datetime-local"
-              />
+              <div style={{ paddingTop: "5px" }}>
+                <DateTimeField
+                  value={params.value}
+                  onChange={(_, value) => {
+                    const updatedBondPurchaseDetails =
+                      formik.values.bondPurchaseDetailsEntities.map((a) => {
+                        if (a.id === params.id) {
+                          return { ...a, validUpToDate: value };
+                        }
+                        return a;
+                      });
+                    formik.setFieldValue(
+                      "bondPurchaseDetailsEntities",
+                      updatedBondPurchaseDetails
+                    );
+                  }}
+                />
+              </div>
+
+              // <InputBoxForGridTab
+              //   value={params.value}
+              //   field={params.field}
+              //   id={params.id}
+              //   formik={formik}
+              //   api={params.api}
+              //   arrayName="bondPurchaseDetailsEntities"
+              //   type="datetime-local"
+              // />
             );
           },
         },

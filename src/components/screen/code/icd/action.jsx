@@ -9,18 +9,16 @@ export const getIcdListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        nav(`editicd`, {state: {formAction: "edit", initialValues: params.row},
-  
+        nav(`editicd`, {
+          state: { formAction: "edit", initialValues: params.row },
         });
       },
       icon: <EditIcon />,
     },
     {
-      label: 'Audit',
+      label: "Audit",
       onClick: (params) => {
-        setModal(
-          { open: true, type: 'audit', data: params.row }
-        )
+        setModal({ open: true, type: "audit", data: params.row });
       },
       icon: <BiotechIcon />,
     },
@@ -33,16 +31,13 @@ export const getIcdListGridActions = (nav, setModal) => {
             type: "delete",
             data: {
               who: "Icd",
-              deleteName: params.row.icd_Name,
+              deleteName: params.row.icdName,
               id: params.row.id,
             },
           });
         } else {
           toast.custom(
-            <CustomToast
-              message="Only for Inactive Icd"
-              toast="error"
-            />,
+            <CustomToast message="Only for Inactive Icd" toast="error" />,
             {
               closeButton: false,
             }

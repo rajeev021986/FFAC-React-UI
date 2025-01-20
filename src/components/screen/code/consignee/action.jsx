@@ -31,16 +31,13 @@ export const getConsigneeListGridActions = (nav, setModal) => {
             type: "delete",
             data: {
               who: "Consignee",
-              deleteName: params.row.consigneeName,
+              deleteName: params.row.consignee_name,
               id: params.row.id,
             },
           });
         } else {
           toast.custom(
-            <CustomToast
-              message="Only for Inactive Consignee"
-              toast="error"
-            />,
+            <CustomToast message="Only for Inactive Consignee" toast="error" />,
             {
               closeButton: false,
             }

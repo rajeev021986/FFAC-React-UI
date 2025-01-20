@@ -25,9 +25,9 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import { useLazyGetConsigneeAuditQuery } from "../../../../store/api/consigneeDataApi";
 import getFirstError from "../../../common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
+import { ConsigneeValidationSchema } from "./ConsigneeValidationSchema";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import HistoryIcon from "@mui/icons-material/History";
-
 
 export default function ConsigneeForm({ initialValues, page, type, id }) {
   const tabs = [
@@ -66,7 +66,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
   const formik = useFormik({
     initialValues,
     validateOnChange: false,
-     validationSchema,
+    validationSchema: ConsigneeValidationSchema(),
     enableReinitialize: true,
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
@@ -241,7 +241,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                         arrow
                       >
                         <InputBox
-                          label="Address1 *"
+                          label="Address1*"
                           id="address1"
                           value={formik.values.address1}
                           error={formik.errors.address1}
@@ -389,64 +389,64 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                       </TabPanel>
                     </TabContext>
                   </Box> */}
-                  <Grid item xs={12}>
-                    <Box
-                    sx={{
-                      width: "100%",
-                      typography: "body1",
-                      border: "1px solid #ccc",
-                      borderRadius: "10px",
-                      margin: "0px 8px",
-                      marginTop:"10px"
-
-                    }}
-                  >
-                    <TabContext value={value}>
-                      <Box>
-                        <TabList
-                          onChange={handleChange}
-                          aria-label="lab API tabs example"
-                        >
-                          <Tab
-                            label="Free Days"
-                            value={1}
-                            sx={{
-                              fontSize: "1rem",
-                              textTransform: "capitalize",
-                            }}
-                          />
-                        </TabList>
+                    <Grid item xs={12}>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          typography: "body1",
+                          border: "1px solid #ccc",
+                          borderRadius: "10px",
+                          margin: "0px 8px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <TabContext value={value}>
+                          <Box>
+                            <TabList
+                              onChange={handleChange}
+                              aria-label="lab API tabs example"
+                            >
+                              <Tab
+                                label="Free Days"
+                                value={1}
+                                sx={{
+                                  fontSize: "1rem",
+                                  textTransform: "capitalize",
+                                }}
+                              />
+                            </TabList>
+                          </Box>
+                          <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
+                            {" "}
+                            <AddMapping disabled={disabled} formik={formik} />
+                          </TabPanel>
+                        </TabContext>
                       </Box>
-                      <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
-                        {" "}
-                        <AddMapping disabled={disabled} formik={formik} />
-                      </TabPanel>
-                    </TabContext>
-                  </Box>
-                  </Grid>
+                    </Grid>
 
-            
-              <Grid item xs={12} sx={{ margin: 1 }}> 
-                <Stack direction="row" spacing={2}>
-                  <OutlinedButton
-                    sx={{ fontWeight: "500", borderRadius: "12px" }}
-                    onClick={() => nav("/app/master/consignee")}
-                  >
-                    Cancel
-                  </OutlinedButton>
-                  <ThemeButton
-                    onClick={formik.handleSubmit}
-                    sx={{ fontWeight: "500", borderRadius: "12px" }}
-                  >
-                    {isLoading && <CircularProgress size={20} color="white" />}{" "}
-                    Add
-                  </ThemeButton>
-                </Stack>
-              </Grid>
-          </Grid>
-          </Grid>
-          </TabPanel>
-          </TabContext>
+                    <Grid item xs={12} sx={{ margin: 1 }}>
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          sx={{ fontWeight: "500", borderRadius: "12px" }}
+                          onClick={() => nav("/app/master/consignee")}
+                        >
+                          Cancel
+                        </OutlinedButton>
+                        <ThemeButton
+                          onClick={formik.handleSubmit}
+                          sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        >
+                          {isLoading && (
+                            <CircularProgress size={20} color="white" />
+                          )}{" "}
+                          Add
+                        </ThemeButton>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+            </TabContext>
           </Box>
         </>
       ) : (
@@ -459,14 +459,17 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                   aria-label="lab API tabs example"
                 >
                   {tabs.map((a) => (
-                    <Tab label={a.label} value={a.value} 
-                    sx={{
-                      fontSize: "1rem",
-                      textTransform: "capitalize",
-                      minHeight: "50px",
-                    }}
-                    icon={a.value === 1 ? <EditIcon /> : <HistoryIcon />}
-                    iconPosition="start"/>
+                    <Tab
+                      label={a.label}
+                      value={a.value}
+                      sx={{
+                        fontSize: "1rem",
+                        textTransform: "capitalize",
+                        minHeight: "50px",
+                      }}
+                      icon={a.value === 1 ? <EditIcon /> : <HistoryIcon />}
+                      iconPosition="start"
+                    />
                   ))}
                 </TabList>
               </Box>
@@ -497,45 +500,47 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                     </Tooltip>
                   </Grid>
                   {initialValues.statusCode == -2 ||
-                    initialValues.statusCode == 1 ? (
-                  <Grid
-                                                    item
-                                                    xs={12}
-                                                    sm={6}
-                                                    md={4}
-                                                    lg={3}
-                                                    xl={2}
-                                                    //sx={{ marginTop: 2 }}
-                                                    paddingLeft={1}
-                                                >
-                                                    <SelectBox
-                                                        label="Status"
-                                                        id="status"
-                                                        options={optionsSettingsData?.body?.status}
-                                                        value={formik.values.status}
-                                                        error={formik.errors.status}
-                                                        onChange={formik.handleChange}
-                                                    />
-                                                </Grid>
-                    ):(<Grid
-                                                                item
-                                                                xs={12}
-                                                                sm={6}
-                                                                md={4}
-                                                                lg={3}
-                                                                xl={2}
-                                                                //sx={{ marginTop: 2 }}
-                                                                paddingLeft={1}
-                                                              >
-                                                                <InputBox
-                                                                  label="Status"
-                                                                  id="status"
-                                                                  disabled={true}
-                                                                  value={formik.values.status}
-                                                                  error={formik.errors.status}
-                                                                  onChange={formik.handleChange}
-                                                                />
-                                                              </Grid>)}
+                  initialValues.statusCode == 1 ? (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      //sx={{ marginTop: 2 }}
+                      paddingLeft={1}
+                    >
+                      <SelectBox
+                        label="Status"
+                        id="status"
+                        options={optionsSettingsData?.body?.status}
+                        value={formik.values.status}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  ) : (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      //sx={{ marginTop: 2 }}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Status"
+                        id="status"
+                        disabled={true}
+                        value={formik.values.status}
+                        error={formik.errors.status}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                  )}
                   <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <Tooltip
                       title={
@@ -544,7 +549,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                       arrow
                     >
                       <InputBox
-                        label="Address1"
+                        label="Address1*"
                         id="address1"
                         disabled={disabled}
                         value={formik.values.address1}
@@ -611,25 +616,24 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                     />
                   </Grid>
                   <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      
-                    >
-                      <FormAutoComplete
-                        label="Country"
-                        id="country"
-                        suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
-                        onChange={formik.handleChange}
-                      ></FormAutoComplete>
-                    </Grid>
-                  
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                  >
+                    <FormAutoComplete
+                      label="Country"
+                      id="country"
+                      suggestionName="country"
+                      value={formik.values.country}
+                      error={formik.errors.country}
+                      onChange={formik.handleChange}
+                    ></FormAutoComplete>
+                  </Grid>
+
                   <Grid
                     item
                     xs={12}
@@ -664,53 +668,53 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-<Grid item xs={12}>
-                   <Box
-                    sx={{
-                      width: "100%",
-                      typography: "body1",
-                      border: "1px solid #ccc",
-                      borderRadius: "10px",
-                      margin: "0px 8px",
-                    }}
-                  >
-                    <TabContext value={value}>
-                      <Box>
-                        <TabList
-                          onChange={handleChange}
-                          aria-label="lab API tabs example"
-                        >
-                          <Tab
-                            label="Free Days"
-                            value={1}
-                            sx={{
-                              fontSize: "1rem",
-                              textTransform: "capitalize",
-                            }}
-                          />
-                        </TabList>
-                      </Box>
-                      <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
-                        {" "}
-                        <AddMapping disabled={disabled} formik={formik} />
-                      </TabPanel>
-                    </TabContext>
-                  </Box>
-                  </Grid>
-                  
-                    <Grid item xs={12}>
-                      <Stack
-                        direction="row"
-                        spacing={2}
-                        justifyContent="space-between"
-                      >
-                        <Stack direction="row" spacing={2}>
-                          <OutlinedButton
-                            onClick={() => nav("/app/master/consignee")}
-                            sx={{ fontWeight: "500" }}
+                  <Grid item xs={12}>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        typography: "body1",
+                        border: "1px solid #ccc",
+                        borderRadius: "10px",
+                        margin: "0px 8px",
+                      }}
+                    >
+                      <TabContext value={value}>
+                        <Box>
+                          <TabList
+                            onChange={handleChange}
+                            aria-label="lab API tabs example"
                           >
-                            Cancel
-                          </OutlinedButton>
+                            <Tab
+                              label="Free Days"
+                              value={1}
+                              sx={{
+                                fontSize: "1rem",
+                                textTransform: "capitalize",
+                              }}
+                            />
+                          </TabList>
+                        </Box>
+                        <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
+                          {" "}
+                          <AddMapping disabled={disabled} formik={formik} />
+                        </TabPanel>
+                      </TabContext>
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="space-between"
+                    >
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          onClick={() => nav("/app/master/consignee")}
+                          sx={{ fontWeight: "500" }}
+                        >
+                          Cancel
+                        </OutlinedButton>
 
                         <ThemeButton
                           onClick={formik.handleSubmit}

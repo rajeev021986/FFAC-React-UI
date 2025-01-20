@@ -420,7 +420,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       marginTop={2}
                     >
                       <SelectBox
-                        label="Post Operator"
+                        label="Port Operator"
                         id="portOperator"
                         options={gateOptions}
                         value={formik.values.portOperator}
@@ -434,6 +434,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
                         sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        onClick={() => nav("/app/master/vesselVoyage")}
                       >
                         Cancel
                       </OutlinedButton>
@@ -795,7 +796,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       marginTop={2}
                     >
                       <SelectBox
-                        label="Post Operator"
+                        label="Port Operator"
                         id="portOperator"
                         options={gateOptions}
                         value={formik.values.portOperator}
@@ -808,6 +809,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
                         sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        onClick={() => nav("/app/master/vesselVoyage")}
                       >
                         Cancel
                       </OutlinedButton>

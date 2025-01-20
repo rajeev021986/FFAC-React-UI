@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Height } from "@mui/icons-material";
 
 export default function DateTimeField({
   sx,
@@ -18,7 +19,11 @@ export default function DateTimeField({
   const validValue = value ? dayjs(value) : null;
 
   const handleDateChange = (date) => {
-    onChange(id, date ? date.toISOString() : "");
+    const timeAsDate = dayjs(date).format("YYYY-MM-DDTHH:mm:ss.SSSSSS");
+    // .toDate();
+
+    console.log(timeAsDate, "timeAsDate");
+    onChange(id, timeAsDate);
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

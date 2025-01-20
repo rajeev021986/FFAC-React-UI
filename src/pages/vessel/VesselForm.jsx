@@ -271,6 +271,7 @@ export function VesselForm({ initialValues, type }) {
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
                         sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        onClick={() => nav("/app/master/vessel")}
                       >
                         Cancel
                       </OutlinedButton>
@@ -469,6 +470,7 @@ export function VesselForm({ initialValues, type }) {
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
                         sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        onClick={() => nav("/app/master/vessel")}
                       >
                         Cancel
                       </OutlinedButton>

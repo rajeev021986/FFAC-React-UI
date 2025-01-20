@@ -26,6 +26,7 @@ import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import getFirstError from "../../../common/FieldToastError";
+import { IcdValidationSchema } from "./IcdValidationSchema";
 
 export default function IcdForm({ initialValues, page, type, id }) {
   const tabs = [
@@ -74,7 +75,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
   const formik = useFormik({
     initialValues,
     validateOnChange: false, //
-    validationSchema,
+    validationSchema: IcdValidationSchema(),
     enableReinitialize: true,
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
@@ -147,13 +148,15 @@ export default function IcdForm({ initialValues, page, type, id }) {
       {type == "new" ? (
         <>
           {" "}
-          <Box sx={{ width: "100%", typography: "body1", margin:0, padding:0 }}>
+          <Box
+            sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}
+          >
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"
-                  sx={{padding:"0px"}}
+                  sx={{ padding: "0px" }}
                 >
                   <Tab
                     label="ICD Details"
@@ -170,7 +173,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                   container
                   sx={{ padding: 0, margin: 0, paddingRight: "8px" }}
                 >
-                  <Grid container sx={{padding:"0px"}}>
+                  <Grid container sx={{ padding: "0px" }}>
                     <Grid
                       item
                       xs={12}
@@ -180,7 +183,6 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       xl={2}
                       marginTop={2}
                       paddingLeft={1}
-                      
                     >
                       <Tooltip
                         title={!formik.values.name ? "Field is mandatory" : ""}
@@ -224,7 +226,6 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       xl={2}
                       marginTop={2}
                       paddingLeft={1}
-                      
                     >
                       <InputBox
                         label="Address1"
@@ -243,7 +244,6 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       xl={2}
                       marginTop={2}
                       paddingLeft={1}
-                      
                     >
                       <InputBox
                         label="Address2"
@@ -253,151 +253,144 @@ export default function IcdForm({ initialValues, page, type, id }) {
                         onChange={formik.handleChange}
                       />
                     </Grid>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      marginTop={2}
-                      paddingLeft={1}
-                      
-                    >
-                      <InputBox
-                        label="Address3"
-                        id="address3"
-                        value={formik.values.address3}
-                        error={formik.errors.address3}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      marginTop={2}
-                      paddingLeft={1}
-                      
-                    >
-                      <InputBox
-                        label="Icd Code"
-                        id="icd_code"
-                        value={formik.values.icd_code}
-                        error={formik.errors.icd_code}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      marginTop={2}
-                      paddingLeft={1}
-                      
-                    >
-                      <InputBox
-                        label="Contact Person"
-                        id="contact_person"
-                        value={formik.values.contact_person}
-                        error={formik.errors.contact_person}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      marginTop={2}
-                      paddingLeft={1}
-                      
-                    >
-                      <InputBox
-                        label="Email"
-                        id="email"
-                        value={formik.values.email}
-                        error={formik.errors.email}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Telephone"
-                        id="tel_no"
-                        value={formik.values.tel_no}
-                        error={formik.errors.tel_no}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      marginTop={2}
-                      paddingLeft={1}
-                      
-                    >
-                      <InputBox
-                        label="Mobile Number"
-                        id="mobile"
-                        value={formik.values.mobile}
-                        error={formik.errors.mobile}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-
-                    
-                    <Grid item xs={12} sx={{ margin: 1 }}>
-                      <Stack direction="row" spacing={2}>
-                        <OutlinedButton
-                          onClick={() => nav("/app/master/icd")}
-                          sx={{ fontWeight: "500", borderRadius: "12px" }}
-                        >
-                          Cancel
-                        </OutlinedButton>
-                        <ThemeButton
-                          onClick={formik.handleSubmit}
-                          sx={{
-                            fontWeight: "500",
-                            borderRadius: "12px",
-                            color: "white !important",
-                          }}
-                        >
-                          {isLoading && (
-                            <CircularProgress size={20} color="white" />
-                          )}{" "}
-                          Add
-                        </ThemeButton>
-                      </Stack>
-                    </Grid>
                   </Grid>
-                
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    marginTop={2}
+                    paddingLeft={1}
+                  >
+                    <InputBox
+                      label="Address3"
+                      id="address3"
+                      value={formik.values.address3}
+                      error={formik.errors.address3}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    marginTop={2}
+                    paddingLeft={1}
+                  >
+                    <InputBox
+                      label="Icd Code"
+                      id="icd_code"
+                      value={formik.values.icd_code}
+                      error={formik.errors.icd_code}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    marginTop={2}
+                    paddingLeft={1}
+                  >
+                    <InputBox
+                      label="Contact Person"
+                      id="contact_person"
+                      value={formik.values.contact_person}
+                      error={formik.errors.contact_person}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    marginTop={2}
+                    paddingLeft={1}
+                  >
+                    <InputBox
+                      label="Email"
+                      id="email"
+                      value={formik.values.email}
+                      error={formik.errors.email}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Telephone"
+                      id="tel_no"
+                      value={formik.values.tel_no}
+                      error={formik.errors.tel_no}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    marginTop={2}
+                    paddingLeft={1}
+                  >
+                    <InputBox
+                      label="Mobile Number"
+                      id="mobile"
+                      value={formik.values.mobile}
+                      error={formik.errors.mobile}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sx={{ margin: 1 }}>
+                    <Stack direction="row" spacing={2}>
+                      <OutlinedButton
+                        onClick={() => nav("/app/master/icd")}
+                        sx={{ fontWeight: "500", borderRadius: "12px" }}
+                      >
+                        Cancel
+                      </OutlinedButton>
+                      <ThemeButton
+                        onClick={formik.handleSubmit}
+                        sx={{
+                          fontWeight: "500",
+                          borderRadius: "12px",
+                          color: "white !important",
+                        }}
+                      >
+                        {isLoading && (
+                          <CircularProgress size={20} color="white" />
+                        )}{" "}
+                        Add
+                      </ThemeButton>
+                    </Stack>
+                  </Grid>
+                </Grid>
               </TabPanel>
             </TabContext>
           </Box>
@@ -532,104 +525,104 @@ export default function IcdForm({ initialValues, page, type, id }) {
                         onChange={formik.handleChange}
                       />
                     </Grid>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Address 3"
-                        id="address3"
-                        disabled={disabled}
-                        // options={dropdownData?.account_type}
-                        value={formik.values.address3}
-                        error={formik.errors.address3}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Address 3"
+                      id="address3"
+                      disabled={disabled}
+                      // options={dropdownData?.account_type}
+                      value={formik.values.address3}
+                      error={formik.errors.address3}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
 
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Icd Code"
-                        id="icd_code"
-                        disabled={disabled}
-                        value={formik.values.icd_code}
-                        error={formik.errors.icd_code}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Contact Person"
-                        id="contact_person"
-                        disabled={disabled}
-                        value={formik.values.contact_person}
-                        error={formik.errors.contact_person}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Email"
-                        id="email"
-                        disabled={disabled}
-                        value={formik.values.email}
-                        error={formik.errors.email}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="Telephone"
-                        id="tel_no"
-                        disabled={disabled}
-                        value={formik.values.tel_no}
-                        error={formik.errors.tel_no}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Icd Code"
+                      id="icd_code"
+                      disabled={disabled}
+                      value={formik.values.icd_code}
+                      error={formik.errors.icd_code}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Contact Person"
+                      id="contact_person"
+                      disabled={disabled}
+                      value={formik.values.contact_person}
+                      error={formik.errors.contact_person}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Email"
+                      id="email"
+                      disabled={disabled}
+                      value={formik.values.email}
+                      error={formik.errors.email}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Telephone"
+                      id="tel_no"
+                      disabled={disabled}
+                      value={formik.values.tel_no}
+                      error={formik.errors.tel_no}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
 
                   <Grid
                     item
