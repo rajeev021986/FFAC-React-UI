@@ -74,7 +74,6 @@ export default function PLDeatilsTableList({ item }) {
         disableRowSelectionOnClick
         disableColumnResize
         disableColumnMenu
-        disableColumnSorting
         getRowClassName={(params) => (params.row.isTotal ? 'total-row' : '')}
       />
     </Stack>

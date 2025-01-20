@@ -260,7 +260,6 @@ export default function PortScreen() {
             paginationModel={portSelector.pagination}
             loading={isLoading || isFetching}
             disableColumnMenu
-            disableColumnSorting
             sortModel={portSelector.sortModel}
             onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
           />

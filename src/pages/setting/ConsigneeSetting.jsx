@@ -15,21 +15,19 @@ import Loader from "../../components/common/Loader/Loader";
 import GlobalDrrpdownSetting from "./GlobalDrrpdownSetting";
 import toast from "react-hot-toast";
 
-const ShipperSetting = () => {
+const ConsigneeSetting = () => {
   const [addOptons, { isloading }] = useAddOptonsMutation();
   const {
     data,
     isLoading,
     error: geterror,
     refetch,
-  } = useGetOptionsSettingsQuery("shipper_settings");
+  } = useGetOptionsSettingsQuery("consignee_settings");
   const [documentType, setDocumentType] = useState([]);
-  const [designation, setDesignation] = useState([]);
   const [isLoadingsave, setIsLoading] = useState(false);
 
   useEffect(() => {
     setDocumentType(data?.body.documentType || []);
-    setDesignation(data?.body.designation || []);
   }, [data, geterror]);
 
   const Postdata = async () => {
@@ -37,14 +35,11 @@ const ShipperSetting = () => {
       documentType: documentType.filter(
         (item) => !item.value.includes("Type the")
       ),
-      designation: designation.filter(
-        (item) => !item.value.includes("Type the")
-      ),
     };
     setIsLoading(true);
     await addOptons({
-      body: { shipper_settings: filteredData },
-      type: "shipper_settings",
+      body: { consignee_settings: filteredData },
+      type: "consignee_settings",
     })
       .then((res) => {
         if (res.error) {
@@ -61,7 +56,7 @@ const ShipperSetting = () => {
   return (
     <div style={{ padding: "1rem" }}>
       <Grid xs={12} sx={{ marginBottom: "10px" }}>
-        <Typography variant="h4">Shipper Setting</Typography>
+        <Typography variant="h4">Consignee Setting</Typography>
       </Grid>
 
       {isLoading ? (
@@ -72,11 +67,6 @@ const ShipperSetting = () => {
             value={documentType}
             setvalue={setDocumentType}
             title="Document Type"
-          />
-          <GlobalDrrpdownSetting
-            value={designation}
-            setvalue={setDesignation}
-            title="Designation"
           />
         </Grid>
       )}
@@ -96,4 +86,4 @@ const ShipperSetting = () => {
   );
 };
 
-export default ShipperSetting;
+export default ConsigneeSetting;

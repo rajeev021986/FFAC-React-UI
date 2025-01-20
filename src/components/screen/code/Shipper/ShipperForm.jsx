@@ -56,7 +56,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
 
   const formik = useFormik({
     initialValues,
-    validateOnChange:false,
+    validateOnChange: false,
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -114,7 +114,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
         ...shipperSettingsData?.body,
       });
     }
-  }, [optionsSettingsData]);
+  }, [optionsSettingsData, shipperSettingsData]);
   useEffect(() => {
     if (shipperNameRef.current) {
       shipperNameRef.current.focus();
@@ -142,13 +142,17 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                   <Tab
                     label=" Add Shipper"
                     value={1}
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
                     icon={<EditIcon />}
                     iconPosition="start"
                   />
                 </TabList>
               </Box>
-              <TabPanel value={1} sx={{ padding: "0px" }}>
+              <TabPanel value={1} sx={{ padding: 0, margin: 0 }}>
                 {" "}
                 <Grid
                   container
@@ -346,14 +350,14 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                       md={4}
                       lg={3}
                       xl={2}
-                      paddingLeft={1}
                       marginTop={2}
+                      paddingLeft={1}
                     >
-                      <InputBox
+                      <SelectBox
                         label="Designation"
                         id="designation"
-                        value={formik.values.designation}
-                        error={formik.errors.designation}
+                        options={dropdownData?.designation}
+                        error={formik.errors.status}
                         onChange={formik.handleChange}
                       />
                     </Grid>
@@ -415,49 +419,67 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                       />
                     </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2} paddingLeft={1}>
-              <InputBox
-                label="Mobile Number"
-                id="mobile"
-                value={formik.values.mobile}
-                error={formik.errors.mobile}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}  marginTop={2} paddingLeft={1}>
-              <InputBox
-                label="IE CODE"
-                id="ieCode"
-                value={formik.values.ieCode}
-                error={formik.errors.ieCode}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid/>
-            
-              <Grid item xs={12} sx={{ margin: 1 }}>
-                <Stack direction="row" spacing={2}>
-                  <OutlinedButton
-                 onClick={() => nav("/app/master/shipper")}
-                    sx={{ fontWeight: "500", borderRadius: "12px" }}
-                  >
-                    Cancel
-                  </OutlinedButton>
-                  <ThemeButton
-                    onClick={formik.handleSubmit}
-                    sx={{ fontWeight: "500", borderRadius: "12px" }}
-                  >
-                    {isLoading && (
-                      <CircularProgress size={20} color="white" />
-                    )}{" "}
-                    Add
-                  </ThemeButton>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Grid>
-          </TabPanel>
-          </TabContext>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="Mobile Number"
+                        id="mobile"
+                        value={formik.values.mobile}
+                        error={formik.errors.mobile}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      marginTop={2}
+                      paddingLeft={1}
+                    >
+                      <InputBox
+                        label="IE CODE"
+                        id="ieCode"
+                        value={formik.values.ieCode}
+                        error={formik.errors.ieCode}
+                        onChange={formik.handleChange}
+                      />
+                    </Grid>
+                    <Grid />
+
+                    <Grid item xs={12} sx={{ margin: 1 }}>
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          onClick={() => nav("/app/master/shipper")}
+                          sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        >
+                          Cancel
+                        </OutlinedButton>
+                        <ThemeButton
+                          onClick={formik.handleSubmit}
+                          sx={{ fontWeight: "500", borderRadius: "12px" }}
+                        >
+                          {isLoading && (
+                            <CircularProgress size={20} color="white" />
+                          )}{" "}
+                          Add
+                        </ThemeButton>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+            </TabContext>
           </Box>
         </>
       ) : (
@@ -683,14 +705,14 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                     md={4}
                     lg={3}
                     xl={2}
+                    marginTop={2}
                     paddingLeft={1}
                   >
-                    <InputBox
+                    <SelectBox
                       label="Designation"
                       id="designation"
-                      disabled={disabled}
-                      value={formik.values.designation}
-                      error={formik.errors.designation}
+                      options={dropdownData?.designation}
+                      error={formik.errors.status}
                       onChange={formik.handleChange}
                     />
                   </Grid>
@@ -816,7 +838,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
               <TabPanel value={2}>
                 <UploadFile
                   customer_id={initialValues.id}
-                  dropdownData={shipperSettingsData?.body?.documentType}
+                  dropdownData={dropdownData?.designation}
                   sourceType="SHIPPER"
                 />
               </TabPanel>

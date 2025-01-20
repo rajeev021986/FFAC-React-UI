@@ -5,6 +5,7 @@ import InputBox from "../../../common/InputBox";
 import { updateInput } from "../../../../store/freatures/icdSlice";
 import { OutlinedButton } from "../../../common/Button";
 import { useFormik } from "formik";
+import SelectBox from "../../../common/SelectBox";
 
 export default function IcdFilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
@@ -32,6 +33,11 @@ export default function IcdFilterForm({ setFilterOpen }) {
       })
     );
   };
+  const statusOptions = [
+    { value: 1, label: "Active" },
+    { value: -2, label: "InActive" },
+    { value: 0, label: "Pending" },
+  ];
 
   return (
     <div>
@@ -55,6 +61,28 @@ export default function IcdFilterForm({ setFilterOpen }) {
             value={formik.values.email}
             onChange={formik.handleChange}
           />
+        </Stack>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            width: "65.7%",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ width: "48%", marginLeft: "0px" }}>
+            <SelectBox
+              label="Status"
+              id="statusCode"
+              options={statusOptions}
+              value={formik.values.statusCode}
+              onChange={formik.handleChange}
+              sx={{ marginLeft: "5px !important" }}
+              MenuProps={{
+                disablePortal: true,
+              }}
+            />
+          </div>
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
           <Button

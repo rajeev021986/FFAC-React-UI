@@ -1,6 +1,4 @@
 const ENDPOINTS = {
-
-
   LOGIN: () => `/auth-service/auth/login`,
   ADD_USER: () => `/users`,
   GET_USERS: (limit, page) => `/users?limit=${limit}&page=${page}`,
@@ -75,7 +73,7 @@ const ENDPOINTS = {
     `/admin-service/v1/data?pattern=${inputValue}&type=${id}`,
   GET_VESSEL_AUDIT: (id) => `/master-service/v1/vessel/audit/${id}`,
   GET_VOYAGE_AUDIT: (id) => `/master-service/v1/vessel/voyage/audit/${id}`,
+  FILE_DOWNLOAD_INTEGATER: (id) => `/entity-service/v1/file/audit/${id}`,
 };
-
 
 export default ENDPOINTS;

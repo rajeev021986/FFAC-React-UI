@@ -120,7 +120,12 @@ export default function BondForm() {
         try {
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          const result = await updateBond({ ...values }).unwrap();
+          const result = await updateBond({
+            ...values,
+            bondPurchaseDetailsEntities: values.bondPurchaseDetailsEntities.map(
+              (a) => ({ ...a, id: null })
+            ),
+          }).unwrap();
           toast.success(result.message);
         } catch (error) {
           toast.success(error.message);

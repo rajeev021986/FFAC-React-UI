@@ -305,7 +305,7 @@ export default function VendorScreen({ page }) {
             paginationModel={vendorSelector.pagination}
             loading={isLoading || isFetching}
             disableColumnMenu
-            disableColumnSorting
+            // disableColumnSorting
             sortModel={vendorSelector.sortModel}
             onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
           />

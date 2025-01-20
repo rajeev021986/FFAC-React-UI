@@ -262,7 +262,6 @@ export default function BondScreen() {
             paginationModel={bondSelector.pagination}
             loading={isLoading || isFetching}
             disableColumnMenu
-            disableColumnSorting
             sortModel={bondSelector.sortModel}
             onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
           />

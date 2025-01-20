@@ -35,6 +35,7 @@ export default function UploadFilesDialog({
   viewDocument,
   fileData,
   setFormData,
+  downloadIntgater,
 }) {
   return (
     <>
@@ -192,6 +193,7 @@ export default function UploadFilesDialog({
               link.href = viewDocument.url;
               link.download = viewDocument.documentType;
               link.click();
+              downloadIntgater();
             }}
             color="primary"
           >
