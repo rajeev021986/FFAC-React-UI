@@ -161,7 +161,11 @@ export default function IcdForm({ initialValues, page, type, id }) {
                   <Tab
                     label="ICD Details"
                     value={1}
-                    sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                    sx={{
+                      fontSize: "1rem",
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
                     icon={<EditIcon />}
                     iconPosition="start"
                   />
@@ -658,7 +662,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                         </OutlinedButton>
                         <ThemeButton
                           onClick={formik.handleSubmit}
-                          sx={{ fontWeight: "500" }}
+                          sx={{ fontWeight: "500", color: "white !important" }}
                         >
                           {loaderUpdate && (
                             <CircularProgress size={20} color="white" />
