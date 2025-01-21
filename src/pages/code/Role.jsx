@@ -38,6 +38,7 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import { useFetchuserQuery } from "../../store/api/userDataApi";
 import ApiManager from "../../services/ApiManager";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 const Role = () => {
   const navigate = useNavigate();
@@ -243,7 +244,15 @@ const Role = () => {
     );
 
     if (!hasDeletePermission) {
-      toast.error("You do not have permission to delete Role.");
+      toast.custom(
+        <CustomToast
+          message="You do not have permission to delete Role."
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
       return;
     }
 
@@ -255,10 +264,35 @@ const Role = () => {
   const handleConfirmRemove = async () => {
     try {
       const queryParams = `role/${dialogConfig.roleId}/user/${dialogConfig.userId}`;
-      await ApiManager.removeAssignedUser(queryParams).then(() => toast.success("User Removed successfully!")).then(() => refetch()).catch(() => toast.error("Failed to Remove User"))
+      await ApiManager.removeAssignedUser(queryParams)
+        .then(() =>
+          toast.custom(
+            <CustomToast
+              message="User Removed successfully!"
+              toast="success"
+            />,
+            {
+              closeButton: false,
+            }
+          )
+        )
+        .then(() => refetch())
+        .catch(() =>
+          toast.custom(
+            <CustomToast message="Failed to Remove User" toast="error" />,
+            {
+              closeButton: false,
+            }
+          )
+        );
       setRefresh((prev) => !prev);
     } catch (error) {
-      toast.error("Failed to remove user");
+      toast.custom(
+        <CustomToast message="Failed to remove user" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
     setOpenDialog(false);
   };
@@ -269,14 +303,30 @@ const Role = () => {
     );
 
     if (!hasDeletePermission) {
-      toast.error("You do not have permission to delete this role.");
+      toast.custom(
+        <CustomToast
+          message="You do not have permission to delete this role."
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
       return;
     }
 
     if (
       roles.find((role) => role.role.roleId === roleId)?.userEntities.length > 0
     ) {
-      toast.error("Cannot delete role with assigned users.");
+      toast.custom(
+        <CustomToast
+          message="Cannot delete role with assigned users."
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
       return;
     } else {
       setDialogConfig({ roleId, type: "role" });
@@ -290,7 +340,15 @@ const Role = () => {
     if (userPermission && userPermission.add === "yes") {
       navigate("add");
     } else {
-      toast.error("You don't have permission to add users.");
+      toast.custom(
+        <CustomToast
+          message="You don't have permission to add users."
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
 
@@ -322,20 +380,43 @@ const Role = () => {
         );
         setRoles(updatedRoles);
         setFilteredRoles(updatedRoles);
-        const result = await ApiManager.deleteRole(dialogConfig.roleId).then((res) => {
-          toast.success("Role deleted successfully!");
-        }).then((res) => {
-          setRefresh((prev) => !prev);
-        }).catch((error) => {
-          toast.error("Failed to delete role");
-        });
+        const result = await ApiManager.deleteRole(dialogConfig.roleId)
+          .then((res) => {
+            toast.custom(
+              <CustomToast
+                message="Role deleted successfully!"
+                toast="success"
+              />,
+              {
+                closeButton: false,
+              }
+            );
+          })
+          .then((res) => {
+            setRefresh((prev) => !prev);
+          })
+          .catch((error) => {
+            toast.custom(
+              <CustomToast message="Failed to delete role" toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
+          });
       } else {
         setRefresh((prev) => !prev);
       }
     } catch (error) {
-      toast.error(
-        `Failed to ${dialogConfig.type === "role" ? "delete role" : "remove user"
-        }`
+      toast.custom(
+        <CustomToast
+          message={`Failed to ${
+            dialogConfig.type === "role" ? "delete role" : "remove user"
+          }`}
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
       );
     }
     setOpenDialog(false);
@@ -371,9 +452,7 @@ const Role = () => {
                 variant="outlined"
                 color="warning"
                 size="small"
-                onClick={() =>
-                  handleRemoveUser(record.role.roleId, user.id)
-                }
+                onClick={() => handleRemoveUser(record.role.roleId, user.id)}
                 sx={{
                   borderColor: "#f47123",
                   backgroundColor: "white",
@@ -400,7 +479,6 @@ const Role = () => {
                     fontSize: "20px",
                     backgroundColor: "antiquewhite",
                   }}
-                  
                 />
               </Button>
             </Grid>
@@ -444,7 +522,15 @@ const Role = () => {
                       state: { adminMenuData },
                     });
                   } else {
-                    toast.error("You don't have permission to edit this role.");
+                    toast.custom(
+                      <CustomToast
+                        message="You don't have permission to edit this role."
+                        toast="error"
+                      />,
+                      {
+                        closeButton: false,
+                      }
+                    );
                   }
                 }}
                 color="primary"
@@ -467,7 +553,15 @@ const Role = () => {
                   if (record.userEntities.length === 0) {
                     handleRoleDelete(record.role.roleId);
                   } else {
-                    toast.error("Cannot delete role with assigned users.");
+                    toast.custom(
+                      <CustomToast
+                        message="Cannot delete role with assigned users."
+                        toast="error"
+                      />,
+                      {
+                        closeButton: false,
+                      }
+                    );
                   }
                 }}
                 color="primary"

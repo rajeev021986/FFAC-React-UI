@@ -17,6 +17,7 @@ import ReusableRightDrawer from "../../common/CommonDrawer";
 import { PACKING_LIST } from "../../../data/columns/audit";
 import * as yup from "yup";
 import { useFormat } from "../../../hooks/useFormat";
+import CustomToast from "../../common/Toast/CustomToast";
 
 export default function PLForm({
   initialValues,
@@ -28,7 +29,7 @@ export default function PLForm({
   const [options, setOptions] = useState([]);
   const [editPLDetails, { isLoading, isError, isSuccess, data, error }] =
     useEditPLDetailsMutation();
-  const {displayFormat} = useFormat()
+  const { displayFormat } = useFormat();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
@@ -49,10 +50,23 @@ export default function PLForm({
         try {
           const response = await editPLDetails(values).unwrap();
           if (response.status === "success") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error(error.data?.message || "Something went wrong!");
+          toast.custom(
+            <CustomToast
+              message={error.data?.message || "Something went wrong!"}
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         setAlertConfig({
@@ -74,8 +88,7 @@ export default function PLForm({
       .then((response) => {
         setOptions(response.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
   const handleAuditModal = () => {
     setDrawerOpen({ open: false, type: "", data: {} });

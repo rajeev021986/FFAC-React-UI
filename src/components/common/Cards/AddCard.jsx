@@ -30,6 +30,7 @@ import { useParams } from "react-router-dom";
 import ApiManager from "../../../services/ApiManager";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import CustomToast from "../Toast/CustomToast";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First Name is required"),
@@ -52,7 +53,10 @@ export default function AddCard() {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [roles, setRoles] = useState([]);
   const formikRef = useRef(null);
-  const [locations, setLocations] = useState([{ value: "Chennai", label: "Chennai" }, { value: "Mumbai", label: "Mumbai" }]);
+  const [locations, setLocations] = useState([
+    { value: "Chennai", label: "Chennai" },
+    { value: "Mumbai", label: "Mumbai" },
+  ]);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -61,26 +65,39 @@ export default function AddCard() {
         const res = await ApiManager.getUserData(id);
 
         if (formikRef.current) {
-          formikRef.current.setFieldValue("defaultLocation", res.body.defaultLocation);
+          formikRef.current.setFieldValue(
+            "defaultLocation",
+            res.body.defaultLocation
+          );
           formikRef.current.setFieldValue("status", res.body.status);
           formikRef.current.setFieldValue("firstName", res.body.firstName);
           formikRef.current.setFieldValue("lastName", res.body.lastName);
           formikRef.current.setFieldValue("email", res.body.email);
           formikRef.current.setFieldValue("phone", res.body.phone);
           formikRef.current.setFieldValue("password", res.body.password);
-          formikRef.current.setFieldValue("confirmPassword", res.body.confirmPassword);
-          formikRef.current.setFieldValue("role", res.body.roles.map(role => role.roleName));
+          formikRef.current.setFieldValue(
+            "confirmPassword",
+            res.body.confirmPassword
+          );
+          formikRef.current.setFieldValue(
+            "role",
+            res.body.roles.map((role) => role.roleName)
+          );
           formikRef.current.setFieldValue("companyCode", res.body.companyCode);
           formikRef.current.setFieldValue("userId", res.body.userId);
           formikRef.current.setFieldValue("id", res.body.id);
-          const userRoles = res.body.roles.map(role => role.roleName) || [];
-          setSelectedOptions(roles.map(role => ({
-            value: role.roleName,
-            checked: userRoles.includes(role.roleName)
-          })));
+          const userRoles = res.body.roles.map((role) => role.roleName) || [];
+          setSelectedOptions(
+            roles.map((role) => ({
+              value: role.roleName,
+              checked: userRoles.includes(role.roleName),
+            }))
+          );
         }
       } catch (err) {
-        toast.error(err.message);
+        toast.custom(<CustomToast message={err.message} toast="error" />, {
+          closeButton: false,
+        });
       }
     };
 
@@ -88,12 +105,16 @@ export default function AddCard() {
       try {
         const res = await ApiManager.getRoles();
         setRoles(res.body);
-        setSelectedOptions(res.body.map(role => ({
-          value: role.roleName,
-          checked: false
-        })));
+        setSelectedOptions(
+          res.body.map((role) => ({
+            value: role.roleName,
+            checked: false,
+          }))
+        );
       } catch (err) {
-        toast.error(err.message);
+        toast.custom(<CustomToast message={err.message} toast="error" />, {
+          closeButton: false,
+        });
       }
     };
 
@@ -104,8 +125,8 @@ export default function AddCard() {
   const handleCheckboxChange = (event, optionValue) => {
     const isChecked = event.target.checked;
 
-    setSelectedOptions(prevOptions =>
-      prevOptions.map(option =>
+    setSelectedOptions((prevOptions) =>
+      prevOptions.map((option) =>
         option.value === optionValue
           ? { ...option, checked: isChecked }
           : option
@@ -118,14 +139,15 @@ export default function AddCard() {
     } else {
       formikRef.current.setFieldValue(
         "role",
-        currentRoles.filter(role => role !== optionValue)
+        currentRoles.filter((role) => role !== optionValue)
       );
     }
   };
 
-  const status = [{ label: "Active", value: "Active" }, { label: "Inactive", value: "Inactive" }]
-
-
+  const status = [
+    { label: "Active", value: "Active" },
+    { label: "Inactive", value: "Inactive" },
+  ];
 
   const handleRemoveOption = (optionValue) => {
     setSelectedOptions((prevOptions) =>
@@ -134,14 +156,17 @@ export default function AddCard() {
       )
     );
     const currentRoles = formikRef.current?.values?.role || [];
-    formikRef.current.setFieldValue("role", currentRoles.filter(role => role !== optionValue));
+    formikRef.current.setFieldValue(
+      "role",
+      currentRoles.filter((role) => role !== optionValue)
+    );
   };
 
   const selectedCount = selectedOptions.filter(
     (option) => option.checked
   ).length;
 
-  const filteredRoles = roles.filter(role =>
+  const filteredRoles = roles.filter((role) =>
     role.roleName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -176,25 +201,63 @@ export default function AddCard() {
             const payload = {
               ...values,
               locations: [values.defaultLocation],
-              roles: values.role.map((role, index) => { return { roleId: roles.find(r => r.roleName === role).roleId, roleName: role, isDeleted: roles.find(r => r.roleName === role).isDeleted } })
-            }
-            await ApiManager.updateUserData(payload).then((res) => {
-              toast.success(res.message)
-            }).catch((err) => {
-              toast.error(err.message)
-            })
+              roles: values.role.map((role, index) => {
+                return {
+                  roleId: roles.find((r) => r.roleName === role).roleId,
+                  roleName: role,
+                  isDeleted: roles.find((r) => r.roleName === role).isDeleted,
+                };
+              }),
+            };
+            await ApiManager.updateUserData(payload)
+              .then((res) => {
+                toast.custom(
+                  <CustomToast message={res.message} toast="success" />,
+                  {
+                    closeButton: false,
+                  }
+                );
+              })
+              .catch((err) => {
+                toast.custom(
+                  <CustomToast message={err.message} toast="error" />,
+                  {
+                    closeButton: false,
+                  }
+                );
+              });
           } else {
             const payload = {
               ...values,
               id: null,
               locations: [values.defaultLocation],
-              roles: values.role.map((role, index) => { return { roleId: roles.find(r => r.roleName === role).roleId, roleName: role, isDeleted: roles.find(r => r.roleName === role).isDeleted } })
-            }
-            await ApiManager.addUserData(payload).then((res) => {
-              toast.success(res.message)
-            }).catch((er) => toast.error(er.msg))
+              roles: values.role.map((role, index) => {
+                return {
+                  roleId: roles.find((r) => r.roleName === role).roleId,
+                  roleName: role,
+                  isDeleted: roles.find((r) => r.roleName === role).isDeleted,
+                };
+              }),
+            };
+            await ApiManager.addUserData(payload)
+              .then((res) => {
+                toast.custom(
+                  <CustomToast message={res.message} toast="success" />,
+                  {
+                    closeButton: false,
+                  }
+                );
+              })
+              .catch((err) =>
+                toast.custom(
+                  <CustomToast message={err.message} toast="error" />,
+                  {
+                    closeButton: false,
+                  }
+                )
+              );
           }
-          navigate(-1)
+          navigate(-1);
         }}
       >
         {(formik) => (
@@ -227,7 +290,7 @@ export default function AddCard() {
                         autoComplete="off"
                         value={formik.values.userId}
                         onChange={(e) => {
-                          formik.setFieldValue("userId", e.target.value)
+                          formik.setFieldValue("userId", e.target.value);
                         }}
                         component={InputBox}
                         sx={{ width: "90%" }}
@@ -248,7 +311,7 @@ export default function AddCard() {
                         label="First Name"
                         value={formik.values.firstName}
                         onChange={(e) => {
-                          formik.setFieldValue("firstName", e.target.value)
+                          formik.setFieldValue("firstName", e.target.value);
                         }}
                         component={InputBox}
                         sx={{ width: "90%" }}
@@ -270,7 +333,7 @@ export default function AddCard() {
                         value={formik.values.lastName}
                         component={InputBox}
                         onChange={(e) => {
-                          formik.setFieldValue("lastName", e.target.value)
+                          formik.setFieldValue("lastName", e.target.value);
                         }}
                         sx={{ width: "90%" }}
                       />
@@ -291,7 +354,7 @@ export default function AddCard() {
                         value={formik.values.email}
                         component={InputBox}
                         onChange={(e) => {
-                          formik.setFieldValue("email", e.target.value)
+                          formik.setFieldValue("email", e.target.value);
                         }}
                         sx={{ width: "90%" }}
                       />
@@ -312,7 +375,7 @@ export default function AddCard() {
                         value={formik.values.phone}
                         component={InputBox}
                         onChange={(e) => {
-                          formik.setFieldValue("phone", e.target.value)
+                          formik.setFieldValue("phone", e.target.value);
                         }}
                         sx={{ width: "90%" }}
                       />
@@ -388,7 +451,7 @@ export default function AddCard() {
                         component={InputBox}
                         value={formik.values.password}
                         onChange={(e) => {
-                          formik.setFieldValue("password", e.target.value)
+                          formik.setFieldValue("password", e.target.value);
                         }}
                         sx={{ width: "90%" }}
                       />
@@ -410,7 +473,10 @@ export default function AddCard() {
                         component={InputBox}
                         value={formik.values.confirmPassword}
                         onChange={(e) => {
-                          formik.setFieldValue("confirmPassword", e.target.value)
+                          formik.setFieldValue(
+                            "confirmPassword",
+                            e.target.value
+                          );
                         }}
                         sx={{ width: "90%" }}
                       />
@@ -431,7 +497,7 @@ export default function AddCard() {
                         value={formik.values.companyCode}
                         component={InputBox}
                         onChange={(e) => {
-                          formik.setFieldValue("companyCode", e.target.value)
+                          formik.setFieldValue("companyCode", e.target.value);
                         }}
                         sx={{ width: "90%" }}
                       />
@@ -448,7 +514,7 @@ export default function AddCard() {
                   </Grid>
                 </TabList>
               </TabContext>
-              <CardContent >
+              <CardContent>
                 {/* <TabContext>
                   <TabList
                     // onChange={handleChange}
@@ -511,7 +577,9 @@ export default function AddCard() {
                               control={
                                 <Checkbox
                                   name={option.roleName}
-                                  checked={formik.values.role?.includes(option.roleName)}
+                                  checked={formik.values.role?.includes(
+                                    option.roleName
+                                  )}
                                   onChange={(event) =>
                                     handleCheckboxChange(event, option.roleName)
                                   }
@@ -537,8 +605,8 @@ export default function AddCard() {
                       </Box>
                     </Box>
                     <Box sx={{ marginTop: 2 }}>
-                      {formik.values.role?.length > 0 && formik.values.role
-                        .map((option, index) => (
+                      {formik.values.role?.length > 0 &&
+                        formik.values.role.map((option, index) => (
                           <Box
                             key={index}
                             sx={{

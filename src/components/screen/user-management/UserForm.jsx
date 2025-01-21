@@ -21,67 +21,96 @@ import {
 } from "../../../store/api/userDataApi";
 import { optionFormatter } from "../../utils/utils";
 import AppAutocomplete from "../../common/AppAutocomplete";
+import CustomToast from "../../common/Toast/CustomToast";
 
 const BACK_BUTTON_PATH = "/app/admin_master/user_management";
 
 export default function UserForm({ initialValues, formAction, refetch }) {
-
   const [loader, setLoader] = React.useState(false);
   const nav = useNavigate();
   const [options, setOptions] = React.useState([]);
   const { data: UserOptions } = useFetchOptionsQuery();
   const [editUser, { isLoading, isError, isSuccess, data, error }] =
     useEditUserMutation();
-    const formik = useFormik({
-        initialValues,
-        validationSchema: UserValidationSchema(formAction),
-        onSubmit: async (values) => {
-            let payload = {...values}
-            delete payload.confirm_password
-            delete payload.usercode
-            if (formAction === 'edit'){
-                delete payload.password
-            }
-            if(formAction === "verify"){
-                payload.action = "verify";
-            }
-            
-            payload.ctypelist = Array.isArray(payload?.ctypelist) ? payload?.ctypelist?.map((item) => item?.value).join(',') : []
-            payload.sprlist = Array.isArray(payload?.sprlist) ? payload?.sprlist?.map((item) => item?.value).join(',') : []
-            setLoader(true);
-            const apiCall = initialValues?.usercode ? editUser({
-                usercode: initialValues?.usercode,
-                ...payload,
-              }).unwrap() : ApiManager.addUser(payload);
-            await apiCall
+  const formik = useFormik({
+    initialValues,
+    validationSchema: UserValidationSchema(formAction),
+    onSubmit: async (values) => {
+      let payload = { ...values };
+      delete payload.confirm_password;
+      delete payload.usercode;
+      if (formAction === "edit") {
+        delete payload.password;
+      }
+      if (formAction === "verify") {
+        payload.action = "verify";
+      }
+
+      payload.ctypelist = Array.isArray(payload?.ctypelist)
+        ? payload?.ctypelist?.map((item) => item?.value).join(",")
+        : [];
+      payload.sprlist = Array.isArray(payload?.sprlist)
+        ? payload?.sprlist?.map((item) => item?.value).join(",")
+        : [];
+      setLoader(true);
+      const apiCall = initialValues?.usercode
+        ? editUser({
+            usercode: initialValues?.usercode,
+            ...payload,
+          }).unwrap()
+        : ApiManager.addUser(payload);
+      await apiCall
         .then((response) => {
           if (response?.status === "error") {
-            toast.error(
-              response?.message + ": " + response?.errors[0]?.message
+            toast.custom(
+              <CustomToast
+                message={
+                  response?.message + ": " + response?.errors[0]?.message
+                }
+                toast="error"
+              />,
+              {
+                closeButton: false,
+              }
             );
           } else {
             const successMessage = initialValues?.usercode
               ? "User updated successfully"
               : "User added successfully";
-            toast.success(successMessage);
+            toast.custom(
+              <CustomToast message={successMessage} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             if (formAction === "edit") {
               refetch();
             } else {
-                const successMessage = initialValues?.usercode ? "User updated successfully" : "User added successfully";
-                toast.success(successMessage);
-                if (formAction === 'edit' || formAction === "verify") {
-                    refetch();
+              const successMessage = initialValues?.usercode
+                ? "User updated successfully"
+                : "User added successfully";
+
+              toast.custom(
+                <CustomToast message={successMessage} toast="success" />,
+                {
+                  closeButton: false,
                 }
-                else {
-                    formik.resetForm();
-                }
+              );
+              if (formAction === "edit" || formAction === "verify") {
+                refetch();
+              } else {
+                formik.resetForm();
+              }
             }
-        }})
+          }
+        })
         .catch((error) => {
           const errorMessage = initialValues?.usercode
             ? "Failed to update user"
             : "Failed to add user";
-          toast.error(errorMessage);
+          toast.custom(<CustomToast message={errorMessage} toast="error" />, {
+            closeButton: false,
+          });
         })
         .finally(() => {
           setLoader(false);
@@ -106,8 +135,7 @@ export default function UserForm({ initialValues, formAction, refetch }) {
       .then((response) => {
         setOptions(response.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
 
   return (

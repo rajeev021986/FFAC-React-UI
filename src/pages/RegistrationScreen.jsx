@@ -17,7 +17,8 @@ import { Field, Form, Formik } from "formik";
 import { useRegisterUserMutation } from "../store/api/userDataApi";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import checkImage from "../assets/images/check.png"
+import checkImage from "../assets/images/check.png";
+import CustomToast from "../components/common/Toast/CustomToast";
 export default function RegistrationScreen() {
   const { state } = useLocation();
   const [register, { isSuccess, data }] = useRegisterUserMutation();
@@ -28,7 +29,7 @@ export default function RegistrationScreen() {
     emailid: "",
   });
   const { user, isAuthenticated } = useAuth0();
-  
+
   useEffect(() => {
     if (isAuthenticated) {
       setUserInfo({
@@ -41,7 +42,15 @@ export default function RegistrationScreen() {
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success("Your account registration request submited successfully.");
+      toast.custom(
+        <CustomToast
+          message="Your account registration request submited successfully."
+          toast="success"
+        />,
+        {
+          closeButton: false,
+        }
+      );
       navigate("/");
     }
   }, [isSuccess, data, navigate]);
@@ -66,10 +75,10 @@ export default function RegistrationScreen() {
   return (
     <>
       <Stack sx={styles.container}>
-        <Stack  sx={{ height : "90%",width: "90%" }}>
-          <Card sx={{height : "100%"}} elevation={3}>
+        <Stack sx={{ height: "90%", width: "90%" }}>
+          <Card sx={{ height: "100%" }} elevation={3}>
             <Stack direction="row">
-              <Stack  spacing={2} sx={styles.left_div} width={"40%"}>
+              <Stack spacing={2} sx={styles.left_div} width={"40%"}>
                 <Box sx={styles.backgroundImage}></Box>
                 <Box spacing={2} sx={styles.content}>
                   <Typography
@@ -92,27 +101,23 @@ export default function RegistrationScreen() {
                   color="secondary.main"
                   textAlign={"center"}
                 >
-                  
                   {state.message}
                 </Typography>
 
-                <Typography
-                  component={"h3"}
-                  color="secondary.main"
-                 
-                >
+                <Typography component={"h3"} color="secondary.main">
                   Your Name : {user?.name}
                 </Typography>
                 <Typography
                   component={"h3"}
                   color="secondary.main"
-                  sx={{mt : 0}}
+                  sx={{ mt: 0 }}
                 >
-                  Your Email :  {user?.email}
+                  Your Email : {user?.email}
                 </Typography>
 
-
-                <Link to="/"><ThemeButton>Back to Login</ThemeButton></Link>
+                <Link to="/">
+                  <ThemeButton>Back to Login</ThemeButton>
+                </Link>
                 {/* <Formik
               enableReinitialize={true}
               initialValues={{
@@ -223,9 +228,9 @@ const styles = {
   container: {
     width: "100%",
     height: "100vh",
-    display : "flex",
-    alignItems : "center",
-    justifyContent : "center"
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   left_div: {
     backgroundColor: "secondary.main",
@@ -259,7 +264,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     width: "60%",
-    padding : "0 1rem"
+    padding: "0 1rem",
   },
   form: {
     width: 350,

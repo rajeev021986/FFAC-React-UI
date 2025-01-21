@@ -46,6 +46,7 @@ import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import ApiManager from "../../services/ApiManager";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export function ExchangeRate({ page }) {
   const exchangeRateSelector = useSelector((state) => state.exchangeRateStore);
@@ -172,10 +173,23 @@ export function ExchangeRate({ page }) {
   const handleDelete = async () => {
     try {
       await deleteExchangeRate(modal.data.id).unwrap();
-      toast.success("Exchange Rate deleted successfully!");
+      toast.custom(
+        <CustomToast
+          message="Exchange Rate deleted successfully!"
+          toast="success"
+        />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete exchange rate.");
+      toast.custom(
+        <CustomToast message="Failed to delete exchange rate." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
 
@@ -249,8 +263,7 @@ export function ExchangeRate({ page }) {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <ExchangeRateFilters
-                  />
+                  <ExchangeRateFilters />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"

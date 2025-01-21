@@ -2,11 +2,22 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { Box, Card, CardHeader, Drawer, IconButton, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardHeader,
+  Drawer,
+  IconButton,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import CardsView from "../../components/common/Cards/CardsView";
-import AuditTimeLine from '../../components/AuditTimeLine';
-import {useLazyGetShipperAuditQuery } from '../../store/api/shipperDataApi';
+import AuditTimeLine from "../../components/AuditTimeLine";
+import { useLazyGetShipperAuditQuery } from "../../store/api/shipperDataApi";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
@@ -27,7 +38,7 @@ import {
 import SelectBox from "../../components/common/SelectBox";
 import { SHIPPER_SORT_OPTIONS } from "../../data/options";
 import GridActions from "../../components/common/Grid/GridActions";
-import { SHIPPER_COLUMNS} from "../../data/columns/shipper"
+import { SHIPPER_COLUMNS } from "../../data/columns/shipper";
 import { getShipperListGridActions } from "../../components/screen/code/Shipper/action";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import toast, { LoaderIcon } from "react-hot-toast";
@@ -38,14 +49,13 @@ import CustomToast from "../../components/common/Toast/CustomToast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import ShpperFilterForm from "../../components/screen/code/Shipper/FilterForm";
 
-
 const ADD_NEW_SHIPPER_PATH = "new_shipper";
 export default function ShipperScreen({ page }) {
   const shipperSelector = useSelector((state) => state.shipper);
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
-   const [exportLoader, setExportLoader] = useState(false);
+  const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
@@ -54,17 +64,24 @@ export default function ShipperScreen({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New Shipper" }, { name: "Copy" }, { name: exportLoader ? <LoaderIcon /> : "Export" },]
-    : [{ name: "New Shipper" }, { name: exportLoader ? <LoaderIcon /> : "Export" },];
+    ? [
+        { name: "New Shipper" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
+    : [
+        { name: "New Shipper" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ];
   const query = {
     page: shipperSelector?.pagination?.page + 1,
     size: shipperSelector?.pagination?.pageSize,
     sortBy:
-    shipperSelector.sortModel.length > 0
+      shipperSelector.sortModel.length > 0
         ? shipperSelector.sortModel[0].field
         : shipperSelector?.sortBy?.split("*")[0],
     sortOrder:
-    shipperSelector.sortModel.length > 0
+      shipperSelector.sortModel.length > 0
         ? shipperSelector?.sortModel[0]?.sort
         : shipperSelector?.sortBy?.split("*")[1] || "",
   };
@@ -98,7 +115,7 @@ export default function ShipperScreen({ page }) {
   } = useFetchShipperDatasQuery({
     params: query,
     payload,
-    page:"shipper/filter" 
+    page: "shipper/filter",
   });
   useEffect(() => {
     refetch();
@@ -108,11 +125,10 @@ export default function ShipperScreen({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  SHIPPER_COLUMNS[SHIPPER_COLUMNS.length - 1].renderCell =
-    GridActions({
-      actions:getShipperListGridActions(nav, setModal)
-    });
-  
+  SHIPPER_COLUMNS[SHIPPER_COLUMNS.length - 1].renderCell = GridActions({
+    actions: getShipperListGridActions(nav, setModal),
+  });
+
   useEffect(() => {
     if (!shipperSelector.view) {
       dispatch(shipperSetView("card"));
@@ -124,8 +140,8 @@ export default function ShipperScreen({ page }) {
       nav(ADD_NEW_SHIPPER_PATH, {
         replace: true,
         state: { formAction: "add", type: "new" },
-    });
-  }
+      });
+    }
     if (actionName === "Copy") {
       nav(`editshipper`, {
         state: {
@@ -135,58 +151,71 @@ export default function ShipperScreen({ page }) {
         },
       });
     }
-    
+
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchShipperDatasExcel(query, payload, "shipper");
+        const blob = await ApiManager.fetchShipperDatasExcel(
+          query,
+          payload,
+          "shipper"
+        );
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', 'shipper-data.xlsx');
+        link.setAttribute("download", "shipper-data.xlsx");
         document.body.appendChild(link);
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
+      } catch (error) {
+        toast.custom(
+          <CustomToast message="Something went wrong" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
+      }
+      setExportLoader(false);
+    }
+  };
+  const [getShipperAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetShipperAuditQuery();
+  const fetchAuditData = () => {
+    getShipperAudit({
+      id: modal.data.id,
+    });
+  };
+  const [deleteShipper] = useDeleteShipperMutation();
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteShipper(modal.data.id)
+        .unwrap()
+        .then(() => refetch());
+      toast.custom(
+        <CustomToast message="Shipper deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
+      handleClose();
     } catch (error) {
       toast.custom(
-        <CustomToast message="Something went wrong" toast="error" />,
+        <CustomToast message="Failed to delete shipper." toast="error" />,
         {
           closeButton: false,
         }
       );
     }
-    setExportLoader(false);
-    }
-  }
-  const [getShipperAudit, { data: AuditData,
-    isLoading: isLoadingAudit }] =  useLazyGetShipperAuditQuery();
-const fetchAuditData = () => {
-    getShipperAudit({
-        id: modal.data.id,
-    });
-};
-const [deleteShipper] = useDeleteShipperMutation();
-const handleClose = () => {
-  setModal({
-    open: false,
-    type: "",
-    data: {},
-  });
-};
-
-
-const handleDelete = async () => {
-  try {
-    await deleteShipper(modal.data.id)
-      .unwrap()
-      .then(() => refetch());
-    toast.success("Shipper deleted successfully!");
-    handleClose();
-  } catch (error) {
-    toast.error("Failed to delete shipper.");
-  }
-};
+  };
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -219,7 +248,7 @@ const handleDelete = async () => {
                       padding: 2,
                       borderRadius: 1,
                       boxShadow: 3,
-                      borderRadius: '20px 19px 19px 20px',
+                      borderRadius: "20px 19px 19px 20px",
                       // "&:hover": {
                       //   backgroundColor: "#e0e0e0",
                       // },
@@ -244,7 +273,7 @@ const handleDelete = async () => {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
-        sx={{ padding: "8px" }}
+          sx={{ padding: "8px" }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -253,14 +282,13 @@ const handleDelete = async () => {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <ShpperFilterForm  />
+                  <ShpperFilterForm />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"
                   options={SHIPPER_SORT_OPTIONS}
                   value={shipperSelector.sortBy}
                   onChange={(event) => {
-
                     dispatch(setSortBy(event.target.value));
                   }}
                   sx={{
@@ -273,18 +301,14 @@ const handleDelete = async () => {
                 <IconButton onClick={() => dispatch(shipperSetView("card"))}>
                   <FormatListBulletedOutlined
                     color={
-                      shipperSelector.view === "card"
-                        ? "primary"
-                        : "secondary"
+                      shipperSelector.view === "card" ? "primary" : "secondary"
                     }
                   />
                 </IconButton>
                 <IconButton onClick={() => dispatch(shipperSetView("grid"))}>
                   <GridOnOutlined
                     color={
-                      shipperSelector.view === "grid"
-                        ? "primary"
-                        : "secondary"
+                      shipperSelector.view === "grid" ? "primary" : "secondary"
                     }
                   />
                 </IconButton>
@@ -317,44 +341,46 @@ const handleDelete = async () => {
             data={ShipperData?.body?.data}
             paginationModel={shipperSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={getShipperListGridActions(nav, setModal)   
-            }
+            actions={getShipperListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
             page={page}
           />
         )}
       </Card>
-      {modal.type === 'audit' && (
-                <Drawer
-                    anchor="right"
-                    open={modal?.open}
-                    onClose={() => setModal({ open: false, type: "", data: {} })}
-                    sx={{
-                        width: "50vw",
-                        // maxWidth: "50vw",  
-                        display: "flex",
-                        flexDirection: "column",
-                        // zIndex: isFrontmost ? 1301 : 1300, // Adjust z-index based on isFrontmost,
-                        zIndex: 1301
-                    }}
-                >
-                    <Box sx={{ p: 2 }}>
-                        <Typography variant="h6" component="div" sx={{ mb: 2 }}>
-                            Shipper Audit Logs
-                        </Typography>
-                        <AuditTimeLine auditDetails={AuditData} reloadDataHandler={fetchAuditData} loading={isLoadingAudit} />
-                    </Box>
-                </Drawer>
-            )}
-            <DeleteDialog
-                    source="shipper"
-                    sourceName={modal?.data?.deleteName}
-                    handleClose={handleClose}
-                    handleDelete={handleDelete}
-                    handleOpen={modal.open && modal.type === "delete"}
-                  />
-
+      {modal.type === "audit" && (
+        <Drawer
+          anchor="right"
+          open={modal?.open}
+          onClose={() => setModal({ open: false, type: "", data: {} })}
+          sx={{
+            width: "50vw",
+            // maxWidth: "50vw",
+            display: "flex",
+            flexDirection: "column",
+            // zIndex: isFrontmost ? 1301 : 1300, // Adjust z-index based on isFrontmost,
+            zIndex: 1301,
+          }}
+        >
+          <Box sx={{ p: 2 }}>
+            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+              Shipper Audit Logs
+            </Typography>
+            <AuditTimeLine
+              auditDetails={AuditData}
+              reloadDataHandler={fetchAuditData}
+              loading={isLoadingAudit}
+            />
+          </Box>
+        </Drawer>
+      )}
+      <DeleteDialog
+        source="shipper"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
     </Box>
   );
 }

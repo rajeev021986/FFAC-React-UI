@@ -18,6 +18,7 @@ import UploadFile from "../../../UploadFile";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuditTimeLine from "../../../AuditTimeLine";
+import CustomToast from "../../../common/Toast/CustomToast";
 
 export default function Exchange() {
   const location = useLocation();
@@ -48,11 +49,18 @@ export default function Exchange() {
         values.statusCode = 1;
         let res = await addExahangeRate(values).unwrap();
         if (res.success) {
-          toast.success(res.message);
+          toast.custom(<CustomToast message={res.message} toast="success" />, {
+            closeButton: false,
+          });
           nav(-1);
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     } else {
       try {
@@ -66,11 +74,18 @@ export default function Exchange() {
               : null,
         }).unwrap();
         if (res.success) {
-          toast.success(res.message);
+          toast.custom(<CustomToast message={res.message} toast="success" />, {
+            closeButton: false,
+          });
           nav(-1);
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     }
   };
@@ -87,10 +102,23 @@ export default function Exchange() {
           formik.setValues(response.data.body);
         }
       } else {
-        toast.error("Failed to fetch Charge data");
+        toast.custom(
+          <CustomToast message="Failed to fetch Charge data" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     } catch (error) {
-      toast.error("Error fetching ExchangeRate data");
+      toast.custom(
+        <CustomToast
+          message="Error fetching ExchangeRate data"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   useEffect(() => {

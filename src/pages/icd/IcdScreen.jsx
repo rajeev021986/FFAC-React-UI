@@ -2,11 +2,22 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { Box, Card, CardHeader, Drawer, IconButton, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardHeader,
+  Drawer,
+  IconButton,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
-import {useLazyGetIcdAuditQuery } from '../../store/api/icdDataApi';
+import { useLazyGetIcdAuditQuery } from "../../store/api/icdDataApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
@@ -16,7 +27,7 @@ import {
 } from "../../store/api/icdDataApi";
 import IcdFilters from "../../components/screen/code/icd/IcdFilters";
 import { useDispatch, useSelector } from "react-redux";
-import AuditTimeLine from '../../components/AuditTimeLine';
+import AuditTimeLine from "../../components/AuditTimeLine";
 import {
   setPagination,
   setSortBy,
@@ -28,7 +39,7 @@ import SelectBox from "../../components/common/SelectBox";
 import { ICD_SORT_OPTIONS } from "../../data/options";
 import GridActions from "../../components/common/Grid/GridActions";
 
-import { ICD_COLUMNS} from "../../data/columns/icd"
+import { ICD_COLUMNS } from "../../data/columns/icd";
 import { getIcdListGridActions } from "../../components/screen/code/icd/action";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { useEffect } from "react";
@@ -40,10 +51,7 @@ import CustomToast from "../../components/common/Toast/CustomToast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import IcdFilterForm from "../../components/screen/code/icd/FilterForm";
 
-
 const ADD_NEW_ICD_PATH = "new_icd";
-
-
 
 export default function IcdScreen({ page }) {
   const icdSelector = useSelector((state) => state.icd);
@@ -59,17 +67,21 @@ export default function IcdScreen({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
-    ? [{ name: "New Icd" }, { name: "Copy" }, { name: exportLoader ? <LoaderIcon /> : "Export" },]
-    : [{ name: "New Icd" }, { name: exportLoader ? <LoaderIcon /> : "Export" },];
+    ? [
+        { name: "New Icd" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
+    : [{ name: "New Icd" }, { name: exportLoader ? <LoaderIcon /> : "Export" }];
   const query = {
     page: icdSelector?.pagination?.page + 1,
     size: icdSelector?.pagination?.pageSize,
     sortBy:
-    icdSelector.sortModel.length > 0
+      icdSelector.sortModel.length > 0
         ? icdSelector.sortModel[0].field
         : icdSelector?.sortBy?.split("*")[0],
     sortOrder:
-    icdSelector.sortModel.length > 0
+      icdSelector.sortModel.length > 0
         ? icdSelector?.sortModel[0]?.sort
         : icdSelector?.sortBy?.split("*")[1] || "",
   };
@@ -113,11 +125,10 @@ export default function IcdScreen({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  ICD_COLUMNS[ICD_COLUMNS.length - 1].renderCell =
-    GridActions({
-      actions:getIcdListGridActions(nav, setModal)
-    });
-  
+  ICD_COLUMNS[ICD_COLUMNS.length - 1].renderCell = GridActions({
+    actions: getIcdListGridActions(nav, setModal),
+  });
+
   useEffect(() => {
     if (!icdSelector.view) {
       dispatch(icdSetView("card"));
@@ -130,8 +141,8 @@ export default function IcdScreen({ page }) {
       nav(ADD_NEW_ICD_PATH, {
         replace: true,
         state: { formAction: "add", type: "new" },
-    });
-  }
+      });
+    }
     if (actionName === "Copy") {
       nav(`editicd`, {
         state: {
@@ -141,20 +152,19 @@ export default function IcdScreen({ page }) {
         },
       });
     }
-    
-    if (actionName === "Export") 
-      {
-        setExportLoader(true);
-        try {
-          const blob = await ApiManager.fetchIcdDatasExcel(query, payload, "icd");
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', 'icd-data.xlsx');
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-          window.URL.revokeObjectURL(url);
+
+    if (actionName === "Export") {
+      setExportLoader(true);
+      try {
+        const blob = await ApiManager.fetchIcdDatasExcel(query, payload, "icd");
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "icd-data.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
       } catch (error) {
         toast.custom(
           <CustomToast message="Something went wrong" toast="error" />,
@@ -165,14 +175,14 @@ export default function IcdScreen({ page }) {
       }
       setExportLoader(false);
     }
-  }
-  const [getIcdAudit, { data: AuditData,
-      isLoading: isLoadingAudit }] =  useLazyGetIcdAuditQuery();
+  };
+  const [getIcdAudit, { data: AuditData, isLoading: isLoadingAudit }] =
+    useLazyGetIcdAuditQuery();
   const fetchAuditData = () => {
-      getIcdAudit({
-          id: modal.data.id,
-      });
-  }
+    getIcdAudit({
+      id: modal.data.id,
+    });
+  };
   const [deleteIcd] = useDeleteIcdMutation();
 
   const handleClose = () => {
@@ -188,10 +198,20 @@ export default function IcdScreen({ page }) {
       await deleteIcd(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Icd deleted successfully!");
+      toast.custom(
+        <CustomToast message="Icd deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete icd.");
+      toast.custom(
+        <CustomToast message="Failed to delete icd." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   return (
@@ -201,56 +221,55 @@ export default function IcdScreen({ page }) {
         rightComps={
           <>
             <Backdrop open={open} />
-              <SpeedDial
-                ariaLabel="Text-only  SpeedDial"
-                sx={{
-                  "& .MuiFab-root": {
-                    width: 50, // Adjust main button width
-                    height: 50, // Adjust main button height
-                    minHeight: 50, // Set minimum height
-                  },
-                }}
-                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
-                direction="left"
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    tooltipTitle=""
-                    sx={{
-                      display: "flex",
-                      // width: "150px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 2,
-                      borderRadius: 1,
-                      boxShadow: 3,
-                      borderRadius: '20px 19px 19px 20px',
-                      // "&:hover": {
-                      //   backgroundColor: "#e0e0e0",
-                      // },
-                      width: 72,
-                      minWidth: 92,
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 16,
-                      },
-                    }}
-                    icon={
-                      <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                        {action.name}
-                      </span>
-                    }
-                    onClick={() => handleActionClick(action.name)}
-                  ></SpeedDialAction>
-                ))}
-              </SpeedDial>
-           
+            <SpeedDial
+              ariaLabel="Text-only  SpeedDial"
+              sx={{
+                "& .MuiFab-root": {
+                  width: 50, // Adjust main button width
+                  height: 50, // Adjust main button height
+                  minHeight: 50, // Set minimum height
+                },
+              }}
+              icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
+              direction="left"
+            >
+              {actions.map((action) => (
+                <SpeedDialAction
+                  key={action.name}
+                  tooltipTitle=""
+                  sx={{
+                    display: "flex",
+                    // width: "150px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 2,
+                    borderRadius: 1,
+                    boxShadow: 3,
+                    borderRadius: "20px 19px 19px 20px",
+                    // "&:hover": {
+                    //   backgroundColor: "#e0e0e0",
+                    // },
+                    width: 72,
+                    minWidth: 92,
+                    "& .MuiSvgIcon-root": {
+                      fontSize: 16,
+                    },
+                  }}
+                  icon={
+                    <span style={{ fontSize: "12px", fontWeight: "bold" }}>
+                      {action.name}
+                    </span>
+                  }
+                  onClick={() => handleActionClick(action.name)}
+                ></SpeedDialAction>
+              ))}
+            </SpeedDial>
           </>
         }
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
-        sx={{ padding: "8px" }}
+          sx={{ padding: "8px" }}
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -259,14 +278,13 @@ export default function IcdScreen({ page }) {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <IcdFilterForm/>
+                  <IcdFilterForm />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"
                   options={ICD_SORT_OPTIONS}
                   value={icdSelector.sortBy}
                   onChange={(event) => {
-
                     dispatch(setSortBy(event.target.value));
                   }}
                   sx={{
@@ -279,18 +297,14 @@ export default function IcdScreen({ page }) {
                 <IconButton onClick={() => dispatch(icdSetView("card"))}>
                   <FormatListBulletedOutlined
                     color={
-                      icdSelector.view === "card"
-                        ? "primary"
-                        : "secondary"
+                      icdSelector.view === "card" ? "primary" : "secondary"
                     }
                   />
                 </IconButton>
                 <IconButton onClick={() => dispatch(icdSetView("grid"))}>
                   <GridOnOutlined
                     color={
-                      icdSelector.view === "grid"
-                        ? "primary"
-                        : "secondary"
+                      icdSelector.view === "grid" ? "primary" : "secondary"
                     }
                   />
                 </IconButton>
@@ -323,46 +337,46 @@ export default function IcdScreen({ page }) {
             data={IcdData?.body?.data}
             paginationModel={icdSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={
-              getIcdListGridActions(nav, setModal)
-                
-            }
+            actions={getIcdListGridActions(nav, setModal)}
             // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
           />
         )}
       </Card>
-      {modal.type === 'audit' && (
-                <Drawer
-                    anchor="right"
-                    open={modal?.open}
-                    onClose={() => setModal({ open: false, type: "", data: {} })}
-                    sx={{
-                        width: "50vw",
-                        // maxWidth: "50vw",  
-                        display: "flex",
-                        flexDirection: "column",
-                        // zIndex: isFrontmost ? 1301 : 1300, // Adjust z-index based on isFrontmost,
-                        zIndex: 1301
-                    }}
-                >
-                    <Box sx={{ p: 2 }}>
-                        <Typography variant="h6" component="div" sx={{ mb: 2 }}>
-                            ICD Audit Logs
-                        </Typography>
-                        <AuditTimeLine auditDetails={AuditData} reloadDataHandler={fetchAuditData} loading={isLoadingAudit} />
-                    </Box>
-                </Drawer>
-            )}
-             <DeleteDialog
-                    source="icd"
-                    sourceName={modal?.data?.deleteName}
-                    handleClose={handleClose}
-                    handleDelete={handleDelete}
-                    handleOpen={modal.open && modal.type === "delete"}
-                  />
-
+      {modal.type === "audit" && (
+        <Drawer
+          anchor="right"
+          open={modal?.open}
+          onClose={() => setModal({ open: false, type: "", data: {} })}
+          sx={{
+            width: "50vw",
+            // maxWidth: "50vw",
+            display: "flex",
+            flexDirection: "column",
+            // zIndex: isFrontmost ? 1301 : 1300, // Adjust z-index based on isFrontmost,
+            zIndex: 1301,
+          }}
+        >
+          <Box sx={{ p: 2 }}>
+            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+              ICD Audit Logs
+            </Typography>
+            <AuditTimeLine
+              auditDetails={AuditData}
+              reloadDataHandler={fetchAuditData}
+              loading={isLoadingAudit}
+            />
+          </Box>
+        </Drawer>
+      )}
+      <DeleteDialog
+        source="icd"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
     </Box>
   );
 }

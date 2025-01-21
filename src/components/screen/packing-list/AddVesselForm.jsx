@@ -1,53 +1,69 @@
-import { CircularProgress, Stack } from '@mui/material';
-import React from 'react';
-import InputBox from '../../common/InputBox';
-import { OutlinedButton } from '../../common/Button';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { useAddVesselDetailsMutation } from '../../../store/api/packingListDataApi';
-import toast from 'react-hot-toast';
+import { CircularProgress, Stack } from "@mui/material";
+import React from "react";
+import InputBox from "../../common/InputBox";
+import { OutlinedButton } from "../../common/Button";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useAddVesselDetailsMutation } from "../../../store/api/packingListDataApi";
+import toast from "react-hot-toast";
+import CustomToast from "../../common/Toast/CustomToast";
 
-
-export default function AddVesselForm({setOpen}) {
+export default function AddVesselForm({ setOpen }) {
   const [loader, setLoader] = React.useState(false);
   const [addVesselDetails] = useAddVesselDetailsMutation();
 
   const formik = useFormik({
     initialValues: {
-        imo : '',
-        mmsi : '',
-        vessel : '',
+      imo: "",
+      mmsi: "",
+      vessel: "",
     },
     validationSchema: Yup.object({
-        imo: Yup.number().required('Required'),
-        mmsi: Yup.number().required('Required'),
-        vessel: Yup.string().required('Required'),
+      imo: Yup.number().required("Required"),
+      mmsi: Yup.number().required("Required"),
+      vessel: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
       setLoader(true);
-        addVesselDetails(values)
-        .then((res)=>{
-            if(res.data.status === 'success'){
-                toast.success(res.data.message);
-                formik.resetForm();
-                setOpen(false);
-            }else{
-                toast.error(res.data.message);
-            }
+      addVesselDetails(values)
+        .then((res) => {
+          if (res.data.status === "success") {
+            toast.custom(
+              <CustomToast message={res.data.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
+            formik.resetForm();
+            setOpen(false);
+          } else {
+            toast.custom(
+              <CustomToast message={res.data.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
+          }
         })
-        .catch((err)=>{
-            toast.error(err.message);
+        .catch((err) => {
+          toast.custom(<CustomToast message={err.message} toast="error" />, {
+            closeButton: false,
+          });
         })
-        .finally(()=>{
+        .finally(() => {
           setLoader(false);
-        })
-    }
+        });
+    },
   });
-  
 
   return (
     <div>
-      <Stack spacing={3} direction="column" justifyContent="space-between" p={2} >
+      <Stack
+        spacing={3}
+        direction="column"
+        justifyContent="space-between"
+        p={2}
+      >
         <Stack direction="row" spacing={3}>
           <InputBox
             label="IMO"
@@ -76,8 +92,12 @@ export default function AddVesselForm({setOpen}) {
           />
         </Stack>
         <Stack direction="row" spacing={3} justifyContent={"end"}>
-          <OutlinedButton color="primary" size="small" onClick={formik.handleSubmit} >
-           {loader && <CircularProgress color="primary" size={15} />} Add
+          <OutlinedButton
+            color="primary"
+            size="small"
+            onClick={formik.handleSubmit}
+          >
+            {loader && <CircularProgress color="primary" size={15} />} Add
           </OutlinedButton>
         </Stack>
       </Stack>

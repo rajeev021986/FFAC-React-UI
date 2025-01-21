@@ -213,10 +213,23 @@ export default function CustomerScreen({ page }) {
       await deleteCustomer(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Customer deleted successfully!");
+      toast.custom(
+        <CustomToast
+          message="Customer deleted successfully!"
+          toast="success"
+        />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete customer.");
+      toast.custom(
+        <CustomToast message="Failed to delete customer." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
 

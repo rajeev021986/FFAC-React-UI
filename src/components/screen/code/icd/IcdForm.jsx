@@ -27,6 +27,7 @@ import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import getFirstError from "../../../common/FieldToastError";
 import { IcdValidationSchema } from "./IcdValidationSchema";
+import CustomToast from "../../../common/Toast/CustomToast";
 
 export default function IcdForm({ initialValues, page, type, id }) {
   const tabs = [
@@ -86,13 +87,32 @@ export default function IcdForm({ initialValues, page, type, id }) {
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
+
             nav("/app/master/icd");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -103,13 +123,31 @@ export default function IcdForm({ initialValues, page, type, id }) {
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/master/icd");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       }
     },

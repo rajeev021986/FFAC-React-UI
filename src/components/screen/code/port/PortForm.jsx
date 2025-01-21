@@ -22,6 +22,7 @@ import getFirstError from "../../../common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import AuditTimeLine from "../../../AuditTimeLine";
+import CustomToast from "../../../common/Toast/CustomToast";
 function PortForm() {
   const [value, setValue] = React.useState(1);
   const [dropdownData, setDropdownData] = useState({});
@@ -72,7 +73,12 @@ function PortForm() {
         }
       }
     } catch (error) {
-      toast.error("Error fetching Port data");
+      toast.custom(
+        <CustomToast message="Error fetching Port data" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   const formik = useFormik({
@@ -119,9 +125,16 @@ function PortForm() {
                 ? -2
                 : null,
           }).unwrap();
-          toast.success(result.message);
+          toast.custom(
+            <CustomToast message={result.message} toast="success" />,
+            {
+              closeButton: false,
+            }
+          );
         } catch (error) {
-          toast.success(error.message);
+          toast.custom(<CustomToast message={error.message} toast="error" />, {
+            closeButton: false,
+          });
         }
       }
       nav(-1);

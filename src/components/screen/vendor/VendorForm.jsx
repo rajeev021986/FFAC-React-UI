@@ -14,6 +14,7 @@ import { USER_STATUS_OPTIONS } from "../../../data/options";
 import SelectBox from "../../common/SelectBox";
 import ReusableRightDrawer from "../../common/CommonDrawer";
 import { COMMON } from "../../../data/columns/audit";
+import CustomToast from "../../common/Toast/CustomToast";
 
 export default function VendorForm({ modal, setModal }) {
   const [addVendor, { isLoading: isAVLoading }] = useAddVendorMutation();
@@ -42,7 +43,6 @@ export default function VendorForm({ modal, setModal }) {
     },
     validationSchema: vendorValidation,
     onSubmit: async (values) => {
-
       try {
         let response =
           modal.type === "edit"
@@ -52,11 +52,21 @@ export default function VendorForm({ modal, setModal }) {
               }).unwrap()
             : await addVendor(values).unwrap();
         if (response.status === "success") {
-          toast.success(response.message);
+          toast.custom(
+            <CustomToast message={response.message} toast="success" />,
+            {
+              closeButton: false,
+            }
+          );
           setModal({ open: false, type: "", data: {} });
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     },
   });

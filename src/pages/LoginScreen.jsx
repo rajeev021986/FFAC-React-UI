@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { login } from "../store/freatures/authSlice";
 import { useDispatch } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
+import CustomToast from "../components/common/Toast/CustomToast";
 
 export default function LoginScreen() {
   const nav = useNavigate();
@@ -42,7 +43,9 @@ export default function LoginScreen() {
       const res = await ApiManager.login(user);
 
       if (res.code === "SUCCESS") {
-        toast.success(res.message);
+        toast.custom(<CustomToast message={res.message} toast="success" />, {
+          closeButton: false,
+        });
 
         await dispatch(
           login({
@@ -55,10 +58,17 @@ export default function LoginScreen() {
 
         nav("/app");
       } else {
-        toast.error(res.message);
+        toast.custom(<CustomToast message={res.message} toast="error" />, {
+          closeButton: false,
+        });
       }
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.custom(
+        <CustomToast message="Something went wrong" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     } finally {
       setLoader(false); // Ensures loader stops even if there's an error
     }

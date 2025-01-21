@@ -19,6 +19,7 @@ import ChargeInputs from "./ChargeInputs";
 import AuditTimeLine from "../../../AuditTimeLine";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
+import CustomToast from "../../../common/Toast/CustomToast";
 
 const AddEditCharge = () => {
   const location = useLocation();
@@ -84,11 +85,18 @@ const AddEditCharge = () => {
       try {
         let res = await addCharge(updatedValue).unwrap();
         if (res.success) {
-          toast.success(res.message);
+          toast.custom(<CustomToast message={res.message} toast="success" />, {
+            closeButton: false,
+          });
           nav("/app/admin/charges");
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     } else {
       try {
@@ -98,11 +106,18 @@ const AddEditCharge = () => {
           (updatedValue.statusCode = -2);
         let res = await updateCharge(updatedValue).unwrap();
         if (res.success) {
-          toast.success(res.message);
+          toast.custom(<CustomToast message={res.message} toast="success" />, {
+            closeButton: false,
+          });
           nav("/app/admin/charges");
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     }
   };
@@ -125,7 +140,12 @@ const AddEditCharge = () => {
         formik.setValues(initialValues);
       }
     } catch (error) {
-      toast.error("Error while fetching data");
+      toast.custom(
+        <CustomToast message="Error while fetching data" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   useEffect(() => {

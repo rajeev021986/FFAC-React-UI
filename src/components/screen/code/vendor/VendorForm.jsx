@@ -23,6 +23,7 @@ import AuditTimeLine from "../../../AuditTimeLine";
 import EditIcon from "@mui/icons-material/Edit";
 import DescriptionIcon from "@mui/icons-material/Description";
 import HistoryIcon from "@mui/icons-material/History";
+import CustomToast from "../../../common/Toast/CustomToast";
 
 export default function VendorForm({ page = "vendor" }) {
   const [value, setValue] = React.useState(1);
@@ -144,10 +145,20 @@ export default function VendorForm({ page = "vendor" }) {
             formik.setValues(response.data.body);
           }
         } else {
-          toast.error("Failed to fetch vendor data");
+          toast.custom(
+            <CustomToast message="Failed to fetch vendor data" toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } catch (error) {
-        toast.error("Error fetching vendor data");
+        toast.custom(
+          <CustomToast message="Error fetching vendor data" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     };
 
@@ -218,11 +229,21 @@ export default function VendorForm({ page = "vendor" }) {
             : 1;
           let res = await addVendor(updatedValue).unwrap();
           if (res.success) {
-            toast.success(res.message);
+            toast.custom(
+              <CustomToast message={res.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav(-1);
           }
         } catch (error) {
-          toast.error(error.data.message);
+          toast.custom(
+            <CustomToast message={error.data.message} toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -232,11 +253,21 @@ export default function VendorForm({ page = "vendor" }) {
             (updatedValue.isApproved = -2);
           let res = await updateVendor(updatedValue).unwrap();
           if (res.success) {
-            toast.success(res.message);
+            toast.custom(
+              <CustomToast message={res.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav(-1);
           }
         } catch (error) {
-          toast.error(error.data.message);
+          toast.custom(
+            <CustomToast message={error.data.message} toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
         }
       }
     },

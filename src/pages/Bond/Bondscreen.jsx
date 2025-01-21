@@ -44,6 +44,7 @@ import GridActions from "../../components/common/Grid/GridActions";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import toast, { LoaderIcon } from "react-hot-toast";
 import DeleteDialog from "../../components/common/DeleteDialog";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export default function BondScreen() {
   const bondSelector = useSelector((state) => state.bond);
   const nav = useNavigate();
@@ -153,10 +154,20 @@ export default function BondScreen() {
       await deleteBond(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Bond deleted successfully!");
+      toast.custom(
+        <CustomToast message="Bond deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete Bond.");
+      toast.custom(
+        <CustomToast message="Failed to delete Bond." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   return (

@@ -24,6 +24,7 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 import getFirstError from "../../components/common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export function VesselForm({ initialValues, type }) {
   const location = useLocation();
   const nav = useNavigate();
@@ -74,13 +75,31 @@ export function VesselForm({ initialValues, type }) {
           }).unwrap();
 
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/master/vessel");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -96,13 +115,31 @@ export function VesselForm({ initialValues, type }) {
           }).unwrap();
 
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/master/vessel");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       }
     },

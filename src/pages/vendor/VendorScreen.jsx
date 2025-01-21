@@ -49,6 +49,7 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import ApiManager from "../../services/ApiManager";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export default function VendorScreen({ page }) {
   const vendorSelector = useSelector((state) => state.vendor);
@@ -82,10 +83,20 @@ export default function VendorScreen({ page }) {
       await deleteVendor(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Vendor deleted successfully!");
+      toast.custom(
+        <CustomToast message="Vendor deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete vendor.");
+      toast.custom(
+        <CustomToast message="Failed to delete vendor." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   const [getVendorAudit, { data: AuditData, isLoading: isLoadingAudit }] =

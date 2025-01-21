@@ -44,6 +44,7 @@ import GridActions from "../../components/common/Grid/GridActions";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export default function PortScreen() {
   const portSelector = useSelector((state) => state.port);
   const nav = useNavigate();
@@ -153,10 +154,20 @@ export default function PortScreen() {
       await deletePort(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Port deleted successfully!");
+      toast.custom(
+        <CustomToast message="Port deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete Port.");
+      toast.custom(
+        <CustomToast message="Failed to delete Port." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   return (

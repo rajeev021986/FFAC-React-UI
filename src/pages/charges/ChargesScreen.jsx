@@ -45,6 +45,7 @@ import ApiManager from "../../services/ApiManager";
 import toast, { LoaderIcon } from "react-hot-toast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export function ChargesScreen({ page }) {
   const chargesSelector = useSelector((state) => state.chargesStore);
   const [exportLoader, setExportLoader] = useState(false);
@@ -154,7 +155,12 @@ export function ChargesScreen({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {
-        toast.error("Somthing Went Wrong");
+        toast.custom(
+          <CustomToast message="Somthing Went Wrong" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
       setExportLoader(false);
     }
@@ -171,10 +177,20 @@ export function ChargesScreen({ page }) {
       await deleteCharge(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Charge deleted successfully!");
+      toast.custom(
+        <CustomToast message="Charge deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete Charge.");
+      toast.custom(
+        <CustomToast message="Failed to delete Charge." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
 

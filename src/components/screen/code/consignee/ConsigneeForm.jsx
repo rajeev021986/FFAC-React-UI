@@ -28,6 +28,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { ConsigneeValidationSchema } from "./ConsigneeValidationSchema";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import HistoryIcon from "@mui/icons-material/History";
+import CustomToast from "../../../common/Toast/CustomToast";
 
 export default function ConsigneeForm({ initialValues, page, type, id }) {
   const tabs = [
@@ -84,14 +85,31 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
           }).unwrap();
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/entity/consignee");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          console.error("Error submitting form:", error);
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -107,14 +125,31 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
           }).unwrap();
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/entity/consignee");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          console.error("Error submitting form:", error);
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       }
     },

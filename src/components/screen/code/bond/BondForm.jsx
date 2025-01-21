@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import AuditTimeLine from "../../../AuditTimeLine";
+import CustomToast from "../../../common/Toast/CustomToast";
 export default function BondForm() {
   const [value, setValue] = React.useState(1);
   const location = useLocation();
@@ -60,10 +61,20 @@ export default function BondForm() {
           formik.setValues(response.data.body);
         }
       } else {
-        toast.error("Failed to fetch Bond data");
+        toast.custom(
+          <CustomToast message="Failed to fetch Bond data" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     } catch (error) {
-      toast.error("Error fetching Bond data");
+      toast.custom(
+        <CustomToast message="Error fetching Bond data" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   const formik = useFormik({
@@ -116,7 +127,15 @@ export default function BondForm() {
             id: null,
           }).unwrap();
         } catch (error) {
-          toast.error(error?.message || "Something went wrong");
+          toast.custom(
+            <CustomToast
+              message={error?.message || "Something went wrong!"}
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -136,9 +155,16 @@ export default function BondForm() {
           };
 
           const result = await updateBond(updatedValues).unwrap();
-          toast.success(result.message);
+          toast.custom(
+            <CustomToast message={result.message} toast="success" />,
+            {
+              closeButton: false,
+            }
+          );
         } catch (error) {
-          toast.error(error.message);
+          toast.custom(<CustomToast message={error.message} toast="error" />, {
+            closeButton: false,
+          });
         }
       }
       nav(-1);

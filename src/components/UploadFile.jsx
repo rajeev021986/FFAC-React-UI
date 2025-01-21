@@ -64,8 +64,16 @@ const UploadFile = ({
   const [fileData, setFileDaat] = useState({});
   const downloadIntgater = async () => {
     await ApiManager.fileDownloadIntegater(viewloaderId)
-      .then((e) => toast.success(e.message))
-      .catch((e) => toast.error(e.message));
+      .then((e) =>
+        toast.custom(<CustomToast message={e.message} toast="success" />, {
+          closeButton: false,
+        })
+      )
+      .catch((e) =>
+        toast.custom(<CustomToast message={e.message} toast="error" />, {
+          closeButton: false,
+        })
+      );
   };
   const handleView = async (event, id, source, sourceId, documentType) => {
     setViewloader(true);
@@ -98,7 +106,12 @@ const UploadFile = ({
       setViewDocument({ url, documentType });
       setViewDialogOpen(true);
     } catch (error) {
-      toast.error("Some thing went Wrong");
+      toast.custom(
+        <CustomToast message={"Something went wrong!"} toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
     setViewloader(false);
   };
@@ -191,7 +204,7 @@ const UploadFile = ({
         documentType:
           formData.documentType == "Other"
             ? formData.other
-            : formData.documentType
+            : formData.documentType,
       },
     };
     try {
