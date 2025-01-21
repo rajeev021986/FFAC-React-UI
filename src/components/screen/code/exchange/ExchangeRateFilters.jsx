@@ -7,7 +7,7 @@ import InputBox from "../../../common/InputBox";
 import { OutlinedButton } from "../../../common/Button";
 import SelectBox from "../../../common/SelectBox";
 
-export default function ExchangeRateFilters() {
+export default function ExchangeRateFilters({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.exchangeRateStore.formData);
 
@@ -19,6 +19,7 @@ export default function ExchangeRateFilters() {
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
+      setFilterOpen(false);
     },
   });
   const handleReset = () => {
@@ -35,6 +36,7 @@ export default function ExchangeRateFilters() {
       usdExchange: "",
       statusCode: "",
     });
+    setFilterOpen(false);
   };
 
   const statusOptions = [
@@ -58,6 +60,7 @@ export default function ExchangeRateFilters() {
             id="usdExchange"
             value={formik.values.usdExchange}
             onChange={formik.handleChange}
+            type="number"
           />
           <SelectBox
             label="Status"

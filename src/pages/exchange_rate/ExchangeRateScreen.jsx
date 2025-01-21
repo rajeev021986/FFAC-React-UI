@@ -250,7 +250,6 @@ export function ExchangeRate({ page }) {
                   width="650px"
                 >
                   <ExchangeRateFilters
-                    filterInfo={ExchangeRateData?.counts || []}
                   />
                 </GridSearchInput>
                 <SelectBox
