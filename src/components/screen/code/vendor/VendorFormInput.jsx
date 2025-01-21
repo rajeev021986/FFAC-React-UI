@@ -15,7 +15,7 @@ import ApiManager from "../../../../services/ApiManager";
 import toast from "react-hot-toast";
 import SelectBox from "../../../common/SelectBox";
 import WarningIcon from "@mui/icons-material/Warning";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
@@ -43,6 +43,13 @@ export default function VendorFormInput({
   page,
   loading,
 }) {
+  const FieldRef = useRef(null);
+
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
   const nav = useNavigate();
   const [dropdownData, setDropdownData] = useState({});
   const [loaderApprove, setLoaderApprove] = useState({
@@ -170,6 +177,7 @@ export default function VendorFormInput({
               value={formik.values.vendorName}
               error={formik.errors.vendorName}
               onChange={formik.handleChange}
+              inputRef={FieldRef}
             />
           </Grid>
           <Grid

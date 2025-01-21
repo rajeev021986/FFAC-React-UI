@@ -40,13 +40,14 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
     type: "",
     data: {},
   });
-  const [options, setOptions] = useState([]);
-  const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
-  const [optionsCity, setCityOptions] = useState([]);
-  const [uploadedFiles, setUploadedFiles] = useState(initialValues.files || []);
   const [addConsignee, { isLoading }] = useAddConsigneeMutation();
-  const [loading, setLoading] = useState(false);
-  const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
+  const FieldRef = useRef(null);
+
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
   const [updateConsignee, { isLoading: loadingUpdate }] =
     useUpdateConsigneeMutation();
   const [dropdownData, setDropdownData] = useState({});
@@ -62,7 +63,6 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const consigneeNameRef = useRef(null);
 
   const formik = useFormik({
     initialValues,
@@ -138,11 +138,6 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
       });
     }
   }, [optionsSettingsData]);
-  useEffect(() => {
-    if (consigneeNameRef.current) {
-      consigneeNameRef.current.focus();
-    }
-  }, []);
   const disabled = page == "consignee" ? false : true;
   useEffect(() => {
     getFirstError(formik.errors);
@@ -208,7 +203,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                           disabled={disabled}
                           error={formik.errors.consigneeName}
                           onChange={formik.handleChange}
-                          inputRef={consigneeNameRef}
+                          inputRef={FieldRef}
                         />
                       </Tooltip>
                     </Grid>
@@ -508,6 +503,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                         value={formik.values.consigneeName}
                         error={formik.errors.consigneeName}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       />
                     </Tooltip>
                   </Grid>

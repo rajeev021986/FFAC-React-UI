@@ -984,6 +984,7 @@ export default function CustomerForm({
                           disabled={disabled}
                           error={formik.errors.customerName}
                           onChange={formik.handleChange}
+                          inputRef={customerNameRef}
                         />
                       </Tooltip>
                     </Grid>

@@ -27,6 +27,13 @@ import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import HistoryIcon from "@mui/icons-material/History";
 
 export default function ShipperForm({ initialValues, page, type, id }) {
+  const FieldRef = useRef(null);
+
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
   const tabs = [
     { label: "Shipper Details", value: 1 },
     { label: "Document Details", value: 2 },
@@ -36,11 +43,6 @@ export default function ShipperForm({ initialValues, page, type, id }) {
   const [updateShipper, { isLoading: loadingUpdate }] =
     useUpdateShipperMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const [modal, setModal] = React.useState({
-    open: false,
-    type: "",
-    data: {},
-  });
 
   const nav = useNavigate();
   const [value, setValue] = React.useState(1);
@@ -87,7 +89,6 @@ export default function ShipperForm({ initialValues, page, type, id }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const shipperNameRef = useRef(null);
 
   const formik = useFormik({
     initialValues,
@@ -149,11 +150,6 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       });
     }
   }, [optionsSettingsData, shipperSettingsData]);
-  useEffect(() => {
-    if (shipperNameRef.current) {
-      shipperNameRef.current.focus();
-    }
-  }, []);
   const disabled = page == "shipper" ? false : true;
   useEffect(() => {
     getFirstError(formik.errors);
@@ -214,7 +210,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                           disabled={disabled}
                           error={formik.errors.name}
                           onChange={formik.handleChange}
-                          inputRef={shipperNameRef}
+                          inputRef={FieldRef}
                         />
                       </Tooltip>
                     </Grid>
@@ -568,6 +564,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                         value={formik.values.name}
                         error={formik.errors.name}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       />
                     </Tooltip>
                   </Grid>

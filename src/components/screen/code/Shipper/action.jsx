@@ -25,7 +25,6 @@ export const getShipperListGridActions = (nav, setModal) => {
     {
       label: "Delete",
       onClick: (params) => {
-        console.log("statusCode"+ params.row.statusCode);
         if (params.row.statusCode == -2) {
           setModal({
             open: true,
