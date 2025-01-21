@@ -26,7 +26,7 @@ export const getVendorGridActions = (nav, setModal) => {
       icon: <BiotechIcon />,
     },
     {
-      label: 'Delete Vendor',
+      label: 'Delete',
       onClick: (params) => {
         if (params.row.isApproved == -2 || params.row.isApproved == -1) {
           setModal(

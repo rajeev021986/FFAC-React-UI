@@ -31,7 +31,7 @@ export const getExchangeRateListGridActions = (nav, setModal) => {
             type: "delete",
             data: {
               who: "Exchange Rate",
-              deleteName: params.row.id,
+              deleteName: params.row.usdExchange,
               id: params.row.id,
             },
           });

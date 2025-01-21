@@ -53,12 +53,8 @@ export default function LoginScreen() {
           })
         );
 
-       
-
         nav("/app");
-        
       } else {
-
         toast.error(res.message);
       }
     } catch (err) {
@@ -93,6 +89,12 @@ export default function LoginScreen() {
               label="User Name"
               variant="outlined"
               onChange={handleChange}
+              InputProps={{
+                style: {
+                  borderRadius: "12px",
+                  fontSize: "14px",
+                },
+              }}
             />
             <TextField
               id="password"
@@ -100,6 +102,12 @@ export default function LoginScreen() {
               variant="outlined"
               type="password"
               onChange={handleChange}
+              InputProps={{
+                style: {
+                  borderRadius: "12px",
+                  fontSize: "14px",
+                },
+              }}
             />
             <ThemeButton
               color="primary"

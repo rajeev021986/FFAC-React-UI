@@ -30,16 +30,13 @@ export const getChargesListGridActions = (nav, setModal) => {
             type: "delete",
             data: {
               who: "Charge",
-              deleteName: params.row.charge,
+              deleteName: params.row.chargeName,
               id: params.row.id,
             },
           });
         } else {
           toast.custom(
-            <CustomToast
-              message="Only for Inactive and Rejected Charge"
-              toast="error"
-            />,
+            <CustomToast message="Only for Inactive Charge" toast="error" />,
             {
               closeButton: false,
             }

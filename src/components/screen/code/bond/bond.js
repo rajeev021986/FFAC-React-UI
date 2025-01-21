@@ -21,7 +21,7 @@ export const getBondGridActions = (nav, setModal) => {
       icon: <BiotechIcon />,
     },
     {
-      label: "Delete Bond",
+      label: "Delete",
       onClick: (params) => {
         if (params.row.statusCode == -2 || params.row.statusCode == -1) {
           setModal({
@@ -36,7 +36,7 @@ export const getBondGridActions = (nav, setModal) => {
         } else {
           toast.custom(
             <CustomToast
-              message="Only for Inactive and Rejected bond"
+              message="Only for Inactive bond"
               toast="error"
             />,
             {
