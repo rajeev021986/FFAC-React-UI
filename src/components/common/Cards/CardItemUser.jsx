@@ -51,7 +51,7 @@ export default function CardItemUser({
             <IconButton color="primary" onClick={() => actions[1].onClick({ row: item })}>
               {actions[1].icon}
             </IconButton>
-            <IconButton color="primary" onClick={() => actions[1].onClick({ row: item })}>
+            <IconButton color="primary" onClick={() => actions[2].onClick({ row: item })}>
               {actions[2].icon}
             </IconButton>
           </Box>

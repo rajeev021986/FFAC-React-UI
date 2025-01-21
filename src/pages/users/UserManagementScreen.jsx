@@ -17,13 +17,13 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { USER_MANAGEMENT_COLUMNS } from "../../data/columns/user";
 import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { OutlinedButton } from "../../components/common/Button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import { useFetchUsersQuery } from "../../store/api/userDataApi";
@@ -56,6 +56,7 @@ export default function UserManagementScreen() {
   const userManagementSelector = useSelector((state) => state.userManagement);
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const location=useLocation();
   const [exportLoader, setExportLoader] = useState();
   const [modal, setModal] = React.useState({
     open: false,
@@ -110,6 +111,9 @@ export default function UserManagementScreen() {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
+  useEffect(() => {
+    refetch();
+  }, [location.pathname]);
   const actions = [
     { name: "New User" },
     { name: exportLoader ? <LoaderIcon /> : "Export" },

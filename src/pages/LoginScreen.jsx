@@ -63,14 +63,11 @@ export default function LoginScreen() {
         });
       }
     } catch (err) {
-      toast.custom(
-        <CustomToast message="Something went wrong" toast="error" />,
-        {
-          closeButton: false,
-        }
-      );
+      toast.custom(<CustomToast message={err.message} toast="error" />, {
+        closeButton: false,
+      });
     } finally {
-      setLoader(false); // Ensures loader stops even if there's an error
+      setLoader(false);
     }
   };
 

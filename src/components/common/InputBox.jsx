@@ -38,6 +38,7 @@ export default function InputBox({
       onChange={onChange}
       inputRef={inputRef}
       helperText={error}
+      autoComplete="off"
       error={error ? true : false}
       sx={{ ...styles.root, ...sx }}
       {...props}
