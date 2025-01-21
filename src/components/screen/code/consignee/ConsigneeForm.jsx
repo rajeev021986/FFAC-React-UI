@@ -85,7 +85,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
             toast.success(response.message);
-            nav("/app/master/consignee");
+            nav("/app/entity/consignee");
           } else {
             toast.error(response.message);
           }
@@ -108,7 +108,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
             toast.success(response.message);
-            nav("/app/master/consignee");
+            nav("/app/entity/consignee");
           } else {
             toast.error(response.message);
           }
@@ -436,7 +436,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
                           sx={{ fontWeight: "500", borderRadius: "12px" }}
-                          onClick={() => nav("/app/master/consignee")}
+                          onClick={() => nav("/app/entity/consignee")}
                         >
                           Cancel
                         </OutlinedButton>
@@ -732,7 +732,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                     >
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
-                          onClick={() => nav("/app/master/consignee")}
+                          onClick={() => nav("/app/entity/consignee")}
                           sx={{ fontWeight: "500" }}
                         >
                           Cancel

@@ -7,12 +7,13 @@ import {
   IconButton,
   Tooltip,
   TextField,
+  Skeleton,
 } from "@mui/material";
 import { DataGrid, renderEditInputCell } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -34,6 +35,7 @@ export default function VendorEditGrid({
 }) {
   const designation = dropdownData?.designation;
   const [editDialogData, setEditDialogData] = useState();
+  const [openTable, setopenTable] = useState(true);
   const [EditRowDialogopen, setEditRowDialogOpen] = useState(false);
   const newRowRef = useRef(null);
   const setFocus = () => {
@@ -59,6 +61,10 @@ export default function VendorEditGrid({
   const handleClose = () => {
     setEditRowDialogOpen(false);
     setEditDialogData({});
+    setopenTable(false);
+    setTimeout(() => {
+      setopenTable(true);
+    }, 10);
   };
 
   const TabsHosts = [
@@ -861,19 +867,35 @@ export default function VendorEditGrid({
             <TabPanel value={index} sx={{ padding: 0, marginTop: 2 }}>
               <Box sx={{ width: "100%" }}>
                 <Box sx={{ height: 400 }}>
-                  <StyledDataGrid
-                    rows={ob.value}
-                    columns={ob.columns.map((column) => ({
-                      ...column,
-                      headerAlign: "center",
-                      align: "center",
-                    }))}
-                    disableSelectionOnClick
-                    processRowUpdate={ob.handleProcessRowUpdate}
-                    experimentalFeatures={{ newEditingApi: true }}
-                    getRowId={(row) => row.id}
-                    disableColumnMenu
-                  />
+                  {openTable ? (
+                    <StyledDataGrid
+                      rows={ob.value}
+                      columns={ob.columns.map((column) => ({
+                        ...column,
+                        headerAlign: "center",
+                        align: "center",
+                      }))}
+                      disableSelectionOnClick
+                      processRowUpdate={ob.handleProcessRowUpdate}
+                      experimentalFeatures={{ newEditingApi: true }}
+                      getRowId={(row) => row.id}
+                      disableColumnMenu
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        height: "100%",
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Skeleton animation="wave" sx={{ flex: 1 }} />
+                      <Skeleton animation="wave" sx={{ flex: 1 }} />
+                      <Skeleton animation="wave" sx={{ flex: 1 }} />
+                      <Skeleton animation="wave" sx={{ flex: 1 }} />
+                    </Box>
+                  )}
                 </Box>
               </Box>
             </TabPanel>

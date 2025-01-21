@@ -104,7 +104,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
 
           if (response.code == "SUCCESS") {
             toast.success(response.message);
-            nav("/app/master/shipper");
+            nav("/app/entity/shipper");
           } else {
             toast.error(response.message);
           }
@@ -121,7 +121,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
             toast.success(response.message);
-            nav("/app/master/shipper");
+            nav("/app/entity/shipper");
           } else {
             toast.error(response.message);
           }
@@ -494,7 +494,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                     <Grid item xs={12} sx={{ margin: 1 }}>
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
-                          onClick={() => nav("/app/master/shipper")}
+                          onClick={() => nav("/app/entity/shipper")}
                           sx={{ fontWeight: "500", borderRadius: "12px" }}
                         >
                           Cancel
@@ -856,7 +856,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
                           sx={{ fontWeight: "500" }}
-                          onClick={() => nav("/app/master/shipper")}
+                          onClick={() => nav("/app/entity/shipper")}
                         >
                           Cancel
                         </OutlinedButton>
@@ -877,7 +877,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
               <TabPanel value={2} sx={{ margin: 0, padding: 0 }}>
                 <UploadFile
                   customer_id={initialValues.id}
-                  dropdownData={dropdownData?.designation}
+                  dropdownData={dropdownData?.documentType}
                   sourceType="SHIPPER"
                 />
               </TabPanel>

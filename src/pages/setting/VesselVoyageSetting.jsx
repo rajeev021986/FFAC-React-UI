@@ -76,7 +76,7 @@ const VesselVoyageSetting = () => {
           <GlobalDrrpdownSetting
             value={portOperator}
             setvalue={setPortOperator}
-            title="Document Type"
+            title="Port Operator"
           />
         </Grid>
       )}

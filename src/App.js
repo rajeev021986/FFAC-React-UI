@@ -32,7 +32,10 @@ import PortScreen from "./pages/port/PortScreen";
 import PortForm from "./components/screen/code/port/PortForm";
 import BondScreen from "./pages/Bond/Bondscreen";
 import BondForm from "./components/screen/code/bond/BondForm";
-import { VesselVoyage, VesselVoyageScreen } from "./pages/vessel_voyage/VesselVoyageScreen";
+import {
+  VesselVoyage,
+  VesselVoyageScreen,
+} from "./pages/vessel_voyage/VesselVoyageScreen";
 import { VesselVoyageFormScreen } from "./pages/vessel_voyage/VesselVoyageFormScreen";
 import { ChargesScreen } from "./pages/charges/ChargesScreen";
 import AddEditCharge from "./components/screen/code/charge/AddEditCharge";
@@ -41,7 +44,6 @@ import Exchange from "./components/screen/code/exchange/Exchange";
 import ShipperFormScreen from "./pages/code/ShipperFormScreen";
 import ConsigneeFormScreen from "./pages/code/ConsigneeFormScreen";
 import IcdFormScreen from "./pages/icd/IcdFormScreen";
-
 
 function App() {
   // const { menuItems } = useMenuSetting();
@@ -87,34 +89,40 @@ function App() {
               path="entity/customer/editcustomer"
               element={<CustomerFormScreen page="customer" />}
             />
-            <Route path="entity/vendor" element={<VendorScreen page="vendor" />} />
-            <Route path="entity/vendorApproval" element={<VendorScreen page="vendorApprove" />} />
+            <Route
+              path="entity/vendor"
+              element={<VendorScreen page="vendor" />}
+            />
+            <Route
+              path="entity/vendorApproval"
+              element={<VendorScreen page="vendorApprove" />}
+            />
             <Route
               path="entity/approve/approveRequest"
               element={<CustomerFormScreen page="customerApprove" />}
             />
             <Route
-              path="master/shipper"
+              path="entity/shipper"
               element={<ShipperComponent page="shipper" />}
             />
             <Route
-              path="master/shipper/new_shipper"
+              path="entity/shipper/new_shipper"
               element={<ShipperFormScreen page="shipper" />}
             />
             <Route
-              path="master/shipper/editshipper"
+              path="entity/shipper/editshipper"
               element={<ShipperFormScreen page="shipper" />}
             />
             <Route
-              path="master/consignee"
+              path="entity/consignee"
               element={<ConsigneeComponent page="consignee" />}
             />
             <Route
-              path="master/consignee/new_consignee"
+              path="entity/consignee/new_consignee"
               element={<ConsigneeFormScreen page="consignee" />}
             />
             <Route
-              path="master/consignee/editconsignee"
+              path="entity/consignee/editconsignee"
               element={<ConsigneeFormScreen page="consignee" />}
             />
             <Route path="admin/settings" element={<SettingsPage />} />
@@ -127,7 +135,10 @@ function App() {
             <Route path="admin/roles/edit/:id" element={<AddEditRole />} />
             <Route path="entity/vendor/addVendor" element={<VendorForm />} />
             <Route path="entity/vendor/editVendor" element={<VendorForm />} />
-            <Route path="entity/vendorApproval/editVendorApprove" element={<VendorForm page="vendorApproval" />} />
+            <Route
+              path="entity/vendorApproval/editVendorApprove"
+              element={<VendorForm page="vendorApproval" />}
+            />
             <Route path="profile" element={<ProfileScreen />} />
             <Route
               path="master/vessel/editvessel"
@@ -137,10 +148,7 @@ function App() {
               path="master/vessel/newvessel"
               element={<VesselFormScreen />}
             />
-            <Route
-              path="master/vessel"
-              element={<VesselScreen />}
-            />
+            <Route path="master/vessel" element={<VesselScreen />} />
             <Route path="master/port" element={<PortScreen />} />
             <Route path="master/bond/bondAdd" element={<BondForm />} />
             <Route path="master/bond/editBond" element={<BondForm />} />
@@ -184,10 +192,15 @@ function App() {
               element={<Exchange />}
             />
 
-
             <Route path="master/icd" element={<IcdScreen page="icd" />} />
-            <Route path="master/icd/new_icd" element={<IcdFormScreen page="icd" />} />
-            <Route path="master/icd/editIcd" element={<IcdFormScreen page="icd" />} />
+            <Route
+              path="master/icd/new_icd"
+              element={<IcdFormScreen page="icd" />}
+            />
+            <Route
+              path="master/icd/editIcd"
+              element={<IcdFormScreen page="icd" />}
+            />
           </Route>
         </Routes>
         <Toaster />
