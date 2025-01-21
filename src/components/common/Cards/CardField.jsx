@@ -42,6 +42,7 @@ export default function CardField({ title, subtitle, icon, ...props }) {
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
+                textTransform: "capitalize",
               }}
             >
               {subtitle}

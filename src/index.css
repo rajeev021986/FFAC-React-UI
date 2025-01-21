@@ -33,13 +33,13 @@ main {
 
 
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 2px;
+  height: 2px;
   background-color: #e9fbf4;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #5cabfa;
+  background-color: #ffe9ff;
   border-radius: 10px;
   position: inherit;
 }

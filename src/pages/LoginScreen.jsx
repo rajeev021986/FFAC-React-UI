@@ -9,7 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { ThemeButton } from "../components/common/Button";
-import Frame from "../assets/images/Frame.png";
+import Frame from "../assets/images/login-bg.png";
 import { useNavigate } from "react-router-dom";
 import ApiManager from "../services/ApiManager";
 import toast from "react-hot-toast";
@@ -67,8 +67,10 @@ export default function LoginScreen() {
   return (
     <>
       <Stack direction="row" sx={styles.container}>
-        {/* Left Section (Form) */}
-        <Stack spacing={2} sx={styles.left_div}>
+        <Stack spacing={2} sx={styles.right_div}>
+          <Box sx={styles.backgroundImage}></Box>
+        </Stack>
+        <Stack spacing={2} sx={styles.login_Page}>
           <Stack component={"form"} spacing={2} sx={styles.form}>
             <Typography
               variant="title"
@@ -117,18 +119,9 @@ export default function LoginScreen() {
               {Loader && <CircularProgress color="white" size={20} />} Login
             </ThemeButton>
             {/* <ThemeButton type="button" onClick={() => loginWithRedirect()}>
-              Log In (Auth0)
-            </ThemeButton> */}
+            Log In (Auth0)
+          </ThemeButton> */}
           </Stack>
-        </Stack>
-
-        {/* Right Section (Image) */}
-        <Stack spacing={2} sx={styles.right_div}>
-          <Box sx={styles.backgroundImage}></Box>
-          {/* <Box sx={styles.content}>
-            <Typography variant="h1" color="primary.main">A passionate team rooted in logistics</Typography>
-            <Typography variant="title" color="white.main">Our people make the difference.</Typography>
-          </Box> */}
         </Stack>
       </Stack>
     </>
@@ -141,16 +134,29 @@ const styles = {
     height: "100vh",
   },
   left_div: {
-    width: "70%",
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     p: 2,
   },
-  right_div: {
+  login_form: {
+    background: "rgba(255, 255, 255, 0.17)",
+    borderRadius: "16px",
+    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+    backdropFilter: "blur(5px)",
+    WebkitBackdropFilter: "blur(5px)",
+  },
+  login_Page: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  right_dixv: {
     // backgroundColor: 'secondary.main',
-    width: "70%",
+    width: "100%",
     position: "relative",
     display: "flex",
     flexDirection: "column",
@@ -164,19 +170,24 @@ const styles = {
     backgroundSize: "cover",
     backgroundPosition: "center",
     // opacity: 0.2, // Control opacity here
-    position: "absolute",
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 1, // Place it below content
   },
   content: {
     position: "relative",
     zIndex: 2, // Ensure content is above the background image
   },
   form: {
-    width: 350,
+    maxWidth: 450,
+    width: "100%",
     p: 2,
+    background: "rgba(255, 255, 255, 0.17)",
+    borderRadius: "24px 16px",
+    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+    backdropFilter: "blur(5px)",
+    WebkitBackdropFilter: "blur(5px)",
   },
 };

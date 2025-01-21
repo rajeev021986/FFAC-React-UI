@@ -2,23 +2,23 @@ export function StatusChip(status, field) {
     if (field === "document") {
         switch (status) {
             case false:
-                return <div style={{ ...styles.chip, backgroundColor: "#fdf2e9", borderColor: "#e67e22", color: "#e67e22" }}>PENDING</div>
+                return <div style={{ ...styles.chip, backgroundColor: "#e67e22", borderColor: "#e67e22", color: "#ffffff" }}>PENDING</div>
             case true:
-                return <div style={{ ...styles.chip, backgroundColor: "#e9f7ef", borderColor: "#27ae60", color: "#27ae60" }}>AVAILABLE</div>
+                return <div style={{ ...styles.chip, backgroundColor: " #27ae60", borderColor: "#27ae60", color: "#ffffff" }}>AVAILABLE</div>
         }
     }
     else {
         switch (status) {
             case "active":
-                return <div style={{ ...styles.chip, backgroundColor: "#e9f7ef", borderColor: "#27ae60", color: "#27ae60" }}>ACTIVE</div>
+                return <div style={{ ...styles.chip, backgroundColor: "#27ae60", borderColor: "#27ae60", color: "#ffffff" }}>ACTIVE</div>
             case "new":
-                return <div style={{ ...styles.chip, backgroundColor: "#ebf5fb", borderColor: "#3498db", color: "#3498db" }}>NEW</div>
+                return <div style={{ ...styles.chip, backgroundColor: "#3498db", borderColor: "#3498db", color: "#ffffff" }}>NEW</div>
             case "inactive":
-                return <div style={{ ...styles.chip, backgroundColor: "#f9ebea", borderColor: "#c0392b", color: "#c0392b" }}>INACTIVE</div>
+                return <div style={{ ...styles.chip, backgroundColor: "#c0392b", borderColor: "#c0392b", color: "#ffffff" }}>INACTIVE</div>
             case "pending_documents":
-                return <div style={{ ...styles.chip, backgroundColor: "#fdf2e9", borderColor: "#e67e22", color: "#e67e22" }}>PENDING DOC</div>
+                return <div style={{ ...styles.chip, backgroundColor: "#e67e22", borderColor: "#e67e22", color: "#ffffff" }}>PENDING DOC</div>
             case "rejected":
-                return <div style={{ ...styles.chip, backgroundColor: "#f9ebea", borderColor: "#c0392b", color: "#c0392b" }}>REJECTED</div>
+                return <div style={{ ...styles.chip, backgroundColor: "#c0392b", borderColor: "#c0392b", color: "#ffffff" }}>REJECTED</div>
             default:
                 return
 
@@ -28,12 +28,13 @@ export function StatusChip(status, field) {
 
 const styles = {
     chip: {
-        fontSize: "12px",
+        fontSize: "11px",
         display: "inline-flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "12px 0px",
+        padding: "10px 0px",
         borderRadius: "16px",
+        fontWeight: "bold",
         height: "20px",
         width: "94px",
         border: "1px solid"

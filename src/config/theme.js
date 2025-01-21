@@ -121,7 +121,7 @@ export const getTheme = (primaryColor = "#026de0", mode) => {
           root: {
             borderBottom: isDarkMode
               ? "1px solid #ffffff1f"
-              : "1px solid #0000001f",
+              : "4px solid #bf77f6",
             "& .MuiCardHeader-title": {
               fontSize: "1rem",
               fontWeight: 500,
