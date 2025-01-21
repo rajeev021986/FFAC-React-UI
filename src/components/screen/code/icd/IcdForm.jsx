@@ -42,7 +42,6 @@ export default function IcdForm({ initialValues, page, type, id }) {
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateIcd, { isLoading: loaderUpdate }] = useUpdateIcdMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const icdNameRef = useRef(null);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -115,9 +114,10 @@ export default function IcdForm({ initialValues, page, type, id }) {
       }
     },
   });
+  const FieldRef = useRef(null);
   useEffect(() => {
-    if (icdNameRef.current) {
-      icdNameRef.current.focus();
+    if (FieldRef.current) {
+      FieldRef.current.focus();
     }
   }, []);
   useEffect(() => {
@@ -199,7 +199,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                           disabled={disabled}
                           error={formik.errors.icd_name}
                           onChange={formik.handleChange}
-                          inputRef={icdNameRef}
+                          inputRef={FieldRef}
                         />
                       </Tooltip>
                     </Grid>
@@ -447,6 +447,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                         value={formik.values.icd_name}
                         error={formik.errors.icd_name}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       />
                     </Grid>
                     {initialValues.statusCode == -2 ||

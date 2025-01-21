@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { VesselVoyageValidation } from "../../components/screen/vessel_voyage/validation";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -37,7 +37,12 @@ export function VesselVoyageForm({ initialValues, type }) {
 
   const [loading, setLoading] = useState(false);
   const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
-
+  const FieldRef = useRef(null);
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
   const reloadDataHandler = async () => {
     try {
       setLoading(true);
@@ -164,6 +169,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         value={formik.values.vessel}
                         error={formik.errors.vessel}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       ></FormAutoComplete>
                     </Grid>
                     <Grid
@@ -516,6 +522,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         value={formik.values.vessel}
                         error={formik.errors.vessel}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       ></FormAutoComplete>
                     </Grid>
                     <Grid

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import InputBox from "../../../common/InputBox";
 import { CircularProgress, Grid, Stack, TextField } from "@mui/material";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
@@ -12,6 +12,13 @@ export default function ExchangeInputs({
   ExchageSettingsData,
   loading,
 }) {
+  const FieldRef = useRef(null);
+
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
   return (
     <Grid container spacing={2} paddingLeft={1} paddingTop={1}>
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>
@@ -21,6 +28,7 @@ export default function ExchangeInputs({
           value={formik.values.fromDate}
           error={formik.errors.fromDate}
           onChange={formik.handleChange}
+          inputRef={FieldRef}
         />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>

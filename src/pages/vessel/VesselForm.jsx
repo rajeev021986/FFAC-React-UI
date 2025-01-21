@@ -8,7 +8,7 @@ import {
 } from "../../store/api/vesselDataApi";
 import { useFormik } from "formik";
 import { useLocation, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { VesselValidation } from "../../components/screen/vessel/validation";
 import toast from "react-hot-toast";
 import { OutlinedButton, ThemeButton } from "../../components/common/Button";
@@ -45,6 +45,13 @@ export function VesselForm({ initialValues, type }) {
     { label: "Yes", value: "yes" },
     { label: "No", value: "no" },
   ];
+  const FieldRef = useRef(null);
+
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
 
   const formik = useFormik({
     initialValues,
@@ -176,6 +183,7 @@ export function VesselForm({ initialValues, type }) {
                         value={formik.values.vesselName}
                         error={formik.errors.vesselName}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       />
                     </Grid>
                     <Grid
@@ -352,6 +360,7 @@ export function VesselForm({ initialValues, type }) {
                         value={formik.values.vesselName}
                         error={formik.errors.vesselName}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       />
                     </Grid>
                     <Grid
