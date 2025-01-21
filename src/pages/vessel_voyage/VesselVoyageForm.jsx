@@ -423,7 +423,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       <SelectBox
                         label="Port Operator"
                         id="portOperator"
-                        options={gateOptions}
+                        options={voyageSettingsData?.body.portOperator}
                         value={formik.values.portOperator}
                         error={formik.errors.portOperator}
                         onChange={formik.handleChange}
@@ -799,7 +799,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       <SelectBox
                         label="Port Operator"
                         id="portOperator"
-                        options={gateOptions}
+                        options={voyageSettingsData?.body.portOperator}
                         value={formik.values.portOperator}
                         error={formik.errors.portOperator}
                         onChange={formik.handleChange}
