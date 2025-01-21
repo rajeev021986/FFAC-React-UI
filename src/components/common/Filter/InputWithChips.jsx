@@ -46,6 +46,48 @@ const Chips = {
   vrnNo: {
     chipLabel: "VRN NO",
   },
+  icdCode: {
+    chipLabel: "ICD Code",
+  },
+  icdName: {
+    chipLabel: "ICD Name",
+  },
+  newPortName: {
+    chipLabel: "Port Name",
+  },
+  country: {
+    chipLabel: "Country",
+  },
+  vessel: {
+    chipLabel: "Vessel",
+  },
+  lname: {
+    chipLabel: "Line Name",
+  },
+  vname: {
+    chipLabel: "Vessel Name",
+  },
+  currency: {
+    chipLabel: "Vessel Name",
+  },
+  usdExchange: {
+    chipLabel: "USD Exchange",
+  },
+  chargeName: {
+    chipLabel: "Charge Name",
+  },
+  chargeCode: {
+    chipLabel: "Charge Code",
+  },
+  city: {
+    chipLabel: "City",
+  },
+  consigneeName: {
+    chipLabel: "Consignee Name",
+  },
+  name: {
+    chipLabel: "Name",
+  },
   statusCode: {
     chipLabel: "Status",
     chipvalues: [
