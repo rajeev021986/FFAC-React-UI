@@ -450,19 +450,17 @@ const Role = () => {
             >
               <Button
                 variant="outlined"
-                color="warning"
                 size="small"
                 onClick={() => handleRemoveUser(record.role.roleId, user.id)}
                 sx={{
-                  borderColor: "#f47123",
                   backgroundColor: "white",
-                  color: "#f47123",
+                  border: "2px solid ",
                   m: 0.5,
                   position: "relative",
                   pr: 3,
+                  borderRadius: "50px",
                   minWidth: "auto",
                   "&:hover": {
-                    borderColor: "#f47123",
                     backgroundColor: "white",
                   },
                 }}
@@ -537,7 +535,7 @@ const Role = () => {
                 sx={{
                   borderRadius: "50%",
                   padding: "9px",
-                  minWidth: "40px", // Ensures a consistent circular size
+                  minWidth: "40px",
                   minHeight: "40px",
                   display: "flex",
                   alignItems: "center",
@@ -568,7 +566,7 @@ const Role = () => {
                 sx={{
                   borderRadius: "50%",
                   padding: "9px",
-                  minWidth: "40px", // Ensures a consistent circular size
+                  minWidth: "40px",
                   minHeight: "40px",
                   display: "flex",
                   alignItems: "center",
@@ -606,13 +604,13 @@ const Role = () => {
             leftComps={<ThemedBreadcrumb />}
             rightComps={
               <>
-                <Box style={{ display: "flex", gap: "10px" }}>
+                <Box style={{ display: "flex", gap: "10px",marginTop:"10px" }}>
                   <Button
                     variant="contained"
                     startIcon={<AddIcon />}
                     onClick={handleAddRole}
                     color="primary"
-                    sx={{ borderRadius: "22px 20px 20px 22px" }}
+                    sx={{ borderRadius: "22px" }}
                   >
                     Add
                   </Button>
