@@ -524,7 +524,7 @@ export default function AddCard() {
                 </Box>
               </Box>
 
-              <Grid display="flex" sx={{ height: "40px",marginTop: "20px" }}>
+              <Grid display="flex" sx={{ height: "40px", marginTop: "20px" }}>
                 {/* <Button
                   variant="contained"
                   size="small"
@@ -558,7 +558,7 @@ export default function AddCard() {
                 <Stack direction="row" spacing={2}>
                   <OutlinedButton
                     sx={{ fontWeight: "500", borderRadius: "12px" }}
-                    onClick={() => navigate("/app/entity/consignee")}
+                    onClick={() => navigate("/app/admin/users")}
                   >
                     Cancel
                   </OutlinedButton>
