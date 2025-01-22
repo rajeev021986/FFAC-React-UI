@@ -110,7 +110,7 @@ const InputWithChips = ({
     .map(([key, value]) => {
       if (value !== "") {
         return `${Chips[key]?.chipLabel || key}: ${
-          Chips[key]?.chipvalues?.find((a) => a.value == value).label || value
+          Chips[key]?.chipvalues?.find((a) => a?.value == value)?.label || value
         }`;
       }
       return null;
@@ -123,6 +123,11 @@ const InputWithChips = ({
 
   const handleDeleteChip = (index) => {
     const updatedFilters = { ...filters };
+    console.log(
+      index,
+      "index",
+      updatedFilters[Object.keys(updatedFilters)[index]]
+    );
     delete updatedFilters[Object.keys(updatedFilters)[index]];
     onFilterChange(updatedFilters);
   };
