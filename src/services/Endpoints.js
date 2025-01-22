@@ -55,7 +55,7 @@ const ENDPOINTS = {
     `/admin-service/v1/data?pattern=${inputValue}&type=${id}`,
   FILE_DOWNLOAD_INTEGATER: (id) => `/entity-service/v1/file/audit/${id}`,
   GET_AUDIT_DATA: (id, page, service) => `/${service}/v1/${page}/audit/${id}`,
-  FETCH_DATA_EXCEL: (queryString, page, service) =>
+  FETCH_DATA_EXCEL: (queryString, service, page) =>
     `/${service}/v1/${page}/export?${queryString}`,
 };
 
