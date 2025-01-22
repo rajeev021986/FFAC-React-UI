@@ -115,8 +115,8 @@ class ApiManager {
     const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id, type);
     return ApiMethods.put(url, payload);
   };
-  static fetchDatasExcel = async (params, payload, service, page) => {
-    const queryString = new URLSearchParams(params).toString();
+  static fetchDatasExcel = async ({query, payload, service, page}) => {
+    const queryString = new URLSearchParams(query).toString();
     const url = ENDPOINTS.FETCH_DATA_EXCEL(queryString, service, page);
     return ApiMethods.postBlob(url, payload);
   };

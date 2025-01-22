@@ -185,10 +185,10 @@ export default function VendorScreen({ page }) {
       setExportLoader(true);
       try {
         const blob = await ApiManager.fetchDatasExcel(
-          query,
-          payload,
-          "entity-service",
-          "vendor"
+          {query: query,
+          payload:  payload,
+          service: "entity-service",
+          page: "vendor"}
         );
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");

@@ -194,10 +194,11 @@ export default function ConsigneeScreen({ page }) {
       setExportLoader(true);
       try {
         const blob = await ApiManager.fetchDatasExcel(
-          query,
-          payload,
-          "entity-service",
-          "consignee"
+    
+          {query: query,
+            payload:  payload,
+            service: "entity-service",
+            page: "consignee"}
         );
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");

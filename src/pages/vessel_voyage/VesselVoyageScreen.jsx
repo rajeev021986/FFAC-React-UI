@@ -91,12 +91,12 @@ export function VesselVoyageScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel(
-          query,
-          payload,
-          "master-service",
-          "vessel/voyage"
-        );
+        const blob = await ApiManager.fetchDatasExcel({
+          query: query,
+          payload: payload,
+          service: "master-service",
+          page: "vessel/voyage",
+        });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;

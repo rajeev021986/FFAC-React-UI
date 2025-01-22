@@ -156,12 +156,12 @@ export default function IcdScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel(
-          query,
-          payload,
-          "master-service",
-          "icd"
-        );
+        const blob = await ApiManager.fetchDatasExcel({
+          query: query,
+          payload: payload,
+          service: "master-service",
+          page: "icd",
+        });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -230,9 +230,9 @@ export default function IcdScreen({ page }) {
               ariaLabel="Text-only  SpeedDial"
               sx={{
                 "& .MuiFab-root": {
-                  width: 50, // Adjust main button width
-                  height: 50, // Adjust main button height
-                  minHeight: 50, // Set minimum height
+                  width: 50,
+                  height: 50,
+                  minHeight: 50,
                 },
               }}
               icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}

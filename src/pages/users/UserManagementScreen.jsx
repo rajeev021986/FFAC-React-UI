@@ -57,7 +57,7 @@ export default function UserManagementScreen() {
   const userManagementSelector = useSelector((state) => state.userManagement);
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const location=useLocation();
+  const location = useLocation();
   const [exportLoader, setExportLoader] = useState();
   const [modal, setModal] = React.useState({
     open: false,
@@ -135,12 +135,12 @@ export default function UserManagementScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel(
-          query,
-          payload,
-          "admin-service",
-          "user"
-        );
+        const blob = await ApiManager.fetchDatasExcel({
+          query: query,
+          payload: payload,
+          service: "admin-service",
+          page: "user",
+        });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -235,7 +235,7 @@ export default function UserManagementScreen() {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                 <FilterForm/>
+                  <FilterForm />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"
