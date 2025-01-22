@@ -173,9 +173,10 @@ export default function CustomerScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(
+        const blob = await ApiManager.fetchDatasExcel(
           query,
           payload,
+          "entity-service",
           "customer"
         );
         const url = window.URL.createObjectURL(blob);

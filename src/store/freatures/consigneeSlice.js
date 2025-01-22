@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-//   role: [],
-//   status: [],
-  pagination : { page: 0, pageSize: 10 },
-  sortModel : [],
+  //   role: [],
+  //   status: [],
+  pagination: { page: 0, pageSize: 10 },
+  sortModel: [],
   formData: {
-    city: '',
-    cName: '',
-    country: ''
+    standard_free_days: '',
+    consignee_name: '',
+    standard_rate: '',
+    statusCode: '',
+    isDoc: ''
   },
-  sortBy : ''
+  sortBy: ''
 };
 
 const consigneeSlice = createSlice({
@@ -18,26 +20,26 @@ const consigneeSlice = createSlice({
   initialState,
   reducers: {
     toggleFilter: (state, action) => {
-        const { category, value } = action.payload;
-        const currentValues = state[category];
-        const isSelected = currentValues.includes(value);
-        state[category] = isSelected
-          ? currentValues.filter((item) => item !== value)
-          : [...currentValues, value];
+      const { category, value } = action.payload;
+      const currentValues = state[category];
+      const isSelected = currentValues.includes(value);
+      state[category] = isSelected
+        ? currentValues.filter((item) => item !== value)
+        : [...currentValues, value];
     },
     updateInput: (state, action) => {
-        state.formData = action.payload;
+      state.formData = action.payload;
     },
     consigneeSetView: (state, action) => {
       state.view = action.payload;
-  },
-  consigneeSetSortModel: (state, action) => {
-    state.sortModel = action.payload;
-  },
-    setPagination: (state, action) => {
-        state.pagination = action.payload;
     },
-    setSortBy: (state,action) =>{
+    consigneeSetSortModel: (state, action) => {
+      state.sortModel = action.payload;
+    },
+    setPagination: (state, action) => {
+      state.pagination = action.payload;
+    },
+    setSortBy: (state, action) => {
       state.sortBy = action.payload;
     },
     setSortModel: (state, action) => {
@@ -46,5 +48,5 @@ const consigneeSlice = createSlice({
   }
 });
 
-export const { toggleFilter,consigneeSetView,consigneeSetSortModel,updateInput,setPagination,setView,setSortBy,setSortModel } = consigneeSlice.actions;
+export const { toggleFilter, consigneeSetView, consigneeSetSortModel, updateInput, setPagination, setView, setSortBy, setSortModel } = consigneeSlice.actions;
 export default consigneeSlice.reducer;

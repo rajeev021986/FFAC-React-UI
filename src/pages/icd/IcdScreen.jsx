@@ -156,7 +156,12 @@ export default function IcdScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchIcdDatasExcel(query, payload, "icd");
+        const blob = await ApiManager.fetchDatasExcel(
+          query,
+          payload,
+          "master-service",
+          "icd"
+        );
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;

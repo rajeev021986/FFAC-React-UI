@@ -141,9 +141,10 @@ export function ChargesScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchAdminDatasExcel(
+        const blob = await ApiManager.fetchDatasExcel(
           query,
           payload,
+          "admin-service",
           "charge"
         );
         const url = window.URL.createObjectURL(blob);

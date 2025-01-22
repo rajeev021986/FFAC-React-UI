@@ -115,9 +115,10 @@ export default function BondScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcelPort(
+        const blob = await ApiManager.fetchDatasExcel(
           query,
           payload,
+          "master-service",
           "bond"
         );
         const url = window.URL.createObjectURL(blob);

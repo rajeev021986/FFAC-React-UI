@@ -118,9 +118,10 @@ export default function PortScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcelPort(
+        const blob = await ApiManager.fetchDatasExcel(
           query,
           payload,
+          "master-service",
           "port"
         );
         const url = window.URL.createObjectURL(blob);

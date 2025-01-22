@@ -201,8 +201,8 @@ export const VESSEL_SORT_OPTIONS = [
 ];
 
 export const VOYAGE_SORT_OPTIONS = [
-  { value: "vvoyage*asc", label: "Voyage Ascending" },
-  { value: "vvoyage*desc", label: "Voyage Descending" },
+  { value: "vessel*asc", label: "Vessel Ascending" },
+  { value: "vessel*desc", label: "Vessel Descending" },
 ];
 
 export const CHARGES_SORT_OPTIONS = [

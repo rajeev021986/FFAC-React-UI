@@ -103,7 +103,7 @@ export default function ShipperScreen({ page }) {
         fieldName: fieldname,
         operator: "=",
         value: value,
-        logicalOperator: "or",
+        logicalOperator: "and",
       };
     });
 
@@ -155,9 +155,10 @@ export default function ShipperScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchShipperDatasExcel(
+        const blob = await ApiManager.fetchDatasExcel(
           query,
           payload,
+          "entity-service",
           "shipper"
         );
         const url = window.URL.createObjectURL(blob);

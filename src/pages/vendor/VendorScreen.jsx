@@ -184,15 +184,16 @@ export default function VendorScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(
+        const blob = await ApiManager.fetchDatasExcel(
           query,
           payload,
+          "entity-service",
           "vendor"
         );
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "customer-data.xlsx");
+        link.setAttribute("download", "vendor-data.xlsx");
         document.body.appendChild(link);
         link.click();
         link.remove();

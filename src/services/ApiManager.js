@@ -138,16 +138,12 @@ class ApiManager {
     const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id, type);
     return ApiMethods.put(url, payload);
   };
-  static fetchCustomerDatasExcel = async (params, payload, source) => {
+  static fetchDatasExcel = async (params, payload, service, page) => {
     const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString, source);
+    const url = ENDPOINTS.FETCH_DATA_EXCEL(queryString, service, page);
     return ApiMethods.postBlob(url, payload);
   };
-  static fetchCustomerDatasExcelPort = async (params, payload, source) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_PORT_DATA_EXCEL(queryString, source);
-    return ApiMethods.postBlob(url, payload);
-  };
+
   static getUserData = async (id) => {
     const url = ENDPOINTS.GET_USER_DATA(id);
     return ApiMethods.get(url);
@@ -198,25 +194,6 @@ class ApiManager {
     return ApiMethods.get(url);
   };
 
-  static fetchVesselDatasExcel = async (params, payload) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_VESSEL_DATA_EXCEL(queryString);
-    return ApiMethods.postBlob(url, payload);
-  };
-
-
-  static fetchIcdDatasExcel = async (params, payload, source) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_ICD_DATA_EXCEL(queryString, source);
-    return ApiMethods.postBlob(url, payload);
-  }
-  static fetchShipperDatasExcel = async (params, payload, source) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_SHIPPER_DATA_EXCEL(queryString, source);
-    return ApiMethods.postBlob(url, payload);
-  }
-
-
   static fileDownloadIntegater = async (id) => {
     const url = ENDPOINTS.FILE_DOWNLOAD_INTEGATER(id);
     return ApiMethods.post(url);
@@ -240,18 +217,6 @@ class ApiManager {
   static updateUserProfileImage = async (payload, id) => {
     const url = ENDPOINTS.UPDATE_USER_PROFILE_IMAGE(id);
     return ApiMethods.put(url, payload);
-  };
-
-  static fetchVoyageDatasExcel = async (params, payload) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_VOYAGE_DATA_EXCEL(queryString);
-    return ApiMethods.postBlob(url, payload);
-  };
-
-  static fetchAdminDatasExcel = async (params, payload, source) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_ADMIN_DATA_EXCEL(queryString, source);
-    return ApiMethods.postBlob(url, payload);
   };
 
   static fetchEditVoyage = (id) => {

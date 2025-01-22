@@ -53,7 +53,6 @@ export function VesselVoyageScreen() {
     .filter(([key, value]) => value)
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key == "vvoyage") && (fieldname = "vesselVoyage");
       return {
         fieldName: fieldname,
         operator: "=",
@@ -92,7 +91,12 @@ export function VesselVoyageScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchVoyageDatasExcel(query, payload);
+        const blob = await ApiManager.fetchDatasExcel(
+          query,
+          payload,
+          "master-service",
+          "vessel/voyage"
+        );
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;

@@ -97,18 +97,18 @@ export default function ConsigneeScreen({ page }) {
         : consigneeSelector?.sortBy?.split("*")[0] === "cName"
     )
   ) {
-    query.sortBy = "consigneeName";
+    query.sortBy = "consignee_name";
   }
   const payload = Object.entries(consigneeSelector?.formData)
     .filter(([key, value]) => value)
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key == "cName") && (fieldname = "consigneeName");
+      Boolean(key == "cName") && (fieldname = "consignee_name");
       return {
         fieldName: fieldname,
         operator: "=",
         value: value,
-        logicalOperator: "or",
+        logicalOperator: "and",
       };
     });
 
@@ -193,9 +193,10 @@ export default function ConsigneeScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchShipperDatasExcel(
+        const blob = await ApiManager.fetchDatasExcel(
           query,
           payload,
+          "entity-service",
           "consignee"
         );
         const url = window.URL.createObjectURL(blob);

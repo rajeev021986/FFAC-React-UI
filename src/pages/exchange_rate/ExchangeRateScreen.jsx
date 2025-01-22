@@ -142,9 +142,10 @@ export function ExchangeRate({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchAdminDatasExcel(
+        const blob = await ApiManager.fetchDatasExcel(
           query,
           payload,
+          "admin-service",
           "exchange-rate"
         );
         const url = window.URL.createObjectURL(blob);

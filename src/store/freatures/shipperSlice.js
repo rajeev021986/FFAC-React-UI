@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-//   role: [],
-//   status: [],
-  pagination : { page: 0, pageSize: 10 },
-  sortModel : [],
+  //   role: [],
+  //   status: [],
+  pagination: { page: 0, pageSize: 10 },
+  sortModel: [],
   formData: {
     city: '',
-    sname: '',
-    country: ''
+    name: '',
+    country: '',
+    isDoc: '',
+    statusCode: ''
   },
-  sortBy : ''
+  sortBy: ''
 };
 
 const shipperSlice = createSlice({
@@ -18,26 +20,26 @@ const shipperSlice = createSlice({
   initialState,
   reducers: {
     toggleFilter: (state, action) => {
-        const { category, value } = action.payload;
-        const currentValues = state[category];
-        const isSelected = currentValues.includes(value);
-        state[category] = isSelected
-          ? currentValues.filter((item) => item !== value)
-          : [...currentValues, value];
+      const { category, value } = action.payload;
+      const currentValues = state[category];
+      const isSelected = currentValues.includes(value);
+      state[category] = isSelected
+        ? currentValues.filter((item) => item !== value)
+        : [...currentValues, value];
     },
     updateInput: (state, action) => {
-        state.formData = action.payload;
+      state.formData = action.payload;
     },
     shipperSetView: (state, action) => {
       state.view = action.payload;
-  },
-  shipperSetSortModel: (state, action) => {
-    state.sortModel = action.payload;
-  },
-    setPagination: (state, action) => {
-        state.pagination = action.payload;
     },
-    setSortBy: (state,action) =>{
+    shipperSetSortModel: (state, action) => {
+      state.sortModel = action.payload;
+    },
+    setPagination: (state, action) => {
+      state.pagination = action.payload;
+    },
+    setSortBy: (state, action) => {
       state.sortBy = action.payload;
     },
     setSortModel: (state, action) => {
@@ -46,5 +48,5 @@ const shipperSlice = createSlice({
   }
 });
 
-export const { toggleFilter,shipperSetView,shipperSetSortModel,updateInput,setPagination,setView,setSortBy,setSortModel } = shipperSlice.actions;
+export const { toggleFilter, shipperSetView, shipperSetSortModel, updateInput, setPagination, setView, setSortBy, setSortModel } = shipperSlice.actions;
 export default shipperSlice.reducer;

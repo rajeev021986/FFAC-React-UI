@@ -135,9 +135,10 @@ export default function UserManagementScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(
+        const blob = await ApiManager.fetchDatasExcel(
           query,
           payload,
+          "admin-service",
           "user"
         );
         const url = window.URL.createObjectURL(blob);

@@ -36,8 +36,8 @@ const ENDPOINTS = {
     `/entity-service/v1/approval/approved/${type}/${id}`,
   CUSTOMER_REJECT_REQUEST: (id, type) =>
     `/entity-service/v1/approval/rejected/${type}/${id}`,
-  FETCH_CUSTOMER_DATA_EXCEL: (queryString, source) =>
-    `/entity-service/v1/${source}/export?${queryString}`,
+  FETCH_DATA_EXCEL: (queryString, page, service) =>
+    `/${service}/v1/${page}/export?${queryString}`,
   FETCH_PORT_DATA_EXCEL: (queryString, source) =>
     `/master-service/v1/${source}/export?${queryString}`,
   FETCH_ICD_DATA_EXCEL: (queryString, source) =>
