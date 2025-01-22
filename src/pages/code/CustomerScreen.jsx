@@ -139,7 +139,7 @@ export default function CustomerScreen({ page }) {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
-  
+
   CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
     GridActions({
       actions:
@@ -159,15 +159,6 @@ export default function CustomerScreen({ page }) {
       nav("newcustomer", {
         replace: true,
         state: { formAction: "add" },
-      });
-    }
-    if (actionName === "Copy") {
-      nav("newcustomer", {
-        state: {
-          formAction: "edit",
-          initialValues: { id: seletectBox },
-          type: "copy",
-        },
       });
     }
     if (actionName === "Export") {

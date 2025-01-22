@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import BondValue from "./BondValue";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
@@ -21,6 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
+import ApiManager from "../../../../services/ApiManager";
 export default function BondForm() {
   const [value, setValue] = React.useState(1);
   const location = useLocation();
@@ -170,13 +171,25 @@ export default function BondForm() {
       nav(-1);
     },
   });
-  const [getbondAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetbondAuditQuery();
-  const fetchUserAudit = () => {
-    getbondAudit({
-      id: id,
-    });
+
+  const [auditDetails, setAuditDetails] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+
+  const reloadDataHandler = async () => {
+    try {
+      setAuditLoading(true);
+      const res = await ApiManager.getAuditDetails(
+        id,
+        "bond",
+        "master-service"
+      );
+      setAuditDetails(res);
+      setAuditLoading(false);
+    } catch (error) {
+      setAuditLoading(false);
+    }
   };
+
   return (
     <>
       <Box
@@ -231,9 +244,9 @@ export default function BondForm() {
               </TabPanel>
               <TabPanel value={2} sx={{ padding: 0, margin: 0 }}>
                 <AuditTimeLine
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchUserAudit}
-                  loading={isLoadingAudit}
+                  auditDetails={auditDetails}
+                  reloadDataHandler={reloadDataHandler}
+                  loading={auditLoading}
                 />
               </TabPanel>
             </TabContext>

@@ -23,6 +23,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
+import ApiManager from "../../../../services/ApiManager";
 function PortForm() {
   const [value, setValue] = React.useState(1);
   const [dropdownData, setDropdownData] = useState({});
@@ -141,12 +142,22 @@ function PortForm() {
     },
   });
 
-  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetPortAuditQuery();
-  const fetchUserAudit = () => {
-    getPortAudit({
-      id: id,
-    });
+  const [auditDetails, setAuditDetails] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+
+  const reloadDataHandler = async () => {
+    try {
+      setAuditLoading(true);
+      const res = await ApiManager.getAuditDetails(
+        id,
+        "port",
+        "master-service"
+      );
+      setAuditDetails(res);
+      setAuditLoading(false);
+    } catch (error) {
+      setAuditLoading(false);
+    }
   };
   return (
     <>
@@ -203,9 +214,9 @@ function PortForm() {
               </TabPanel>
               <TabPanel value={2} sx={{ padding: "0px" }}>
                 <AuditTimeLine
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchUserAudit}
-                  loading={isLoadingAudit}
+                  auditDetails={auditDetails}
+                  reloadDataHandler={reloadDataHandler}
+                  loading={auditLoading}
                 />
               </TabPanel>
             </TabContext>

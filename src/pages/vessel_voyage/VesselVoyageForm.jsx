@@ -36,22 +36,27 @@ export function VesselVoyageForm({ initialValues, type }) {
   const [updateVoyage, { isLoading: loadingUpdate }] =
     useUpdateVoyageMutation();
 
-  const [loading, setLoading] = useState(false);
-  const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
   const FieldRef = useRef(null);
   useEffect(() => {
     if (FieldRef.current) {
       FieldRef.current.focus();
     }
   }, []);
+  const [auditDetails, setAuditDetails] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+
   const reloadDataHandler = async () => {
     try {
-      setLoading(true);
-      const res = await ApiManager.getVoyageAudit(initialValues.id);
-      setEnquiryAuditDetails(res);
-      setLoading(false);
+      setAuditLoading(true);
+      const res = await ApiManager.getAuditDetails(
+        initialValues.id,
+        "vessel/voyage",
+        "master-service"
+      );
+      setAuditDetails(res);
+      setAuditLoading(false);
     } catch (error) {
-      setLoading(false);
+      setAuditLoading(false);
     }
   };
 
@@ -877,9 +882,9 @@ export function VesselVoyageForm({ initialValues, type }) {
               </TabPanel>{" "}
               <TabPanel value="2" sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeLine
-                  auditDetails={enquiryAuditDetails}
+                  auditDetails={auditDetails}
                   reloadDataHandler={reloadDataHandler}
-                  loading={loading}
+                  loading={auditLoading}
                 />
               </TabPanel>
             </TabContext>

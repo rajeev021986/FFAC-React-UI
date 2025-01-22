@@ -30,11 +30,10 @@ export function VesselForm({ initialValues, type }) {
   const nav = useNavigate();
   const disabled = false;
   const [addVessel, { isLoading: loadingAdd }] = useAddVesselMutation();
-  const [loading, setLoading] = useState(false);
+
   const [updateVessel, { isLoading: loadingUpdate }] =
     useUpdateVesselMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
 
   const [value, setValue] = React.useState("1");
 
@@ -159,16 +158,24 @@ export function VesselForm({ initialValues, type }) {
     }
   }, [optionsSettingsData, vesselSettingsData]);
 
+  const [auditDetails, setAuditDetails] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+
   const reloadDataHandler = async () => {
     try {
-      setLoading(true);
-      const res = await ApiManager.getVesselAudit(initialValues.id);
-      setEnquiryAuditDetails(res);
-      setLoading(false);
+      setAuditLoading(true);
+      const res = await ApiManager.getAuditDetails(
+        initialValues.id,
+        "vessel",
+        "master-service"
+      );
+      setAuditDetails(res);
+      setAuditLoading(false);
     } catch (error) {
-      setLoading(false);
+      setAuditLoading(false);
     }
   };
+
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -540,9 +547,9 @@ export function VesselForm({ initialValues, type }) {
               </TabPanel>{" "}
               <TabPanel value="2" sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeLine
-                  auditDetails={enquiryAuditDetails}
+                  auditDetails={auditDetails}
                   reloadDataHandler={reloadDataHandler}
-                  loading={loading}
+                  loading={auditLoading}
                 />
               </TabPanel>
             </TabContext>

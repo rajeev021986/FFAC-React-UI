@@ -154,10 +154,23 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
       }
     },
   });
-  const [getConsigneeAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetConsigneeAuditQuery();
-  const fetchAuditData = () => {
-    getConsigneeAudit({ id: initialValues.id });
+
+  const [auditDetails, setAuditDetails] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+
+  const reloadDataHandler = async () => {
+    try {
+      setAuditLoading(true);
+      const res = await ApiManager.getAuditDetails(
+        initialValues.id,
+        "consignee",
+        "entity-service"
+      );
+      setAuditDetails(res);
+      setAuditLoading(false);
+    } catch (error) {
+      setAuditLoading(false);
+    }
   };
 
   const { data: optionsSettingsData } =
@@ -792,9 +805,9 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
               </TabPanel>
               <TabPanel value={3} sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeline
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchAuditData}
-                  loading={isLoadingAudit}
+                  auditDetails={auditDetails}
+                  reloadDataHandler={reloadDataHandler}
+                  loading={auditLoading}
                 />
               </TabPanel>
             </TabContext>

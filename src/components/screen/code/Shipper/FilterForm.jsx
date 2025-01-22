@@ -47,8 +47,6 @@ export default function ShpperFilterForm({ setFilterOpen }) {
   const statusOptions = [
     { value: 1, label: "Active" },
     { value: -2, label: "InActive" },
-    { value: 0, label: "New & Pen Doc" },
-    { value: -1, label: "Rejected" },
   ];
   const documentOptions = [
     { value: false, label: "Pending" },

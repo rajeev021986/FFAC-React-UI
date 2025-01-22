@@ -67,31 +67,8 @@ class ApiManager {
     const url = ENDPOINTS.GET_COMMON_OPTIONS(name, search);
     return ApiMethods.get(url);
   };
-  static getAuditDetails = async (id) => {
-    const url = ENDPOINTS.GET_CUSTOMER_AUDIT(id);
-    return ApiMethods.get(url);
-  };
-  static getVesselAudit = async (id) => {
-    const url = ENDPOINTS.GET_VESSEL_AUDIT(id);
-    return ApiMethods.get(url);
-  };
-  static getVoyageAudit = async (id) => {
-    const url = ENDPOINTS.GET_VOYAGE_AUDIT(id);
-    return ApiMethods.get(url);
-  };
-  static getShipperAuditDetails = async (id) => {
-    const url = ENDPOINTS.GET_SHIPPER_AUDIT(id);
-
-    return ApiMethods.get(url);
-  };
-  static getConsigneeAuditDetails = async (id) => {
-    const url = ENDPOINTS.GET_CONSIGNEE_AUDIT(id);
-
-    return ApiMethods.get(url);
-  };
-  static getIcdAuditDetails = async (id) => {
-    const url = ENDPOINTS.GET_ICD_AUDIT(id);
-
+  static getAuditDetails = async (id, page, service) => {
+    const url = ENDPOINTS.GET_AUDIT_DATA(id, page, service);
     return ApiMethods.get(url);
   };
   static getCustomerFormData = async (source, id) => {

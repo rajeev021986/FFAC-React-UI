@@ -26,6 +26,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../../common/Toast/CustomToast";
+import ApiManager from "../../../../services/ApiManager";
 
 export default function ShipperForm({ initialValues, page, type, id }) {
   const FieldRef = useRef(null);
@@ -169,10 +170,22 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       }
     },
   });
-  const [getShipperAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetShipperAuditQuery();
-  const fetchAuditData = () => {
-    getShipperAudit({ id: initialValues.id });
+
+  const [auditDetails, setAuditDetails] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+  const reloadDataHandler = async () => {
+    try {
+      setAuditLoading(true);
+      const res = await ApiManager.getAuditDetails(
+        initialValues.id,
+        "shipper",
+        "entity-service"
+      );
+      setAuditDetails(res);
+      setAuditLoading(false);
+    } catch (error) {
+      setAuditLoading(false);
+    }
   };
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -917,9 +930,9 @@ export default function ShipperForm({ initialValues, page, type, id }) {
               </TabPanel>
               <TabPanel value={3} sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeline
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchAuditData}
-                  loading={isLoadingAudit}
+                  auditDetails={auditDetails}
+                  reloadDataHandler={reloadDataHandler}
+                  loading={auditLoading}
                 />
               </TabPanel>
             </TabContext>

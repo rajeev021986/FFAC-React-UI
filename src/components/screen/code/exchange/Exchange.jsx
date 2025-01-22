@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
@@ -19,6 +19,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
+import ApiManager from "../../../../services/ApiManager";
 
 export default function Exchange() {
   const location = useLocation();
@@ -149,12 +150,22 @@ export default function Exchange() {
     onSubmit,
   });
 
-  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetExchangeRateAuditQuery();
-  const fetchUserAudit = () => {
-    getPortAudit({
-      id: id,
-    });
+  const [auditDetails, setAuditDetails] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+
+  const reloadDataHandler = async () => {
+    try {
+      setAuditLoading(true);
+      const res = await ApiManager.getAuditDetails(
+        id,
+        "exchange-rate",
+        "admin-service"
+      );
+      setAuditDetails(res);
+      setAuditLoading(false);
+    } catch (error) {
+      setAuditLoading(false);
+    }
   };
 
   return (
@@ -216,9 +227,9 @@ export default function Exchange() {
               </TabPanel>
               <TabPanel value={2} sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeLine
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchUserAudit}
-                  loading={isLoadingAudit}
+                  auditDetails={auditDetails}
+                  reloadDataHandler={reloadDataHandler}
+                  loading={auditLoading}
                 />
               </TabPanel>
             </TabContext>

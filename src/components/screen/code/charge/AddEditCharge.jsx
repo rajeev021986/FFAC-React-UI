@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, FieldArray, useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, Card, CardContent, Stack, Tab } from "@mui/material";
@@ -20,6 +20,7 @@ import AuditTimeLine from "../../../AuditTimeLine";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../../common/Toast/CustomToast";
+import ApiManager from "../../../../services/ApiManager";
 
 const AddEditCharge = () => {
   const location = useLocation();
@@ -153,13 +154,25 @@ const AddEditCharge = () => {
       handleFetchCharge();
     }
   }, [ChargeSettingsData]);
-  const [getChargeAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetChargeAuditQuery();
-  const fetchUserAudit = () => {
-    getChargeAudit({
-      id: id,
-    });
+
+  const [auditDetails, setAuditDetails] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+
+  const reloadDataHandler = async () => {
+    try {
+      setAuditLoading(true);
+      const res = await ApiManager.getAuditDetails(
+        id,
+        "charge",
+        "admin-service"
+      );
+      setAuditDetails(res);
+      setAuditLoading(false);
+    } catch (error) {
+      setAuditLoading(false);
+    }
   };
+
   return (
     <>
       <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
@@ -226,9 +239,9 @@ const AddEditCharge = () => {
                   sx={{ margin: "0px !important", padding: "0px !important" }}
                 >
                   <AuditTimeLine
-                    auditDetails={AuditData}
-                    reloadDataHandler={fetchUserAudit}
-                    loading={isLoadingAudit}
+                    auditDetails={auditDetails}
+                    reloadDataHandler={reloadDataHandler}
+                    loading={auditLoading}
                   />
                 </TabPanel>
               </TabContext>
