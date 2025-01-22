@@ -83,9 +83,9 @@ export default function FilterForm({ setFilterOpen }) {
           <div style={{ width: "48%", marginLeft: "0px" }}>
             <SelectBox
               label="Status"
-              id="status"
+              id="statusCode"
               options={statusOptions}
-              value={formik.values.status}
+              value={formik.values.statusCode}
               onChange={formik.handleChange}
               sx={{ marginLeft: "0px !important" }}
               MenuProps={{
