@@ -53,7 +53,7 @@ export default function FilterForm({ setFilterOpen }) {
           />
           <InputBox
             label="First Name"
-            id="firstname"
+            id="firstName"
             value={formik.values.firstName}
             onChange={formik.handleChange}
           />
