@@ -117,7 +117,6 @@ const InputWithChips = ({
     })
     .filter((filter) => filter);
 
-  // Clear the filter when the end button is clicked
   const endButtonHandler = () => {
     formattedFilter.length > 0 ? onFilterReset() : onFocus();
   };

@@ -50,6 +50,7 @@ import { useLazyFetchAuditQuery } from "../../store/api/common";
 import ApiManager from "../../services/ApiManager";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import toast, { LoaderIcon } from "react-hot-toast";
+import FilterForm from "../../components/screen/user-management/FilterForm";
 const ADD_NEW_USER_PATH = "/app/admin/users/addUser";
 
 export default function UserManagementScreen() {
@@ -233,7 +234,7 @@ export default function UserManagementScreen() {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <UserManagementFilters filterInfo={UserData?.counts || []} />
+                 <FilterForm/>
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"

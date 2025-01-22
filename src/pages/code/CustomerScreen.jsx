@@ -139,7 +139,7 @@ export default function CustomerScreen({ page }) {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
-
+  
   CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
     GridActions({
       actions:
