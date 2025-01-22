@@ -13,6 +13,7 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
@@ -30,6 +31,7 @@ import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { Height } from "@mui/icons-material";
 import CustomToast from "../Toast/CustomToast";
+import { OutlinedButton, ThemeButton } from "../Button";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First Name is required"),
@@ -203,6 +205,7 @@ export default function AddCard() {
                   isDeleted: roles.find((r) => r.roleName === role).isDeleted,
                 };
               }),
+              statusCode: values.status === "Active" ? 1 : -2,
             };
             await ApiManager.updateUserData(payload)
               .then((res) => {
@@ -521,15 +524,56 @@ export default function AddCard() {
                 </Box>
               </Box>
 
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                sx={{ padding: "8px 10px", margin: "20px" }}
-                type="submit"
-              >
-                Submit
-              </Button>
+              <Grid display="flex" sx={{ height: "40px",marginTop: "20px" }}>
+                {/* <Button
+                  variant="contained"
+                  size="small"
+                  sx={{
+                    padding: "8px 10px",
+                    margin: "20px",
+                    borderRadius: "22px",
+                    backgroundColor: "white",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "white",
+                    },
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  sx={{
+                    padding: "8px 10px",
+                    margin: "20px",
+                    borderRadius: "22px",
+                  }}
+                  type="submit"
+                >
+                  Submit
+                </Button> */}
+
+                <Stack direction="row" spacing={2}>
+                  <OutlinedButton
+                    sx={{ fontWeight: "500", borderRadius: "12px" }}
+                    onClick={() => navigate("/app/entity/consignee")}
+                  >
+                    Cancel
+                  </OutlinedButton>
+                  <ThemeButton
+                    onClick={formik.handleSubmit}
+                    sx={{
+                      fontWeight: "500",
+                      borderRadius: "12px",
+                      color: "white !important",
+                    }}
+                  >
+                    Submit
+                  </ThemeButton>
+                </Stack>
+              </Grid>
             </Card>
           </Form>
         )}

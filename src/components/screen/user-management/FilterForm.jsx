@@ -12,12 +12,11 @@ export default function FilterForm({ setFilterOpen }) {
   const inputs = useSelector((state) => state.userManagement.formData);
 
   const formik = useFormik({
-    initialValues: {
-      userid: inputs.userid || "",
-      firstname: inputs.firstname || "",
-      lastname: inputs.lastname || "",
-      companyname: inputs.companyname || "",
-      emailid: inputs.emailid || "",
+    initialValues: inputs || {
+      userId: inputs.userId || "",
+      firstName: inputs.firstName || "",
+      lastName: inputs.lastName || "",
+      email: inputs.email || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -30,16 +29,16 @@ export default function FilterForm({ setFilterOpen }) {
     dispatch(
       updateInput({
         userid: "",
-        firstname: "",
-        lastname: "",
+        firstName: "",
+        lastName: "",
         companyname: "",
-        emailid: "",
+        email: "",
       })
     );
   };
   const statusOptions = [
-    { value: "Active", label: "Active" },
-    { value: "InActive", label: "InActive" },
+    { value: 1, label: "Active" },
+    { value: -2, label: "InActive" },
   ];
 
   return (
@@ -48,52 +47,46 @@ export default function FilterForm({ setFilterOpen }) {
         <Stack direction="row" spacing={3}>
           <InputBox
             label="User ID"
-            id="userid"
-            value={formik.values.userid}
+            id="userId"
+            value={formik.values.userId}
             onChange={formik.handleChange}
           />
           <InputBox
             label="First Name"
             id="firstname"
-            value={formik.values.firstname}
+            value={formik.values.firstName}
             onChange={formik.handleChange}
           />
           <InputBox
             label="Last Name"
-            id="lastname"
-            value={formik.values.lastname}
+            id="lastName"
+            value={formik.values.lastName}
             onChange={formik.handleChange}
           />
         </Stack>
-        <Stack direction="row" spacing={3}>
-          <InputBox
-            label="Company Name"
-            id="companyname"
-            value={formik.values.companyname}
-            onChange={formik.handleChange}
-          />
+        <Stack direction="row" gap={3}>
           <InputBox
             label="Email"
-            id="emailid"
-            value={formik.values.emailid}
+            id="email"
+            value={formik.values.email}
             onChange={formik.handleChange}
           />
+          <SelectBox
+            label="Status"
+            id="statusCode"
+            options={statusOptions}
+            value={formik.values.statusCode}
+            onChange={formik.handleChange}
+            MenuProps={{
+              disablePortal: true,
+            }}
+          />
         </Stack>
-        <Stack direction="row" spacing={3}>
+        {/* <Stack direction="row" spacing={3}>
           <div style={{ width: "48%", marginLeft: "0px" }}>
-            <SelectBox
-              label="Status"
-              id="statusCode"
-              options={statusOptions}
-              value={formik.values.statusCode}
-              onChange={formik.handleChange}
-              sx={{ marginLeft: "0px !important" }}
-              MenuProps={{
-                disablePortal: true,
-              }}
-            />
+           
           </div>
-        </Stack>
+        </Stack> */}
         <Stack direction="row" spacing={3} justifyContent={"end"}>
           <Button color="primary" size="small" onClick={handleReset}>
             reset
