@@ -508,14 +508,16 @@ export default function AddCard() {
                           justifyContent: "space-between",
                           marginBottom: 1,
                           border: "1px solid #ccc",
-                          padding: "5px",
-                          borderRadius: "4px",
+                          padding: "5px 10px",
+                          borderRadius: "22px",
+                          borderColor: "primary.main",
                         }}
                       >
                         <Typography>{option}</Typography>
                         <IconButton
                           onClick={() => handleRemoveOption(option)}
                           size="small"
+                          color="primary"
                         >
                           <CloseIcon fontSize="small" />
                         </IconButton>
@@ -525,7 +527,6 @@ export default function AddCard() {
               </Box>
 
               <Grid display="flex" sx={{ height: "40px", marginTop: "20px" }}>
-
                 <Stack direction="row" spacing={2}>
                   <OutlinedButton
                     sx={{ fontWeight: "500", borderRadius: "12px" }}

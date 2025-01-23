@@ -27,7 +27,7 @@ import {
   Delete as DeleteIcon,
   Height,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // import { CommonApiCall, fetchSidebarData } from '@Api/Api';
 // import { ApiEndPoints } from '@CommonFile/endPoints';
 import moment from "moment";
@@ -42,7 +42,8 @@ import CustomToast from "../../components/common/Toast/CustomToast";
 
 const Role = () => {
   const navigate = useNavigate();
-  const { data, isLoading, refetch } = useFetchuserQuery();
+  const location = useLocation();
+  const { data, isLoading, isFetching, refetch } = useFetchuserQuery();
   const [roles, setRoles] = useState([
     {
       role: {
@@ -215,6 +216,9 @@ const Role = () => {
     setRoles(data?.body || []);
     setFilteredRoles(data?.body || []);
   }, [data]);
+  useEffect(() => {
+    refetch();
+  }, [location.pathname]);
   const [filteredRoles, setFilteredRoles] = useState(roles);
   const [refresh, setRefresh] = useState(false);
   const [loader, setLoader] = useState(true);
@@ -234,8 +238,6 @@ const Role = () => {
     userId: null,
     type: null,
   });
-
-  // Replace the commented useEffect with this dummy data version
 
   // Handle removing user from role
   const handleRemoveUser = async (roleId, userId) => {
@@ -584,7 +586,7 @@ const Role = () => {
 
   return (
     <>
-      {!loader ? (
+      {isFetching ? (
         <Box
           sx={{
             display: "flex",
@@ -604,7 +606,9 @@ const Role = () => {
             leftComps={<ThemedBreadcrumb />}
             rightComps={
               <>
-                <Box style={{ display: "flex", gap: "10px",marginTop:"10px" }}>
+                <Box
+                  style={{ display: "flex", gap: "10px", marginTop: "10px" }}
+                >
                   <Button
                     variant="contained"
                     startIcon={<AddIcon />}
