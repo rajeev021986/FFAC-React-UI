@@ -122,12 +122,15 @@ const InputWithChips = ({
   };
 
   const handleDeleteChip = (index) => {
-    const updatedFilters = { ...filters };
-    console.log(
-      index,
-      "index",
-      updatedFilters[Object.keys(updatedFilters)[index]]
-    );
+    const updatedFilters = {
+      ...Object.fromEntries(
+        Object.entries(filters).filter(
+          ([key, value]) =>
+            value !== null && value !== undefined && value !== ""
+        )
+      ),
+    };
+    console.log(index, "index", filters);
     delete updatedFilters[Object.keys(updatedFilters)[index]];
     onFilterChange(updatedFilters);
   };
