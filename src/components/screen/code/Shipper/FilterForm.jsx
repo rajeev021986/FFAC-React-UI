@@ -12,7 +12,7 @@ export default function ShpperFilterForm({ setFilterOpen }) {
   const inputs = useSelector((state) => state.shipper.formData);
 
   const formik = useFormik({
-    initialValues: {
+    initialValues: inputs || {
       city: inputs.city || "",
       name: inputs.name || "",
       country: inputs.country || "",

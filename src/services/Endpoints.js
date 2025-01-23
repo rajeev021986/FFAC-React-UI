@@ -43,10 +43,9 @@ const ENDPOINTS = {
   DELETE_USER: (id) => `/admin-service/v1/user/${id}`,
   GET_ROLES: () => `/admin-service/v1/role`,
   UPDATE_ROLE_PERMISSIONS: () => `/admin-service/v1/role/permissions/update`,
-  USER_PASS_RESET: () => `/admin-service/v1/user/update/password`,
   UPDATE_USER_PROFILE: () => `/admin-service/v1/profile`,
   UPDATE_USER_PROFILE_IMAGE: (id) => `/admin-service/v1/profile/image?id=${id}`,
-  USER_PASS_RESET: () => `/admin-service/v1/user/update/password`,
+  USER_PASS_RESET: () => `/admin-service/v1/user/password`,
   GET_EDIT_VESSEL: (id) => `/master-service/v1/vessel/${id}`,
   FETCH_VESSEL_SUGGESTIONS: (inputValue, id) =>
     `/admin-service/v1/data?pattern=${inputValue}&type=${id}`,

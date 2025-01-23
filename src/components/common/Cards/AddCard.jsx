@@ -525,35 +525,6 @@ export default function AddCard() {
               </Box>
 
               <Grid display="flex" sx={{ height: "40px", marginTop: "20px" }}>
-                {/* <Button
-                  variant="contained"
-                  size="small"
-                  sx={{
-                    padding: "8px 10px",
-                    margin: "20px",
-                    borderRadius: "22px",
-                    backgroundColor: "white",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "white",
-                    },
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  sx={{
-                    padding: "8px 10px",
-                    margin: "20px",
-                    borderRadius: "22px",
-                  }}
-                  type="submit"
-                >
-                  Submit
-                </Button> */}
 
                 <Stack direction="row" spacing={2}>
                   <OutlinedButton

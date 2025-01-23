@@ -43,6 +43,7 @@ function UserManagementModules({ modal, setModal, refetch }) {
         confirmPassword: formik.values.confirmPassword,
       };
       const res = await resetPassword(payload)
+        .unwrap()
         .then((res) => {
           toast.custom(
             <CustomToast
