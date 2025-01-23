@@ -171,22 +171,6 @@ export default function ShipperForm({ initialValues, page, type, id }) {
     },
   });
 
-  const [auditDetails, setAuditDetails] = useState([]);
-  const [auditLoading, setAuditLoading] = useState(false);
-  const reloadDataHandler = async () => {
-    try {
-      setAuditLoading(true);
-      const res = await ApiManager.getAuditDetails(
-        initialValues.id,
-        "shipper",
-        "entity-service"
-      );
-      setAuditDetails(res);
-      setAuditLoading(false);
-    } catch (error) {
-      setAuditLoading(false);
-    }
-  };
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: shipperSettingsData } =
@@ -930,9 +914,9 @@ export default function ShipperForm({ initialValues, page, type, id }) {
               </TabPanel>
               <TabPanel value={3} sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeline
-                  auditDetails={auditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={auditLoading}
+                  id={initialValues.id}
+                  page="shipper"
+                  service="entity-service"
                 />
               </TabPanel>
             </TabContext>

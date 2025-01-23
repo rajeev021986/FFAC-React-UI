@@ -142,23 +142,6 @@ function PortForm() {
     },
   });
 
-  const [auditDetails, setAuditDetails] = useState([]);
-  const [auditLoading, setAuditLoading] = useState(false);
-
-  const reloadDataHandler = async () => {
-    try {
-      setAuditLoading(true);
-      const res = await ApiManager.getAuditDetails(
-        id,
-        "port",
-        "master-service"
-      );
-      setAuditDetails(res);
-      setAuditLoading(false);
-    } catch (error) {
-      setAuditLoading(false);
-    }
-  };
   return (
     <>
       <Box
@@ -213,11 +196,7 @@ function PortForm() {
                 )}
               </TabPanel>
               <TabPanel value={2} sx={{ padding: "0px" }}>
-                <AuditTimeLine
-                  auditDetails={auditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={auditLoading}
-                />
+                <AuditTimeLine id={id} page="port" service="master-service" />
               </TabPanel>
             </TabContext>
           </CardContent>

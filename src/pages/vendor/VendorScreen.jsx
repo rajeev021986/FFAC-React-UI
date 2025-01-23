@@ -99,8 +99,7 @@ export default function VendorScreen({ page }) {
       );
     }
   };
-  const [getVendorAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetVendorAuditQuery();
+
   const [seletectBox, setSelectedBox] = useState();
   const dispatch = useDispatch();
   const nav = useNavigate();
@@ -143,11 +142,7 @@ export default function VendorScreen({ page }) {
   useEffect(() => {
     refetch();
   }, [location.pathname, modal]);
-  const fetchUserAudit = () => {
-    getVendorAudit({
-      id: modal.data.id,
-    });
-  };
+
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setVendorPagination({ page, pageSize }));
@@ -374,9 +369,9 @@ export default function VendorScreen({ page }) {
               Vendor Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="vendor"
+              service="entity-service"
             />
           </Box>
         </Drawer>

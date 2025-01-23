@@ -65,15 +65,6 @@ export default function CustomerApproveScreen({ page }) {
     data: {},
   });
 
-  const [getCustomerAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetCustomerAuditQuery();
-
-  const fetchUserAudit = () => {
-    getCustomerAudit({
-      id: modal.data.id,
-    });
-  };
-
   const [open, setOpen] = React.useState(false);
   // const actions = [{ name: "Copy" }, { name: "Export" }, { name: "New Client" }];
   const actions = Boolean(seletectBox.length > 0)
@@ -143,7 +134,6 @@ export default function CustomerApproveScreen({ page }) {
                     options={CUSTOMER_SORT_OPTIONS}
                     value={codeCustomerSelector.sortBy}
                     onChange={(event) => {
-
                       dispatch(setSortBy(event.target.value));
                     }}
                     sx={{
@@ -224,9 +214,9 @@ export default function CustomerApproveScreen({ page }) {
               Customer Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="customer"
+              service="entity-service"
             />
           </Box>
         </Drawer>

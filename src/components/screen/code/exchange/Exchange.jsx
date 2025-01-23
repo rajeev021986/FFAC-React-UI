@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import {
   useAddExahangeRateMutation,
   useLazyGetExahangeRateQuery,
-  useLazyGetExchangeRateAuditQuery,
   useUpdateExahangeRateMutation,
 } from "../../../../store/api/exchangeRateDataApi";
 import ExchangeInputs from "./ExchangeInputs";
@@ -14,12 +13,12 @@ import ScreenToolbar from "../../../common/ScreenToolbar";
 import ThemedBreadcrumb from "../../../common/Breadcrumb";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Loader from "../../../common/Loader/Loader";
-import UploadFile from "../../../UploadFile";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
-import ApiManager from "../../../../services/ApiManager";
+import EditIcon from "@mui/icons-material/Edit";
+import HistoryIcon from "@mui/icons-material/History";
 
 export default function Exchange() {
   const location = useLocation();
@@ -32,8 +31,8 @@ export default function Exchange() {
   const { data: ExchageSettingsData, isFetching } =
     useGetOptionsSettingsQuery("common_settings");
   const tabs = [
-    { label: "Exchange Details", value: 1 },
-    { label: "Audit Logs", value: 2 },
+    { label: "Exchange Details", value: 1, icon: <EditIcon /> },
+    { label: "Audit Logs", value: 2, icon: <HistoryIcon /> },
   ];
   Boolean(type == "copy" || type == "new") && tabs.splice(1, 1);
   const [getExahangeRate, { isLoading }] = useLazyGetExahangeRateQuery();
@@ -150,24 +149,6 @@ export default function Exchange() {
     onSubmit,
   });
 
-  const [auditDetails, setAuditDetails] = useState([]);
-  const [auditLoading, setAuditLoading] = useState(false);
-
-  const reloadDataHandler = async () => {
-    try {
-      setAuditLoading(true);
-      const res = await ApiManager.getAuditDetails(
-        id,
-        "exchange-rate",
-        "admin-service"
-      );
-      setAuditDetails(res);
-      setAuditLoading(false);
-    } catch (error) {
-      setAuditLoading(false);
-    }
-  };
-
   return (
     <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
       <Stack sx={{ padding: "8px 0px" }}>
@@ -208,6 +189,8 @@ export default function Exchange() {
                         textTransform: "capitalize",
                         minHeight: "50px",
                       }}
+                      icon={a.icon}
+                      iconPosition="start"
                     />
                   ))}
                 </TabList>
@@ -227,9 +210,9 @@ export default function Exchange() {
               </TabPanel>
               <TabPanel value={2} sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeLine
-                  auditDetails={auditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={auditLoading}
+                  id={id}
+                  page="exchange-rate"
+                  service="admin-service"
                 />
               </TabPanel>
             </TabContext>

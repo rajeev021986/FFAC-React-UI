@@ -162,23 +162,6 @@ export default function IcdForm({ initialValues, page, type, id }) {
     getFirstError(formik.errors);
   }, [formik.errors]);
 
-  const [auditDetails, setAuditDetails] = useState([]);
-  const [auditLoading, setAuditLoading] = useState(false);
-
-  const reloadDataHandler = async () => {
-    try {
-      setAuditLoading(true);
-      const res = await ApiManager.getAuditDetails(
-        initialValues.id,
-        "icd",
-        "master-service"
-      );
-      setAuditDetails(res);
-      setAuditLoading(false);
-    } catch (error) {
-      setAuditLoading(false);
-    }
-  };
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: icdSettingsData } = useGetOptionsSettingsQuery("icd_settings");
@@ -728,9 +711,9 @@ export default function IcdForm({ initialValues, page, type, id }) {
 
               <TabPanel value={2}>
                 <AuditTimeline
-                  auditDetails={auditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={auditLoading}
+                  id={initialValues.id}
+                  page="icd"
+                  service="master-service"
                 />
               </TabPanel>
             </TabContext>

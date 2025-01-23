@@ -233,23 +233,6 @@ export default function CustomerForm({
     (value) => value !== ""
   );
 
-  const [auditDetails, setAuditDetails] = useState([]);
-  const [auditLoading, setAuditLoading] = useState(false);
-  const reloadDataHandler = async () => {
-    try {
-      setAuditLoading(true);
-      const res = await ApiManager.getAuditDetails(
-        initialValues.id,
-        "customer",
-        "entity-service"
-      );
-      setAuditDetails(res);
-      setAuditLoading(false);
-    } catch (error) {
-      setAuditLoading(false);
-    }
-  };
-
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -1568,9 +1551,9 @@ export default function CustomerForm({
               </TabPanel>
               <TabPanel value="3" sx={{ padding: "0px" }}>
                 <AuditTimeline
-                  auditDetails={auditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={auditLoading}
+                  id={initialValues.id}
+                  page="customer"
+                  service="entity-service"
                 />
               </TabPanel>
             </TabContext>

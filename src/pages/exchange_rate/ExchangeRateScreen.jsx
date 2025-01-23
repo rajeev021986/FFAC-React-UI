@@ -194,14 +194,6 @@ export function ExchangeRate({ page }) {
     }
   };
 
-  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetExchangeRateAuditQuery();
-  const fetchUserAudit = () => {
-    getPortAudit({
-      id: modal.data.id,
-    });
-  };
-
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -356,9 +348,9 @@ export function ExchangeRate({ page }) {
               Exchange Rate Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="exchange-rate"
+              service="admin-service"
             />
           </Box>
         </Drawer>

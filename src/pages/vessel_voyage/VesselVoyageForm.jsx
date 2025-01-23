@@ -42,23 +42,6 @@ export function VesselVoyageForm({ initialValues, type }) {
       FieldRef.current.focus();
     }
   }, []);
-  const [auditDetails, setAuditDetails] = useState([]);
-  const [auditLoading, setAuditLoading] = useState(false);
-
-  const reloadDataHandler = async () => {
-    try {
-      setAuditLoading(true);
-      const res = await ApiManager.getAuditDetails(
-        initialValues.id,
-        "vessel/voyage",
-        "master-service"
-      );
-      setAuditDetails(res);
-      setAuditLoading(false);
-    } catch (error) {
-      setAuditLoading(false);
-    }
-  };
 
   const formik = useFormik({
     initialValues,
@@ -882,9 +865,9 @@ export function VesselVoyageForm({ initialValues, type }) {
               </TabPanel>{" "}
               <TabPanel value="2" sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeLine
-                  auditDetails={auditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={auditLoading}
+                  id={initialValues.id}
+                  page="vessel/voyage"
+                  service="master-service"
                 />
               </TabPanel>
             </TabContext>

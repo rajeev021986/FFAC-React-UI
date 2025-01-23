@@ -106,8 +106,7 @@ export default function UserManagementScreen() {
     params: query,
     payload,
   });
-  const [fetchAudit, { data: AuditData, isLoading: AuditLoadinng }] =
-    useLazyFetchAuditQuery();
+
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
@@ -123,11 +122,7 @@ export default function UserManagementScreen() {
     GridActions({
       actions: getUserListGridActions(nav, setModal),
     });
-  const fetchUserAudit = () => {
-    fetchAudit({
-      userId: modal.data.id,
-    });
-  };
+
   const handleActionClick = async (actionName) => {
     if (actionName === "New User") {
       nav(ADD_NEW_USER_PATH, { state: { formAction: "add" } });
@@ -335,9 +330,9 @@ export default function UserManagementScreen() {
               User Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={AuditLoadinng}
+              id={modal.data.id}
+              page="user"
+              service="admin-service"
             />
           </Box>
         </Drawer>

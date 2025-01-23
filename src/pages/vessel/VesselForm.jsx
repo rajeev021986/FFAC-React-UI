@@ -158,24 +158,6 @@ export function VesselForm({ initialValues, type }) {
     }
   }, [optionsSettingsData, vesselSettingsData]);
 
-  const [auditDetails, setAuditDetails] = useState([]);
-  const [auditLoading, setAuditLoading] = useState(false);
-
-  const reloadDataHandler = async () => {
-    try {
-      setAuditLoading(true);
-      const res = await ApiManager.getAuditDetails(
-        initialValues.id,
-        "vessel",
-        "master-service"
-      );
-      setAuditDetails(res);
-      setAuditLoading(false);
-    } catch (error) {
-      setAuditLoading(false);
-    }
-  };
-
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -547,9 +529,9 @@ export function VesselForm({ initialValues, type }) {
               </TabPanel>{" "}
               <TabPanel value="2" sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeLine
-                  auditDetails={auditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={auditLoading}
+                  id={initialValues.id}
+                  page="vessel"
+                  service="master-service"
                 />
               </TabPanel>
             </TabContext>

@@ -136,13 +136,7 @@ export default function PortScreen() {
       setExportLoader(false);
     }
   };
-  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetPortAuditQuery();
-  const fetchUserAudit = () => {
-    getPortAudit({
-      id: modal.data.id,
-    });
-  };
+
   const handleClose = () => {
     setModal({
       open: false,
@@ -315,9 +309,9 @@ export default function PortScreen() {
               Port Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="port"
+              service="master-service"
             />
           </Box>
         </Drawer>

@@ -180,13 +180,7 @@ export default function ShipperScreen({ page }) {
       setExportLoader(false);
     }
   };
-  const [getShipperAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetShipperAuditQuery();
-  const fetchAuditData = () => {
-    getShipperAudit({
-      id: modal.data.id,
-    });
-  };
+
   const [deleteShipper] = useDeleteShipperMutation();
   const handleClose = () => {
     setModal({
@@ -368,9 +362,9 @@ export default function ShipperScreen({ page }) {
               Shipper Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchAuditData}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="shipper"
+              service="entity-service"
             />
           </Box>
         </Drawer>

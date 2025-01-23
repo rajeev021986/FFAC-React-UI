@@ -172,24 +172,6 @@ export default function BondForm() {
     },
   });
 
-  const [auditDetails, setAuditDetails] = useState([]);
-  const [auditLoading, setAuditLoading] = useState(false);
-
-  const reloadDataHandler = async () => {
-    try {
-      setAuditLoading(true);
-      const res = await ApiManager.getAuditDetails(
-        id,
-        "bond",
-        "master-service"
-      );
-      setAuditDetails(res);
-      setAuditLoading(false);
-    } catch (error) {
-      setAuditLoading(false);
-    }
-  };
-
   return (
     <>
       <Box
@@ -243,11 +225,7 @@ export default function BondForm() {
                 )}
               </TabPanel>
               <TabPanel value={2} sx={{ padding: 0, margin: 0 }}>
-                <AuditTimeLine
-                  auditDetails={auditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={auditLoading}
-                />
+                <AuditTimeLine id={id} page="bond" service="master-service" />
               </TabPanel>
             </TabContext>
           </CardContent>

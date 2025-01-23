@@ -272,13 +272,7 @@ export default function VendorForm({ page = "vendor" }) {
       }
     },
   });
-  const [getVendorAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetVendorAuditQuery();
-  const fetchUserAudit = () => {
-    getVendorAudit({
-      id: id,
-    });
-  };
+
   return (
     <>
       <Box
@@ -342,11 +336,7 @@ export default function VendorForm({ page = "vendor" }) {
                 />
               </TabPanel>
               <TabPanel value={3} sx={{ padding: "0px" }}>
-                <AuditTimeLine
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchUserAudit}
-                  loading={isLoadingAudit}
-                />
+                <AuditTimeLine id={id} page="vendor" service="entity-service" />
               </TabPanel>
             </TabContext>
           </Card>

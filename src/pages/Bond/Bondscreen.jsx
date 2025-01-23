@@ -133,13 +133,7 @@ export default function BondScreen() {
       setExportLoader(false);
     }
   };
-  const [getbondAudit, { data: AuditData, isFetching: isLoadingAudit }] =
-    useLazyGetbondAuditQuery();
-  const fetchUserAudit = () => {
-    getbondAudit({
-      id: modal.data.id,
-    });
-  };
+
   const handleClose = () => {
     setModal({
       open: false,
@@ -316,9 +310,9 @@ export default function BondScreen() {
               Bond Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="bond"
+              service="master-service"
             />
           </Box>
         </Drawer>

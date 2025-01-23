@@ -181,13 +181,7 @@ export default function IcdScreen({ page }) {
       setExportLoader(false);
     }
   };
-  const [getIcdAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetIcdAuditQuery();
-  const fetchAuditData = () => {
-    getIcdAudit({
-      id: modal.data.id,
-    });
-  };
+
   const [deleteIcd] = useDeleteIcdMutation();
 
   const handleClose = () => {
@@ -368,9 +362,9 @@ export default function IcdScreen({ page }) {
               ICD Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchAuditData}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="icd"
+              service="master-service"
             />
           </Box>
         </Drawer>

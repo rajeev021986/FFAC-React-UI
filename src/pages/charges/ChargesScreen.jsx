@@ -195,32 +195,6 @@ export function ChargesScreen({ page }) {
     }
   };
 
-  //   const [deleteCustomer] = useDeleteCustomerMutation();
-
-  //   const handleClose = () => {
-  //     setModal({
-  //       open: false,
-  //       type: "",
-  //       data: {},
-  //     });
-  //   };
-
-  //   const handleDelete = async () => {
-  //     try {
-  //       await deleteCustomer(modal.data.id).unwrap();
-  //       toast.success("Customer deleted successfully!");
-  //       handleClose();
-  //     } catch (error) {
-  //       toast.error("Failed to delete customer.");
-  //     }
-  //   };
-  const [getChargeAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetChargeAuditQuery();
-  const fetchUserAudit = () => {
-    getChargeAudit({
-      id: modal.data.id,
-    });
-  };
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -369,9 +343,9 @@ export function ChargesScreen({ page }) {
               Charge Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="charge"
+              service="admin-service"
             />
           </Box>
         </Drawer>

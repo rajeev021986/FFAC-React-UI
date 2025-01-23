@@ -64,14 +64,7 @@ export default function CustomerScreen({ page }) {
     type: "",
     data: {},
   });
-  const [getCustomerAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetCustomerAuditQuery();
 
-  const fetchUserAudit = () => {
-    getCustomerAudit({
-      id: modal.data.id,
-    });
-  };
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
@@ -381,9 +374,9 @@ export default function CustomerScreen({ page }) {
               Customer Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="customer"
+              service="entity-service"
             />
           </Box>
         </Drawer>

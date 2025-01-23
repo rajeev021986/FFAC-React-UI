@@ -218,13 +218,7 @@ export default function ConsigneeScreen({ page }) {
       setExportLoader(false);
     }
   };
-  const [getConsigneeAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetConsigneeAuditQuery();
-  const fetchAuditData = () => {
-    getConsigneeAudit({
-      id: modal.data.id,
-    });
-  };
+
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -383,9 +377,9 @@ export default function ConsigneeScreen({ page }) {
               Consignee Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchAuditData}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="consignee"
+              service="entity-service"
             />
           </Box>
         </Drawer>

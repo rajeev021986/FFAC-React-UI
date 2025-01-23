@@ -155,24 +155,6 @@ const AddEditCharge = () => {
     }
   }, [ChargeSettingsData]);
 
-  const [auditDetails, setAuditDetails] = useState([]);
-  const [auditLoading, setAuditLoading] = useState(false);
-
-  const reloadDataHandler = async () => {
-    try {
-      setAuditLoading(true);
-      const res = await ApiManager.getAuditDetails(
-        id,
-        "charge",
-        "admin-service"
-      );
-      setAuditDetails(res);
-      setAuditLoading(false);
-    } catch (error) {
-      setAuditLoading(false);
-    }
-  };
-
   return (
     <>
       <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
@@ -239,9 +221,9 @@ const AddEditCharge = () => {
                   sx={{ margin: "0px !important", padding: "0px !important" }}
                 >
                   <AuditTimeLine
-                    auditDetails={auditDetails}
-                    reloadDataHandler={reloadDataHandler}
-                    loading={auditLoading}
+                    id={id}
+                    page="charge"
+                    service="admin-service"
                   />
                 </TabPanel>
               </TabContext>
