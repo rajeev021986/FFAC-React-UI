@@ -17,6 +17,7 @@ import { login } from "../store/freatures/authSlice";
 import { useDispatch } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
 import CustomToast from "../components/common/Toast/CustomToast";
+import Img from "../assets/images/loginScreen.png";
 
 export default function LoginScreen() {
   const nav = useNavigate();
@@ -74,24 +75,36 @@ export default function LoginScreen() {
   return (
     <>
       <Stack direction="row" sx={styles.container}>
-        <Stack spacing={2} sx={styles.right_div}>
-          <Box sx={styles.backgroundImage}></Box>
-        </Stack>
+        <Box>
+          <img src={Img} alt="Login Screen" className="login-img" />
+        </Box>
         <Stack spacing={2} sx={styles.login_Page}>
-          <Stack component={"form"} spacing={2} sx={styles.form}>
+          <Stack component={"form"} spacing={4} className="login-screen">
             <Typography
               variant="title"
               color="secondary.main"
               textAlign={"center"}
+              sx={{ fontSize: "32px", fontWeight: "bold" }}
             >
-              Login
+              Welcome To FFAC
+            </Typography>
+            <Box>
+              <div class="ball"></div>
+            </Box>
+            <Typography
+              variant="title"
+              color="secondary.main"
+              textAlign={"left"}
+              sx={{ fontWeight: "bold" }}
+            >
+              Login To Your Account
             </Typography>
             <Typography
               variant="subtitle1"
               color="secondary.main"
-              textAlign={"center"}
+              textAlign={"left"}
             >
-              Please login to continue
+              Welcome back! &#128400; Please login to continue
             </Typography>
             <TextField
               id="userId"
@@ -140,13 +153,13 @@ const styles = {
     width: "100%",
     height: "100vh",
   },
-  left_div: {
+  login_img: {
     width: "100%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    p: 2,
+    height: "100vh",
   },
   login_form: {
     background: "rgba(255, 255, 255, 0.17)",
@@ -160,6 +173,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    p: "0 12px",
   },
   right_dixv: {
     // backgroundColor: 'secondary.main',
@@ -172,29 +186,9 @@ const styles = {
     p: 4,
     overflow: "hidden", // Ensure no overflow from children
   },
-  backgroundImage: {
-    backgroundImage: `url(${Frame})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    // opacity: 0.2, // Control opacity here
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
+
   content: {
     position: "relative",
     zIndex: 2, // Ensure content is above the background image
-  },
-  form: {
-    maxWidth: 450,
-    width: "100%",
-    p: 2,
-    background: "rgba(255, 255, 255, 0.17)",
-    borderRadius: "24px 16px",
-    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-    backdropFilter: "blur(5px)",
-    WebkitBackdropFilter: "blur(5px)",
   },
 };

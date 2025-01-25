@@ -71,16 +71,16 @@ const styles = {
     boxShadow:
       "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
     // margin: "auto",
-    marginBottom: "8px",
+    marginBottom: "16px",
     marginLeft: "8px",
     borderRadius: "10px",
     height: "fit-content",
     transition: "background-color 0.3s ease, box-shadow 0.3s ease", // Smooth transition for hover effect
 
-    '&:hover': {
+    "&:hover": {
       border: "1px solid #BF77F6", // Change background color on hover
-      backgroundColor:"#ffe9ff",
-    }
+      backgroundColor: "#bf77f614",
+    },
   },
   card_left_box: {
     display: "flex",

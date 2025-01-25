@@ -100,7 +100,7 @@ export const getTheme = (primaryColor = "#026de0", mode) => {
       MuiSpeedDialIcon: {
         styleOverrides: {
           root: {
-            color: "white", 
+            color: "white",
           },
         },
       },
