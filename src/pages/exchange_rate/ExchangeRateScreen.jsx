@@ -46,6 +46,7 @@ import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import ApiManager from "../../services/ApiManager";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export function ExchangeRate({ page }) {
   const exchangeRateSelector = useSelector((state) => state.exchangeRateStore);
@@ -141,11 +142,12 @@ export function ExchangeRate({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchAdminDatasExcel(
-          query,
-          payload,
-          "exchange-rate"
-        );
+        const blob = await ApiManager.fetchDatasExcel({
+          query: query,
+          payload: payload,
+          service: "admin-service",
+          page: "exchange-rate",
+        });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -172,19 +174,24 @@ export function ExchangeRate({ page }) {
   const handleDelete = async () => {
     try {
       await deleteExchangeRate(modal.data.id).unwrap();
-      toast.success("Exchange Rate deleted successfully!");
+      toast.custom(
+        <CustomToast
+          message="Exchange Rate deleted successfully!"
+          toast="success"
+        />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete exchange rate.");
+      toast.custom(
+        <CustomToast message="Failed to delete exchange rate." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
-  };
-
-  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetExchangeRateAuditQuery();
-  const fetchUserAudit = () => {
-    getPortAudit({
-      id: modal.data.id,
-    });
   };
 
   return (
@@ -249,8 +256,7 @@ export function ExchangeRate({ page }) {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <ExchangeRateFilters
-                  />
+                  <ExchangeRateFilters />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"
@@ -342,9 +348,9 @@ export function ExchangeRate({ page }) {
               Exchange Rate Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="exchange-rate"
+              service="admin-service"
             />
           </Box>
         </Drawer>

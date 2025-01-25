@@ -14,6 +14,7 @@ import {
 import Loader from "../../components/common/Loader/Loader";
 import GlobalDrrpdownSetting from "./GlobalDrrpdownSetting";
 import toast from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 const CustomerSetting = () => {
   const [addOptons, { isloading: saveLoading }] = useAddOptonsMutation();
@@ -62,12 +63,29 @@ const CustomerSetting = () => {
     })
       .then((res) => {
         if (res.error) {
-          toast.error(res.error.data.error);
+          toast.custom(
+            <CustomToast message={res.error.data.error} toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
         } else {
-          toast.success(`setting Updated Successufully`);
+          toast.custom(
+            <CustomToast
+              message="Setting Updated Successufully"
+              toast="success"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       })
-      .catch((e) => toast.error(e?.message));
+      .catch((e) =>
+        toast.custom(<CustomToast message={e?.message} toast="error" />, {
+          closeButton: false,
+        })
+      );
     refetch();
     setIsLoading(false);
   };

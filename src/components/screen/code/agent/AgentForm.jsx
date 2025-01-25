@@ -1,4 +1,11 @@
-import { Box, Checkbox, CircularProgress, FormControlLabel, Grid, Stack } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  CircularProgress,
+  FormControlLabel,
+  Grid,
+  Stack,
+} from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import InputBox from "../../../common/InputBox";
@@ -13,13 +20,10 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AgentValidationSchema } from "./validationSchema";
 
-export default function AgentForm({
-  initialValues,
-}) {
-  
-    const [options, setOptions] = useState([]);
-    const [addAgent, { isLoading }] = useAddAgentMutation();
-    const nav = useNavigate();
+export default function AgentForm({ initialValues }) {
+  const [options, setOptions] = useState([]);
+  const [addAgent, { isLoading }] = useAddAgentMutation();
+  const nav = useNavigate();
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",
@@ -37,46 +41,59 @@ export default function AgentForm({
       const formData = new FormData();
 
       Object.keys(values).forEach((key) => {
-        if (key !== 'files' && key !== 'atype') {
+        if (key !== "files" && key !== "atype") {
           formData.append(key, values[key]);
         }
       });
 
       formData.append("atype", JSON.stringify(values.atype));
-  
+
       try {
         let response = await addAgent(formData).unwrap();
 
-        if (response.message === 'Data saved successfully!') {
-          toast.success(response.message);
+        if (response.message === "Data saved successfully!") {
+          toast.custom(
+            <CustomToast message={response.message} toast="success" />,
+            {
+              closeButton: false,
+            }
+          );
           nav("/app/code/agent");
         } else {
-          toast.error(response.message);
+          toast.custom(
+            <CustomToast message={response.message} toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } catch (error) {
-        toast.error("An error occurred while submitting the form.");
+        toast.custom(
+          <CustomToast
+            message="An error occurred while submitting the form."
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
       }
     },
   });
 
   const handleCityOptionChange = async (query) => {
-
-    ApiManager.getCityOptions('city',query)
+    ApiManager.getCityOptions("city", query)
       .then((response) => {
-
-        
         setOptions(response.data);
       })
-      .catch((error) => {
-
-      });
+      .catch((error) => {});
   };
 
   const handleCitySelect = (selectedCity) => {
     if (selectedCity) {
-      formik.setFieldValue('state', selectedCity.state || '');
-      formik.setFieldValue('zipcode', selectedCity.pincode || '');
-      formik.setFieldValue('country', selectedCity.country || '');
+      formik.setFieldValue("state", selectedCity.state || "");
+      formik.setFieldValue("zipcode", selectedCity.pincode || "");
+      formik.setFieldValue("country", selectedCity.country || "");
     }
   };
 
@@ -86,13 +103,17 @@ export default function AgentForm({
     const currentSelection = formik.values.atype || [];
 
     if (currentSelection.includes(option.toUpperCase())) {
-        
       // If option is already selected, remove it from the array
-      const updatedSelection = currentSelection.filter((item) => item !== option.toUpperCase());
+      const updatedSelection = currentSelection.filter(
+        (item) => item !== option.toUpperCase()
+      );
       formik.setFieldValue("atype", updatedSelection);
     } else {
       // If option is not selected, add it to the array
-      formik.setFieldValue("atype", [...currentSelection, option.toUpperCase()]);
+      formik.setFieldValue("atype", [
+        ...currentSelection,
+        option.toUpperCase(),
+      ]);
     }
   };
 
@@ -104,7 +125,6 @@ export default function AgentForm({
           id="iesclientcode"
           value={formik.values.iesclientcode}
           error={formik.errors.iesclientcode}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -114,7 +134,6 @@ export default function AgentForm({
           id="cname"
           value={formik.values.cname}
           error={formik.errors.cname}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -124,7 +143,6 @@ export default function AgentForm({
           id="email"
           value={formik.values.email}
           error={formik.errors.email}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -134,7 +152,6 @@ export default function AgentForm({
           id="mobile"
           value={formik.values.mobile}
           error={formik.errors.mobile}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -144,7 +161,6 @@ export default function AgentForm({
           id="phone"
           value={formik.values.phone}
           error={formik.errors.phone}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -154,7 +170,6 @@ export default function AgentForm({
           id="fax"
           value={formik.values.fax}
           error={formik.errors.fax}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -164,7 +179,6 @@ export default function AgentForm({
           id="url"
           value={formik.values.url}
           error={formik.errors.url}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -183,7 +197,6 @@ export default function AgentForm({
           id="addressl2"
           value={formik.values.addressl2}
           error={formik.errors.addressl2}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -193,7 +206,6 @@ export default function AgentForm({
           id="addressl3"
           value={formik.values.addressl3}
           error={formik.errors.addressl3}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -211,7 +223,9 @@ export default function AgentForm({
           error={formik.errors.city}
           onChange={(selectedCity) => {
             formik.setFieldValue("city", selectedCity); // Set selected city in formik
-            const foundCity = options.find(city => city.city === selectedCity); // Find the selected city's data
+            const foundCity = options.find(
+              (city) => city.city === selectedCity
+            ); // Find the selected city's data
             handleCitySelect(foundCity); // Populate pincode, state, and country
           }}
           handleOptionChange={handleCityOptionChange}
@@ -224,7 +238,6 @@ export default function AgentForm({
           id="state"
           value={formik.values.state}
           error={formik.errors.state}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -234,7 +247,6 @@ export default function AgentForm({
           id="zipcode"
           value={formik.values.zipcode}
           error={formik.errors.zipcode}
-          
           onChange={formik.handleChange}
         />
       </Grid>
@@ -244,32 +256,35 @@ export default function AgentForm({
           id="country"
           value={formik.values.country}
           error={formik.errors.country}
-          
           onChange={formik.handleChange}
         />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <SelectBox
-              label="Status"
-              id="status"
-              options={USER_STATUS_OPTIONS}
-              value={formik.values.status}
-              error={formik.errors.status}
-              onChange={formik.handleChange}
-            />
+        <SelectBox
+          label="Status"
+          id="status"
+          options={USER_STATUS_OPTIONS}
+          value={formik.values.status}
+          error={formik.errors.status}
+          onChange={formik.handleChange}
+        />
       </Grid>
 
-<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
         <Box sx={{ fontWeight: "bold", marginBottom: 1 }}>Account Type</Box>
         <Grid container spacing={2}>
           {checkboxOptions.map((option) => (
-            <Grid item xs={6} key={option}> {/* 50% width for two checkboxes per row */}
+            <Grid item xs={6} key={option}>
+              {" "}
+              {/* 50% width for two checkboxes per row */}
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={formik.values.atype.includes(option.toUpperCase())}
                     onChange={() => handleCheckboxChange(option)}
-                    disabled={initialValues.atype.includes(option.toUpperCase())}
+                    disabled={initialValues.atype.includes(
+                      option.toUpperCase()
+                    )}
                   />
                 }
                 label={option}

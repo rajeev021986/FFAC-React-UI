@@ -25,6 +25,8 @@ import getFirstError from "../../../common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import HistoryIcon from "@mui/icons-material/History";
+import CustomToast from "../../../common/Toast/CustomToast";
+import ApiManager from "../../../../services/ApiManager";
 
 export default function ShipperForm({ initialValues, page, type, id }) {
   const FieldRef = useRef(null);
@@ -104,13 +106,31 @@ export default function ShipperForm({ initialValues, page, type, id }) {
           let response = await addShipper({ ...values }).unwrap();
 
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/entity/shipper");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -121,22 +141,36 @@ export default function ShipperForm({ initialValues, page, type, id }) {
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/entity/shipper");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       }
     },
   });
-  const [getShipperAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetShipperAuditQuery();
-  const fetchAuditData = () => {
-    getShipperAudit({ id: initialValues.id });
-  };
+
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: shipperSettingsData } =
@@ -880,9 +914,9 @@ export default function ShipperForm({ initialValues, page, type, id }) {
               </TabPanel>
               <TabPanel value={3} sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeline
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchAuditData}
-                  loading={isLoadingAudit}
+                  id={initialValues.id}
+                  page="shipper"
+                  service="entity-service"
                 />
               </TabPanel>
             </TabContext>

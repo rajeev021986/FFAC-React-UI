@@ -17,13 +17,13 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { USER_MANAGEMENT_COLUMNS } from "../../data/columns/user";
 import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { OutlinedButton } from "../../components/common/Button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import { useFetchUsersQuery } from "../../store/api/userDataApi";
@@ -50,12 +50,14 @@ import { useLazyFetchAuditQuery } from "../../store/api/common";
 import ApiManager from "../../services/ApiManager";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import toast, { LoaderIcon } from "react-hot-toast";
+import FilterForm from "../../components/screen/user-management/FilterForm";
 const ADD_NEW_USER_PATH = "/app/admin/users/addUser";
 
 export default function UserManagementScreen() {
   const userManagementSelector = useSelector((state) => state.userManagement);
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const [exportLoader, setExportLoader] = useState();
   const [modal, setModal] = React.useState({
     open: false,
@@ -104,12 +106,14 @@ export default function UserManagementScreen() {
     params: query,
     payload,
   });
-  const [fetchAudit, { data: AuditData, isLoading: AuditLoadinng }] =
-    useLazyFetchAuditQuery();
+
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
+  useEffect(() => {
+    refetch();
+  }, [location.pathname]);
   const actions = [
     { name: "New User" },
     { name: exportLoader ? <LoaderIcon /> : "Export" },
@@ -118,11 +122,7 @@ export default function UserManagementScreen() {
     GridActions({
       actions: getUserListGridActions(nav, setModal),
     });
-  const fetchUserAudit = () => {
-    fetchAudit({
-      userId: modal.data.id,
-    });
-  };
+
   const handleActionClick = async (actionName) => {
     if (actionName === "New User") {
       nav(ADD_NEW_USER_PATH, { state: { formAction: "add" } });
@@ -130,11 +130,12 @@ export default function UserManagementScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(
-          query,
-          payload,
-          "user"
-        );
+        const blob = await ApiManager.fetchDatasExcel({
+          query: query,
+          payload: payload,
+          service: "admin-service",
+          page: "user",
+        });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -229,7 +230,7 @@ export default function UserManagementScreen() {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
-                  <UserManagementFilters filterInfo={UserData?.counts || []} />
+                  <FilterForm />
                 </GridSearchInput>
                 <SelectBox
                   label="Sort By"
@@ -329,9 +330,9 @@ export default function UserManagementScreen() {
               User Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={AuditLoadinng}
+              id={modal.data.id}
+              page="user"
+              service="admin-service"
             />
           </Box>
         </Drawer>

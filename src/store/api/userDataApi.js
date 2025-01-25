@@ -90,7 +90,7 @@ export const userDataApi = createApi({
     resetPassword: builder.mutation({
       query: (params) => {
         return {
-          url: `/admin-service/v1/user/update/password`,
+          url: `/admin-service/v1/user/password`,
           method: "PUT",
           body: params,
           headers: getAppHeaders(),

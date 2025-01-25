@@ -44,6 +44,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       ...consigneeEntityFreeDays,
       newRow,
     ]);
+    setFocus();
   };
 
   // Handler to delete a row
@@ -101,6 +102,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
               onChange={(e) =>
                 updateRowValue(params, e, "consigneeEntityFreeDays")
               }
+              inputRef={newRowRef}
             />
           </div>
         </Tooltip>

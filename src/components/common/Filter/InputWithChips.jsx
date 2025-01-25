@@ -46,6 +46,48 @@ const Chips = {
   vrnNo: {
     chipLabel: "VRN NO",
   },
+  icdCode: {
+    chipLabel: "ICD Code",
+  },
+  icdName: {
+    chipLabel: "ICD Name",
+  },
+  newPortName: {
+    chipLabel: "Port Name",
+  },
+  country: {
+    chipLabel: "Country",
+  },
+  vessel: {
+    chipLabel: "Vessel",
+  },
+  lname: {
+    chipLabel: "Line Name",
+  },
+  vname: {
+    chipLabel: "Vessel Name",
+  },
+  currency: {
+    chipLabel: "Vessel Name",
+  },
+  usdExchange: {
+    chipLabel: "USD Exchange",
+  },
+  chargeName: {
+    chipLabel: "Charge Name",
+  },
+  chargeCode: {
+    chipLabel: "Charge Code",
+  },
+  city: {
+    chipLabel: "City",
+  },
+  consigneeName: {
+    chipLabel: "Consignee Name",
+  },
+  name: {
+    chipLabel: "Name",
+  },
   statusCode: {
     chipLabel: "Status",
     chipvalues: [
@@ -68,20 +110,27 @@ const InputWithChips = ({
     .map(([key, value]) => {
       if (value !== "") {
         return `${Chips[key]?.chipLabel || key}: ${
-          Chips[key]?.chipvalues?.find((a) => a.value == value).label || value
+          Chips[key]?.chipvalues?.find((a) => a?.value == value)?.label || value
         }`;
       }
       return null;
     })
     .filter((filter) => filter);
 
-  // Clear the filter when the end button is clicked
   const endButtonHandler = () => {
     formattedFilter.length > 0 ? onFilterReset() : onFocus();
   };
 
   const handleDeleteChip = (index) => {
-    const updatedFilters = { ...filters };
+    const updatedFilters = {
+      ...Object.fromEntries(
+        Object.entries(filters).filter(
+          ([key, value]) =>
+            value !== null && value !== undefined && value !== ""
+        )
+      ),
+    };
+    console.log(index, "index", filters);
     delete updatedFilters[Object.keys(updatedFilters)[index]];
     onFilterChange(updatedFilters);
   };

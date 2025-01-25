@@ -45,6 +45,7 @@ import ApiManager from "../../services/ApiManager";
 import toast, { LoaderIcon } from "react-hot-toast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import AuditTimeLine from "../../components/AuditTimeLine";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export function ChargesScreen({ page }) {
   const chargesSelector = useSelector((state) => state.chargesStore);
   const [exportLoader, setExportLoader] = useState(false);
@@ -140,11 +141,12 @@ export function ChargesScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchAdminDatasExcel(
-          query,
-          payload,
-          "charge"
-        );
+        const blob = await ApiManager.fetchDatasExcel({
+          query: query,
+          payload: payload,
+          service: "admin-service",
+          page: "charge",
+        });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -154,7 +156,12 @@ export function ChargesScreen({ page }) {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {
-        toast.error("Somthing Went Wrong");
+        toast.custom(
+          <CustomToast message="Somthing Went Wrong" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
       setExportLoader(false);
     }
@@ -171,39 +178,23 @@ export function ChargesScreen({ page }) {
       await deleteCharge(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Charge deleted successfully!");
+      toast.custom(
+        <CustomToast message="Charge deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete Charge.");
+      toast.custom(
+        <CustomToast message="Failed to delete Charge." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
 
-  //   const [deleteCustomer] = useDeleteCustomerMutation();
-
-  //   const handleClose = () => {
-  //     setModal({
-  //       open: false,
-  //       type: "",
-  //       data: {},
-  //     });
-  //   };
-
-  //   const handleDelete = async () => {
-  //     try {
-  //       await deleteCustomer(modal.data.id).unwrap();
-  //       toast.success("Customer deleted successfully!");
-  //       handleClose();
-  //     } catch (error) {
-  //       toast.error("Failed to delete customer.");
-  //     }
-  //   };
-  const [getChargeAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetChargeAuditQuery();
-  const fetchUserAudit = () => {
-    getChargeAudit({
-      id: modal.data.id,
-    });
-  };
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -352,9 +343,9 @@ export function ChargesScreen({ page }) {
               Charge Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="charge"
+              service="admin-service"
             />
           </Box>
         </Drawer>

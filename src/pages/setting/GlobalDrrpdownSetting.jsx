@@ -4,11 +4,20 @@ import { Box, Grid, TextField } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { OutlinedButton } from "../../components/common/Button";
 import toast from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   const handleAddRow = () => {
     if (value.some((item) => item.value.includes("Type the"))) {
-      toast.error("Please complete the newly added field first");
+      toast.custom(
+        <CustomToast
+          message="Please complete the newly added field first"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
       return;
     }
 

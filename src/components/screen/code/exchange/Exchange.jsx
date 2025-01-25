@@ -5,7 +5,6 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import {
   useAddExahangeRateMutation,
   useLazyGetExahangeRateQuery,
-  useLazyGetExchangeRateAuditQuery,
   useUpdateExahangeRateMutation,
 } from "../../../../store/api/exchangeRateDataApi";
 import ExchangeInputs from "./ExchangeInputs";
@@ -14,10 +13,12 @@ import ScreenToolbar from "../../../common/ScreenToolbar";
 import ThemedBreadcrumb from "../../../common/Breadcrumb";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Loader from "../../../common/Loader/Loader";
-import UploadFile from "../../../UploadFile";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuditTimeLine from "../../../AuditTimeLine";
+import CustomToast from "../../../common/Toast/CustomToast";
+import EditIcon from "@mui/icons-material/Edit";
+import HistoryIcon from "@mui/icons-material/History";
 
 export default function Exchange() {
   const location = useLocation();
@@ -30,8 +31,8 @@ export default function Exchange() {
   const { data: ExchageSettingsData, isFetching } =
     useGetOptionsSettingsQuery("common_settings");
   const tabs = [
-    { label: "Exchange Details", value: 1 },
-    { label: "Audit Logs", value: 2 },
+    { label: "Exchange Details", value: 1, icon: <EditIcon /> },
+    { label: "Audit Logs", value: 2, icon: <HistoryIcon /> },
   ];
   Boolean(type == "copy" || type == "new") && tabs.splice(1, 1);
   const [getExahangeRate, { isLoading }] = useLazyGetExahangeRateQuery();
@@ -48,11 +49,18 @@ export default function Exchange() {
         values.statusCode = 1;
         let res = await addExahangeRate(values).unwrap();
         if (res.success) {
-          toast.success(res.message);
+          toast.custom(<CustomToast message={res.message} toast="success" />, {
+            closeButton: false,
+          });
           nav(-1);
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     } else {
       try {
@@ -66,11 +74,18 @@ export default function Exchange() {
               : null,
         }).unwrap();
         if (res.success) {
-          toast.success(res.message);
+          toast.custom(<CustomToast message={res.message} toast="success" />, {
+            closeButton: false,
+          });
           nav(-1);
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     }
   };
@@ -87,10 +102,23 @@ export default function Exchange() {
           formik.setValues(response.data.body);
         }
       } else {
-        toast.error("Failed to fetch Charge data");
+        toast.custom(
+          <CustomToast message="Failed to fetch Charge data" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     } catch (error) {
-      toast.error("Error fetching ExchangeRate data");
+      toast.custom(
+        <CustomToast
+          message="Error fetching ExchangeRate data"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   useEffect(() => {
@@ -120,14 +148,6 @@ export default function Exchange() {
     validateOnChange: false,
     onSubmit,
   });
-
-  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetExchangeRateAuditQuery();
-  const fetchUserAudit = () => {
-    getPortAudit({
-      id: id,
-    });
-  };
 
   return (
     <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
@@ -169,6 +189,8 @@ export default function Exchange() {
                         textTransform: "capitalize",
                         minHeight: "50px",
                       }}
+                      icon={a.icon}
+                      iconPosition="start"
                     />
                   ))}
                 </TabList>
@@ -188,9 +210,9 @@ export default function Exchange() {
               </TabPanel>
               <TabPanel value={2} sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeLine
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchUserAudit}
-                  loading={isLoadingAudit}
+                  id={id}
+                  page="exchange-rate"
+                  service="admin-service"
                 />
               </TabPanel>
             </TabContext>

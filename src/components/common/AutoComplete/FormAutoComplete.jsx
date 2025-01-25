@@ -8,14 +8,8 @@ import {
 } from "@mui/material";
 import { GetAutoCompleteData } from "../../utils/GetAutoCompleteData";
 
-function FormAutoComplete({
-  label,
-  id,
-  suggestionName,
-  value,
-  error,
-  onChange,
-}) {
+function FormAutoComplete(props) {
+  const { label, id, suggestionName, value, error, onChange } = props;
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
@@ -89,6 +83,7 @@ function FormAutoComplete({
                 </>
               ),
             }}
+            {...params}
           />
         )}
         renderOption={(props, option) => (

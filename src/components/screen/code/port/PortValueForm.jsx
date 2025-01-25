@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import InputBox from "../../../common/InputBox";
 import { CircularProgress, Grid, Stack, TextField } from "@mui/material";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
@@ -17,6 +17,13 @@ export default function PortValueForm({
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
+
+  const FieldRef = useRef(null);
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
   return (
     <Grid container sx={{ padding: 0, margin: 0, paddingRight: "8px" }}>
       <Grid container sx={{ margin: 0 }}>
@@ -36,6 +43,7 @@ export default function PortValueForm({
             value={formik.values.newPortName}
             error={formik.errors.newPortName}
             onChange={formik.handleChange}
+            inputRef={FieldRef}
           />
         </Grid>
         <Grid

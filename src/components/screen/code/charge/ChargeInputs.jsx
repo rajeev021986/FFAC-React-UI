@@ -40,6 +40,13 @@ export default function ChargeInputs({
   };
 
   const [value, setValue] = React.useState("1");
+  const FieldRef = useRef(null);
+
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -166,6 +173,7 @@ export default function ChargeInputs({
             value={formik.values.chargeName}
             error={formik.errors.chargeName}
             onChange={formik.handleChange}
+            inputRef={FieldRef}
           />
         </Grid>
         <Grid

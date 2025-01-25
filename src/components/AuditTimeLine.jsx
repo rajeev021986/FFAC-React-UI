@@ -1,15 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Timeline from "./Timeline";
 import { Button, Grid } from "@mui/material";
 import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import Loader from "./common/Loader/Loader";
-function AuditTimeLine({ auditDetails, reloadDataHandler, loading }) {
+import { reloadDataHandler } from "../services/common/AuditDetails";
+function AuditTimeLine({ id, page, service }) {
+  const [auditDetails, setAuditDetails] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
   useEffect(() => {
-    reloadDataHandler();
+    reloadDataHandler(id, page, service, setAuditDetails, setAuditLoading);
   }, []);
   return (
     <>
-      {loading ? (
+      {auditLoading ? (
         <Loader />
       ) : (
         <div style={{ minHeight: "55vh", padding: 0, margin: "0px 8px" }}>

@@ -16,7 +16,6 @@ import { useParams } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
-import AppAutocomplete from "../../../common/AppAutocomplete";
 import ApiManager from "../../../../services/ApiManager";
 import PopupAlert from "../../../common/Alert/PopupAlert";
 import toast from "react-hot-toast";
@@ -59,10 +58,8 @@ export default function CustomerForm({
   type = "notcopy",
 }) {
   const [options, setOptions] = useState([]);
-  const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
-  const [loading, setLoading] = useState(false);
   const [loaderApprove, setLoaderApprove] = useState({
     approve: false,
     reject: false,
@@ -235,16 +232,6 @@ export default function CustomerForm({
   let shouldShowTabs = Object.values(formik.values?.customerName).some(
     (value) => value !== ""
   );
-  const reloadDataHandler = async () => {
-    try {
-      setLoading(true);
-      const res = await ApiManager.getAuditDetails(initialValues.id);
-      setEnquiryAuditDetails(res);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
 
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -1564,9 +1551,9 @@ export default function CustomerForm({
               </TabPanel>
               <TabPanel value="3" sx={{ padding: "0px" }}>
                 <AuditTimeline
-                  auditDetails={enquiryAuditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={loading}
+                  id={initialValues.id}
+                  page="customer"
+                  service="entity-service"
                 />
               </TabPanel>
             </TabContext>

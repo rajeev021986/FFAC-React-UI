@@ -134,13 +134,8 @@ export const codeDataApi = createApi({
             },
             providesTags: ["Code"],
         }),
-        getCustomerAudit: builder.query({
-            query: (params) => {
-                return { url: `entity-service/v1/customer/audit/${params.id}`, method: "GET", body: params.body, headers: getAppHeaders() };
-            },
-        }),
 
     }),
 });
 
-export const { useFetchCustomerQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useFetchPartyQuery, useAddPartyMutation, useFetchAgentQuery, useAddAgentMutation, useUploadCustomerFileMutation, useGetCustomerFileListMutation, useDownloadDocumnentMutation, useFetchCustomerDatasQuery, useLazyGetCustomerAuditQuery } = codeDataApi;
+export const { useFetchCustomerQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useFetchPartyQuery, useAddPartyMutation, useFetchAgentQuery, useAddAgentMutation, useUploadCustomerFileMutation, useGetCustomerFileListMutation, useDownloadDocumnentMutation, useFetchCustomerDatasQuery } = codeDataApi;

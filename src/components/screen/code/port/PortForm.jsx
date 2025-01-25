@@ -22,6 +22,8 @@ import getFirstError from "../../../common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import AuditTimeLine from "../../../AuditTimeLine";
+import CustomToast from "../../../common/Toast/CustomToast";
+import ApiManager from "../../../../services/ApiManager";
 function PortForm() {
   const [value, setValue] = React.useState(1);
   const [dropdownData, setDropdownData] = useState({});
@@ -72,7 +74,12 @@ function PortForm() {
         }
       }
     } catch (error) {
-      toast.error("Error fetching Port data");
+      toast.custom(
+        <CustomToast message="Error fetching Port data" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   const formik = useFormik({
@@ -119,22 +126,22 @@ function PortForm() {
                 ? -2
                 : null,
           }).unwrap();
-          toast.success(result.message);
+          toast.custom(
+            <CustomToast message={result.message} toast="success" />,
+            {
+              closeButton: false,
+            }
+          );
         } catch (error) {
-          toast.success(error.message);
+          toast.custom(<CustomToast message={error.message} toast="error" />, {
+            closeButton: false,
+          });
         }
       }
       nav(-1);
     },
   });
 
-  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetPortAuditQuery();
-  const fetchUserAudit = () => {
-    getPortAudit({
-      id: id,
-    });
-  };
   return (
     <>
       <Box
@@ -189,11 +196,7 @@ function PortForm() {
                 )}
               </TabPanel>
               <TabPanel value={2} sx={{ padding: "0px" }}>
-                <AuditTimeLine
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchUserAudit}
-                  loading={isLoadingAudit}
-                />
+                <AuditTimeLine id={id} page="port" service="master-service" />
               </TabPanel>
             </TabContext>
           </CardContent>

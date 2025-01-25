@@ -32,6 +32,7 @@ import PortScreen from "./pages/port/PortScreen";
 import PortForm from "./components/screen/code/port/PortForm";
 import BondScreen from "./pages/Bond/Bondscreen";
 import BondForm from "./components/screen/code/bond/BondForm";
+import "./App.css";
 import {
   VesselVoyage,
   VesselVoyageScreen,

@@ -49,6 +49,7 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import ApiManager from "../../services/ApiManager";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export default function VendorScreen({ page }) {
   const vendorSelector = useSelector((state) => state.vendor);
@@ -82,14 +83,23 @@ export default function VendorScreen({ page }) {
       await deleteVendor(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Vendor deleted successfully!");
+      toast.custom(
+        <CustomToast message="Vendor deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete vendor.");
+      toast.custom(
+        <CustomToast message="Failed to delete vendor." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
-  const [getVendorAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetVendorAuditQuery();
+
   const [seletectBox, setSelectedBox] = useState();
   const dispatch = useDispatch();
   const nav = useNavigate();
@@ -132,11 +142,7 @@ export default function VendorScreen({ page }) {
   useEffect(() => {
     refetch();
   }, [location.pathname, modal]);
-  const fetchUserAudit = () => {
-    getVendorAudit({
-      id: modal.data.id,
-    });
-  };
+
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setVendorPagination({ page, pageSize }));
@@ -173,15 +179,16 @@ export default function VendorScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(
-          query,
-          payload,
-          "vendor"
+        const blob = await ApiManager.fetchDatasExcel(
+          {query: query,
+          payload:  payload,
+          service: "entity-service",
+          page: "vendor"}
         );
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "customer-data.xlsx");
+        link.setAttribute("download", "vendor-data.xlsx");
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -362,9 +369,9 @@ export default function VendorScreen({ page }) {
               Vendor Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="vendor"
+              service="entity-service"
             />
           </Box>
         </Drawer>

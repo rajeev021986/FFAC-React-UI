@@ -1,9 +1,10 @@
 import { KeyOutlined } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
-import BiotechIcon from '@mui/icons-material/Biotech';
-import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import BiotechIcon from "@mui/icons-material/Biotech";
+import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import toast from "react-hot-toast";
+import CustomToast from "../../common/Toast/CustomToast";
 
 export const getUserListGridActions = (nav, setModal) => {
   return [
@@ -40,23 +41,25 @@ export const getUserListGridActions = (nav, setModal) => {
   ];
 };
 
-
-
 export const newUserListGridActions = (nav, setModal) => {
   return [
     {
       label: "Approve",
       onClick: (params) => {
         // userid : params.row.emailid
-        let data = { ...params.row, }
+        let data = { ...params.row };
         if (data.status !== "APPROVED") {
           delete data.status;
           nav(`/app/admin_master/user_management/form`, {
             state: { formAction: "verify", initialValues: data },
           });
-        }
-        else {
-          toast.error("Already Approved")
+        } else {
+          toast.custom(
+            <CustomToast message="Already Approved" toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
         }
       },
       icon: <EditIcon />,
@@ -64,22 +67,22 @@ export const newUserListGridActions = (nav, setModal) => {
     {
       label: "Reject",
       onClick: (params) => {
-
         if (params.row.status !== "APPROVED") {
           setModal({
             open: true,
             type: "reject",
             data: params.row,
-          })
-        }
-        else {
-          toast.error("Already Approved")
+          });
+        } else {
+          toast.custom(
+            <CustomToast message="Already Approved" toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
         }
       },
       icon: <ThumbDownAltOutlinedIcon />,
     },
   ];
 };
-
-
-

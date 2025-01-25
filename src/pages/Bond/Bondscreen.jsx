@@ -44,6 +44,7 @@ import GridActions from "../../components/common/Grid/GridActions";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import toast, { LoaderIcon } from "react-hot-toast";
 import DeleteDialog from "../../components/common/DeleteDialog";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export default function BondScreen() {
   const bondSelector = useSelector((state) => state.bond);
   const nav = useNavigate();
@@ -114,11 +115,12 @@ export default function BondScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcelPort(
-          query,
-          payload,
-          "bond"
-        );
+        const blob = await ApiManager.fetchDatasExcel({
+          query: query,
+          payload: payload,
+          service: "master-service",
+          page: "bond",
+        });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -131,13 +133,7 @@ export default function BondScreen() {
       setExportLoader(false);
     }
   };
-  const [getbondAudit, { data: AuditData, isFetching: isLoadingAudit }] =
-    useLazyGetbondAuditQuery();
-  const fetchUserAudit = () => {
-    getbondAudit({
-      id: modal.data.id,
-    });
-  };
+
   const handleClose = () => {
     setModal({
       open: false,
@@ -153,10 +149,20 @@ export default function BondScreen() {
       await deleteBond(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Bond deleted successfully!");
+      toast.custom(
+        <CustomToast message="Bond deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete Bond.");
+      toast.custom(
+        <CustomToast message="Failed to delete Bond." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   return (
@@ -304,9 +310,9 @@ export default function BondScreen() {
               Bond Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="bond"
+              service="master-service"
             />
           </Box>
         </Drawer>

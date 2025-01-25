@@ -44,6 +44,7 @@ import ApiManager from "../../services/ApiManager";
 import toast from "react-hot-toast";
 import UserManagementFilters from "../../components/screen/user-management/UserManagementFilters";
 import NewUserRegisteredFilter from "../../components/screen/user-management/NewUserRegisteredFilter";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export default function NewRegisteredUserScreen() {
   const nav = useNavigate();
@@ -55,7 +56,7 @@ export default function NewRegisteredUserScreen() {
     data: UserData,
     isLoading,
     isFetching,
-    refetch
+    refetch,
   } = useFetchRegesterdUserQuery({
     page: userManagementSelector?.pagination?.page + 1,
     perPage: userManagementSelector?.pagination?.pageSize,
@@ -69,7 +70,7 @@ export default function NewRegisteredUserScreen() {
     status: userManagementSelector.status.join(","),
     ...userManagementSelector.formData,
   });
-  
+
   const [modal, setModal] = useState({
     open: false,
     type: "",
@@ -92,21 +93,25 @@ export default function NewRegisteredUserScreen() {
       const result = await ApiManager.rejectUser(payload);
       if (result.status === "error")
         throw new Error(result.message, { cause: result.errors });
-      toast.success(result.message);
-      refetch()
+      toast.custom(<CustomToast message={result.message} toast="success" />, {
+        closeButton: false,
+      });
+      refetch();
       setModal({
         open: false,
         type: "",
         data: {},
-      })
+      });
     } catch (error) {
-      let errors = {}
+      let errors = {};
       error.cause.forEach((item) => {
         errors[item.path] = item.message;
       });
 
       setErrors(errors);
-      toast.error(error.message);
+      toast.custom(<CustomToast message={error.message} toast="error" />, {
+        closeButton: false,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -145,7 +150,6 @@ export default function NewRegisteredUserScreen() {
                   options={NEW_USER_SORT_OPTIONS}
                   value={userManagementSelector.sortBy}
                   onChange={(event) => {
-                    
                     dispatch(setSortBy(event.target.value));
                   }}
                   sx={{
@@ -190,8 +194,7 @@ export default function NewRegisteredUserScreen() {
             loading={isLoading || isFetching}
             sortModel={userManagementSelector.sortModel}
             onSortModelChange={(sortModel) => {
-              
-              dispatch(setSortModel(sortModel))
+              dispatch(setSortModel(sortModel));
             }}
           />
         ) : (

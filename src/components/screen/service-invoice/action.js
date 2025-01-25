@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { TRM_STATUS } from "../../../data/enums";
 import moment from "moment";
+import CustomToast from "../../common/Toast/CustomToast";
 
 
 export const SIActions = {
@@ -20,10 +21,20 @@ export const SIActions = {
         try {
             const resp = await verifyStatus(payload).unwrap();
             if (resp.status === 'success') {
-                toast.success(resp.message);
+                toast.custom(
+                    <CustomToast message={resp.message} toast="success" />,
+                    {
+                        closeButton: false,
+                    }
+                );
             }
         } catch (error) {
-            toast.error(error.data.message);
+            toast.custom(
+                <CustomToast message={error.data.message} toast="error" />,
+                {
+                    closeButton: false,
+                }
+            );
         }
     },
     save: async (params, saveServiceInvoice) => {
@@ -33,14 +44,14 @@ export const SIActions = {
         }
 
         let payload = {
-            serial_id: params.serial_id, 
+            serial_id: params.serial_id,
             volume: params.numbr1,
             pieces: params.numbr2,
             grosswt: params.numbr3,
             chargeablewt: params.numbr4,
             trm_received_date: moment(params.batch_run_date).format("MM/DD/YYYY"),
             invoice_date: moment(params.invoice_date).format("MM/DD/YYYY"),
-            charges: params.serviceInvoiceDetails.map((item) => { 
+            charges: params.serviceInvoiceDetails.map((item) => {
                 return {
                     serial_id: item.serial_id,
                     amount: Number(item.extended_price),
@@ -50,10 +61,20 @@ export const SIActions = {
         try {
             const resp = await saveServiceInvoice(payload).unwrap();
             if (resp.status === 'success') {
-                toast.success(resp.message);
+                toast.custom(
+                    <CustomToast message={resp.message} toast="success" />,
+                    {
+                        closeButton: false,
+                    }
+                );
             }
         } catch (error) {
-            toast.error(error.data.message);
+            toast.custom(
+                <CustomToast message={error.data.message} toast="error" />,
+                {
+                    closeButton: false,
+                }
+            );
         }
 
     },

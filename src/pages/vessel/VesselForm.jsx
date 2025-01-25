@@ -8,7 +8,7 @@ import {
 } from "../../store/api/vesselDataApi";
 import { useFormik } from "formik";
 import { useLocation, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { VesselValidation } from "../../components/screen/vessel/validation";
 import toast from "react-hot-toast";
 import { OutlinedButton, ThemeButton } from "../../components/common/Button";
@@ -24,16 +24,16 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 import getFirstError from "../../components/common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export function VesselForm({ initialValues, type }) {
   const location = useLocation();
   const nav = useNavigate();
   const disabled = false;
   const [addVessel, { isLoading: loadingAdd }] = useAddVesselMutation();
-  const [loading, setLoading] = useState(false);
+
   const [updateVessel, { isLoading: loadingUpdate }] =
     useUpdateVesselMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
 
   const [value, setValue] = React.useState("1");
 
@@ -45,6 +45,13 @@ export function VesselForm({ initialValues, type }) {
     { label: "Yes", value: "yes" },
     { label: "No", value: "no" },
   ];
+  const FieldRef = useRef(null);
+
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
 
   const formik = useFormik({
     initialValues,
@@ -67,13 +74,31 @@ export function VesselForm({ initialValues, type }) {
           }).unwrap();
 
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/master/vessel");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -89,13 +114,31 @@ export function VesselForm({ initialValues, type }) {
           }).unwrap();
 
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/master/vessel");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       }
     },
@@ -115,16 +158,6 @@ export function VesselForm({ initialValues, type }) {
     }
   }, [optionsSettingsData, vesselSettingsData]);
 
-  const reloadDataHandler = async () => {
-    try {
-      setLoading(true);
-      const res = await ApiManager.getVesselAudit(initialValues.id);
-      setEnquiryAuditDetails(res);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -176,6 +209,7 @@ export function VesselForm({ initialValues, type }) {
                         value={formik.values.vesselName}
                         error={formik.errors.vesselName}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       />
                     </Grid>
                     <Grid
@@ -352,6 +386,7 @@ export function VesselForm({ initialValues, type }) {
                         value={formik.values.vesselName}
                         error={formik.errors.vesselName}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       />
                     </Grid>
                     <Grid
@@ -494,9 +529,9 @@ export function VesselForm({ initialValues, type }) {
               </TabPanel>{" "}
               <TabPanel value="2" sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeLine
-                  auditDetails={enquiryAuditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={loading}
+                  id={initialValues.id}
+                  page="vessel"
+                  service="master-service"
                 />
               </TabPanel>
             </TabContext>

@@ -64,14 +64,7 @@ export default function CustomerScreen({ page }) {
     type: "",
     data: {},
   });
-  const [getCustomerAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetCustomerAuditQuery();
 
-  const fetchUserAudit = () => {
-    getCustomerAudit({
-      id: modal.data.id,
-    });
-  };
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
@@ -161,22 +154,14 @@ export default function CustomerScreen({ page }) {
         state: { formAction: "add" },
       });
     }
-    if (actionName === "Copy") {
-      nav("newcustomer", {
-        state: {
-          formAction: "edit",
-          initialValues: { id: seletectBox },
-          type: "copy",
-        },
-      });
-    }
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcel(
-          query,
-          payload,
-          "customer"
+        const blob = await ApiManager.fetchDatasExcel(
+          {query: query,
+          payload: payload,
+          service: "entity-service",
+          page: "customer"}
         );
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -213,10 +198,23 @@ export default function CustomerScreen({ page }) {
       await deleteCustomer(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Customer deleted successfully!");
+      toast.custom(
+        <CustomToast
+          message="Customer deleted successfully!"
+          toast="success"
+        />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete customer.");
+      toast.custom(
+        <CustomToast message="Failed to delete customer." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
 
@@ -376,9 +374,9 @@ export default function CustomerScreen({ page }) {
               Customer Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="customer"
+              service="entity-service"
             />
           </Box>
         </Drawer>

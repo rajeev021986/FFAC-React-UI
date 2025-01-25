@@ -1,5 +1,5 @@
 import { CircularProgress, Grid, Stack } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import InputBox from "../../../common/InputBox";
 import BondFilterForm from "./BondFilterForm";
 import BondEditGrid from "./BondGrid";
@@ -18,6 +18,13 @@ export default function BondValue({
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
+
+  const FieldRef = useRef(null);
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
   return (
     <Grid container sx={{ padding: 0, margin: 0, paddingRight: "8px" }}>
       <Grid container sx={{ margin: 0 }}>
@@ -37,6 +44,7 @@ export default function BondValue({
             value={formik.values.bondNumber}
             error={formik.errors.bondNumber}
             onChange={formik.handleChange}
+            inputRef={FieldRef}
           />
         </Grid>
         <Grid

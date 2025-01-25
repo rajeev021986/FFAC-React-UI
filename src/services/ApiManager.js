@@ -67,31 +67,8 @@ class ApiManager {
     const url = ENDPOINTS.GET_COMMON_OPTIONS(name, search);
     return ApiMethods.get(url);
   };
-  static getAuditDetails = async (id) => {
-    const url = ENDPOINTS.GET_CUSTOMER_AUDIT(id);
-    return ApiMethods.get(url);
-  };
-  static getVesselAudit = async (id) => {
-    const url = ENDPOINTS.GET_VESSEL_AUDIT(id);
-    return ApiMethods.get(url);
-  };
-  static getVoyageAudit = async (id) => {
-    const url = ENDPOINTS.GET_VOYAGE_AUDIT(id);
-    return ApiMethods.get(url);
-  };
-  static getShipperAuditDetails = async (id) => {
-    const url = ENDPOINTS.GET_SHIPPER_AUDIT(id);
-
-    return ApiMethods.get(url);
-  };
-  static getConsigneeAuditDetails = async (id) => {
-    const url = ENDPOINTS.GET_CONSIGNEE_AUDIT(id);
-
-    return ApiMethods.get(url);
-  };
-  static getIcdAuditDetails = async (id) => {
-    const url = ENDPOINTS.GET_ICD_AUDIT(id);
-
+  static getAuditDetails = async (id, page, service) => {
+    const url = ENDPOINTS.GET_AUDIT_DATA(id, page, service);
     return ApiMethods.get(url);
   };
   static getCustomerFormData = async (source, id) => {
@@ -138,16 +115,12 @@ class ApiManager {
     const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id, type);
     return ApiMethods.put(url, payload);
   };
-  static fetchCustomerDatasExcel = async (params, payload, source) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_CUSTOMER_DATA_EXCEL(queryString, source);
+  static fetchDatasExcel = async ({query, payload, service, page}) => {
+    const queryString = new URLSearchParams(query).toString();
+    const url = ENDPOINTS.FETCH_DATA_EXCEL(queryString, service, page);
     return ApiMethods.postBlob(url, payload);
   };
-  static fetchCustomerDatasExcelPort = async (params, payload, source) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_PORT_DATA_EXCEL(queryString, source);
-    return ApiMethods.postBlob(url, payload);
-  };
+
   static getUserData = async (id) => {
     const url = ENDPOINTS.GET_USER_DATA(id);
     return ApiMethods.get(url);
@@ -198,25 +171,6 @@ class ApiManager {
     return ApiMethods.get(url);
   };
 
-  static fetchVesselDatasExcel = async (params, payload) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_VESSEL_DATA_EXCEL(queryString);
-    return ApiMethods.postBlob(url, payload);
-  };
-
-
-  static fetchIcdDatasExcel = async (params, payload, source) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_ICD_DATA_EXCEL(queryString, source);
-    return ApiMethods.postBlob(url, payload);
-  }
-  static fetchShipperDatasExcel = async (params, payload, source) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_SHIPPER_DATA_EXCEL(queryString, source);
-    return ApiMethods.postBlob(url, payload);
-  }
-
-
   static fileDownloadIntegater = async (id) => {
     const url = ENDPOINTS.FILE_DOWNLOAD_INTEGATER(id);
     return ApiMethods.post(url);
@@ -240,18 +194,6 @@ class ApiManager {
   static updateUserProfileImage = async (payload, id) => {
     const url = ENDPOINTS.UPDATE_USER_PROFILE_IMAGE(id);
     return ApiMethods.put(url, payload);
-  };
-
-  static fetchVoyageDatasExcel = async (params, payload) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_VOYAGE_DATA_EXCEL(queryString);
-    return ApiMethods.postBlob(url, payload);
-  };
-
-  static fetchAdminDatasExcel = async (params, payload, source) => {
-    const queryString = new URLSearchParams(params).toString();
-    const url = ENDPOINTS.FETCH_ADMIN_DATA_EXCEL(queryString, source);
-    return ApiMethods.postBlob(url, payload);
   };
 
   static fetchEditVoyage = (id) => {

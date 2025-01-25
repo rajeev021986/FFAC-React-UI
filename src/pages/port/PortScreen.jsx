@@ -44,6 +44,7 @@ import GridActions from "../../components/common/Grid/GridActions";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export default function PortScreen() {
   const portSelector = useSelector((state) => state.port);
   const nav = useNavigate();
@@ -117,11 +118,12 @@ export default function PortScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchCustomerDatasExcelPort(
-          query,
-          payload,
-          "port"
-        );
+        const blob = await ApiManager.fetchDatasExcel({
+          query: query,
+          payload: payload,
+          service: "master-service",
+          page: "port",
+        });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -134,13 +136,7 @@ export default function PortScreen() {
       setExportLoader(false);
     }
   };
-  const [getPortAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetPortAuditQuery();
-  const fetchUserAudit = () => {
-    getPortAudit({
-      id: modal.data.id,
-    });
-  };
+
   const handleClose = () => {
     setModal({
       open: false,
@@ -153,10 +149,20 @@ export default function PortScreen() {
       await deletePort(modal.data.id)
         .unwrap()
         .then(() => refetch());
-      toast.success("Port deleted successfully!");
+      toast.custom(
+        <CustomToast message="Port deleted successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
       handleClose();
     } catch (error) {
-      toast.error("Failed to delete Port.");
+      toast.custom(
+        <CustomToast message="Failed to delete Port." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   return (
@@ -303,9 +309,9 @@ export default function PortScreen() {
               Port Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={isLoadingAudit}
+              id={modal.data.id}
+              page="port"
+              service="master-service"
             />
           </Box>
         </Drawer>

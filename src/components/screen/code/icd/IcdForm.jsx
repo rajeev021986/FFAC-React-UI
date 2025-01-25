@@ -27,6 +27,7 @@ import UploadFile from "../../../UploadFile";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import getFirstError from "../../../common/FieldToastError";
 import { IcdValidationSchema } from "./IcdValidationSchema";
+import CustomToast from "../../../common/Toast/CustomToast";
 
 export default function IcdForm({ initialValues, page, type, id }) {
   const tabs = [
@@ -42,7 +43,6 @@ export default function IcdForm({ initialValues, page, type, id }) {
   const [enquiryFileDetails, setEnquiryFileDetails] = useState([]);
   const [updateIcd, { isLoading: loaderUpdate }] = useUpdateIcdMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const icdNameRef = useRef(null);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -87,13 +87,32 @@ export default function IcdForm({ initialValues, page, type, id }) {
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
+
             nav("/app/master/icd");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -104,31 +123,45 @@ export default function IcdForm({ initialValues, page, type, id }) {
 
           // Handle response and display toast messages
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/master/icd");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       }
     },
   });
+  const FieldRef = useRef(null);
   useEffect(() => {
-    if (icdNameRef.current) {
-      icdNameRef.current.focus();
+    if (FieldRef.current) {
+      FieldRef.current.focus();
     }
   }, []);
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
 
-  const [getIcdAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetIcdAuditQuery();
-  const fetchAuditData = () => {
-    getIcdAudit({ id: initialValues.id });
-  };
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: icdSettingsData } = useGetOptionsSettingsQuery("icd_settings");
@@ -199,7 +232,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                           disabled={disabled}
                           error={formik.errors.icd_name}
                           onChange={formik.handleChange}
-                          inputRef={icdNameRef}
+                          inputRef={FieldRef}
                         />
                       </Tooltip>
                     </Grid>
@@ -447,6 +480,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                         value={formik.values.icd_name}
                         error={formik.errors.icd_name}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       />
                     </Grid>
                     {initialValues.statusCode == -2 ||
@@ -677,9 +711,9 @@ export default function IcdForm({ initialValues, page, type, id }) {
 
               <TabPanel value={2}>
                 <AuditTimeline
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchAuditData}
-                  loading={isLoadingAudit}
+                  id={initialValues.id}
+                  page="icd"
+                  service="master-service"
                 />
               </TabPanel>
             </TabContext>

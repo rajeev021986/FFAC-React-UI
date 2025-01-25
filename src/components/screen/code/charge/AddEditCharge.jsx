@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, FieldArray, useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, Card, CardContent, Stack, Tab } from "@mui/material";
@@ -19,6 +19,8 @@ import ChargeInputs from "./ChargeInputs";
 import AuditTimeLine from "../../../AuditTimeLine";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
+import CustomToast from "../../../common/Toast/CustomToast";
+import ApiManager from "../../../../services/ApiManager";
 
 const AddEditCharge = () => {
   const location = useLocation();
@@ -84,11 +86,18 @@ const AddEditCharge = () => {
       try {
         let res = await addCharge(updatedValue).unwrap();
         if (res.success) {
-          toast.success(res.message);
+          toast.custom(<CustomToast message={res.message} toast="success" />, {
+            closeButton: false,
+          });
           nav("/app/admin/charges");
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     } else {
       try {
@@ -98,11 +107,18 @@ const AddEditCharge = () => {
           (updatedValue.statusCode = -2);
         let res = await updateCharge(updatedValue).unwrap();
         if (res.success) {
-          toast.success(res.message);
+          toast.custom(<CustomToast message={res.message} toast="success" />, {
+            closeButton: false,
+          });
           nav("/app/admin/charges");
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     }
   };
@@ -125,7 +141,12 @@ const AddEditCharge = () => {
         formik.setValues(initialValues);
       }
     } catch (error) {
-      toast.error("Error while fetching data");
+      toast.custom(
+        <CustomToast message="Error while fetching data" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   useEffect(() => {
@@ -133,13 +154,7 @@ const AddEditCharge = () => {
       handleFetchCharge();
     }
   }, [ChargeSettingsData]);
-  const [getChargeAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetChargeAuditQuery();
-  const fetchUserAudit = () => {
-    getChargeAudit({
-      id: id,
-    });
-  };
+
   return (
     <>
       <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
@@ -206,9 +221,9 @@ const AddEditCharge = () => {
                   sx={{ margin: "0px !important", padding: "0px !important" }}
                 >
                   <AuditTimeLine
-                    auditDetails={AuditData}
-                    reloadDataHandler={fetchUserAudit}
-                    loading={isLoadingAudit}
+                    id={id}
+                    page="charge"
+                    service="admin-service"
                   />
                 </TabPanel>
               </TabContext>

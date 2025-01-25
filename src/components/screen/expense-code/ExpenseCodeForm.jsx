@@ -12,6 +12,7 @@ import {
 import toast from "react-hot-toast";
 import ReusableRightDrawer from "../../common/CommonDrawer";
 import { COMMON } from "../../../data/columns/audit";
+import CustomToast from "../../common/Toast/CustomToast";
 
 export default function ExpenseCodeForm({ modal, setModal }) {
   const [addExpenseCode, { isLoading: isAECLoading }] =
@@ -34,7 +35,6 @@ export default function ExpenseCodeForm({ modal, setModal }) {
     },
     validationSchema: expenseCodeValidation,
     onSubmit: async (values) => {
-
       try {
         let response =
           modal.type === "edit"
@@ -45,11 +45,21 @@ export default function ExpenseCodeForm({ modal, setModal }) {
             : await addExpenseCode(values).unwrap();
         // handle errors and success with toast
         if (response.status === "success") {
-          toast.success(response.message);
+          toast.custom(
+            <CustomToast message={response.message} toast="success" />,
+            {
+              closeButton: false,
+            }
+          );
           setModal({ open: false, type: "", data: {} });
         }
       } catch (error) {
-        toast.error(error.data.message);
+        toast.custom(
+          <CustomToast message={error.data.message} toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     },
   });

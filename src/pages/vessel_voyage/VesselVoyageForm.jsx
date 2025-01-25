@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { VesselVoyageValidation } from "../../components/screen/vessel_voyage/validation";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -21,6 +21,7 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 import getFirstError from "../../components/common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
+import CustomToast from "../../components/common/Toast/CustomToast";
 export function VesselVoyageForm({ initialValues, type }) {
   const disabled = false;
   const nav = useNavigate();
@@ -35,19 +36,12 @@ export function VesselVoyageForm({ initialValues, type }) {
   const [updateVoyage, { isLoading: loadingUpdate }] =
     useUpdateVoyageMutation();
 
-  const [loading, setLoading] = useState(false);
-  const [enquiryAuditDetails, setEnquiryAuditDetails] = useState([]);
-
-  const reloadDataHandler = async () => {
-    try {
-      setLoading(true);
-      const res = await ApiManager.getVoyageAudit(initialValues.id);
-      setEnquiryAuditDetails(res);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
+  const FieldRef = useRef(null);
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
     }
-  };
+  }, []);
 
   const formik = useFormik({
     initialValues,
@@ -64,13 +58,31 @@ export function VesselVoyageForm({ initialValues, type }) {
             ...values,
           }).unwrap();
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/master/vesselVoyage");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -81,13 +93,31 @@ export function VesselVoyageForm({ initialValues, type }) {
           }).unwrap();
 
           if (response.code == "SUCCESS") {
-            toast.success(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="success" />,
+              {
+                closeButton: false,
+              }
+            );
             nav("/app/master/vesselVoyage");
           } else {
-            toast.error(response.message);
+            toast.custom(
+              <CustomToast message={response.message} toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
           }
         } catch (error) {
-          toast.error("An error occurred while submitting the form.");
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       }
     },
@@ -164,6 +194,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         value={formik.values.vessel}
                         error={formik.errors.vessel}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       ></FormAutoComplete>
                     </Grid>
                     <Grid
@@ -516,6 +547,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         value={formik.values.vessel}
                         error={formik.errors.vessel}
                         onChange={formik.handleChange}
+                        inputRef={FieldRef}
                       ></FormAutoComplete>
                     </Grid>
                     <Grid
@@ -833,9 +865,9 @@ export function VesselVoyageForm({ initialValues, type }) {
               </TabPanel>{" "}
               <TabPanel value="2" sx={{ margin: 0, padding: 0 }}>
                 <AuditTimeLine
-                  auditDetails={enquiryAuditDetails}
-                  reloadDataHandler={reloadDataHandler}
-                  loading={loading}
+                  id={initialValues.id}
+                  page="vessel/voyage"
+                  service="master-service"
                 />
               </TabPanel>
             </TabContext>

@@ -33,15 +33,6 @@ export function VesselBody({ selectBox, setSelectBox }) {
     data: {},
   });
 
-  const fetchUserAudit = () => {
-    fetchAudit({
-      id: modal?.data?.id,
-    });
-  };
-
-  const [fetchAudit, { data: AuditData, isLoading: AuditLoading }] =
-    useLazyFetchAuditVesselQuery();
-
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
@@ -194,9 +185,9 @@ export function VesselBody({ selectBox, setSelectBox }) {
               User Audit Logs
             </Typography>
             <AuditTimeLine
-              auditDetails={AuditData}
-              reloadDataHandler={fetchUserAudit}
-              loading={AuditLoading}
+              id={modal?.data?.id}
+              page="vessel"
+              service="master-service"
             />
           </Box>
         </Drawer>

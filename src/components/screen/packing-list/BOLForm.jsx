@@ -21,6 +21,7 @@ import BLDetailsFields from "./bol-form";
 import { useDropzone } from "react-dropzone";
 import FileScreen from "./fileShowGrid";
 import { useNavigate } from "react-router-dom";
+import CustomToast from "../../common/Toast/CustomToast";
 
 export default function BOLForm({
   initialValues,
@@ -86,8 +87,7 @@ export default function BOLForm({
       .then((response) => {
         setOptions(response.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
 
   const handlePlDetailsChange = (index, fieldName, value) => {
@@ -103,29 +103,35 @@ export default function BOLForm({
     sethblDetailsData(newHblData);
   };
 
-  const handleDrop = useCallback((acceptedFiles) => {
-    const MAX_FILE_SIZE = 5 * 1024 * 1024;
-  
-    const oversizedFiles = acceptedFiles.filter((file) => file.size > MAX_FILE_SIZE);
-    const validFiles = acceptedFiles.filter((file) => file.size <= MAX_FILE_SIZE);
-  
-    if (oversizedFiles.length > 0) {
-      setAlertConfig({
-        open: true,
-        title: "File Size Error",
-        message: "Files must be less than 5 MB. Please select smaller files.",
-        severity: "error",
-        confirmText: "Close",
-        onConfirm: () => setAlertConfig({ ...alertConfig, open: false }),
-        onClose: () => setAlertConfig({ ...alertConfig, open: false }),
-      });
-    }
- 
-    if (validFiles.length > 0) {
-      setUploadedFiles((prevFiles) => [...prevFiles, ...validFiles]);
-    }
-  }, [alertConfig]);
-  
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+      const oversizedFiles = acceptedFiles.filter(
+        (file) => file.size > MAX_FILE_SIZE
+      );
+      const validFiles = acceptedFiles.filter(
+        (file) => file.size <= MAX_FILE_SIZE
+      );
+
+      if (oversizedFiles.length > 0) {
+        setAlertConfig({
+          open: true,
+          title: "File Size Error",
+          message: "Files must be less than 5 MB. Please select smaller files.",
+          severity: "error",
+          confirmText: "Close",
+          onConfirm: () => setAlertConfig({ ...alertConfig, open: false }),
+          onClose: () => setAlertConfig({ ...alertConfig, open: false }),
+        });
+      }
+
+      if (validFiles.length > 0) {
+        setUploadedFiles((prevFiles) => [...prevFiles, ...validFiles]);
+      }
+    },
+    [alertConfig]
+  );
 
   const handleFileClick = (file) => {
     const fileURL = URL.createObjectURL(file);
@@ -134,23 +140,25 @@ export default function BOLForm({
 
   const handleSubmit = async () => {
     setLoader(true);
-  
+
     const formData = new FormData();
-  
+
     // Prepare the data by removing unwanted fields from plData
-    const updatedPlData = plData.map(({ sprBLIteamDetails, ...restItem }) => restItem);
-  
+    const updatedPlData = plData.map(
+      ({ sprBLIteamDetails, ...restItem }) => restItem
+    );
+
     const completeFormValues = {
       ...updateInitialValue,
       plData: updatedPlData,
       hbllist: hblData,
     };
-  
+
     // Append form fields to FormData
     for (const [key, value] of Object.entries(completeFormValues)) {
       if (Array.isArray(value)) {
         // For plData or hbllist, append as JSON string
-        if (key === 'plData' || key === 'hbllist') {
+        if (key === "plData" || key === "hbllist") {
           formData.append(key, JSON.stringify(value));
         } else {
           // For any other arrays, append as individual items
@@ -163,11 +171,11 @@ export default function BOLForm({
         formData.append(key, value);
       }
     }
-  
+
     uploadedFiles.forEach((file) => {
-      formData.append('files', file); // Append all files under the same key 'files'
+      formData.append("files", file); // Append all files under the same key 'files'
     });
-  
+
     const showAlert = (message) => {
       setAlertConfig({
         open: true,
@@ -180,7 +188,7 @@ export default function BOLForm({
         onClose: () => setAlertConfig({ ...alertConfig, open: false }),
       });
     };
-  
+
     try {
       if (completeFormValues.polDate > completeFormValues.podDate) {
         setLoader(false);
@@ -192,9 +200,11 @@ export default function BOLForm({
       }
       if (completeFormValues.pol === completeFormValues.finalDest) {
         setLoader(false);
-        return showAlert("POL and Final Destination cannot be the same location !!");
+        return showAlert(
+          "POL and Final Destination cannot be the same location !!"
+        );
       }
-  
+
       const errors = validateBOLForm(completeFormValues);
       if (Object.keys(errors).length > 0) {
         setLoader(false);
@@ -203,18 +213,25 @@ export default function BOLForm({
       } else {
         dispatch(clearFormErrors());
       }
-  
+
       const res = await addSPRBLSave(formData);
-  
+
       if (res?.error?.status === 400) {
         setLoader(false);
         return showAlert(res.error.data.message);
       } else {
-        toast.success(res?.data?.message);
+        toast.custom(
+          <CustomToast message={res?.data?.message} toast="success" />,
+          {
+            closeButton: false,
+          }
+        );
         navigate("/app/spr/packing_list");
       }
     } catch (err) {
-      toast.error(err.message);
+      toast.custom(<CustomToast message={err.message} toast="error" />, {
+        closeButton: false,
+      });
     } finally {
       setLoader(false);
     }
@@ -274,7 +291,7 @@ export default function BOLForm({
           >
             <PLDetailsForm data={plData} onChange={handlePlDetailsChange} />
             <HBLForm data={hblData} onChange={handleHblDataChange} />
-            <FileScreen data ={fileData}/>
+            <FileScreen data={fileData} />
           </ThemeTabs>
         </Box>
       </Grid>

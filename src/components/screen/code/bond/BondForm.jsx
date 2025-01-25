@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import BondValue from "./BondValue";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
@@ -20,6 +20,8 @@ import toast from "react-hot-toast";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import AuditTimeLine from "../../../AuditTimeLine";
+import CustomToast from "../../../common/Toast/CustomToast";
+import ApiManager from "../../../../services/ApiManager";
 export default function BondForm() {
   const [value, setValue] = React.useState(1);
   const location = useLocation();
@@ -60,10 +62,20 @@ export default function BondForm() {
           formik.setValues(response.data.body);
         }
       } else {
-        toast.error("Failed to fetch Bond data");
+        toast.custom(
+          <CustomToast message="Failed to fetch Bond data" toast="error" />,
+          {
+            closeButton: false,
+          }
+        );
       }
     } catch (error) {
-      toast.error("Error fetching Bond data");
+      toast.custom(
+        <CustomToast message="Error fetching Bond data" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
     }
   };
   const formik = useFormik({
@@ -116,7 +128,15 @@ export default function BondForm() {
             id: null,
           }).unwrap();
         } catch (error) {
-          toast.error(error?.message || "Something went wrong");
+          toast.custom(
+            <CustomToast
+              message={error?.message || "Something went wrong!"}
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
         }
       } else {
         try {
@@ -136,21 +156,22 @@ export default function BondForm() {
           };
 
           const result = await updateBond(updatedValues).unwrap();
-          toast.success(result.message);
+          toast.custom(
+            <CustomToast message={result.message} toast="success" />,
+            {
+              closeButton: false,
+            }
+          );
         } catch (error) {
-          toast.error(error.message);
+          toast.custom(<CustomToast message={error.message} toast="error" />, {
+            closeButton: false,
+          });
         }
       }
       nav(-1);
     },
   });
-  const [getbondAudit, { data: AuditData, isLoading: isLoadingAudit }] =
-    useLazyGetbondAuditQuery();
-  const fetchUserAudit = () => {
-    getbondAudit({
-      id: id,
-    });
-  };
+
   return (
     <>
       <Box
@@ -204,11 +225,7 @@ export default function BondForm() {
                 )}
               </TabPanel>
               <TabPanel value={2} sx={{ padding: 0, margin: 0 }}>
-                <AuditTimeLine
-                  auditDetails={AuditData}
-                  reloadDataHandler={fetchUserAudit}
-                  loading={isLoadingAudit}
-                />
+                <AuditTimeLine id={id} page="bond" service="master-service" />
               </TabPanel>
             </TabContext>
           </CardContent>
