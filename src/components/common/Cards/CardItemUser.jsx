@@ -42,8 +42,8 @@ export default function CardItemUser({
         borderColor: "border.main",
         borderRadius: "20px",
         padding: "10px",
-        width: "20rem",
-        height: "12rem",
+        width: "22rem",
+        height: "20rem",
         boxShadow:
           "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px",
         display: "flex",
@@ -52,10 +52,98 @@ export default function CardItemUser({
         margin: "5px",
       }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          gap: "10px",
+          alignItems: "flex-start",
+          flexDirection: "column",
+          width: "100%",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            flexDirection: "column",
+            borderRadius: "8px",
+
+            width: "100%",
+            height: "8rem",
+            backgroundColor: "#f0f0f0",
+          }}
+        >
+          {/* Replace this with an Avatar or Image */}
+          <Typography variant="h6">{avatar || "A"}</Typography>
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <Typography variant="h6" component="div">
+              {item.firstName}
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "10px",
+                  padding: "2px 8px",
+                  borderRadius: "15px",
+                  backgroundColor: item.status === "Active" ? "green" : "red",
+                  color: "#fff",
+                }}
+              >
+                {item.status}
+              </Typography>
+            </Box>
+          </Box>
+          <Box>
+            {" "}
+            <Typography variant="body2" color="text.secondary">
+              {item.email}
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            sx={{ borderRadius: "20px", textTransform: "unset" }}
+            onClick={() => actions[2].onClick({ row: item })}
+          >
+            {actions[2].label}
+          </Button>
+        </Box>
+      </Box>
       <CardHeader
-        sx={{ padding: "8px" }}
+        sx={{ padding: "8px", width: "100%" }}
         action={
-          <Box sx={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "8px",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
             <IconButton
               color="primary"
               onClick={() => actions[0].onClick({ row: item })}
@@ -83,67 +171,6 @@ export default function CardItemUser({
           </Box>
         }
       />
-      <Box sx={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "3rem",
-            height: "3rem",
-            backgroundColor: "#f0f0f0",
-            borderRadius: "50%",
-          }}
-        >
-          {/* Replace this with an Avatar or Image */}
-          <Typography variant="h6">{avatar || "A"}</Typography>
-        </Box>
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-          }}
-        >
-          <Box>
-            <Typography variant="h6" component="div">
-              {item.firstName}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {item.email}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "12px",
-                padding: "5px 10px",
-                borderRadius: "15px",
-                backgroundColor: item.status === "Active" ? "green" : "red",
-                color: "#fff",
-              }}
-            >
-              {item.status}
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              sx={{ borderRadius: "20px", textTransform: "unset" }}
-              onClick={() => actions[2].onClick({ row: item })}
-            >
-              {actions[2].label}
-            </Button>
-          </Box>
-        </Box>
-      </Box>
     </Card>
   );
 }
