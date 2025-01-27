@@ -16,7 +16,7 @@ const ENDPOINTS = {
     `/getAutoComplete?name=${name}&search=${search}`,
   GET_COMMON_OPTIONS: (name, search) =>
     `/getAutoComplete?name=${name}&search=${search}`,
-  GET_CUSTOMER_DOCUMENT_FILE: (source, id) =>
+  GET_DOCUMENT_FILES: (source, id) =>
     `/entity-service/v1/file?source=${source}&sourceId=${id}`,
   GET_SHIPPER_DOCUMENT_FILE: (source, id) =>
     `/entity-service/file/get?source=${source}&sourceId=${id}`,

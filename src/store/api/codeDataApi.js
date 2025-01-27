@@ -7,14 +7,6 @@ export const codeDataApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
     tagTypes: ["Code"],
     endpoints: (builder) => ({
-        fetchCustomer: builder.query({
-            query: (params) => {
-                const queryString = new URLSearchParams(params).toString();
-                return { url: `/entity-service/customer/get`, method: "GET", headers: getAppHeaders() };
-                // return { url: `/code/customer?${queryString}`, method: "GET", headers : getAppHeaders() };
-            },
-            providesTags: ["Code"],
-        }),
         addCustomer: builder.mutation({
             query: (params) => {
                 const headers = {
@@ -48,38 +40,7 @@ export const codeDataApi = createApi({
             invalidatesTags: ["Code"],
         }),
 
-        fetchParty: builder.query({
-            query: (params) => {
-                const queryString = new URLSearchParams(params).toString();
-                return { url: `/code/party?${queryString}`, method: "GET", headers: getAppHeaders() };
-            },
-            providesTags: ["Code"],
-        }),
-        addParty: builder.mutation({
-            query: (params) => {
-                const headers = {
-                    'Authorization': getAppHeaders()['Authorization']
-                };
-                return { url: `/code/party`, method: "POST", body: params, headers: headers };
-            },
-            invalidatesTags: ["Code"],
-        }),
-        fetchAgent: builder.query({
-            query: (params) => {
-                const queryString = new URLSearchParams(params).toString();
-                return { url: `/code/agent?${queryString}`, method: "GET", headers: getAppHeaders() };
-            },
-            providesTags: ["Code"],
-        }),
-        addAgent: builder.mutation({
-            query: (params) => {
-                const headers = {
-                    'Authorization': getAppHeaders()['Authorization']
-                };
-                return { url: `/code/agent`, method: "POST", body: params, headers: headers };
-            },
-            invalidatesTags: ["Code"],
-        }),
+
         uploadCustomerFile: builder.mutation({
             query: (params) => {
                 const formData = new FormData();
@@ -99,26 +60,6 @@ export const codeDataApi = createApi({
                 };
             },
         }),
-        getCustomerFileList: builder.mutation({
-            query: (params) => {
-                const headers = {
-                    'Authorization': getAppHeaders()['Authorization']
-                };
-                return { url: `/entity-service/v1/file/get`, method: "POST", body: params, headers: headers };
-            },
-        }),
-        downloadDocumnent: builder.mutation({
-            query: (params) => {
-                return { url: `/file/download?${params.id}`, body: params.body, method: "GET", headers: getAppHeaders() };
-            },
-        }),
-        // fetchCustomerDatas: builder.query({
-        //     query: (params, payload) => {
-        //         const queryString = new URLSearchParams(params).toString();
-        //         return { url: `/entity-service/customer/filter?${queryString}`, method: "POST", body: payload, headers: getAppHeaders() };
-        //     },
-        //     providesTags: ["Code"],
-        // }),
         fetchCustomerDatas: builder.query({
             query: ({ params, payload, page }) => {
                 const queryString = new URLSearchParams(params).toString();
@@ -138,4 +79,4 @@ export const codeDataApi = createApi({
     }),
 });
 
-export const { useFetchCustomerQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useFetchPartyQuery, useAddPartyMutation, useFetchAgentQuery, useAddAgentMutation, useUploadCustomerFileMutation, useGetCustomerFileListMutation, useDownloadDocumnentMutation, useFetchCustomerDatasQuery } = codeDataApi;
+export const { useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useUploadCustomerFileMutation, useFetchCustomerDatasQuery } = codeDataApi;
