@@ -24,6 +24,7 @@ import { StyledDataGrid } from "./common/Grid/styles";
 import UploadFilesDialog from "./UploadFilesDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import CustomToast from "./common/Toast/CustomToast";
+import { reloadDataHandler } from "../services/common/DocumentDetails";
 // Custom styled drop zone
 const DropZone = styled(Box)(({ theme }) => ({
   border: "2px dashed #ccc",
@@ -62,6 +63,11 @@ const UploadFile = ({
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [viewDocument, setViewDocument] = useState({});
   const [fileData, setFileDaat] = useState({});
+
+  useEffect(() => {
+    reloadDataHandler(sourceType, customer_id, setListData, setLoading);
+  }, []);
+
   const downloadIntgater = async () => {
     await ApiManager.fileDownloadIntegater(viewloaderId)
       .then((e) =>
@@ -131,7 +137,7 @@ const UploadFile = ({
       );
 
       setOpenConfirmation(false);
-      reloadDataHandler();
+      reloadDataHandler(sourceType, customer_id, setListData, setLoading);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -211,7 +217,7 @@ const UploadFile = ({
       setLoading(true);
       let response = await uploadCustomerFile(uploadData).unwrap();
       setDialogOpen(false);
-      reloadDataHandler();
+      reloadDataHandler(sourceType, customer_id, setListData, setLoading);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -493,20 +499,7 @@ const UploadFile = ({
       ),
     },
   ];
-  useEffect(() => {
-    reloadDataHandler();
-  }, []);
-  const reloadDataHandler = async () => {
-    try {
-      let source = sourceType;
-      setLoading(true);
-      const res = await ApiManager.getCustomerFormData(source, customer_id);
-      setListData(res.body);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
+
   return (
     <>
       {loading ? (

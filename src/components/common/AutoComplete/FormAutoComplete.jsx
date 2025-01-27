@@ -9,7 +9,8 @@ import {
 import { GetAutoCompleteData } from "../../utils/GetAutoCompleteData";
 
 function FormAutoComplete(props) {
-  const { label, id, suggestionName, value, error, onChange } = props;
+  const { label, id, suggestionName, dataLabel, value, error, onChange } =
+    props;
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,11 @@ function FormAutoComplete(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await GetAutoCompleteData(suggestionName, id);
+        const data = await GetAutoCompleteData(
+          suggestionName,
+          id,
+          !dataLabel ? suggestionName : dataLabel
+        );
         setOptions(data);
         setFilteredOptions(data);
       } catch (error) {
@@ -29,19 +34,18 @@ function FormAutoComplete(props) {
     };
 
     fetchData();
-  }, []);
+  }, [suggestionName, id]);
 
   const handleInputChange = (event, newValue) => {
     setLoading(false);
     const filtered = options.filter((option) =>
-      option.toLowerCase().includes(newValue.toLowerCase())
+      option.label.toLowerCase().includes(newValue.toLowerCase())
     );
-
     setFilteredOptions(filtered);
   };
 
   const handleSelectionChange = (event, newValue) => {
-    onChange({ target: { name: id, value: newValue } });
+    onChange({ target: { name: id, value: newValue.value } });
   };
 
   return (
@@ -52,11 +56,11 @@ function FormAutoComplete(props) {
         }}
         size="small"
         id={id}
-        value={value}
+        value={options.find((option) => option.value === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
-        options={filteredOptions} // Use the filtered options
-        getOptionLabel={(option) => option || ""}
+        options={filteredOptions}
+        getOptionLabel={(option) => option.label || ""}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -87,8 +91,8 @@ function FormAutoComplete(props) {
           />
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option} sx={{ fontSize: "14px" }}>
-            {option}
+          <MenuItem {...props} key={option.value} sx={{ fontSize: "14px" }}>
+            {option.label}
           </MenuItem>
         )}
         noOptionsText={

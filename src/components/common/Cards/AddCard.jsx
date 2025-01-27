@@ -32,6 +32,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Height } from "@mui/icons-material";
 import CustomToast from "../Toast/CustomToast";
 import { OutlinedButton, ThemeButton } from "../Button";
+import FormAutoComplete from "../AutoComplete/FormAutoComplete";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First Name is required"),
@@ -117,7 +118,6 @@ export default function AddCard() {
     fetchRoles();
     id && fetchUserData();
   }, []);
-
   const handleCheckboxChange = (event, optionValue) => {
     const isChecked = event.target.checked;
 
@@ -403,16 +403,15 @@ export default function AddCard() {
                   paddingLeft={1}
                   marginTop={2}
                 >
-                  <InputBox
-                    name="companyCode"
-                    label="Company Code"
-                    type="companyCode"
+                  <FormAutoComplete
+                    label="Company Name"
                     id="companyCode"
-                    autoComplete="off"
+                    suggestionName="company_code"
+                    dataLabel="company_name"
                     value={formik.values.companyCode}
                     error={formik.errors.companyCode}
                     onChange={formik.handleChange}
-                  />
+                  ></FormAutoComplete>
                 </Grid>
               </Grid>
               <Box

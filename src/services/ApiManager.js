@@ -67,18 +67,7 @@ class ApiManager {
     const url = ENDPOINTS.GET_COMMON_OPTIONS(name, search);
     return ApiMethods.get(url);
   };
-  static getAuditDetails = async (id, page, service) => {
-    const url = ENDPOINTS.GET_AUDIT_DATA(id, page, service);
-    return ApiMethods.get(url);
-  };
-  static getCustomerFormData = async (source, id) => {
-    const url = ENDPOINTS.GET_CUSTOMER_DOCUMENT_FILE(source, id);
-    return ApiMethods.get(url);
-  };
-  static getShipperFormData = async (source, id) => {
-    const url = ENDPOINTS.GET_SHIPPER_DOCUMENT_FILE(source, id);
-    return ApiMethods.get(url);
-  };
+
   static getCustomerDeatils = async (id) => {
     const url = ENDPOINTS.GET_CUSTOMER_DETAILS(id);
     return ApiMethods.get(url);
@@ -115,11 +104,7 @@ class ApiManager {
     const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(id, type);
     return ApiMethods.put(url, payload);
   };
-  static fetchDatasExcel = async ({query, payload, service, page}) => {
-    const queryString = new URLSearchParams(query).toString();
-    const url = ENDPOINTS.FETCH_DATA_EXCEL(queryString, service, page);
-    return ApiMethods.postBlob(url, payload);
-  };
+
 
   static getUserData = async (id) => {
     const url = ENDPOINTS.GET_USER_DATA(id);
@@ -200,6 +185,24 @@ class ApiManager {
     const url = ENDPOINTS.GET_EDIT_VOYAGE(id);
     return ApiMethods.get(url);
   };
+
+  static fetchDatasExcel = async ({ query, payload, service, page }) => {
+    const queryString = new URLSearchParams(query).toString();
+    const url = ENDPOINTS.FETCH_DATA_EXCEL(queryString, service, page);
+    return ApiMethods.postBlob(url, payload);
+  };
+
+  static getAuditDetails = async (id, page, service) => {
+    const url = ENDPOINTS.GET_AUDIT_DATA(id, page, service);
+    return ApiMethods.get(url);
+  };
+
+  static getDocumentFiles = async (source, id) => {
+    const url = ENDPOINTS.GET_DOCUMENT_FILES(source, id);
+    return ApiMethods.get(url);
+  };
 }
+
+
 
 export default ApiManager;
