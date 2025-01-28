@@ -7,9 +7,13 @@ import { reloadDataHandler } from "../services/common/AuditDetails";
 function AuditTimeLine({ id, page, service }) {
   const [auditDetails, setAuditDetails] = useState([]);
   const [auditLoading, setAuditLoading] = useState(false);
-  useEffect(() => {
+  const refresher = () =>
     reloadDataHandler(id, page, service, setAuditDetails, setAuditLoading);
+  useEffect(() => {
+    // reloadDataHandler(id, page, service, setAuditDetails, setAuditLoading);
+    refresher();
   }, []);
+
   return (
     <>
       {auditLoading ? (
@@ -21,7 +25,7 @@ function AuditTimeLine({ id, page, service }) {
               variant="contained"
               color="primary"
               startIcon={<RefreshOutlinedIcon />}
-              onClick={reloadDataHandler}
+              onClick={refresher}
               sx={{
                 borderRadius: "17px 18px 18px 17px",
                 color: "white !important",
