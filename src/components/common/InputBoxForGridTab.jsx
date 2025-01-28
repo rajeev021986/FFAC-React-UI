@@ -41,7 +41,9 @@ const InputBoxForGridTab = (props) => {
     api.updateRows([{ id, [field]: newValue }]);
     if (onChange) onChange(event);
   };
-
+  const handleKeyDown = (event) => {
+    event.stopPropagation();
+  };
   const renderInput = () => {
     switch (fieldType) {
       case "input":
@@ -51,6 +53,7 @@ const InputBoxForGridTab = (props) => {
             placeholder={`Enter ${field}`}
             onBlur={handleBlur}
             onChange={handleChange}
+            onKeyDown={handleKeyDown} 
             fullWidth
             size="small"
             InputProps={{
@@ -80,6 +83,7 @@ const InputBoxForGridTab = (props) => {
             onChange={handleChange}
             placeholder={`Enter ${field}`}
             fullWidth
+            onKeyDown={handleKeyDown} 
             displayEmpty
             size="small"
             style={{
