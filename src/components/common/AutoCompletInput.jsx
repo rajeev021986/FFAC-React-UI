@@ -14,6 +14,7 @@ function AutoCompleteInput({
   label,
   id,
   suggestionName,
+  dataLabel,
   value,
   error,
   onChange,
@@ -28,7 +29,11 @@ function AutoCompleteInput({
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await GetAutoCompleteData(suggestionName, id);
+        const data = await GetAutoCompleteData(
+          suggestionName,
+          id,
+          !dataLabel ? suggestionName : dataLabel
+        );
         setOptions(data);
         setFilteredOptions(data);
       } catch (error) {
@@ -44,15 +49,18 @@ function AutoCompleteInput({
   const handleInputChange = async (event, newValue) => {
     setLoading(false);
     const filtered = options.filter((option) =>
-      option.toLowerCase().includes(newValue.toLowerCase())
+      option.label.toLowerCase().includes(newValue.toLowerCase())
     );
 
     setFilteredOptions(filtered);
   };
 
   const handleSelectionChange = (event, newValue) => {
-    // onChange({ target: { name: id, value: newValue } });
-    onChange(newValue);
+    if (newValue) {
+      onChange(newValue.value);
+    } else {
+      onChange(null);
+    }
   };
 
   return (
@@ -69,11 +77,11 @@ function AutoCompleteInput({
     >
       <Autocomplete
         id={id}
-        value={value}
+        value={options.find((option) => option.value === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
-        getOptionLabel={(option) => option || ""}
+        getOptionLabel={(option) => option.label || ""}
         sx={{
           height: "100%",
           width: "100%",
@@ -115,8 +123,8 @@ function AutoCompleteInput({
           </Tooltip>
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option} sx={{ fontSize: "14px" }}>
-            {option}
+          <MenuItem {...props} key={option.value} sx={{ fontSize: "14px" }}>
+            {option.label}
           </MenuItem>
         )}
         noOptionsText={

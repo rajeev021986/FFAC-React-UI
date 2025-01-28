@@ -45,9 +45,12 @@ function FormAutoComplete(props) {
   };
 
   const handleSelectionChange = (event, newValue) => {
-    onChange({ target: { name: id, value: newValue.value } });
+    if (newValue) {
+      onChange({ target: { name: id, value: newValue.value } });
+    } else {
+      onChange({ target: { name: id, value: null } }); 
+    }
   };
-
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
