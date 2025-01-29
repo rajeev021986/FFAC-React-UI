@@ -229,12 +229,9 @@ export default function VendorForm({ page = "vendor" }) {
             : 1;
           let res = await addVendor(updatedValue).unwrap();
           if (res.success) {
-            toast.custom(
-              <CustomToast message={res.message} toast="success" />,
-              {
-                closeButton: false,
-              }
-            );
+            toast.custom(<CustomToast message={res.message} toast="warn" />, {
+              closeButton: false,
+            });
             nav(-1);
           }
         } catch (error) {

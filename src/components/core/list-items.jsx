@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { iconsMap } from "../../config/menu";
+import IconComponent from "../common/IconComponent";
 
 export const ExpandableListItems = ({ label, items, icon, hover }) => {
   const [open, setOpen] = useState(false);
@@ -37,7 +38,8 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
       >
         <ListItemIcon sx={{ color: "primary.main" }}>
           {icon ? (
-            <Avatar sx={{ width: "30px", height: "30px" }} src={icon} />
+            // <Avatar sx={{ width: "30px", height: "30px" }} src={icon} />
+            <IconComponent iconName={icon} />
           ) : (
             <Brightness1Outlined />
           )}
@@ -48,8 +50,7 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
       <Collapse in={hover ? open : false} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {items.map((item) => {
-
-return item.items?.length > 0 ? (
+            return item.items?.length > 0 ? (
               // Recursively handle nested items
               <ListItem
                 sx={{
@@ -78,10 +79,11 @@ return item.items?.length > 0 ? (
                 >
                   <ListItemIcon sx={{ color: "primary.main" }}>
                     {item.iconKey ? (
-                      <Avatar
-                        src={item.iconKey}
-                        sx={{ width: "30px", height: "30px" }}
-                      />
+                      // <Avatar
+                      //   src={item.iconKey}
+                      //   sx={{ width: "30px", height: "30px" }}
+                      // />
+                      <IconComponent iconName={icon} />
                     ) : (
                       <ControlPointOutlined />
                     )}
@@ -110,7 +112,8 @@ export const TListItem = ({ label, to, icon }) => {
         }}
       >
         <ListItemIcon sx={{ color: "primary.main" }}>
-          {<Avatar src={icon} sx={{ width: "30px", height: "30px" }} />}
+          {/* {<Avatar src={icon} sx={{ width: "30px", height: "30px" }} />} */}
+          <IconComponent iconName={icon} />
         </ListItemIcon>
         <ListItemText primary={label} />
       </ListItem>
