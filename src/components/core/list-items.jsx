@@ -39,7 +39,7 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
         <ListItemIcon sx={{ color: "primary.main" }}>
           {icon ? (
             // <Avatar sx={{ width: "30px", height: "30px" }} src={icon} />
-            <IconComponent iconName={icon} />
+            <IconComponent iconName={icon}  sx={style.icon} />
           ) : (
             <Brightness1Outlined />
           )}
@@ -83,7 +83,7 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
                       //   src={item.iconKey}
                       //   sx={{ width: "30px", height: "30px" }}
                       // />
-                      <IconComponent iconName={icon} />
+                      <IconComponent iconName={item.iconKey}  sx={style.icon} />
                     ) : (
                       <ControlPointOutlined />
                     )}
@@ -113,10 +113,14 @@ export const TListItem = ({ label, to, icon }) => {
       >
         <ListItemIcon sx={{ color: "primary.main" }}>
           {/* {<Avatar src={icon} sx={{ width: "30px", height: "30px" }} />} */}
-          <IconComponent iconName={icon} />
+          <IconComponent iconName={icon} sx={style.icon} />
         </ListItemIcon>
         <ListItemText primary={label} />
       </ListItem>
     </Link>
   );
 };
+
+const style={
+  icon:{ fontSize: "1.8rem" }
+}
