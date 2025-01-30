@@ -16,7 +16,15 @@ export default function DeleteDialog({
   handleOpen,
   handleClose,
   handleDelete,
+  ...props
 }) {
+  const {
+    headerContent = "",
+    showName = true,
+    content = "",
+    cancelButton = "",
+    confirmationButton = "",
+  } = props;
   const [loader, setLoader] = useState(false);
   return (
     <Dialog
@@ -39,7 +47,7 @@ export default function DeleteDialog({
           pb: 2,
         }}
       >
-        {`Are you sure you want to delete the ${source}?`}
+        {headerContent || `Are you sure you want to delete the ${source}?`}
       </DialogTitle>
       <DialogContent
         sx={{
@@ -48,10 +56,12 @@ export default function DeleteDialog({
           fontSize: "1rem",
         }}
       >
-        <p>
-          <strong>{sourceName}</strong>
-        </p>
-        <p>This action cannot be undone.</p>
+        {showName && (
+          <p>
+            <strong>{sourceName}</strong>
+          </p>
+        )}
+        <p>{content || "This action cannot be undone."}</p>
       </DialogContent>
       <DialogActions
         sx={{
@@ -69,12 +79,16 @@ export default function DeleteDialog({
             borderRadius: 50,
           }}
         >
-          Cancel
+          {cancelButton || "Cancel"}
         </Button>
         <Button
-          onClick={() => {
+          onClick={async () => {
             setLoader(true);
-            handleDelete().then(() => setLoader(false));
+            try {
+              await handleDelete(); 
+            } finally {
+              setLoader(false);
+            }
           }}
           variant="contained"
           sx={{
@@ -84,7 +98,7 @@ export default function DeleteDialog({
             color: "white",
           }}
         >
-          {loader ? <LoaderIcon /> : "Delete"}
+          {loader ? <LoaderIcon /> : confirmationButton || "Delete"}
         </Button>
       </DialogActions>
     </Dialog>

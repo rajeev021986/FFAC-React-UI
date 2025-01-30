@@ -147,7 +147,7 @@ export default function BondForm() {
                 ? 1
                 : values.status === "Inactive"
                 ? -2
-                : null,
+                : values.statusCode,
             bondPurchaseDetailsEntities:
               values?.bondPurchaseDetailsEntities?.map((a) => ({
                 ...a,

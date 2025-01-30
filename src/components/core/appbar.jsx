@@ -15,7 +15,7 @@ import { styled } from "@mui/material/styles";
 // import LOGO from '../../assets/images/TransmodalBlackLogo.png';
 import { ThemeProvider } from "@mui/material/styles";
 import { getTheme } from "../../config/theme";
-import LOGO from "../../assets/images/ffacfavicon.png";
+import LOGO from "../../assets/images/ffacicon.png";
 import { useSelector, useDispatch } from "react-redux";
 import { setMode, setTheme } from "../../store/freatures/dashboardSlice";
 import AppDrawer from "../common/AppDrawer";

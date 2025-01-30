@@ -71,7 +71,7 @@ export default function Exchange() {
               ? 1
               : values.status === "Inactive"
               ? -2
-              : null,
+              : values.statusCode,
         }).unwrap();
         if (res.success) {
           toast.custom(<CustomToast message={res.message} toast="success" />, {

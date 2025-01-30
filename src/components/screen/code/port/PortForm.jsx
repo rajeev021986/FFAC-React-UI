@@ -124,7 +124,7 @@ function PortForm() {
                 ? 1
                 : values.status === "Inactive"
                 ? -2
-                : null,
+                : values.statusCode,
           }).unwrap();
           toast.custom(
             <CustomToast message={result.message} toast="success" />,
