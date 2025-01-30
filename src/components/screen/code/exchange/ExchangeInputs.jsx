@@ -23,11 +23,12 @@ export default function ExchangeInputs({
     <Grid container spacing={2} paddingLeft={1} paddingTop={1}>
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>
         <DateTimeField
+          name="fromDate"
           label="From Date"
           id="fromDate"
           value={formik.values.fromDate}
           error={formik.errors.fromDate}
-          onChange={formik.handleChange}
+          onChange={formik.setFieldValue}
           inputRef={FieldRef}
         />
       </Grid>
@@ -37,7 +38,7 @@ export default function ExchangeInputs({
           id="toDate"
           value={formik.values.toDate}
           error={formik.errors.toDate}
-          onChange={formik.handleChange}
+          onChange={formik.setFieldValue}
         />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={1}>
