@@ -87,24 +87,12 @@ export default function UserCard({ setDraweropen }) {
       <DeleteDialog
         handleOpen={openDialogPopup}
         handleClose={() => setOpenDialogPopup(false)}
-        headerContent="Are You sure want to Loout?"
+        headerContent="Logout Account"
         showName={false}
-        content={
-          <div>
-            Click{" "}
-            <span style={{ color: "red", fontWeight: "bold" }}>Logout</span> to
-            log out of the website, or click{" "}
-            <Typography
-              component="span"
-              sx={{ color: "primary.main", fontWeight: "bold" }}
-            >
-              Cancel
-            </Typography>{" "}
-            to go back to the page.
-          </div>
-        }
+        content={<div>Are you sure you want to Logout?</div>}
         handleDelete={handleLogout}
         confirmationButton="Logout"
+        confirmationButtonBackground="primary.main"
       />
     </Box>
   );

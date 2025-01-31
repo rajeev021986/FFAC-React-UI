@@ -177,7 +177,6 @@ export function VesselForm({ initialValues, type }) {
                     label="Vessel Details"
                     value="1"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -289,9 +288,9 @@ export function VesselForm({ initialValues, type }) {
                             label="Line"
                             value="1"
                             sx={{
-                              fontSize: "1rem",
                               textTransform: "capitalize",
                             }}
+                            className="nested1"
                           />
                         </TabList>
                       </Box>
@@ -343,7 +342,6 @@ export function VesselForm({ initialValues, type }) {
                     label="Vessel Details"
                     value="1"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -354,7 +352,6 @@ export function VesselForm({ initialValues, type }) {
                     label="Audit Logs"
                     value="2"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -490,9 +487,9 @@ export function VesselForm({ initialValues, type }) {
                             label="Line"
                             value="1"
                             sx={{
-                              fontSize: "1rem",
                               textTransform: "capitalize",
                             }}
+                            className="nested1"
                           />
                         </TabList>
                       </Box>

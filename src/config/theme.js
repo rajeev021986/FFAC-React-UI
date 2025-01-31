@@ -72,6 +72,18 @@ export const getTheme = (primaryColor = "#026de0", mode) => {
       },
     },
     components: {
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            fontSize: "1.5rem",
+            fontWeight:'bold',
+            "&.nested1": {
+              fontSize: "1.2rem",
+              fontWeight:"500"
+            },
+          },
+        },
+      },
       MuiTypography: {
         styleOverrides: {
           title: {

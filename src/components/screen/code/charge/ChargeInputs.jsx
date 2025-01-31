@@ -323,8 +323,8 @@ export default function ChargeInputs({
                 <Tab
                   label="Mapping Details"
                   value="1"
+                  className="nested1"
                   sx={{
-                    fontSize: "1rem",
                     textTransform: "capitalize",
                   }}
                 />

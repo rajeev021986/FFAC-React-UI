@@ -244,9 +244,10 @@ export default function BondEditGrid({ formik, disabled }) {
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               {TabsHosts.map((value, index) => (
                 <Tab
-                  sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  sx={{ textTransform: "capitalize" }}
                   label={value.tabLabel}
                   value={index}
+                  className="nested1"
                 />
               ))}
             </TabList>

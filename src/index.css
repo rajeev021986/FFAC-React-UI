@@ -3,6 +3,7 @@
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   padding: 0;
@@ -17,6 +18,7 @@ code {
 li {
   list-style-type: none;
 }
+
 a {
   text-decoration: none;
   color: inherit;
@@ -25,19 +27,21 @@ a {
 main {
   overflow-x: hidden;
 }
+
 .color-test {
   color: #20cb67;
   color: #b3f4ce;
 }
 
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  width: 7px;
+  height: 7px;
   background-color: #e9fbf4;
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background-color: #bf77f614;
+  background-color: #5cabfa;
   border-radius: 10px;
   position: inherit;
 }
@@ -45,6 +49,7 @@ main {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 /* From Uiverse.io by satyamchaudharydev */
 .ball {
   --size: 20px;
@@ -55,8 +60,7 @@ main {
   height: var(--size);
   background: #000;
   margin-right: var(--displace);
-  animation: animation321 var(--timing) infinite alternate
-    cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: animation321 var(--timing) infinite alternate cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 @keyframes animation321 {
@@ -70,31 +74,37 @@ main {
     transform: translateX(00px);
   }
 }
+
 .login-img {
   height: 100dvh;
 }
+
 .login-screen {
   max-width: 600px;
   width: 100%;
   padding: 24px 36px;
 }
+
 @media (max-width: 1499px) {
   .login-img {
     width: 65vw;
   }
 }
+
 @media (max-width: 1199px) {
   .login-img {
     width: 60vw;
     object-fit: cover;
   }
 }
+
 @media (max-width: 991px) {
   .ball {
     --size: 16px;
     --timing: 0.6s;
     --displace: 240px;
   }
+
   .login-img {
     width: 100%;
     object-fit: cover;
@@ -102,6 +112,7 @@ main {
     z-index: -1;
     height: 100%;
   }
+
   .login-screen {
     background: #ebeaec;
     border-radius: 24px;

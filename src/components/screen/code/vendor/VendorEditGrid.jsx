@@ -856,9 +856,10 @@ export default function VendorEditGrid({
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               {TabsHosts.map((value, index) => (
                 <Tab
-                  sx={{ fontSize: "1rem", textTransform: "capitalize" }}
+                  sx={{textTransform: "capitalize" }}
                   label={value.tabLable}
                   value={index}
+                  className="nested1"
                 />
               ))}
             </TabList>

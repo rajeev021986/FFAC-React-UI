@@ -35,6 +35,7 @@ const ThemeTabs = ({ tabData, tabCounts, children }) => {
                 tabData.map((tab, index) => (
                   <Tab
                     sx={tabStyle.tab}
+                    className="nested1"
                     label={tab.label}
                     value={tab.value}
                     key={index}
@@ -64,7 +65,6 @@ const tabStyle = {
   },
   tab: {
     textTransform: "capitalize",
-    fontSize: "1rem",
   },
   tabPanel: {
     width: "100%",

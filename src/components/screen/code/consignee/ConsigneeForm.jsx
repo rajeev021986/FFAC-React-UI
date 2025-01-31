@@ -191,7 +191,6 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                     label=" Consignee Details"
                     value={1}
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       padding: "0px 12px",
                       minHeight: "50px",
@@ -439,9 +438,9 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                             >
                               <Tab
                                 label="Free Days"
+                                className="nested1"
                                 value={1}
                                 sx={{
-                                  fontSize: "1rem",
                                   textTransform: "capitalize",
                                   padding: "0px 12px",
                                   minHeight: "50px",
@@ -500,7 +499,6 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                       label={a.label}
                       value={a.value}
                       sx={{
-                        fontSize: "1rem",
                         textTransform: "capitalize",
                         minHeight: "50px",
                       }}
@@ -728,9 +726,9 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                           >
                             <Tab
                               label="Free Days"
+                              className="nested1"
                               value={1}
                               sx={{
-                                fontSize: "1rem",
                                 textTransform: "capitalize",
                               }}
                             />

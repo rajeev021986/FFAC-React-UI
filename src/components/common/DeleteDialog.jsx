@@ -24,6 +24,9 @@ export default function DeleteDialog({
     content = "",
     cancelButton = "",
     confirmationButton = "",
+    cancelButtonColor = "",
+    confirmationButtonColor = "",
+    confirmationButtonBackground = "",
   } = props;
   const [loader, setLoader] = useState(false);
   return (
@@ -77,6 +80,7 @@ export default function DeleteDialog({
           sx={{
             minWidth: 100,
             borderRadius: 50,
+            color: cancelButtonColor || "primary.main",
           }}
         >
           {cancelButton || "Cancel"}
@@ -85,7 +89,7 @@ export default function DeleteDialog({
           onClick={async () => {
             setLoader(true);
             try {
-              await handleDelete(); 
+              await handleDelete();
             } finally {
               setLoader(false);
             }
@@ -94,8 +98,8 @@ export default function DeleteDialog({
           sx={{
             minWidth: 100,
             borderRadius: 50,
-            backgroundColor: "red",
-            color: "white",
+            backgroundColor: confirmationButtonBackground || "red",
+            color: confirmationButtonColor || "white",
           }}
         >
           {loader ? <LoaderIcon /> : confirmationButton || "Delete"}

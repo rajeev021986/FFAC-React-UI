@@ -188,7 +188,6 @@ const AddEditCharge = () => {
                         label={a.label}
                         value={a.value}
                         sx={{
-                          fontSize: "1rem",
                           textTransform: "capitalize",
                           minHeight: "50px",
                         }}

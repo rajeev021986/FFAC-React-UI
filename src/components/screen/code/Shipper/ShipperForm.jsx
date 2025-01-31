@@ -207,7 +207,6 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                     label="Shipper Details"
                     value={1}
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -566,7 +565,6 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                       label={a.label}
                       value={a.value}
                       sx={{
-                        fontSize: "1rem",
                         textTransform: "capitalize",
                         minHeight: "50px",
                       }}

@@ -161,7 +161,6 @@ export function VesselVoyageForm({ initialValues, type }) {
                     label="Voyage Details"
                     value="1"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -503,7 +502,6 @@ export function VesselVoyageForm({ initialValues, type }) {
                     label="Voyage Details"
                     value="1"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -514,7 +512,6 @@ export function VesselVoyageForm({ initialValues, type }) {
                     label="Audit Logs"
                     value="2"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}

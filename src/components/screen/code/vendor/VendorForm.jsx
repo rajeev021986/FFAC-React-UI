@@ -299,7 +299,6 @@ export default function VendorForm({ page = "vendor" }) {
                   {tabs.map((a) => (
                     <Tab
                       sx={{
-                        fontSize: "1rem",
                         textTransform: "capitalize",
                         padding: "0px 12px",
                         minHeight: "50px",

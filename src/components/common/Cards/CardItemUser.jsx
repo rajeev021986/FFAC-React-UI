@@ -9,6 +9,9 @@ import {
   Avatar,
   Typography,
   Button,
+  CardContent,
+  CardActions,
+  Badge,
 } from "@mui/material";
 import { MoreVert, VerifiedUserOutlined } from "@mui/icons-material";
 import CardField from "./CardField";
@@ -16,6 +19,7 @@ import TMenu from "../TMenu";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import { StatusChip } from "../../utils/statusChip";
 
 export default function CardItemUser({
   item,
@@ -38,175 +42,100 @@ export default function CardItemUser({
   return (
     <Card
       sx={{
-        borderWidth: 1,
-        borderColor: "border.main",
-        borderRadius: "20px",
-        padding: "10px",
-        width: "22rem",
-        height: "20rem",
-        boxShadow:
-          "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        margin: "5px",
+        minWidth: "300px",
+        maxWidth: "350px",
+        margin: 2,
+        borderRadius: 3,
+        boxShadow: 5,
+        transition: "transform 0.3s ease-in-out",
+        "&:hover": {
+          transform: "scale(1.05)",
+        },
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          gap: "10px",
-          alignItems: "flex-start",
-          flexDirection: "column",
-          width: "100%",
-        }}
+      <CardContent
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
-        <Box
+        <Avatar
           sx={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "flex-start",
-            flexDirection: "column",
-            borderRadius: "8px",
+            width: 100,
+            height: 100,
+            marginBottom: 2,
+            border: (theme) => `4px solid ${theme.palette.primary.main}`,
+          }}
+          src={item.profileimg}
+          alt="Profile Image"
+        />
 
-            width: "100%",
-            height: "8rem",
-            backgroundColor: "#f0f0f0",
-          }}
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ fontWeight: "bold", marginBottom: 1 }}
         >
-          {/* Replace this with an Avatar or Image */}
-          <Typography variant="h6">{avatar || "A"}</Typography>
-        </Box>
+          {item.firstName}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ marginBottom: 0.5 }}
+        >
+          {item.email}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {item.phone}
+        </Typography>
+
         <Box
           sx={{
-            flex: 1,
             display: "flex",
-            flexDirection: "column",
-            gap: "10px",
+            alignItems: "center",
+            marginTop: 2,
+            padding: "5px 10px",
+            borderRadius: "15px",
+            justifyContent: "center",
+            width: "100%",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "4px",
-            }}
-          >
-            <Typography variant="h6" component="div">
-              {item.firstName}
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "10px",
-                  padding: "2px 8px",
-                  borderRadius: "15px",
-                  backgroundColor: item.status === "Active" ? "green" : "red",
-                  color: "#fff",
-                }}
-              >
-                {item.status}
-              </Typography>
-            </Box>
-          </Box>
-          <Box>
-            {" "}
-            <Typography variant="body2" color="text.secondary">
-              {item.email}
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
+          {StatusChip(item.status.toLowerCase(), "status")}
+        </Box>
+      </CardContent>
+
+      <Box sx={{ display: "flex", justifyContent: "center", paddingBottom: 2 }}>
+        <CardActions
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <IconButton
             color="primary"
-            size="small"
-            sx={{ borderRadius: "20px", textTransform: "unset" }}
+            onClick={() => actions[0].onClick({ row: item })}
+          >
+            {actions[0].icon}
+          </IconButton>
+
+          <IconButton
+            color="primary"
+            onClick={() => actions[1].onClick({ row: item })}
+          >
+            {actions[1].icon}
+          </IconButton>
+
+          <IconButton
+            color="error"
             onClick={() => actions[2].onClick({ row: item })}
           >
-            {actions[2].label}
-          </Button>
-        </Box>
-      </Box>
-      <CardHeader
-        sx={{ padding: "8px", width: "100%" }}
-        action={
-          <Box
-            sx={{
-              display: "flex",
-              gap: "8px",
-              alignItems: "center",
-              width: "100%",
-            }}
+            {actions[2].icon}
+          </IconButton>
+
+          <IconButton
+            color="primary"
+            onClick={() => actions[3].onClick({ row: item })}
           >
-            <IconButton
-              color="primary"
-              onClick={() => actions[0].onClick({ row: item })}
-            >
-              {actions[0].icon}
-            </IconButton>
-            <IconButton
-              color="primary"
-              onClick={() => actions[1].onClick({ row: item })}
-            >
-              {actions[1].icon}
-            </IconButton>
-            <IconButton
-              color="primary"
-              onClick={() => actions[2].onClick({ row: item })}
-            >
-              {actions[2].icon}
-            </IconButton>
-            <IconButton
-              color="primary"
-              onClick={() => actions[3].onClick({ row: item })}
-            >
-              {actions[3].icon}
-            </IconButton>
-          </Box>
-        }
-      />
+            {actions[3].icon}
+          </IconButton>
+        </CardActions>
+      </Box>
     </Card>
   );
 }
-
-const styles = {
-  root_item: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "98%",
-    padding: "10px",
-    backgroundColor: "white.lightDark",
-    boxShadow:
-      "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
-    margin: "auto",
-    marginBottom: "16px",
-    borderRadius: "10px",
-  },
-  card_left_box: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    width: 150,
-    padding: "10px",
-    height: "100%",
-  },
-  card_right_box: {
-    width: "calc(100% - 150px)",
-    height: "100%",
-    paddingBottom: "10px",
-  },
-  icon: {
-    backgroundColor: "primary.light",
-    borderRadius: "10px",
-    padding: "10px",
-  },
-};

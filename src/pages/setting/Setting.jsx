@@ -78,7 +78,7 @@ export default function SettingsPage() {
               sx={{ width: "100%", padding: 2 }}
             >
               {settingTabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
+                <Tab key={tab.value} label={tab.label} value={tab.value} className="nested1" />
               ))}
             </Tabs>
           </Box>

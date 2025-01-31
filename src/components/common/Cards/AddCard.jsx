@@ -14,10 +14,13 @@ import {
   InputAdornment,
   IconButton,
   Stack,
+  Tab,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import HistoryIcon from "@mui/icons-material/History";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import React, { useEffect, useState, useRef } from "react";
 import ScreenToolbar from "../../common/ScreenToolbar";
@@ -33,6 +36,8 @@ import { Height } from "@mui/icons-material";
 import CustomToast from "../Toast/CustomToast";
 import { OutlinedButton, ThemeButton } from "../Button";
 import FormAutoComplete from "../AutoComplete/FormAutoComplete";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import AuditTimeLine from "../../AuditTimeLine";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First Name is required"),
@@ -48,41 +53,100 @@ export default function AddCard() {
   const navigate = useNavigate();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [roles, setRoles] = useState([]);
-  const formikRef = useRef(null);
   const [locations, setLocations] = useState([
     { value: "Chennai", label: "Chennai" },
     { value: "Mumbai", label: "Mumbai" },
   ]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [value, setValue] = React.useState(1);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const tabs = [
+    { label: "User Details", value: 1, icon: <EditIcon /> },
+    { label: "Audit logs", value: 2, icon: <HistoryIcon /> },
+  ];
+  Boolean(!id) && tabs.splice(1, 1);
+  const formik = useFormik({
+    validateOnChange: false,
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+      defaultLocation: "",
+      status: "Active",
+      companyCode: "",
+      userId: "",
+      role: [],
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const payload = {
+          ...values,
+          locations: [values.defaultLocation],
+          roles: values.role.map((role) => {
+            const matchedRole = roles.find((r) => r.roleName === role);
+            return matchedRole
+              ? {
+                  roleId: matchedRole.roleId,
+                  roleName: role,
+                  isDeleted: matchedRole.isDeleted,
+                }
+              : {};
+          }),
+          statusCode: values.status === "Active" ? 1 : -2,
+        };
+
+        if (id) {
+          // Update user
+          const res = await ApiManager.updateUserData(payload);
+          toast.success(res.message);
+        } else {
+          // Create new user
+          payload.id = null;
+          const res = await ApiManager.addUserData(payload);
+          toast.success(res.message);
+        }
+
+        navigate(-1);
+      } catch (err) {
+        toast.error(err.message || "Something went wrong");
+      }
+    },
+  });
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const res = await ApiManager.getUserData(id);
 
-        if (formikRef.current) {
-          formikRef.current.setValues({ ...res.body });
-          // formikRef.current.setFieldValue(
+        if (formik) {
+          formik.setValues({ ...res.body });
+          // formik.setFieldValue(
           //   "defaultLocation",
           //   res.body.defaultLocation
           // );
-          // formikRef.current.setFieldValue("status", res.body.status);
-          // formikRef.current.setFieldValue("firstName", res.body.firstName);
-          // formikRef.current.setFieldValue("lastName", res.body.lastName);
-          // formikRef.current.setFieldValue("email", res.body.email);
-          // formikRef.current.setFieldValue("phone", res.body.phone);
-          // formikRef.current.setFieldValue("password", res.body.password);
-          // formikRef.current.setFieldValue(
+          // formik.setFieldValue("status", res.body.status);
+          // formik.setFieldValue("firstName", res.body.firstName);
+          // formik.setFieldValue("lastName", res.body.lastName);
+          // formik.setFieldValue("email", res.body.email);
+          // formik.setFieldValue("phone", res.body.phone);
+          // formik.setFieldValue("password", res.body.password);
+          // formik.setFieldValue(
           //   "confirmPassword",
           //   res.body.confirmPassword
           // );
-          formikRef.current.setFieldValue(
+          formik.setFieldValue(
             "role",
             res.body.roles.map((role) => role.roleName)
           );
-          // formikRef.current.setFieldValue("companyCode", res.body.companyCode);
-          // formikRef.current.setFieldValue("userId", res.body.userId);
-          // formikRef.current.setFieldValue("id", res.body.id);
+          // formik.setFieldValue("companyCode", res.body.companyCode);
+          // formik.setFieldValue("userId", res.body.userId);
+          // formik.setFieldValue("id", res.body.id);
           const userRoles = res.body.roles.map((role) => role.roleName) || [];
           setSelectedOptions(
             roles.map((role) => ({
@@ -129,11 +193,11 @@ export default function AddCard() {
       )
     );
 
-    const currentRoles = formikRef.current?.values?.role || [];
+    const currentRoles = formik?.values?.role || [];
     if (isChecked) {
-      formikRef.current.setFieldValue("role", [...currentRoles, optionValue]);
+      formik.setFieldValue("role", [...currentRoles, optionValue]);
     } else {
-      formikRef.current.setFieldValue(
+      formik.setFieldValue(
         "role",
         currentRoles.filter((role) => role !== optionValue)
       );
@@ -151,8 +215,8 @@ export default function AddCard() {
         option.value === optionValue ? { ...option, checked: false } : option
       )
     );
-    const currentRoles = formikRef.current?.values?.role || [];
-    formikRef.current.setFieldValue(
+    const currentRoles = formik?.values?.role || [];
+    formik.setFieldValue(
       "role",
       currentRoles.filter((role) => role !== optionValue)
     );
@@ -165,7 +229,6 @@ export default function AddCard() {
   const filteredRoles = roles.filter((role) =>
     role.roleName.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
   return (
     <Box>
       <ScreenToolbar
@@ -176,68 +239,32 @@ export default function AddCard() {
         }
         rightComps={<div></div>}
       />
-      <Formik
-        innerRef={formikRef}
-        validateOnChange={false}
-        initialValues={{
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          password: "",
-          confirmPassword: "",
-          defaultLocation: "",
-          status: "Active",
-          companyCode: "",
-          userId: "",
-          role: [],
-        }}
-        validationSchema={validationSchema}
-        onSubmit={async (values) => {
-          if (id) {
-            const payload = {
-              ...values,
-              locations: [values.defaultLocation],
-              roles: values.role.map((role, index) => {
-                return {
-                  roleId: roles.find((r) => r.roleName === role).roleId,
-                  roleName: role,
-                  isDeleted: roles.find((r) => r.roleName === role).isDeleted,
-                };
-              }),
-              statusCode: values.status === "Active" ? 1 : -2,
-            };
-            await ApiManager.updateUserData(payload)
-              .then((res) => {
-                toast.success(res.message);
-              })
-              .catch((err) => {
-                toast.error(err.message);
-              });
-          } else {
-            const payload = {
-              ...values,
-              id: null,
-              locations: [values.defaultLocation],
-              roles: values.role.map((role, index) => {
-                return {
-                  roleId: roles.find((r) => r.roleName === role).roleId,
-                  roleName: role,
-                  isDeleted: roles.find((r) => r.roleName === role).isDeleted,
-                };
-              }),
-            };
-            await ApiManager.addUserData(payload)
-              .then((res) => {
-                toast.success(res.message);
-              })
-              .catch((er) => toast.error(er.msg));
-          }
-          navigate(-1);
-        }}
-      >
-        {(formik) => (
-          <Form>
+      <Card>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <TabList
+              onChange={handleChange}
+              aria-label="lab API tabs example"
+              sx={{
+                padding: 0,
+              }}
+            >
+              {tabs.map((a) => (
+                <Tab
+                  sx={{
+                    textTransform: "capitalize",
+                    padding: "0px 12px",
+                    minHeight: "50px",
+                  }}
+                  label={a.label}
+                  value={a.value}
+                  icon={a.icon}
+                  iconPosition="start"
+                />
+              ))}
+            </TabList>
+          </Box>
+          <TabPanel value={1} sx={{ padding: "0px" }}>
             <Card
               sx={{
                 borderWidth: 1,
@@ -245,15 +272,7 @@ export default function AddCard() {
                 padding: "10px",
               }}
             >
-              <CardHeader
-                title={
-                  <Box display="flex" justifyContent={"space-between"}>
-                    <Typography variant="subtitle3" component="div">
-                      User Info
-                    </Typography>
-                  </Box>
-                }
-              />
+             
               <Grid container spacing={2}>
                 <Grid
                   item
@@ -269,6 +288,7 @@ export default function AddCard() {
                     name="userId"
                     label="User ID"
                     id="userId"
+                    disabled={id}
                     autoComplete="off"
                     value={formik.values.userId}
                     error={formik.errors.userId}
@@ -546,9 +566,16 @@ export default function AddCard() {
                 </Stack>
               </Grid>
             </Card>
-          </Form>
-        )}
-      </Formik>
+          </TabPanel>
+          <TabPanel value={2} sx={{ padding: "0px" }}>
+            <AuditTimeLine
+              id={formik?.values?.id}
+              page="user"
+              service="admin-service"
+            />
+          </TabPanel>
+        </TabContext>
+      </Card>
     </Box>
   );
 }

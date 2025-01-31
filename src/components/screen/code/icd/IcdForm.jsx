@@ -195,7 +195,6 @@ export default function IcdForm({ initialValues, page, type, id }) {
                     label="ICD Details"
                     value={1}
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -446,7 +445,6 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       label={a.label}
                       value={a.value}
                       sx={{
-                        fontSize: "1rem",
                         textTransform: "capitalize",
                         minHeight: "50px",
                       }}

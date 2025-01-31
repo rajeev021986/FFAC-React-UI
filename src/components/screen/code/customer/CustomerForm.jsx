@@ -352,7 +352,6 @@ export default function CustomerForm({
                     label="Customer Details"
                     value="1"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -911,7 +910,6 @@ export default function CustomerForm({
                     label="Customer Details"
                     value="1"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -922,7 +920,6 @@ export default function CustomerForm({
                     label="Document Details"
                     value="2"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
@@ -933,7 +930,6 @@ export default function CustomerForm({
                     label="Audit Logs"
                     value="3"
                     sx={{
-                      fontSize: "1rem",
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
