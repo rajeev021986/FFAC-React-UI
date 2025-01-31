@@ -122,6 +122,7 @@ export default function ChargeInputs({
       renderCell: (params) => {
         return (
           <InputBoxForGridTab
+            placeholder="Direct Expense"
             headerName="Direct Expense"
             value={params.value}
             field={params.field}
