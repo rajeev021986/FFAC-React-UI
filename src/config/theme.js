@@ -76,10 +76,10 @@ export const getTheme = (primaryColor = "#026de0", mode) => {
         styleOverrides: {
           root: {
             fontSize: "1.5rem",
-            fontWeight:'bold',
+            fontWeight: "bold",
             "&.nested1": {
               fontSize: "1.2rem",
-              fontWeight:"500"
+              fontWeight: "500",
             },
           },
         },
@@ -150,7 +150,7 @@ export const getTheme = (primaryColor = "#026de0", mode) => {
       },
     },
     typography: {
-      fontFamily: 'Inter, "sans-serif"',
+      fontFamily: 'MyCustomFont, "cursive"',
     },
   });
 };

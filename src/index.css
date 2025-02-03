@@ -10,6 +10,15 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('../public/Font/gadugi-normal.ttf') format('truetype');
+  /* url('../public/Font/gadugi-gras.ttf') format('truetype'),
+    url('../public/Font/gadugi-normal.ttf') format('truetype'); */
+  font-weight: normal;
+  font-style: normal;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
