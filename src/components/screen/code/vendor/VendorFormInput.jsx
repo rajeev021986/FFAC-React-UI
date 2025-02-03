@@ -236,8 +236,8 @@ export default function VendorFormInput({
                 disabled
               />
             </Grid>
-          ) : formik.values.isApproved == -2 ||
-            formik.values.isApproved == 1 ? (
+          ) : formik.values.statusCode == -2 ||
+            formik.values.statusCode == 1 ? (
             <Grid
               item
               xs={12}

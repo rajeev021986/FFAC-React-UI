@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Search, Clear, FilterAltOutlined } from "@mui/icons-material";
 const Chips = {
-  isApproved: {
+  statusCode: {
     chipLabel: "Status",
     chipvalues: [
       { value: 1, label: "Active" },

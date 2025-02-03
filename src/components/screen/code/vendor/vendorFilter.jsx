@@ -16,7 +16,7 @@ export default function VendorFilterForm({ setFilterOpen }) {
       tinNo: inputs.tinNo || "",
       vendorName: inputs.vendorName || "",
       vrnNo: inputs.country || "",
-      isApproved: inputs.isApproved || "",
+      statusCode: inputs.statusCode || "",
       isDoc: inputs.isDoc || "",
     },
     onSubmit: (values) => {
@@ -31,7 +31,7 @@ export default function VendorFilterForm({ setFilterOpen }) {
         tinNo: "",
         vendorName: "",
         vrnNo: "",
-        isApproved: "",
+        statusCode: "",
         isDoc: "",
       })
     );
@@ -39,7 +39,7 @@ export default function VendorFilterForm({ setFilterOpen }) {
       tinNo: "",
       vendorName: "",
       vrnNo: "",
-      isApproved: "",
+      statusCode: "",
       isDoc: "",
     });
   };
@@ -87,9 +87,9 @@ export default function VendorFilterForm({ setFilterOpen }) {
           <div style={{ width: "48%", marginLeft: "0px" }}>
             <SelectBox
               label="Status"
-              id="isApproved"
+              id="statusCode"
               options={StatusOptions}
-              value={formik.values.isApproved}
+              value={formik.values.statusCode}
               onChange={formik.handleChange}
               sx={{ marginLeft: "0px !important" }}
               MenuProps={{

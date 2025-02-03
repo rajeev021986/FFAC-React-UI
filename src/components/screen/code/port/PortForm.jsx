@@ -67,7 +67,7 @@ function PortForm() {
         if (type === "new") {
           formik.setValues({
             ...response.data.body,
-            // isApproved: !customerSettingsData?.approvalRequest,
+            // statusCode: !customerSettingsData?.approvalRequest,
           });
         } else {
           formik.setValues(response.data.body);

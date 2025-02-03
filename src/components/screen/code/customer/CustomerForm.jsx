@@ -101,7 +101,7 @@ export default function CustomerForm({
         );
         try {
           delete values.id;
-          values.isApproved = dropdownData?.approvalRequest ? 0 : 1;
+          values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
 
           if (values.paymentType === "cash") {
@@ -166,8 +166,8 @@ export default function CustomerForm({
           let bank = values.bankDetails.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           );
-          Boolean(values.status == "Active") && (values.isApproved = 1);
-          Boolean(values.status == "Inactive") && (values.isApproved = -2);
+          Boolean(values.status == "Active") && (values.statusCode = 1);
+          Boolean(values.status == "Inactive") && (values.statusCode = -2);
           let response = await updateCustomer({
             ...values,
             customerEntityEmailsIds: emails,
@@ -1010,8 +1010,8 @@ export default function CustomerForm({
                       />
                     </Grid>
 
-                    {initialValues.isApproved == -2 ||
-                    initialValues.isApproved == 1 ? (
+                    {initialValues.statusCode == -2 ||
+                    initialValues.statusCode == 1 ? (
                       <Grid
                         item
                         xs={12}
@@ -1026,7 +1026,7 @@ export default function CustomerForm({
                           label="Status"
                           id="status"
                           options={optionsSettingsData?.body.status}
-                          // disabled={!initialValues.isApproved || disabled}
+                          // disabled={!initialValues.statusCode || disabled}
                           value={formik.values.status}
                           error={formik.errors.status}
                           onChange={formik.handleChange}

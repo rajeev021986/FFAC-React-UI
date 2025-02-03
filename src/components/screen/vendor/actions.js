@@ -28,7 +28,7 @@ export const getVendorGridActions = (nav, setModal) => {
     {
       label: 'Delete',
       onClick: (params) => {
-        if (params.row.isApproved == -2 || params.row.isApproved == -1) {
+        if (params.row.statusCode == -2 || params.row.statusCode == -1) {
           setModal(
             { open: true, type: 'delete', data: { who: "Vendor", deleteName: params.row.vendorName, id: params.row.id } }
           )

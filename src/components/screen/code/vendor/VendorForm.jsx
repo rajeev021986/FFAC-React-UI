@@ -139,7 +139,7 @@ export default function VendorForm({ page = "vendor" }) {
             formik.setValues({
               ...response.data.body,
               status: "New",
-              isApproved: !vendorSettingsData?.body?.approvalRequest,
+              statusCode: !vendorSettingsData?.body?.approvalRequest,
             });
           } else {
             formik.setValues(response.data.body);
@@ -221,10 +221,10 @@ export default function VendorForm({ page = "vendor" }) {
       };
       if (type == "copy" || type == "new") {
         try {
-          updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest
+          updatedValue.statusCode = vendorSettingsData?.body?.approvalRequest
             ? 0
             : 1;
-          updatedValue.isApproved = vendorSettingsData?.body?.approvalRequest
+          updatedValue.statusCode = vendorSettingsData?.body?.approvalRequest
             ? 0
             : 1;
           let res = await addVendor(updatedValue).unwrap();
@@ -245,9 +245,9 @@ export default function VendorForm({ page = "vendor" }) {
       } else {
         try {
           Boolean(updatedValue.status == "Active") &&
-            (updatedValue.isApproved = 1);
+            (updatedValue.statusCode = 1);
           Boolean(updatedValue.status == "Inactive") &&
-            (updatedValue.isApproved = -2);
+            (updatedValue.statusCode = -2);
           let res = await updateVendor(updatedValue).unwrap();
           if (res.success) {
             toast.custom(

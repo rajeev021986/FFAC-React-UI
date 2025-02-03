@@ -16,7 +16,7 @@ export default function FilterForm({ setFilterOpen }) {
       customerName: inputs.customerName || "",
       tinNo: inputs.tinNo || "",
       vatNo: inputs.vatNo || "",
-      isApproved: inputs.isApproved || "",
+      statusCode: inputs.statusCode || "",
       isDoc: inputs.isDoc || "",
     },
     onSubmit: (values) => {
@@ -36,7 +36,7 @@ export default function FilterForm({ setFilterOpen }) {
         customerName: "",
         tinNo: "",
         vatNo: "",
-        isApproved: "",
+        statusCode: "",
         isDoc: "",
       })
     );
@@ -44,7 +44,7 @@ export default function FilterForm({ setFilterOpen }) {
       customerName: "",
       tinNo: "",
       vatNo: "",
-      isApproved: "",
+      statusCode: "",
       isDoc: "",
     });
   };
@@ -100,9 +100,9 @@ export default function FilterForm({ setFilterOpen }) {
           <div style={{ width: "48%", marginLeft: "0px" }}>
             <SelectBox
               label="Status"
-              id="isApproved"
+              id="statusCode"
               options={statusOptions}
-              value={formik.values.isApproved}
+              value={formik.values.statusCode}
               onChange={formik.handleChange}
               sx={{ marginLeft: "0px !important" }}
               MenuProps={{
