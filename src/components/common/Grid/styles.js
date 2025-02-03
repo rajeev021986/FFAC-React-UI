@@ -15,15 +15,28 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   "& .MuiDataGrid-columnHeader": {
     backgroundColor: theme.palette.primary.main,
     lineHeight: 10,
+    height: "38px !important",
   },
   "& .MuiDataGrid-columnHeaderTitle": {
     color: "white",
-    fontSize: "15px",
+    fontSize: "14px",
   },
   "& .MuiDataGrid-iconButtonContainer": {
     color: "white",
   },
   "& .MuiDataGrid-sortIcon": {
     color: "white",
+  },
+  "& .MuiDataGrid-row": {
+    fontSize: "14px",
+    height: "44px",
+    minHeight: "44px !important",
+    maxHeight: "44px !important",
+  },
+  "& .MuiDataGrid-cell": {
+    height: "44px",
+    minHeight: "44px !important",
+    maxHeight: "44px !important",
+    lineHeight: "44px !important",
   },
 }));

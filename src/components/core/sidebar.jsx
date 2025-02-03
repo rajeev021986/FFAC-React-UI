@@ -31,6 +31,9 @@ export default function Sidebar({
         sx={{
           display: { xs: "block", sm: "none" },
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+          "& .MuiButtonBase-root .MuiListItem-root": {
+            padding: "8px 16px",
+          },
         }}
       >
         <DrawerContainer hover={hover} />
@@ -45,8 +48,8 @@ export default function Sidebar({
             boxSizing: "border-box",
             width: hover ? expandedDrawerWidth : drawerWidth,
             transition: "width 0.3s ease-in-out",
-            borderRightWidth : 1,
-            borderColor : "border.main",
+            borderRightWidth: 1,
+            borderColor: "border.main",
           },
         }}
         open

@@ -86,7 +86,7 @@ const ThemedBreadcrumb = () => {
         const isLast = index === pathnames?.length - 1;
         if (!Routes[value]?.label) return null;
         return isLast || Routes[value]?.disabled ? (
-          <Typography key={routeTo} fontSize="12px">
+          <Typography key={routeTo} fontSize="18px">
             {Routes[value]?.label}
           </Typography>
         ) : (
@@ -98,7 +98,7 @@ const ThemedBreadcrumb = () => {
             key={routeTo}
             fontSize="14px"
           >
-            <Typography fontSize="14px">{Routes[value]?.label}</Typography>
+            <Typography fontSize="18px">{Routes[value]?.label}</Typography>
           </Link>
         );
       })}

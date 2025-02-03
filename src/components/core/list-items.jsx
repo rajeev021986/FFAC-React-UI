@@ -39,7 +39,7 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
         <ListItemIcon sx={{ color: "primary.main" }}>
           {icon ? (
             // <Avatar sx={{ width: "30px", height: "30px" }} src={icon} />
-            <IconComponent iconName={icon}  sx={style.icon} />
+            <IconComponent iconName={icon} sx={style.icon} />
           ) : (
             <Brightness1Outlined />
           )}
@@ -83,7 +83,7 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
                       //   src={item.iconKey}
                       //   sx={{ width: "30px", height: "30px" }}
                       // />
-                      <IconComponent iconName={item.iconKey}  sx={style.icon} />
+                      <IconComponent iconName={item.iconKey} sx={style.icon} />
                     ) : (
                       <ControlPointOutlined />
                     )}
@@ -115,12 +115,20 @@ export const TListItem = ({ label, to, icon }) => {
           {/* {<Avatar src={icon} sx={{ width: "30px", height: "30px" }} />} */}
           <IconComponent iconName={icon} sx={style.icon} />
         </ListItemIcon>
-        <ListItemText primary={label} />
+        <ListItemText
+          primary={label}
+          sx={{
+            fontSize: "14px",
+            "& .MuiListItemText-root .MuiTypography-root": {
+              fontSize: "14px !important",
+            },
+          }}
+        />
       </ListItem>
     </Link>
   );
 };
 
-const style={
-  icon:{ fontSize: "1.8rem" }
-}
+const style = {
+  icon: { fontSize: "1.8rem" },
+};

@@ -88,9 +88,7 @@ export default function LoginScreen() {
             >
               Welcome To FFAC
             </Typography>
-            <Box>
-              <div class="ball"></div>
-            </Box>
+
             <Typography
               variant="title"
               color="secondary.main"

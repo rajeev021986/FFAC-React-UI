@@ -50,7 +50,7 @@ const GridSearchInput = ({
               top: "100%",
               left: 0,
               mt: 1,
-              width,
+              width: "500px",
               height,
               overflowY: "auto",
               ...styles.paper,

@@ -81,7 +81,10 @@ function GridDataTable({ data }) {
             },
             "& .MuiDataGrid-columnHeaderTitle": {
               color: "#fff",
-              fontSize: "15px",
+              fontSize: "14px",
+            },
+            "& .MuiDataGrid-cell": {
+              fontSize: "14px",
             },
           }}
         />

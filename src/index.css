@@ -11,8 +11,8 @@ body {
 }
 
 @font-face {
-  font-family: 'MyCustomFont';
-  src: url('../public/Font/gadugi-normal.ttf') format('truetype');
+  font-family: "MyCustomFont";
+  src: url("../public/Font/gadugi-normal.ttf") format("truetype");
   /* url('../public/Font/gadugi-gras.ttf') format('truetype'),
     url('../public/Font/gadugi-normal.ttf') format('truetype'); */
   font-weight: normal;
@@ -35,6 +35,8 @@ a {
 
 main {
   overflow-x: hidden;
+  padding: 28px !important;
+  background-color: transparent !important;
 }
 
 .color-test {
@@ -43,8 +45,8 @@ main {
 }
 
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 2px;
+  height: 2px;
   background-color: #e9fbf4;
   border-radius: 10px;
 }
@@ -57,31 +59,6 @@ main {
 
 ::-webkit-scrollbar-track {
   background: transparent;
-}
-
-/* From Uiverse.io by satyamchaudharydev */
-.ball {
-  --size: 20px;
-  --timing: 0.8s;
-  --displace: 360px;
-  border-radius: 50%;
-  width: var(--size);
-  height: var(--size);
-  background: #000;
-  margin-right: var(--displace);
-  animation: animation321 var(--timing) infinite alternate cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-@keyframes animation321 {
-  0% {
-    background: #4284f3;
-    transform: translateX(var(--displace));
-  }
-
-  100% {
-    background: #bf77f6;
-    transform: translateX(00px);
-  }
 }
 
 .login-img {
