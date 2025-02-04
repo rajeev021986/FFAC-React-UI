@@ -19,6 +19,7 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 import toast from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import DeleteDialog from "../../components/common/DeleteDialog";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
 
 export function VesselVoyageBody({ selectBox, setSelectBox }) {
   const nav = useNavigate();
@@ -172,7 +173,7 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
             <AuditTimeLine
               id={modal?.data?.id}
               page="vessel/voyage"
-              service="master-service"
+              service={menuConfigUrl.master}
             />
           </Box>
         </Drawer>

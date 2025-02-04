@@ -51,6 +51,8 @@ import toast, { LoaderIcon } from "react-hot-toast";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import FilterForm from "../../components/screen/code/customer/FilterForm";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 
 export default function CustomerScreen({ page }) {
   const codeCustomerSelector = useSelector((state) => state.codeCustomer);
@@ -157,20 +159,13 @@ export default function CustomerScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel(
-          {query: query,
+        await downloadExcel({
+          query: query,
           payload: payload,
-          service: "entity-service",
-          page: "customer"}
-        );
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "customer-data.xlsx"); // or whatever filename you want
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
+          service: `${menuConfigUrl.entity}`,
+          page: "customer",
+          filename: "customer-data.xlsx",
+        });
       } catch (error) {
         toast.custom(
           <CustomToast message="Something went wrong" toast="error" />,
@@ -376,7 +371,7 @@ export default function CustomerScreen({ page }) {
             <AuditTimeLine
               id={modal.data.id}
               page="customer"
-              service="entity-service"
+              service={menuConfigUrl.entity}
             />
           </Box>
         </Drawer>

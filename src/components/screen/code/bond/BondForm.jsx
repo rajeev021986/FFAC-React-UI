@@ -22,6 +22,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
 import ApiManager from "../../../../services/ApiManager";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 export default function BondForm() {
   const [value, setValue] = React.useState(1);
   const location = useLocation();
@@ -224,7 +225,11 @@ export default function BondForm() {
                 )}
               </TabPanel>
               <TabPanel value={2} sx={{ padding: 0, margin: 0 }}>
-                <AuditTimeLine id={id} page="bond" service="master-service" />
+                <AuditTimeLine
+                  id={id}
+                  page="bond"
+                  service={menuConfigUrl.master}
+                />
               </TabPanel>
             </TabContext>
           </CardContent>

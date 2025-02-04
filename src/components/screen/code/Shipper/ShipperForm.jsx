@@ -27,6 +27,7 @@ import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../../common/Toast/CustomToast";
 import ApiManager from "../../../../services/ApiManager";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 
 export default function ShipperForm({ initialValues, page, type, id }) {
   const FieldRef = useRef(null);
@@ -914,7 +915,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                 <AuditTimeline
                   id={initialValues.id}
                   page="shipper"
-                  service="entity-service"
+                  service={menuConfigUrl.entity}
                 />
               </TabPanel>
             </TabContext>

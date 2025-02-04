@@ -46,6 +46,8 @@ import toast, { LoaderIcon } from "react-hot-toast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 export function ChargesScreen({ page }) {
   const chargesSelector = useSelector((state) => state.chargesStore);
   const [exportLoader, setExportLoader] = useState(false);
@@ -141,20 +143,13 @@ export function ChargesScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "admin-service",
+          service: menuConfigUrl.admin,
           page: "charge",
+          filename: "charge-data.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "charge-data.xlsx");
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {
         toast.custom(
           <CustomToast message="Somthing Went Wrong" toast="error" />,
@@ -345,7 +340,7 @@ export function ChargesScreen({ page }) {
             <AuditTimeLine
               id={modal.data.id}
               page="charge"
-              service="admin-service"
+             service={menuConfigUrl.admin}
             />
           </Box>
         </Drawer>

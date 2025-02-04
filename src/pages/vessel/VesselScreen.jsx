@@ -18,6 +18,8 @@ import { VesselBody } from "./VesselBody";
 import ApiManager from "../../services/ApiManager";
 import { useSelector } from "react-redux";
 import { LoaderIcon } from "react-hot-toast";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 
 const ADD_NEW_VESSEL_PATH = "newvessel";
 
@@ -104,20 +106,13 @@ export function VesselScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "master-service",
+          service: `${menuConfigUrl.master}`,
           page: "vessel",
+          filename: "vessel-data.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "vessel-data.xlsx"); // or whatever filename you want
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {}
       setExportLoader(false);
     }

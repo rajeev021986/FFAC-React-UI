@@ -47,6 +47,8 @@ import toast, { LoaderIcon } from "react-hot-toast";
 import ApiManager from "../../services/ApiManager";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 
 export function ExchangeRate({ page }) {
   const exchangeRateSelector = useSelector((state) => state.exchangeRateStore);
@@ -142,20 +144,13 @@ export function ExchangeRate({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "admin-service",
+          service: `${menuConfigUrl.admin}`,
           page: "exchange-rate",
+          filename: "exchange-rate.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "exchangerate-data.xlsx"); // or whatever filename you want
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {}
       setExportLoader(false);
     }
@@ -350,7 +345,7 @@ export function ExchangeRate({ page }) {
             <AuditTimeLine
               id={modal.data.id}
               page="exchange-rate"
-              service="admin-service"
+              service={menuConfigUrl.admin}
             />
           </Box>
         </Drawer>

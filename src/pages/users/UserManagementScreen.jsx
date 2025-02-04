@@ -51,6 +51,8 @@ import ApiManager from "../../services/ApiManager";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import toast, { LoaderIcon } from "react-hot-toast";
 import FilterForm from "../../components/screen/user-management/FilterForm";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 const ADD_NEW_USER_PATH = "/app/admin/users/addUser";
 
 export default function UserManagementScreen() {
@@ -130,20 +132,13 @@ export default function UserManagementScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "admin-service",
+          service: `${menuConfigUrl.admin}`,
           page: "user",
+          filename: "user-data.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "user-data.xlsx");
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {
         toast.custom(
           <CustomToast message="Something went wrong" toast="error" />,
@@ -332,7 +327,7 @@ export default function UserManagementScreen() {
             <AuditTimeLine
               id={modal.data.id}
               page="user"
-              service="admin-service"
+              service={menuConfigUrl.admin}
             />
           </Box>
         </Drawer>

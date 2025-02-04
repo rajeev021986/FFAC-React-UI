@@ -45,6 +45,8 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 export default function PortScreen() {
   const portSelector = useSelector((state) => state.port);
   const nav = useNavigate();
@@ -118,20 +120,13 @@ export default function PortScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "master-service",
+          service: `${menuConfigUrl.master}`,
           page: "port",
+          filename: "port-data.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "port-data.xlsx");
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {}
       setExportLoader(false);
     }
@@ -311,7 +306,7 @@ export default function PortScreen() {
             <AuditTimeLine
               id={modal.data.id}
               page="port"
-              service="master-service"
+              service={menuConfigUrl.master}
             />
           </Box>
         </Drawer>

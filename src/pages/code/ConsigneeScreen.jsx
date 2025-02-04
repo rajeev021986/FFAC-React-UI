@@ -52,6 +52,8 @@ import ApiManager from "../../services/ApiManager";
 import toast, { LoaderIcon } from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import ConsigneFilterForm from "../../components/screen/code/consignee/FilterForm";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 
 const ADD_NEW_CONSIGNEE_PATH = "new_consignee";
 
@@ -193,20 +195,13 @@ export default function ConsigneeScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "entity-service",
+          service: menuConfigUrl.entity,
           page: "consignee",
+          filename: "consignee-data.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "consignee-data.xlsx");
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {
         toast.custom(
           <CustomToast message="Something went wrong" toast="error" />,
@@ -379,7 +374,7 @@ export default function ConsigneeScreen({ page }) {
             <AuditTimeLine
               id={modal.data.id}
               page="consignee"
-              service="entity-service"
+              service={menuConfigUrl.entity}
             />
           </Box>
         </Drawer>

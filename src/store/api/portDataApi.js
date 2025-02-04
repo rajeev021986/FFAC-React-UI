@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
+import { menuConfigUrl } from "../menuConfigUrl";
 
 export const portDataAPI = createApi({
   reducerPath: "portDataAPI",
@@ -10,7 +11,7 @@ export const portDataAPI = createApi({
       query: (params) => {
         const queryString = new URLSearchParams(params.params).toString();
         return {
-          url: `master-service/v1/port/filter?${queryString}`,
+          url: `${menuConfigUrl.master}/port/filter?${queryString}`,
           method: "POST",
           body: params.payload,
           headers: getAppHeaders(),
@@ -20,7 +21,7 @@ export const portDataAPI = createApi({
     }),
     addPort: builder.mutation({
       query: (payload) => ({
-        url: "master-service/v1/port",
+        url: `${menuConfigUrl.master}/port`,
         method: "POST",
         body: payload,
         headers: getAppHeaders(),
@@ -29,7 +30,7 @@ export const portDataAPI = createApi({
     getPort: builder.query({
       query: (params) => {
         return {
-          url: `master-service/v1/port/${params.id}`,
+          url: `${menuConfigUrl.master}/port/${params.id}`,
           method: "GET",
           headers: getAppHeaders(),
         };
@@ -37,7 +38,7 @@ export const portDataAPI = createApi({
     }),
     updatePort: builder.mutation({
       query: (payload) => ({
-        url: "master-service/v1/port",
+        url: `${menuConfigUrl.master}/port`,
         method: "PUT",
         body: payload,
         headers: getAppHeaders(),
@@ -46,7 +47,7 @@ export const portDataAPI = createApi({
     getPortAudit: builder.query({
       query: (params) => {
         return {
-          url: `master-service/v1/port/audit/${params.id}`,
+          url: `${menuConfigUrl.master}/port/audit/${params.id}`,
           method: "GET",
           headers: getAppHeaders(),
         };
@@ -55,7 +56,7 @@ export const portDataAPI = createApi({
     deletePort: builder.mutation({
       query: (id) => {
         return {
-          url: `master-service/v1/port/${id}`,
+          url: `${menuConfigUrl.master}/port/${id}`,
           method: "DELETE",
           headers: getAppHeaders(),
         };
@@ -70,5 +71,5 @@ export const {
   useLazyGetPortQuery,
   useUpdatePortMutation,
   useLazyGetPortAuditQuery,
-  useDeletePortMutation
+  useDeletePortMutation,
 } = portDataAPI;

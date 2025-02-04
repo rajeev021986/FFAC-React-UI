@@ -24,6 +24,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DescriptionIcon from "@mui/icons-material/Description";
 import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../../common/Toast/CustomToast";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 
 export default function VendorForm({ page = "vendor" }) {
   const [value, setValue] = React.useState(1);
@@ -332,7 +333,7 @@ export default function VendorForm({ page = "vendor" }) {
                 />
               </TabPanel>
               <TabPanel value={3} sx={{ padding: "0px" }}>
-                <AuditTimeLine id={id} page="vendor" service="entity-service" />
+                <AuditTimeLine id={id} page="vendor" service={menuConfigUrl.entity} />
               </TabPanel>
             </TabContext>
           </Card>

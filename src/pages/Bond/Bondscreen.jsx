@@ -45,6 +45,8 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 import toast, { LoaderIcon } from "react-hot-toast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 export default function BondScreen() {
   const bondSelector = useSelector((state) => state.bond);
   const nav = useNavigate();
@@ -115,20 +117,13 @@ export default function BondScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "master-service",
+          service: menuConfigUrl.master,
           page: "bond",
+          filename: "bond-data.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "bond-data.xlsx");
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {}
       setExportLoader(false);
     }
@@ -312,7 +307,7 @@ export default function BondScreen() {
             <AuditTimeLine
               id={modal.data.id}
               page="bond"
-              service="master-service"
+              service={menuConfigUrl.master}
             />
           </Box>
         </Drawer>

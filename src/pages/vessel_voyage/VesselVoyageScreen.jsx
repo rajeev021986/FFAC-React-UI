@@ -13,9 +13,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { VesselVoyageHeader } from "./VesselVoyageHeader";
 import { VesselVoyageBody } from "./VesselVoyageBody";
-import ApiManager from "../../services/ApiManager";
 import { useSelector } from "react-redux";
 import { LoaderIcon } from "react-hot-toast";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 const ADD_NEW_VOYAGE_PATH = "newvoyage";
 
 export function VesselVoyageScreen() {
@@ -91,20 +92,13 @@ export function VesselVoyageScreen() {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "master-service",
+          service: `${menuConfigUrl.master}`,
           page: "vessel/voyage",
+          filename: "vessel-voyage-data.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "voyage-data.xlsx"); // or whatever filename you want
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {}
       setExportLoader(false);
     }

@@ -50,6 +50,8 @@ import toast, { LoaderIcon } from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import IcdFilterForm from "../../components/screen/code/icd/FilterForm";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 
 const ADD_NEW_ICD_PATH = "new_icd";
 
@@ -156,20 +158,13 @@ export default function IcdScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "master-service",
+          service: `${menuConfigUrl.master}`,
           page: "icd",
+          filename: "icd-data.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "icd-data.xlsx");
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {
         toast.custom(
           <CustomToast message="Something went wrong" toast="error" />,
@@ -364,7 +359,7 @@ export default function IcdScreen({ page }) {
             <AuditTimeLine
               id={modal.data.id}
               page="icd"
-              service="master-service"
+              service={menuConfigUrl.master}
             />
           </Box>
         </Drawer>

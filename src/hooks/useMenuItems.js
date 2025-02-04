@@ -8,24 +8,24 @@ const transformMenuData = (menuEntities) => {
         iconKey: entity?.image, 
         items: entity?.nestedMenus?.length > 0 ? transformMenuData(entity?.nestedMenus) : [],
         
-    }));
+  }));
 };
 
 export const useMenuSetting = () => {
-    const [menuItems, setMenuItems] = useState([]);
-   
+  const [menuItems, setMenuItems] = useState([]);
+
     const role = JSON.parse(localStorage.getItem('user')).role || "";
     
     useEffect(() => {
         const fetchData = async () => {
             const response = await ApiManager.getMenu(role);
- const transformedData = transformMenuData(response?.body);
-            setMenuItems(transformedData);
+      const transformedData = transformMenuData(response?.body);
+      setMenuItems(transformedData);
           
-        };
-        fetchData();
-    }, []);
-    return {
-        menuItems,
     };
+    fetchData();
+  }, []);
+  return {
+    menuItems,
+  };
 };

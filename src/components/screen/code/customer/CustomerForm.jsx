@@ -51,6 +51,7 @@ import CustomerBankDetails from "./BankDetails";
 import EditIcon from "@mui/icons-material/Edit";
 import DescriptionIcon from "@mui/icons-material/Description";
 import HistoryIcon from "@mui/icons-material/History";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 
 export default function CustomerForm({
   initialValues,
@@ -1549,7 +1550,7 @@ export default function CustomerForm({
                 <AuditTimeline
                   id={initialValues.id}
                   page="customer"
-                  service="entity-service"
+                  service={menuConfigUrl.entity}
                 />
               </TabPanel>
             </TabContext>

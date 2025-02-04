@@ -21,6 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../../common/Toast/CustomToast";
 import ApiManager from "../../../../services/ApiManager";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 
 const AddEditCharge = () => {
   const location = useLocation();
@@ -222,7 +223,7 @@ const AddEditCharge = () => {
                   <AuditTimeLine
                     id={id}
                     page="charge"
-                    service="admin-service"
+                    service={menuConfigUrl.admin}
                   />
                 </TabPanel>
               </TabContext>

@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getAppHeaders, API_BASE_URL } from "../../services/ApiMethods";
+import { menuConfigUrl } from "../menuConfigUrl";
 
 export const chargesDataApi = createApi({
   reducerPath: "chargesDataApi",
@@ -13,7 +14,7 @@ export const chargesDataApi = createApi({
           Authorization: getAppHeaders()["Authorization"],
         };
         return {
-          url: `/admin-service/v1/${page}?${queryString}`,
+          url: `/${menuConfigUrl.admin}/${page}?${queryString}`,
           method: "POST",
           body: payload,
           headers,
@@ -24,7 +25,7 @@ export const chargesDataApi = createApi({
     addCharge: builder.mutation({
       query: (params) => {
         return {
-          url: `admin-service/v1/charge`,
+          url: `${menuConfigUrl.admin}/charge`,
           method: "POST",
           body: params,
           headers: getAppHeaders(),
@@ -35,7 +36,7 @@ export const chargesDataApi = createApi({
     updateCharge: builder.mutation({
       query: (params) => {
         return {
-          url: `admin-service/v1/charge`,
+          url: `${menuConfigUrl.admin}/charge`,
           method: "PUT",
           body: params,
           headers: getAppHeaders(),
@@ -46,7 +47,7 @@ export const chargesDataApi = createApi({
     getCharge: builder.query({
       query: (params) => {
         return {
-          url: `admin-service/v1/charge/${params.id}`,
+          url: `${menuConfigUrl.admin}/charge/${params.id}`,
           method: "GET",
           body: params.body,
           headers: getAppHeaders(),
@@ -56,7 +57,7 @@ export const chargesDataApi = createApi({
     deleteCharge: builder.mutation({
       query: (id) => {
         return {
-          url: `admin-service/v1/charge/${id}`,
+          url: `${menuConfigUrl.admin}/charge/${id}`,
           method: "DELETE",
           headers: getAppHeaders(),
         };
@@ -65,7 +66,7 @@ export const chargesDataApi = createApi({
     getChargeAudit: builder.query({
       query: (params) => {
         return {
-          url: `admin-service/v1/charge/audit/${params.id}`,
+          url: `${menuConfigUrl.admin}/charge/audit/${params.id}`,
           method: "GET",
           body: params.body,
           headers: getAppHeaders(),
@@ -81,5 +82,5 @@ export const {
   useUpdateChargeMutation,
   useLazyGetChargeQuery,
   useDeleteChargeMutation,
-  useLazyGetChargeAuditQuery
+  useLazyGetChargeAuditQuery,
 } = chargesDataApi;

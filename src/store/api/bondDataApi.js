@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
+import { menuConfigUrl } from "../menuConfigUrl";
 
 export const bondDataAPI = createApi({
   reducerPath: "bondDataAPI",
@@ -10,7 +11,7 @@ export const bondDataAPI = createApi({
       query: (params) => {
         const queryString = new URLSearchParams(params.params).toString();
         return {
-          url: `master-service/v1/bond/filter?${queryString}`,
+          url: `${menuConfigUrl.master}/bond/filter?${queryString}`,
           method: "POST",
           body: params.payload,
           headers: getAppHeaders(),
@@ -20,7 +21,7 @@ export const bondDataAPI = createApi({
     }),
     addbond: builder.mutation({
       query: (payload) => ({
-        url: "master-service/v1/bond",
+        url: `${menuConfigUrl.master}/bond`,
         method: "POST",
         body: payload,
         headers: getAppHeaders(),
@@ -29,7 +30,7 @@ export const bondDataAPI = createApi({
     getbond: builder.query({
       query: (params) => {
         return {
-          url: `master-service/v1/bond/${params.id}`,
+          url: `${menuConfigUrl.master}/bond/${params.id}`,
           method: "GET",
           headers: getAppHeaders(),
         };
@@ -37,7 +38,7 @@ export const bondDataAPI = createApi({
     }),
     updatebond: builder.mutation({
       query: (payload) => ({
-        url: "master-service/v1/bond",
+        url: `${menuConfigUrl.master}/bond`,
         method: "PUT",
         body: payload,
         headers: getAppHeaders(),
@@ -46,7 +47,7 @@ export const bondDataAPI = createApi({
     getbondAudit: builder.query({
       query: (params) => {
         return {
-          url: `master-service/v1/bond/audit/${params.id}`,
+          url: `${menuConfigUrl.master}/bond/audit/${params.id}`,
           method: "GET",
           headers: getAppHeaders(),
         };
@@ -55,7 +56,7 @@ export const bondDataAPI = createApi({
     deleteBond: builder.mutation({
       query: (id) => {
         return {
-          url: `master-service/v1/bond/${id}`,
+          url: `${menuConfigUrl.master}/bond/${id}`,
           method: "DELETE",
           headers: getAppHeaders(),
         };
@@ -70,5 +71,5 @@ export const {
   useLazyGetbondQuery,
   useUpdatebondMutation,
   useLazyGetbondAuditQuery,
-  useDeleteBondMutation
+  useDeleteBondMutation,
 } = bondDataAPI;

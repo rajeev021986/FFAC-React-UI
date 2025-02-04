@@ -38,6 +38,7 @@ import { OutlinedButton, ThemeButton } from "../Button";
 import FormAutoComplete from "../AutoComplete/FormAutoComplete";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import AuditTimeLine from "../../AuditTimeLine";
+import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First Name is required"),
@@ -272,7 +273,6 @@ export default function AddCard() {
                 padding: "10px",
               }}
             >
-             
               <Grid container spacing={2}>
                 <Grid
                   item
@@ -571,7 +571,7 @@ export default function AddCard() {
             <AuditTimeLine
               id={formik?.values?.id}
               page="user"
-              service="admin-service"
+              service={menuConfigUrl.admin}
             />
           </TabPanel>
         </TabContext>

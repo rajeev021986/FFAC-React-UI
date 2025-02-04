@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getAppHeaders, API_BASE_URL } from "../../services/ApiMethods";
+import { menuConfigUrl } from "../menuConfigUrl";
 
 export const userDataApi = createApi({
   reducerPath: "userDataApi",
@@ -10,10 +11,10 @@ export const userDataApi = createApi({
       query: (params) => {
         const queryString = new URLSearchParams(params.params).toString();
         return {
-          url: `/admin-service/v1/user/filter?${queryString}`,
+          url: `/${menuConfigUrl.admin}/user/filter?${queryString}`,
           method: "POST",
           headers: getAppHeaders(),
-          body: params.payload
+          body: params.payload,
         };
       },
       providesTags: ["User"],
@@ -70,27 +71,35 @@ export const userDataApi = createApi({
         return {
           url: `/users/new_registered_users?${queryString}`,
           method: "GET",
-          headers: getAppHeaders()
-        }
-      }
+          headers: getAppHeaders(),
+        };
+      },
     }),
     menuSubmenu: builder.query({
       query: () => {
-        return { url: `/admin-service/v1/menu/submenu`, method: "GET", headers: getAppHeaders() };
+        return {
+          url: `/${menuConfigUrl.admin}/menu/submenu`,
+          method: "GET",
+          headers: getAppHeaders(),
+        };
       },
       providesTags: ["User"],
     }),
     fetchuser: builder.query({
       query: (params) => {
         const queryString = new URLSearchParams(params).toString();
-        return { url: `/admin-service/v1/role/users`, method: "GET", headers: getAppHeaders() };
+        return {
+          url: `/${menuConfigUrl.admin}/role/users`,
+          method: "GET",
+          headers: getAppHeaders(),
+        };
       },
       providesTags: ["User"],
     }),
     resetPassword: builder.mutation({
       query: (params) => {
         return {
-          url: `/admin-service/v1/user/password`,
+          url: `/${menuConfigUrl.admin}/user/password`,
           method: "PUT",
           body: params,
           headers: getAppHeaders(),
@@ -98,7 +107,6 @@ export const userDataApi = createApi({
       },
       invalidatesTags: ["User"],
     }),
-
   }),
 });
 
@@ -112,5 +120,5 @@ export const {
   useFetchRegesterdUserQuery,
   useMenuSubmenuQuery,
   useFetchuserQuery,
-  useResetPasswordMutation
+  useResetPasswordMutation,
 } = userDataApi;

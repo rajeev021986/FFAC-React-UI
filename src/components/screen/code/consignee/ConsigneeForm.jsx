@@ -29,6 +29,7 @@ import { ConsigneeValidationSchema } from "./ConsigneeValidationSchema";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../../common/Toast/CustomToast";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 
 export default function ConsigneeForm({ initialValues, page, type, id }) {
   const tabs = [
@@ -787,7 +788,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                 <AuditTimeline
                   id={initialValues.id}
                   page="consignee"
-                  service="entity-service"
+                  service={menuConfigUrl.entity}
                 />
               </TabPanel>
             </TabContext>

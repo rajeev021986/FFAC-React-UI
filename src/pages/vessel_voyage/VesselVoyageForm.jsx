@@ -22,6 +22,7 @@ import getFirstError from "../../components/common/FieldToastError";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
 export function VesselVoyageForm({ initialValues, type }) {
   const disabled = false;
   const nav = useNavigate();
@@ -864,7 +865,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                 <AuditTimeLine
                   id={initialValues.id}
                   page="vessel/voyage"
-                  service="master-service"
+                  service={menuConfigUrl.master}
                 />
               </TabPanel>
             </TabContext>

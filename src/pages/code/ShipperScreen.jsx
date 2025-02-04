@@ -48,6 +48,8 @@ import ApiManager from "../../services/ApiManager";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import ShpperFilterForm from "../../components/screen/code/Shipper/FilterForm";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 
 const ADD_NEW_SHIPPER_PATH = "new_shipper";
 export default function ShipperScreen({ page }) {
@@ -155,20 +157,13 @@ export default function ShipperScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel({
+        await downloadExcel({
           query: query,
           payload: payload,
-          service: "entity-service",
+          service: `${menuConfigUrl.entity}`,
           page: "shipper",
+          filename: "shipper-data.xlsx",
         });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "shipper-data.xlsx");
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
       } catch (error) {
         toast.custom(
           <CustomToast message="Something went wrong" toast="error" />,
@@ -364,7 +359,7 @@ export default function ShipperScreen({ page }) {
             <AuditTimeLine
               id={modal.data.id}
               page="shipper"
-              service="entity-service"
+              service={menuConfigUrl.entity}
             />
           </Box>
         </Drawer>

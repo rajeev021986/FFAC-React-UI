@@ -50,6 +50,8 @@ import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import ApiManager from "../../services/ApiManager";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import { downloadExcel } from "../../utils/downloadExcel";
 
 export default function VendorScreen({ page }) {
   const vendorSelector = useSelector((state) => state.vendor);
@@ -179,20 +181,13 @@ export default function VendorScreen({ page }) {
     if (actionName === "Export") {
       setExportLoader(true);
       try {
-        const blob = await ApiManager.fetchDatasExcel(
-          {query: query,
-          payload:  payload,
-          service: "entity-service",
-          page: "vendor"}
-        );
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "vendor-data.xlsx");
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
+        await downloadExcel({
+          query: query,
+          payload: payload,
+          service: `${menuConfigUrl.entity}`,
+          page: "vendor",
+          filename: "vendor-data.xlsx",
+        });
       } catch (error) {}
       setExportLoader(false);
     }
@@ -371,7 +366,7 @@ export default function VendorScreen({ page }) {
             <AuditTimeLine
               id={modal.data.id}
               page="vendor"
-              service="entity-service"
+              service={menuConfigUrl.entity}
             />
           </Box>
         </Drawer>

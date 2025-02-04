@@ -1,5 +1,6 @@
 import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
+import { menuConfigUrl } from "../menuConfigUrl";
  //const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const shipperDataApi = createApi({
@@ -10,7 +11,7 @@ export const shipperDataApi = createApi({
         fetchShipper: builder.query({
             query: (params) => {
                 const queryString = new URLSearchParams(params).toString();
-                return { url: `/entity-service/v1/shipper`, method: "GET", headers: getAppHeaders() };
+                return { url: `/${menuConfigUrl.entity}/shipper`, method: "GET", headers: getAppHeaders() };
             },
             providesTags: ["Shipper"],
         }),
@@ -22,7 +23,7 @@ export const shipperDataApi = createApi({
                 };
 
 
-                return { url: `entity-service/v1/shipper`, method: "POST", body: params, headers: headers };
+                return { url: `${menuConfigUrl.entity}/shipper`, method: "POST", body: params, headers: headers };
             },
             invalidatesTags: ["Shipper"],
         }),
@@ -33,7 +34,7 @@ export const shipperDataApi = createApi({
                     'Authorization': getAppHeaders()['Authorization']
                 };
 
-                return { url: `entity-service/v1/shipper`, method: "PUT", body: params, headers: headers };
+                return { url: `${menuConfigUrl.entity}/shipper`, method: "PUT", body: params, headers: headers };
             },
             invalidatesTags: ["Shipper"],
         }),
@@ -45,7 +46,7 @@ export const shipperDataApi = createApi({
                     Authorization: getAppHeaders()['Authorization'],
                 };
                 return {
-                    url: `/entity-service/v1/${page}?${queryString}`,
+                    url: `/${menuConfigUrl.entity}/${page}?${queryString}`,
                     method: "POST",
                     body: payload,
                     headers,
@@ -55,13 +56,13 @@ export const shipperDataApi = createApi({
         }),
         getShipperAudit: builder.query({
             query: (params) => {
-                return { url: `entity-service/v1/shipper/audit/${params.id}`, method: "GET", headers: getAppHeaders() };
+                return { url: `${menuConfigUrl.entity}/shipper/audit/${params.id}`, method: "GET", headers: getAppHeaders() };
             },
         }),
         DeleteShipper: builder.mutation({
             query: (id) => {
                 return {
-                    url: `entity-service/v1/shipper/${id}`,
+                    url: `${menuConfigUrl.entity}/shipper/${id}`,
                     method: "DELETE",
                     headers: getAppHeaders()
                 };

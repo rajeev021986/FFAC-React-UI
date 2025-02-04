@@ -24,6 +24,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
 import ApiManager from "../../../../services/ApiManager";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 function PortForm() {
   const [value, setValue] = React.useState(1);
   const [dropdownData, setDropdownData] = useState({});
@@ -195,7 +196,11 @@ function PortForm() {
                 )}
               </TabPanel>
               <TabPanel value={2} sx={{ padding: "0px" }}>
-                <AuditTimeLine id={id} page="port" service="master-service" />
+                <AuditTimeLine
+                  id={id}
+                  page="port"
+                  service={menuConfigUrl.master}
+                />
               </TabPanel>
             </TabContext>
           </CardContent>

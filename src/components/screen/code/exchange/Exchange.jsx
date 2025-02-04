@@ -19,6 +19,7 @@ import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 
 export default function Exchange() {
   const location = useLocation();
@@ -211,7 +212,7 @@ export default function Exchange() {
                 <AuditTimeLine
                   id={id}
                   page="exchange-rate"
-                  service="admin-service"
+                  service={menuConfigUrl.admin}
                 />
               </TabPanel>
             </TabContext>

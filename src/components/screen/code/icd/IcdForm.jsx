@@ -28,6 +28,7 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import getFirstError from "../../../common/FieldToastError";
 import { IcdValidationSchema } from "./IcdValidationSchema";
 import CustomToast from "../../../common/Toast/CustomToast";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 
 export default function IcdForm({ initialValues, page, type, id }) {
   const tabs = [
@@ -711,7 +712,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                 <AuditTimeline
                   id={initialValues.id}
                   page="icd"
-                  service="master-service"
+                  service={menuConfigUrl.master}
                 />
               </TabPanel>
             </TabContext>

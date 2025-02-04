@@ -63,7 +63,7 @@ export default function CardItemUser({
             marginBottom: 2,
             border: (theme) => `4px solid ${theme.palette.primary.main}`,
           }}
-          src={item.profileimg}
+          src={item.image}
           alt="Profile Image"
         />
 
