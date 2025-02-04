@@ -61,7 +61,7 @@ const tabStyle = {
   container: {
     width: "fit-content",
     fontWeight: "bold",
-    fontSize: "20px",
+    fontSize: "18px",
   },
   tab: {
     textTransform: "capitalize",

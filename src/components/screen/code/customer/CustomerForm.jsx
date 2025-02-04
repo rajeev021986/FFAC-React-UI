@@ -342,8 +342,13 @@ export default function CustomerForm({
           <Box
             sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}
           >
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <TabContext value={value} sx={{ padding: "20px 0" }}>
+              <Box
+                sx={{
+                  borderBottom: 1,
+                  borderColor: "divider",
+                }}
+              >
                 <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"
@@ -905,7 +910,7 @@ export default function CustomerForm({
                 <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"
-                  sx={{ padding: "0px" }}
+                  sx={{ paddingBottom: "20px" }}
                 >
                   <Tab
                     label="Customer Details"
@@ -913,6 +918,7 @@ export default function CustomerForm({
                     sx={{
                       textTransform: "capitalize",
                       minHeight: "50px",
+                      fontSize: "18px",
                     }}
                     icon={<EditIcon />}
                     iconPosition="start"
@@ -923,6 +929,7 @@ export default function CustomerForm({
                     sx={{
                       textTransform: "capitalize",
                       minHeight: "50px",
+                      fontSize: "18px",
                     }}
                     icon={<DescriptionIcon />}
                     iconPosition="start"
@@ -933,6 +940,7 @@ export default function CustomerForm({
                     sx={{
                       textTransform: "capitalize",
                       minHeight: "50px",
+                      fontSize: "18px",
                     }}
                     icon={<HistoryIcon />}
                     iconPosition="start"
@@ -1395,10 +1403,11 @@ export default function CustomerForm({
                     >
                       <ThemeTabs
                         tabData={[
-                          { label: "Tariffs", value: "1", disable: false },
+                          { label: "Tariff", value: "1", disable: false },
                           { label: "Email", value: "2", disable: false },
                           { label: "Bank Details", value: "3", disable: false },
                         ]}
+                        sx={{ fontSize: "18px" }}
                       >
                         <AddMapping
                           formik={formik}
