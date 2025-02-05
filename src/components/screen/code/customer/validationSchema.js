@@ -3,8 +3,8 @@ import * as Yup from "yup";
 export const CustomerValidationSchema = () =>
   Yup.object({
     customerName: Yup.string().required("Name is required"),
-    tinNo: Yup.string().nullable(),
-    vatNo: Yup.string().nullable(),
+    tinNo: Yup.number().nullable(),
+    vatNo: Yup.number().nullable(),
     // status: Yup.string().required("Status is required"),
     add1: Yup.string().required("Address is required"),
     // add2: Yup.string().required("Address is required"),
@@ -32,15 +32,17 @@ export const CustomerValidationSchema = () =>
         return emailRegex.test(value);
       }
     ),
-    telephone: Yup.number().typeError('Telephone must be a valid number')
-      .positive('Telephone must be positive'),
+    telephone: Yup.number()
+      .typeError("Telephone must be a valid number")
+      .positive("Telephone must be positive"),
     // fax: Yup.string().required("Fax is required"),
     bankName: Yup.string().matches(
       /^[A-Za-z\s]+$/,
       "Bank name must only contain letters"
     ),
-    accountNo: Yup.number().typeError('Account number must be a valid number')
-      .positive('Account number must be positive'),
+    accountNo: Yup.number()
+      .typeError("Account number must be a valid number")
+      .positive("Account number must be positive"),
     // customerType: Yup.string().required("Customer Type is required"),
     // companyCode: Yup.string().required("Company Code is required"),
     paymentType: Yup.string().required("Payment Type is required"),
@@ -66,8 +68,7 @@ export const CustomerValidationSchema = () =>
     // rejectRemarks: Yup.string().required("Reject remarks is required"),
     customerEntityTariffs: Yup.array().of(
       Yup.object().shape({
-        unitRate: Yup.number()
-          .min(0, "Unit Rate must be a positive number")
+        unitRate: Yup.number().min(0, "Unit Rate must be a positive number"),
       })
     ),
 

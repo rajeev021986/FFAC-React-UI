@@ -18,7 +18,6 @@ import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 export default function IcdFormScreen({ page }) {
   const [icdDatas, seticdDatas] = useState({});
   const [loading, setLoading] = useState(true);
-  const [settingsLoaded, setSettingsLoaded] = useState(false);
   const { state } = useLocation();
   const [initialValues, setInitialValues] = React.useState({
     id: "",
@@ -93,8 +92,9 @@ export default function IcdFormScreen({ page }) {
     } else {
       setLoading(false);
     }
+    setLoading(false);
   }, [state?.initialValues?.id]);
-
+  console.log(loading, optionsLoading, icdSettingsLoading, "asdfg");
   return (
     <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
       <Stack sx={{ padding: "8px 0px" }}>

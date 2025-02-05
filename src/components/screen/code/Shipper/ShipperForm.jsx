@@ -77,6 +77,10 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       .min(8),
     extn_No: Yup.number().typeError("Extn number must be number"),
     fax_No: Yup.number().typeError("Fax number must be number"),
+    contactName: Yup.string().matches(
+      /^[A-Za-z\s]+$/,
+      "Contact Person must only contain letters"
+    ),
     tel_No: Yup.number()
       .typeError("phone number must be number")
       .positive("A phone number can't start with a minus")
