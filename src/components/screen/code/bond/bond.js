@@ -3,6 +3,9 @@ import BiotechIcon from "@mui/icons-material/Biotech";
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import CustomToast from "../../../common/Toast/CustomToast";
 import toast from "react-hot-toast";
+import EditIconDropdown from "../../../common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
+import AuditIconDropdown from "../../../common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
+import DeleteIconDropdown from "../../../common/commonIconDropdown/DeleteIconDropdown/DeleteIconDropdown";
 
 export const getBondGridActions = (nav, setModal) => {
   return [
@@ -11,14 +14,14 @@ export const getBondGridActions = (nav, setModal) => {
       onClick: (params) => {
         nav("editBond", { state: { id: params.row.id, type: "Edit" } });
       },
-      icon: <EditIcon />,
+      icon: <EditIconDropdown />,
     },
     {
       label: "Audit",
       onClick: (params) => {
         setModal({ open: true, type: "audit", data: params.row });
       },
-      icon: <BiotechIcon />,
+      icon: <AuditIconDropdown />,
     },
     {
       label: "Delete",
@@ -35,10 +38,7 @@ export const getBondGridActions = (nav, setModal) => {
           });
         } else {
           toast.custom(
-            <CustomToast
-              message="Only for Inactive bond"
-              toast="error"
-            />,
+            <CustomToast message="Only for Inactive bond" toast="error" />,
             {
               closeButton: false,
             }
@@ -46,7 +46,7 @@ export const getBondGridActions = (nav, setModal) => {
           return;
         }
       },
-      icon: <GridDeleteIcon />,
+      icon: <DeleteIconDropdown />,
     },
   ];
 };

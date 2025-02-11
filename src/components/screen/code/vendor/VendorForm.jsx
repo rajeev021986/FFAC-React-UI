@@ -25,6 +25,9 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../../common/Toast/CustomToast";
 import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
+import DocumentIcon from "../../../common/commonIcons/DocumentIcons/DocumentIcon";
+import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
 
 export default function VendorForm({ page = "vendor" }) {
   const [value, setValue] = React.useState(1);
@@ -33,9 +36,13 @@ export default function VendorForm({ page = "vendor" }) {
     setValue(newValue);
   };
   const tabs = [
-    { label: "Vendor Details", value: 1, icon: <EditIcon /> },
-    { label: "Document Details", value: 2, icon: <DescriptionIcon /> },
-    { label: "Audit logs", value: 3, icon: <HistoryIcon /> },
+    {
+      label: "Vendor Details",
+      value: 1,
+      icon: <EditIconForHeader />,
+    },
+    { label: "Document Details", value: 2, icon: <DocumentIcon /> },
+    { label: "Audit logs", value: 3, icon: <AuditIcon /> },
   ];
   const location = useLocation();
   const { id, type } = location.state;
@@ -333,7 +340,11 @@ export default function VendorForm({ page = "vendor" }) {
                 />
               </TabPanel>
               <TabPanel value={3} sx={{ padding: "0px" }}>
-                <AuditTimeLine id={id} page="vendor" service={menuConfigUrl.entity} />
+                <AuditTimeLine
+                  id={id}
+                  page="vendor"
+                  service={menuConfigUrl.entity}
+                />
               </TabPanel>
             </TabContext>
           </Card>

@@ -25,6 +25,9 @@ import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
 import ApiManager from "../../../../services/ApiManager";
 import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
+import DocumentIcon from "../../../common/commonIcons/DocumentIcons/DocumentIcon";
+import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
 function PortForm() {
   const [value, setValue] = React.useState(1);
   const [dropdownData, setDropdownData] = useState({});
@@ -39,10 +42,10 @@ function PortForm() {
   };
   const tabs =
     type == "new"
-      ? [{ label: "Port Details", value: 1, icon: EditIcon }]
+      ? [{ label: "Port Details", value: 1, icon: EditIconForHeader }]
       : [
-          { label: "Port Details", value: 1, icon: EditIcon },
-          { label: "Audit logs", value: 2, icon: HistoryIcon },
+          { label: "Port Details", value: 1, icon: DocumentIcon },
+          { label: "Audit logs", value: 2, icon: AuditIcon },
         ];
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -176,7 +179,7 @@ function PortForm() {
                         textTransform: "capitalize",
                         minHeight: "50px",
                       }}
-                      icon={<a.icon />}
+                      icon={<a.icon sx={{ width: "20px" }} />}
                       iconPosition="start"
                     />
                   ))}

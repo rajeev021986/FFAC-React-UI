@@ -39,6 +39,8 @@ import FormAutoComplete from "../AutoComplete/FormAutoComplete";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import AuditTimeLine from "../../AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
+import EditIconForHeader from "../commonIcons/EditIcons/EditIconForHeader";
+import AuditIcon from "../commonIcons/AuditIcon/AuditIcon";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First Name is required"),
@@ -64,8 +66,12 @@ export default function AddCard() {
     setValue(newValue);
   };
   const tabs = [
-    { label: "User Details", value: 1, icon: <EditIcon /> },
-    { label: "Audit logs", value: 2, icon: <HistoryIcon /> },
+    {
+      label: "User Details",
+      value: 1,
+      icon: <EditIconForHeader />,
+    },
+    { label: "Audit logs", value: 2, icon: <AuditIcon /> },
   ];
   Boolean(!id) && tabs.splice(1, 1);
   const formik = useFormik({

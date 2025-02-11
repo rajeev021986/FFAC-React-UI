@@ -22,6 +22,8 @@ import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../../common/Toast/CustomToast";
 import ApiManager from "../../../../services/ApiManager";
 import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
+import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
 
 const AddEditCharge = () => {
   const location = useLocation();
@@ -35,8 +37,12 @@ const AddEditCharge = () => {
     useGetOptionsSettingsQuery("common_settings");
 
   const tabs = [
-    { label: "Charge Details", value: 1, icon: <EditIcon /> },
-    { label: "Audit Logs", value: 2, icon: <HistoryIcon /> },
+    {
+      label: "Charge Details",
+      value: 1,
+      icon: <EditIconForHeader />,
+    },
+    { label: "Audit Logs", value: 2, icon: <AuditIcon /> },
   ];
   Boolean(type == "copy" || type == "new") && tabs.splice(1, 1);
 

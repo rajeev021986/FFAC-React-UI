@@ -75,10 +75,10 @@ export const getTheme = (primaryColor = "#026de0", mode) => {
       MuiTab: {
         styleOverrides: {
           root: {
-            fontSize: "1.5rem",
+            fontSize: "1.125rem",
             fontWeight: "bold",
             "&.nested1": {
-              fontSize: "1.2rem",
+              fontSize: "1rem",
               fontWeight: "500",
             },
           },

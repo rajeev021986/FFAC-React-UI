@@ -536,7 +536,12 @@ export default function AddEditRole() {
           onChange={(e) => setRoleName(e.target.value)}
           sx={{ minWidth: "200px" }}
         />
-        <Button variant="contained" color="primary" onClick={handleAddRole}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAddRole}
+          sx={{ color: "#fff" }}
+        >
           {id ? "Update Role" : "Add Role"}
         </Button>
       </div>

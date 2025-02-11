@@ -3,6 +3,9 @@ import { GridDeleteIcon } from "@mui/x-data-grid";
 import toast from "react-hot-toast";
 import BiotechIcon from "@mui/icons-material/Biotech";
 import CustomToast from "../../../common/Toast/CustomToast";
+import EditIconDropdown from "../../../common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
+import AuditIconDropdown from "../../../common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
+import DeleteIconDropdown from "../../../common/commonIconDropdown/DeleteIconDropdown/DeleteIconDropdown";
 
 export const getConsigneeListGridActions = (nav, setModal) => {
   return [
@@ -13,14 +16,14 @@ export const getConsigneeListGridActions = (nav, setModal) => {
           state: { formAction: "edit", initialValues: params.row },
         });
       },
-      icon: <EditIcon />,
+      icon: <EditIconDropdown />,
     },
     {
       label: "Audit",
       onClick: (params) => {
         setModal({ open: true, type: "audit", data: params.row });
       },
-      icon: <BiotechIcon />,
+      icon: <AuditIconDropdown />,
     },
     {
       label: "Delete",
@@ -45,7 +48,7 @@ export const getConsigneeListGridActions = (nav, setModal) => {
           return;
         }
       },
-      icon: <GridDeleteIcon />,
+      icon: <DeleteIconDropdown />,
     },
   ];
 };

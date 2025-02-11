@@ -26,6 +26,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
+import EditIconForHeader from "../../components/common/commonIcons/EditIcons/EditIconForHeader";
+import AuditIcon from "../../components/common/commonIcons/AuditIcon/AuditIcon";
 export function VesselForm({ initialValues, type }) {
   const location = useLocation();
   const nav = useNavigate();
@@ -181,7 +183,7 @@ export function VesselForm({ initialValues, type }) {
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
-                    icon={<EditIcon />}
+                    icon={<EditIconForHeader />}
                     iconPosition="start"
                   />
                 </TabList>
@@ -346,7 +348,7 @@ export function VesselForm({ initialValues, type }) {
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
-                    icon={<EditIcon />}
+                    icon={<EditIconForHeader />}
                     iconPosition="start"
                   />
                   <Tab
@@ -356,7 +358,7 @@ export function VesselForm({ initialValues, type }) {
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
-                    icon={<HistoryIcon />}
+                    icon={<AuditIcon />}
                     iconPosition="start"
                   />
                 </TabList>

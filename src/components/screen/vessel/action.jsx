@@ -3,6 +3,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import CustomToast from "../../common/Toast/CustomToast";
 import toast from "react-hot-toast";
+import EditIconDropdown from "../../common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
+import AuditIconDropdown from "../../common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
+import DeleteIconDropdown from "../../common/commonIconDropdown/DeleteIconDropdown/DeleteIconDropdown";
 
 export const getVesselListGridActions = (nav, setModal) => {
   return [
@@ -13,7 +16,7 @@ export const getVesselListGridActions = (nav, setModal) => {
           state: { formAction: "edit", initialValues: params.row },
         });
       },
-      icon: <EditIcon />,
+      icon: <EditIconDropdown />,
     },
     {
       label: "Audit",
@@ -23,7 +26,7 @@ export const getVesselListGridActions = (nav, setModal) => {
         // });
         setModal({ type: "audit", open: true, data: params.row });
       },
-      icon: <Biotech />,
+      icon: <AuditIconDropdown />,
     },
     {
       label: "Delete",
@@ -48,7 +51,7 @@ export const getVesselListGridActions = (nav, setModal) => {
           return;
         }
       },
-      icon: <GridDeleteIcon />,
+      icon: <DeleteIconDropdown />,
     },
   ];
 };

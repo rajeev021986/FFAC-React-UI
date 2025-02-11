@@ -28,6 +28,8 @@ import HistoryIcon from "@mui/icons-material/History";
 import CustomToast from "../../../common/Toast/CustomToast";
 import ApiManager from "../../../../services/ApiManager";
 import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
+import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
 
 export default function ShipperForm({ initialValues, page, type, id }) {
   const FieldRef = useRef(null);
@@ -215,7 +217,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
-                    icon={<EditIcon />}
+                    icon={<EditIconForHeader />}
                     iconPosition="start"
                   />
                 </TabList>
@@ -573,7 +575,9 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                         textTransform: "capitalize",
                         minHeight: "50px",
                       }}
-                      icon={a.value === 1 ? <EditIcon /> : <HistoryIcon />}
+                      icon={
+                        a.value === 1 ? <EditIconForHeader /> : <AuditIcon />
+                      }
                       iconPosition="start"
                     />
                   ))}

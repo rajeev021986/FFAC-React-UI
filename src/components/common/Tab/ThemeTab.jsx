@@ -61,13 +61,13 @@ const tabStyle = {
   container: {
     width: "fit-content",
     fontWeight: "bold",
-    fontSize: "18px",
   },
   tab: {
     textTransform: "capitalize",
   },
   tabPanel: {
     width: "100%",
+
     "& .MuiTabPanel-root": {
       padding: "0px !important",
       width: "100%",

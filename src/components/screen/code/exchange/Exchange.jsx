@@ -17,9 +17,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
-import EditIcon from "@mui/icons-material/Edit";
-import HistoryIcon from "@mui/icons-material/History";
+
 import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
+import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
 
 export default function Exchange() {
   const location = useLocation();
@@ -32,8 +33,12 @@ export default function Exchange() {
   const { data: ExchageSettingsData, isFetching } =
     useGetOptionsSettingsQuery("common_settings");
   const tabs = [
-    { label: "Exchange Details", value: 1, icon: <EditIcon /> },
-    { label: "Audit Logs", value: 2, icon: <HistoryIcon /> },
+    {
+      label: "Exchange Details",
+      value: 1,
+      icon: <EditIconForHeader />,
+    },
+    { label: "Audit Logs", value: 2, icon: <AuditIcon /> },
   ];
   Boolean(type == "copy" || type == "new") && tabs.splice(1, 1);
   const [getExahangeRate, { isLoading }] = useLazyGetExahangeRateQuery();
