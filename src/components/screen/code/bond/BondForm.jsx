@@ -23,6 +23,9 @@ import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
 import ApiManager from "../../../../services/ApiManager";
 import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
+import DocumentIcon from "../../../common/commonIcons/DocumentIcons/DocumentIcon";
+import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
 export default function BondForm() {
   const [value, setValue] = React.useState(1);
   const location = useLocation();
@@ -36,10 +39,10 @@ export default function BondForm() {
   const [updateBond, { isLoading: loaderUpdate }] = useUpdatebondMutation();
   const tabs =
     type == "new"
-      ? [{ label: "Bond Details", value: 1, icon: EditIcon }]
+      ? [{ label: "Bond Details", value: 1, icon: EditIconForHeader }]
       : [
-          { label: "Bond Details", value: 1, icon: EditIcon },
-          { label: "Audit Logs", value: 2, icon: HistoryIcon },
+          { label: "Bond Details", value: 1, icon: DocumentIcon },
+          { label: "Audit Logs", value: 2, icon: AuditIcon },
         ];
   const { data: StatusDropdown } =
     useGetOptionsSettingsQuery("common_settings");
@@ -206,7 +209,7 @@ export default function BondForm() {
                         textTransform: "capitalize",
                         minHeight: "50px",
                       }}
-                      icon={<a.icon />}
+                      icon={<a.icon sx={{ width: "20px" }} />}
                       iconPosition="start"
                     />
                   ))}

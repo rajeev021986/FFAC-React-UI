@@ -3,6 +3,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import CustomToast from "../../common/Toast/CustomToast";
 import toast from "react-hot-toast";
 import { GridDeleteIcon } from "@mui/x-data-grid";
+import EditIconDropdown from "../../common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
+import AuditIconDropdown from "../../common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
 
 export const getVoyageListGridActions = (nav, setModal) => {
   return [
@@ -13,14 +15,14 @@ export const getVoyageListGridActions = (nav, setModal) => {
           state: { formAction: "edit", initialValues: params.row },
         });
       },
-      icon: <EditIcon />,
+      icon: <EditIconDropdown />,
     },
     {
       label: "Audit",
       onClick: (params) => {
         setModal({ type: "audit", open: true, data: params.row });
       },
-      icon: <Biotech />,
+      icon: <AuditIconDropdown />,
     },
     {
       label: "Delete",

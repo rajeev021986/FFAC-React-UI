@@ -29,6 +29,8 @@ import getFirstError from "../../../common/FieldToastError";
 import { IcdValidationSchema } from "./IcdValidationSchema";
 import CustomToast from "../../../common/Toast/CustomToast";
 import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
+import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
 
 export default function IcdForm({ initialValues, page, type, id }) {
   const tabs = [
@@ -199,7 +201,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
-                    icon={<EditIcon />}
+                    icon={<EditIconForHeader />}
                     iconPosition="start"
                   />
                 </TabList>
@@ -449,7 +451,9 @@ export default function IcdForm({ initialValues, page, type, id }) {
                         textTransform: "capitalize",
                         minHeight: "50px",
                       }}
-                      icon={a.value === 1 ? <EditIcon /> : <HistoryIcon />}
+                      icon={
+                        a.value === 1 ? <EditIconForHeader /> : <AuditIcon />
+                      }
                       iconPosition="start"
                     />
                   ))}

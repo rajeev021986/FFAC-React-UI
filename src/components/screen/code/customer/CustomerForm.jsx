@@ -48,10 +48,11 @@ import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import getFirstError from "../../../common/FieldToastError";
 import CustomerBankDetails from "./BankDetails";
-import EditIcon from "@mui/icons-material/Edit";
-import DescriptionIcon from "@mui/icons-material/Description";
-import HistoryIcon from "@mui/icons-material/History";
+
 import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
+import DocumentIcon from "../../../common/commonIcons/DocumentIcons/DocumentIcon";
+import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
 
 export default function CustomerForm({
   initialValues,
@@ -361,7 +362,7 @@ export default function CustomerForm({
                       textTransform: "capitalize",
                       minHeight: "50px",
                     }}
-                    icon={<EditIcon />}
+                    icon={<EditIconForHeader />}
                     iconPosition="start"
                   />
                 </TabList>
@@ -918,9 +919,8 @@ export default function CustomerForm({
                     sx={{
                       textTransform: "capitalize",
                       minHeight: "50px",
-                      fontSize: "18px",
                     }}
-                    icon={<EditIcon />}
+                    icon={<EditIconForHeader />}
                     iconPosition="start"
                   />
                   <Tab
@@ -929,9 +929,8 @@ export default function CustomerForm({
                     sx={{
                       textTransform: "capitalize",
                       minHeight: "50px",
-                      fontSize: "18px",
                     }}
-                    icon={<DescriptionIcon />}
+                    icon={<DocumentIcon />}
                     iconPosition="start"
                   />
                   <Tab
@@ -940,9 +939,8 @@ export default function CustomerForm({
                     sx={{
                       textTransform: "capitalize",
                       minHeight: "50px",
-                      fontSize: "18px",
                     }}
-                    icon={<HistoryIcon />}
+                    icon={<AuditIcon />}
                     iconPosition="start"
                   />
                 </TabList>
@@ -1407,7 +1405,6 @@ export default function CustomerForm({
                           { label: "Email", value: "2", disable: false },
                           { label: "Bank Details", value: "3", disable: false },
                         ]}
-                        sx={{ fontSize: "18px" }}
                       >
                         <AddMapping
                           formik={formik}
