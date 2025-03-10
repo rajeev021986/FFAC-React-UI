@@ -29,9 +29,7 @@ import PortForm from "./components/screen/code/port/PortForm";
 import BondScreen from "./pages/Bond/Bondscreen";
 import BondForm from "./components/screen/code/bond/BondForm";
 import "./App.css";
-import {
-  VesselVoyageScreen,
-} from "./pages/vessel_voyage/VesselVoyageScreen";
+import { VesselVoyageScreen } from "./pages/vessel_voyage/VesselVoyageScreen";
 import { VesselVoyageFormScreen } from "./pages/vessel_voyage/VesselVoyageFormScreen";
 import { ChargesScreen } from "./pages/charges/ChargesScreen";
 import AddEditCharge from "./components/screen/code/charge/AddEditCharge";
@@ -40,6 +38,13 @@ import Exchange from "./components/screen/code/exchange/Exchange";
 import ShipperFormScreen from "./pages/code/ShipperFormScreen";
 import ConsigneeFormScreen from "./pages/code/ConsigneeFormScreen";
 import IcdFormScreen from "./pages/icd/IcdFormScreen";
+
+// Job Entry
+import JobEntryScreen from "./pages/JobEntry/JobEntryListing";
+import AddJobEntry from "./pages/JobEntry/AddJobEntry";
+
+// Update Job Page
+import UpdateJobDetails from "./pages/UpdateJob/UpdateJob";
 
 function App() {
   // const { menuItems } = useMenuSetting();
@@ -70,6 +75,7 @@ function App() {
           <Route path="/app" element={<Layout />}>
             <Route path="profile" element={<ProfileScreen />} />
             <Route index element={<DashboardScreen />} />
+
             <Route
               path="entity/customer"
               element={<Component page="customer" />}
@@ -78,6 +84,7 @@ function App() {
               path="entity/customer/newcustomer"
               element={<CustomerFormScreen page="customer" />}
             />
+
             <Route
               path="entity/customer/editcustomer"
               element={<CustomerFormScreen page="customer" />}
@@ -94,12 +101,8 @@ function App() {
               path="entity/vendor"
               element={<VendorScreen page="vendor" />}
             />
-            <Route
-              path="entity/vendor/addVendor"
-              element={<VendorForm />} />
-            <Route
-              path="entity/vendor/editVendor"
-              element={<VendorForm />} />
+            <Route path="entity/vendor/addVendor" element={<VendorForm />} />
+            <Route path="entity/vendor/editVendor" element={<VendorForm />} />
             <Route
               path="entity/vendorApproval"
               element={<VendorScreen page="vendorApprove" />}
@@ -131,6 +134,26 @@ function App() {
             <Route
               path="entity/consignee/editconsignee"
               element={<ConsigneeFormScreen page="consignee" />}
+            />
+
+            <Route
+              path="documentation/job/entry"
+              element={<JobEntryScreen page="job-entry" />}
+            />
+
+            <Route
+              path="documentation/job/entry/newEntry"
+              element={<AddJobEntry page="job-entry" />}
+            />
+
+            <Route
+              path="documentation/job/entry/edit-job-entry"
+              element={<AddJobEntry page="job-entry" />}
+            />
+
+            <Route
+              path="documentation/update/job"
+              element={<UpdateJobDetails page="update-job" />}
             />
 
             <Route path="admin/settings" element={<SettingsPage />} />

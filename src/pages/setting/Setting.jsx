@@ -10,6 +10,7 @@ import VesselSetting from "./Vessel";
 import VesselVoyageSetting from "./VesselVoyageSetting";
 import ShipperSetting from "./ShipperSettings";
 import ConsigneeSetting from "./ConsigneeSetting";
+import JobEntrySetting from "./jobEntrySetting";
 const settingTabs = [
   {
     label: "Global",
@@ -43,6 +44,11 @@ const settingTabs = [
     label: "Consignee",
     value: "8",
   },
+  {
+    label: "job Entry",
+    value: "9",
+  },
+
 ];
 
 export default function SettingsPage() {
@@ -91,6 +97,8 @@ export default function SettingsPage() {
             {activeTab === "6" && <VesselVoyageSetting />}
             {activeTab === "7" && <ShipperSetting />}
             {activeTab === "8" && <ConsigneeSetting />}
+            {activeTab === "9" && <JobEntrySetting />}
+
           </Box>
         </Box>
       </Grid>

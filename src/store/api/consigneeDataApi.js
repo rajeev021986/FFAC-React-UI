@@ -1,119 +1,144 @@
-import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL, getAppHeaders } from "../../services/ApiMethods";
 import { menuConfigUrl } from "../menuConfigUrl";
-  // const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
+// const API_BASE_Shipper_URL= process.env.REACT_APP_Shipper_API_BASE_URL1;
 
 export const consigneeDataApi = createApi({
-    reducerPath: "consigneeDataApi",
-    baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
-    tagTypes: ["Consignee"],
-    endpoints: (builder) => ({
-        fetchConsignee: builder.query({
-            query: (params) => {
-                const queryString = new URLSearchParams(params).toString();
-                return { url: `/${menuConfigUrl.entity}/consignee`, method: "GET", headers: getAppHeaders() };
-            },
-            providesTags: ["Consignee"],
-        }),
-        addConsignee: builder.mutation({
-            query: (params) => {
-
-                const headers = {
-                    'Authorization': getAppHeaders()['Authorization']
-                };
-
-
-                return { url: `${menuConfigUrl.entity}/consignee`, method: "POST", body: params, headers: headers };
-            },
-            invalidatesTags: ["Consignee"],
-        }),
-        updateConsignee: builder.mutation({
-            query: (params) => {
-                
-                const headers = {
-                    'Authorization': getAppHeaders()['Authorization']
-                };
-
-                return { url: `${menuConfigUrl.entity}/consignee`, method: "PUT", body: params, headers: headers };
-            },
-            invalidatesTags: ["Consignee"],
-        }),
-        uploadConsigneeFile: builder.mutation({
-            query: (params) => {
-                const formData = new FormData();
-                formData.append('file', params.file);
-                const entityFileBlob = new Blob([JSON.stringify(params.entityFile)], { type: 'application/json' });
-                formData.append('entityFile', entityFileBlob);
-
-                const headers = {
-                    Authorization: getAppHeaders()['Authorization'],
-                };
-
-                return {
-                    url: `/${menuConfigUrl.entity}/file/upload`,
-                    method: "POST",
-                    body: formData,
-                    headers: headers
-                };
-            },
-        }),
-        getConsigneeFileList: builder.mutation({
-            query: (params) => {
-                const headers = {
-                    'Authorization': getAppHeaders()['Authorization']
-                };
-                return { url: `/${menuConfigUrl.entity}/file/get`, method: "POST", body: params, headers: headers };
-            },
-        }),
-        downloadDocumnent: builder.mutation({
-            query: (params) => {
-                return { url: `/file/download?${params.id}`, body: params.body, method: "GET", headers: getAppHeaders() };
-            },
-        }),
-        
-        fetchConsigneeDatas: builder.query({
-            query: ({ params, payload, page }) => {
-                const queryString = new URLSearchParams(params).toString();
-                const headers = {
-                    Authorization: getAppHeaders()['Authorization'],
-                };
-                return {
-                    url: `/${menuConfigUrl.entity}/${page}?${queryString}`,
-                    method: "POST",
-                    body: payload,
-                    headers,
-                };
-            },
-            providesTags: ["Shipper"],
-        }),
-        getConsigneeAudit: builder.query({
-            query: (params) => {
-                return { url: `/${menuConfigUrl.entity}/consignee/audit/${params.id}`, method: "GET", headers: getAppHeaders() };
-            },
-        }),
-        deleteConsignee: builder.mutation({
-            query: (id) => {
-                return {
-                    url: `${menuConfigUrl.entity}/consignee/${id}`,
-                    method: "DELETE",
-                    headers: getAppHeaders()
-                };
-            },
-            // invalidatesTags: ["Vendor"],
-        }),
-        
-        
+  reducerPath: "consigneeDataApi",
+  baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
+  tagTypes: ["Consignee"],
+  endpoints: (builder) => ({
+    fetchConsignee: builder.query({
+      query: (params) => {
+        const queryString = new URLSearchParams(params).toString();
+        return {
+          url: `/${menuConfigUrl.entity}/consignee`,
+          method: "GET",
+          headers: getAppHeaders(),
+        };
+      },
+      providesTags: ["Consignee"],
     }),
+    addConsignee: builder.mutation({
+      query: (params) => {
+        const headers = {
+          Authorization: getAppHeaders()["Authorization"],
+        };
+
+        return {
+          url: `${menuConfigUrl.entity}/consignee`,
+          method: "POST",
+          body: params,
+          headers: headers,
+        };
+      },
+      invalidatesTags: ["Consignee"],
+    }),
+    updateConsignee: builder.mutation({
+      query: (params) => {
+        const headers = {
+          Authorization: getAppHeaders()["Authorization"],
+        };
+
+        return {
+          url: `${menuConfigUrl.entity}/consignee`,
+          method: "PUT",
+          body: params,
+          headers: headers,
+        };
+      },
+      invalidatesTags: ["Consignee"],
+    }),
+    uploadConsigneeFile: builder.mutation({
+      query: (params) => {
+        const formData = new FormData();
+        formData.append("file", params.file);
+        const entityFileBlob = new Blob([JSON.stringify(params.entityFile)], {
+          type: "application/json",
+        });
+        formData.append("entityFile", entityFileBlob);
+
+        const headers = {
+          Authorization: getAppHeaders()["Authorization"],
+        };
+
+        return {
+          url: `/${menuConfigUrl.entity}/file/upload`,
+          method: "POST",
+          body: formData,
+          headers: headers,
+        };
+      },
+    }),
+    getConsigneeFileList: builder.mutation({
+      query: (params) => {
+        const headers = {
+          Authorization: getAppHeaders()["Authorization"],
+        };
+        return {
+          url: `/${menuConfigUrl.entity}/file/get`,
+          method: "POST",
+          body: params,
+          headers: headers,
+        };
+      },
+    }),
+    downloadDocumnent: builder.mutation({
+      query: (params) => {
+        return {
+          url: `/file/download?${params.id}`,
+          body: params.body,
+          method: "GET",
+          headers: getAppHeaders(),
+        };
+      },
+    }),
+
+    fetchConsigneeDatas: builder.query({
+      query: ({ params, payload, page }) => {
+        const queryString = new URLSearchParams(params).toString();
+        const headers = {
+          Authorization: getAppHeaders()["Authorization"],
+        };
+        return {
+          url: `/${menuConfigUrl.entity}/${page}?${queryString}`,
+          method: "POST",
+          body: payload,
+          headers,
+        };
+      },
+      providesTags: ["Shipper"],
+    }),
+    getConsigneeAudit: builder.query({
+      query: (params) => {
+        return {
+          url: `/${menuConfigUrl.entity}/consignee/audit/${params.id}`,
+          method: "GET",
+          headers: getAppHeaders(),
+        };
+      },
+    }),
+    deleteConsignee: builder.mutation({
+      query: (id) => {
+        return {
+          url: `${menuConfigUrl.entity}/consignee/${id}`,
+          method: "DELETE",
+          headers: getAppHeaders(),
+        };
+      },
+      // invalidatesTags: ["Vendor"],
+    }),
+  }),
 });
 
-export const { 
-    useFetchConsigneeQuery,
-    useAddConsigneeMutation,
-    useUpdateConsigneeMutation,
-    useUploadConsigneeFileMutation, 
-    useGetConsigneeFileListMutation, 
-    useDownloadDocumnentMutation,
-    useFetchConsigneeDatasQuery,
-    useLazyGetConsigneeAuditQuery,
-    useDeleteConsigneeMutation,
+export const {
+  useFetchConsigneeQuery,
+  useAddConsigneeMutation,
+  useUpdateConsigneeMutation,
+  useUploadConsigneeFileMutation,
+  useGetConsigneeFileListMutation,
+  useDownloadDocumnentMutation,
+  useFetchConsigneeDatasQuery,
+  useLazyGetConsigneeAuditQuery,
+  useDeleteConsigneeMutation,
 } = consigneeDataApi;

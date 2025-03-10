@@ -157,6 +157,7 @@ export default function VendorFormInput({
     getFirstError(formik.errors);
   }, [formik.errors]);
   const disable = type == "Approve";
+  
   return (
     <>
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
@@ -574,6 +575,7 @@ export default function VendorFormInput({
             {currentError}
           </Grid>
         )} */}
+
         <Grid item xs={12}>
           <VendorEditGrid
             formik={formik}
@@ -581,6 +583,7 @@ export default function VendorFormInput({
             dropdownData={dropdownData}
           />
         </Grid>
+
         {formik.values.status.toLowerCase() === "rejected" ||
         page == "vendorApproval" ? (
           <Grid item xs={12} sx={{ padding: "10px 3px", margin: "auto" }}>

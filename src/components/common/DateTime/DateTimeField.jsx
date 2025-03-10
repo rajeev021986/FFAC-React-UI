@@ -38,6 +38,8 @@ export default function DateTimeField({
             fontSize: "14px",
             borderRadius: "10px",
             width: "100%",
+            height: "42px",
+            borderColor: error ? "red" : "",
           },
         }}
         slotProps={{

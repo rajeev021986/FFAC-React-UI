@@ -39,7 +39,6 @@ import {
   useGetCustomerAuditQuery,
   useUpdateCustomerMutation,
 } from "../../../../store/api/codeDataApi";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
@@ -249,7 +248,6 @@ export default function CustomerForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
-
   const handleApproveRequest = async () => {
     setRejectError(false);
     try {
@@ -282,7 +280,6 @@ export default function CustomerForm({
       approve: false,
     }));
   };
-
   const handleRejectRequest = async () => {
     if (!formik.values.rejectRemarks) {
       setRejectError(true);
@@ -326,7 +323,6 @@ export default function CustomerForm({
       reject: false,
     }));
   };
-
   const disabled =
     page == "customer" || page == "customerApprove" ? false : true;
   useEffect(() => {
@@ -339,7 +335,6 @@ export default function CustomerForm({
       customerNameRef.current.focus();
     }
   }, []);
-
   return (
     <>
       {type == "add" ? (
@@ -1469,7 +1464,6 @@ export default function CustomerForm({
                             onClick={() => nav(-1)}
                           >
                             Cancel
-                            
                           </OutlinedButton>
                           <ThemeButton
                             onClick={formik.handleSubmit}

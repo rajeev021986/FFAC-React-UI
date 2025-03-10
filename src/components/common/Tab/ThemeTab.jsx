@@ -3,11 +3,14 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
-const ThemeTabs = ({ tabData, tabCounts, children }) => {
+const ThemeTabs = ({ tabData, children, setactiveTab }) => {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (setactiveTab) {
+      setactiveTab(newValue);
+    }
   };
 
   return (

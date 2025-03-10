@@ -157,6 +157,7 @@ export default function VendorScreen({ page }) {
   VENDOR_COLUMNS[VENDOR_COLUMNS.length - 1].renderCell = GridActions({
     actions: Actions,
   });
+  
   const actions = seletectBox
     ? [
         { name: "New Vendor" },

@@ -56,6 +56,10 @@ const ENDPOINTS = {
   GET_AUDIT_DATA: (id, page, service) => `/${service}/${page}/audit/${id}`,
   FETCH_DATA_EXCEL: (queryString, service, page) =>
     `/${service}/${page}/export?${queryString}`,
+
+  GET_JOBENTRIES: (limit, page) => `/job-detail/filter?limit=${limit}&page=${page}`,
+  GET_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail/${id}`,
+  
 };
 
 export default ENDPOINTS;

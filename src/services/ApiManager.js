@@ -1,6 +1,7 @@
 import ENDPOINTS from "./Endpoints";
 import ApiMethods from "./ApiMethods";
 import { menuConfigUrl } from "../store/menuConfigUrl";
+
 class ApiManager {
   static login = async (payload) => {
     const url = ENDPOINTS.LOGIN();
@@ -31,6 +32,7 @@ class ApiManager {
     const url = ENDPOINTS.POL_POD_OPTION(search);
     return ApiMethods.get(url);
   };
+
   static getfinalDestOptions = async (search) => {
     const url = ENDPOINTS.FINAL_DESTI_OPTION(search);
     return ApiMethods.get(url);
@@ -45,6 +47,7 @@ class ApiManager {
     const url = ENDPOINTS.REJECT_USER();
     return ApiMethods.post(url, payload);
   };
+
   static getCompanyOptions = async (role, search) => {
     const url = ENDPOINTS.Company_OPTION(role, search);
     return ApiMethods.get(url);
@@ -54,14 +57,17 @@ class ApiManager {
     const url = ENDPOINTS.OTM_BOL(bol);
     return ApiMethods.get(url);
   };
+
   static getSalesOptions = async (name, search) => {
     const url = ENDPOINTS.GET_SALES_OPTIONS(name, search);
     return ApiMethods.get(url);
   };
+
   static getCityOptions = async (name, search) => {
     const url = ENDPOINTS.GET_CITY_OPTIONS(name, search);
     return ApiMethods.get(url);
   };
+
   static getCommonOptions = async (name, search) => {
     const url = ENDPOINTS.GET_COMMON_OPTIONS(name, search);
     return ApiMethods.get(url);
@@ -71,21 +77,25 @@ class ApiManager {
     const url = ENDPOINTS.GET_CUSTOMER_DETAILS(id, menuConfigUrl.entity);
     return ApiMethods.get(url);
   };
+
   static getShipperDeatils = async (id) => {
     const url = ENDPOINTS.GET_SHIPPER_DETAILS(id, menuConfigUrl.entity);
     const page = "shipper";
     return ApiMethods.get(url, page);
   };
+
   static getConsigneeDeatils = async (id) => {
     const url = ENDPOINTS.GET_CONSIGNEE_DETAILS(id, menuConfigUrl.entity);
     const page = "consignee";
     return ApiMethods.get(url, page);
   };
+
   static getIcdDeatils = async (id) => {
     const url = ENDPOINTS.GET_ICD_DETAILS(id, menuConfigUrl.master);
     const page = "shipper";
     return ApiMethods.get(url, page);
   };
+
   static downloadDocumnent = async (id, source, sourceId) => {
     const url = ENDPOINTS.DOWNLOAD_DOCUMENT(
       id,
@@ -95,6 +105,7 @@ class ApiManager {
     );
     return ApiMethods.get(url);
   };
+
   static deleteDocument = async (id, source, sourceId) => {
     const url = ENDPOINTS.DOCUMENT_DELETE(
       id,
@@ -104,6 +115,7 @@ class ApiManager {
     );
     return ApiMethods.delete(url);
   };
+
   static approveCustomerApprove = async (id, type) => {
     const url = ENDPOINTS.CUSTOMER_APPROVE_REQUEST(
       id,
@@ -112,6 +124,7 @@ class ApiManager {
     );
     return ApiMethods.put(url);
   };
+
   static rejectCustomerApprove = async (id, type, remarkMessage) => {
     let payload = { remarks: remarkMessage };
     const url = ENDPOINTS.CUSTOMER_REJECT_REQUEST(
@@ -126,42 +139,52 @@ class ApiManager {
     const url = ENDPOINTS.GET_USER_DATA(id, menuConfigUrl.admin);
     return ApiMethods.get(url);
   };
+
   static deleteUser = async (id) => {
     const url = ENDPOINTS.DELETE_USER(id, menuConfigUrl.admin);
     return ApiMethods.delete(url);
   };
+
   static addUserData = async (payload) => {
     const url = ENDPOINTS.ADD_USER_DATA(menuConfigUrl.admin);
     return ApiMethods.post(url, payload);
   };
+
   static updateUserData = async (payload) => {
     const url = ENDPOINTS.UPDATE_USER_DATA(menuConfigUrl.admin);
     return ApiMethods.put(url, payload);
   };
+
   static deleteRole = async (id) => {
     const url = ENDPOINTS.DELETE_ROLE(id, menuConfigUrl.admin);
     return ApiMethods.delete(url);
   };
+
   static addRole = async (payload) => {
     const url = ENDPOINTS.ADD_ROLE(menuConfigUrl.admin);
     return ApiMethods.post(url, payload);
   };
+
   static removeAssignedUser = (params) => {
     const url = ENDPOINTS.REMOVE_ASSIGNED_USER(params, menuConfigUrl.admin);
     return ApiMethods.delete(url);
   };
+
   static getRolepermissions = (id) => {
     const url = ENDPOINTS.GET_ROLE_PERMISSIONS(id, menuConfigUrl.admin);
     return ApiMethods.get(url);
   };
+
   static getRoles = () => {
     const url = ENDPOINTS.GET_ROLES(menuConfigUrl.admin);
     return ApiMethods.get(url);
   };
+
   static updateRolePermissions = async (payload) => {
     const url = ENDPOINTS.UPDATE_ROLE_PERMISSIONS(menuConfigUrl.admin);
     return ApiMethods.put(url, payload);
   };
+
   static userPassReset = async (payload) => {
     const url = ENDPOINTS.USER_PASS_RESET(menuConfigUrl.admin);
     return ApiMethods.put(url, payload);
@@ -199,6 +222,7 @@ class ApiManager {
     const url = ENDPOINTS.UPDATE_USER_PROFILE(menuConfigUrl.admin);
     return ApiMethods.put(url, payload);
   };
+
   static updateUserProfileImage = async (payload, id) => {
     const url = ENDPOINTS.UPDATE_USER_PROFILE_IMAGE(id, menuConfigUrl.admin);
     return ApiMethods.put(url, payload);
@@ -222,6 +246,16 @@ class ApiManager {
 
   static getDocumentFiles = async (source, id) => {
     const url = ENDPOINTS.GET_DOCUMENT_FILES(source, id, menuConfigUrl.entity);
+    return ApiMethods.get(url);
+  };
+
+  static getJobEntries = async (limit, page) => {
+    const url = ENDPOINTS.GET_JOBENTRIES(limit, page);
+    return ApiMethods.get(url);
+  };
+
+  static getJobEntryDetails = async (id) => {
+    const url = ENDPOINTS.GET_JOBENTRY_DETAILS(id, menuConfigUrl.document);
     return ApiMethods.get(url);
   };
 }

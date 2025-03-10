@@ -45,7 +45,7 @@ const ThemedGrid = (props) => {
         headerAlign: "center",
         align: "center",
         renderCell: (params) => {
-          return StatusChip(params.row.status.toLowerCase(), "status");
+          return StatusChip(params?.row?.status?.toLowerCase(), "status");
         },
       };
     } else if (a.field === "isDoc") {

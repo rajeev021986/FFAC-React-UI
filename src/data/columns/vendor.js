@@ -83,9 +83,12 @@ export const VENDOR_COLUMNS = [
     },
     {
         field: 'action',
-        headerName: 'Action',
+        headerName: 'Asction',
         width: 130,
         headerAlign: 'center',
         align: 'center',
+        renderCell: (params) => {
+            return <button>Action</button>; // Replace with an actual action button
+          },
     }
 ]

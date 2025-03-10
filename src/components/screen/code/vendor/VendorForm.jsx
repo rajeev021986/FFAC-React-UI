@@ -51,6 +51,7 @@ export default function VendorForm({ page = "vendor" }) {
   const [updateVendor, { isLoading: loadingUpdate }] =
     useUpdateVendorMutation();
   const [getVendor, { isLoading }] = useLazyGetVendorQuery();
+
   const validationSchema = Yup.object({
     vendorName: Yup.string().required("Vendor Name is required"),
     tinNo: Yup.number().nullable(),
@@ -116,7 +117,6 @@ export default function VendorForm({ page = "vendor" }) {
         ),
       })
     ),
-
     bankDetails: Yup.array(
       Yup.object({
         id: Yup.number(),
@@ -133,6 +133,7 @@ export default function VendorForm({ page = "vendor" }) {
       })
     ),
   });
+  
   const { data: optionsSettingsData, isLoading: dropLoadco } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: vendorSettingsData, isLoading: dropLoadven } =
@@ -319,6 +320,7 @@ export default function VendorForm({ page = "vendor" }) {
                   ))}
                 </TabList>
               </Box>
+              
               <TabPanel value={1} sx={{ padding: "0px" }}>
                 <VendorFormInput
                   formik={formik}

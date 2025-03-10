@@ -2,19 +2,20 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getAppHeaders, API_BASE_URL } from "../../services/ApiMethods";
 import { menuConfigUrl } from "../menuConfigUrl";
 
-export const codeDataApi = createApi({
-  reducerPath: "codeDataApi",
+export const jobEntry = createApi({
+  reducerPath: "jobEntry",
   baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
   tagTypes: ["Code"],
+
   endpoints: (builder) => ({
-    addCustomer: builder.mutation({
+    addJobEntry: builder.mutation({
       query: (params) => {
         const headers = {
           Authorization: getAppHeaders()["Authorization"],
         };
 
         return {
-          url: `${menuConfigUrl.entity}/customer`,
+          url: `${menuConfigUrl.document}/job-detail`,
           method: "POST",
           body: params,
           headers: headers,
@@ -22,14 +23,14 @@ export const codeDataApi = createApi({
       },
       invalidatesTags: ["Code"],
     }),
-    updateCustomer: builder.mutation({
+
+    updateJobEntry: builder.mutation({
       query: (params) => {
         const headers = {
           Authorization: getAppHeaders()["Authorization"],
         };
-
         return {
-          url: `${menuConfigUrl.entity}/customer`,
+          url: `${menuConfigUrl.document}/job-detail`,
           method: "PUT",
           body: params,
           headers: headers,
@@ -38,10 +39,10 @@ export const codeDataApi = createApi({
       invalidatesTags: ["Code"],
     }),
 
-    deleteCustomer: builder.mutation({
+    deleteJobEntry: builder.mutation({
       query: (id) => {
         return {
-          url: `${menuConfigUrl.entity}/customer/${id}`,
+          url: `${menuConfigUrl.document}/job-detail/${id}`,
           method: "DELETE",
           headers: getAppHeaders(),
         };
@@ -49,36 +50,36 @@ export const codeDataApi = createApi({
       invalidatesTags: ["Code"],
     }),
 
-    uploadCustomerFile: builder.mutation({
-      query: (params) => {
-        const formData = new FormData();
-        formData.append("file", params.file);
-        const entityFileBlob = new Blob([JSON.stringify(params.entityFile)], {
-          type: "application/json",
-        });
-        formData.append("entityFile", entityFileBlob);
+    // uploadCustomerFile: builder.mutation({
+    //   query: (params) => {
+    //     const formData = new FormData();
+    //     formData.append("file", params.file);
+    //     const entityFileBlob = new Blob([JSON.stringify(params.entityFile)], {
+    //       type: "application/json",
+    //     });
+    //     formData.append("entityFile", entityFileBlob);
 
-        const headers = {
-          Authorization: getAppHeaders()["Authorization"],
-        };
+    //     const headers = {
+    //       Authorization: getAppHeaders()["Authorization"],
+    //     };
 
-        return {
-          url: `/${menuConfigUrl.entity}/file`,
-          method: "POST",
-          body: formData,
-          headers: headers,
-        };
-      },
-    }),
+    //     return {
+    //       url: `/${menuConfigUrl.entity}/file`,
+    //       method: "POST",
+    //       body: formData,
+    //       headers: headers,
+    //     };
+    //   },
+    // }),
 
-    fetchCustomerDatas: builder.query({
+    fetchJobEntries: builder.query({
       query: ({ params, payload, page }) => {
         const queryString = new URLSearchParams(params).toString();
         const headers = {
           Authorization: getAppHeaders()["Authorization"],
         };
         return {
-          url: `/${menuConfigUrl.entity}/${page}?${queryString}`,
+          url: `${menuConfigUrl.document}/job-detail/filter?${queryString}`,
           method: "POST",
           body: payload,
           headers,
@@ -90,9 +91,9 @@ export const codeDataApi = createApi({
 });
 
 export const {
-  useAddCustomerMutation,
-  useUpdateCustomerMutation,
-  useDeleteCustomerMutation,
-  useUploadCustomerFileMutation,
-  useFetchCustomerDatasQuery,
-} = codeDataApi;
+  //   useUploadCustomerFileMutation,
+  useAddJobEntryMutation,
+  useFetchJobEntriesQuery,
+  useDeleteJobEntryMutation,
+  useUpdateJobEntryMutation,
+} = jobEntry;

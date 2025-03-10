@@ -391,37 +391,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                         onChange={formik.handleChange}
                       />
                     </Grid>
-                    {/* <Box
-                    sx={{
-                      width: "100%",
-                      typography: "body1",
-                      border: "1px solid #ccc",
-                      borderRadius: "10px",
-                      margin: "0px 8px",
-                    }}
-                  >
-                    <TabContext value={value}>
-                      <Box>
-                        <TabList
-                          onChange={handleChange}
-                          aria-label="lab API tabs example"
-                        >
-                          <Tab
-                            label="Line"
-                            value="1"
-                            sx={{
-                              fontSize: "1rem",
-                              textTransform: "capitalize",
-                            }}
-                          />
-                        </TabList>
-                      </Box>
-                      <TabPanel value="1" sx={{ margin: 0, padding: 0 }}>
-                        {" "}
-                        <AddMapping disabled={disabled} dropdownData={dropdownData}/>
-                      </TabPanel>
-                    </TabContext>
-                  </Box> */}
+
                     <Grid item xs={12}>
                       <Box
                         sx={{

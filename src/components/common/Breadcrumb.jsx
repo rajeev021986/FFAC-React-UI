@@ -65,6 +65,10 @@ const Routes = {
   bond: { label: "Bond", disabled: false },
   bondAdd: { label: "Add Bond", disabled: false },
   editBond: { label: "Edit Bond", disabled: false },
+  documentation: { label: "Documentation", disabled: true },
+  entry: { label: "Job Entry", disabled: true },
+  newEntry: { label: "Add New Entry", disabled: true },
+  update: { label: "Update Job", disabled: true },
 };
 
 const ThemedBreadcrumb = () => {
@@ -73,14 +77,6 @@ const ThemedBreadcrumb = () => {
 
   return (
     <MUIBreadcrumbs aria-label="breadcrumb">
-      {/* <Link
-        component={RouterLink}
-        to="/app"
-        underline="hover"
-        color="inherit"
-      >
-        Home
-      </Link> */}
       {pathnames.map((value, index) => {
         const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
         const isLast = index === pathnames?.length - 1;

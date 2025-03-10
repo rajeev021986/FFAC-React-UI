@@ -14,6 +14,13 @@ import { codeDataApi } from "./api/codeDataApi";
 import { portDataAPI } from "./api/portDataApi";
 import { icdDataApi } from "./api/icdDataApi";
 import { bondDataAPI } from "./api/bondDataApi";
+import { vesselDataApi } from "./api/vesselDataApi";
+import { vesselVoyageDataApi } from "./api/vesselVoyageDataApi";
+import { chargesDataApi } from "./api/chargesDataApi";
+import { exchangeRateDataApi } from "./api/exchangeRateDataApi";
+import { otmBolDataApi } from "./api/otmBolDataApi";
+import { jobEntry } from "./api/jobEntryApi";
+
 import userManagementReducer from "./freatures/userManagementSlice";
 import authReducer from "./freatures/authSlice";
 import packingListReducer from "./freatures/packingListSlice";
@@ -29,100 +36,100 @@ import PoOrderListSlice from "./freatures/PoOrderListSlice";
 import DsoOrderListSlice from "./freatures/DsoOrderListSlice";
 import dashboardSlice from "./freatures/dashboardSlice";
 import newRegisteredUserReducer from "./freatures/newRegisteredUserSlice";
-import settingsSlice from "./freatures/settingsSlice"
-import { otmBolDataApi } from "./api/otmBolDataApi";
+import settingsSlice from "./freatures/settingsSlice";
 import otmBolListSlice from "./freatures/otmBolListSlice";
 import codeCustomerReducer from "./freatures/CustomerSlice";
 import vesselReducer from "./freatures/VesselSlice";
 import codePartyReducer from "./freatures/PartySlice";
 import codeAgentReducer from "./freatures/AgentSlice";
-import portReducer from "./freatures/portSlice"
-import bondReducer from "./freatures/bondSlice"
-import { vesselDataApi } from "./api/vesselDataApi";
-import { vesselVoyageDataApi } from "./api/vesselVoyageDataApi";
-import { chargesDataApi } from "./api/chargesDataApi";
-import { exchangeRateDataApi } from "./api/exchangeRateDataApi";
+import portReducer from "./freatures/portSlice";
+import bondReducer from "./freatures/bondSlice";
 import vesselVoyagaReducer from "./freatures/VesselVoyageSlice";
 import chargesReducer from "./freatures/ChargesSlice";
 import exchangeRateReducer from "./freatures/ExchangeRateSlice";
-
+import jonEntryReducer from "./freatures/JobEntrySlice";
 
 const store = configureStore({
-        reducer: {
-                // api
-                [userDataApi.reducerPath]: userDataApi.reducer,
-                [packingListDataApi.reducerPath]: packingListDataApi.reducer,
-                [serviceInvoiceDataApi.reducerPath]: serviceInvoiceDataApi.reducer,
-                [expenseCodeDataApi.reducerPath]: expenseCodeDataApi.reducer,
-                [destinationDataApi.reducerPath]: destinationDataApi.reducer,
-                [vendorDataApi.reducerPath]: vendorDataApi.reducer,
-                [shipperDataApi.reducerPath]: shipperDataApi.reducer,
-                [consigneeDataApi.reducerPath]: consigneeDataApi.reducer,
-                [icdDataApi.reducerPath]: icdDataApi.reducer,
-                [auditDataApi.reducerPath]: auditDataApi.reducer,
-                [dashboardDataApi.reducerPath]: dashboardDataApi.reducer,
-                [settingsApi.reducerPath]: settingsApi.reducer,
-                [otmBolDataApi.reducerPath]: otmBolDataApi.reducer,
-                [codeDataApi.reducerPath]: codeDataApi.reducer,
-                [vesselDataApi.reducerPath]: vesselDataApi.reducer,
-                [portDataAPI.reducerPath]: portDataAPI.reducer,
-                [bondDataAPI.reducerPath]: bondDataAPI.reducer,
-                [vesselVoyageDataApi.reducerPath]: vesselVoyageDataApi.reducer,
-                [chargesDataApi.reducerPath]: chargesDataApi.reducer,
-                [exchangeRateDataApi.reducerPath]: exchangeRateDataApi.reducer,
-                // slice
-                userManagement: userManagementReducer,
-                auth: authReducer,
-                packingList: packingListReducer,
-                shipper: shipperReducer,
-                consignee: consigneeReducer,
-                serviceInvoice: serviceInvoiceReducer,
-                expenseCode: expenseCodeReducer,
-                destination: destinationReducer,
-                vendor: vendorReducer,
-                icd: icdReducer,
-                sprblDetails: sprblDetailsReducer,
-                poOrderList: PoOrderListSlice,
-                dsoOrderList: DsoOrderListSlice,
-                dashboard: dashboardSlice,
-                newRegisteredUser: newRegisteredUserReducer,
-                settings: settingsSlice,
-                otmBolList: otmBolListSlice,
-                dashboard: dashboardSlice,
-                codeCustomer: codeCustomerReducer,
-                vesselStore: vesselReducer,
-                codeParty: codePartyReducer,
-                codeAgent: codeAgentReducer,
-                port: portReducer,
-                bond: bondReducer,
-                vesselVoyageStore: vesselVoyagaReducer,
-                chargesStore: chargesReducer,
-                exchangeRateStore: exchangeRateReducer,
-        },
-        middleware: (getDefaultMiddleware) =>
-                getDefaultMiddleware().concat(
-                        userDataApi.middleware,
-                        packingListDataApi.middleware,
-                        serviceInvoiceDataApi.middleware,
-                        expenseCodeDataApi.middleware,
-                        destinationDataApi.middleware,
-                        vendorDataApi.middleware,
-                        shipperDataApi.middleware,
-                        consigneeDataApi.middleware,
-                        auditDataApi.middleware,
-                        dashboardDataApi.middleware,
-                        settingsApi.middleware,
-                        otmBolDataApi.middleware,
-                        codeDataApi.middleware,
-                        vesselDataApi.middleware,
-                        portDataAPI.middleware,
-                        icdDataApi.middleware,
-                        bondDataAPI.middleware,
-                        vesselVoyageDataApi.middleware,
-                        chargesDataApi.middleware,
-                        exchangeRateDataApi.middleware,
-                ),
-});
+  reducer: {
+    // api
+    [userDataApi.reducerPath]: userDataApi.reducer,
+    [packingListDataApi.reducerPath]: packingListDataApi.reducer,
+    [serviceInvoiceDataApi.reducerPath]: serviceInvoiceDataApi.reducer,
+    [expenseCodeDataApi.reducerPath]: expenseCodeDataApi.reducer,
+    [destinationDataApi.reducerPath]: destinationDataApi.reducer,
+    [vendorDataApi.reducerPath]: vendorDataApi.reducer,
+    [shipperDataApi.reducerPath]: shipperDataApi.reducer,
+    [consigneeDataApi.reducerPath]: consigneeDataApi.reducer,
+    [icdDataApi.reducerPath]: icdDataApi.reducer,
+    [auditDataApi.reducerPath]: auditDataApi.reducer,
+    [dashboardDataApi.reducerPath]: dashboardDataApi.reducer,
+    [settingsApi.reducerPath]: settingsApi.reducer,
+    [otmBolDataApi.reducerPath]: otmBolDataApi.reducer,
+    [codeDataApi.reducerPath]: codeDataApi.reducer,
+    [vesselDataApi.reducerPath]: vesselDataApi.reducer,
+    [portDataAPI.reducerPath]: portDataAPI.reducer,
+    [bondDataAPI.reducerPath]: bondDataAPI.reducer,
+    [vesselVoyageDataApi.reducerPath]: vesselVoyageDataApi.reducer,
+    [chargesDataApi.reducerPath]: chargesDataApi.reducer,
+    [exchangeRateDataApi.reducerPath]: exchangeRateDataApi.reducer,
 
+    [jobEntry.reducerPath]: jobEntry.reducer,
+
+    // slice
+    userManagement: userManagementReducer,
+    auth: authReducer,
+    packingList: packingListReducer,
+    shipper: shipperReducer,
+    consignee: consigneeReducer,
+    serviceInvoice: serviceInvoiceReducer,
+    expenseCode: expenseCodeReducer,
+    destination: destinationReducer,
+    vendor: vendorReducer,
+    icd: icdReducer,
+    sprblDetails: sprblDetailsReducer,
+    poOrderList: PoOrderListSlice,
+    dsoOrderList: DsoOrderListSlice,
+    dashboard: dashboardSlice,
+    newRegisteredUser: newRegisteredUserReducer,
+    settings: settingsSlice,
+    otmBolList: otmBolListSlice,
+    dashboard: dashboardSlice,
+    codeCustomer: codeCustomerReducer,
+    vesselStore: vesselReducer,
+    codeParty: codePartyReducer,
+    codeAgent: codeAgentReducer,
+    port: portReducer,
+    bond: bondReducer,
+    vesselVoyageStore: vesselVoyagaReducer,
+    chargesStore: chargesReducer,
+    exchangeRateStore: exchangeRateReducer,
+    jobEntries: jonEntryReducer,
+  },
+
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      userDataApi.middleware,
+      packingListDataApi.middleware,
+      serviceInvoiceDataApi.middleware,
+      expenseCodeDataApi.middleware,
+      destinationDataApi.middleware,
+      vendorDataApi.middleware,
+      shipperDataApi.middleware,
+      consigneeDataApi.middleware,
+      auditDataApi.middleware,
+      dashboardDataApi.middleware,
+      settingsApi.middleware,
+      otmBolDataApi.middleware,
+      codeDataApi.middleware,
+      vesselDataApi.middleware,
+      portDataAPI.middleware,
+      icdDataApi.middleware,
+      bondDataAPI.middleware,
+      vesselVoyageDataApi.middleware,
+      chargesDataApi.middleware,
+      exchangeRateDataApi.middleware,
+      jobEntry.middleware
+    ),
+});
 
 export default store;
