@@ -93,10 +93,12 @@ function App() {
               path="entity/approve"
               element={<Component page="customerApprove" />}
             />
+
             <Route
               path="entity/approve/approveRequest"
               element={<CustomerFormScreen page="customerApprove" />}
             />
+
             <Route
               path="entity/vendor"
               element={<VendorScreen page="vendor" />}
@@ -147,8 +149,17 @@ function App() {
             />
 
             <Route
-              path="documentation/job/entry/edit-job-entry"
+              path="documentation/job/entry/editJobEntry"
               element={<AddJobEntry page="job-entry" />}
+            />
+
+            <Route
+              path="documentation/job-approve/file"
+              element={<JobEntryScreen page="jobApprove" />}
+            />
+            <Route
+              path="documentation/job-approve/file/approveJobRequest"
+              element={<AddJobEntry page="jobApprove" />}
             />
 
             <Route

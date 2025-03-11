@@ -9,7 +9,7 @@ export const getJobEntryListGridActions = (nav, setModal) => {
     {
       label: "Edit",
       onClick: (params) => {
-        nav(`edit-job-entry`, {
+        nav(`editJobEntry`, {
           state: { formAction: "edit", initialValues: params.row },
         });
       },

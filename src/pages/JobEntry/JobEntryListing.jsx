@@ -33,7 +33,7 @@ import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import CustomToast from "../../components/common/Toast/CustomToast";
-import FilterForm from "../../components/screen/code/customer/FilterForm";
+import FilterForm from "./FilterForm";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
 import { downloadExcel } from "../../utils/downloadExcel";
 
@@ -47,11 +47,9 @@ import {
 import { JOB_ENTRY_COLUMNS } from "../../data/columns/jobEntry";
 import GridActions from "../../components/common/Grid/GridActions";
 import { getJobEntryListGridActions } from "../../components/screen/jobsEntry/action";
-import { getJobEntryListGridActionsApprovel } from "../../components/screen/jobsEntry/action copy";
+import { getJobEntryListGridActionsApprovel } from "../../components/screen/jobsEntry/actioncopy";
 
 export default function JobEntryScreen({ page }) {
-
-  
   const location = useLocation();
   const dispatch = useDispatch();
   const nav = useNavigate();
@@ -67,51 +65,51 @@ export default function JobEntryScreen({ page }) {
   const [open, setOpen] = useState(false);
 
   const actions = seletectBox
-  ? [
-      { name: "New Job Entry" },
-      { name: "Copy" },
-      { name: exportLoader ? <LoaderIcon /> : "Export" },
-    ]
-  : page === "entry-approve"
-  ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
-  : [
-      { name: "New Job Entry" },
-      { name: exportLoader ? <LoaderIcon /> : "Export" },
-    ];
+    ? [
+        { name: "New Job Entry" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
+    : page === "entry-approve"
+    ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
+    : [
+        { name: "New Job Entry" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ];
 
-const query = {
-  page: codeJobEntryrSelector?.pagination?.page + 1,
-  size: codeJobEntryrSelector?.pagination?.pageSize,
-  sortBy:
-    codeJobEntryrSelector.sortModel.length > 0
-      ? codeJobEntryrSelector.sortModel[0].field
-      : codeJobEntryrSelector?.sortBy?.split("*")[0],
-  sortOrder:
-    codeJobEntryrSelector.sortModel.length > 0
-      ? codeJobEntryrSelector?.sortModel[0]?.sort
-      : codeJobEntryrSelector?.sortBy?.split("*")[1] || "",
-};
-if (
-  Boolean(
-    codeJobEntryrSelector.sortModel.length > 0
-      ? codeJobEntryrSelector.sortModel[0].field === "cname"
-      : codeJobEntryrSelector?.sortBy?.split("*")[0] === "cname"
-  )
-) {
-  query.sortBy = "customerName";
-}
-const payload = Object.entries(codeJobEntryrSelector?.formData)
-  .filter(([key, value]) => value !== "")
-  .map(([key, value]) => {
-    let fieldname = key;
-    Boolean(key == "cname") && (fieldname = "customerName");
-    return {
-      fieldName: fieldname,
-      operator: "=",
-      value: value,
-      logicalOperator: "and",
-    };
-  });
+  const query = {
+    page: codeJobEntryrSelector?.pagination?.page + 1,
+    size: codeJobEntryrSelector?.pagination?.pageSize,
+    sortBy:
+      codeJobEntryrSelector.sortModel.length > 0
+        ? codeJobEntryrSelector.sortModel[0].field
+        : codeJobEntryrSelector?.sortBy?.split("*")[0],
+    sortOrder:
+      codeJobEntryrSelector.sortModel.length > 0
+        ? codeJobEntryrSelector?.sortModel[0]?.sort
+        : codeJobEntryrSelector?.sortBy?.split("*")[1] || "",
+  };
+  if (
+    Boolean(
+      codeJobEntryrSelector.sortModel.length > 0
+        ? codeJobEntryrSelector.sortModel[0].field === "cname"
+        : codeJobEntryrSelector?.sortBy?.split("*")[0] === "cname"
+    )
+  ) {
+    query.sortBy = "customerName";
+  }
+  const payload = Object.entries(codeJobEntryrSelector?.formData)
+    .filter(([key, value]) => value !== "")
+    .map(([key, value]) => {
+      let fieldname = key;
+      Boolean(key == "cname") && (fieldname = "customerName");
+      return {
+        fieldName: fieldname,
+        operator: "=",
+        value: value,
+        logicalOperator: "and",
+      };
+    });
   const [deleteJobEntry] = useDeleteJobEntryMutation();
   const {
     data: jobEntriesData,
@@ -122,7 +120,7 @@ const payload = Object.entries(codeJobEntryrSelector?.formData)
     params: query,
     payload,
     page:
-      page == "job-entry" ? "job-detail/filter" : "approval/filter/job-entry",
+      page == "job-entry" ? "job-detail/filter" : "approval/filter/JOB_DETAIL",
   });
 
   useEffect(() => {
@@ -138,7 +136,7 @@ const payload = Object.entries(codeJobEntryrSelector?.formData)
     actions:
       page == "job-entry"
         ? getJobEntryListGridActions(nav, setModal)
-        : getJobEntryListGridActionsApprovel((nav, setModal)),
+        : getJobEntryListGridActionsApprovel(nav, setModal),
   });
 
   useEffect(() => {
@@ -220,7 +218,6 @@ const payload = Object.entries(codeJobEntryrSelector?.formData)
         rightComps={
           <>
             <Backdrop open={open} />
-
             {page == "job-entry" && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
@@ -337,7 +334,7 @@ const payload = Object.entries(codeJobEntryrSelector?.formData)
             <AuditTimeLine
               id={modal.data.id}
               page="job-entry"
-              service={menuConfigUrl.entity}
+              service={menuConfigUrl.document}
             />
           </Box>
         </Drawer>

@@ -79,7 +79,7 @@ export const jobEntry = createApi({
           Authorization: getAppHeaders()["Authorization"],
         };
         return {
-          url: `${menuConfigUrl.document}/job-detail/filter?${queryString}`,
+          url: `/${menuConfigUrl.document}/${page}?${queryString}`,
           method: "POST",
           body: payload,
           headers,

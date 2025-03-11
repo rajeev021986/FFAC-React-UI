@@ -59,7 +59,11 @@ const ENDPOINTS = {
 
   GET_JOBENTRIES: (limit, page) => `/job-detail/filter?limit=${limit}&page=${page}`,
   GET_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail/${id}`,
-  
+  JOB_APPROVE_REQUEST: (id, type,BasePageUrl) =>
+    `/${BasePageUrl}/approval/approved/${type}/${id}`,
+  JOB_ENTRY_REJECT_REQUEST: (id, type,BasePageUrl) =>
+    `/${BasePageUrl}/approval/rejected/${type}/${id}`,
+
 };
 
 export default ENDPOINTS;

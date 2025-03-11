@@ -258,6 +258,23 @@ class ApiManager {
     const url = ENDPOINTS.GET_JOBENTRY_DETAILS(id, menuConfigUrl.document);
     return ApiMethods.get(url);
   };
+
+  static approveJobEntryRequest = async (id, type) => {
+    const url = ENDPOINTS.JOB_APPROVE_REQUEST(id, type, menuConfigUrl.document);
+    return ApiMethods.put(url);
+  };
+
+  static rejectjobEntryApprove = async (id, type, remarkMessage) => {
+    let payload = { remarks: remarkMessage };
+    const url = ENDPOINTS.JOB_ENTRY_REJECT_REQUEST(
+      id,
+      type,
+      menuConfigUrl.document
+    );
+    return ApiMethods.put(url, payload);
+  };
+
+
 }
 
 export default ApiManager;

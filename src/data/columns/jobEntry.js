@@ -1,4 +1,3 @@
-import { GridMoreVertIcon } from "@mui/x-data-grid";
 
 export const JOB_ENTRY_COLUMNS = [
   {

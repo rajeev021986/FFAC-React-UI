@@ -39,8 +39,10 @@ export default function AddNoteModal({
 
   const handleAddNote = () => {
     const newNote = {
+      id: Date.now(),
       subjectType: formik.values.jobNotes[0]?.subjectType || "",
       note: formik.values.jobNotes[0]?.note || "",
+      createdDate: new Date().toISOString(),
     };
     const storedNotes = JSON.parse(sessionStorage.getItem("jobNotes")) || [];
     const updatedNotes = [...storedNotes, newNote];

@@ -65,10 +65,11 @@ const Routes = {
   bond: { label: "Bond", disabled: false },
   bondAdd: { label: "Add Bond", disabled: false },
   editBond: { label: "Edit Bond", disabled: false },
-  documentation: { label: "Documentation", disabled: true },
-  entry: { label: "Job Entry", disabled: true },
+  documentation: { label: "Documentation", disabled: false },
+  job: { label: "Job Entries", disabled: false },
   newEntry: { label: "Add New Entry", disabled: true },
-  update: { label: "Update Job", disabled: true },
+  editJobEntry: { label: "Edit Job Entry", disabled: false },
+  update: { label: "Update Job", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {
@@ -83,6 +84,7 @@ const ThemedBreadcrumb = () => {
         if (!Routes[value]?.label) return null;
         return isLast || Routes[value]?.disabled ? (
           <Typography key={routeTo} fontSize="18px">
+            {console.log(Routes[value]?.label, 7487587)}
             {Routes[value]?.label}
           </Typography>
         ) : (

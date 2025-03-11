@@ -24,6 +24,8 @@ import CommonTabForm from "./TabForm";
 import AddRateModal from "./RateModal";
 import InputBox from "../../components/common/InputBox";
 import EditIconForHeader from "../../components/common/commonIcons/EditIcons/EditIconForHeader";
+import DocumentIcon from "../../components/common/commonIcons/DocumentIcons/DocumentIcon";
+import AuditIcon from "../../components/common/commonIcons/AuditIcon/AuditIcon";
 import SelectBox from "../../components/common/SelectBox";
 import PopupAlert from "../../components/common/Alert/PopupAlert";
 import CustomToast from "../../components/common/Toast/CustomToast";
@@ -35,6 +37,10 @@ import {
   useAddJobEntryMutation,
   useUpdateJobEntryMutation,
 } from "../../store/api/jobEntryApi";
+import UploadFile from "../../components/UploadFile";
+import { menuConfigUrl } from "../../store/menuConfigUrl";
+import AuditTimeLine from "../../components/AuditTimeLine";
+import ApiManager from "../../services/ApiManager";
 
 export default function JobEntryForm({
   initialValues,
@@ -49,6 +55,10 @@ export default function JobEntryForm({
   const [rejectError, setRejectError] = useState(false);
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
+  const [loaderApprove, setLoaderApprove] = useState({
+    approve: false,
+    reject: false,
+  });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -63,7 +73,6 @@ export default function JobEntryForm({
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
 
-  console.log(initialValues, "initialValues");
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -81,7 +90,7 @@ export default function JobEntryForm({
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
-            // nav("/app/documentation/job/entry");
+            nav("/app/documentation/job/entry");
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
               closeButton: false,
@@ -168,82 +177,82 @@ export default function JobEntryForm({
     }
   }, [optionsSettingsData, customerSettingsData]);
 
-  // const handleApproveRequest = async () => {
-  //   setRejectError(false);
-  //   try {
-  //     setLoaderApprove((prevState) => ({
-  //       ...prevState,
-  //       approve: true,
-  //     }));
-  //     const response = await ApiManager.approveCustomerApprove(
-  //       initialValues.id,
-  //       "customer"
-  //     );
-  //     const message = response.message;
-  //     nav("/app/entity/approve");
-  //     toast.custom(<CustomToast message={message} toast="success" />, {
-  //       closeButton: false,
-  //     });
-  //   } catch (error) {
-  //     toast.custom(
-  //       <CustomToast
-  //         message="Error occurred while approve customer"
-  //         toast="error"
-  //       />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //   }
-  //   setLoaderApprove((prevState) => ({
-  //     ...prevState,
-  //     approve: false,
-  //   }));
-  // };
+  const handleApproveRequest = async () => {
+    setRejectError(false);
+    try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        approve: true,
+      }));
+      const response = await ApiManager.approveJobEntryRequest(
+        initialValues.id,
+        "JOB_DETAIL"
+      );
+      const message = response.message;
+      nav("/app/documentation/job/entry");
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while approve entry request"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      approve: false,
+    }));
+  };
 
-  // const handleRejectRequest = async () => {
-  //   if (!formik.values.rejectRemarks) {
-  //     setRejectError(true);
-  //     toast.custom(
-  //       <CustomToast message="Reject remarks to be filled!" toast="warn" />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //     return;
-  //   }
-  //   try {
-  //     setLoaderApprove((prevState) => ({
-  //       ...prevState,
-  //       reject: true,
-  //     }));
-  //     const response = await ApiManager.rejectCustomerApprove(
-  //       initialValues.id,
-  //       "customer",
-  //       formik.values.rejectRemarks
-  //     );
-  //     const message = response.message;
-  //     nav("/app/entity/approve");
+  const handleRejectRequest = async () => {
+    if (!formik.values.rejectRemarks) {
+      setRejectError(true);
+      toast.custom(
+        <CustomToast message="Reject remarks to be filled!" toast="warn" />,
+        {
+          closeButton: false,
+        }
+      );
+      return;
+    }
+    try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        reject: true,
+      }));
+      const response = await ApiManager.rejectjobEntryApprove(
+        initialValues.id,
+        "JOB_DETAIL",
+        formik.values.rejectRemarks
+      );
+      const message = response.message;
+      nav("/app/documentation/job/entry");
 
-  //     toast.custom(<CustomToast message={message} toast="success" />, {
-  //       closeButton: false,
-  //     });
-  //   } catch (error) {
-  //     toast.custom(
-  //       <CustomToast
-  //         message="Error occurred while reject customer"
-  //         toast="error"
-  //       />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //   }
-  //   setLoaderApprove((prevState) => ({
-  //     ...prevState,
-  //     reject: false,
-  //   }));
-  // };
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while reject job entry request"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      reject: false,
+    }));
+  };
 
   const disabled = page == "job-entry" ? false : true;
 
@@ -292,7 +301,9 @@ export default function JobEntryForm({
                 iconPosition="start"
               />
 
-              {/* <Tab
+              {initialValues?.id && (
+                <>
+                  <Tab
                     label="Document Details"
                     value="2"
                     sx={{
@@ -311,7 +322,9 @@ export default function JobEntryForm({
                     }}
                     icon={<AuditIcon />}
                     iconPosition="start"
-                  /> */}
+                  />
+                </>
+              )}
             </TabList>
           </Box>
 
@@ -674,7 +687,7 @@ export default function JobEntryForm({
               </Grid>
 
               {formik?.values?.status?.toLowerCase() === "rejected" ||
-              page == "jobEntryApprove" ? (
+              page == "jobApprove" ? (
                 <Grid item xs={12} paddingLeft={1} paddingTop={1}>
                   <TextField
                     label="Reject Remarks"
@@ -687,7 +700,7 @@ export default function JobEntryForm({
                         : formik.errors.rejectRemarks
                     }
                     onChange={formik.handleChange}
-                    disabled={page === "jobEntryApprove" ? disabled : !disabled}
+                    disabled={page === "job-entry" ? disabled : !disabled}
                     multiline
                     rows={4}
                     variant="outlined"
@@ -698,7 +711,8 @@ export default function JobEntryForm({
                 <></>
               )}
 
-              {page == "job-entry" && (
+              {/* Buttons */}
+              {page == "job-entry" ? (
                 <Grid item xs={12} sx={{ margin: 1 }}>
                   <Stack
                     direction="row"
@@ -747,6 +761,63 @@ export default function JobEntryForm({
                     </Stack>
                   </Stack>
                 </Grid>
+              ) : (
+                <Grid item xs={12} sx={{ margin: 1 }}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Stack direction="row" spacing={2}>
+                      <OutlinedButton
+                        sx={{ fontWeight: "500" }}
+                        onClick={() => nav(-1)}
+                      >
+                        Cancel
+                      </OutlinedButton>
+
+                      <ThemeButton
+                        onClick={formik.handleSubmit}
+                        sx={{
+                          fontWeight: "500",
+                          color: "white !important",
+                        }}
+                      >
+                        {isLoading && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Update
+                      </ThemeButton>
+
+                      <ThemeButton
+                        sx={{
+                          fontWeight: "500",
+                          backgroundColor: "red",
+                          color: "white !important",
+                        }}
+                        onClick={() => handleRejectRequest()}
+                      >
+                        {loaderApprove.reject && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Reject
+                      </ThemeButton>
+                      <ThemeButton
+                        sx={{ fontWeight: "500", color: "white !important" }}
+                        onClick={() => handleApproveRequest()}
+                      >
+                        {loaderApprove.approve && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Approve
+                      </ThemeButton>
+
+                      {/* Update Job Button */}
+                    </Stack>
+                  </Stack>
+                </Grid>
               )}
 
               <PopupAlert alertConfig={alertConfig} />
@@ -754,19 +825,19 @@ export default function JobEntryForm({
           </TabPanel>
 
           <TabPanel value="2" sx={{ padding: "0px" }}>
-            {/* <UploadFile
-                  customer_id={initialValues.id}
-                  disabled={disabled}
-                  dropdownData={dropdownData.documentType}
-                  sourceType="CUSTOMER"
-                /> */}
+            <UploadFile
+              customer_id={initialValues.id}
+              disabled={disabled}
+              dropdownData={dropdownData.documentType}
+              sourceType="JOB_DETAIL"
+            />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: "0px" }}>
-            {/* <AuditTimeline
-                  id={initialValues.id}
-                  page="customer"
-                  service={menuConfigUrl.entity}
-                /> */}
+            <AuditTimeLine
+              id={initialValues.id}
+              page="job-entry"
+              service={menuConfigUrl.document}
+            />
           </TabPanel>
         </TabContext>
       </Box>

@@ -344,7 +344,6 @@ export default function CustomerForm({
     <>
       {type == "add" ? (
         <>
-          {" "}
           <Box
             sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}
           >

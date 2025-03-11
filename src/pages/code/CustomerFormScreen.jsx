@@ -11,12 +11,14 @@ import { useLocation } from "react-router-dom";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import CustomerForm from "../../components/screen/code/customer/CustomerForm";
-import { useFetchCustomerQuery } from "../../store/api/codeDataApi";
 import ApiManager from "../../services/ApiManager";
 import Loader from "../../components/common/Loader/Loader";
-import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import toast from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
+
+import { useFetchCustomerQuery } from "../../store/api/codeDataApi";
+import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+
 export default function CustomerFormScreen({ page }) {
   const [loading, setLoading] = useState(true);
   const { state } = useLocation();

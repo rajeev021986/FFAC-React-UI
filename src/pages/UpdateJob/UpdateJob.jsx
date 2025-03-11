@@ -146,29 +146,6 @@ export default function UpdateJobDetails({ page }) {
     }
   }, [state?.initialValues?.id]);
 
-
-  // {
-//   "jobNo": "string",
-//   "blNo": "string",
-//   "customer": "string",
-//   "sct": "string",
-//   "urgent": "string",
-
-
-//   "shippingLineDOCollectionDate": "2025-03-05T09:40:16.573Z",
-//   "customReleaseDate": "2025-03-05T09:40:16.573Z",
-//   "taxExemptionCertificateDate": "2025-03-05T09:40:16.573Z",
-//   "btNumber": "string",
-//   "idfNo": "string",
-//   "idfDate": "2025-03-05T09:40:16.573Z",
-//   "entryLoadgedRef": "string",
-//   "entryLoadgedDate": "2025-03-05T09:40:16.573Z",
-//   "entryNo": "string",
-//   "entryDate": "2025-03-05T09:40:16.573Z",
-
-//   "pickUpOrder": "string",
-// }
-
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
       <Stack sx={{ padding: "8px 0px" }}>
