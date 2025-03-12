@@ -9,6 +9,7 @@ import DateTimeField from "../../components/common/DateTime/DateTimeField";
 // Setting Data
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import SelectBox from "../../components/common/SelectBox";
+import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 
 export default function ShipmentDetails({ formik }) {
   let disabled = null;
@@ -27,47 +28,53 @@ export default function ShipmentDetails({ formik }) {
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
         <Grid paddingLeft={1} marginTop={2} container spacing={2}>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
+            <FormAutoComplete
               label="Origin Country"
               id="originCountry"
-              value={formik?.values?.originCountry}
-              error={formik?.errors?.originCountry}
-              onChange={formik?.handleChange}
-              disabled={disabled}
+              suggestionName="country"
+              value={formik.values.originCountry}
+              error={formik.errors.originCountry}
+              onChange={formik.handleChange}
+              inputRef={FieldRef}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
+            <FormAutoComplete
               label="Port Of Loading"
               id="portOfLoading"
+              suggestionName="port_name"
               value={formik.values.portOfLoading}
               error={formik.errors.portOfLoading}
               onChange={formik.handleChange}
-              disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
+            <FormAutoComplete
               label="Port Of Discharge"
               id="portOfDischarge"
+              suggestionName="port_name"
               value={formik.values.portOfDischarge}
               error={formik.errors.portOfDischarge}
               onChange={formik.handleChange}
-              disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
+          <FormAutoComplete
               label="Place Of Delivery"
               id="placeOfDelivery"
+              suggestionName="port_name"
               value={formik.values.placeOfDelivery}
               error={formik.errors.placeOfDelivery}
               onChange={formik.handleChange}
-              disabled={disabled}
+              inputRef={FieldRef}
             />
+
+           
           </Grid>
         </Grid>
 
@@ -102,19 +109,14 @@ export default function ShipmentDetails({ formik }) {
             lg={3}
             xl={2}
           >
-            <Tooltip
-              // title={!formik.values.totalNoOfPackages ? "Field is mandatory" : ""}
-              arrow
-            >
-              <InputBox
-                label="Total NoOfPkgs."
-                id="totalNoOfPackages"
-                value={formik.values.totalNoOfPackages}
-                error={formik.errors.totalNoOfPackages}
-                disabled={disabled}
-                onChange={formik.handleChange}
-              />
-            </Tooltip>
+            <InputBox
+              label="Total NoOfPkgs."
+              id="totalNoOfPackages"
+              value={formik.values.totalNoOfPackages}
+              error={formik.errors.totalNoOfPackages}
+              disabled={disabled}
+              onChange={formik.handleChange}
+            />
           </Grid>
 
           <Grid

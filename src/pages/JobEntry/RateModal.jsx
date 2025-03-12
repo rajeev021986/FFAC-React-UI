@@ -223,8 +223,6 @@ export default function AddRateModal({
     },
   ];
 
-  console.log(formik?.values?.rate?.totalAmount, 989458);
-
   return (
     <div>
       <Modal

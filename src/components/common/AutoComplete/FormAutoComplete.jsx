@@ -11,6 +11,7 @@ import { GetAutoCompleteData } from "../../utils/GetAutoCompleteData";
 function FormAutoComplete(props) {
   const { label, id, suggestionName, dataLabel, value, error, onChange } =
     props;
+
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,7 @@ function FormAutoComplete(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
+        
         const data = await GetAutoCompleteData(
           suggestionName,
           id,
@@ -32,7 +34,6 @@ function FormAutoComplete(props) {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [suggestionName, id]);
 
@@ -51,6 +52,7 @@ function FormAutoComplete(props) {
       onChange({ target: { name: id, value: null } }); 
     }
   };
+
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
@@ -99,7 +101,7 @@ function FormAutoComplete(props) {
           </MenuItem>
         )}
         noOptionsText={
-          filteredOptions.length === 0 ? "No data available" : "Loading..."
+          filteredOptions?.length === 0 ? "No data available" : "Loading..."
         }
       />
     </Box>

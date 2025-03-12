@@ -1,13 +1,15 @@
 import { Box, Card, CardContent, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
+import ApiManager from "../../services/ApiManager";
+
+// Components
+import JobEntryForm from "./JobEntryForm";
+import Loader from "../../components/common/Loader/Loader";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
-import ApiManager from "../../services/ApiManager";
-import Loader from "../../components/common/Loader/Loader";
-import toast from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
-import JobEntryForm from "./JobEntryForm";
 
 export default function AddJobEntry({ page }) {
   const [loading, setLoading] = useState(true);
@@ -100,6 +102,7 @@ export default function AddJobEntry({ page }) {
         }
         setInitialValues({
           ...initialValues,
+          status: res.body.status || "",
           id: res.body?.id || "",
           customerName: res.body?.customerName || "",
           shipmentType: res.body?.shipmentType || "",

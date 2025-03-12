@@ -10,6 +10,7 @@ import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
 // Setting Data
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 
 export default function LineVessel({ formik }) {
   let disabled = null;
@@ -27,14 +28,15 @@ export default function LineVessel({ formik }) {
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
         <Grid paddingLeft={1} marginTop={2} container spacing={2}>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
+            <FormAutoComplete
               label="Shipping Line"
               id="shippingLine"
-              value={formik?.values?.shippingLine}
-              error={formik?.errors?.shippingLine}
-              onChange={formik?.handleChange}
-              disabled={disabled}
-            />
+              suggestionName="line_name"
+              value={formik.values.shippingLine}
+              error={formik.errors.shippingLine}
+              onChange={formik.handleChange}
+              inputRef={FieldRef}
+            ></FormAutoComplete>
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -105,19 +107,15 @@ export default function LineVessel({ formik }) {
             lg={3}
             xl={2}
           >
-            <Tooltip
-              // title={!formik.values.voyage ? "Field is mandatory" : ""}
-              arrow
-            >
-              <InputBox
-                label="Voyage"
-                id="loadingVoyage"
-                value={formik.values.loadingVoyage}
-                error={formik.errors.loadingVoyage}
-                disabled={disabled}
-                onChange={formik.handleChange}
-              />
-            </Tooltip>
+            <FormAutoComplete
+              label="Loading Voyage"
+              id="loadingVoyage"
+              suggestionName="vessel"
+              value={formik.values.loadingVoyage}
+              error={formik.errors.loadingVoyage}
+              onChange={formik.handleChange}
+              inputRef={FieldRef}
+            ></FormAutoComplete>
           </Grid>
 
           <Grid
@@ -150,14 +148,15 @@ export default function LineVessel({ formik }) {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <FormAutoComplete
               label="Discharge Voyage"
               id="dischargeVoyage"
+              suggestionName="vessel"
               value={formik.values.dischargeVoyage}
               error={formik.errors.dischargeVoyage}
               onChange={formik.handleChange}
-              disabled={disabled}
-            />
+              inputRef={FieldRef}
+            ></FormAutoComplete>
           </Grid>
         </Grid>
 
@@ -173,14 +172,15 @@ export default function LineVessel({ formik }) {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <FormAutoComplete
               label="Vessel/Local Agent"
               id="vesselAgent"
+              suggestionName="line_name"
               value={formik.values.vesselAgent}
               error={formik.errors.vesselAgent}
               onChange={formik.handleChange}
-              disabled={disabled}
-            />
+              inputRef={FieldRef}
+            ></FormAutoComplete>
           </Grid>
 
           {/* Select */}

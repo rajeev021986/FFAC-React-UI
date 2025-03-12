@@ -166,7 +166,6 @@ function App() {
               path="documentation/update/job"
               element={<UpdateJobDetails page="update-job" />}
             />
-
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="admin/users" element={<UserManagementScreen />} />

@@ -30,6 +30,7 @@ import SelectBox from "../../components/common/SelectBox";
 import PopupAlert from "../../components/common/Alert/PopupAlert";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import getFirstError from "../../components/common/FieldToastError";
+import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 
 // API Function Helper
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
@@ -393,15 +394,15 @@ export default function JobEntryForm({
                     }
                     arrow
                   >
-                    <InputBox
+                    <FormAutoComplete
                       label="Customer Name*"
                       id="customerName"
                       value={formik.values.customerName}
-                      disabled={disabled}
                       error={formik.errors.customerName}
                       onChange={formik.handleChange}
-                      inputRef={customerNameRef}
-                    />
+                      inputRef={FieldRef}
+                      suggestionName="customer_name"
+                    ></FormAutoComplete>
                   </Tooltip>
                 </Grid>
 

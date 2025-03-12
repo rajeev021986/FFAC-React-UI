@@ -84,7 +84,6 @@ const ThemedBreadcrumb = () => {
         if (!Routes[value]?.label) return null;
         return isLast || Routes[value]?.disabled ? (
           <Typography key={routeTo} fontSize="18px">
-            {console.log(Routes[value]?.label, 7487587)}
             {Routes[value]?.label}
           </Typography>
         ) : (

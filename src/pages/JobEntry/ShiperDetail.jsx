@@ -1,9 +1,11 @@
+import { useEffect, useRef } from "react";
 import { Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 
 // Components
 import InputBox from "../../components/common/InputBox";
 import SelectBox from "../../components/common/SelectBox";
+import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 
 // Settng Data
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
@@ -12,19 +14,27 @@ export default function ShipperDetails({ formik }) {
   let disabled = null;
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
+  const FieldRef = useRef(null);
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
+
   return (
     <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
         <Grid paddingLeft={1} marginTop={2} container spacing={2}>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
+            <FormAutoComplete
               label="Supplier Name"
               id="supplierName"
-              value={formik?.values?.supplierName}
-              error={formik?.errors?.supplierName}
-              onChange={formik?.handleChange}
-              disabled={disabled}
-            />
+              suggestionName="name"
+              value={formik.values.supplierName}
+              error={formik.errors.supplierName}
+              onChange={formik.handleChange}
+              inputRef={FieldRef}
+            ></FormAutoComplete>
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -39,14 +49,15 @@ export default function ShipperDetails({ formik }) {
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
+            <FormAutoComplete
               label="Consignee Name"
               id="consigneeName"
+              suggestionName="consignee_name"
               value={formik.values.consigneeName}
               error={formik.errors.consigneeName}
               onChange={formik.handleChange}
-              disabled={disabled}
-            />
+              inputRef={FieldRef}
+            ></FormAutoComplete>
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
