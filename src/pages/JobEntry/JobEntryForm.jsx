@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   CircularProgress,
   Grid,
@@ -48,10 +48,13 @@ export default function JobEntryForm({
   page,
   type = "notcopy",
 }) {
+  const params = useLocation();
+
   const [addJobEntry, { isLoading }] = useAddJobEntryMutation();
   const [updateJobEntry, { isLoading: loadingUpdate }] =
     useUpdateJobEntryMutation();
 
+  const [toggleRate, settoggleRate] = useState(false);
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
   const nav = useNavigate();
@@ -269,7 +272,6 @@ export default function JobEntryForm({
     }
   }, []);
 
-  const [toggleRate, settoggleRate] = useState(false);
   const toggleRateModal = () => {
     settoggleRate((prev) => !prev);
   };
@@ -286,41 +288,24 @@ export default function JobEntryForm({
       <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList
-              onChange={handleChange}
-              aria-label="lab API tabs example"
-              sx={{ paddingBottom: "20px" }}
-            >
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab
                 label="Job Entry Details"
                 value="1"
-                sx={{
-                  textTransform: "capitalize",
-                  minHeight: "50px",
-                }}
                 icon={<EditIconForHeader />}
                 iconPosition="start"
               />
-
-              {initialValues?.id && (
+              {initialValues.id && (
                 <>
                   <Tab
                     label="Document Details"
                     value="2"
-                    sx={{
-                      textTransform: "capitalize",
-                      minHeight: "50px",
-                    }}
                     icon={<DocumentIcon />}
                     iconPosition="start"
                   />
                   <Tab
                     label="Audit Logs"
                     value="3"
-                    sx={{
-                      textTransform: "capitalize",
-                      minHeight: "50px",
-                    }}
                     icon={<AuditIcon />}
                     iconPosition="start"
                   />
@@ -669,7 +654,7 @@ export default function JobEntryForm({
                     value={formik.values.createdBy}
                     error={formik.errors.createdBy}
                     onChange={formik.handleChange}
-                    disabled
+                    // disabled
                   />
                 </Grid>
               </Grid>
@@ -833,6 +818,7 @@ export default function JobEntryForm({
               sourceType="JOB_DETAIL"
             />
           </TabPanel>
+
           <TabPanel value="3" sx={{ padding: "0px" }}>
             <AuditTimeLine
               id={initialValues.id}

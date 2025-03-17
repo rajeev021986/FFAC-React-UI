@@ -25,7 +25,6 @@ import DateTimeField from "../../components/common/DateTime/DateTimeField";
 export default function JobEntryGridForm({
   formik,
   disabled = false,
-  vendorSettingsData,
   dropdownData,
   jobSettingData,
 }) {
@@ -139,7 +138,6 @@ export default function JobEntryGridForm({
                 height: "100%",
               }}
             >
-              
               <SelectBox
                 placeholder={true}
                 size="small"
@@ -166,7 +164,7 @@ export default function JobEntryGridForm({
                   const updatedDischargeDate =
                     formik.values.containerShipments.map((a) => {
                       if (a.id === params.id) {
-                        return { ...a, date: value };
+                        return { ...a, dischargeDate: value };
                       }
                       return a;
                     });
@@ -374,7 +372,7 @@ export default function JobEntryGridForm({
                   const updatedBirthingeDate =
                     formik.values.vehicleShipments.map((a) => {
                       if (a.id === params.id) {
-                        return { ...a, date: value };
+                        return { ...a, berthingDate: value };
                       }
                       return a;
                     });
@@ -388,7 +386,7 @@ export default function JobEntryGridForm({
           ),
         },
         {
-          field: "releaseDate",
+          field: "customReleaseODate",
           headerName: "Custom Release O Date",
           flex: 1,
           renderCell: (params) => (
@@ -399,7 +397,7 @@ export default function JobEntryGridForm({
                   const updatedReleaseDate = formik.values.vehicleShipments.map(
                     (a) => {
                       if (a.id === params.id) {
-                        return { ...a, date: value };
+                        return { ...a, customReleaseODate: value };
                       }
                       return a;
                     }
@@ -432,7 +430,7 @@ export default function JobEntryGridForm({
                   const updatedDepartureDate =
                     formik.values.vehicleShipments.map((a) => {
                       if (a.id === params.id) {
-                        return { ...a, date: value };
+                        return { ...a, dateOfDeparture: value };
                       }
                       return a;
                     });
@@ -457,7 +455,7 @@ export default function JobEntryGridForm({
                   const updatedArrivaleDate =
                     formik.values.vehicleShipments.map((a) => {
                       if (a.id === params.id) {
-                        return { ...a, date: value };
+                        return { ...a, dateOfArrivalAtBorder: value };
                       }
                       return a;
                     });
@@ -479,7 +477,7 @@ export default function JobEntryGridForm({
                   const updatedDepartureBorderDate =
                     formik.values.vehicleShipments.map((a) => {
                       if (a.id === params.id) {
-                        return { ...a, date: value };
+                        return { ...a, dateOfDepartureAtBorder: value };
                       }
                       return a;
                     });
@@ -504,7 +502,7 @@ export default function JobEntryGridForm({
                   const updatedDelivaryDate =
                     formik.values.vehicleShipments.map((a) => {
                       if (a.id === params.id) {
-                        return { ...a, date: value };
+                        return { ...a, dateOfDelivery: value };
                       }
                       return a;
                     });

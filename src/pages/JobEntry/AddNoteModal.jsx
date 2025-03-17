@@ -37,6 +37,20 @@ export default function AddNoteModal({
     formik.setFieldValue("jobNotes", updatedNotes);
   };
 
+  // const handleAddNote = () => {
+  //   const newNote = {
+  //     id: Date.now(),
+  //     subjectType: formik.values.jobNotes[0]?.subjectType || "",
+  //     note: formik.values.jobNotes[0]?.note || "",
+  //     createdDate: new Date().toISOString(),
+  //   };
+  //   const storedNotes = JSON.parse(sessionStorage.getItem("jobNotes")) || [];
+  //   const updatedNotes = [...storedNotes, newNote];
+  //   sessionStorage.setItem("jobNotes", JSON.stringify(updatedNotes));
+  //   formik.setFieldValue("jobNotes", [{ subjectType: "", note: "" }]);
+  //   handleToggleNote();
+  // };
+
   const handleAddNote = () => {
     const newNote = {
       id: Date.now(),
@@ -44,11 +58,18 @@ export default function AddNoteModal({
       note: formik.values.jobNotes[0]?.note || "",
       createdDate: new Date().toISOString(),
     };
+
+    // Get existing notes from sessionStorage
     const storedNotes = JSON.parse(sessionStorage.getItem("jobNotes")) || [];
     const updatedNotes = [...storedNotes, newNote];
+
+    // Save updated notes in sessionStorage
     sessionStorage.setItem("jobNotes", JSON.stringify(updatedNotes));
-    formik.setFieldValue("jobNotes", [{ subjectType: "", note: "" }]);
-    handleToggleNote();
+
+    // ✅ Immediately update formik state to reflect changes
+    formik.setFieldValue("jobNotes", updatedNotes);
+
+    handleToggleNote(); // Close modal if needed
   };
 
   return (
