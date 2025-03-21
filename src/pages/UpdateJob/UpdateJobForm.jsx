@@ -484,28 +484,35 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           <BondDetailsGridForm formik={formik} dropdownData={dropdownData} />
         </Grid>
 
-        <TabContext value={detailTab}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider", paddingTop: 2 }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab
-                label="Container Details / Update Details"
-                value="1"
-                sx={{
-                  width: "100%",
-                  typography: "body1",
-                  borderBottom: 1,
-                  border: "1px solid",
-                  borderColor: "divider",
-                  borderRadius: "10px",
-                }}
-                iconPosition="start"
-              />
-            </TabList>
-          </Box>
-          <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
-            <ContainerDetails formik={formik} />
-          </TabPanel>
-        </TabContext>
+        {formik.values.containerDetails?.length > 0 && (
+          <TabContext value={detailTab}>
+            <Box
+              sx={{ borderBottom: 1, borderColor: "divider", paddingTop: 2 }}
+            >
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab
+                  label="Container Details / Update Details"
+                  value="1"
+                  sx={{
+                    width: "100%",
+                    typography: "body1",
+                    borderBottom: 1,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: "10px",
+                  }}
+                  iconPosition="start"
+                />
+              </TabList>
+            </Box>
+            <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
+              <ContainerDetails formik={formik} />
+            </TabPanel>
+          </TabContext>
+        )}
 
         {page == "update-job" && (
           <Grid
