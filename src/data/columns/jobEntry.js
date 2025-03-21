@@ -1,4 +1,3 @@
-
 export const JOB_ENTRY_COLUMNS = [
   {
     flex: 1,
@@ -20,8 +19,8 @@ export const JOB_ENTRY_COLUMNS = [
   },
   {
     flex: 1,
-    field: "hblNo",
-    headerName: "Reference No.",
+    field: "customerName",
+    headerName: "Customer",
     width: 110,
     headerAlign: "center",
     align: "center",
@@ -29,8 +28,8 @@ export const JOB_ENTRY_COLUMNS = [
   },
   {
     flex: 1,
-    field: "customerName",
-    headerName: "Customer",
+    field: "customerRefNo",
+    headerName: "Reference No.",
     width: 110,
     headerAlign: "center",
     align: "center",
@@ -82,11 +81,11 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
   },
   {
-    field: 'action',
-    headerName: 'Action',
+    field: "action",
+    headerName: "Action",
     width: 150,
-    headerAlign: 'center',
-    align : 'center',
-    editable:true,   
-}
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
 ];

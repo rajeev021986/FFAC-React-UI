@@ -10,7 +10,7 @@ const initialState = {
   pol: [],
   pod: [],
   sortBy: "",
-  theme: "#BF77F6",
+  theme: "#166de0",
   mode: false,
   sessionExpiredmodule: false,
 };

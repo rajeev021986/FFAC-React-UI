@@ -24,18 +24,14 @@ const suggestionName = {
 
 export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {
   inputId = suggestionName[inputId];
-  console.log(dataKey, inputId, dataLabel, "keyprops");
   try {
     const response = await ApiManager.fetchAutoCompleteData("", inputId);
     const data = await response.body;
     let uniqueSuggestions = [];
-    console.log(data, "data");
     uniqueSuggestions = data.filter(
       (value, index, self) =>
         index === self.findIndex((t) => t[dataKey] === value[dataKey])
     );
-    console.log(uniqueSuggestions, "manish");
-
     uniqueSuggestions = uniqueSuggestions.map((item) => {
       return { label: item[dataLabel], value: item[dataKey] };
     });

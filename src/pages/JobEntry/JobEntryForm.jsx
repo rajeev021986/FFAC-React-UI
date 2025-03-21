@@ -48,8 +48,6 @@ export default function JobEntryForm({
   page,
   type = "notcopy",
 }) {
-  const params = useLocation();
-
   const [addJobEntry, { isLoading }] = useAddJobEntryMutation();
   const [updateJobEntry, { isLoading: loadingUpdate }] =
     useUpdateJobEntryMutation();
@@ -288,30 +286,44 @@ export default function JobEntryForm({
       <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab
-                label="Job Entry Details"
-                value="1"
-                icon={<EditIconForHeader />}
-                iconPosition="start"
-              />
-              {initialValues.id && (
-                <>
-                  <Tab
-                    label="Document Details"
-                    value="2"
-                    icon={<DocumentIcon />}
-                    iconPosition="start"
-                  />
-                  <Tab
-                    label="Audit Logs"
-                    value="3"
-                    icon={<AuditIcon />}
-                    iconPosition="start"
-                  />
-                </>
-              )}
-            </TabList>
+            {type === "add" ? (
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab
+                  label="Job Entry Details"
+                  value="1"
+                  icon={<EditIconForHeader />}
+                  iconPosition="start"
+                />
+              </TabList>
+            ) : (
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab
+                  label="Job Entry Details"
+                  value="1"
+                  icon={<EditIconForHeader />}
+                  iconPosition="start"
+                />
+
+                <Tab
+                  label="Document Details"
+                  value="2"
+                  icon={<DocumentIcon />}
+                  iconPosition="start"
+                />
+                <Tab
+                  label="Audit Logs"
+                  value="3"
+                  icon={<AuditIcon />}
+                  iconPosition="start"
+                />
+              </TabList>
+            )}
           </Box>
 
           <TabPanel value="1" sx={{ padding: "0px" }}>
@@ -339,6 +351,19 @@ export default function JobEntryForm({
                     onChange={formik.handleChange}
                     disabled={disabled}
                   />
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <ThemeButton
+                    onClick={() => toggleRateModal()}
+                    sx={{
+                      fontWeight: "500",
+                      color: "white !important",
+                      height: "38px",
+                    }}
+                  >
+                    Add Rate
+                  </ThemeButton>
                 </Grid>
               </Grid>
 
@@ -625,17 +650,6 @@ export default function JobEntryForm({
                     onChange={formik.handleChange}
                     disabled={disabled}
                   />
-                  <span
-                    style={{
-                      whiteSpace: "nowrap",
-                      fontSize: "14px",
-                      marginTop: "15px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => toggleRateModal()}
-                  >
-                    Add Rate
-                  </span>
                 </Grid>
 
                 <Grid

@@ -23,8 +23,8 @@ export default function UpdateJobDetails({ page }) {
     shippingLineDOCollectionDate: "",
     customReleaseDate: "",
     taxExemptionCertificateDate: "",
-    pickUpOrder: "",
     btNumber: "",
+    pickUpOrder: "",
     idfNo: "",
     idfDate: "",
     entryLoadgedRef: "",
@@ -32,16 +32,7 @@ export default function UpdateJobDetails({ page }) {
     entryNo: "",
     entryDate: "",
 
-    bondDetails: [
-      {
-        id: 0,
-        bondNumber: "",
-        balanceBondAmount: 0,
-        bondAmount: 0,
-        bondDate: "",
-        runningBalance: 0,
-      },
-    ],
+    bondDetails: [],
     containerDetails: [
       {
         containerNo: "",
@@ -86,7 +77,7 @@ export default function UpdateJobDetails({ page }) {
   useEffect(() => {
     const fetchCustomerDetails = async () => {
       try {
-        const res = await ApiManager.getCustomerDeatils(
+        const res = await ApiManager.getUpdateJobEntryDetails(
           state?.initialValues?.id
         );
         let status = "";
@@ -97,34 +88,26 @@ export default function UpdateJobDetails({ page }) {
         }
         setInitialValues({
           id: res.body?.id || "",
-          customerName: res.body?.customerName || "",
-          tinNo: res.body?.tinNo || "",
-          vatNo: res.body?.vatNo || "",
           status: status,
-          add1: res.body?.add1 || "",
-          add2: res.body?.add2 || "",
-          add3: res.body?.add3 || "",
-          poNo: res.body?.poNo || "",
-          city: res.body?.city || "",
-          country: res.body?.country || "",
-          province: res.body?.province || "",
-          contactPerson: res.body?.contactPerson || "",
-          emailId: res.body?.emailId || "",
-          telephone: res.body?.telephone || "",
-          fax: res.body?.fax || "",
-          bankName: res.body?.bankName || "",
-          accountNo: res.body?.accountNo || "",
-          customerType: res.body?.customerType || "",
-          companyCode: res.body?.companyCode || "",
-          paymentType: res.body?.paymentType || "cash",
-          creditDays: res.body?.creditDays || "",
-          creditAmount: res.body?.creditAmount || "",
           rejectRemarks: res.body?.rejectRemarks || "",
-          statusCode: res.body?.statusCode,
-          agreementExpiryDate: res.body?.agreementExpiryDate || "",
-          customerEntityTariffs: res.body?.customerEntityTariffs || [],
-          customerEntityEmailsIds: res.body?.customerEntityEmailsIds || [],
-          bankDetails: res.body?.bankDetails || [],
+          jobNo: res.body?.jobNo || "",
+          blNo: res.body?.blNo || "",
+          customer: res.body?.customer || "",
+          sct: res.body?.sct || "NO",
+          urgent: res.body?.urgent || "NO",
+          shippingLineDOCollectionDate: res.body?.shippingLineDOCollectionDate || "",
+          customReleaseDate: res.body?.customReleaseDate || "",
+          taxExemptionCertificateDate: res.body?.taxExemptionCertificateDate || "",
+          pickUpOrder: res.body?.pickUpOrder || "",
+          btNumber: res.body?.btNumber || "",
+          idfNo: res.body?.idfNo || "",
+          idfDate: res.body?.idfDate || "",
+          entryLoadgedRef: res.body?.entryLoadgedRef || "",
+          entryLoadgedDate: res.body?.entryLoadgedDate || "",
+          entryNo: res.body?.entryNo || "",
+          entryDate: res.body?.entryDate || "",
+          bondDetails: res.body?.bondDetails || [],
+          containerDetails: res.body?.containerDetails || [],
         });
         setLoading(false);
       } catch (error) {

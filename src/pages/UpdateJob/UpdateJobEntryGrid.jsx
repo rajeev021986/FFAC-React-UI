@@ -19,6 +19,7 @@ import EditRowDialog from "../../components/common/EditRowDialog";
 import InputBoxForGrid from "../../components/common/InputBoxForGrid";
 import SelectBox from "../../components/common/SelectBox";
 import { StyledDataGrid } from "../../components/common/Grid/styles";
+import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
 export default function BondDetailsGridForm({
   formik,
@@ -60,10 +61,16 @@ export default function BondDetailsGridForm({
     }, 10);
   };
 
+  // balanceBondAmount: 0,
+  // bondAmount: 0,
+  // bondDate: "",
+  // runningBalance: 0,
+
+
   const TabsHosts = [
     {
       tabLable: "Bond Details",
-      value: formik?.values?.vendorEntityTariffs || [],
+      value: formik?.values?.bondDetails || [],
       addNewRow: () => {
         const hasEmptyFields = TabsHosts[0].value.some((row) =>
           Object.values(row).some(
@@ -72,15 +79,14 @@ export default function BondDetailsGridForm({
         )
         const newRow = {
           id: Date.now(),
-          chargeName: "",
-          type: "",
-          finalDestination: "",
-          unitType: "",
-          releaseDate: "",
-          unitRate: "0",
+          bondNumber: "",
+          balanceBondAmount: "",
+          bondAmount: "",
+          bondDate: "",
+          runningBalance: "",
           new: true,
         };
-        formik.setFieldValue("vendorEntityTariffs", [
+        formik.setFieldValue("bondDetails", [
           ...TabsHosts[0].value,
           newRow,
         ]);
@@ -88,13 +94,13 @@ export default function BondDetailsGridForm({
       },
       deleteRow: (id) => {
         const updatedRows = TabsHosts[0]?.value.filter((row) => row.id !== id);
-        formik.setFieldValue("vendorEntityTariffs", updatedRows);
+        formik.setFieldValue("bondDetails", updatedRows);
       },
       handleProcessRowUpdate: (newRow, oldRow) => {
         const updatedRows = TabsHosts?.[0]?.value?.map((row) =>
           row?.id === newRow.id ? { ...row, ...newRow } : row
         );
-        formik.setFieldValue("vendorEntityTariffs", updatedRows);
+        formik.setFieldValue("bondDetails", updatedRows);
         return newRow;
       },
       columns: [
@@ -105,23 +111,23 @@ export default function BondDetailsGridForm({
           renderCell: (params) => {
             return (
               <AutoCompleteInput
-                id="chargeName"
+                id="bondNumber"
                 suggestionName="charge_name"
                 value={params.value}
                 error={
-                  formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeName
+                  formik.errors.bondDetails?.[params.rowIndex]
+                    ?.bondNumber
                 }
                 onChange={(newValue) => {
-                  const rowIndex = formik.values.vendorEntityTariffs.findIndex(
+                  const rowIndex = formik.values.bondDetails.findIndex(
                     (entity) => entity.id === params.id
                   );
                   formik.setValues({
                     ...formik?.values,
-                    vendorEntityTariffs: formik?.values?.vendorEntityTariffs?.map(
+                    bondDetails: formik?.values?.bondDetails?.map(
                       (entity, index) =>
                         index === rowIndex
-                          ? { ...entity, chargeName: newValue }
+                          ? { ...entity, bondNumber: newValue }
                           : entity
                     ),
                   });
@@ -132,32 +138,21 @@ export default function BondDetailsGridForm({
           },
         },
         {
-          field: "balanceBondNumber",
+          field: "balanceBondAmount",
           headerName: "Balance Bond Amount",
           flex: 1,
+          editable: true,
           renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              {" "}
-              <SelectBox
-                placeholder={true}
-                size="small"
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-                options={vendorSettingsData?.body?.tarifType}
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
-              />
-            </div>
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter Balance Bond Amount"
+            />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter Balance Bond Amount"
+            />
           ),
         },
         {
@@ -168,78 +163,56 @@ export default function BondDetailsGridForm({
           renderCell: (params) => (
             <InputBoxForGrid
               {...params}
-              placeholder="Enter final destination"
+              placeholder="Enter Bond Amount"
             />
           ),
           renderEditCell: (params) => (
             <InputBoxForGrid
               {...params}
-              placeholder="Enter final destination"
+              placeholder="Enter Bond Amount"
             />
           ),
         },
         {
-          field: "unitType",
+          field: "bondDate",
           headerName: "Bond Date",
           flex: 1,
           renderCell: (params) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
+            <DateTimeField
+              value={params.value}
+              onChange={(_, value) => {
+                const updatedDischargeDate =
+                  formik.values.bondDetails.map((a) => {
+                    if (a.id === params.id) {
+                      return { ...a, bondDate: value };
+                    }
+                    return a;
+                  });
+                formik.setFieldValue(
+                  "bondDetails",
+                  updatedDischargeDate
+                );
               }}
-            >
-              {" "}
-              <SelectBox
-                placeholder={true}
-                size="small"
-                sx={{
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                }}
-                options={vendorSettingsData?.body?.unitType}
-                value={params.value}
-                onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
-              />
-            </div>
+            />
           ),
         },
         {
-          field: "currency",
+          field: "runningBalance",
           headerName: "Ranning Balance",
           flex: 1,
-          renderCell: (params) => {
-            return (
-              <AutoCompleteInput
-                id="currency"
-                suggestionName="currency"
-                value={params.value}
-                error={
-                  formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeName
-                }
-                onChange={(newValue) => {
-                  const rowIndex = formik?.values?.vendorEntityTariffs?.findIndex(
-                    (entity) => entity.id === params.id
-                  );
-                  // setTimeout(() => {
-                  formik.setValues({
-                    ...formik.values,
-                    vendorEntityTariffs: formik?.values?.vendorEntityTariffs?.map(
-                      (entity, index) =>
-                        index === rowIndex
-                          ? { ...entity, currency: newValue }
-                          : entity
-                    ),
-                  });
-                  // }, 1500);
-                }}
-              />
-            );
-          },
+          editable: true,
+          renderCell: (params) => (
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter Ranning Balance"
+            />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid
+              {...params}
+              placeholder="Enter Ranning Balance"
+            />
+          ),
         },
         {
           field: "actions",

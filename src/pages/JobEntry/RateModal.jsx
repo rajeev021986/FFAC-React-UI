@@ -74,7 +74,7 @@ export default function AddRateModal({
 
   const TabsHosts = [
     {
-      tabLable: "Container Shipment",
+      tabLable: "Rate Details",
       value: formik?.values?.rate?.rateDetails || [],
       addNewRow: () => {
         const newRow = {
@@ -244,10 +244,6 @@ export default function AddRateModal({
           >
             <CloseIcon />
           </IconButton>
-
-          <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            Rate Details
-          </Typography>
 
           <Grid paddingLeft={1} marginTop={2} container spacing={2}>
             <Grid item xs={12} sm={6} md={4} lg={4} xl={2}>

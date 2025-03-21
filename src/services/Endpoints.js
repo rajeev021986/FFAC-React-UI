@@ -63,6 +63,7 @@ const ENDPOINTS = {
     `/${BasePageUrl}/approval/approved/${type}/${id}`,
   JOB_ENTRY_REJECT_REQUEST: (id, type,BasePageUrl) =>
     `/${BasePageUrl}/approval/rejected/${type}/${id}`,
+  GET_UPDATE_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-update/${id}`,
 
 };
 

@@ -39,7 +39,7 @@ export default function DateTimeField({
             borderRadius: "10px",
             width: "100%",
             height: "42px",
-            borderColor: error ? "red" : "",
+            borderColor: error ? "#f56962" : "",
           },
         }}
         slotProps={{

@@ -45,6 +45,7 @@ import AddJobEntry from "./pages/JobEntry/AddJobEntry";
 
 // Update Job Page
 import UpdateJobDetails from "./pages/UpdateJob/UpdateJob";
+import UpdateJobListingScreen from "./pages/JobEntry/UpdateJob/updateJobListing";
 
 function App() {
   // const { menuItems } = useMenuSetting();
@@ -52,6 +53,7 @@ function App() {
     useSelector((state) => state.dashboard.theme),
     useSelector((state) => state.dashboard.mode)
   );
+
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -164,8 +166,14 @@ function App() {
 
             <Route
               path="documentation/update/job"
+              element={<UpdateJobListingScreen page="update-jobs" />}
+            />
+
+            <Route
+              path="documentation/update/job/edit-job"
               element={<UpdateJobDetails page="update-job" />}
             />
+
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="admin/users" element={<UserManagementScreen />} />

@@ -152,26 +152,6 @@ export default function JobEntryScreen({ page }) {
         state: { formAction: "add" },
       });
     }
-    // if (actionName === "Export") {
-    //   setExportLoader(true);
-    //   try {
-    //     await downloadExcel({
-    //       query: query,
-    //       payload: payload,
-    //       service: `${menuConfigUrl.entity}`,
-    //       page: "customer",
-    //       filename: "customer-data.xlsx",
-    //     });
-    //   } catch (error) {
-    //     toast.custom(
-    //       <CustomToast message="Something went wrong" toast="error" />,
-    //       {
-    //         closeButton: false,
-    //       }
-    //     );
-    //   }
-    //   setExportLoader(false);
-    // }
   };
 
   const handleClose = () => {
@@ -228,7 +208,7 @@ export default function JobEntryScreen({ page }) {
                     minHeight: 50,
                   },
                 }}
-                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
+                 icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
                 direction="left"
               >
                 {actions.map((action) => (

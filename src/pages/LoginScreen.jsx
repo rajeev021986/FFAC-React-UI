@@ -17,7 +17,7 @@ import { login } from "../store/freatures/authSlice";
 import { useDispatch } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
 import CustomToast from "../components/common/Toast/CustomToast";
-import Img from "../assets/images/loginScreen.png";
+import Img from "../assets/images/LoginFrame.png";
 
 export default function LoginScreen() {
   const nav = useNavigate();
@@ -76,7 +76,10 @@ export default function LoginScreen() {
     <>
       <Stack direction="row" sx={styles.container}>
         <Box>
-          <img src={Img} alt="Login Screen" className="login-img" />
+          <img src={Img} alt="Login Screen" 
+          // className="login-img" 
+          style={{ width: "100%", height: "100vh", objectFit: "contain" }}
+          />
         </Box>
         <Stack spacing={2} sx={styles.login_Page}>
           <Stack component={"form"} spacing={4} className="login-screen">
@@ -133,6 +136,7 @@ export default function LoginScreen() {
               color="primary"
               sx={{ width: "100%" }}
               onClick={handleSubmit}
+              disabled={Loader}
             >
               {Loader && <CircularProgress color="white" size={20} />} Login
             </ThemeButton>

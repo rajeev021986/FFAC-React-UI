@@ -157,24 +157,22 @@ export default function JobEntryGridForm({
           headerName: "Discharge Date",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ paddingTop: "5px" }}>
-              <DateTimeField
-                value={params.value}
-                onChange={(_, value) => {
-                  const updatedDischargeDate =
-                    formik.values.containerShipments.map((a) => {
-                      if (a.id === params.id) {
-                        return { ...a, dischargeDate: value };
-                      }
-                      return a;
-                    });
-                  formik.setFieldValue(
-                    "containerShipments",
-                    updatedDischargeDate
-                  );
-                }}
-              />
-            </div>
+            <DateTimeField
+              value={params.value}
+              onChange={(_, value) => {
+                const updatedDischargeDate =
+                  formik.values.containerShipments.map((a) => {
+                    if (a.id === params.id) {
+                      return { ...a, dischargeDate: value };
+                    }
+                    return a;
+                  });
+                formik.setFieldValue(
+                  "containerShipments",
+                  updatedDischargeDate
+                );
+              }}
+            />
           ),
         },
         {
@@ -279,6 +277,7 @@ export default function JobEntryGridForm({
             <IconButton
               color="error"
               onClick={() => TabsHosts[0].deleteRow(params.row.id)}
+              style={{ width: "5%" }}
             >
               <DeleteIcon />
             </IconButton>
@@ -365,24 +364,20 @@ export default function JobEntryGridForm({
           headerName: "Berthing Date",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ paddingTop: "5px" }}>
-              <DateTimeField
-                value={params.value}
-                onChange={(_, value) => {
-                  const updatedBirthingeDate =
-                    formik.values.vehicleShipments.map((a) => {
-                      if (a.id === params.id) {
-                        return { ...a, berthingDate: value };
-                      }
-                      return a;
-                    });
-                  formik.setFieldValue(
-                    "vehicleShipments",
-                    updatedBirthingeDate
-                  );
-                }}
-              />
-            </div>
+            <DateTimeField
+              value={params.value}
+              onChange={(_, value) => {
+                const updatedBirthingeDate = formik.values.vehicleShipments.map(
+                  (a) => {
+                    if (a.id === params.id) {
+                      return { ...a, berthingDate: value };
+                    }
+                    return a;
+                  }
+                );
+                formik.setFieldValue("vehicleShipments", updatedBirthingeDate);
+              }}
+            />
           ),
         },
         {
@@ -390,22 +385,20 @@ export default function JobEntryGridForm({
           headerName: "Custom Release O Date",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ paddingTop: "5px" }}>
-              <DateTimeField
-                value={params.value}
-                onChange={(_, value) => {
-                  const updatedReleaseDate = formik.values.vehicleShipments.map(
-                    (a) => {
-                      if (a.id === params.id) {
-                        return { ...a, customReleaseODate: value };
-                      }
-                      return a;
+            <DateTimeField
+              value={params.value}
+              onChange={(_, value) => {
+                const updatedReleaseDate = formik.values.vehicleShipments.map(
+                  (a) => {
+                    if (a.id === params.id) {
+                      return { ...a, customReleaseODate: value };
                     }
-                  );
-                  formik.setFieldValue("vehicleShipments", updatedReleaseDate);
-                }}
-              />
-            </div>
+                    return a;
+                  }
+                );
+                formik.setFieldValue("vehicleShipments", updatedReleaseDate);
+              }}
+            />
           ),
         },
         {
@@ -423,24 +416,20 @@ export default function JobEntryGridForm({
           headerName: "Date of Departure",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ paddingTop: "5px" }}>
-              <DateTimeField
-                value={params.value}
-                onChange={(_, value) => {
-                  const updatedDepartureDate =
-                    formik.values.vehicleShipments.map((a) => {
-                      if (a.id === params.id) {
-                        return { ...a, dateOfDeparture: value };
-                      }
-                      return a;
-                    });
-                  formik.setFieldValue(
-                    "vehicleShipments",
-                    updatedDepartureDate
-                  );
-                }}
-              />
-            </div>
+            <DateTimeField
+              value={params.value}
+              onChange={(_, value) => {
+                const updatedDepartureDate = formik.values.vehicleShipments.map(
+                  (a) => {
+                    if (a.id === params.id) {
+                      return { ...a, dateOfDeparture: value };
+                    }
+                    return a;
+                  }
+                );
+                formik.setFieldValue("vehicleShipments", updatedDepartureDate);
+              }}
+            />
           ),
         },
         {
@@ -448,21 +437,20 @@ export default function JobEntryGridForm({
           headerName: "Date of Arrival at Border",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ paddingTop: "5px" }}>
-              <DateTimeField
-                value={params.value}
-                onChange={(_, value) => {
-                  const updatedArrivaleDate =
-                    formik.values.vehicleShipments.map((a) => {
-                      if (a.id === params.id) {
-                        return { ...a, dateOfArrivalAtBorder: value };
-                      }
-                      return a;
-                    });
-                  formik.setFieldValue("vehicleShipments", updatedArrivaleDate);
-                }}
-              />
-            </div>
+            <DateTimeField
+              value={params.value}
+              onChange={(_, value) => {
+                const updatedArrivaleDate = formik.values.vehicleShipments.map(
+                  (a) => {
+                    if (a.id === params.id) {
+                      return { ...a, dateOfArrivalAtBorder: value };
+                    }
+                    return a;
+                  }
+                );
+                formik.setFieldValue("vehicleShipments", updatedArrivaleDate);
+              }}
+            />
           ),
         },
         {
@@ -470,24 +458,22 @@ export default function JobEntryGridForm({
           headerName: "Date of Depart at Border",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ paddingTop: "5px" }}>
-              <DateTimeField
-                value={params.value}
-                onChange={(_, value) => {
-                  const updatedDepartureBorderDate =
-                    formik.values.vehicleShipments.map((a) => {
-                      if (a.id === params.id) {
-                        return { ...a, dateOfDepartureAtBorder: value };
-                      }
-                      return a;
-                    });
-                  formik.setFieldValue(
-                    "vehicleShipments",
-                    updatedDepartureBorderDate
-                  );
-                }}
-              />
-            </div>
+            <DateTimeField
+              value={params.value}
+              onChange={(_, value) => {
+                const updatedDepartureBorderDate =
+                  formik.values.vehicleShipments.map((a) => {
+                    if (a.id === params.id) {
+                      return { ...a, dateOfDepartureAtBorder: value };
+                    }
+                    return a;
+                  });
+                formik.setFieldValue(
+                  "vehicleShipments",
+                  updatedDepartureBorderDate
+                );
+              }}
+            />
           ),
         },
         {
@@ -495,21 +481,20 @@ export default function JobEntryGridForm({
           headerName: "Date of Delivary",
           flex: 1,
           renderCell: (params) => (
-            <div style={{ paddingTop: "5px" }}>
-              <DateTimeField
-                value={params.value}
-                onChange={(_, value) => {
-                  const updatedDelivaryDate =
-                    formik.values.vehicleShipments.map((a) => {
-                      if (a.id === params.id) {
-                        return { ...a, dateOfDelivery: value };
-                      }
-                      return a;
-                    });
-                  formik.setFieldValue("vehicleShipments", updatedDelivaryDate);
-                }}
-              />
-            </div>
+            <DateTimeField
+              value={params.value}
+              onChange={(_, value) => {
+                const updatedDelivaryDate = formik.values.vehicleShipments.map(
+                  (a) => {
+                    if (a.id === params.id) {
+                      return { ...a, dateOfDelivery: value };
+                    }
+                    return a;
+                  }
+                );
+                formik.setFieldValue("vehicleShipments", updatedDelivaryDate);
+              }}
+            />
           ),
         },
         {
@@ -525,6 +510,7 @@ export default function JobEntryGridForm({
             <IconButton
               color="error"
               onClick={() => TabsHosts[1].deleteRow(params.row.id)}
+              style={{ width: "20%" }}
             >
               <DeleteIcon />
             </IconButton>
@@ -726,7 +712,7 @@ export default function JobEntryGridForm({
                       <Skeleton animation="wave" sx={{ flex: 1 }} />
                       <Skeleton animation="wave" sx={{ flex: 1 }} />
                       <Skeleton animation="wave" sx={{ flex: 1 }} />
-                      <Skeleton animation="wave" sx={{ flex: 1 }} />
+                      <Skeleton animation="wave" sx={{ flex: 0 }} />
                     </Box>
                   )}
                 </Box>

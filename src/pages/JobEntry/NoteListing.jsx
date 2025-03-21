@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Box,
-} from "@mui/material";
 import { ThemeButton } from "../../components/common/Button";
 import AddNoteModal from "./AddNoteModal";
+import ThemedGrid from "../../components/common/Grid/ThemedGrid";
+import { useLocation } from "react-router-dom";
 
 const NotesTable = ({ formik }) => {
+  const location = useLocation();
   const [notes, setNotes] = useState([]);
-
   const [toggleNotes, settoggleNotes] = useState(false);
   const handleToggleNote = () => {
     settoggleNotes((prev) => !prev);
@@ -25,65 +17,60 @@ const NotesTable = ({ formik }) => {
     setNotes(storedNotes ? JSON.parse(storedNotes) : []);
   }, [storedNotes]);
 
+  const NOTE_COLUMNS = [
+    {
+      flex: 1,
+      field: "id",
+      headerName: "ID",
+      width: 110,
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "subjectType",
+      headerName: "Subject Type",
+      width: 110,
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "note",
+      headerName: "Note",
+      width: 110,
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "createdDate",
+      headerName: "Created Date",
+      width: 110,
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+  ];
+
+  useEffect(() => {
+    if (location.pathname !== "app/documentation/job/entry/newEntry") {
+      sessionStorage.removeItem("jobNotes");
+      setNotes([]);
+    }
+  }, []);
+
   return (
     <React.Fragment>
-      <Paper
-        sx={{
-          maxWidth: "100%",
-          overflow: "hidden",
-          borderRadius: "5px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          height: "calc(100vh - 190px)",
-          overflowY: "auto",
-          padding: 2,
-        }}
-      >
-        <TableContainer
-          component={Box}
-          sx={{ maxHeight: "500px", width: "100%", overflowY: "auto" }}
-        >
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <strong>ID</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Subject</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Note</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Created Date</strong>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {notes.length > 0 ? (
-                notes.map((note) => (
-                  <TableRow key={note.id} hover>
-                    <TableCell>{note.id}</TableCell>
-                    <TableCell>{note.subjectType}</TableCell>
-                    <TableCell>{note.note}</TableCell>
-                    <TableCell>
-                      {new Date(note.createdDate).toLocaleString()}
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    No notes available
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+      <ThemedGrid
+        uniqueId="id"
+        columns={NOTE_COLUMNS}
+        count={notes || 0}
+        data={notes}
+      />
 
       <ThemeButton
         sx={{

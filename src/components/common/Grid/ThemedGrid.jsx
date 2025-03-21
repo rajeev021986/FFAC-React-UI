@@ -77,7 +77,7 @@ const ThemedGrid = (props) => {
         overflowY: "auto",
       }}
     >
-      <StyledDataGrid
+      {/* <StyledDataGrid
         pagination
         paginationMode="server"
         sortingMode="server"
@@ -93,6 +93,29 @@ const ThemedGrid = (props) => {
         rowCount={count}
         paginationModel={paginationModel}
         onPaginationModelChange={handlePage}
+        getRowId={(row) => row[uniqueId]}
+        disableColumnFilter
+        slots={{
+          toolbar: () => (
+            <Box sx={{ display: "flex", justifyContent: "flex-start", p: 0 }}>
+              <GridToolbarColumnsButton />
+            </Box>
+          ),
+        }}
+        {...rest}
+      /> */}
+      <StyledDataGrid
+        pagination={!!paginationModel}
+        paginationMode={paginationModel ? "server" : null}
+        sortingMode="server"
+        loading={loading}
+        columns={modifiedColumns}
+        rows={gridData}
+        columnHeaderHeight={42}
+        rowCount={paginationModel ? count : gridData.length}
+        pageSizeOptions={paginationModel ? [10, 20, 50, 100] : undefined}
+        paginationModel={paginationModel || undefined}
+        onPaginationModelChange={paginationModel ? handlePage : undefined}
         getRowId={(row) => row[uniqueId]}
         disableColumnFilter
         slots={{

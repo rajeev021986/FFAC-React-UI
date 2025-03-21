@@ -14,8 +14,11 @@ export default function FilterForm({ setFilterOpen }) {
   const formik = useFormik({
     initialValues: inputs || {
       customerName: inputs.customerName || "",
-      tinNo: inputs.tinNo || "",
+      refNo: inputs.refNo || "",
       customerRefNo: inputs.customerRefNo || "",
+      entryNo: inputs.entryNo || "",
+      tansadNo: inputs.tansadNo || "",
+      invoiceNo: inputs.invoiceNo || "",
       statusCode: inputs.statusCode || "",
       isDoc: inputs.isDoc || "",
     },
@@ -34,16 +37,22 @@ export default function FilterForm({ setFilterOpen }) {
     dispatch(
       updateInput({
         customerName: "",
-        tinNo: "",
-        vatNo: "",
+        customerRefNo: "",
+        entryNo: "",
+        refNo: "",
+        tansadNo: "",
+        invoiceNo: "",
         statusCode: "",
         isDoc: "",
       })
     );
     formik.setValues({
       customerName: "",
-      tinNo: "",
-      vatNo: "",
+      customerRefNo: "",
+      refNo: "",
+      entryNo: "",
+      tansadNo: "",
+      invoiceNo: "",
       statusCode: "",
       isDoc: "",
     });
@@ -55,6 +64,7 @@ export default function FilterForm({ setFilterOpen }) {
     { value: 0, label: "New & Pen Doc" },
     { value: -1, label: "Rejected" },
   ];
+
   const documentOptions = [
     { value: false, label: "Pending" },
     { value: true, label: "Available" },
@@ -71,18 +81,63 @@ export default function FilterForm({ setFilterOpen }) {
             onChange={formik.handleChange}
           />
           <InputBox
-            label="BL No."
-            id="tinNo"
-            value={formik.values.tinNo}
+            label="Ref No."
+            id="refNo"
+            value={formik.values.refNo}
+            onChange={formik.handleChange}
+          />
+          <InputBox
+            label="Customer Reference No."
+            id="customerRefNo"
+            value={formik.values.customerRefNo}
+            onChange={formik.handleChange}
+          />
+        </Stack>
+
+        <Stack direction="row" spacing={2}>
+          <InputBox
+            label="Entry No."
+            id="entryNo"
+            value={formik.values.entryNo}
             onChange={formik.handleChange}
           />
           <InputBox
             label="Tansad No."
-            id="vatNo"
-            value={formik.values.vatNo}
+            id="tansadNo"
+            value={formik.values.tansadNo}
+            onChange={formik.handleChange}
+          />
+          <InputBox
+            label="Tansad No."
+            id="tansadNo"
+            value={formik.values.tansadNo}
             onChange={formik.handleChange}
           />
         </Stack>
+
+        <Stack direction="row" spacing={2}>
+          <InputBox
+            label="Invoice No."
+            id="invoiceNo"
+            value={formik.values.invoiceNo}
+            onChange={formik.handleChange}
+          />
+
+          <InputBox
+            label="Tansad No."
+            id="tansadNo"
+            value={formik.values.tansadNo}
+            onChange={formik.handleChange}
+          />
+
+          <InputBox
+            label="BL No."
+            id="mblNo"
+            value={formik.values.mblNo}
+            onChange={formik.handleChange}
+          />
+        </Stack>
+
         <Stack
           direction="row"
           spacing={2}
@@ -104,16 +159,16 @@ export default function FilterForm({ setFilterOpen }) {
               }}
             />
           </div>
-          <div style={{ width: "48%", marginLeft: "0px" }}>
-          <InputBox
-            label="Customer Ref"
-            id="customerRefNo"
-            value={formik.values.customerRefNo}
-            onChange={formik.handleChange}
-          />
-
-          </div>
+          {/* <div style={{ width: "48%", marginLeft: "0px" }}>
+            <InputBox
+              label="BL No."
+              id="mblNo"
+              value={formik.values.mblNo}
+              onChange={formik.handleChange}
+            />
+          </div> */}
         </Stack>
+
         <Stack direction="row" spacing={3} justifyContent={"end"}>
           <Button
             color="primary"

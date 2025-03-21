@@ -1,9 +1,14 @@
 import {
+  AppBar,
   CircularProgress,
   Grid,
+  MenuItem,
+  Select,
   Stack,
   TextField,
+  Toolbar,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
@@ -30,6 +35,8 @@ import EditIconForHeader from "../../components/common/commonIcons/EditIcons/Edi
 import { useAddJobEntryMutation } from "../../store/api/jobEntryApi";
 import BondDetailsGridForm from "./UpdateJobEntryGrid";
 import ContainerDetails from "./UpdateDetailsForm";
+import SelectBox from "../../components/common/SelectBox";
+import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
 export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
   const [addJobEntry, { isLoading }] = useAddJobEntryMutation();
@@ -163,10 +170,16 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
   }, [formik.errors]);
 
   const customerNameRef = useRef(null);
-
   useEffect(() => {
     if (customerNameRef.current) {
       customerNameRef.current.focus();
+    }
+  }, []);
+
+  const FieldRef = useRef(null);
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
     }
   }, []);
 
@@ -190,105 +203,120 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 icon={<EditIconForHeader />}
                 iconPosition="start"
               />
-
-              {/* <Tab
-                    label="Document Details"
-                    value="2"
-                    sx={{
-                      textTransform: "capitalize",
-                      minHeight: "50px",
-                    }}
-                    icon={<DocumentIcon />}
-                    iconPosition="start"
-                  />
-                  <Tab
-                    label="Audit Logs"
-                    value="3"
-                    sx={{
-                      textTransform: "capitalize",
-                      minHeight: "50px",
-                    }}
-                    icon={<AuditIcon />}
-                    iconPosition="start"
-                  /> */}
             </TabList>
           </Box>
 
           <TabPanel value="1" sx={{ padding: "0px" }}>
             <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
+              <AppBar position="static">
+                <Toolbar
+                  sx={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    <Typography variant="body1">
+                      <strong>JOB NO: </strong> {formik.values.jobNo}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>BL NO: </strong> {formik.values.blNo}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Customer: </strong> {formik.values.customer}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Typography variant="body1">
+                      <strong>ExitPoint: </strong>
+                      <span style={{ color: "red" }}>NO</span>
+                    </Typography>
+
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Typography variant="body1">
+                        <strong>SCT</strong>
+                      </Typography>
+                      <Select
+                        name="sct"
+                        id="sct"
+                        value={formik.values.sct}
+                        onChange={formik.handleChange}
+                        error={Boolean(formik.errors.sct)}
+                        disabled={disabled || false}
+                        size="small"
+                        sx={{ backgroundColor: "#fff", minWidth: 80 }}
+                      >
+                        <MenuItem value="" disabled>
+                          Select Type
+                        </MenuItem>{" "}
+                        <MenuItem value="NO">NO</MenuItem>
+                        <MenuItem value="YES">YES</MenuItem>
+                      </Select>
+                    </Box>
+
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Typography variant="body1">
+                        <strong>URGENT</strong>
+                      </Typography>
+                      <Select
+                        name="urgent"
+                        value={formik.values.urgent}
+                        onChange={formik.handleChange}
+                        error={Boolean(formik.errors.urgent)}
+                        disabled={disabled || false}
+                        defaultValue="NO"
+                        size="small"
+                        sx={{ backgroundColor: "#fff", minWidth: 80 }}
+                      >
+                        <MenuItem value="NO">NO</MenuItem>
+                        <MenuItem value="YES">YES</MenuItem>
+                      </Select>
+                    </Box>
+                  </Box>
+                </Toolbar>
+              </AppBar>
+
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
-                    label="Job No."
-                    id="jobNo"
-                    value={formik.values.jobNo}
-                    error={formik.errors.jobNo}
-                    onChange={formik.handleChange}
-                    disabled
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
-                    label="BL No."
-                    id="blNo"
-                    value={formik.values.blNo}
-                    error={formik.errors.blNo}
-                    onChange={formik.handleChange}
-                    disabled
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
-                    label="Customer"
-                    id="blNo"
-                    value={formik.values.blNo}
-                    error={formik.errors.blNo}
-                    onChange={formik.handleChange}
-                    disabled
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
+                  <DateTimeField
                     label="Shipping Line DO Collection Date"
-                    id="shipmentType"
-                    value={formik.values.shipmentType}
-                    error={formik.errors.shipmentType}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
+                    name="shippingLineDOCollectionDate"
+                    id="shippingLineDOCollectionDate"
+                    value={formik.values.shippingLineDOCollectionDate}
+                    error={formik.errors.shippingLineDOCollectionDate}
+                    onChange={formik.setFieldValue}
+                    inputRef={FieldRef}
                   />
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
+                  <DateTimeField
                     label="Custom Release Date"
-                    id="moveType"
-                    value={formik.values.moveType}
-                    error={formik.errors.moveType}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
+                    name="customReleaseDate"
+                    id="customReleaseDate"
+                    value={formik.values.customReleaseDate}
+                    error={formik.errors.customReleaseDate}
+                    onChange={formik.setFieldValue}
+                    inputRef={FieldRef}
                   />
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
+                  <DateTimeField
                     label="TAX Exemption Certificate"
-                    id="mblNo"
-                    value={formik.values.mblNo}
-                    error={formik.errors.mblNo}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
+                    name="taxExemptionCertificateDate"
+                    id="taxExemptionCertificateDate"
+                    value={formik.values.taxExemptionCertificateDate}
+                    error={formik.errors.taxExemptionCertificateDate}
+                    onChange={formik.setFieldValue}
+                    inputRef={FieldRef}
                   />
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="BT Number"
-                    id="mblNo"
-                    value={formik.values.mblNo}
-                    error={formik.errors.mblNo}
+                    id="btNumber"
+                    value={formik.values.btNumber}
+                    error={formik.errors.btNumber}
                     onChange={formik.handleChange}
                     disabled={disabled}
                   />
@@ -306,22 +334,36 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   paddingLeft={1}
                   marginTop={2}
                 >
-                  <Tooltip
-                    title={
-                      !formik.values.customerName ? "Field is mandatory" : ""
-                    }
-                    arrow
-                  >
-                    <InputBox
-                      label="IDF No."
-                      id="customerName"
-                      value={formik.values.customerName}
-                      disabled={disabled}
-                      error={formik.errors.customerName}
-                      onChange={formik.handleChange}
-                      inputRef={customerNameRef}
-                    />
-                  </Tooltip>
+                  <InputBox
+                    label="IDF No."
+                    id="idfNo"
+                    value={formik.values.idfNo}
+                    disabled={disabled}
+                    error={formik.errors.idfNo}
+                    onChange={formik.handleChange}
+                    inputRef={customerNameRef}
+                  />
+                </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={2}
+                  paddingLeft={1}
+                  marginTop={2}
+                >
+                  <DateTimeField
+                    label="IDF Date"
+                    name="idfDate"
+                    id="idfDate"
+                    value={formik.values.idfDate}
+                    error={formik.errors.idfDate}
+                    onChange={formik.setFieldValue}
+                    inputRef={FieldRef}
+                  />
                 </Grid>
 
                 <Grid
@@ -335,10 +377,10 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   marginTop={2}
                 >
                   <InputBox
-                    label="Date"
-                    id="dateOfReceipt"
-                    value={formik.values.dateOfReceipt}
-                    error={formik.errors.dateOfReceipt}
+                    label="Entry Loadged Ref."
+                    id="entryLoadgedRef"
+                    value={formik.values.entryLoadgedRef}
+                    error={formik.errors.entryLoadgedRef}
                     onChange={formik.handleChange}
                     disabled={disabled}
                   />
@@ -356,11 +398,34 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 >
                   <InputBox
                     label="Entry Loadged Ref."
-                    id="hblNo"
-                    value={formik.values.hblNo}
-                    error={formik.errors.hblNo}
+                    id="entryLoadgedDate"
+                    value={formik.values.entryLoadgedDate}
+                    error={formik.errors.entryLoadgedDate}
                     onChange={formik.handleChange}
                     disabled={disabled}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={2}
+                  paddingLeft={1}
+                  marginTop={2}
+                >
+                  <InputBox
+                    label="Entry No."
+                    id="entryNo"
+                    value={formik.values.entryNo}
+                    error={formik.errors.entryNo}
+                    onChange={formik.handleChange}
+                    disabled={disabled}
+                    inputRef={customerNameRef}
                   />
                 </Grid>
 
@@ -374,13 +439,14 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   paddingLeft={1}
                   marginTop={2}
                 >
-                  <InputBox
-                    label="Entry No."
-                    id="hblNo"
-                    value={formik.values.hblNo}
-                    error={formik.errors.hblNo}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
+                  <DateTimeField
+                    label="Entry Date"
+                    name="entryDate"
+                    id="entryDate"
+                    value={formik.values.entryDate}
+                    error={formik.errors.entryDate}
+                    onChange={formik.setFieldValue}
+                    inputRef={FieldRef}
                   />
                 </Grid>
               </Grid>
@@ -409,7 +475,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
               ) : (
                 <></>
               )}
-
               <PopupAlert alertConfig={alertConfig} />
             </Grid>
           </TabPanel>
@@ -443,7 +508,13 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
         </TabContext>
 
         {page == "update-job" && (
-          <Grid paddingLeft={6} marginTop={2} marginBottom={2} container spacing={2}>
+          <Grid
+            paddingLeft={6}
+            marginTop={2}
+            marginBottom={2}
+            container
+            spacing={2}
+          >
             <Stack
               direction="row"
               spacing={2}
