@@ -95,9 +95,11 @@ export default function UpdateJobDetails({ page }) {
           customer: res.body?.customer || "",
           sct: res.body?.sct || "NO",
           urgent: res.body?.urgent || "NO",
-          shippingLineDOCollectionDate: res.body?.shippingLineDOCollectionDate || "",
+          shippingLineDOCollectionDate:
+            res.body?.shippingLineDOCollectionDate || "",
           customReleaseDate: res.body?.customReleaseDate || "",
-          taxExemptionCertificateDate: res.body?.taxExemptionCertificateDate || "",
+          taxExemptionCertificateDate:
+            res.body?.taxExemptionCertificateDate || "",
           pickUpOrder: res.body?.pickUpOrder || "",
           btNumber: res.body?.btNumber || "",
           idfNo: res.body?.idfNo || "",
