@@ -1,16 +1,5 @@
-import {
-  Box,
-  Card,
-  CardHeader,
-  Drawer,
-  Stack,
-  Typography,
-} from "@mui/material";
-import React, { useState } from "react";
-import ScreenToolbar from "../../components/common/ScreenToolbar";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ThemedBreadcrumb from "../../components/common/Breadcrumb";
-import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPagination,
@@ -19,23 +8,19 @@ import {
   updateInput,
 } from "../../store/freatures/CustomerSlice";
 
-import { jobEntrySetView } from "../../store/freatures/JobEntrySlice";
-import SelectBox from "../../components/common/SelectBox";
-import { CUSTOMER_SORT_OPTIONS } from "../../data/options";
+import GridSearchInput from "../../components/common/Filter/GridSearchInput";
+import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
-import { useEffect } from "react";
+import CustomToast from "../../components/common/Toast/CustomToast";
+import ScreenToolbar from "../../components/common/ScreenToolbar";
+import SelectBox from "../../components/common/SelectBox";
+import AuditTimeLine from "../../components/AuditTimeLine";
 
-import Backdrop from "@mui/material/Backdrop";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { jobEntrySetView } from "../../store/freatures/JobEntrySlice";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
-import AuditTimeLine from "../../components/AuditTimeLine";
-import CustomToast from "../../components/common/Toast/CustomToast";
 import FilterForm from "./FilterForm";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
-import { downloadExcel } from "../../utils/downloadExcel";
 
 // Custom API Manager
 import {
@@ -44,10 +29,18 @@ import {
 } from "../../store/api/jobEntryApi";
 
 // Tables Columns
+import { CUSTOMER_SORT_OPTIONS } from "../../data/options";
 import { JOB_ENTRY_COLUMNS } from "../../data/columns/jobEntry";
 import GridActions from "../../components/common/Grid/GridActions";
 import { getJobEntryListGridActions } from "../../components/screen/jobsEntry/action";
 import { getJobEntryListGridActionsApprovel } from "../../components/screen/jobsEntry/actioncopy";
+
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import SpeedDial from "@mui/material/SpeedDial";
+import Backdrop from "@mui/material/Backdrop";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import { Box, Stack, Typography } from "@mui/material";
+import { Card, CardHeader, Drawer } from "@mui/material";
 
 export default function JobEntryScreen({ page }) {
   const location = useLocation();
@@ -208,7 +201,7 @@ export default function JobEntryScreen({ page }) {
                     minHeight: 50,
                   },
                 }}
-                 icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
+                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
                 direction="left"
               >
                 {actions.map((action) => (
@@ -291,6 +284,8 @@ export default function JobEntryScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(customerSetSortModel(sortModel))
             }
+            // rowSelection={true}
+            // checkboxSelection={true}
           />
         )}
       </Card>

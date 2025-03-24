@@ -1,14 +1,9 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-  CircularProgress,
-  Grid,
-  Stack,
-  TextField,
-  Tooltip,
-} from "@mui/material";
-import { useFormik } from "formik";
-import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import React, { useEffect, useRef, useState } from "react";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+import { CircularProgress, Tooltip } from "@mui/material";
+import { Grid, Stack, TextField } from "@mui/material";
 import { JobEntryValidationSchema } from "./validationSchema";
 
 import Box from "@mui/material/Box";
@@ -836,7 +831,7 @@ export default function JobEntryForm({
           <TabPanel value="3" sx={{ padding: "0px" }}>
             <AuditTimeLine
               id={initialValues.id}
-              page="job-entry"
+              page="job-detail"
               service={menuConfigUrl.document}
             />
           </TabPanel>

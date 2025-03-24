@@ -1,7 +1,6 @@
 import * as React from "react";
 
 //  MUI
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { Skeleton, TabContext, TabList, TabPanel } from "@mui/lab";
@@ -12,7 +11,6 @@ import { Grid, IconButton, Tab } from "@mui/material";
 
 //  Components
 import InputBox from "../../components/common/InputBox";
-import AutoCompleteInput from "../../components/common/AutoCompletInput";
 import InputBoxForGrid from "../../components/common/InputBoxForGrid";
 import { StyledDataGrid } from "../../components/common/Grid/styles";
 import SelectBox from "../../components/common/SelectBox";
@@ -23,7 +21,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "55%",
+  width: "70%",
   bgcolor: "background.paper",
   boxShadow: 24,
   borderRadius: "10px",
