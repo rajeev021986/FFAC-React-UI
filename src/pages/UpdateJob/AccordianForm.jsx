@@ -1,9 +1,17 @@
-import React, { useState } from "react";
-import { Grid, Tooltip, Typography } from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import { Grid, Typography } from "@mui/material";
 import InputBox from "../../components/common/InputBox";
+import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
-const AccordianForm = () => {
+const AccordianForm = ({ formik, index }) => {
   let disabled = null;
+
+  const FieldRef = useRef(null);
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
 
   return (
     <div>
@@ -23,57 +31,14 @@ const AccordianForm = () => {
           Transport Details
         </Typography>
 
-        {/* <Grid paddingLeft={1} container spacing={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
-              label="TRANSPORTER"
-              id="originCountry"
-              // value={formik?.values?.originCountry}
-              // error={formik?.errors?.originCountry}
-              // onChange={formik?.handleChange}
-              disabled={disabled}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
-              label="TRUCK/TRAILER NO."
-              id="portOfLoading"
-              // value={formik.values.portOfLoading}
-              // error={formik.errors.portOfLoading}
-              // onChange={formik.handleChange}
-              disabled={disabled}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
-              label="Driver"
-              id="portOfDischarge"
-              // value={formik.values.portOfDischarge}
-              // error={formik.errors.portOfDischarge}
-              // onChange={formik.handleChange}
-              disabled={disabled}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <InputBox
-              label="Agreed Rate"
-              id="placeOfDelivery"
-              // value={formik.values.placeOfDelivery}
-              // error={formik.errors.placeOfDelivery}
-              // onChange={formik.handleChange}
-              disabled={disabled}
-            />
-          </Grid>
-        </Grid> */}
-
         <Grid paddingLeft={1} container spacing={2}>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
             <InputBox
               label="TRANSPORTER"
               id="originCountry"
+              name={`containerDetails[${index}].transporter`}
+              value={formik.values.containerDetails[index].transporter}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -81,19 +46,34 @@ const AccordianForm = () => {
           <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
             <InputBox
               label="TRUCK/TRAILER NO."
-              id="portOfLoading"
+              id="truckTrailerNoTransporter"
+              name={`containerDetails[${index}].truckTrailerNoTransporter`}
+              value={
+                formik.values.containerDetails[index].truckTrailerNoTransporter
+              }
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-            <InputBox label="Driver" id="portOfDischarge" disabled={disabled} />
+            <InputBox
+              label="Driver"
+              id="driver"
+              name={`containerDetails[${index}].driver`}
+              value={formik.values.containerDetails[index].driver}
+              onChange={formik.handleChange}
+              disabled={disabled}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
             <InputBox
               label="Agreed Rate"
-              id="placeOfDelivery"
+              id="agreedRate"
+              name={`containerDetails[${index}].agreedRate`}
+              value={formik.values.containerDetails[index].agreedRate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -112,10 +92,10 @@ const AccordianForm = () => {
           >
             <InputBox
               label="Tel No."
-              id="destinationIcd"
-              // value={formik.values.destinationIcd}
-              // error={formik.errors.destinationIcd}
-              // onChange={formik.handleChange}
+              id="telNo"
+              name={`containerDetails[${index}].telNo`}
+              value={formik.values.containerDetails[index].telNo}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -130,19 +110,13 @@ const AccordianForm = () => {
             lg={3}
             xl={2}
           >
-            <Tooltip
-              // title={!formik.values.totalNoOfPackages ? "Field is mandatory" : ""}
-              arrow
-            >
-              <InputBox
-                label="Passport No."
-                id="totalNoOfPackages"
-                // value={formik.values.totalNoOfPackages}
-                // error={formik.errors.totalNoOfPackages}
-                // disabled={disabled}
-                // onChange={formik.handleChange}
-              />
-            </Tooltip>
+            <InputBox
+              label="Passport No."
+              id="passportNo"
+              name={`containerDetails[${index}].passportNo`}
+              value={formik.values.containerDetails[index].passportNo}
+              onChange={formik.handleChange}
+            />
           </Grid>
 
           <Grid
@@ -157,10 +131,10 @@ const AccordianForm = () => {
           >
             <InputBox
               label="Licence No."
-              id="totalGrWt"
-              // value={formik.values.totalGrWt}
-              // error={formik.errors.totalGrWt}
-              // onChange={formik.handleChange}
+              id="licenceNo"
+              name={`containerDetails[${index}].licenceNo`}
+              value={formik.values.containerDetails[index].licenceNo}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -193,9 +167,9 @@ const AccordianForm = () => {
             <InputBox
               label="Clerk Name"
               id="clerkName"
-              // value={formik.values.marks}
-              // error={formik.errors.marks}
-              // onChange={formik.handleChange}
+              name={`containerDetails[${index}].clerkName`}
+              value={formik.values.containerDetails[index].clerkName}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -211,11 +185,11 @@ const AccordianForm = () => {
             marginTop={2}
           >
             <InputBox
-              label="Tel No."
-              id="description"
-              // value={formik.values.description}
-              // error={formik.errors.description}
-              // onChange={formik.handleChange}
+              label="Clerk Tel No."
+              id="clerkTelNo"
+              name={`containerDetails[${index}].clerkTelNo`}
+              value={formik.values.containerDetails[index].clerkTelNo}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -232,10 +206,10 @@ const AccordianForm = () => {
           >
             <InputBox
               label="Reporting Place"
-              id="poNo"
-              // value={formik.values.poNo}
-              // error={formik.errors.poNo}
-              // onChange={formik.handleChange}
+              id="reportingPlace"
+              name={`containerDetails[${index}].reportingPlace`}
+              value={formik.values.containerDetails[index].reportingPlace}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -250,33 +224,13 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Reporting Date"
-              id="currency"
-              // value={formik.values.currency}
-              // error={formik.errors.currency}
-              // onChange={formik.handleChange}
-              disabled={disabled}
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={3}
-            xl={2}
-            paddingLeft={1}
-            marginTop={2}
-          >
-            <InputBox
-              label="Reporting Time"
-              id="reportingTime"
-              // value={formik.values.reportingTime}
-              // error={formik.errors.reportingTime}
-              // onChange={formik.handleChange}
-              disabled={disabled}
+              id="reportingDate"
+              name={`containerDetails[${index}].reportingDate`}
+              value={formik.values.containerDetails[index].reportingDate}
+              onChange={formik.handleChange}
+              inputRef={FieldRef}
             />
           </Grid>
         </Grid>
@@ -293,11 +247,11 @@ const AccordianForm = () => {
             marginTop={2}
           >
             <InputBox
-              label="ContainerNO"
-              id="ContainerNO"
-              // value={formik.values.ContainerNO}
-              // error={formik.errors.ContainerNO}
-              // onChange={formik.handleChange}
+              label="Reporting Time"
+              id="reportingTime"
+              name={`containerDetails[${index}].reportingTime`}
+              value={formik.values.containerDetails[index].reportingTime}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -313,11 +267,31 @@ const AccordianForm = () => {
             marginTop={2}
           >
             <InputBox
+              label="ContainerNO"
+              id="containerNo"
+              name={`containerDetails[${index}].containerNo`}
+              value={formik.values.containerDetails[index].containerNo}
+              onChange={formik.handleChange}
+              disabled={disabled}
+            />
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={2}
+            paddingLeft={1}
+            marginTop={2}
+          >
+            <DateTimeField
               label="Transfer Date"
               id="transferDate"
-              // value={formik.values.transferDate}
-              // error={formik.errors.transferDate}
-              // onChange={formik.handleChange}
+              name={`containerDetails[${index}].transferDate`}
+              value={formik.values.containerDetails[index].transferDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -334,10 +308,10 @@ const AccordianForm = () => {
           >
             <InputBox
               label="T1/C1 READY"
-              id="routeCode"
-              // value={formik.values.routeCode}
-              // error={formik.errors.routeCode}
-              // onChange={formik.handleChange}
+              id="t1C1ReadyDate"
+              name={`containerDetails[${index}].t1C1ReadyDate`}
+              value={formik.values.containerDetails[index].t1C1ReadyDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -354,16 +328,17 @@ const AccordianForm = () => {
           >
             <InputBox
               label="LOADING DATE"
-              id="loadingAirDate"
-              // value={formik.values.loadingAirDate}
-              // error={formik.errors.loadingAirDate}
-              // onChange={formik.handleChange}
+              id="loadingDate"
+              name={`containerDetails[${index}].loadingDate`}
+              value={formik.values.containerDetails[index].loadingDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
         </Grid>
 
         <Grid container>
+          {/* Keys are not available */}
           <Grid
             item
             xs={12}
@@ -376,10 +351,10 @@ const AccordianForm = () => {
           >
             <InputBox
               label="Bond No."
-              id="bondNo"
-              // value={formik.values.bondNo}
-              // error={formik.errors.bondNo}
-              // onChange={formik.handleChange}
+              id="bondNumber"
+              name={`containerDetails[${index}].bondNumber`}
+              value={formik.values.containerDetails[index].bondNumber}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -397,9 +372,9 @@ const AccordianForm = () => {
             <InputBox
               label="Bond Amount"
               id="bondAmount"
-              // value={formik.values.bondAmount}
-              // error={formik.errors.bondAmount}
-              // onChange={formik.handleChange}
+              name={`containerDetails[${index}].bondAmount`}
+              value={formik.values.containerDetails[index].bondAmount}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -414,12 +389,12 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Cancellation Date"
               id="cancellationDate"
-              // value={formik.values.cancellationDate}
-              // error={formik.errors.cancellationDate}
-              // onChange={formik.handleChange}
+              name={`containerDetails[${index}].cancellationDate`}
+              value={formik.values.containerDetails[index].cancellationDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -434,12 +409,12 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Arrival Border"
-              id="arrivalBorder"
-              // value={formik.values.arrivalBorder}
-              // error={formik.errors.arrivalBorder}
-              // onChange={formik.handleChange}
+              id="arrivalBorderDate"
+              name={`containerDetails[${index}].arrivalBorderDate`}
+              value={formik.values.containerDetails[index].arrivalBorderDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -456,12 +431,12 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Crossed Border"
-              id="crossedBorder"
-              // value={formik.values.crossedBorder}
-              // error={formik.errors.crossedBorder}
-              // onChange={formik.handleChange}
+              id="crossedBorderDate"
+              name={`containerDetails[${index}].crossedBorderDate`}
+              value={formik.values.containerDetails[index].crossedBorderDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -476,12 +451,12 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Arrival ICD"
-              id="arrivalICD"
-              // value={formik.values.arrivalICD}
-              // error={formik.errors.arrivalICD}
-              // onChange={formik.handleChange}
+              id="arrivalICDDate"
+              name={`containerDetails[${index}].arrivalICDDate`}
+              value={formik.values.containerDetails[index].arrivalICDDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -496,12 +471,12 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Cargo Release Date"
               id="cargoReleaseDate"
-              // value={formik.values.cargoReleaseDate}
-              // error={formik.errors.cargoReleaseDate}
-              // onChange={formik.handleChange}
+              name={`containerDetails[${index}].cargoReleaseDate`}
+              value={formik.values.containerDetails[index].cargoReleaseDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -516,17 +491,18 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Depart ICD"
-              id="departICD"
-              // value={formik.values.departICD}
-              // error={formik.errors.departICD}
-              // onChange={formik.handleChange}
+              id="departICDDate"
+              name={`containerDetails[${index}].departICDDate`}
+              value={formik.values.containerDetails[index].departICDDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
         </Grid>
 
+        {/*  */}
         <Grid container>
           <Grid
             item
@@ -538,12 +514,14 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Arrival Customer Place"
-              id="arrivalCustomerPlace"
-              // value={formik.values.arrivalCustomerPlace}
-              // error={formik.errors.arrivalCustomerPlace}
-              // onChange={formik.handleChange}
+              id="arrivalCustomerPlaceDate"
+              name={`containerDetails[${index}].arrivalCustomerPlaceDate`}
+              value={
+                formik.values.containerDetails[index].arrivalCustomerPlaceDate
+              }
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -558,12 +536,12 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Empty Released"
-              id="emptyRelease"
-              // value={formik.values.emptyRelease}
-              // error={formik.errors.emptyRelease}
-              // onChange={formik.handleChange}
+              id="emptyReleasedDate"
+              name={`containerDetails[${index}].emptyReleasedDate`}
+              value={formik.values.containerDetails[index].emptyReleasedDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -581,9 +559,9 @@ const AccordianForm = () => {
             <InputBox
               label="Empty Return Place"
               id="emptyReturnPlace"
-              // value={formik.values.emptyReturnPlace}
-              // error={formik.errors.emptyReturnPlace}
-              // onChange={formik.handleChange}
+              name={`containerDetails[${index}].emptyReturnPlace`}
+              value={formik.values.containerDetails[index].emptyReturnPlace}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -601,9 +579,9 @@ const AccordianForm = () => {
             <InputBox
               label="POD NO."
               id="podNo"
-              // value={formik.values.podNo}
-              // error={formik.errors.podNo}
-              // onChange={formik.handleChange}
+              name={`containerDetails[${index}].podNo`}
+              value={formik.values.containerDetails[index].podNo}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -620,12 +598,12 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
-              label="DATE"
-              id="arrivalCustomerPlace"
-              // value={formik.values.arrivalCustomerPlace}
-              // error={formik.errors.arrivalCustomerPlace}
-              // onChange={formik.handleChange}
+            <DateTimeField
+              label="Pod DATE"
+              id="podDate"
+              name={`containerDetails[${index}].podDate`}
+              value={formik.values.containerDetails[index].podDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -640,12 +618,12 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Empty Return Date"
               id="emptyReturnDate"
-              // value={formik.values.emptyReturnDate}
-              // error={formik.errors.emptyReturnDate}
-              // onChange={formik.handleChange}
+              name={`containerDetails[${index}].emptyReturnDate`}
+              value={formik.values.containerDetails[index].emptyReturnDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -660,12 +638,14 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Certificate of Export"
-              id="certificateExport"
-              // value={formik.values.certificateExport}
-              // error={formik.errors.certificateExport}
-              // onChange={formik.handleChange}
+              id="certificateOfExportDate"
+              name={`containerDetails[${index}].certificateOfExportDate`}
+              value={
+                formik.values.containerDetails[index].certificateOfExportDate
+              }
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -682,10 +662,10 @@ const AccordianForm = () => {
           >
             <InputBox
               label="Port Gate In Date"
-              id="portGateDate"
-              // value={formik.values.portGateDate}
-              // error={formik.errors.portGateDate}
-              // onChange={formik.handleChange}
+              id="portGateInDate"
+              name={`containerDetails[${index}].portGateInDate`}
+              value={formik.values.containerDetails[index].portGateInDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -702,12 +682,12 @@ const AccordianForm = () => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Nomination Date"
               id="nominationDate"
-              // value={formik.values.nominationDate}
-              // error={formik.errors.nominationDate}
-              // onChange={formik.handleChange}
+              name={`containerDetails[${index}].nominationDate`}
+              value={formik.values.containerDetails[index].nominationDate}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>
@@ -724,10 +704,10 @@ const AccordianForm = () => {
           >
             <InputBox
               label="Remark"
-              id="remarks"
-              // value={formik.values.remarks}
-              // error={formik.errors.remarks}
-              // onChange={formik.handleChange}
+              id="remark"
+              name={`containerDetails[${index}].remark`}
+              value={formik.values.containerDetails[index].remark}
+              onChange={formik.handleChange}
               disabled={disabled}
             />
           </Grid>

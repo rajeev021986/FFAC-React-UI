@@ -39,12 +39,12 @@ export default function InputBoxForGrid(props) {
       }}
       onMouseEnter={() => {
         if (props?.cellMode === "view") {
-          api.startCellEditMode({ id, field });
+          api?.startCellEditMode({ id, field });
         }
       }}
       onMouseLeave={() => {
         if (props?.cellMode === "edit") {
-          api.stopCellEditMode({ id, field });
+          api?.stopCellEditMode({ id, field });
         }
       }}
     >

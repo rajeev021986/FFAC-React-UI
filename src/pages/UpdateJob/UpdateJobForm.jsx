@@ -1,47 +1,34 @@
-import {
-  AppBar,
-  CircularProgress,
-  Grid,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-  Toolbar,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { useFormik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
-import InputBox from "../../components/common/InputBox";
-import { OutlinedButton, ThemeButton } from "../../components/common/Button";
-import PopupAlert from "../../components/common/Alert/PopupAlert";
+import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 import toast from "react-hot-toast";
-import { JobEntryValidationSchema } from "./validationSchema";
 
+import { AppBar, CircularProgress, Toolbar, Typography } from "@mui/material";
+import { MenuItem, Select, Stack, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 
-import { useUpdateCustomerMutation } from "../../store/api/codeDataApi";
-import { useNavigate } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import getFirstError from "../../components/common/FieldToastError";
 import EditIconForHeader from "../../components/common/commonIcons/EditIcons/EditIconForHeader";
 
+import { useUpdateJobDetailsEntryMutation } from "../../store/api/jobEntryApi";
+
 // Components
-import { useAddJobEntryMutation } from "../../store/api/jobEntryApi";
+import { OutlinedButton, ThemeButton } from "../../components/common/Button";
+import InputBox from "../../components/common/InputBox";
+import PopupAlert from "../../components/common/Alert/PopupAlert";
 import BondDetailsGridForm from "./UpdateJobEntryGrid";
 import ContainerDetails from "./UpdateDetailsForm";
-import SelectBox from "../../components/common/SelectBox";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
 export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
-  const [addJobEntry, { isLoading }] = useAddJobEntryMutation();
-  const [updateCustomer, { isLoading: loadingUpdate }] =
-    useUpdateCustomerMutation();
+  const [updateJobDetailsEntry, { isLoading }] =
+    useUpdateJobDetailsEntryMutation();
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
   const nav = useNavigate();
@@ -65,85 +52,40 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
-      console.log(values, "values");
-      if (!values.id || type == "copy") {
-        try {
-          delete values.id;
-          values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
-          values.status = "";
-          values.tinNo = values?.tinNo?.trim() || null;
-          values.vatNo = values?.vatNo?.trim() || null;
-          let response = await addJobEntry({ ...values }).unwrap();
-
-          const message = response.message;
-          if (response.code == "SUCCESS") {
-            toast.custom(<CustomToast message={message} toast="warn" />, {
-              closeButton: false,
-            });
-            nav("/app/entity/customer");
-          } else {
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          }
-        } catch (error) {
-          if (error.status === 409) {
-            const message = error.data.message;
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          } else {
-            toast.custom(
-              <CustomToast
-                message="An error occurred while submitting the form."
-                toast="error"
-              />,
-              {
-                closeButton: false,
-              }
-            );
-          }
+      console.log(values, "valuesjobDetails");
+      try {
+        // delete values.id;
+        values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
+        values.status = "";
+        let response = await updateJobDetailsEntry({ ...values }).unwrap();
+        const message = response.message;
+        if (response.code == "SUCCESS") {
+          toast.custom(<CustomToast message={message} toast="success" />, {
+            closeButton: false,
+          });
+          nav("/app/documentation/update/job");
+        } else {
+          toast.custom(<CustomToast message={message} toast="error" />, {
+            closeButton: false,
+          });
         }
-      } else {
-        try {
-          setRejectError(false);
-          Boolean(values.status == "Active") && (values.statusCode = 1);
-          Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          let response = await updateCustomer({ ...values }).unwrap();
-          const message = response.message;
-          if (response.code == "SUCCESS") {
-            toast.custom(<CustomToast message={message} toast="success" />, {
+      } catch (error) {
+        if (error.status === 409) {
+          const message = error.data.message;
+          toast.custom(<CustomToast message={message} toast="error" />, {
+            closeButton: false,
+          });
+        } else {
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
               closeButton: false,
-            });
-            nav(-1);
-          } else {
-            toast.custom(<CustomToast message={message} toast="warn" />, {
-              closeButton: false,
-            });
-          }
-        } catch (error) {
-          if (error.status === 409) {
-            const message = error.data.message;
-            toast.custom(
-              <CustomToast message={message} toast="error" />,
-
-              {
-                closeButton: false,
-              }
-            );
-          } else {
-            toast.custom(
-              <CustomToast
-                message="An error occurred while submitting the form."
-                toast="error"
-              />,
-              {
-                closeButton: false,
-              }
-            );
-          }
+            }
+          );
         }
       }
     },
@@ -451,30 +393,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 </Grid>
               </Grid>
 
-              {formik?.values?.status?.toLowerCase() === "rejected" ||
-              page == "jobEntryApprove" ? (
-                <Grid item xs={12} paddingLeft={1} paddingTop={1}>
-                  <TextField
-                    label="Reject Remarks"
-                    name="rejectRemarks"
-                    value={formik.values.rejectRemarks}
-                    error={rejectError}
-                    helperText={
-                      rejectError
-                        ? "Reject remarks are required when rejecting a customer*."
-                        : formik.errors.rejectRemarks
-                    }
-                    onChange={formik.handleChange}
-                    disabled={page === "jobEntryApprove" ? disabled : !disabled}
-                    multiline
-                    rows={4}
-                    variant="outlined"
-                    fullWidth
-                  />
-                </Grid>
-              ) : (
-                <></>
-              )}
               <PopupAlert alertConfig={alertConfig} />
             </Grid>
           </TabPanel>

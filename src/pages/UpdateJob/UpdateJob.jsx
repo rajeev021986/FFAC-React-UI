@@ -1,12 +1,14 @@
-import { Box, Card, CardContent, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Box, Card, CardContent, Stack } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
+import ApiManager from "../../services/ApiManager";
+
+// Components
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
-import ApiManager from "../../services/ApiManager";
-import Loader from "../../components/common/Loader/Loader";
-import toast from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import Loader from "../../components/common/Loader/Loader";
 import UpdateForm from "./UpdateJobForm";
 
 export default function UpdateJobDetails({ page }) {
@@ -31,47 +33,8 @@ export default function UpdateJobDetails({ page }) {
     entryLoadgedDate: "",
     entryNo: "",
     entryDate: "",
-
     bondDetails: [],
-    containerDetails: [
-      {
-        containerNo: "",
-        sizeType: "",
-        sealNo: "",
-        truckTrailerNo: "",
-        transporter: "",
-        truckTrailerNoTransporter: "",
-        driver: "",
-        agreedRate: "",
-        telNo: "",
-        passportNo: "",
-        licenceNo: "",
-        clerkName: "",
-        clerkTelNo: "",
-        reportingPlace: "",
-        reportingDate: "",
-        reportingTime: "",
-        transferDate: "",
-        t1C1ReadyDate: "",
-        loadingDate: "",
-        cancellationDate: "",
-        arrivalBorderDate: "",
-        crossedBorderDate: "",
-        arrivalICDDate: "",
-        cargoReleaseDate: "",
-        departICDDate: "",
-        arrivalCustomerPlaceDate: "",
-        emptyReleasedDate: "",
-        emptyReturnPlace: "",
-        podNo: "",
-        podDate: "",
-        emptyReturnDate: "",
-        certificateOfExportDate: "",
-        portGateInDate: "",
-        nominationDate: "",
-        remark: "",
-      },
-    ],
+    containerDetails: [],
   });
 
   useEffect(() => {

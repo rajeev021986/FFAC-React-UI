@@ -618,7 +618,7 @@ export default function JobEntryForm({
                   marginTop={2}
                 >
                   <InputBox
-                    label="Ref No."
+                    label="Reference No."
                     id="refNo"
                     value={formik.values.refNo}
                     error={formik.errors.refNo}
@@ -648,7 +648,7 @@ export default function JobEntryForm({
                     value={formik.values.fileManager}
                     error={formik.errors.fileManager}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled
                   />
                 </Grid>
 
@@ -668,7 +668,7 @@ export default function JobEntryForm({
                     value={formik.values.createdBy}
                     error={formik.errors.createdBy}
                     onChange={formik.handleChange}
-                    // disabled
+                    disabled
                   />
                 </Grid>
               </Grid>

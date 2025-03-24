@@ -1,12 +1,8 @@
 import React, { useRef, useState } from "react";
-import toast, { LoaderIcon } from "react-hot-toast";
-
-import ApiManager from "../../services/ApiManager";
 
 // MUI
 import TabContext from "@mui/lab/TabContext";
 import Tab from "@mui/material/Tab";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
@@ -17,20 +13,14 @@ import { Box, IconButton, Skeleton } from "@mui/material";
 import AutoCompleteInput from "../../components/common/AutoCompletInput";
 import EditRowDialog from "../../components/common/EditRowDialog";
 import InputBoxForGrid from "../../components/common/InputBoxForGrid";
-import SelectBox from "../../components/common/SelectBox";
 import { StyledDataGrid } from "../../components/common/Grid/styles";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
-export default function BondDetailsGridForm({
-  formik,
-  disabled = false,
-  vendorSettingsData,
-  dropdownData,
-}) {
-  const designation = dropdownData?.designation;
+export default function BondDetailsGridForm({ formik, dropdownData }) {
   const [editDialogData, setEditDialogData] = useState();
   const [openTable, setopenTable] = useState(true);
   const [EditRowDialogopen, setEditRowDialogOpen] = useState(false);
+
   const newRowRef = useRef(null);
   const setFocus = () => {
     setTimeout(() => {
@@ -39,19 +29,7 @@ export default function BondDetailsGridForm({
       }
     }, 1000);
   };
-  const OnChange = (params, e, name) => {
-    const rowIndex = formik.values[name].findIndex(
-      (entity) => entity.id === params.id
-    );
-    formik.setValues({
-      ...formik.values,
-      [name]: formik?.values[name]?.map((entity, index) =>
-        index === rowIndex
-          ? { ...entity, [params.field]: e.target.value }
-          : entity
-      ),
-    });
-  };
+
   const handleClose = () => {
     setEditRowDialogOpen(false);
     setEditDialogData({});
@@ -61,22 +39,11 @@ export default function BondDetailsGridForm({
     }, 10);
   };
 
-  // balanceBondAmount: 0,
-  // bondAmount: 0,
-  // bondDate: "",
-  // runningBalance: 0,
-
-
   const TabsHosts = [
     {
       tabLable: "Bond Details",
       value: formik?.values?.bondDetails || [],
       addNewRow: () => {
-        const hasEmptyFields = TabsHosts[0].value.some((row) =>
-          Object.values(row).some(
-            (value) => value === "" || value === null || value === undefined
-          )
-        )
         const newRow = {
           id: Date.now(),
           bondNumber: "",
@@ -86,10 +53,7 @@ export default function BondDetailsGridForm({
           runningBalance: "",
           new: true,
         };
-        formik.setFieldValue("bondDetails", [
-          ...TabsHosts[0].value,
-          newRow,
-        ]);
+        formik.setFieldValue("bondDetails", [...TabsHosts[0].value, newRow]);
         setFocus();
       },
       deleteRow: (id) => {
@@ -114,10 +78,7 @@ export default function BondDetailsGridForm({
                 id="bondNumber"
                 suggestionName="charge_name"
                 value={params.value}
-                error={
-                  formik.errors.bondDetails?.[params.rowIndex]
-                    ?.bondNumber
-                }
+                error={formik.errors.bondDetails?.[params.rowIndex]?.bondNumber}
                 onChange={(newValue) => {
                   const rowIndex = formik.values.bondDetails.findIndex(
                     (entity) => entity.id === params.id
@@ -156,21 +117,15 @@ export default function BondDetailsGridForm({
           ),
         },
         {
-          field: "finalDestination",
+          field: "bondAmount",
           headerName: "Bond Amount",
           flex: 1,
           editable: true,
           renderCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Bond Amount"
-            />
+            <InputBoxForGrid {...params} placeholder="Enter Bond Amount" />
           ),
           renderEditCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Bond Amount"
-            />
+            <InputBoxForGrid {...params} placeholder="Enter Bond Amount" />
           ),
         },
         {
@@ -181,17 +136,15 @@ export default function BondDetailsGridForm({
             <DateTimeField
               value={params.value}
               onChange={(_, value) => {
-                const updatedDischargeDate =
-                  formik.values.bondDetails.map((a) => {
+                const updatedDischargeDate = formik.values.bondDetails.map(
+                  (a) => {
                     if (a.id === params.id) {
                       return { ...a, bondDate: value };
                     }
                     return a;
-                  });
-                formik.setFieldValue(
-                  "bondDetails",
-                  updatedDischargeDate
+                  }
                 );
+                formik.setFieldValue("bondDetails", updatedDischargeDate);
               }}
             />
           ),
@@ -202,16 +155,10 @@ export default function BondDetailsGridForm({
           flex: 1,
           editable: true,
           renderCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Ranning Balance"
-            />
+            <InputBoxForGrid {...params} placeholder="Enter Ranning Balance" />
           ),
           renderEditCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Enter Ranning Balance"
-            />
+            <InputBoxForGrid {...params} placeholder="Enter Ranning Balance" />
           ),
         },
         {

@@ -50,28 +50,6 @@ export const jobEntry = createApi({
       invalidatesTags: ["Code"],
     }),
 
-    // uploadCustomerFile: builder.mutation({
-    //   query: (params) => {
-    //     const formData = new FormData();
-    //     formData.append("file", params.file);
-    //     const entityFileBlob = new Blob([JSON.stringify(params.entityFile)], {
-    //       type: "application/json",
-    //     });
-    //     formData.append("entityFile", entityFileBlob);
-
-    //     const headers = {
-    //       Authorization: getAppHeaders()["Authorization"],
-    //     };
-
-    //     return {
-    //       url: `/${menuConfigUrl.entity}/file`,
-    //       method: "POST",
-    //       body: formData,
-    //       headers: headers,
-    //     };
-    //   },
-    // }),
-
     fetchJobEntries: builder.query({
       query: ({ params, payload, page }) => {
         const queryString = new URLSearchParams(params).toString();
@@ -87,13 +65,29 @@ export const jobEntry = createApi({
       },
       providesTags: ["Code"],
     }),
+    
+    updateJobDetailsEntry: builder.mutation({
+      query: (params) => {
+        const headers = {
+          Authorization: getAppHeaders()["Authorization"],
+        };
+        return {
+          url: `${menuConfigUrl.document}/job-update`,
+          method: "PUT",
+          body: params,
+          headers: headers,
+        };
+      },
+      invalidatesTags: ["Code"],
+    }),
+
   }),
 });
 
 export const {
-  //   useUploadCustomerFileMutation,
   useAddJobEntryMutation,
   useFetchJobEntriesQuery,
   useDeleteJobEntryMutation,
   useUpdateJobEntryMutation,
+  useUpdateJobDetailsEntryMutation
 } = jobEntry;

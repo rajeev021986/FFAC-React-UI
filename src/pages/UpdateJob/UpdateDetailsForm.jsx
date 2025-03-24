@@ -18,12 +18,11 @@ export default function ContainerDetails({ formik }) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  console.log(formik?.values, 485748);
   return (
     <React.Fragment>
       {formik?.values?.containerDetails?.map((container, index) => (
         <Accordion
-          key={index}
+          key={index}v 
           expanded={expanded === `panel${index}`}
           onChange={handleAccordionChange(`panel${index}`)}
         >
