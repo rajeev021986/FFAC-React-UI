@@ -12,7 +12,7 @@ const NotesTable = ({ formik }) => {
     settoggleNotes((prev) => !prev);
   };
 
-  const storedNotes = sessionStorage.getItem("jobNotes");
+  const storedNotes = sessionStorage.getItem("notes");
   useEffect(() => {
     setNotes(storedNotes ? JSON.parse(storedNotes) : []);
   }, [storedNotes]);
@@ -58,7 +58,7 @@ const NotesTable = ({ formik }) => {
 
   useEffect(() => {
     if (location.pathname !== "app/documentation/job/entry/newEntry") {
-      sessionStorage.removeItem("jobNotes");
+      sessionStorage.removeItem("notes");
       setNotes([]);
     }
   }, []);

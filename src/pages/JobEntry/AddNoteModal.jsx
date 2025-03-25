@@ -32,23 +32,23 @@ export default function AddNoteModal({
   ];
 
   const handleNoteChange = (field, value) => {
-    let updatedNotes = [...formik.values.jobNotes];
+    let updatedNotes = [...formik.values.notes];
     updatedNotes[0] = { ...updatedNotes[0], [field]: value };
-    formik.setFieldValue("jobNotes", updatedNotes);
+    formik.setFieldValue("notes", updatedNotes);
   };
 
   const handleAddNote = () => {
     const newNote = {
       id: Date.now(),
-      subjectType: formik.values.jobNotes[0]?.subjectType || "",
-      note: formik.values.jobNotes[0]?.note || "",
+      subjectType: formik.values.notes[0]?.subjectType || "",
+      note: formik.values.notes[0]?.note || "",
       createdDate: new Date().toISOString(),
     };
-    const storedNotes = JSON.parse(sessionStorage.getItem("jobNotes")) || [];
+    const storedNotes = JSON.parse(sessionStorage.getItem("notes")) || [];
     const updatedNotes = [...storedNotes, newNote];
-    sessionStorage.setItem("jobNotes", JSON.stringify(updatedNotes));
-    formik.setFieldValue("jobNotes", updatedNotes);
-    formik.setFieldValue("jobNotes", [{ subjectType: "", note: "" }]);
+    sessionStorage.setItem("notes", JSON.stringify(updatedNotes));
+    formik.setFieldValue("notes", updatedNotes);
+    formik.setFieldValue("notes", [{ subjectType: "", note: "" }]);
     handleToggleNote();
   };
 
@@ -80,7 +80,7 @@ export default function AddNoteModal({
                   label="Subject"
                   id="subjectType"
                   options={subjectType}
-                  value={formik.values.jobNotes[0]?.subjectType || ""}
+                  value={formik.values.notes[0]?.subjectType || ""}
                   onChange={(e) =>
                     handleNoteChange("subjectType", e.target.value)
                   }
@@ -93,7 +93,7 @@ export default function AddNoteModal({
               <InputBox
                 label="Notes"
                 id="note"
-                value={formik.values.jobNotes[0]?.note || ""}
+                value={formik.values.notes[0]?.note || ""}
                 onChange={(e) => handleNoteChange("note", e.target.value)}
                 disabled={disabled}
               />

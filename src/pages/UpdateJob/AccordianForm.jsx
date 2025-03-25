@@ -246,7 +246,7 @@ const AccordianForm = ({ formik, index }) => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Reporting Time"
               id="reportingTime"
               name={`containerDetails[${index}].reportingTime`}
@@ -326,7 +326,7 @@ const AccordianForm = ({ formik, index }) => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="LOADING DATE"
               id="loadingDate"
               name={`containerDetails[${index}].loadingDate`}
@@ -660,7 +660,7 @@ const AccordianForm = ({ formik, index }) => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="Port Gate In Date"
               id="portGateInDate"
               name={`containerDetails[${index}].portGateInDate`}

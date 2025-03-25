@@ -81,7 +81,7 @@ export default function AddJobEntry({ page }) {
     containerShipments: [],
     vehicleShipments: [],
     looseCargoShipments: [],
-    jobNotes: [],
+    notes: [],
     rate: {
       totalAmount: 0,
       remarks: "",
@@ -161,7 +161,7 @@ export default function AddJobEntry({ page }) {
           containerShipments: res.body?.containerShipments || [],
           vehicleShipments: res.body?.vehicleShipments || [],
           looseCargoShipments: res.body?.looseCargoShipments || [],
-          jobNotes: res.body?.jobNotes || [],
+          notes: res.body?.notes || [],
           rate: res.body?.rate
             ? {
                 totalAmount: res.body?.rate.totalAmount || 0,

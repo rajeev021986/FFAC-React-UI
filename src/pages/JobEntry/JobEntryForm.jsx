@@ -45,7 +45,6 @@ export default function JobEntryForm({
   getUserId,
 }) {
   const location = useLocation();
-  console.log(location, 495895);
   const [addJobEntry, { isLoading }] = useAddJobEntryMutation();
   const [updateJobEntry, { isLoading: loadingUpdate }] =
     useUpdateJobEntryMutation();
@@ -79,6 +78,8 @@ export default function JobEntryForm({
     validateOnChange: false,
     validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
+      console.log(values, "values")
+      
       if (!values.id || type == "copy") {
         try {
           delete values.id;
