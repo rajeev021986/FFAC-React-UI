@@ -214,3 +214,16 @@ export const EXCHANGE_RATE_SORT_OPTIONS = [
   { value: "currency*asc", label: "Currency Ascending" },
   { value: "currency*desc", label: "Currency Descending" },
 ];
+
+
+export const JOB_SORT_OPTIONS = [
+  { value: "cname*asc", label: "Customer Ascending" },
+  { value: "cname*desc", label: "Customer Descending" },
+  { value: "refNo*asc", label: "Ref No Ascending" },
+  { value: "refNo*desc", label: "VatNo Descending" },
+  { value: "entryNo*asc", label: "entryNo Ascending" },
+  { value: "entryNo*desc", label: "entryNo Descending" },
+  { value: "invoiceNo*asc", label: "invoiceNo Ascending" },
+  { value: "invoiceNo*desc", label: "invoiceNo Descending" },
+
+];

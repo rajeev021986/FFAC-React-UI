@@ -66,7 +66,7 @@ export default function UserCard({ setDraweropen }) {
       <TMenu
         buttonIcon={
           <Avatar alt="Remy Sharp" sx={styles.avater}>
-            {localStorage.getItem("userId").charAt(0).toUpperCase()}
+            {localStorage?.getItem("userId").charAt(0).toUpperCase()}
           </Avatar>
         }
         buttonProps={{ p: 0 }}

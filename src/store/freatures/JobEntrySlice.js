@@ -5,8 +5,13 @@ const initialState = {
   sortModel: [],
   formData: {
     customerName: "",
+    customerRefNo: "",
+    entryNo: "",
+    invoiceNo: "",
+    isDoc: "",
+    refNo: "",
+    statusCode: "",
     tansadNo: "",
-    blNo: "",
   },
   sortBy: "",
 };

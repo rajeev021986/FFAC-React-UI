@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
+  jobEntrySetView,
   setPagination,
   setSortBy,
-  customerSetSortModel,
+  jobEntrySetSortModel,
   updateInput,
-} from "../../store/freatures/CustomerSlice";
-
+} from "../../store/freatures/JobEntrySlice";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
@@ -16,7 +17,6 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import SelectBox from "../../components/common/SelectBox";
 import AuditTimeLine from "../../components/AuditTimeLine";
 
-import { jobEntrySetView } from "../../store/freatures/JobEntrySlice";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import FilterForm from "./FilterForm";
@@ -29,7 +29,7 @@ import {
 } from "../../store/api/jobEntryApi";
 
 // Tables Columns
-import { CUSTOMER_SORT_OPTIONS } from "../../data/options";
+import { JOB_SORT_OPTIONS } from "../../data/options";
 import { JOB_ENTRY_COLUMNS } from "../../data/columns/jobEntry";
 import GridActions from "../../components/common/Grid/GridActions";
 import { getJobEntryListGridActions } from "../../components/screen/jobsEntry/action";
@@ -103,6 +103,7 @@ export default function JobEntryScreen({ page }) {
         logicalOperator: "and",
       };
     });
+
   const [deleteJobEntry] = useDeleteJobEntryMutation();
   const {
     data: jobEntriesData,
@@ -253,7 +254,7 @@ export default function JobEntryScreen({ page }) {
                 {codeJobEntryrSelector.view === "card" && (
                   <SelectBox
                     label="Sort By"
-                    options={CUSTOMER_SORT_OPTIONS}
+                    options={JOB_SORT_OPTIONS}
                     value={codeJobEntryrSelector.sortBy}
                     onChange={(event) => {
                       dispatch(setSortBy(event.target.value));
@@ -282,7 +283,7 @@ export default function JobEntryScreen({ page }) {
             loading={isLoading || isFetching}
             sortModel={codeJobEntryrSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(customerSetSortModel(sortModel))
+              dispatch(jobEntrySetSortModel(sortModel))
             }
             // rowSelection={true}
             // checkboxSelection={true}
@@ -308,7 +309,7 @@ export default function JobEntryScreen({ page }) {
             </Typography>
             <AuditTimeLine
               id={modal.data.id}
-              page="job-entry"
+              page="job-detail"
               service={menuConfigUrl.document}
             />
           </Box>

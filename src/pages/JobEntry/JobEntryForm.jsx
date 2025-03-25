@@ -823,7 +823,7 @@ export default function JobEntryForm({
             <UploadFile
               customer_id={initialValues.id}
               disabled={disabled}
-              dropdownData={dropdownData.documentType}
+              dropdownData={dropdownData.jobDocumentType}
               sourceType="JOB_DETAIL"
             />
           </TabPanel>

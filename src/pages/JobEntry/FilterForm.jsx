@@ -9,18 +9,18 @@ import SelectBox from "../../components/common/SelectBox";
 
 export default function FilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
-  const inputs = useSelector((state) => state.codeCustomer.formData);
-
+  const inputs = useSelector((state) => state?.codeJobEntryrSelector?.formData);
+  console.log(inputs , "inputs")
   const formik = useFormik({
     initialValues: inputs || {
-      customerName: inputs.customerName || "",
-      refNo: inputs.refNo || "",
-      customerRefNo: inputs.customerRefNo || "",
-      entryNo: inputs.entryNo || "",
-      tansadNo: inputs.tansadNo || "",
-      invoiceNo: inputs.invoiceNo || "",
-      statusCode: inputs.statusCode || "",
-      isDoc: inputs.isDoc || "",
+      customerName: inputs?.customerName || "",
+      refNo: inputs?.refNo || "",
+      customerRefNo: inputs?.customerRefNo || "",
+      entryNo: inputs?.entryNo || "",
+      tansadNo: inputs?.tansadNo || "",
+      invoiceNo: inputs?.invoiceNo || "",
+      statusCode: inputs?.statusCode || "",
+      isDoc: inputs?.isDoc || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -159,14 +159,6 @@ export default function FilterForm({ setFilterOpen }) {
               }}
             />
           </div>
-          {/* <div style={{ width: "48%", marginLeft: "0px" }}>
-            <InputBox
-              label="BL No."
-              id="mblNo"
-              value={formik.values.mblNo}
-              onChange={formik.handleChange}
-            />
-          </div> */}
         </Stack>
 
         <Stack direction="row" spacing={3} justifyContent={"end"}>

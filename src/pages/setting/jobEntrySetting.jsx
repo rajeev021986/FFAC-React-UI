@@ -37,9 +37,11 @@ const JobEntrySetting = () => {
   const [ICDTransfer, setICDTransfer] = useState([]);
   const [sizeType, setsizeType] = useState([]);
   const [unitTypes, setunitTypes] = useState([]);
+  const [jobDocumentType, setJobDocumentType] = useState([]);
 
   const [isLoadingsave, setIsLoading] = useState(false);
   useEffect(() => {
+    setApprovalRequest(data?.body.approvalRequest || false);
     setMoveType(data?.body.moveType || []);
     setCargoType(data?.body.cargoType || []);
     setTypesOfCargo(data?.body.typesOfCargo || []);
@@ -51,6 +53,7 @@ const JobEntrySetting = () => {
     setICDTransfer(data?.body.ICDTransfer || []);
     setsizeType(data?.body.sizeType || []);
     setunitTypes(data?.body.unitTypes || []);
+    setJobDocumentType(data?.body.jobDocumentType || []);
   }, [data, geterror]);
 
   const Postdata = async () => {
@@ -78,6 +81,9 @@ const JobEntrySetting = () => {
       ),
       sizeType: sizeType.filter((item) => !item.value.includes("Type the")),
       unitTypes: unitTypes.filter((item) => !item.value.includes("Type the")),
+      jobDocumentType: jobDocumentType.filter(
+        (item) => !item.value.includes("Type the")
+      ),
     };
     await addOptons({
       body: { job_settings: filteredData },
@@ -193,6 +199,12 @@ const JobEntrySetting = () => {
             value={unitTypes}
             setvalue={setunitTypes}
             title="Unit Types"
+          />
+
+          <GlobalDrrpdownSetting
+            value={jobDocumentType}
+            setvalue={setJobDocumentType}
+            title="Document Job Type"
           />
         </Grid>
       )}
