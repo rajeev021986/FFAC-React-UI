@@ -313,7 +313,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   paddingLeft={1}
                   marginTop={2}
                 >
-                  <InputBox
+                  <DateTimeField
                     label="Entry Loadged Ref."
                     id="entryLoadgedRef"
                     value={formik.values.entryLoadgedRef}
