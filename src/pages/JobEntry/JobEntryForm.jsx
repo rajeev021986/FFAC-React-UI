@@ -78,8 +78,6 @@ export default function JobEntryForm({
     validateOnChange: false,
     validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
-      console.log(values, "values")
-      
       if (!values.id || type == "copy") {
         try {
           delete values.id;

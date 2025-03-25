@@ -170,7 +170,7 @@ export default function AddRateModal({
           ),
         },
         {
-          field: "no_units",
+          field: "noOfUnits",
           headerName: "No of Units",
           flex: 1,
           editable: true,

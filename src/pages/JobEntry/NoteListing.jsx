@@ -20,7 +20,7 @@ const NotesTable = ({ formik }) => {
   const NOTE_COLUMNS = [
     {
       flex: 1,
-      field: "id",
+      field: "noteId",
       headerName: "ID",
       width: 110,
       headerAlign: "center",
@@ -29,7 +29,7 @@ const NotesTable = ({ formik }) => {
     },
     {
       flex: 1,
-      field: "subjectType",
+      field: "subject",
       headerName: "Subject Type",
       width: 110,
       headerAlign: "center",
@@ -66,7 +66,7 @@ const NotesTable = ({ formik }) => {
   return (
     <React.Fragment>
       <ThemedGrid
-        uniqueId="id"
+        uniqueId="noteId"
         columns={NOTE_COLUMNS}
         count={notes || 0}
         data={notes}

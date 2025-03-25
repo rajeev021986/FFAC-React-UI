@@ -37,7 +37,6 @@ function FormAutoComplete(props) {
   }, [suggestionName, id]);
 
   const handleInputChange = (event, newValue) => {
-    console.log(newValue, "newValue");
     setLoading(false);
     const filtered = options.filter((option) =>
       option.label.toLowerCase().includes(newValue.toLowerCase())
@@ -52,8 +51,6 @@ function FormAutoComplete(props) {
       onChange({ target: { name: id, value: null } });
     }
   };
-
-  console.log(loading, "loading");
 
   return (
     <Box sx={{ width: "100%" }}>
