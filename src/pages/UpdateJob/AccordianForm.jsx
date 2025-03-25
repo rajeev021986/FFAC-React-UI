@@ -226,10 +226,11 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Reporting Date"
-              id="reportingDate"
+              id={`containerDetails[${index}].reportingDate`}
               name={`containerDetails[${index}].reportingDate`}
               value={formik.values.containerDetails[index].reportingDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
+              disabled={disabled}
               inputRef={FieldRef}
             />
           </Grid>
@@ -288,11 +289,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Transfer Date"
-              id="transferDate"
+              id={`containerDetails[${index}].transferDate`}
               name={`containerDetails[${index}].transferDate`}
               value={formik.values.containerDetails[index].transferDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -308,11 +310,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="T1/C1 READY"
-              id="t1C1ReadyDate"
+              id={`containerDetails[${index}].t1C1ReadyDate`}
               name={`containerDetails[${index}].t1C1ReadyDate`}
               value={formik.values.containerDetails[index].t1C1ReadyDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -328,11 +331,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="LOADING DATE"
-              id="loadingDate"
+              id={`containerDetails[${index}].loadingDate`}
               name={`containerDetails[${index}].loadingDate`}
               value={formik.values.containerDetails[index].loadingDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
         </Grid>
@@ -356,6 +360,7 @@ const AccordianForm = ({ formik, index }) => {
               value={formik.values.containerDetails[index].bondNumber}
               onChange={formik.handleChange}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -376,6 +381,7 @@ const AccordianForm = ({ formik, index }) => {
               value={formik.values.containerDetails[index].bondAmount}
               onChange={formik.handleChange}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -391,11 +397,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Cancellation Date"
-              id="cancellationDate"
+              id={`containerDetails[${index}].cancellationDate`}
               name={`containerDetails[${index}].cancellationDate`}
               value={formik.values.containerDetails[index].cancellationDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -411,11 +418,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Arrival Border"
-              id="arrivalBorderDate"
+              id={`containerDetails[${index}].arrivalBorderDate`}
               name={`containerDetails[${index}].arrivalBorderDate`}
               value={formik.values.containerDetails[index].arrivalBorderDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
         </Grid>
@@ -433,11 +441,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Crossed Border"
-              id="crossedBorderDate"
+              id={`containerDetails[${index}].crossedBorderDate`}
               name={`containerDetails[${index}].crossedBorderDate`}
               value={formik.values.containerDetails[index].crossedBorderDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -453,11 +462,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Arrival ICD"
-              id="arrivalICDDate"
+              id={`containerDetails[${index}].arrivalICDDate`}
               name={`containerDetails[${index}].arrivalICDDate`}
               value={formik.values.containerDetails[index].arrivalICDDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -473,11 +483,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Cargo Release Date"
-              id="cargoReleaseDate"
+              id={`containerDetails[${index}].cargoReleaseDate`}
               name={`containerDetails[${index}].cargoReleaseDate`}
               value={formik.values.containerDetails[index].cargoReleaseDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -493,11 +504,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Depart ICD"
-              id="departICDDate"
+              id={`containerDetails[${index}].departICDDate`}
               name={`containerDetails[${index}].departICDDate`}
               value={formik.values.containerDetails[index].departICDDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
         </Grid>
@@ -516,13 +528,14 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Arrival Customer Place"
-              id="arrivalCustomerPlaceDate"
+              id={`containerDetails[${index}].arrivalCustomerPlaceDate`}
               name={`containerDetails[${index}].arrivalCustomerPlaceDate`}
               value={
                 formik.values.containerDetails[index].arrivalCustomerPlaceDate
               }
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -538,11 +551,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Empty Released"
-              id="emptyReleasedDate"
+              id={`containerDetails[${index}].emptyReleasedDate`}
               name={`containerDetails[${index}].emptyReleasedDate`}
               value={formik.values.containerDetails[index].emptyReleasedDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -600,11 +614,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Pod DATE"
-              id="podDate"
+              id={`containerDetails[${index}].podDate`}
               name={`containerDetails[${index}].podDate`}
               value={formik.values.containerDetails[index].podDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -620,11 +635,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Empty Return Date"
-              id="emptyReturnDate"
+              id={`containerDetails[${index}].emptyReturnDate`}
               name={`containerDetails[${index}].emptyReturnDate`}
               value={formik.values.containerDetails[index].emptyReturnDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -640,13 +656,14 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Certificate of Export"
-              id="certificateOfExportDate"
+              id={`containerDetails[${index}].certificateOfExportDate`}
               name={`containerDetails[${index}].certificateOfExportDate`}
               value={
                 formik.values.containerDetails[index].certificateOfExportDate
               }
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
@@ -662,11 +679,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Port Gate In Date"
-              id="portGateInDate"
+              id={`containerDetails[${index}].portGateInDate`}
               name={`containerDetails[${index}].portGateInDate`}
               value={formik.values.containerDetails[index].portGateInDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
         </Grid>
@@ -684,11 +702,12 @@ const AccordianForm = ({ formik, index }) => {
           >
             <DateTimeField
               label="Nomination Date"
-              id="nominationDate"
+              id={`containerDetails[${index}].nominationDate`}
               name={`containerDetails[${index}].nominationDate`}
               value={formik.values.containerDetails[index].nominationDate}
-              onChange={formik.handleChange}
+              onChange={formik.setFieldValue}
               disabled={disabled}
+              inputRef={FieldRef}
             />
           </Grid>
 
