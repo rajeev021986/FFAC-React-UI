@@ -15,6 +15,7 @@ export default function AddJobEntry({ page }) {
   const [loading, setLoading] = useState(true);
   const { state } = useLocation();
 
+  const getUserId = localStorage.getItem("userId");
   const [initialValues, setInitialValues] = React.useState({
     rejectRemarks: "",
     shipmentType: "",
@@ -32,7 +33,7 @@ export default function AddJobEntry({ page }) {
     entryTansadDate: "",
     entryNo: "",
     refNo: "",
-    fileManager: "",
+    fileManager: getUserId,
 
     // Shipper Details Key Start
     supplierName: "",
@@ -118,7 +119,7 @@ export default function AddJobEntry({ page }) {
           entryTansadDate: res.body?.entryTansadDate || "",
           entryNo: res.body?.entryNo || "",
           refNo: res.body?.refNo || "",
-          fileManager: res.body?.fileManager || "",
+          fileManager: res.body?.fileManager || getUserId,
           createdBy: res.body?.createdBy || "",
           supplierName: res.body?.supplierName || "",
           supplierAddress: res.body?.supplierAddress || "",
@@ -218,6 +219,7 @@ export default function AddJobEntry({ page }) {
               initialValues={initialValues}
               type={state?.formAction}
               page={page}
+              getUserId={getUserId}
             />
           </CardContent>
         </Card>

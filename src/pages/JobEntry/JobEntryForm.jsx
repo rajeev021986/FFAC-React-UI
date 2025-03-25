@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CircularProgress, Tooltip } from "@mui/material";
 import { Grid, Stack, TextField } from "@mui/material";
 import { JobEntryValidationSchema } from "./validationSchema";
@@ -25,7 +25,7 @@ import SelectBox from "../../components/common/SelectBox";
 import PopupAlert from "../../components/common/Alert/PopupAlert";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import getFirstError from "../../components/common/FieldToastError";
-import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
+import FormAutoCompleteWithLoader from "../../components/common/AutoComplete/FormAutoCompletewithLoader";
 
 // API Function Helper
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
@@ -42,7 +42,10 @@ export default function JobEntryForm({
   initialValues,
   page,
   type = "notcopy",
+  getUserId,
 }) {
+  const location = useLocation();
+  console.log(location, 495895);
   const [addJobEntry, { isLoading }] = useAddJobEntryMutation();
   const [updateJobEntry, { isLoading: loadingUpdate }] =
     useUpdateJobEntryMutation();
@@ -348,18 +351,24 @@ export default function JobEntryForm({
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <ThemeButton
-                    onClick={() => toggleRateModal()}
-                    sx={{
-                      fontWeight: "500",
-                      color: "white !important",
-                      height: "38px",
-                    }}
-                  >
-                    Add Rate
-                  </ThemeButton>
-                </Grid>
+                {(location?.pathname ===
+                  "/app/documentation/job/entry/newEntry" ||
+                  location?.pathname ===
+                    "/app/documentation/job-approve/file/approveJobRequest" ||
+                  formik?.values?.createdBy === getUserId) && (
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <ThemeButton
+                      onClick={() => toggleRateModal()}
+                      sx={{
+                        fontWeight: "500",
+                        color: "white !important",
+                        height: "38px",
+                      }}
+                    >
+                      Add Rate
+                    </ThemeButton>
+                  </Grid>
+                )}
               </Grid>
 
               <Grid container>
@@ -399,7 +408,7 @@ export default function JobEntryForm({
                     }
                     arrow
                   >
-                    <FormAutoComplete
+                    <FormAutoCompleteWithLoader
                       label="Customer Name*"
                       id="customerName"
                       value={formik.values.customerName}
@@ -407,7 +416,7 @@ export default function JobEntryForm({
                       onChange={formik.handleChange}
                       inputRef={FieldRef}
                       suggestionName="customer_name"
-                    ></FormAutoComplete>
+                    />
                   </Tooltip>
                 </Grid>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Autocomplete,
@@ -6,24 +6,35 @@ import {
   CircularProgress,
   MenuItem,
 } from "@mui/material";
-import { GetAutoCompleteData } from "../../utils/GetAutoCompleteData";
+import { GetAutoCompleteDataWithLoader } from "../../utils/GetAutoCompleteDataWithLoader";
+import useDebounce from "../../../hooks/useDebounce";
 
-function FormAutoComplete(props) {
+function FormAutoCompleteWithLoader(props) {
   const { label, id, suggestionName, dataLabel, value, error, onChange } =
     props;
 
   const [options, setOptions] = useState([]);
-  const [filteredOptions, setFilteredOptions] = useState(options);
+  const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  const debounceValue = useDebounce(inputValue, 800); // Custom Hook
 
   useEffect(() => {
+    if (!debounceValue) {
+      setOptions([]);
+      setFilteredOptions([]);
+      return;
+    }
+
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await GetAutoCompleteData(
+        const data = await GetAutoCompleteDataWithLoader(
           suggestionName,
           id,
-          !dataLabel ? suggestionName : dataLabel
+          dataLabel || suggestionName,
+          debounceValue
         );
         setOptions(data);
         setFilteredOptions(data);
@@ -33,16 +44,12 @@ function FormAutoComplete(props) {
         setLoading(false);
       }
     };
+
     fetchData();
-  }, [suggestionName, id]);
+  }, [debounceValue, suggestionName, id, dataLabel]);
 
   const handleInputChange = (event, newValue) => {
-    console.log(newValue, "newValue");
-    setLoading(false);
-    const filtered = options.filter((option) =>
-      option.label.toLowerCase().includes(newValue.toLowerCase())
-    );
-    setFilteredOptions(filtered);
+    setInputValue(newValue);
   };
 
   const handleSelectionChange = (event, newValue) => {
@@ -53,13 +60,11 @@ function FormAutoComplete(props) {
     }
   };
 
-  console.log(loading, "loading");
-
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
         sx={{
-          border: "none ! important",
+          border: "none !important",
         }}
         size="small"
         id={id}
@@ -94,7 +99,6 @@ function FormAutoComplete(props) {
                 </>
               ),
             }}
-            {...params}
           />
         )}
         renderOption={(props, option) => (
@@ -102,12 +106,10 @@ function FormAutoComplete(props) {
             {option.label}
           </MenuItem>
         )}
-        noOptionsText={
-          filteredOptions?.length === 0 ? "No data available" : "Loading..."
-        }
+        noOptionsText={inputValue ? "No results found" : "Type to search..."}
       />
     </Box>
   );
 }
 
-export default FormAutoComplete;
+export default FormAutoCompleteWithLoader;

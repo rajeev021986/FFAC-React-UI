@@ -275,11 +275,12 @@ class ApiManager {
   };
 
   static getUpdateJobEntryDetails = async (id) => {
-    const url = ENDPOINTS.GET_UPDATE_JOBENTRY_DETAILS(id, menuConfigUrl.document);
+    const url = ENDPOINTS.GET_UPDATE_JOBENTRY_DETAILS(
+      id,
+      menuConfigUrl.document
+    );
     return ApiMethods.get(url);
   };
-
-  
 }
 
 export default ApiManager;

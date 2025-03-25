@@ -23,6 +23,7 @@ const suggestionName = {
 };
 
 export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {
+  console.log(dataKey, inputId, dataLabel, 3874)
   inputId = suggestionName[inputId];
   try {
     const response = await ApiManager.fetchAutoCompleteData("", inputId);
