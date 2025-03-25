@@ -93,7 +93,7 @@ function FormAutoCompleteWithLoader(props) {
               endAdornment: (
                 <>
                   {loading ? (
-                    <CircularProgress color="inherit" size={20} />
+                    <CircularProgress color="inherit" size={15} />
                   ) : null}
                   {params.InputProps.endAdornment}
                 </>
