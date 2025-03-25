@@ -167,11 +167,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   </Box>
 
                   <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <Typography variant="body1">
-                      <strong>ExitPoint: </strong>
-                      <span style={{ color: "red" }}>NO</span>
-                    </Typography>
-
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <Typography variant="body1">
                         <strong>SCT</strong>
