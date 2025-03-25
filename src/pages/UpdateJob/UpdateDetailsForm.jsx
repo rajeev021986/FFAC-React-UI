@@ -18,6 +18,7 @@ export default function ContainerDetails({ formik }) {
     setExpanded(isExpanded ? panel : false);
   };
 
+  console.log(formik?.values, "formik?.values")
   return (
     <React.Fragment>
       {formik?.values?.containerDetails?.map((container, index) => (

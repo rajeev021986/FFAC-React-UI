@@ -236,7 +236,7 @@ const AccordianForm = ({ formik, index }) => {
         </Grid>
 
         <Grid container>
-          <Grid
+          {/* <Grid
             item
             xs={12}
             sm={6}
@@ -254,7 +254,7 @@ const AccordianForm = ({ formik, index }) => {
               onChange={formik.handleChange}
               disabled={disabled}
             />
-          </Grid>
+          </Grid> */}
 
           <Grid
             item
@@ -306,7 +306,7 @@ const AccordianForm = ({ formik, index }) => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <DateTimeField
               label="T1/C1 READY"
               id="t1C1ReadyDate"
               name={`containerDetails[${index}].t1C1ReadyDate`}
