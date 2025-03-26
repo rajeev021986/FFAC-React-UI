@@ -21,12 +21,6 @@ function FormAutoCompleteWithLoader(props) {
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
 
   useEffect(() => {
-    if (!debounceValue) {
-      setOptions([]);
-      setFilteredOptions([]);
-      return;
-    }
-
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -102,7 +96,7 @@ function FormAutoCompleteWithLoader(props) {
           />
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option.value} sx={{ fontSize: "14px" }}>
+          <MenuItem {...props} key={option.value || "87343874"} sx={{ fontSize: "14px" }}>
             {option.label}
           </MenuItem>
         )}
