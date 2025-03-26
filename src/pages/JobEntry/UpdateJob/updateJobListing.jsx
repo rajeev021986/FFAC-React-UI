@@ -1,39 +1,25 @@
-import {
-  Box,
-  Card,
-  CardHeader,
-  Drawer,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CardHeader, Stack } from "@mui/material";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ScreenToolbar from "../../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../../components/common/Breadcrumb";
 import GridSearchInput from "../../../components/common/Filter/GridSearchInput";
-import DeleteDialog from "../../../components/common/DeleteDialog";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
-  customerSetSortModel,
+  jobEntrySetView,
   setPagination,
-  setSortBy,
+  // setSortBy,
+  jobEntrySetSortModel,
   updateInput,
-} from "../../../store/freatures/CustomerSlice";
-import { jobEntrySetView } from "../../../store/freatures/JobEntrySlice";
-import SelectBox from "../../../components/common/SelectBox";
-import { CUSTOMER_SORT_OPTIONS } from "../../../data/options";
+} from "../../../store/freatures/JobEntrySlice";
+
 import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 import { useEffect } from "react";
 
 import Backdrop from "@mui/material/Backdrop";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
 import toast, { LoaderIcon } from "react-hot-toast";
-import AuditTimeLine from "../../../components/AuditTimeLine";
-import CustomToast from "../../../components/common/Toast/CustomToast";
 import FilterForm from "../FilterForm";
-import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
 // Custom API Manager
 import {
@@ -116,7 +102,7 @@ export default function UpdateJobListingScreen({ page }) {
   } = useFetchJobEntriesQuery({
     params: query,
     payload,
-    page: page == "update-jobs" ? "job-detail/filter" : "",
+    page: page == "update-jobs" ? "job-update/filter" : "",
   });
 
   useEffect(() => {
@@ -138,7 +124,6 @@ export default function UpdateJobListingScreen({ page }) {
       dispatch(jobEntrySetView("card"));
     }
   }, [codeJobEntryrSelector.view, dispatch]);
-
 
   useEffect(() => {
     dispatch(jobEntrySetView("grid"));
@@ -186,7 +171,7 @@ export default function UpdateJobListingScreen({ page }) {
             loading={isLoading || isFetching}
             sortModel={codeJobEntryrSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(customerSetSortModel(sortModel))
+              dispatch(jobEntrySetSortModel(sortModel))
             }
           />
         )}
