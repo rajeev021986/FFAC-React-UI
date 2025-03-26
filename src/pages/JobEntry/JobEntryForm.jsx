@@ -344,6 +344,10 @@ export default function JobEntryForm({
                 <Tab
                   label="Job Entry Details"
                   value="1"
+                  sx={{
+                    textTransform: "capitalize",
+                    minHeight: "50px",
+                  }}
                   icon={<EditIconForHeader />}
                   iconPosition="start"
                 />
@@ -358,6 +362,10 @@ export default function JobEntryForm({
                   value="1"
                   icon={<EditIconForHeader />}
                   iconPosition="start"
+                  sx={{
+                    textTransform: "capitalize",
+                    minHeight: "50px",
+                  }}
                 />
 
                 <Tab
@@ -365,12 +373,20 @@ export default function JobEntryForm({
                   value="2"
                   icon={<DocumentIcon />}
                   iconPosition="start"
+                  sx={{
+                    textTransform: "capitalize",
+                    minHeight: "50px",
+                  }}
                 />
                 <Tab
                   label="Audit Logs"
                   value="3"
                   icon={<AuditIcon />}
                   iconPosition="start"
+                  sx={{
+                    textTransform: "capitalize",
+                    minHeight: "50px",
+                  }}
                 />
               </TabList>
             )}
