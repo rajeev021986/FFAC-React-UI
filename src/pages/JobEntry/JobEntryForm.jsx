@@ -88,10 +88,16 @@ export default function JobEntryForm({
         let looseCargo = values.looseCargoShipments.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
         );
-
         let notesData = values.notes.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
         );
+        let rateData = {
+          totalAmount: values.rate.totalAmount || 0,
+          remarks: values.rate.remarks || "",
+          rateDetails: values.rate.rateDetails.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          ),
+        };
 
         try {
           delete values.id;
@@ -103,6 +109,7 @@ export default function JobEntryForm({
             vehicleShipments: vehicleShipment,
             looseCargoShipments: looseCargo,
             note: notesData,
+            rate: rateData,
           }).unwrap();
           const message = response.message;
           if (response.code == "SUCCESS") {
@@ -148,6 +155,13 @@ export default function JobEntryForm({
           let notesData = values.notes.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           );
+          let rateData = {
+            totalAmount: values.rate.totalAmount || 0,
+            remarks: values.rate.remarks || "",
+            rateDetails: values.rate.rateDetails.map((item) =>
+              item?.new ? { ...item, id: null, new: false } : item
+            ),
+          };
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
           let response = await updateJobEntry({
@@ -156,6 +170,7 @@ export default function JobEntryForm({
             vehicleShipments: vehicleShipment,
             looseCargoShipments: looseCargo,
             note: notesData,
+            rate: rateData,
           }).unwrap();
           const message = response.message;
           if (response.code == "SUCCESS") {
