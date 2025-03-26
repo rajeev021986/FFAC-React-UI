@@ -65,8 +65,10 @@ const Routes = {
   bond: { label: "Bond", disabled: false },
   bondAdd: { label: "Add Bond", disabled: false },
   editBond: { label: "Edit Bond", disabled: false },
-  documentation: { label: "Documentation", disabled: false },
+
+  documentation: { label: "Documentation", disabled: true },
   job: { label: "Job Entries", disabled: false },
+
   newEntry: { label: "Add New Entry", disabled: true },
   editJobEntry: { label: "Edit Job Entry", disabled: false },
   update: { label: "Update Job", disabled: false },

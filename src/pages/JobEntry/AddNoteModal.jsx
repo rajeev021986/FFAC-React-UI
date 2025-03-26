@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Typography, Modal, Box, Grid, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -24,6 +24,7 @@ export default function AddNoteModal({
   disabled = false,
   toggleNotes,
   handleToggleNote,
+  onNoteAdded, // ✅ Receive function to update notes
 }) {
   const subjectType = [
     { name: "OUTSTANDING", value: "OUTSTANDING" },
@@ -31,25 +32,31 @@ export default function AddNoteModal({
     { name: "DELAY NOTIFICATION", value: "DELAY NOTIFICATION" },
   ];
 
-  const handleNoteChange = (field, value) => {
-    let updatedNotes = [...formik.values.notes];
-    updatedNotes[0] = { ...updatedNotes[0], [field]: value };
-    formik.setFieldValue("notes", updatedNotes);
+  // Local state for new note input
+  const [noteData, setNoteData] = useState({
+    subjectType: "",
+    note: "",
+  });
+
+  const handleChange = (field, value) => {
+    setNoteData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleAddNote = () => {
+    if (!noteData.subjectType || !noteData.note) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
     const newNote = {
-      noteId: Date.now(),
-      subject: formik.values.notes[0]?.subjectType || "", // ✅ Renamed to "subject"
-      note: formik.values.notes[0]?.note || "",
+      id: Date.now(),
+      subject: noteData.subjectType,
+      note: noteData.note,
       createdDate: new Date().toISOString(),
     };
 
-    const storedNotes = JSON.parse(sessionStorage.getItem("notes")) || [];
-    const updatedNotes = [...storedNotes, newNote];
-
-    sessionStorage.setItem("notes", JSON.stringify(updatedNotes));
-    formik.setFieldValue("notes", updatedNotes);
+    onNoteAdded(newNote); // ✅ Call function to update the list
+    setNoteData({ subjectType: "", note: "" }); // Reset form
     handleToggleNote();
   };
 
@@ -74,32 +81,28 @@ export default function AddNoteModal({
         </Typography>
 
         <Box sx={{ width: "100%", mt: 2 }}>
-          <Box>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <SelectBox
-                  label="Subject"
-                  id="subjectType"
-                  options={subjectType}
-                  value={formik.values.notes[0]?.subjectType || ""}
-                  onChange={(e) =>
-                    handleNoteChange("subjectType", e.target.value)
-                  }
-                  disabled={disabled}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid item sx={{ width: "100%", marginTop: 3 }} sm={12}>
-              <InputBox
-                label="Notes"
-                id="note"
-                value={formik.values.notes[0]?.note || ""}
-                onChange={(e) => handleNoteChange("note", e.target.value)}
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <SelectBox
+                label="Subject"
+                id="subjectType"
+                options={subjectType}
+                value={noteData.subjectType}
+                onChange={(e) => handleChange("subjectType", e.target.value)}
                 disabled={disabled}
               />
             </Grid>
-          </Box>
+          </Grid>
+
+          <Grid item sx={{ width: "100%", marginTop: 3 }} sm={12}>
+            <InputBox
+              label="Notes"
+              id="note"
+              value={noteData.note}
+              onChange={(e) => handleChange("note", e.target.value)}
+              disabled={disabled}
+            />
+          </Grid>
 
           <ThemeButton
             onClick={handleAddNote}

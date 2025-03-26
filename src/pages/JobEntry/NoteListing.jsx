@@ -7,20 +7,49 @@ import { useLocation } from "react-router-dom";
 const NotesTable = ({ formik }) => {
   const location = useLocation();
   const [notes, setNotes] = useState([]);
-  const [toggleNotes, settoggleNotes] = useState(false);
+  const [toggleNotes, setToggleNotes] = useState(false);
+
   const handleToggleNote = () => {
-    settoggleNotes((prev) => !prev);
+    setToggleNotes((prev) => !prev);
   };
 
-  const storedNotes = sessionStorage.getItem("notes");
+  // Load notes from formik and localStorage
+  const loadNotes = () => {
+    const storedNotes = JSON.parse(localStorage.getItem("notes")) || [];
+    const apiNotes = formik?.values?.notes || [];
+
+    const combinedNotes = [...apiNotes, ...storedNotes].reduce((acc, note) => {
+      if (!acc.some((n) => n.id === note.id)) {
+        acc.push(note);
+      }
+      return acc;
+    }, []);
+
+    setNotes(combinedNotes);
+  };
+
   useEffect(() => {
-    setNotes(storedNotes ? JSON.parse(storedNotes) : []);
-  }, [storedNotes]);
+    loadNotes();
+  }, [formik?.values?.notes]);
+
+  useEffect(() => {
+    if (location.pathname !== "/app/documentation/job/entry/editJobEntry") {
+      localStorage.removeItem("notes");
+      setNotes([]);
+    }
+  }, [location.pathname]);
+
+  const handleNoteAdded = (newNote) => {
+    const updatedNotes = [...notes, newNote];
+    formik.setFieldValue("notes", updatedNotes);
+    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+    setNotes(updatedNotes);
+  };
 
   const NOTE_COLUMNS = [
     {
       flex: 1,
-      field: "noteId",
+      field: "id",
       headerName: "ID",
       width: 110,
       headerAlign: "center",
@@ -56,36 +85,27 @@ const NotesTable = ({ formik }) => {
     },
   ];
 
-  useEffect(() => {
-    if (location.pathname !== "app/documentation/job/entry/newEntry") {
-      sessionStorage.removeItem("notes");
-      setNotes([]);
-    }
-  }, []);
-
   return (
     <React.Fragment>
       <ThemedGrid
-        uniqueId="noteId"
+        uniqueId="id"
         columns={NOTE_COLUMNS}
-        count={notes || 0}
+        count={notes.length}
         data={notes}
       />
 
       <ThemeButton
-        sx={{
-          fontWeight: "500",
-          color: "white !important",
-          marginTop: 2,
-        }}
+        sx={{ fontWeight: "500", color: "white !important", marginTop: 2 }}
         onClick={handleToggleNote}
       >
         Add Note
       </ThemeButton>
+
       <AddNoteModal
         toggleNotes={toggleNotes}
         handleToggleNote={handleToggleNote}
         formik={formik}
+        onNoteAdded={handleNoteAdded}
       />
     </React.Fragment>
   );

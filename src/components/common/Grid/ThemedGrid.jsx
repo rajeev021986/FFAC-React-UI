@@ -27,12 +27,12 @@ const ThemedGrid = (props) => {
   const gridData = data?.map((obj) => {
     return {
       ...obj,
-      modifiedDate: obj.modifiedDate
-        ? handleDate(obj.modifiedDate)
-        : obj.modifiedDate,
-      createdDate: obj.createdDate
-        ? handleDate(obj.createdDate)
-        : obj.createdDate,
+      modifiedDate: obj?.modifiedDate
+        ? handleDate(obj?.modifiedDate)
+        : obj?.modifiedDate,
+      createdDate: obj?.createdDate
+        ? handleDate(obj?.createdDate)
+        : obj?.createdDate,
     };
   });
 
