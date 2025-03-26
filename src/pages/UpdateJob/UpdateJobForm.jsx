@@ -53,12 +53,16 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
     enableReinitialize: true,
     validateOnChange: false,
     onSubmit: async (values) => {
-      console.log(values, "valuesjobDetails");
+      let bondData = values.bondDetails.map((item) =>
+        item?.new ? { ...item, id: null, new: false } : item
+      );
       try {
-        // delete values.id;
         values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
         values.status = "";
-        let response = await updateJobDetailsEntry({ ...values }).unwrap();
+        let response = await updateJobDetailsEntry({
+          ...values,
+          bondDetails: bondData,
+        }).unwrap();
         const message = response.message;
         if (response.code == "SUCCESS") {
           toast.custom(<CustomToast message={message} toast="success" />, {

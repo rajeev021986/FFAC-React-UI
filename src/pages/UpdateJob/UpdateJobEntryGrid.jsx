@@ -72,31 +72,13 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
           field: "bondNumber",
           headerName: "Bond Number",
           flex: 1,
-          renderCell: (params) => {
-            return (
-              <AutoCompleteInput
-                id="bondNumber"
-                suggestionName="charge_name"
-                value={params.value}
-                error={formik.errors.bondDetails?.[params.rowIndex]?.bondNumber}
-                onChange={(newValue) => {
-                  const rowIndex = formik.values.bondDetails.findIndex(
-                    (entity) => entity.id === params.id
-                  );
-                  formik.setValues({
-                    ...formik?.values,
-                    bondDetails: formik?.values?.bondDetails?.map(
-                      (entity, index) =>
-                        index === rowIndex
-                          ? { ...entity, bondNumber: newValue }
-                          : entity
-                    ),
-                  });
-                }}
-                inputRef={newRowRef}
-              />
-            );
-          },
+          editable: true,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter Bond Number" />
+          ),
+          renderEditCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Enter Bond Number" />
+          ),
         },
         {
           field: "balanceBondAmount",
