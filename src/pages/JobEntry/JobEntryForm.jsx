@@ -79,11 +79,31 @@ export default function JobEntryForm({
     validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
+        let containerShipment = values.containerShipments.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
+        let vehicleShipment = values.vehicleShipments.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
+        let looseCargo = values.looseCargoShipments.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
+
+        let notesData = values.notes.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
+
         try {
           delete values.id;
           values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
-          let response = await addJobEntry({ ...values }).unwrap();
+          let response = await addJobEntry({
+            ...values,
+            containerShipments: containerShipment,
+            vehicleShipments: vehicleShipment,
+            looseCargoShipments: looseCargo,
+            note: notesData,
+          }).unwrap();
           const message = response.message;
           if (response.code == "SUCCESS") {
             toast.custom(<CustomToast message={message} toast="warn" />, {
@@ -116,9 +136,27 @@ export default function JobEntryForm({
       } else {
         try {
           setRejectError(false);
+          let containerShipment = values.containerShipments.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
+          let vehicleShipment = values.vehicleShipments.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
+          let looseCargo = values.looseCargoShipments.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
+          let notesData = values.notes.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          let response = await updateJobEntry({ ...values }).unwrap();
+          let response = await updateJobEntry({
+            ...values,
+            containerShipments: containerShipment,
+            vehicleShipments: vehicleShipment,
+            looseCargoShipments: looseCargo,
+            note: notesData,
+          }).unwrap();
           const message = response.message;
           if (response.code == "SUCCESS") {
             toast.custom(<CustomToast message={message} toast="success" />, {

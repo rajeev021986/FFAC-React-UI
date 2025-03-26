@@ -148,7 +148,7 @@ function App() {
               path="documentation/job-approve/file"
               element={<JobEntryScreen page="jobApprove" />}
             />
-            
+
             <Route
               path="documentation/job/entry/newEntry"
               element={<AddJobEntry page="job-entry" />}

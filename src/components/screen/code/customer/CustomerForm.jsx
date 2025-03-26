@@ -1468,7 +1468,6 @@ export default function CustomerForm({
                             onClick={() => nav(-1)}
                           >
                             Cancel
-                            
                           </OutlinedButton>
                           <ThemeButton
                             onClick={formik.handleSubmit}
