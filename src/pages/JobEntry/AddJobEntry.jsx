@@ -104,6 +104,7 @@ export default function AddJobEntry({ page }) {
         }
         setInitialValues({
           ...initialValues,
+          rateId: res.body?.rateId || "",
           status: res.body.status || "",
           id: res.body?.id || "",
           customerName: res.body?.customerName || "",

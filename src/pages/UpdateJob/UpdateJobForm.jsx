@@ -339,11 +339,12 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 >
                   <DateTimeField
                     label="Entry Loadged Ref. Date"
+                    name="entryLoadgedDate"
                     id="entryLoadgedDate"
                     value={formik.values.entryLoadgedDate}
                     error={formik.errors.entryLoadgedDate}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
+                    onChange={formik.setFieldValue}
+                    inputRef={FieldRef}
                   />
                 </Grid>
               </Grid>
