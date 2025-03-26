@@ -10,7 +10,6 @@ import SelectBox from "../../components/common/SelectBox";
 export default function FilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state?.codeJobEntryrSelector?.formData);
-  console.log(inputs , "inputs")
   const formik = useFormik({
     initialValues: inputs || {
       customerName: inputs?.customerName || "",

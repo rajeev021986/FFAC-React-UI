@@ -6,3 +6,10 @@
   padding: 0 24px;
   border-radius: 8px;
 }
+.css-zw9y3a-MuiFormControl-root-MuiTextField-root .MuiInputBase-root {
+  font-size: 14px;
+  border-radius: 10px;
+  width: 100%;
+  height: 42px;
+  border: 1px solid #f44336;
+}
