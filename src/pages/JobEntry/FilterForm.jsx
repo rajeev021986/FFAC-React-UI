@@ -13,11 +13,12 @@ export default function FilterForm({ setFilterOpen }) {
   const formik = useFormik({
     initialValues: inputs || {
       customerName: inputs?.customerName || "",
-      refNo: inputs?.refNo || "",
-      customerRefNo: inputs?.customerRefNo || "",
-      entryNo: inputs?.entryNo || "",
-      tansadNo: inputs?.tansadNo || "",
       invoiceNo: inputs?.invoiceNo || "",
+      customerRefNo: inputs?.customerRefNo || "",
+      tansadNo: inputs?.tansadNo || "",
+      entryNo: inputs?.entryNo || "",
+      blNo: inputs?.blNo || "",
+      mblNo: inputs?.mblNo || "",
       statusCode: inputs?.statusCode || "",
       isDoc: inputs?.isDoc || "",
     },
@@ -38,9 +39,10 @@ export default function FilterForm({ setFilterOpen }) {
         customerName: "",
         customerRefNo: "",
         entryNo: "",
-        refNo: "",
+        blNo: "",
         tansadNo: "",
         invoiceNo: "",
+        mblNo: "",
         statusCode: "",
         isDoc: "",
       })
@@ -48,10 +50,11 @@ export default function FilterForm({ setFilterOpen }) {
     formik.setValues({
       customerName: "",
       customerRefNo: "",
-      refNo: "",
       entryNo: "",
+      blNo: "",
       tansadNo: "",
       invoiceNo: "",
+      mblNo: "",
       statusCode: "",
       isDoc: "",
     });
@@ -80,57 +83,44 @@ export default function FilterForm({ setFilterOpen }) {
             onChange={formik.handleChange}
           />
           <InputBox
-            label="Ref No."
-            id="refNo"
-            value={formik.values.refNo}
-            onChange={formik.handleChange}
-          />
-          <InputBox
             label="Customer Reference No."
             id="customerRefNo"
             value={formik.values.customerRefNo}
             onChange={formik.handleChange}
           />
-        </Stack>
-
-        <Stack direction="row" spacing={2}>
           <InputBox
             label="Entry No."
             id="entryNo"
             value={formik.values.entryNo}
             onChange={formik.handleChange}
           />
-          <InputBox
-            label="Tansad No."
-            id="tansadNo"
-            value={formik.values.tansadNo}
-            onChange={formik.handleChange}
-          />
-          <InputBox
-            label="Tansad No."
-            id="tansadNo"
-            value={formik.values.tansadNo}
-            onChange={formik.handleChange}
-          />
         </Stack>
 
         <Stack direction="row" spacing={2}>
+          <InputBox
+            label="BL No."
+            id="blNo"
+            value={formik.values.blNo}
+            onChange={formik.handleChange}
+          />
+
+          <InputBox
+            label="Tansad No."
+            id="tansadNo"
+            value={formik.values.tansadNo}
+            onChange={formik.handleChange}
+          />
           <InputBox
             label="Invoice No."
             id="invoiceNo"
             value={formik.values.invoiceNo}
             onChange={formik.handleChange}
           />
+        </Stack>
 
+        <Stack direction="row" spacing={2}>
           <InputBox
-            label="Tansad No."
-            id="tansadNo"
-            value={formik.values.tansadNo}
-            onChange={formik.handleChange}
-          />
-
-          <InputBox
-            label="BL No."
+            label="MBL No."
             id="mblNo"
             value={formik.values.mblNo}
             onChange={formik.handleChange}
