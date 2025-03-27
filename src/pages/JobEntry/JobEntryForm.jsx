@@ -500,7 +500,7 @@ export default function JobEntryForm({
                 >
                   <DateTimeField
                     name="dateOfReceipt"
-                    label="Date of Receipt"
+                    label="Date Of Receipt"
                     id="dateOfReceipt"
                     value={formik.values.dateOfReceipt}
                     error={formik.errors.dateOfReceipt}
@@ -564,7 +564,7 @@ export default function JobEntryForm({
                   marginTop={2}
                 >
                   <InputBox
-                    label="Customer Ref NO."
+                    label="Customer Ref No."
                     id="customerRefNo"
                     value={formik.values.customerRefNo}
                     error={formik.errors.customerRefNo}
@@ -585,7 +585,7 @@ export default function JobEntryForm({
                   marginTop={2}
                 >
                   <SelectBox
-                    label="Type of Cargo"
+                    label="Type Of Cargo"
                     id="typeOfCargo"
                     options={jobSettingData?.body.typesOfCargo}
                     value={formik.values.typeOfCargo}
@@ -628,7 +628,7 @@ export default function JobEntryForm({
                   marginTop={2}
                 >
                   <InputBox
-                    label="TANSAD No."
+                    label="Tansad No."
                     id="tansadNo"
                     value={formik.values.tansadNo}
                     error={formik.errors.tansadNo}
@@ -650,7 +650,7 @@ export default function JobEntryForm({
                 >
                   <DateTimeField
                     name="entryTansadDate"
-                    label="Entry/TANSAD Date"
+                    label="Entry/Tansad Date"
                     id="entryTansadDate"
                     value={formik.values.entryTansadDate}
                     error={formik.errors.entryTansadDate}

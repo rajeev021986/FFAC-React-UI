@@ -285,6 +285,11 @@ export default function JobEntryScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(jobEntrySetSortModel(sortModel))
             }
+            // disableRowSelectionOnClick
+            // checkboxSelection 
+            // sx={{
+            //   "& .MuiDataGrid-columnHeaderCheckbox": { display: "none !important" },
+            // }} 
             // rowSelection={true}
             // checkboxSelection={true}
           />

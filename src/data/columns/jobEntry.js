@@ -1,4 +1,13 @@
 export const JOB_ENTRY_COLUMNS = [
+  // {
+  //   flex: 1,
+  //   field: "isapprove",
+  //   headerName: "Approve",
+  //   width: 110,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   editable: false,
+  // },
   {
     flex: 1,
     field: "isDoc",
@@ -20,7 +29,7 @@ export const JOB_ENTRY_COLUMNS = [
   {
     flex: 1,
     field: "customerName",
-    headerName: "Customer",
+    headerName: "Customer Name",
     width: 110,
     headerAlign: "center",
     align: "center",
@@ -29,7 +38,7 @@ export const JOB_ENTRY_COLUMNS = [
   {
     flex: 1,
     field: "customerRefNo",
-    headerName: "Reference No.",
+    headerName: "Customer Ref.",
     width: 110,
     headerAlign: "center",
     align: "center",
@@ -48,15 +57,6 @@ export const JOB_ENTRY_COLUMNS = [
     flex: 1,
     field: "hblNo",
     headerName: "Bl No.",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    editable: false,
-  },
-  {
-    flex: 1,
-    field: "customerRefNo",
-    headerName: "Customer Ref.",
     width: 110,
     headerAlign: "center",
     align: "center",
