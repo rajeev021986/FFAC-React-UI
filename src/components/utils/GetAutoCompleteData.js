@@ -33,7 +33,7 @@ export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {
         index === self.findIndex((t) => t[dataKey] === value[dataKey])
     );
     uniqueSuggestions = uniqueSuggestions.map((item) => {
-      return { label: item[dataLabel], value: item[dataKey] };
+      return { label: item[dataLabel], value: item[dataKey], fullData:item };
     });
 
     return uniqueSuggestions;

@@ -32,7 +32,13 @@ export default function ShipperDetails({ formik }) {
               suggestionName="name"
               value={formik.values.supplierName}
               error={formik.errors.supplierName}
-              onChange={formik.handleChange}
+              onChange={(event) => {
+                formik.setFieldValue("supplierName", event.target.value);
+                formik.setFieldValue(
+                  "supplierAddress",
+                  event.target.formattedAddress || ""
+                );
+              }}
               inputRef={FieldRef}
             ></FormAutoComplete>
           </Grid>
@@ -55,7 +61,13 @@ export default function ShipperDetails({ formik }) {
               suggestionName="consignee_name"
               value={formik.values.consigneeName}
               error={formik.errors.consigneeName}
-              onChange={formik.handleChange}
+              onChange={(event) => {
+                formik.setFieldValue("consigneeName", event.target.value);
+                formik.setFieldValue(
+                  "consigneeAddress",
+                  event.target.formattedAddress || ""
+                );
+              }}
               inputRef={FieldRef}
             ></FormAutoComplete>
           </Grid>
