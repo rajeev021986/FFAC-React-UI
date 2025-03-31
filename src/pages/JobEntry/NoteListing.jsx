@@ -5,6 +5,8 @@ import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { useLocation } from "react-router-dom";
 import { Delete } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { IconButton } from "@mui/material";
 
 const NotesTable = ({ formik }) => {
   const location = useLocation();
@@ -105,7 +107,7 @@ const handleToggleNote = () => {
     {
       flex: 1,
       field: "subject",
-      headerName: "Subject Type",
+      headerName: "Subject",
       width: 110,
       headerAlign: "center",
       align: "center",
@@ -114,7 +116,7 @@ const handleToggleNote = () => {
     {
       flex: 1,
       field: "createdDate",
-      headerName: "Created Date",
+      headerName: "Date",
       width: 110,
       headerAlign: "center",
       align: "center",
@@ -124,7 +126,13 @@ const handleToggleNote = () => {
       field: "edit",
       headerName: "Edit",
       flex: 1,
+      sortable: false, 
       headerAlign: "center",
+        renderHeader: () => (
+                  <IconButton color="white" onClick={handleToggleNote}>
+                    <AddCircleIcon />
+                  </IconButton>
+                ),
       renderCell: (params) => (
         <div
           style={{
@@ -155,12 +163,12 @@ const handleToggleNote = () => {
         data={notes}
       />
 
-      <ThemeButton
+      {/* <ThemeButton
         sx={{ fontWeight: "500", color: "white !important", marginTop: 2 }}
         onClick={handleToggleNote}
       >
         Add Note
-      </ThemeButton>
+      </ThemeButton> */}
 
       <AddNoteModal
         toggleNotes={toggleNotes}
