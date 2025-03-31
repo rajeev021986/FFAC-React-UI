@@ -46,9 +46,20 @@ function FormAutoComplete(props) {
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      onChange({ target: { name: id, value: newValue.value } });
+      const { fullData } = newValue;
+      const selectedAddress =
+        fullData.address1?.trim() ||
+        fullData.address2?.trim() ||
+        fullData.address3?.trim() ||
+        "";
+        const selectedCity = fullData.city || "";
+        const selectedCountry = fullData.country || "";
+        const formattedAddress = selectedAddress
+        ? `${selectedAddress}, ${selectedCity}, ${selectedCountry}`
+        : "";
+      onChange({ target: { name: id, value: newValue.value, formattedAddress , } });
     } else {
-      onChange({ target: { name: id, value: null } });
+      onChange({ target: { name: id, value: null, formattedAddress: "" } });
     }
   };
 
