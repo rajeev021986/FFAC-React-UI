@@ -110,12 +110,12 @@ export default function FilterForm({ setFilterOpen }) {
             value={formik.values.tansadNo}
             onChange={formik.handleChange}
           />
-          <InputBox
+          {/* <InputBox
             label="Invoice No."
             id="invoiceNo"
             value={formik.values.invoiceNo}
             onChange={formik.handleChange}
-          />
+          /> */}
         </Stack>
 
         <Stack direction="row" spacing={2}>
