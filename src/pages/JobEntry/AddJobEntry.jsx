@@ -34,6 +34,8 @@ export default function AddJobEntry({ page }) {
     entryNo: "",
     refNo: "",
     fileManager: getUserId,
+    status: "",
+    statusCode: "",
 
     // Shipper Details Key Start
     supplierName: "",
@@ -105,8 +107,9 @@ export default function AddJobEntry({ page }) {
         setInitialValues({
           ...initialValues,
           rateId: res.body?.rateId || "",
-          status: res.body.status || "",
+          status: res.body?.status || "",
           id: res.body?.id || "",
+          statusCode: res.body?.statusCode,
           customerName: res.body?.customerName || "",
           shipmentType: res.body?.shipmentType || "",
           moveType: res.body?.moveType || "",

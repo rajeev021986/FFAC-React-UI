@@ -1,7 +1,7 @@
 export const NOTES_COLUMNS = [
   {
     flex: 1,
-    field: "subjectType",
+    field: "subject",
     headerName: "Subject",
     width: 110,
     headerAlign: "center",
