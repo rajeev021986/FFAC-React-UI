@@ -307,7 +307,7 @@ export default function JobEntryForm({
     }));
   };
 
-  const disabled = page == "job-entry" ? false : true;
+  const disabled = page == "job-entry" || "jobApprove" ? false : true;
 
   useEffect(() => {
     getFirstError(formik.errors);
