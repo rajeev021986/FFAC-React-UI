@@ -18,7 +18,7 @@ export default function FilterForm({ setFilterOpen }) {
       tansadNo: inputs?.tansadNo || "",
       entryNo: inputs?.entryNo || "",
       blNo: inputs?.blNo || "",
-      mblNo: inputs?.mblNo || "",
+      hblNo: inputs?.hblNo || "",
       statusCode: inputs?.statusCode || "",
       isDoc: inputs?.isDoc || "",
     },
@@ -42,7 +42,7 @@ export default function FilterForm({ setFilterOpen }) {
         blNo: "",
         tansadNo: "",
         invoiceNo: "",
-        mblNo: "",
+        hblNo: "",
         statusCode: "",
         isDoc: "",
       })
@@ -54,7 +54,7 @@ export default function FilterForm({ setFilterOpen }) {
       blNo: "",
       tansadNo: "",
       invoiceNo: "",
-      mblNo: "",
+      hblNo: "",
       statusCode: "",
       isDoc: "",
     });
@@ -98,9 +98,9 @@ export default function FilterForm({ setFilterOpen }) {
 
         <Stack direction="row" spacing={2}>
           <InputBox
-            label="BL No."
-            id="blNo"
-            value={formik.values.blNo}
+            label="MBL No."
+            id="mblNo"
+            value={formik.values.mblNo}
             onChange={formik.handleChange}
           />
 
@@ -120,9 +120,9 @@ export default function FilterForm({ setFilterOpen }) {
 
         <Stack direction="row" spacing={2}>
           <InputBox
-            label="MBL No."
-            id="mblNo"
-            value={formik.values.mblNo}
+            label="HBL No."
+            id="hblNo"
+            value={formik.values.hblNo}
             onChange={formik.handleChange}
           />
         </Stack>

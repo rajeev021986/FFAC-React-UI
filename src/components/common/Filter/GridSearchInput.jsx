@@ -14,6 +14,7 @@ const GridSearchInput = ({
   setFilters,
   selectedIds, // Receive selected IDs
   handleApproveAllRequest, // Receive function
+  page,
   width = "500px",
   height = "auto",
 }) => {
@@ -91,6 +92,9 @@ const GridSearchInput = ({
       )}
      
     </Box>
+    {
+      selectedIds?.length === 0  && page === "job-entry" && 
+    
        <Button
         onClick={handleApproveAllRequest}
         disabled={selectedIds?.length === 0}
@@ -98,7 +102,7 @@ const GridSearchInput = ({
          size="small"
       >
         Approve
-      </Button>
+      </Button>}
     </>
   
   );

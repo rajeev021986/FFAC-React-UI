@@ -306,6 +306,7 @@ export default function JobEntryScreen({ page }) {
                   width="650px"
                   selectedIds={selectedIds} // Pass selected IDs
                   handleApproveAllRequest={handleApproveAllRequest} // Pass function
+                  page={page}
                 >
                   <FilterForm />
                 </GridSearchInput>

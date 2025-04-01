@@ -22,8 +22,8 @@ export default function AddJobEntry({ page }) {
     moveType: "",
 
     customerName: "",
-    mblNo: "",
     hblNo: "",
+    mblNo: "",
     customerRefNo: "",
     invoiceNo: "",
     dateOfReceipt: "",
