@@ -2,7 +2,6 @@ import EditIconDropdown from "../../common/commonIconDropdown/EditIconDropdown/E
 import AuditIconDropdown from "../../common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
 
 export const getJobEntryListGridActionsApprovel = (nav, setModal) => {
-  console.log(nav, 98394839)
   return [
     {
       label: "Edit",

@@ -42,6 +42,7 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { Box, Stack, Typography } from "@mui/material";
 import { Card, CardHeader, Drawer } from "@mui/material";
 import ApiManager from "../../services/ApiManager";
+import { JOB_ENTRY_NEW_COLUMNS } from "../../data/columns/jobEntry(New)";
 
 export default function JobEntryScreen({ page }) {
   const location = useLocation();
@@ -121,14 +122,15 @@ export default function JobEntryScreen({ page }) {
 
   useEffect(() => {
     refetch();
+    setSelectedIds([])
   }, [location.pathname]);
 
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
-
-  JOB_ENTRY_COLUMNS[JOB_ENTRY_COLUMNS.length - 1].renderCell = GridActions({
+  const activeColumns = page === "job-entry" ? JOB_ENTRY_NEW_COLUMNS : JOB_ENTRY_COLUMNS;
+  activeColumns[activeColumns.length - 1].renderCell = GridActions({
     actions:
       page == "job-entry"
         ? getJobEntryListGridActions(nav, setModal)
@@ -219,6 +221,28 @@ export default function JobEntryScreen({ page }) {
     }
   };
 
+  // const jobEntryColumns = [
+  //   ...(page === "job-entry"
+  //     ? [
+  //         {
+  //           field: "Approve",
+  //           headerName: "Approve",
+  //           width: 80,
+  //           headerAlign: "center",
+  //           align: "center",
+  //           renderCell: (params) => (
+  //             <input
+  //               type="checkbox"
+  //               style={{cursor:'pointer'}}
+  //               checked={selectedIds.includes(params.row.id)}
+  //               onChange={() => handleCheckboxChange(params.row.id)}
+  //             />
+  //           ),
+  //         },
+  //       ]
+  //     : []),
+  //   ...JOB_ENTRY_COLUMNS,
+  // ];
   const jobEntryColumns = [
     ...(page === "job-entry"
       ? [
@@ -231,17 +255,18 @@ export default function JobEntryScreen({ page }) {
             renderCell: (params) => (
               <input
                 type="checkbox"
-                style={{cursor:'pointer'}}
+                style={{ cursor: "pointer" }}
                 checked={selectedIds.includes(params.row.id)}
                 onChange={() => handleCheckboxChange(params.row.id)}
               />
             ),
           },
+          ...JOB_ENTRY_NEW_COLUMNS, // Use the new columns when on "job-entry" page
         ]
-      : []),
-    ...JOB_ENTRY_COLUMNS,
+      : [...JOB_ENTRY_COLUMNS] // Use the default columns otherwise
+    ),
   ];
-
+  
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
