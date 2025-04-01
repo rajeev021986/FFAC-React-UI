@@ -62,6 +62,8 @@ const ENDPOINTS = {
   GET_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail/${id}`,
   JOB_APPROVE_REQUEST: (id, type,BasePageUrl) =>
     `/${BasePageUrl}/approval/approved/${type}/${id}`,
+  ALL_JOBS_APPROVE_REQUEST: (type,BasePageUrl) =>
+    `/${BasePageUrl}/approval/approved/${type}`,
   JOB_ENTRY_REJECT_REQUEST: (id, type,BasePageUrl) =>
     `/${BasePageUrl}/approval/rejected/${type}/${id}`,
   GET_UPDATE_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-update/${id}`,
