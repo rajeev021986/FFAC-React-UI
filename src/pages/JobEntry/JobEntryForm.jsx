@@ -817,7 +817,7 @@ export default function JobEntryForm({
                         : formik.errors.rejectRemarks
                     }
                     onChange={formik.handleChange}
-                    disabled={page === "job-entry" ? disabled : !disabled}
+                    disabled={page === "job-entry" ? true : false}
                     multiline
                     rows={4}
                     variant="outlined"

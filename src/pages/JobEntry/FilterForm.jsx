@@ -88,12 +88,12 @@ export default function FilterForm({ setFilterOpen }) {
             value={formik.values.customerRefNo}
             onChange={formik.handleChange}
           />
-          <InputBox
+          {/* <InputBox
             label="Entry No."
             id="entryNo"
             value={formik.values.entryNo}
             onChange={formik.handleChange}
-          />
+          /> */}
         </Stack>
 
         <Stack direction="row" spacing={2}>
@@ -118,22 +118,22 @@ export default function FilterForm({ setFilterOpen }) {
           /> */}
         </Stack>
 
-        <Stack direction="row" spacing={2}>
+        {/* <Stack direction="row" spacing={2}>
           <InputBox
             label="HBL No."
             id="hblNo"
             value={formik.values.hblNo}
             onChange={formik.handleChange}
           />
-        </Stack>
+        </Stack> */}
 
         <Stack
           direction="row"
           spacing={2}
-          sx={{
-            width: "65.7%",
-            justifyContent: "space-between",
-          }}
+          // sx={{
+          //   width: "99.7%",
+          //   justifyContent: "space-between",
+          // }}
         >
           <div style={{ width: "48%", marginLeft: "0px" }}>
             <SelectBox

@@ -59,7 +59,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       "City must only contain letters"
     ),
     country: Yup.string(),
-    emailId: Yup.string().test(
+    email: Yup.string().test(
       "valid-email",
       "Invalid email format",
       (value) => {

@@ -133,6 +133,7 @@ export default function AddJobEntry({ page }) {
           notifyPartyName: res.body?.notifyPartyName || "",
           notifyAddress: res.body?.notifyAddress || "",
           shipperStatus: res.body?.shipperStatus || "",
+          rejectRemarks: res.body?.rejectRemarks || "",
           shippingLine: res.body?.shippingLine || "",
           eta: res.body?.eta || "",
           arrivalDate: res.body?.arrivalDate || "",
