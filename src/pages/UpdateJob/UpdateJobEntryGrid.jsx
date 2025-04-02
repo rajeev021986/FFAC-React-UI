@@ -211,6 +211,9 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
                       experimentalFeatures={{ newEditingApi: true }}
                       getRowId={(row) => row.id}
                       disableColumnMenu
+                      disablePagination
+                      paginationMode="client" // Ensures manual pagination is off
+                      hideFooterPagination 
                     />
                   ) : (
                     <Box

@@ -17,11 +17,14 @@ import { Link, useLocation } from "react-router-dom";
 import { iconsMap } from "../../config/menu";
 import IconComponent from "../common/IconComponent";
 
-export const ExpandableListItems = ({ label, items, icon, hover }) => {
+export const ExpandableListItems = ({ label, items, icon, hover,openItem,setOpenItem }) => {
   const [open, setOpen] = useState(false);
+  const isOpen = openItem === label;
+  console.log(isOpen,"isOpen")
   const { pathname } = useLocation();
   const handleClick = () => {
     setOpen(!open);
+    setOpenItem(isOpen ? null : label); 
   };
   return (
     <>

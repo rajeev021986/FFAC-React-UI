@@ -308,6 +308,7 @@ export default function JobEntryForm({
 
   const disabled = page == "job-entry" ? false : true;
 
+
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -695,7 +696,7 @@ export default function JobEntryForm({
                     value={formik.values.refNo}
                     error={formik.errors.refNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={true}
                   />
                 </Grid>
               </Grid>

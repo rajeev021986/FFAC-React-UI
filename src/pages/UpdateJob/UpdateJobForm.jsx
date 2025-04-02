@@ -170,7 +170,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     </Typography>
                   </Box>
 
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  {/* <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <Typography variant="body1">
                         <strong>SCT</strong>
@@ -211,7 +211,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                         <MenuItem value="YES">YES</MenuItem>
                       </Select>
                     </Box>
-                  </Box>
+                  </Box> */}
                 </Toolbar>
               </AppBar>
 

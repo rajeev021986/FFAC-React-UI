@@ -15,18 +15,40 @@ export default function InputBoxForGrid(props) {
     inputRef,
   } = props;
 
+  console.log(field,"field")
   const tooltipMessage = value ? value : "This field is empty";
   const [inputValue, setInputValue] = useState(value || "");
+  const [error, setError] = useState(false);
   useEffect(() => {
     if (props?.cellMode === "view") {
       setInputValue(props.value);
     }
   }, [props.value]);
   const handleChange = (event) => {
+    let isValid = true;
     const newValue = event.target.value;
+    if (field == "tflSealNo ") {
+      isValid = /^\d{11}$/.test(newValue); // Must be exactly 11 digits
+    }
+
     setInputValue(newValue);
-    api.setEditCellValue({ id, field, value: newValue }, event);
+    setError(!isValid);
+    if (isValid) {
+      api.setEditCellValue({ id, field, value: newValue }, event);
+    }
   };
+  const handleChangeContainerNo = (event) => {
+    const newValue = event.target.value;
+    const isValid = /^[A-Za-z]{4}\d{7}$/.test(newValue); // 4 letters + 7 digits
+  
+    setInputValue(newValue);
+    setError(!isValid); // Show error if invalid
+  console.log(isValid,"isValid")
+    if (isValid) {
+      api.setEditCellValue({ id, field, value: newValue }, event);
+    }
+  };
+  
   return (
     <div
       key={id}
@@ -76,14 +98,16 @@ export default function InputBoxForGrid(props) {
           default:
             return (
               <Tooltip title={tooltipMessage} arrow>
-                <TextField
+               <TextField
                   size="small"
                   type={fieldType}
-                  fullWidth={true}
+                  fullWidth
                   value={inputValue}
-                  onChange={handleChange}
+                  onChange={ field == "containerNo"? handleChangeContainerNo :handleChange}
                   inputRef={inputRef}
                   placeholder={placeholder}
+                  error={error}
+                  helperText={error ? "Must be 4 letters & 7 digits (e.g., ABCD1234567)" : ""}
                   InputProps={{
                     disableUnderline: true,
                     style: {
@@ -96,11 +120,10 @@ export default function InputBoxForGrid(props) {
                     },
                   }}
                   inputProps={{
-                    style: {
-                      textAlign: "center", 
-                    },
+                    style: { textAlign: "center" },
+                    maxLength: 11, // Prevents extra characters
                   }}
-                  {...props}
+                  // {...props}
                 />
               </Tooltip>
             );

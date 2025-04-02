@@ -56,7 +56,7 @@ export default function JobEntryScreen({ page }) {
     data: {},
   });
   const [open, setOpen] = useState(false);
-
+console.log(jobEntrySetView,"jobEntrySetView")
   const actions = seletectBox
     ? [
         { name: "New Job Entry" },
@@ -182,7 +182,7 @@ export default function JobEntryScreen({ page }) {
   };
 
   useEffect(() => {
-    dispatch(jobEntrySetView("grid"));
+     dispatch(jobEntrySetView("grid"));
   }, []);
 
   return (

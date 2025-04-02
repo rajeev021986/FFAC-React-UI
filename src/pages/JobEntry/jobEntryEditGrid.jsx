@@ -121,7 +121,7 @@ export default function JobEntryGridForm({
           editable: true,
           renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
           renderEditCell: (params) => (
-            <InputBoxForGrid {...params} type="number" />
+            <InputBoxForGrid field = "Container" {...params} type="number" />
           ),
         },
         {
@@ -256,7 +256,7 @@ export default function JobEntryGridForm({
         },
         {
           field: "tflSealNo",
-          headerName: "TFL Seal No.",
+          headerName: "Seal No.",
           flex: 1,
           editable: true,
           renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
@@ -699,6 +699,9 @@ export default function JobEntryGridForm({
                       experimentalFeatures={{ newEditingApi: true }}
                       getRowId={(row) => row.id}
                       disableColumnMenu
+                      disablePagination
+                      paginationMode="client" // Ensures manual pagination is off
+                      hideFooterPagination // Hides pagination UI
                     />
                   ) : (
                     <Box
