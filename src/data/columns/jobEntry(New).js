@@ -2,6 +2,24 @@ import dayjs from "dayjs";
 export const JOB_ENTRY_NEW_COLUMNS = [
   {
     flex: 1,
+    field: "isDoc",
+    headerName: "Document",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+  {
+    flex: 1,
+    field: "status",
+    headerName: "Status",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+  {
+    flex: 1,
     field: "customerRefNo",
     headerName: "Customer Ref No",
     width: 110,
@@ -28,24 +46,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
       </div>
     ),
   },
-  {
-    flex: 1,
-    field: "isDoc",
-    headerName: "Document",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    editable: false,
-  },
-  {
-    flex: 1,
-    field: "status",
-    headerName: "Status",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    editable: false,
-  },
+
   {
     flex: 1,
     field: "tansadNo",

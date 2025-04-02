@@ -17,7 +17,7 @@ const suggestionName = {
   loadingVoyage: "VESSEL_VOYAGE",
   dischargeVoyage: "VESSEL_VOYAGE",
   vesselAgent: "LINE",
-  originCountry: "PORT_COUNTRY",
+  originCountry: "PORT_LOADING",
   portOfLoading: "PORT_LOADING",
   portOfDischarge: "PORT",
   placeOfDelivery: "PORT",
@@ -42,7 +42,7 @@ export const GetAutoCompleteDataWithLoader = async (
           (value, index, self) =>
             index === self.findIndex((t) => t[dataKey] === value[dataKey])
         )
-        .map((item) => ({ label: item[dataLabel], value: item[dataKey] }));
+        .map((item) => ({ label: item[dataLabel], value: item[dataKey], fullData:item }));
   
       return uniqueSuggestions;
     } catch (error) {

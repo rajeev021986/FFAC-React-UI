@@ -93,7 +93,7 @@ const GridSearchInput = ({
      
     </Box>
     {
-      selectedIds?.length != 0  && page === "job-entry" && 
+      selectedIds?.length != 0  && page === "jobApprove" && 
     
        <Button
         onClick={handleApproveAllRequest}
