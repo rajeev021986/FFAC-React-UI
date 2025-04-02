@@ -163,7 +163,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       <strong>JOB NO: </strong> {formik.values.jobNo}
                     </Typography>
                     <Typography variant="body1">
-                      <strong>BL NO: </strong> {formik.values.blNo}
+                      <strong>MBL NO: </strong> {formik.values.mblNo}
                     </Typography>
                     <Typography variant="body1">
                       <strong>Customer: </strong> {formik.values.customer}

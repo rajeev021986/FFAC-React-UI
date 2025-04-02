@@ -72,6 +72,7 @@ export default function JobEntryForm({
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
 
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -108,7 +109,7 @@ export default function JobEntryForm({
             containerShipments: containerShipment,
             vehicleShipments: vehicleShipment,
             looseCargoShipments: looseCargo,
-            note: notesData,
+            notes: notesData,
             rate: rateData,
           }).unwrap();
           const message = response.message;
@@ -169,7 +170,7 @@ export default function JobEntryForm({
             containerShipments: containerShipment,
             vehicleShipments: vehicleShipment,
             looseCargoShipments: looseCargo,
-            note: notesData,
+            notes: notesData,
             rate: rateData,
           }).unwrap();
           const message = response.message;
@@ -306,7 +307,7 @@ export default function JobEntryForm({
     }));
   };
 
-  const disabled = page == "job-entry" ? false : true;
+  const disabled = page == "job-entry" || "jobApprove" ? false : true;
 
   useEffect(() => {
     getFirstError(formik.errors);
@@ -743,8 +744,52 @@ export default function JobEntryForm({
                     disabled
                   />
                 </Grid>
+              
+                                  {initialValues.statusCode == -2 ||
+                                  initialValues.statusCode == 1 ? (
+                                    <Grid
+                                      item
+                                      xs={12}
+                                      sm={6}
+                                      md={4}
+                                      lg={3}
+                                      xl={2}
+                                      sx={{ marginTop: 2 }}
+                                      paddingLeft={1}
+                                    >
+                                      <SelectBox
+                                        label="Status"
+                                        id="status"
+                                        options={optionsSettingsData?.body.status}
+                                        // disabled={!initialValues.statusCode || disabled}
+                                        value={formik.values.status}
+                                        error={formik.errors.status}
+                                        onChange={formik.handleChange}
+                                      />
+                                    </Grid>
+                                  ) : (
+                                    <Grid
+                                      item
+                                      xs={12}
+                                      sm={6}
+                                      md={4}
+                                      lg={3}
+                                      xl={2}
+                                      paddingLeft={1}
+                                      marginTop={2}
+                                    >
+                                      <InputBox
+                                        label="Status"
+                                        id="status"
+                                        disabled={true}
+                                        value={formik.values.status}
+                                        error={formik.errors.status}
+                                        onChange={formik.handleChange}
+                                      />
+                                    </Grid>
+                                  )}
               </Grid>
-
+         
               <Grid item xs={12}>
                 <Box
                   sx={{
@@ -772,7 +817,7 @@ export default function JobEntryForm({
                         : formik.errors.rejectRemarks
                     }
                     onChange={formik.handleChange}
-                    disabled={page === "job-entry" ? disabled : !disabled}
+                    disabled={page === "job-entry" ? true : false}
                     multiline
                     rows={4}
                     variant="outlined"
