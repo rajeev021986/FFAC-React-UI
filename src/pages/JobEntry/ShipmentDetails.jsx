@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Grid, Tooltip } from "@mui/material";
+import { Grid, TextField, Tooltip } from "@mui/material";
 import Box from "@mui/material/Box";
 
 // Components
@@ -10,6 +10,7 @@ import DateTimeField from "../../components/common/DateTime/DateTimeField";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import SelectBox from "../../components/common/SelectBox";
 import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
+import FormAutoCompleteWithTable from "../../components/common/AutoComplete/FormAutoCompletewithTable";
 
 export default function ShipmentDetails({ formik }) {
   let disabled = null;
@@ -28,19 +29,20 @@ export default function ShipmentDetails({ formik }) {
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
         <Grid paddingLeft={1} marginTop={2} container spacing={2}>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <FormAutoComplete
+            <FormAutoCompleteWithTable
               label="Origin Country"
               id="originCountry"
-              suggestionName="country"
+               suggestionName="country"
               value={formik.values.originCountry}
               error={formik.errors.originCountry}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+              formik={formik}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <FormAutoComplete
+            {/* <FormAutoComplete
               label="Port Of Loading"
               id="portOfLoading"
               suggestionName="port_name"
@@ -48,6 +50,16 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.portOfLoading}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+            /> */}
+            <InputBox
+            label="Port Of Loading"
+              id="portOfLoading"
+              suggestionName="port_name"
+              value={formik.values.portOfLoading}
+              error={formik.errors.portOfLoading}
+              onChange={formik.handleChange}
+              inputRef={FieldRef}
+              disabled={true}
             />
           </Grid>
 

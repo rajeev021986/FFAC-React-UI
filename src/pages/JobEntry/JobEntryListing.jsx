@@ -129,7 +129,7 @@ console.log(jobEntrySetView,"jobEntrySetView")
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
-  const activeColumns = page === "job-entry" ? JOB_ENTRY_NEW_COLUMNS : JOB_ENTRY_COLUMNS;
+  const activeColumns = page === "job-entry" ? JOB_ENTRY_NEW_COLUMNS  : JOB_ENTRY_COLUMNS ;
   activeColumns[activeColumns.length - 1].renderCell = GridActions({
     actions:
       page == "job-entry"
@@ -244,7 +244,7 @@ console.log(jobEntrySetView,"jobEntrySetView")
   //   ...JOB_ENTRY_COLUMNS,
   // ];
   const jobEntryColumns = [
-    ...(page === "job-entry"
+    ...(page === "jobApprove"
       ? [
           {
             field: "Approve",
@@ -261,9 +261,9 @@ console.log(jobEntrySetView,"jobEntrySetView")
               />
             ),
           },
-          ...JOB_ENTRY_NEW_COLUMNS, // Use the new columns when on "job-entry" page
+          ... JOB_ENTRY_COLUMNS , // Use the new columns when on "job-entry" page
         ]
-      : [...JOB_ENTRY_COLUMNS] // Use the default columns otherwise
+      : [...JOB_ENTRY_NEW_COLUMNS] // Use the default columns otherwise
     ),
   ];
   
