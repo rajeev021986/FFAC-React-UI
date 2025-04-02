@@ -13,3 +13,10 @@
   height: 42px;
   border: 1px solid #f44336;
 }
+.word-wrap-cell {
+  white-space: normal !important; /* Allows text to wrap */
+  word-break: break-word; /* Breaks long words */
+  overflow-wrap: break-word; /* Ensures text doesn't overflow */
+  max-width: 100%; /* Ensures it stays within column width */
+  line-height: 1.4; /* Improves readability */
+}

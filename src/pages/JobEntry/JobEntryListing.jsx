@@ -41,6 +41,8 @@ import Backdrop from "@mui/material/Backdrop";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { Box, Stack, Typography } from "@mui/material";
 import { Card, CardHeader, Drawer } from "@mui/material";
+import ApiManager from "../../services/ApiManager";
+import { JOB_ENTRY_NEW_COLUMNS } from "../../data/columns/jobEntry(New)";
 
 export default function JobEntryScreen({ page }) {
   const location = useLocation();
@@ -50,6 +52,7 @@ export default function JobEntryScreen({ page }) {
   const codeJobEntryrSelector = useSelector((s) => s?.jobEntries);
   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
+  const [selectedIds, setSelectedIds] = useState([]);
   const [modal, setModal] = useState({
     open: false,
     type: "",
@@ -119,14 +122,15 @@ console.log(jobEntrySetView,"jobEntrySetView")
 
   useEffect(() => {
     refetch();
+    setSelectedIds([])
   }, [location.pathname]);
 
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
-
-  JOB_ENTRY_COLUMNS[JOB_ENTRY_COLUMNS.length - 1].renderCell = GridActions({
+  const activeColumns = page === "job-entry" ? JOB_ENTRY_NEW_COLUMNS : JOB_ENTRY_COLUMNS;
+  activeColumns[activeColumns.length - 1].renderCell = GridActions({
     actions:
       page == "job-entry"
         ? getJobEntryListGridActions(nav, setModal)
@@ -185,6 +189,84 @@ console.log(jobEntrySetView,"jobEntrySetView")
      dispatch(jobEntrySetView("grid"));
   }, []);
 
+  const handleCheckboxChange = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+  const handleApproveAllRequest = async () => {
+    if (selectedIds.length === 0) {
+      toast.custom(
+        <CustomToast message="No job entries selected!" toast="error" />
+      );
+      return;
+    }
+    try {
+      const response = await ApiManager.approveAllJobEntryRequest(
+        "JOB_DETAIL",
+        selectedIds
+      ); // Send selected IDs in the request);
+      refetch();
+      toast.custom(<CustomToast message={response.message} toast="success" />);
+      setSelectedIds([]); // Clear selection after approval
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while approving entries"
+          toast="error"
+        />
+      );
+    } finally {
+      setSelectedIds([]);
+    }
+  };
+
+  // const jobEntryColumns = [
+  //   ...(page === "job-entry"
+  //     ? [
+  //         {
+  //           field: "Approve",
+  //           headerName: "Approve",
+  //           width: 80,
+  //           headerAlign: "center",
+  //           align: "center",
+  //           renderCell: (params) => (
+  //             <input
+  //               type="checkbox"
+  //               style={{cursor:'pointer'}}
+  //               checked={selectedIds.includes(params.row.id)}
+  //               onChange={() => handleCheckboxChange(params.row.id)}
+  //             />
+  //           ),
+  //         },
+  //       ]
+  //     : []),
+  //   ...JOB_ENTRY_COLUMNS,
+  // ];
+  const jobEntryColumns = [
+    ...(page === "job-entry"
+      ? [
+          {
+            field: "Approve",
+            headerName: "Approve",
+            width: 80,
+            headerAlign: "center",
+            align: "center",
+            renderCell: (params) => (
+              <input
+                type="checkbox"
+                style={{ cursor: "pointer" }}
+                checked={selectedIds.includes(params.row.id)}
+                onChange={() => handleCheckboxChange(params.row.id)}
+              />
+            ),
+          },
+          ...JOB_ENTRY_NEW_COLUMNS, // Use the new columns when on "job-entry" page
+        ]
+      : [...JOB_ENTRY_COLUMNS] // Use the default columns otherwise
+    ),
+  ];
+  
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -247,6 +329,9 @@ console.log(jobEntrySetView,"jobEntrySetView")
                   filters={codeJobEntryrSelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
+                  selectedIds={selectedIds} // Pass selected IDs
+                  handleApproveAllRequest={handleApproveAllRequest} // Pass function
+                  page={page}
                 >
                   <FilterForm />
                 </GridSearchInput>
@@ -273,7 +358,7 @@ console.log(jobEntrySetView,"jobEntrySetView")
         {codeJobEntryrSelector.view === "grid" && (
           <ThemedGrid
             uniqueId="id"
-            columns={JOB_ENTRY_COLUMNS}
+            columns={jobEntryColumns}
             count={jobEntriesData?.body?.totalElements || 0}
             handlePage={handlePage}
             data={jobEntriesData?.body?.data}
@@ -285,13 +370,6 @@ console.log(jobEntrySetView,"jobEntrySetView")
             onSortModelChange={(sortModel) =>
               dispatch(jobEntrySetSortModel(sortModel))
             }
-            // disableRowSelectionOnClick
-            // checkboxSelection 
-            // sx={{
-            //   "& .MuiDataGrid-columnHeaderCheckbox": { display: "none !important" },
-            // }} 
-            // rowSelection={true}
-            // checkboxSelection={true}
           />
         )}
       </Card>

@@ -1,12 +1,20 @@
 import React, { useState, useRef } from "react";
-import { Paper, Box, ClickAwayListener, IconButton } from "@mui/material";
+import {
+  Paper,
+  Box,
+  ClickAwayListener,
+  IconButton,
+  Button,
+} from "@mui/material";
 import InputWithChips from "./InputWithChips";
 import { GridCloseIcon } from "@mui/x-data-grid";
-
 const GridSearchInput = ({
   children,
   filters,
   setFilters,
+  selectedIds, // Receive selected IDs
+  handleApproveAllRequest, // Receive function
+  page,
   width = "500px",
   height = "auto",
 }) => {
@@ -27,7 +35,8 @@ const GridSearchInput = ({
   };
 
   return (
-    <Box sx={{ position: "relative", minWidth: "500px" }}>
+    <>
+      <Box sx={{ position: "relative", minWidth: "500px" }}>
       {/* Search Bar */}
       <InputWithChips
         inputRef={searchRef}
@@ -81,7 +90,21 @@ const GridSearchInput = ({
           </Paper>
         </ClickAwayListener>
       )}
+     
     </Box>
+    {
+      selectedIds?.length != 0  && page === "job-entry" && 
+    
+       <Button
+        onClick={handleApproveAllRequest}
+        disabled={selectedIds?.length === 0}
+        variant="contained"
+         size="small"
+      >
+        Approve
+      </Button>}
+    </>
+  
   );
 };
 
