@@ -33,7 +33,7 @@ export default function LineVessel({ formik }) {
             <FormAutoComplete
               label="Shipping Line"
               id="shippingLine"
-              suggestionName="line_name"
+              suggestionName="type"
               value={formik.values.shippingLine}
               error={formik.errors.shippingLine}
               onChange={formik.handleChange}
@@ -177,7 +177,7 @@ export default function LineVessel({ formik }) {
             <FormAutoComplete
               label="Vessel/Local Agent"
               id="vesselAgent"
-              suggestionName="line_name"
+              suggestionName="type"
               value={formik.values.vesselAgent}
               error={formik.errors.vesselAgent}
               onChange={formik.handleChange}
