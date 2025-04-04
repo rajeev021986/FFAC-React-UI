@@ -133,14 +133,14 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
         },
         {
           field: "runningBalance",
-          headerName: "Ranning Balance",
+          headerName: "Running Balance",
           flex: 1,
           editable: true,
           renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter Ranning Balance" />
+            <InputBoxForGrid {...params} placeholder="Enter Running Balance" />
           ),
           renderEditCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Enter Ranning Balance" />
+            <InputBoxForGrid {...params} placeholder="Enter Running Balance" />
           ),
         },
         {

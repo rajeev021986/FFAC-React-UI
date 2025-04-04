@@ -17,7 +17,7 @@ export default function FilterForm({ setFilterOpen }) {
       customerRefNo: inputs?.customerRefNo || "",
       tansadNo: inputs?.tansadNo || "",
       entryNo: inputs?.entryNo || "",
-      blNo: inputs?.blNo || "",
+      mblNo: inputs?.mblNo || "",
       hblNo: inputs?.hblNo || "",
       statusCode: inputs?.statusCode || "",
       isDoc: inputs?.isDoc || "",
@@ -39,7 +39,7 @@ export default function FilterForm({ setFilterOpen }) {
         customerName: "",
         customerRefNo: "",
         entryNo: "",
-        blNo: "",
+        mblNo: "",
         tansadNo: "",
         invoiceNo: "",
         hblNo: "",
@@ -51,7 +51,7 @@ export default function FilterForm({ setFilterOpen }) {
       customerName: "",
       customerRefNo: "",
       entryNo: "",
-      blNo: "",
+      mblNo: "",
       tansadNo: "",
       invoiceNo: "",
       hblNo: "",
@@ -71,6 +71,7 @@ export default function FilterForm({ setFilterOpen }) {
     { value: false, label: "Pending" },
     { value: true, label: "Available" },
   ];
+
 
   return (
     <div>

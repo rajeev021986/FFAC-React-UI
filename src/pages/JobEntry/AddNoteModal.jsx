@@ -106,7 +106,6 @@ const handleClose = () => {
   });
   handleToggleNote();
 };
-console.log("noteData.note",noteData.note);
 
   return (
     <Modal

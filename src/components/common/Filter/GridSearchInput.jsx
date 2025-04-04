@@ -5,6 +5,10 @@ import {
   ClickAwayListener,
   IconButton,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import InputWithChips from "./InputWithChips";
 import { GridCloseIcon } from "@mui/x-data-grid";
@@ -19,6 +23,7 @@ const GridSearchInput = ({
   height = "auto",
 }) => {
   const [filterOpen, setFilterOpen] = useState(false);
+  const [openApproveDialog, setOpenApproveDialog] = useState(false);
   const searchRef = useRef(null);
 
   const handleSearchFocus = () => {
@@ -33,7 +38,18 @@ const GridSearchInput = ({
   const handleResetFilter = () => {
     setFilters({});
   };
+  const handleOpenApproveDialog = () => {
+    setOpenApproveDialog(true);
+  };
 
+  const handleCloseApproveDialog = () => {
+    setOpenApproveDialog(false);
+  };
+
+  const handleApproveConfirm = () => {
+    handleApproveAllRequest(); // Call the approval function
+    handleCloseApproveDialog(); // Close the dialog
+  };
   return (
     <>
       <Box sx={{ position: "relative", minWidth: "500px" }}>
@@ -92,17 +108,32 @@ const GridSearchInput = ({
       )}
      
     </Box>
-    {
-      selectedIds?.length != 0  && page === "jobApprove" && 
-    
-       <Button
-        onClick={handleApproveAllRequest}
-        disabled={selectedIds?.length === 0}
-        variant="contained"
-         size="small"
-      >
-        Approve
-      </Button>}
+  {/* Approve Button */}
+  {selectedIds?.length !== 0 && page === "jobApprove" && (
+        <Button
+          onClick={handleOpenApproveDialog} // Open confirmation dialog
+          disabled={selectedIds?.length === 0}
+          variant="contained"
+          size="small"
+        >
+          Approve
+        </Button>
+      )}
+      {/* Confirmation Dialog */}
+      <Dialog open={openApproveDialog} onClose={handleCloseApproveDialog}>
+        <DialogTitle>Confirm Approval</DialogTitle>
+        <DialogContent>
+          Do you want to approve all the selected job IDs?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseApproveDialog} color="secondary">
+            Close
+          </Button>
+          <Button onClick={handleApproveConfirm} color="primary" variant="contained">
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   
   );

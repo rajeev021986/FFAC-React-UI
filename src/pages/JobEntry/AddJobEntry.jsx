@@ -23,7 +23,7 @@ export default function AddJobEntry({ page }) {
 
     customerName: "",
     hblNo: "",
-    mblNo: "",
+    mblNo: null,
     customerRefNo: "",
     invoiceNo: "",
     dateOfReceipt: "",
@@ -113,7 +113,7 @@ export default function AddJobEntry({ page }) {
           customerName: res.body?.customerName || "",
           shipmentType: res.body?.shipmentType || "",
           moveType: res.body?.moveType || "",
-          mblNo: res.body?.mblNo || "",
+          mblNo: res.body?.mblNo || null,
           dateOfReceipt: res.body?.dateOfReceipt || "",
           hblNo: res.body?.hblNo || "",
           cargoType: res.body?.cargoType || "",

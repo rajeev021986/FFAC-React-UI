@@ -35,6 +35,7 @@ function FormAutoCompleteWithTable(props) {
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
 
   useEffect(() => {
+    if (!debounceValue) return; // Avoid API call on empty input
     const fetchData = async () => {
       setLoading(true);
       try {
