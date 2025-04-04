@@ -40,8 +40,8 @@ export default function Sidebar({
       </Drawer>
       <Drawer
         variant="permanent"
-        // onMouseEnter={() => setHover(true)}
-        // onMouseLeave={() => setHover(false)}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
         sx={{
           display: { xs: "none", sm: "block" },
           "& .MuiDrawer-paper": {
