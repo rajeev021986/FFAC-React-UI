@@ -609,26 +609,69 @@ export default function JobEntryGridForm({
           ),
           renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
-        {
-          field: "truckRegCard",
-          headerName: "Truck Reg.Card",
+        // {
+        //   field: "truckRegCard",
+        //   headerName: "Truck Reg.Card",
+        //   flex: 1,
+        //   editable: true,
+        //   renderCell: (params) => (
+        //     <InputBoxForGrid {...params} placeholder="Truck Red." />
+        //   ),
+        //   renderEditCell: (params) => <InputBoxForGrid {...params} />,
+        // },
+        // {
+        //   field: "trailerRegCard",
+        //   headerName: "Trailer Reg.Card",
+        //   flex: 1,
+        //   editable: true,
+        //   renderCell: (params) => (
+        //     <InputBoxForGrid {...params} placeholder="Trailer Reg." />
+        //   ),
+        //   renderEditCell: (params) => <InputBoxForGrid {...params} />,
+        // },
+
+
+    {
+          field: "grossWt",
+          headerName: "Gross wt",
           flex: 1,
           editable: true,
           renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Truck Red." />
+            <InputBoxForGrid {...params} placeholder="Gross wt." />
           ),
           renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
-          field: "trailerRegCard",
-          headerName: "Trailer Reg.Card",
+          field: "netWt",
+          headerName: "Net wt",
           flex: 1,
           editable: true,
           renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Trailer Reg." />
+            <InputBoxForGrid {...params} placeholder="Net wt." />
           ),
           renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
+        {
+          field: "noOfPackage",
+          headerName: "No.of package",
+          flex: 1,
+          editable: true,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="No of package" />
+          ),
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+        },
+        {
+          field: "packageType",
+          headerName: "Package Type",
+          flex: 1,
+          editable: true,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} placeholder="Package Type" />
+          ),
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+        },
+
         {
           field: "actions",
           headerName: "Actions",

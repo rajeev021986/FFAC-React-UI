@@ -37,6 +37,7 @@ import UploadFile from "../../components/UploadFile";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import ApiManager from "../../services/ApiManager";
+import SelectShipment from "../../components/common/SelectShipment";
 
 export default function JobEntryForm({
   initialValues,
@@ -211,12 +212,11 @@ export default function JobEntryForm({
   });
 
   const { data: optionsSettingsData } =
-    useGetOptionsSettingsQuery("common_settings");
+    useGetOptionsSettingsQuery("common_settings"); 
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-
-  useEffect(() => {
+useEffect(() => {
     if (
       optionsSettingsData?.body ||
       customerSettingsData?.body ||
@@ -398,13 +398,15 @@ export default function JobEntryForm({
             <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <SelectBox
+                  <SelectShipment
                     label="Shipment Type"
                     id="shipmentType"
-                    options={optionsSettingsData?.body.shipmentType}
+                    
+                    options ={jobSettingData?.body?.jobPatternData}
                     value={formik.values.shipmentType}
+                    
                     error={formik.errors.shipmentType}
-                    onChange={formik.handleChange}
+                    onChange={ formik.handleChange}
                     disabled={disabled}
                   />
                 </Grid>

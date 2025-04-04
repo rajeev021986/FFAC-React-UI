@@ -4,8 +4,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { FormHelperText } from "@mui/material";
+import CustomToast from "./Toast/CustomToast";
+import toast from "react-hot-toast";
 
-export default function SelectBox({
+export default function SelectShipment({
   placeholder = false,
   inputRef,
   sx,
@@ -19,6 +21,7 @@ export default function SelectBox({
   fullWidth = true,
   ...props
 }) {
+  console.log(options?.length, "length");
   return (
     <FormControl
       fullWidth={fullWidth}
@@ -30,10 +33,24 @@ export default function SelectBox({
       <Select
         labelId={`${id}-simple-select-label`}
         id={id}
+        defaultValue={"General/common"}
         name={id}
         value={value}
         label={label}
         onChange={onChange}
+        onClick={() => {
+          if (options?.length == undefined || options?.length < 1) {
+            toast.custom(
+              <CustomToast
+                message="Please fill job pattern first."
+                toast="error"
+              />,
+              {
+                closeButton: false,
+              }
+            );
+          }
+        }}
         size="small"
         sx={{
           ...styles.root,
@@ -45,21 +62,22 @@ export default function SelectBox({
         }}
         {...props}
         inputRef={inputRef}
-        // MenuProps={{
-        //   disablePortal: true,
-        // }}
       >
-        <MenuItem  sx={{ fontSize: "14px" }}>
-          <em>None</em>
+        <MenuItem
+          defaultValue="General/Common"
+          value="General/common"
+          sx={{ fontSize: "14px" }}
+      
+        >
+          <em>General/Common</em>
         </MenuItem>
-        {options?.map((option, idx) => {
-          return (
-            <MenuItem key={idx} value={option?.value  }>
-              {option?.label || option?.value  }
-            </MenuItem>
-          );
-        })}
+        {options?.map((option, idx) => (
+          <MenuItem key={idx} value={option?.shipmentType}>
+            {option?.shipmentType}
+          </MenuItem>
+        ))}
       </Select>
+
       <FormHelperText>{error}</FormHelperText>
     </FormControl>
   );
