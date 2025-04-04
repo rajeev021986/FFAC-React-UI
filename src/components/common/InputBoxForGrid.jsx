@@ -123,7 +123,7 @@ export default function InputBoxForGrid(props) {
                     style: { textAlign: "center" },
                     maxLength: 11, // Prevents extra characters
                   }}
-                  // {...props}
+                  {...props}
                 />
               </Tooltip>
             );

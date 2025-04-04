@@ -15,6 +15,7 @@ import Loader from "../../components/common/Loader/Loader";
 import GlobalDrrpdownSetting from "./GlobalDrrpdownSetting";
 import toast from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import GlobalDrrpdownSettingVoucher from "./GlobalDrrpdownSettingVoucher";
 
 const JobEntrySetting = () => {
   const [addOptons] = useAddOptonsMutation();
@@ -39,6 +40,11 @@ const JobEntrySetting = () => {
   const [unitTypes, setunitTypes] = useState([]);
   const [jobDocumentType, setJobDocumentType] = useState([]);
 
+ 
+  const [voucherData, setVoucherData] = useState([
+    { id: 1, shipmentType: "", jobPattern: "", sampleJobNumber: "" },
+  ]);
+
   const [isLoadingsave, setIsLoading] = useState(false);
   useEffect(() => {
     setApprovalRequest(data?.body.approvalRequest || false);
@@ -54,6 +60,7 @@ const JobEntrySetting = () => {
     setsizeType(data?.body.sizeType || []);
     setunitTypes(data?.body.unitTypes || []);
     setJobDocumentType(data?.body.jobDocumentType || []);
+    setVoucherData(data?.body.jobPatternData ||  []);
   }, [data, geterror]);
 
   const Postdata = async () => {
@@ -83,6 +90,9 @@ const JobEntrySetting = () => {
       unitTypes: unitTypes.filter((item) => !item.value.includes("Type the")),
       jobDocumentType: jobDocumentType.filter(
         (item) => !item.value.includes("Type the")
+      ),
+      jobPatternData: voucherData.filter(
+        (item) => !item?.jobPattern?.includes("Type the")
       ),
     };
     await addOptons({
@@ -206,6 +216,12 @@ const JobEntrySetting = () => {
             setvalue={setJobDocumentType}
             title="Document Job Type"
           />
+          <GlobalDrrpdownSettingVoucher
+            value={voucherData}
+            setvalue={setVoucherData}
+            title=" Job Number"
+          />
+         
         </Grid>
       )}
 
