@@ -9,51 +9,44 @@ export const JOB_ENTRY_COLUMNS = [
   //   align: "center",
   //   editable: false,
   // },
-  // {
-  //   flex: 1,
-  //   field: "isDoc",
-  //   headerName: "Document",
-  //   width: 110,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   editable: false,
-  // },
-  // {
-  //   flex: 1,
-  //   field: "status",
-  //   headerName: "Status",
-  //   width: 110,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   editable: false,
-  // },
   {
     flex: 1,
-    field: "JobNo",
+    field: "isDoc",
+    headerName: "Document",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+  {
+    flex: 1,
+    field: "status",
+    headerName: "Status",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+  {
+    flex: 1,
+    field: "jobNo",
     headerName: "Job No.",
     width: 110,
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => params.value?.trim() || "N/A",
+    renderCell: (params) => (
+      <div className="word-wrap-cell">
+        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+      </div>
+    ),
   },
-  {
-    flex: 1,
-    field: "dateOfReceipt",
-    headerName: "Date of Receipt",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    editable: false,
-    renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
-    },
-  },
+
   {
     flex: 1,
     field: "customerName",
     headerName: "Customer",
-    width: 110,
+    width: 140,
     headerAlign: "center",
     align: "center",
     editable: false,
@@ -189,12 +182,15 @@ export const JOB_ENTRY_COLUMNS = [
   },
   {
     flex: 1,
-    field: "status",
-    headerName: "Status",
+    field: "dateOfReceipt",
+    headerName: "Date of Receipt",
     width: 110,
     headerAlign: "center",
     align: "center",
     editable: false,
+    renderCell: (params) => {
+      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    },
   },
   {
     flex: 1,

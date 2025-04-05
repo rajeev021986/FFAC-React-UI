@@ -20,6 +20,20 @@ export const JOB_ENTRY_NEW_COLUMNS = [
   },
   {
     flex: 1,
+    field: "jobNo",
+    headerName: "Job No.",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+    renderCell: (params) => (
+      <div className="word-wrap-cell">
+        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+      </div>
+    ),
+  },
+  {
+    flex: 1,
     field: "customerRefNo",
     headerName: "Customer Ref No",
     width: 110,
@@ -35,7 +49,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
   {
     flex: 1,
     field: "customerName",
-    headerName: "Customer",
+    headerName: "Customer Name",
     width: 110,
     headerAlign: "center",
     align: "center",

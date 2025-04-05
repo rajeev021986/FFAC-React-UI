@@ -123,7 +123,7 @@ export default function AddJobEntry({ page }) {
           tansadNo: res.body?.tansadNo || "",
           entryTansadDate: res.body?.entryTansadDate || "",
           entryNo: res.body?.entryNo || "",
-          refNo: res.body?.refNo || "",
+          refNo: res.body?.jobNo || "",
           fileManager: res.body?.fileManager || getUserId,
           createdBy: res.body?.createdBy || "",
           supplierName: res.body?.supplierName || "",
