@@ -14,7 +14,7 @@ const expandedDrawerWidth = 240; // Width when sidebar is expanded
 
 export default function Main({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [hover, setHover] = useState(true);
+  const [hover, setHover] = useState(false);
   const dispatch = useDispatch();
   const { refetch } = useFetchFormatQuery();
 
