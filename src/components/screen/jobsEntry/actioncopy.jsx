@@ -1,5 +1,7 @@
 import EditIconDropdown from "../../common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
 import AuditIconDropdown from "../../common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
+import DocumentIconDropdown from "../../common/commonIconDropdown/DocumentIconDropdown/DocumentIconDropdown";
+// import AddRateIconDropdown from "../../common/commonIconDropdown/DocumentIconDropdown/AddRateIconDropdown/AddRateIconDropdown";
 
 export const getJobEntryListGridActionsApprovel = (nav, setModal) => {
   return [
@@ -20,5 +22,19 @@ export const getJobEntryListGridActionsApprovel = (nav, setModal) => {
       },
       icon: <AuditIconDropdown />,
     },
+    {
+      label: "Document",
+      onClick: (params) => {
+        setModal({ open: true, type: "document", data: params.row });
+      },
+      icon: <DocumentIconDropdown />,
+    },
+    // {
+    //   label: "Add Rate",
+    //   onClick: (params) => {
+    //     setModal({ open: true, type: "addRate", data: params.row });
+    //   },
+    //   icon: <AddRateIconDropdown />,
+    // },
   ];
 };
