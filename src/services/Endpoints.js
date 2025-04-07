@@ -59,7 +59,7 @@ const ENDPOINTS = {
     `/${service}/${page}/export?${queryString}`,
 
   GET_JOBENTRIES: (limit, page) => `/job-detail/filter?limit=${limit}&page=${page}`,
-  GET_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail${id}`,
+  GET_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail/${id}`,
   GET_ADDRATE_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail/rate/${id}`,
   JOB_APPROVE_REQUEST: (id, type,BasePageUrl) =>
     `/${BasePageUrl}/approval/approved/${type}/${id}`,
