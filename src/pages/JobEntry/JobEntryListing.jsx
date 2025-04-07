@@ -43,6 +43,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import { Card, CardHeader, Drawer } from "@mui/material";
 import ApiManager from "../../services/ApiManager";
 import { JOB_ENTRY_NEW_COLUMNS } from "../../data/columns/jobEntry(New)";
+import DocumentDialog from "../../components/common/DocumentDialog";
 
 export default function JobEntryScreen({ page }) {
   const location = useLocation();
@@ -123,7 +124,6 @@ export default function JobEntryScreen({ page }) {
     refetch();
     setSelectedIds([])
   }, [location.pathname]);
-
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
@@ -219,29 +219,6 @@ export default function JobEntryScreen({ page }) {
       setSelectedIds([]);
     }
   };
-
-  // const jobEntryColumns = [
-  //   ...(page === "job-entry"
-  //     ? [
-  //         {
-  //           field: "Approve",
-  //           headerName: "Approve",
-  //           width: 80,
-  //           headerAlign: "center",
-  //           align: "center",
-  //           renderCell: (params) => (
-  //             <input
-  //               type="checkbox"
-  //               style={{cursor:'pointer'}}
-  //               checked={selectedIds.includes(params.row.id)}
-  //               onChange={() => handleCheckboxChange(params.row.id)}
-  //             />
-  //           ),
-  //         },
-  //       ]
-  //     : []),
-  //   ...JOB_ENTRY_COLUMNS,
-  // ];
   const jobEntryColumns = [
     ...(page === "jobApprove"
       ? [
@@ -265,7 +242,6 @@ export default function JobEntryScreen({ page }) {
       : [...JOB_ENTRY_NEW_COLUMNS] // Use the default columns otherwise
     ),
   ];
-  
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -397,7 +373,15 @@ export default function JobEntryScreen({ page }) {
           </Box>
         </Drawer>
       )}
-
+      <DocumentDialog
+        source="jobApprove"
+        sourceId={modal?.data?.id}
+        customerRefNo={modal?.data?.customerRefNo}
+        job_No = {modal?.data?.jobNo}
+        handleClose={handleClose}
+        handleOpen={modal.open && modal.type === "document"}
+      />
+      
       <DeleteDialog
         source="job-entry"
         sourceName={modal?.data?.deleteName}
