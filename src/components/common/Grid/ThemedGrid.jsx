@@ -60,7 +60,14 @@ const ThemedGrid = (props) => {
         },
       };
     } else {
-      return a;
+      const smallFields = ["id","Approve"];
+     return {
+    ...a,
+    flex: 1,
+    minWidth: smallFields.includes(a.field) ? 100 : 210, 
+    align: 'center',
+    headerAlign: 'center',
+  };
     }
   });
 
@@ -75,6 +82,7 @@ const ThemedGrid = (props) => {
         alignItems: "center",
         height: "calc(100vh - 190px)",
         overflowY: "auto",
+        
       }}
     >
       {/* <StyledDataGrid

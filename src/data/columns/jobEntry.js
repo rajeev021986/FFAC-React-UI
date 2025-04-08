@@ -34,6 +34,8 @@ export const JOB_ENTRY_COLUMNS = [
     width: 110,
     headerAlign: "center",
     align: "center",
+    minWidth: 100,
+
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
@@ -48,6 +50,8 @@ export const JOB_ENTRY_COLUMNS = [
     headerName: "Customer",
     width: 140,
     headerAlign: "center",
+    minWidth: 100,
+
     align: "center",
     editable: false,
     renderCell: (params) => (
@@ -61,6 +65,8 @@ export const JOB_ENTRY_COLUMNS = [
     field: "supplierName",
     headerName: "Shipper",
     width: 110,
+    minWidth: 100,
+
     headerAlign: "center",
     align: "center",
     editable: false,

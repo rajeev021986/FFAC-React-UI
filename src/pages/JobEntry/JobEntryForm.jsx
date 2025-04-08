@@ -473,6 +473,7 @@ console.log(page,"page")
                         fontWeight: "500",
                         color: "white !important",
                         height: "38px",
+                        
                       }}
                     >
                       Add Rate

@@ -362,7 +362,7 @@ export default function GlobalDrrpdownSettingVoucher({
   ];
 
   return (
-    <Grid item xs={12} md={12} sm={12}>
+    <Grid item xs={12} md={10} sm={12}>
       <div
         style={{
           display: "flex",
@@ -383,10 +383,10 @@ export default function GlobalDrrpdownSettingVoucher({
           columns={columns}
           processRowUpdate={handleProcessRowUpdate}
           experimentalFeatures={{ newEditingApi: true }}
-          sx={{
-            backgroundColor: "white.main",
-            "& .MuiDataGrid-main": { overflow: "auto" },
-          }}
+          // sx={{
+          //   backgroundColor: "white.main",
+          //   "& .MuiDataGrid-main": { overflow: "auto" },
+          // }}
           disableRowSelectionOnClick
           autoHeight={false}
           hideFooter

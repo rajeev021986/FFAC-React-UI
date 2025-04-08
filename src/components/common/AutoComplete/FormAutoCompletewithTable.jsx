@@ -169,7 +169,9 @@ ListboxComponent={(props) => (
         display: "flex",
         justifyContent: "space-between",
         fontWeight: "bold",
-        backgroundColor: "#f0f0f0",
+        // backgroundColor: "#f0f0f0",
+   backgroundColor: '#166de0',
+
         padding: "8px",
         borderBottom: "1px solid #ddd",
         position: "sticky",
@@ -177,8 +179,16 @@ ListboxComponent={(props) => (
         zIndex: 2, // Ensure it stays above the list
       }}
     >
-      <span>Country Name</span>
-      <span>Port Name</span>
+      <span style={{
+        color: "white",
+        fontSize: "14px",
+        // fontWeight: "bold",
+      }}>Country Name</span>
+      <span style={{
+        color: "white",
+        fontSize: "14px",
+        fontWeight: "bold",
+      }}>Port Name</span>
     </Box>
 
     {/* Scrollable Options List */}

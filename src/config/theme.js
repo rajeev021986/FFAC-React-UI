@@ -128,12 +128,13 @@ export const getTheme = (primaryColor = "#026de0", mode) => {
           },
         },
       },
+      // "4px solid #bf77f6",
       MuiCardHeader: {
         styleOverrides: {
           root: {
             borderBottom: isDarkMode
               ? "1px solid #ffffff1f"
-              : "4px solid #bf77f6",
+              : primaryColor,
             "& .MuiCardHeader-title": {
               fontSize: "1rem",
               fontWeight: 500,

@@ -17,7 +17,8 @@ export function ThemeButton({ sx, color, children, size, ...rest }) {
         ...styles.common,
         ...styles.contained[color],
         ...sx,
-        borderRadius: "8px",
+        borderRadius: "20px 19px 19px 20px",
+
       }}
     >
       {children}
@@ -41,7 +42,7 @@ export function OutlinedButton({ sx, color, children, size, ...rest }) {
         ...styles.common,
         ...styles.outlined[color],
         ...sx,
-        borderRadius: "8px",
+
       }}
     >
       {children}

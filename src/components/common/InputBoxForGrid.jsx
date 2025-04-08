@@ -38,16 +38,26 @@ export default function InputBoxForGrid(props) {
     }
   };
   const handleChangeContainerNo = (event) => {
-    const newValue = event.target.value;
-    const isValid = /^[A-Za-z]{4}\d{7}$/.test(newValue); // 4 letters + 7 digits
+    let newValue = event.target.value; // Auto uppercase
+    // Remove all non-alphanumeric characters
+    newValue = newValue.replace(/[^a-zA-Z0-9]/g, '');
   
-    setInputValue(newValue);
-    setError(!isValid); // Show error if invalid
-  console.log(isValid,"isValid")
+    // Split into letters and digits
+    const letters = newValue.slice(0, 4).replace(/[^A-Z]/g, '');
+    const digits = newValue.slice(4).replace(/\D/g, '').slice(0, 7);
+  
+    const formattedValue = letters + digits;
+  
+    setInputValue(formattedValue);
+    
+    const isValid = /^[A-Z]{4}\d{7}$/.test(formattedValue);
+  
+    console.log(isValid, "isValid");
     if (isValid) {
-      api.setEditCellValue({ id, field, value: newValue }, event);
+      api.setEditCellValue({ id, field, value: formattedValue }, event);
     }
   };
+  
   
   return (
     <div

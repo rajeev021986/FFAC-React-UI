@@ -115,6 +115,17 @@ const GridSearchInput = ({
           disabled={selectedIds?.length === 0}
           variant="contained"
           size="small"
+          sx={{
+         
+            padding: 2,
+            borderRadius: 1,
+            boxShadow: 3,
+            borderRadius: "20px 19px 19px 20px",
+          
+            "& .MuiSvgIcon-root": {
+              fontSize: 16,
+            },
+          }}
         >
           Approve
         </Button>

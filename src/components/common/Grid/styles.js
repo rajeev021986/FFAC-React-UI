@@ -38,5 +38,9 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     minHeight: "44px !important",
     maxHeight: "44px !important",
     lineHeight: "44px !important",
+    display: "flex",           // make it a flexbox
+    justifyContent: "center",  // horizontal center
+    alignItems: "center",      // vertical center
+    textAlign: "center", 
   },
 }));

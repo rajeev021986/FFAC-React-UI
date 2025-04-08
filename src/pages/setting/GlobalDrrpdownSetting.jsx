@@ -5,6 +5,8 @@ import { Delete as DeleteIcon } from "@mui/icons-material";
 import { OutlinedButton } from "../../components/common/Button";
 import toast from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import { useSelector } from "react-redux";
+import { getTheme } from "../../config/theme";
 
 export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   const handleAddRow = () => {
@@ -65,8 +67,13 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
     },
   ];
 
+  const theme = getTheme(
+    useSelector((state) => state.dashboard.theme),
+    useSelector((state) => state.dashboard.mode)
+  );
+  console.log(theme, "theme");
   return (
-    <Grid item xs={12} md={4} sm={6}>
+    <Grid item xs={12} md={3} sm={6}>
       <div
         style={{
           display: "flex",
@@ -86,13 +93,26 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
           columns={columns}
           processRowUpdate={handleProcessRowUpdate}
           experimentalFeatures={{ newEditingApi: true }}
-          sx={{
-            backgroundColor: "white.main",
-            "& .MuiDataGrid-main": { overflow: "auto" },
-          }}
           disableRowSelectionOnClick
           autoHeight={false}
           hideFooter
+          sx={{
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "primary.main",
+              lineHeight: 10,
+            },
+            "& .MuiDataGrid-cell": {
+              whiteSpace: "normal",
+              wordWrap: "break-word",
+            },
+            "& .MuiDataGrid-columnHeaderTitle": {
+              color: "#fff",
+              fontSize: "14px",
+            },
+            "& .MuiDataGrid-cell": {
+              fontSize: "14px",
+            },
+          }}
           slots={{
             toolbar: () => (
               <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
@@ -100,7 +120,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
               </Box>
             ),
           }}
-          // components={{
+                 // components={{
           //     Toolbar: () => (
           //       <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
           //         <GridToolbarColumnsButton />
