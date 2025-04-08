@@ -49,7 +49,7 @@ export default function JobEntryForm({
   const [addJobEntry, { isLoading }] = useAddJobEntryMutation();
   const [updateJobEntry, { isLoading: loadingUpdate }] =
     useUpdateJobEntryMutation();
-
+console.log(page,"page")
   const [toggleRate, settoggleRate] = useState(false);
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
@@ -72,7 +72,6 @@ export default function JobEntryForm({
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
-
 
   const formik = useFormik({
     initialValues,
@@ -212,11 +211,20 @@ export default function JobEntryForm({
   });
 
   const { data: optionsSettingsData } =
-    useGetOptionsSettingsQuery("common_settings"); 
+    useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
+
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-useEffect(() => {
+  console.log(
+    jobSettingData?.body?.jobPatternData?.map((i) => i.shipmentType),
+    "manish"
+  );
+  const validType = jobSettingData?.body?.jobPatternData?.map(
+    (i) => i.shipmentType
+  );
+
+  useEffect(() => {
     if (
       optionsSettingsData?.body ||
       customerSettingsData?.body ||
@@ -229,6 +237,7 @@ useEffect(() => {
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
+  console.log(optionsSettingsData?.body?.shipmentType, "optionsSettingsData");
 
   const handleApproveRequest = async () => {
     setRejectError(false);
@@ -307,7 +316,16 @@ useEffect(() => {
     }));
   };
 
-  const disabled = page == "job-entry" || "jobApprove" ? false : true;
+
+
+   const disabled = page == "job-entry" || "jobApprove" ? false : true;
+
+
+  const getPage = location?.pathname.split("/").slice(-1)[0];
+  console.log(getPage, "getPage");
+  
+  // const disabled =
+  //   getPage === "editJobEntry" ? true : !(page === "job-entry" || page === "jobApprove");
 
 
   useEffect(() => {
@@ -332,6 +350,26 @@ useEffect(() => {
       FieldRef.current.focus();
     }
   }, []);
+
+
+// const disabled =
+//   getPage === "editJobEntry" ? true : !(page === "job-entry" || page === "jobApprove");
+  useEffect(() => {
+    const selectedValue = formik.values.shipmentType;
+
+    if (selectedValue && !validType?.includes(selectedValue)) {
+      toast.custom(
+        <CustomToast
+          message={'Invalid shipment type selected.'}
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+      // formik.setFieldError('shipmentType', 'Invalid shipment type selected.');
+    }
+  }, [formik.values.shipmentType, optionsSettingsData]);
 
   return (
     <>
@@ -401,13 +439,13 @@ useEffect(() => {
                   <SelectShipment
                     label="Shipment Type"
                     id="shipmentType"
-                    
-                    options ={jobSettingData?.body?.jobPatternData}
+                    options={optionsSettingsData?.body?.shipmentType}
                     value={formik.values.shipmentType}
-                    
                     error={formik.errors.shipmentType}
-                    onChange={ formik.handleChange}
+                    onChange={formik.handleChange}
                     disabled={disabled}
+                    getPage={getPage}
+
                   />
                 </Grid>
 
@@ -747,52 +785,52 @@ useEffect(() => {
                     disabled
                   />
                 </Grid>
-              
-                                  {initialValues.statusCode == -2 ||
-                                  initialValues.statusCode == 1 ? (
-                                    <Grid
-                                      item
-                                      xs={12}
-                                      sm={6}
-                                      md={4}
-                                      lg={3}
-                                      xl={2}
-                                      sx={{ marginTop: 2 }}
-                                      paddingLeft={1}
-                                    >
-                                      <SelectBox
-                                        label="Status"
-                                        id="status"
-                                        options={optionsSettingsData?.body.status}
-                                        // disabled={!initialValues.statusCode || disabled}
-                                        value={formik.values.status}
-                                        error={formik.errors.status}
-                                        onChange={formik.handleChange}
-                                      />
-                                    </Grid>
-                                  ) : (
-                                    <Grid
-                                      item
-                                      xs={12}
-                                      sm={6}
-                                      md={4}
-                                      lg={3}
-                                      xl={2}
-                                      paddingLeft={1}
-                                      marginTop={2}
-                                    >
-                                      <InputBox
-                                        label="Status"
-                                        id="status"
-                                        disabled={true}
-                                        value={formik.values.status}
-                                        error={formik.errors.status}
-                                        onChange={formik.handleChange}
-                                      />
-                                    </Grid>
-                                  )}
+
+                {initialValues.statusCode == -2 ||
+                initialValues.statusCode == 1 ? (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    sx={{ marginTop: 2 }}
+                    paddingLeft={1}
+                  >
+                    <SelectBox
+                      label="Status"
+                      id="status"
+                      options={optionsSettingsData?.body.status}
+                      // disabled={!initialValues.statusCode || disabled}
+                      value={formik.values.status}
+                      error={formik.errors.status}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                ) : (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Status"
+                      id="status"
+                      disabled={true}
+                      value={formik.values.status}
+                      error={formik.errors.status}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+                )}
               </Grid>
-         
+
               <Grid item xs={12}>
                 <Box
                   sx={{

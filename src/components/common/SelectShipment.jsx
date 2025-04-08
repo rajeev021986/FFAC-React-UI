@@ -15,13 +15,13 @@ export default function SelectShipment({
   onChange,
   label,
   id,
+  getPage,
   helperText,
   options,
   error,
   fullWidth = true,
   ...props
 }) {
-  console.log(options?.length, "length");
   return (
     <FormControl
       fullWidth={fullWidth}
@@ -66,14 +66,15 @@ export default function SelectShipment({
         <MenuItem
           defaultValue="General/Common"
           value="General/common"
+          disabled={getPage == "editJobEntry"}
           sx={{ fontSize: "14px" }}
       
         >
           <em>General/Common</em>
         </MenuItem>
         {options?.map((option, idx) => (
-          <MenuItem key={idx} value={option?.shipmentType}>
-            {option?.shipmentType}
+          <MenuItem disabled ={getPage == "editJobEntry"} key={idx} value={option?.value}>
+            {option?.value}
           </MenuItem>
         ))}
       </Select>

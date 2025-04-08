@@ -45,7 +45,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 50 },
     {
       field: "value",
       headerName: "Value",
