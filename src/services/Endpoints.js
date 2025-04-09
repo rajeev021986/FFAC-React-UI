@@ -61,6 +61,7 @@ const ENDPOINTS = {
   GET_JOBENTRIES: (limit, page) => `/job-detail/filter?limit=${limit}&page=${page}`,
   GET_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail/${id}`,
   GET_ADDRATE_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail/rate/${id}`,
+  UPDATE_ADDRATE_DETAILS: (BasePageUrl) => `/${BasePageUrl}/job-detail/rate`,
   JOB_APPROVE_REQUEST: (id, type,BasePageUrl) =>
     `/${BasePageUrl}/approval/approved/${type}/${id}`,
   ALL_JOBS_APPROVE_REQUEST: (type,BasePageUrl) =>

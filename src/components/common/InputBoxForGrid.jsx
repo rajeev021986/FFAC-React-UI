@@ -15,7 +15,6 @@ export default function InputBoxForGrid(props) {
     inputRef,
   } = props;
 
-  console.log(field,"field")
   const tooltipMessage = value ? value : "This field is empty";
   const [inputValue, setInputValue] = useState(value || "");
   const [error, setError] = useState(false);
