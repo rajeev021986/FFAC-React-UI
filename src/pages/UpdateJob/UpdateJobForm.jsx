@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import toast from "react-hot-toast";
 
 import { AppBar, CircularProgress, Toolbar, Typography } from "@mui/material";
-import { MenuItem, Select, Stack, Grid } from "@mui/material";
+import { Stack, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -26,17 +26,19 @@ import BondDetailsGridForm from "./UpdateJobEntryGrid";
 import ContainerDetails from "./UpdateDetailsForm";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
+// Container Table
+import ContainerShipmentView from "./ContainerTable/ContainerShipmentView";
+
 export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
   const [updateJobDetailsEntry, { isLoading }] =
     useUpdateJobDetailsEntryMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const [rejectError, setRejectError] = useState(false);
   const nav = useNavigate();
   const [detailTab, setdetailTab] = useState("1");
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setdetailTab(newValue);
   };
 
   const [alertConfig, setAlertConfig] = useState({
@@ -135,7 +137,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList
-              onChange={handleChange}
+              // onChange={handleChange}
               aria-label="lab API tabs example"
               sx={{ paddingBottom: "20px" }}
             >
@@ -418,16 +420,46 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     width: "100%",
                     typography: "body1",
                     borderBottom: 1,
-                    border: "1px solid",
                     borderColor: "divider",
                     borderRadius: "10px",
                   }}
-                  iconPosition="start"
+                />
+                <Tab
+                  label="Vehicle Shipment"
+                  value="2"
+                  sx={{
+                    width: "100%",
+                    typography: "body1",
+                    borderBottom: 1,
+                    borderColor: "divider",
+                    borderRadius: "10px",
+                  }}
+                />
+                <Tab
+                  label="Loose Cargo Shipment"
+                  value="3"
+                  sx={{
+                    width: "100%",
+                    typography: "body1",
+                    borderBottom: 1,
+                    borderColor: "divider",
+                    borderRadius: "10px",
+                  }}
                 />
               </TabList>
             </Box>
+
             <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
+              <ContainerShipmentView />
               <ContainerDetails formik={formik} />
+            </TabPanel>
+
+            <TabPanel value="2" sx={{ paddingBottom: "15px" }}>
+              <ContainerShipmentView />
+            </TabPanel>
+
+            <TabPanel value="3" sx={{ paddingBottom: "15px" }}>
+              <ContainerShipmentView />
             </TabPanel>
           </TabContext>
         )}
