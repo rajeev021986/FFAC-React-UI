@@ -4,16 +4,12 @@ import {
   Autocomplete,
   Box,
   CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Paper,
 } from "@mui/material";
-import { GetAutoCompleteDataWithLoader } from "../../utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
+import { GetAutoCompleteDataWithCountry } from "../../utils/GetAutoCompleteDataCountry";
+import toast from "react-hot-toast";
+import CustomToast from "../Toast/CustomToast";
 
 function FormAutoCompleteWithTable(props) {
   const {
@@ -30,9 +26,8 @@ function FormAutoCompleteWithTable(props) {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const debounceValue = useDebounce(inputValue, 800); // Custom Hook
+  const debounceValue = useDebounce(inputValue, 800);
 
   useEffect(() => {
     if (!debounceValue) return; // Avoid API call on empty input
@@ -40,13 +35,16 @@ function FormAutoCompleteWithTable(props) {
       setLoading(true);
       try {
         const searchQuery = inputValue.trim() === "" ? "" : debounceValue;
-        const data = await GetAutoCompleteDataWithLoader(
+        const data = await GetAutoCompleteDataWithCountry(
           suggestionName,
           id,
           dataLabel || suggestionName,
           searchQuery
         );
+
         setOptions(data);
+
+        // Preload selected option if formik has a value
         if (formik.values.originCountry) {
           const preloadedOption = data.find(
             (item) => item.fullData.country === formik.values.originCountry
@@ -56,8 +54,10 @@ function FormAutoCompleteWithTable(props) {
           }
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
+        toast.custom(
+          <CustomToast message={"Something went wrong!"} toast="error" />
+        );
+      }finally {
         setLoading(false);
       }
     };
@@ -65,7 +65,7 @@ function FormAutoCompleteWithTable(props) {
     fetchData();
   }, [debounceValue, suggestionName, id, dataLabel]);
 
-  // Sync inputValue when formik value changes (for preloaded data)
+  // Sync inputValue when formik value changes
   useEffect(() => {
     if (formik.values.originCountry) {
       setInputValue(formik.values.originCountry);
@@ -86,6 +86,7 @@ function FormAutoCompleteWithTable(props) {
         portOfLoading: newValue.fullData.port_name,
       });
       setInputValue(newValue.fullData.country);
+      setSelectedOption(newValue);
     } else {
       formik.setValues({
         ...formik.values,
@@ -96,49 +97,37 @@ function FormAutoCompleteWithTable(props) {
       setOptions([]);
       setSelectedOption(null);
     }
-    setShowDropdown(false);
   };
+
   return (
     <Box sx={{ width: "100%" }}>
-    <Autocomplete
-    sx={{
-          border: "none !important",
-        }}
-           size="small"
-           id={id}
-    open={showDropdown}
-    onOpen={() => setShowDropdown(true)}
-    onClose={() => setShowDropdown(false)}
-    options={options}
-    onFocus={()=>   setShowDropdown(true)}
-    getOptionLabel={(option) => option.fullData?.country || ""}
-    isOptionEqualToValue={(option, value) => option.fullData?.country === value.fullData?.country}
-    onInputChange={(event, newValue) => setInputValue(newValue)}
-    inputValue={inputValue}
-    value={selectedOption} // Ensure the selected option remains after API call
-    onChange={handleSelectionChange}
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        label={label}
-        variant="outlined"
-       placeholder="Type to search"
-        fullWidth
-        error={Boolean(error)}
-        helperText={error}
-        sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "10px",
-                fontSize: "14px",
-              },
-            }}
+      <Autocomplete
+        size="small"
+        id={id}
+        options={options}
+        getOptionLabel={(option) => option.fullData?.country || ""}
+        isOptionEqualToValue={(option, value) =>
+          option.fullData?.country === value.fullData?.country
+        }
+        onInputChange={(event, newValue) => setInputValue(newValue)}
+        inputValue={inputValue}
+        value={selectedOption}
+        onChange={handleSelectionChange}
+        loading={loading}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={label}
+            variant="outlined"
+            placeholder="Type to search"
+            fullWidth
+            error={Boolean(error)}
+            helperText={error}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
                 <>
-                  {loading ? (
-                    <CircularProgress color="inherit" size={15} />
-                  ) : null}
+                  {loading ? <CircularProgress color="inherit" size={15} /> : null}
                   {params.InputProps.endAdornment}
                 </>
               ),
@@ -175,7 +164,7 @@ ListboxComponent={(props) => (
         padding: "8px",
         borderBottom: "1px solid #ddd",
         position: "sticky",
-        top: 0,
+        top: '-15px',
         zIndex: 2, // Ensure it stays above the list
       }}
     >
@@ -183,24 +172,21 @@ ListboxComponent={(props) => (
         color: "white",
         fontSize: "14px",
         // fontWeight: "bold",
-      }}>Country Name</span>
+      }}>Country</span>
       <span style={{
         color: "white",
         fontSize: "14px",
         fontWeight: "bold",
-      }}>Port Name</span>
+      }}>Port</span>
     </Box>
 
-    {/* Scrollable Options List */}
-    {props.children}
-  </Paper>
-)}
-
-
-  />
- 
-</Box>
+            {/* Scrollable Options List */}
+            {props.children}
+          </Paper>
+        )}
+      />
+    </Box>
   );
 }
 
-export default FormAutoCompleteWithTable; 
+export default FormAutoCompleteWithTable;
