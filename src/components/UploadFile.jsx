@@ -25,6 +25,8 @@ import UploadFilesDialog from "./UploadFilesDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import CustomToast from "./common/Toast/CustomToast";
 import { reloadDataHandler } from "../services/common/DocumentDetails";
+import { reloadDocumentDataHandler } from "../services/common/DocumentDetails";
+
 // Custom styled drop zone
 const DropZone = styled(Box)(({ theme }) => ({
   border: "2px dashed #ccc",
@@ -48,7 +50,11 @@ const UploadFile = ({
   disabled = false,
   dropdownData,
   sourceType = null,
+  isNotShowType,
+  type,
 }) => {
+  console.log(customer_id, "customer_id");
+  console.log(type,"type")
   const [viewloader, setViewloader] = useState(false);
   const [viewloaderId, setViewLoaderId] = useState();
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
@@ -65,7 +71,15 @@ const UploadFile = ({
   const [fileData, setFileDaat] = useState({});
 
   useEffect(() => {
-    reloadDataHandler(sourceType, customer_id, setListData, setLoading);
+    type == null
+      ? reloadDataHandler(sourceType, customer_id, setListData, setLoading)
+      : reloadDocumentDataHandler(
+          sourceType,
+          customer_id,
+          type,
+          setListData,
+          setLoading
+        );
   }, []);
 
   const downloadIntgater = async () => {
@@ -137,7 +151,15 @@ const UploadFile = ({
       );
 
       setOpenConfirmation(false);
-      reloadDataHandler(sourceType, customer_id, setListData, setLoading);
+      type == null
+        ? reloadDataHandler(sourceType, customer_id, setListData, setLoading)
+        : reloadDocumentDataHandler(
+            sourceType,
+            customer_id,
+            type,
+            setListData,
+            setLoading
+          );
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -166,7 +188,8 @@ const UploadFile = ({
       );
     }
     setUploadedFile(file);
-    setDialogOpen(true);
+
+    setDialogOpen(isNotShowType == true ? false : true);
   };
 
   const handleInputChange = (e) => {
@@ -198,9 +221,9 @@ const UploadFile = ({
   };
 
   const handleDialogSave = async () => {
-    if (!validateForm()) {
-      return;
-    }
+    // if (!validateForm()) {
+    //   return;
+    // }
     const uploadData = {
       file: uploadedFile,
       entityFile: {
@@ -210,14 +233,29 @@ const UploadFile = ({
         documentType:
           formData.documentType == "Other"
             ? formData.other
-            : formData.documentType,
+            : type == null
+            ? formData.documentType
+            : type,
       },
     };
+    console.log(uploadData, "uploadData");
     try {
       setLoading(true);
       let response = await uploadCustomerFile(uploadData).unwrap();
       setDialogOpen(false);
-      reloadDataHandler(sourceType, customer_id, setListData, setLoading);
+      if (type !== null && type !== undefined) {
+        reloadDocumentDataHandler(
+          sourceType,
+          customer_id,
+          type,
+          setListData,
+          setLoading
+        );
+      }else{
+        reloadDataHandler(sourceType, customer_id, setListData, setLoading);
+
+      }
+
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -225,6 +263,12 @@ const UploadFile = ({
     }
     setFormData({});
   };
+
+  useEffect(() => {
+    if (isNotShowType == true && uploadedFile != null && type !== null) {
+      handleDialogSave();
+    }
+  }, [uploadedFile]);
 
   const handleDate = (date) => {
     if (!date) {
@@ -409,52 +453,58 @@ const UploadFile = ({
       headerAlign: "center",
       renderCell: (params) => (
         <Tooltip title={`${params.row.createdBy}`} arrow>
-          <div>{params.value}</div>
+          <div >{params.value}</div>
         </Tooltip>
       ),
     },
-    {
-      field: "modifiedBy",
-      headerName: "Modified By",
-      flex: 1,
-      headerAlign: "center",
-      renderCell: (params) => (
-        <Tooltip title={`${params.row.modifiedBy}`} arrow>
-          <div>{params.value}</div>
-        </Tooltip>
-      ),
-    },
+    // {
+    //   field: "modifiedBy",
+    //   headerName: "Modified By",
+    //   flex: 1,
+    //   headerAlign: "center",
+    //   renderCell: (params) => (
+    //     <Tooltip title={`${params.row.modifiedBy}`} arrow>
+    //       <div>{params.value}</div>
+    //     </Tooltip>
+    //   ),
+    // },
     {
       field: "createdDate",
       headerName: "Created Date",
       width: 130,
+      flex: 1,
+
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
         return (
           <Tooltip title={`${handleDate(params.value)}`} arrow>
-            <div>{handleDate(params.value)}</div>;
+            <div  style={{
+            marginTop:'42px'
+          }}>{handleDate(params.value)}</div>;
           </Tooltip>
         );
       },
     },
-    {
-      field: "modifiedDate",
-      headerName: "Modified Date",
-      width: 130,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => {
-        return (
-          <Tooltip title={`${handleDate(params.value)}`} arrow>
-            <div>{handleDate(params.value)}</div>;
-          </Tooltip>
-        );
-      },
-    },
+    // {
+    //   field: "modifiedDate",
+    //   headerName: "Modified Date",
+    //   width: 130,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderCell: (params) => {
+    //     return (
+    //       <Tooltip title={`${handleDate(params.value)}`} arrow>
+    //         <div >{handleDate(params.value)}</div>;
+    //       </Tooltip>
+    //     );
+    //   },
+    // },
     {
       field: "actions",
       headerName: "Actions",
+      headerAlign: "center",
+      align: "center",
       flex: 1,
       renderCell: (params) => (
         <div

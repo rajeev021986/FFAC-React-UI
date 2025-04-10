@@ -80,7 +80,7 @@ const ThemedGrid = (props) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: "calc(100vh - 190px)",
+        // height: "calc(100vh - 190px)",
         overflowY: "auto",
         
       }}
