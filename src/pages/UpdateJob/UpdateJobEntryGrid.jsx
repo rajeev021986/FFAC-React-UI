@@ -10,14 +10,13 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Box, IconButton, Skeleton } from "@mui/material";
 
 // Components
-import AutoCompleteInput from "../../components/common/AutoCompletInput";
 import EditRowDialog from "../../components/common/EditRowDialog";
 import InputBoxForGrid from "../../components/common/InputBoxForGrid";
 import { StyledDataGrid } from "../../components/common/Grid/styles";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 import FormAutoCompleteBond from "../../components/common/AutoComplete/FormAutoCompleteBond";
 
-export default function BondDetailsGridForm({ formik, dropdownData }) {
+export default function BondDetailsGridForm({ formik }) {
   const [editDialogData, setEditDialogData] = useState();
   const [openTable, setopenTable] = useState(true);
   const [EditRowDialogopen, setEditRowDialogOpen] = useState(false);
@@ -64,32 +63,34 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
       handleProcessRowUpdate: (newRow, oldRow) => {
         const runningBalance = parseFloat(oldRow.runningBalance) || 0;
         const enteredAmount = parseFloat(newRow.bondAmount) || 0;
-        
-        // Find row index inside the array
-        const rowIndex = formik.values.bondDetails.findIndex(row => row.id === newRow.id);
-      
+
+        const rowIndex = formik.values.bondDetails.findIndex(
+          (row) => row.id === newRow.id
+        );
+
         if (enteredAmount > runningBalance) {
-          formik.setFieldError(`bondDetails.${rowIndex}.bondAmount`, "Bond Amount cannot exceed Running Balance");
+          formik.setFieldError(
+            `bondDetails.${rowIndex}.bondAmount`,
+            "Bond Amount cannot exceed Running Balance"
+          );
           return oldRow; // Reject update
         } else {
           // Clear any previous error
-          formik.setFieldError(`bondDetails.${rowIndex}.bondAmount`, "");
-          
+          // formik.setFieldError(`bondDetails.${rowIndex}.bondAmount`, "");
           const updatedRow = {
             ...newRow,
-            balanceBondAmount: runningBalance - enteredAmount, // ✅ Update balanceBondAmount
+            balanceBondAmount: runningBalance - enteredAmount,
           };
-      
+
           const updatedRows = formik.values.bondDetails.map((row) =>
             row.id === newRow.id ? updatedRow : row
           );
-      
+
           formik.setFieldValue("bondDetails", updatedRows);
           return updatedRow;
         }
       },
-      
-      
+
       columns: [
         {
           field: "bondNumber",
@@ -97,8 +98,7 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
           flex: 1,
           renderCell: (params) => (
             <FormAutoCompleteBond
-              placeholder = "Enter Bond Number"
-              // size="large"
+              placeholder="Enter Bond Number"
               id="bond_number"
               label="Bond Number"
               suggestionName="bond_number"
@@ -106,18 +106,18 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
               onChange={(e) => {
                 const selectedBondNumber = e.target.value;
                 const selectedBondData = e.fullData; // Get full bond data
-        
+
                 const updatedRows = formik.values.bondDetails.map((row) => {
                   if (row.id === params.id) {
-                    return { 
-                      ...row, 
+                    return {
+                      ...row,
                       bondNumber: selectedBondNumber,
-                      runningBalance: selectedBondData?.amount || "" // Set running balance
+                      runningBalance: selectedBondData?.amount || "", // Set running balance
                     };
                   }
                   return row;
                 });
-        
+
                 formik.setFieldValue("bondDetails", updatedRows);
               }}
             />
@@ -127,16 +127,18 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
           field: "balanceBondAmount",
           headerName: "Balance Bond Amount",
           flex: 1,
-          editable: false, 
+          editable: false,
           renderCell: (params) => {
-            const row = formik.values.bondDetails.find((r) => r.id === params.id);
+            const row = formik.values.bondDetails.find(
+              (r) => r.id === params.id
+            );
             return (
               <InputBoxForGrid
                 {...params}
-                type= "number"
+                type="number"
                 placeholder="Enter Balance Bond Amount"
                 value={row?.balanceBondAmount || ""}
-                disabled ={true}// Make it read-only
+                disabled={true} // Make it read-only
               />
             );
           },
@@ -180,8 +182,8 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
           flex: 1,
           // editable:true,
           renderCell: (params) => (
-            <InputBoxForGrid 
-              {...params} 
+            <InputBoxForGrid
+              {...params}
               placeholder="Running Balance"
               // disabled // Make the field read-only
             />
@@ -257,7 +259,7 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
                       disableColumnMenu
                       disablePagination
                       paginationMode="client" // Ensures manual pagination is off
-                      hideFooterPagination 
+                      hideFooterPagination
                     />
                   ) : (
                     <Box
