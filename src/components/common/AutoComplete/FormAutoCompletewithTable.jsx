@@ -1,33 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { useTheme } from '@mui/material/styles';
 import {
-  TextField,
-  Autocomplete,
-  Box,
-  CircularProgress,
-  Paper,
+TextField,
+Autocomplete,
+Box,
+CircularProgress,
+Paper,
 } from "@mui/material";
 import useDebounce from "../../../hooks/useDebounce";
 import { GetAutoCompleteDataWithCountry } from "../../utils/GetAutoCompleteDataCountry";
 import toast from "react-hot-toast";
 import CustomToast from "../Toast/CustomToast";
-
 function FormAutoCompleteWithTable(props) {
-  const {
-    label,
-    id,
-    suggestionName,
-    dataLabel,
-    value,
-    error,
-    onChange,
-    formik,
-  } = props;
+  const { label, id, suggestionName, dataLabel, error, formik } = props;
 
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
   const debounceValue = useDebounce(inputValue, 800);
+  const theme = useTheme();
 
   useEffect(() => {
     if (!debounceValue) return; // Avoid API call on empty input
@@ -44,7 +36,6 @@ function FormAutoCompleteWithTable(props) {
 
         setOptions(data);
 
-        // Preload selected option if formik has a value
         if (formik.values.originCountry) {
           const preloadedOption = data.find(
             (item) => item.fullData.country === formik.values.originCountry
@@ -57,7 +48,7 @@ function FormAutoCompleteWithTable(props) {
         toast.custom(
           <CustomToast message={"Something went wrong!"} toast="error" />
         );
-      }finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -98,6 +89,7 @@ function FormAutoCompleteWithTable(props) {
       setSelectedOption(null);
     }
   };
+  console.log("options", options);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -127,58 +119,74 @@ function FormAutoCompleteWithTable(props) {
               ...params.InputProps,
               endAdornment: (
                 <>
-                  {loading ? <CircularProgress color="inherit" size={15} /> : null}
+                  {loading ? (
+                    <CircularProgress color="inherit" size={15} />
+                  ) : null}
                   {params.InputProps.endAdornment}
                 </>
               ),
             }}
-      />
-    )}
-    renderOption={(props, option) => (
-  <Box component="li" {...props} key={option.value}>
-    <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", padding: "1px" }}>
-      <span>{option.fullData.country}</span>
-      <span>{option.fullData.port_name}</span>
-    </Box>
-  </Box>
-)}
+          />
+        )}
+        renderOption={(props, option) => (
+          <Box component="li" {...props} key={option.value}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                padding: "1px",
+              }}
+            >
+              <span>{option.fullData.country}</span>
+              <span>{option.fullData.port_name}</span>
+            </Box>
+          </Box>
+        )}
+        ListboxComponent={(props) => (
+          <Paper
+            {...props}
+            sx={{
+              maxHeight: 300, // Limit height to enable scrolling
+              overflowY: "auto",
+              border: "1px solid #ddd",
+            }}
+          >
+            {/* Fixed Header */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontWeight: "bold",
+                backgroundColor: theme.palette.primary.main, 
+                color: theme.palette.common.white,
 
-ListboxComponent={(props) => (
-  <Paper
-    {...props}
-    sx={{
-      maxHeight: 300, // Limit height to enable scrolling
-      overflowY: "auto",
-      border: "1px solid #ddd",
-    }}
-  >
-    {/* Fixed Header */}
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        fontWeight: "bold",
-        // backgroundColor: "#f0f0f0",
-   backgroundColor: '#166de0',
-
-        padding: "8px",
-        borderBottom: "1px solid #ddd",
-        position: "sticky",
-        top: '-15px',
-        zIndex: 2, // Ensure it stays above the list
-      }}
-    >
-      <span style={{
-        color: "white",
-        fontSize: "14px",
-        // fontWeight: "bold",
-      }}>Country</span>
-      <span style={{
-        color: "white",
-        fontSize: "14px",
-        fontWeight: "bold",
-      }}>Port</span>
-    </Box>
+                padding: "8px",
+                borderBottom: "1px solid #ddd",
+                position: "sticky",
+                top: "-15px",
+                zIndex: 2, // Ensure it stays above the list
+              }}
+            >
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "14px",
+                  // fontWeight: "bold",
+                }}
+              >
+                Country
+              </span>
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                }}
+              >
+                Port
+              </span>
+            </Box>
 
             {/* Scrollable Options List */}
             {props.children}

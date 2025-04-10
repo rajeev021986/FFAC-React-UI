@@ -241,7 +241,7 @@ export default function BondDetailsGridForm({ formik, dropdownData }) {
           {TabsHosts?.map((ob, index) => (
             <TabPanel value={index} sx={{ padding: 0, marginTop: 2 }}>
               <Box sx={{ width: "100%" }}>
-                <Box sx={{ height: 400 }}>
+                <Box >
                   {openTable ? (
                     <StyledDataGrid
                       rows={ob.value}

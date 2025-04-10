@@ -248,7 +248,10 @@ class ApiManager {
     const url = ENDPOINTS.GET_DOCUMENT_FILES(source, id, menuConfigUrl.entity);
     return ApiMethods.get(url);
   };
-
+  static getEditJobDocumentFiles = async (source, type,id) => {
+    const url = ENDPOINTS.GET_DOCUMENT_EDIT_JOB_FILES(source,type, id, menuConfigUrl.entity);
+    return ApiMethods.get(url);
+  };
   static getJobEntries = async (limit, page) => {
     const url = ENDPOINTS.GET_JOBENTRIES(limit, page);
     return ApiMethods.get(url);

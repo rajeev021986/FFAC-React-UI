@@ -122,7 +122,7 @@ export default function ShipmentDetails({ formik }) {
             xl={2}
           >
             <InputBox
-              label="Total NoOfPkgs."
+              label="Total No OfPkgs."
               id="totalNoOfPackages"
               value={formik.values.totalNoOfPackages}
               error={formik.errors.totalNoOfPackages}

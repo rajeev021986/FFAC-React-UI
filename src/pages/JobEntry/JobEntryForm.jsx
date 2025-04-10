@@ -321,7 +321,6 @@ console.log("page",page);
 
 
   const getPage = location?.pathname.split("/").slice(-1)[0];
-  console.log(getPage, "getPage");
   
   // const disabled =
   //   getPage === "editJobEntry" ? true : !(page === "job-entry" || page === "jobApprove");
@@ -356,7 +355,7 @@ console.log("page",page);
   useEffect(() => {
     const selectedValue = formik.values.shipmentType;
 
-    if (selectedValue && !validType?.includes(selectedValue)) {
+    if ( selectedValue && !validType?.includes(selectedValue) && getPage == "newEntry") {
       toast.custom(
         <CustomToast
           message={'Invalid shipment type selected.'}
@@ -368,7 +367,7 @@ console.log("page",page);
       );
       // formik.setFieldError('shipmentType', 'Invalid shipment type selected.');
     }
-  }, [formik.values.shipmentType, optionsSettingsData]);
+  }, [formik.values.shipmentType,]);
 
   return (
     <>
@@ -457,6 +456,8 @@ console.log("page",page);
                     error={formik.errors.moveType}
                     onChange={formik.handleChange}
                     disabled={getPage === 'newEntry' ? false : true}
+                    getPage={getPage}
+
                   />
                 </Grid>
 
@@ -465,14 +466,16 @@ console.log("page",page);
                   location?.pathname ===
                     "/app/documentation/job-approve/file/approveJobRequest" ||
                   formik?.values?.createdBy === getUserId) && (
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={6} xl={2} style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                  }}>
                     <ThemeButton
                       onClick={() => toggleRateModal()}
                       sx={{
                         fontWeight: "500",
                         color: "white !important",
-                        height: "38px",
-                        
                       }}
                     >
                       Add Rate

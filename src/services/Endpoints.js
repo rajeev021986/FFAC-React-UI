@@ -18,6 +18,10 @@ const ENDPOINTS = {
     `/getAutoComplete?name=${name}&search=${search}`,
   GET_DOCUMENT_FILES: (source, id,BasePageUrl) =>
     `/${BasePageUrl}/file?source=${source}&sourceId=${id}`,
+
+  GET_DOCUMENT_EDIT_JOB_FILES: (source,type, id,BasePageUrl) =>
+    `/${BasePageUrl}/file/type?source=${source}&docType=${type}&sourceId=${id}`,
+
   GET_SHIPPER_DOCUMENT_FILE: (source, id) =>
     `/entity-service/file/get?source=${source}&sourceId=${id}`,
   DOWNLOAD_DOCUMENT: (id, source, sourceId,BasePageUrl) =>

@@ -387,6 +387,23 @@ export default function GlobalDrrpdownSettingVoucher({
           //   backgroundColor: "white.main",
           //   "& .MuiDataGrid-main": { overflow: "auto" },
           // }}
+          sx={{
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "primary.main",
+              lineHeight: 10,
+            },
+            "& .MuiDataGrid-cell": {
+              whiteSpace: "normal",
+              wordWrap: "break-word",
+            },
+            "& .MuiDataGrid-columnHeaderTitle": {
+              color: "#fff",
+              fontSize: "14px",
+            },
+            "& .MuiDataGrid-cell": {
+              fontSize: "14px",
+            },
+          }}
           disableRowSelectionOnClick
           autoHeight={false}
           hideFooter

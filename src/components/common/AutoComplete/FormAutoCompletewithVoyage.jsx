@@ -9,10 +9,20 @@ import {
 } from "@mui/material";
 import useDebounce from "../../../hooks/useDebounce";
 import { GetAutoCompleteDataWithVoyage } from "../../utils/GetAutoCompleteDataWithVoyage";
+import { useTheme } from "@mui/material/styles";
 
 function FormAutoCompleteWithVoyage(props) {
-  const { label, id, suggestionName, dataLabel, value, error, onChange , setFieldValue,formik} =
-    props;
+  const {
+    label,
+    id,
+    suggestionName,
+    dataLabel,
+    value,
+    error,
+    onChange,
+    setFieldValue,
+    formik,
+  } = props;
 
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -23,9 +33,9 @@ function FormAutoCompleteWithVoyage(props) {
 
   useEffect(() => {
     if (!debounceValue) return; // Avoid API call on empty input
-  
+
     let isMounted = true; // To prevent state updates on unmounted component
-  
+
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -45,23 +55,22 @@ function FormAutoCompleteWithVoyage(props) {
         if (isMounted) setLoading(false);
       }
     };
-  
+
     fetchData();
-  
+
     return () => {
       isMounted = false; // Cleanup function to prevent unnecessary state updates
     };
   }, [debounceValue]); // ✅ Only triggers when typing
-  
 
+  const theme = useTheme();
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);
   };
   const handleSelectionChange = (event, newValue) => {
-  
     if (newValue) {
       const { vessel, voyage } = newValue.fullData;
-  
+
       if (id === "loadingVessel") {
         setFieldValue("loadingVessel", vessel);
         setFieldValue("loadingVoyage", voyage || "");
@@ -89,8 +98,7 @@ function FormAutoCompleteWithVoyage(props) {
       }
     }
   };
-  
-
+  console.log(theme.palette.primary.main, "main");
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
@@ -99,7 +107,9 @@ function FormAutoCompleteWithVoyage(props) {
         }}
         size="small"
         id={id}
-       value={formik.values[id] ? { label: formik.values[id] } : null}
+        noOptionsText="Type to Search"
+
+        value={formik.values[id] ? { label: formik.values[id] } : null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
@@ -137,46 +147,55 @@ function FormAutoCompleteWithVoyage(props) {
               ),
             }}
           />
-        )}renderOption={(props, option) => (
-  <Box component="li" {...props} key={option.value}>
-    <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", padding: "1px" }}>
-      <span>{option.fullData.vessel}</span>
-      <span>{option.fullData.voyage}</span>
-    </Box>
-  </Box>
-)}
+        )}
+        renderOption={(props, option) => (
+          <Box component="li" {...props} key={option.value}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                padding: "1px",
+              }}
+            >
+              <span>{option.fullData.vessel}</span>
+              <span>{option.fullData.voyage}</span>
+            </Box>
+          </Box>
+        )}
+        ListboxComponent={(props) => (
+          <Paper
+            {...props}
+            sx={{
+              maxHeight: 300, // Limit height to enable scrolling
+              overflowY: "auto",
+              border: "1px solid #ddd",
+            }}
+          >
+            {/* Fixed Header */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontWeight: "bold",
+                backgroundColor: "#f0f0f0",
+                padding: "8px",
+                borderBottom: "1px solid #ddd",
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.common.white,
+                position: "sticky",
+                top: 0,
+                zIndex: 2, // Ensure it stays above the list
+              }}
+            >
+              <span>Vessel</span>
+              <span>Voyage</span>
+            </Box>
 
-ListboxComponent={(props) => (
-  <Paper
-    {...props}
-    sx={{
-      maxHeight: 300, // Limit height to enable scrolling
-      overflowY: "auto",
-      border: "1px solid #ddd",
-    }}
-  >
-    {/* Fixed Header */}
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        fontWeight: "bold",
-        backgroundColor: "#f0f0f0",
-        padding: "8px",
-        borderBottom: "1px solid #ddd",
-        position: "sticky",
-        top: 0,
-        zIndex: 2, // Ensure it stays above the list
-      }}
-    >
-      <span>Vessel</span>
-      <span>Voyage</span>
-    </Box>
-
-    {/* Scrollable Options List */}
-    {props.children}
-  </Paper>
-)}
+            {/* Scrollable Options List */}
+            {props.children}
+          </Paper>
+        )}
         // renderOption={(props, option) => (
         //   <MenuItem
         //     {...props}

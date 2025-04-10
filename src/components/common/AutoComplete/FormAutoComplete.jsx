@@ -71,6 +71,8 @@ function FormAutoComplete(props) {
         }}
         size="small"
         id={id}
+        noOptionsText="Type to Search"
+
         value={options.find((option) => option.value === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
