@@ -45,6 +45,7 @@ import ApiManager from "../../services/ApiManager";
 import { JOB_ENTRY_NEW_COLUMNS } from "../../data/columns/jobEntry(New)";
 import DocumentDialog from "../../components/common/DocumentDialog";
 import AddRateModalApprove from "./AddRateModalApprove";
+import AddRejectedRemarks from "./RejectedRemarks";
 
 export default function JobEntryScreen({ page }) {
   const location = useLocation();
@@ -56,7 +57,7 @@ export default function JobEntryScreen({ page }) {
   const [seletectBox, setSelectedBox] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
   const [toggleRate, settoggleRate] = useState(false);
-  
+
   const [modal, setModal] = useState({
     open: false,
     type: "",
@@ -125,13 +126,14 @@ export default function JobEntryScreen({ page }) {
 
   useEffect(() => {
     refetch();
-    setSelectedIds([])
+    setSelectedIds([]);
   }, [location.pathname]);
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
-  const activeColumns = page === "job-entry" ? JOB_ENTRY_NEW_COLUMNS  : JOB_ENTRY_COLUMNS ;
+  const activeColumns =
+    page === "job-entry" ? JOB_ENTRY_NEW_COLUMNS : JOB_ENTRY_COLUMNS;
   activeColumns[activeColumns.length - 1].renderCell = GridActions({
     actions:
       page == "job-entry"
@@ -188,7 +190,7 @@ export default function JobEntryScreen({ page }) {
   };
 
   useEffect(() => {
-     dispatch(jobEntrySetView("grid"));
+    dispatch(jobEntrySetView("grid"));
   }, []);
 
   const handleCheckboxChange = (id) => {
@@ -240,10 +242,9 @@ export default function JobEntryScreen({ page }) {
               />
             ),
           },
-          ... JOB_ENTRY_COLUMNS , // Use the new columns when on "job-entry" page
+          ...JOB_ENTRY_COLUMNS, // Use the new columns when on "job-entry" page
         ]
-      : [...JOB_ENTRY_NEW_COLUMNS] // Use the default columns otherwise
-    ),
+      : [...JOB_ENTRY_NEW_COLUMNS]), // Use the default columns otherwise
   ];
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
@@ -380,7 +381,7 @@ export default function JobEntryScreen({ page }) {
         // source="jobApprove"
         sourceId={modal?.data?.id}
         customerRefNo={modal?.data?.customerRefNo}
-        job_No = {modal?.data?.jobNo}
+        job_No={modal?.data?.jobNo}
         handleClose={handleClose}
         handleOpen={modal.open && modal.type === "document"}
       />
@@ -390,6 +391,13 @@ export default function JobEntryScreen({ page }) {
         handleOpen={modal.open && modal.type === "addRate"}
         handleClose={handleClose}
       />
+
+      <AddRejectedRemarks
+        rowId={modal?.data?.id}
+        handleOpen={modal.open && modal.type === "reject"}
+        handleClose={handleClose}
+      />
+
       <DeleteDialog
         source="job-entry"
         sourceName={modal?.data?.deleteName}

@@ -267,16 +267,19 @@ class ApiManager {
   };
   static updateAddRateDetails = async (payload) => {
     const url = ENDPOINTS.UPDATE_ADDRATE_DETAILS(menuConfigUrl.document);
-    return ApiMethods.put(url,payload);
+    return ApiMethods.put(url, payload);
   };
-  
+
   static approveJobEntryRequest = async (id, type) => {
     const url = ENDPOINTS.JOB_APPROVE_REQUEST(id, type, menuConfigUrl.document);
     return ApiMethods.put(url);
   };
-  static approveAllJobEntryRequest = async (type,payload) => {
-    const url = ENDPOINTS.ALL_JOBS_APPROVE_REQUEST(type, menuConfigUrl.document);
-    return ApiMethods.put(url,payload);
+  static approveAllJobEntryRequest = async (type, payload) => {
+    const url = ENDPOINTS.ALL_JOBS_APPROVE_REQUEST(
+      type,
+      menuConfigUrl.document
+    );
+    return ApiMethods.put(url, payload);
   };
   static rejectjobEntryApprove = async (id, type, remarkMessage) => {
     let payload = { remarks: remarkMessage };
