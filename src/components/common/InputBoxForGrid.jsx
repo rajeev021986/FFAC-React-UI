@@ -13,6 +13,7 @@ export default function InputBoxForGrid(props) {
     placeholder,
     fieldType = "text",
     inputRef,
+    isEditable
   } = props;
 
   const tooltipMessage = value ? value : "This field is empty";
@@ -71,15 +72,17 @@ export default function InputBoxForGrid(props) {
         height: "100%",
       }}
       onMouseEnter={() => {
-        if (props?.cellMode === "view") {
-          api?.startCellEditMode({ id, field });
-        }
-      }}
-      onMouseLeave={() => {
-        if (props?.cellMode === "edit") {
-          api?.stopCellEditMode({ id, field });
-        }
-      }}
+    // ✅ Prevent edit mode if the field is NOT editable
+    if (props?.cellMode === "view" && props?.isEditable !== false) {
+      api?.startCellEditMode({ id, field });
+    }
+  }}
+  onMouseLeave={() => {
+    // ✅ Only stop edit mode if the field is actually editable
+    if (props?.cellMode === "edit") {
+      api?.stopCellEditMode({ id, field });
+    }
+  }}
     >
       {(() => {
         switch (type) {
@@ -111,8 +114,9 @@ export default function InputBoxForGrid(props) {
               <Tooltip title={tooltipMessage} arrow>
                <TextField
                   size="small"
-                  type={fieldType}
+                  type={type || fieldType}
                   fullWidth
+                  disabled= { field == "balanceBondAmount" && true}
                   value={inputValue}
                   onChange={ field == "containerNo"? handleChangeContainerNo :handleChange}
                   inputRef={inputRef}

@@ -21,6 +21,7 @@ const suggestionName = {
   portOfLoading: "PORT_LOADING",
   portOfDischarge: "PORT",
   placeOfDelivery: "PORT",
+  bond_number:"BOND",
 };
 
 export const GetAutoCompleteDataWithLoader = async (

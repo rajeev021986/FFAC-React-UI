@@ -218,10 +218,7 @@ console.log(page,"page")
     useGetOptionsSettingsQuery("customer_settings");
 
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-  console.log(
-    jobSettingData?.body?.jobPatternData?.map((i) => i.shipmentType),
-    "manish"
-  );
+
   const validType = jobSettingData?.body?.jobPatternData?.map(
     (i) => i.shipmentType
   );
@@ -239,7 +236,6 @@ console.log(page,"page")
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
-  console.log(optionsSettingsData?.body?.shipmentType, "optionsSettingsData");
 
   const handleApproveRequest = async () => {
     setRejectError(false);
@@ -319,6 +315,7 @@ console.log(page,"page")
   };
 
 
+console.log("page",page);
 
    const disabled = page == "job-entry" || "jobApprove" ? false : true;
 
@@ -445,7 +442,7 @@ console.log(page,"page")
                     value={formik.values.shipmentType}
                     error={formik.errors.shipmentType}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={getPage === 'newEntry' ? false : true}
                     getPage={getPage}
 
                   />
@@ -459,7 +456,7 @@ console.log(page,"page")
                     value={formik.values.moveType}
                     error={formik.errors.moveType}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={getPage === 'newEntry' ? false : true}
                   />
                 </Grid>
 
