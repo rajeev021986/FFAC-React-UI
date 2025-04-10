@@ -110,13 +110,13 @@ function FormAutoCompleteWithTable(props) {
         }}
         size="small"
         id={id}
-        open={showDropdown}
+        // open={showDropdown}
         
         noOptionsText="Type to Search"
-        onOpen={() => setShowDropdown(true)}
-        onClose={() => setShowDropdown(false)}
+        // onOpen={() => setShowDropdown(true)}
+        // onClose={() => setShowDropdown(false)}
         options={options}
-        onFocus={() => setShowDropdown(true)}
+        // onFocus={() => setShowDropdown(true)}
         getOptionLabel={(option) => option.fullData?.country || ""}
         isOptionEqualToValue={(option, value) =>
           option.fullData?.country === value.fullData?.country
@@ -175,75 +175,41 @@ function FormAutoCompleteWithTable(props) {
               border: "1px solid #ddd",
             }}
           >
-            {/* Fixed Header */}
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 fontWeight: "bold",
+                // backgroundColor: "#f0f0f0",
                 backgroundColor: theme.palette.primary.main, 
                 color: theme.palette.common.white,
-
                 padding: "8px",
                 borderBottom: "1px solid #ddd",
                 position: "sticky",
-                top: 0,
+                top: '-15px',
                 zIndex: 2, // Ensure it stays above the list
               }}
             >
-              <span
-                style={{
-                  color: "white",
-                  fontSize: "14px",
-                  // fontWeight: "bold",
-                }}
-              >
-                Country Name
-              </span>
-              <span
-                style={{
-                  color: "white",
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                }}
-              >
-                Port Name
-              </span>
+              <span style={{
+                color: "white",
+                fontSize: "14px",
+                // fontWeight: "bold",
+              }}>Country</span>
+              <span style={{
+                color: "white",
+                fontSize: "14px",
+                fontWeight: "bold",
+              }}>Port</span>
             </Box>
-        padding: "8px",
-        borderBottom: "1px solid #ddd",
-        position: "sticky",
-        top: '-15px',
-        zIndex: 2, // Ensure it stays above the list
-      }}
-    >
-      <span style={{
-        color: "white",
-        fontSize: "14px",
-        // fontWeight: "bold",
-      }}>Country</span>
-      <span style={{
-        color: "white",
-        fontSize: "14px",
-        fontWeight: "bold",
-      }}>Port</span>
-    </Box>
-
-            {/* Scrollable Options List */}
-            {props.children}
-          </Paper>
-        )}
+                    {/ Scrollable Options List /}
+                    {props.children}
+                  </Paper>
+                )} 
       />
-    </Box>
-            {/* Scrollable Options List */}
-            {props.children}
-          </Paper>
-        )}
-      />
+           
     </Box>
   );
 }
 
-export default FormAutoCompleteWithTable;
 
 export default FormAutoCompleteWithTable;
