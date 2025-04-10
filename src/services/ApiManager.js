@@ -265,6 +265,11 @@ class ApiManager {
     const url = ENDPOINTS.GET_ADDRATE_DETAILS(id, menuConfigUrl.document);
     return ApiMethods.get(url);
   };
+  static updateAddRateDetails = async (payload) => {
+    const url = ENDPOINTS.UPDATE_ADDRATE_DETAILS(menuConfigUrl.document);
+    return ApiMethods.put(url,payload);
+  };
+  
   static approveJobEntryRequest = async (id, type) => {
     const url = ENDPOINTS.JOB_APPROVE_REQUEST(id, type, menuConfigUrl.document);
     return ApiMethods.put(url);

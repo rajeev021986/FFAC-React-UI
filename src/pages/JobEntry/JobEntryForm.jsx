@@ -95,6 +95,7 @@ console.log(page,"page")
         let rateData = {
           totalAmount: values.rate.totalAmount || 0,
           remarks: values.rate.remarks || "",
+          id: values.rate.id || "",
           rateDetails: values.rate.rateDetails.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           ),
@@ -159,6 +160,7 @@ console.log(page,"page")
           let rateData = {
             totalAmount: values.rate.totalAmount || 0,
             remarks: values.rate.remarks || "",
+            id: values.rate.id || "",
             rateDetails: values.rate.rateDetails.map((item) =>
               item?.new ? { ...item, id: null, new: false } : item
             ),

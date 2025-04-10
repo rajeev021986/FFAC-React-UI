@@ -44,6 +44,7 @@ import { Card, CardHeader, Drawer } from "@mui/material";
 import ApiManager from "../../services/ApiManager";
 import { JOB_ENTRY_NEW_COLUMNS } from "../../data/columns/jobEntry(New)";
 import DocumentDialog from "../../components/common/DocumentDialog";
+import AddRateModalApprove from "./AddRateModalApprove";
 
 export default function JobEntryScreen({ page }) {
   const location = useLocation();
@@ -54,6 +55,8 @@ export default function JobEntryScreen({ page }) {
   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
+  const [toggleRate, settoggleRate] = useState(false);
+  
   const [modal, setModal] = useState({
     open: false,
     type: "",
@@ -374,14 +377,19 @@ export default function JobEntryScreen({ page }) {
         </Drawer>
       )}
       <DocumentDialog
-        source="jobApprove"
+        // source="jobApprove"
         sourceId={modal?.data?.id}
         customerRefNo={modal?.data?.customerRefNo}
         job_No = {modal?.data?.jobNo}
         handleClose={handleClose}
         handleOpen={modal.open && modal.type === "document"}
       />
-      
+      <AddRateModalApprove
+        // source="jobApprove"
+        sourceId={modal?.data?.id}
+        handleOpen={modal.open && modal.type === "addRate"}
+        handleClose={handleClose}
+      />
       <DeleteDialog
         source="job-entry"
         sourceName={modal?.data?.deleteName}
