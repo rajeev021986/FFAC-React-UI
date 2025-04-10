@@ -47,6 +47,9 @@ import AddJobEntry from "./pages/JobEntry/AddJobEntry";
 import UpdateJobDetails from "./pages/UpdateJob/UpdateJob";
 import UpdateJobListingScreen from "./pages/JobEntry/UpdateJob/updateJobListing";
 
+// Container 
+import ContainerForm from "./pages/UpdateJob/ContainerTable/Forms";
+
 function App() {
   // const { menuItems } = useMenuSetting();
   const theme = getTheme(
@@ -173,6 +176,12 @@ function App() {
               path="documentation/update/job/edit-job"
               element={<UpdateJobDetails page="update-job" />}
             />
+
+            <Route
+              path="documentation/update/job/edit-job/editcontainerNumber"
+              element={<ContainerForm page="update-job" />}
+            />
+
 
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />

@@ -23,11 +23,13 @@ import { OutlinedButton, ThemeButton } from "../../components/common/Button";
 import InputBox from "../../components/common/InputBox";
 import PopupAlert from "../../components/common/Alert/PopupAlert";
 import BondDetailsGridForm from "./UpdateJobEntryGrid";
-import ContainerDetails from "./UpdateDetailsForm";
+// import ContainerDetails from "./UpdateDetailsForm";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
 // Container Table
 import ContainerShipmentView from "./ContainerTable/ContainerShipmentView";
+import VehicleShipmentView from "./ContainerTable/VehicleShipmentView";
+import LooseShipmentView from "./ContainerTable/LooseCargoShipmentView";
 
 export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
   const [updateJobDetailsEntry, { isLoading }] =
@@ -404,65 +406,57 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           <BondDetailsGridForm formik={formik} dropdownData={dropdownData} />
         </Grid>
 
-        {formik.values.containerDetails?.length > 0 && (
-          <TabContext value={detailTab}>
-            <Box
-              sx={{ borderBottom: 1, borderColor: "divider", paddingTop: 2 }}
-            >
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="Container Details / Update Details"
-                  value="1"
-                  sx={{
-                    width: "100%",
-                    typography: "body1",
-                    borderBottom: 1,
-                    borderColor: "divider",
-                    borderRadius: "10px",
-                  }}
-                />
-                <Tab
-                  label="Vehicle Shipment"
-                  value="2"
-                  sx={{
-                    width: "100%",
-                    typography: "body1",
-                    borderBottom: 1,
-                    borderColor: "divider",
-                    borderRadius: "10px",
-                  }}
-                />
-                <Tab
-                  label="Loose Cargo Shipment"
-                  value="3"
-                  sx={{
-                    width: "100%",
-                    typography: "body1",
-                    borderBottom: 1,
-                    borderColor: "divider",
-                    borderRadius: "10px",
-                  }}
-                />
-              </TabList>
-            </Box>
+        <TabContext value={detailTab}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", paddingTop: 2 }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab
+                label="Container Details / Update Details"
+                value="1"
+                sx={{
+                  width: "100%",
+                  typography: "body1",
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  borderRadius: "10px",
+                }}
+              />
+              <Tab
+                label="Vehicle Shipment"
+                value="2"
+                sx={{
+                  width: "100%",
+                  typography: "body1",
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  borderRadius: "10px",
+                }}
+              />
+              <Tab
+                label="Loose Cargo Shipment"
+                value="3"
+                sx={{
+                  width: "100%",
+                  typography: "body1",
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  borderRadius: "10px",
+                }}
+              />
+            </TabList>
+          </Box>
 
-            <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
-              <ContainerShipmentView />
-              <ContainerDetails formik={formik} />
-            </TabPanel>
+          <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
+            <ContainerShipmentView page={"containerNo"} />
+          </TabPanel>
 
-            <TabPanel value="2" sx={{ paddingBottom: "15px" }}>
-              <ContainerShipmentView />
-            </TabPanel>
+          <TabPanel value="2" sx={{ paddingBottom: "15px" }}>
+            <VehicleShipmentView page={"vehicleShipment"} />
+          </TabPanel>
 
-            <TabPanel value="3" sx={{ paddingBottom: "15px" }}>
-              <ContainerShipmentView />
-            </TabPanel>
-          </TabContext>
-        )}
+          <TabPanel value="3" sx={{ paddingBottom: "15px" }}>
+            <LooseShipmentView page={"looseShipment"}/>
+          </TabPanel>
+        </TabContext>
 
         {page == "update-job" && (
           <Grid

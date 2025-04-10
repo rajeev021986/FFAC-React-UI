@@ -101,6 +101,7 @@ export const CODE_CUSTOMER_COLUMNS = [
     }
 
 ]
+
 export const CODE_USER_COLUMNS = [
 
     {

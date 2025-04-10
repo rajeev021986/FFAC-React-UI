@@ -3,49 +3,46 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { Box, IconButton, Stack, Typography } from "@mui/material";
-import { Card, CardHeader, Drawer } from "@mui/material";
-import CardsView from "../../../components/common/Cards/CardsView";
-import ScreenToolbar from "../../../components/common/ScreenToolbar";
+import { Box, IconButton, Stack } from "@mui/material";
+import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import GridSearchInput from "../../../components/common/Filter/GridSearchInput";
 import {
   useDeleteCustomerMutation,
-  useFetchCustomerDatasQuery,
 } from "../../../store/api/codeDataApi";
 import { useDispatch, useSelector } from "react-redux";
+import toast, { LoaderIcon } from "react-hot-toast";
+
 import {
   setPagination,
-  setSortBy,
-  customerSetView,
-  customerSetSortModel,
+  containerView,
+  containerSetSortModel,
   updateInput,
-} from "../../../store/freatures/CustomerSlice";
+} from "../../../store/freatures/containersSlice";
 
-import SelectBox from "../../../components/common/SelectBox";
-import GridActions from "../../../components/common/Grid/GridActions";
-
-import { CUSTOMER_SORT_OPTIONS } from "../../../data/options";
-import { CODE_CUSTOMER_COLUMNS } from "../../../data/columns/code";
-
-import { getCustomerListGridActions } from "../../../components/screen/code/customer/action";
-import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 import { useEffect } from "react";
 
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import { getCustomerListGridActionsCustomerApprovel } from "../../../components/screen/code/customer/action copy";
+
+// Components
+import GridSearchInput from "../../../components/common/Filter/GridSearchInput";
+import CardsView from "../../../components/common/Cards/CardsView";
+import ScreenToolbar from "../../../components/common/ScreenToolbar";
+import GridActions from "../../../components/common/Grid/GridActions";
+import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 import DeleteDialog from "../../../components/common/DeleteDialog";
-import toast, { LoaderIcon } from "react-hot-toast";
-import AuditTimeLine from "../../../components/AuditTimeLine";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import FilterForm from "../../../components/screen/code/customer/FilterForm";
-import { menuConfigUrl } from "../../../store/menuConfigUrl";
+
+import { useFetchContainerQuery } from "../../../store/api/containerApi";
+import { getContaienrListGridActions } from "./containerAction";
+import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
 
 export default function ContainerShipmentView({ page }) {
-  const codeCustomerSelector = useSelector((state) => state.codeCustomer);
+  const containerSelector = useSelector((state) => state?.containers);
+
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -60,39 +57,35 @@ export default function ContainerShipmentView({ page }) {
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
-        { name: "New Customer" },
-        { name: "Copy" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
-      ]
-    : page === "customerApprove"
-    ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
-    : [
-        { name: "New Customer" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
-      ];
+      { name: "New Customer" },
+      { name: "Copy" },
+      { name: exportLoader ? <LoaderIcon /> : "Export" },
+    ]
+    : "";
+
   const query = {
-    page: codeCustomerSelector?.pagination?.page + 1,
-    size: codeCustomerSelector?.pagination?.pageSize,
+    page: containerSelector?.pagination?.page + 1,
+    size: containerSelector?.pagination?.pageSize,
     sortBy:
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector.sortModel[0].field
-        : codeCustomerSelector?.sortBy?.split("*")[0],
+      containerSelector.sortModel.length > 0
+        ? containerSelector.sortModel[0].field
+        : containerSelector?.sortBy?.split("*")[0],
     sortOrder:
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector?.sortModel[0]?.sort
-        : codeCustomerSelector?.sortBy?.split("*")[1] || "",
+      containerSelector.sortModel.length > 0
+        ? containerSelector?.sortModel[0]?.sort
+        : containerSelector?.sortBy?.split("*")[1] || "",
   };
   if (
     Boolean(
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector.sortModel[0].field === "cname"
-        : codeCustomerSelector?.sortBy?.split("*")[0] === "cname"
+      containerSelector.sortModel.length > 0
+        ? containerSelector.sortModel[0].field === "cname"
+        : containerSelector?.sortBy?.split("*")[0] === "cname"
     )
   ) {
     query.sortBy = "customerName";
   }
 
-  const payload = Object.entries(codeCustomerSelector?.formData)
+  const payload = Object.entries(containerSelector?.formData)
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
@@ -106,14 +99,14 @@ export default function ContainerShipmentView({ page }) {
     });
 
   const {
-    data: CustomerData,
+    data: containerListData,
     isLoading,
     isFetching,
     refetch,
-  } = useFetchCustomerDatasQuery({
+  } = useFetchContainerQuery({
     params: query,
     payload,
-    page: page == "customer" ? "customer/filter" : "approval/filter/customer",
+    page: page == "containerNo" ? "job-update/container/filter" : "",
   });
 
   const handleActionClick = async (actionName) => {
@@ -137,19 +130,17 @@ export default function ContainerShipmentView({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  CODE_CUSTOMER_COLUMNS[CODE_CUSTOMER_COLUMNS.length - 1].renderCell =
+  CONTAINER_COLUMNS[CONTAINER_COLUMNS.length - 1].renderCell =
     GridActions({
       actions:
-        page == "customer"
-          ? getCustomerListGridActions(nav, setModal)
-          : getCustomerListGridActionsCustomerApprovel((nav, setModal)),
+        getContaienrListGridActions(nav, setModal)
     });
 
   useEffect(() => {
-    if (!codeCustomerSelector.view) {
-      dispatch(customerSetView("card"));
+    if (!containerSelector.view) {
+      dispatch(containerView("card"));
     }
-  }, [codeCustomerSelector.view, dispatch]);
+  }, [containerSelector.view, dispatch]);
 
   const [deleteCustomer] = useDeleteCustomerMutation();
 
@@ -244,7 +235,7 @@ export default function ContainerShipmentView({ page }) {
             <Stack direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
-                  filters={codeCustomerSelector?.formData}
+                  filters={containerSelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
@@ -252,19 +243,19 @@ export default function ContainerShipmentView({ page }) {
                 </GridSearchInput>
               </Box>
               <Box>
-                <IconButton onClick={() => dispatch(customerSetView("card"))}>
+                <IconButton onClick={() => dispatch(containerView("card"))}>
                   <FormatListBulletedOutlined
                     color={
-                      codeCustomerSelector.view === "card"
+                      containerSelector.view === "card"
                         ? "primary"
                         : "secondary"
                     }
                   />
                 </IconButton>
-                <IconButton onClick={() => dispatch(customerSetView("grid"))}>
+                <IconButton onClick={() => dispatch(containerView("grid"))}>
                   <GridOnOutlined
                     color={
-                      codeCustomerSelector.view === "grid"
+                      containerSelector.view === "grid"
                         ? "primary"
                         : "secondary"
                     }
@@ -274,66 +265,38 @@ export default function ContainerShipmentView({ page }) {
             </Stack>
           }
         />
-        {codeCustomerSelector.view === "grid" ? (
+        {containerSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.totalElements || 0}
+            columns={CONTAINER_COLUMNS}
+            count={containerListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={CustomerData?.body?.data}
+            data={containerListData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
-            paginationModel={codeCustomerSelector.pagination}
+            columnVisibilityHandler={() => { }}
+            paginationModel={containerSelector.pagination}
             loading={isLoading || isFetching}
-            sortModel={codeCustomerSelector.sortModel}
+            sortModel={containerSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(customerSetSortModel(sortModel))
+              dispatch(containerSetSortModel(sortModel))
             }
           />
         ) : (
           <CardsView
             uniqueId="id"
-            columns={CODE_CUSTOMER_COLUMNS}
-            count={CustomerData?.body?.totalElements || 0}
+            columns={CONTAINER_COLUMNS}
+            count={containerListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={CustomerData?.body?.data}
-            paginationModel={codeCustomerSelector?.pagination}
+            data={containerListData?.body?.data}
+            paginationModel={containerSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={
-              page == "customer"
-                ? getCustomerListGridActions(nav, setModal)
-                : getCustomerListGridActionsCustomerApprovel(nav, setModal)
-            }
-            // actions={getCustomerListGridActions(nav, setModal)}
+            actions={getContaienrListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
           />
         )}
       </Card>
-      {modal.type === "audit" && (
-        <Drawer
-          anchor="right"
-          open={modal?.open}
-          onClose={() => setModal({ open: false, type: "", data: {} })}
-          sx={{
-            width: "50vw",
-            display: "flex",
-            flexDirection: "column",
-            zIndex: 1301,
-          }}
-        >
-          <Box>
-            <Typography variant="h6" component="div" margin="8px">
-              Customer Audit Logs
-            </Typography>
-            <AuditTimeLine
-              id={modal.data.id}
-              page="customer"
-              service={menuConfigUrl.entity}
-            />
-          </Box>
-        </Drawer>
-      )}
+
       <DeleteDialog
         source="customer"
         sourceName={modal?.data?.deleteName}

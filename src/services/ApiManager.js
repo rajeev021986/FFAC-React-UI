@@ -287,6 +287,15 @@ class ApiManager {
     );
     return ApiMethods.get(url);
   };
+
+  static getUpdateContainerNumber = async (id) => {
+    const url = ENDPOINTS.GET_UPDATE_CONTAINER_NUMBER(
+      id,
+      menuConfigUrl.document
+    );
+    return ApiMethods.get(url);
+  };
+  
 }
 
 export default ApiManager;

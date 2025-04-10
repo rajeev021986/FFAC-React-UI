@@ -11,7 +11,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccordianForm from "./AccordianForm";
 
 export default function ContainerDetails({ formik }) {
-  let disabled = null;
   const [expanded, setExpanded] = useState(false);
 
   const handleAccordionChange = (panel) => (event, isExpanded) => {

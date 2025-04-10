@@ -72,7 +72,6 @@ export default function UpdateJobDetails({ page }) {
           entryNo: res.body?.entryNo || "",
           entryDate: res.body?.entryDate || "",
           bondDetails: res.body?.bondDetails || [],
-          containerDetails: res.body?.containerDetails || [],
         });
         setLoading(false);
       } catch (error) {

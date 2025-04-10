@@ -55,7 +55,7 @@ const styles = {
     textTransform: "none",
     fontWeight: "bold",
     fontSize: "1rem",
-    borderRadius: "8px",
+    borderRadius: "20px",
     padding: "5px 10px",
     cursor: "pointer",
     boxShadow: "none",
