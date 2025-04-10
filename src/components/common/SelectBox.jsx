@@ -12,6 +12,7 @@ export default function SelectBox({
   value,
   onChange,
   label,
+  getPage,
   id,
   helperText,
   options,
@@ -49,12 +50,17 @@ export default function SelectBox({
         //   disablePortal: true,
         // }}
       >
-        <MenuItem  sx={{ fontSize: "14px" }}>
+        <MenuItem 
+          disabled={getPage == "editJobEntry"}
+        
+        sx={{ fontSize: "14px" }}>
           <em>None</em>
         </MenuItem>
         {options?.map((option, idx) => {
           return (
-            <MenuItem key={idx} value={option?.value  }>
+            <MenuItem
+            disabled ={getPage == "editJobEntry"}
+            key={idx} value={option?.value  }>
               {option?.label || option?.value  }
             </MenuItem>
           );

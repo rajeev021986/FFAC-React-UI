@@ -14,22 +14,13 @@ import toast from "react-hot-toast";
 import CustomToast from "../Toast/CustomToast";
 
 function FormAutoCompleteWithTable(props) {
-  const {
-    label,
-    id,
-    suggestionName,
-    dataLabel,
-    value,
-    error,
-    onChange,
-    formik,
-  } = props;
+  const { label, id, suggestionName, dataLabel, error, formik } = props;
 
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
-  const debounceValue = useDebounce(inputValue, 800); // Custom Hook
+  const debounceValue = useDebounce(inputValue, 800);
   const theme = useTheme();
 
   useEffect(() => {
@@ -47,7 +38,6 @@ function FormAutoCompleteWithTable(props) {
 
         setOptions(data);
 
-        // Preload selected option if formik has a value
         if (formik.values.originCountry) {
           const preloadedOption = data.find(
             (item) => item.fullData.country === formik.values.originCountry
@@ -60,7 +50,7 @@ function FormAutoCompleteWithTable(props) {
         toast.custom(
           <CustomToast message={"Something went wrong!"} toast="error" />
         );
-      }finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -101,30 +91,23 @@ function FormAutoCompleteWithTable(props) {
       setSelectedOption(null);
     }
   };
+  console.log("options", options);
 
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
-        sx={{
-          border: "none !important",
-        }}
         size="small"
         id={id}
-        // open={showDropdown}
-        
-        noOptionsText="Type to Search"
-        // onOpen={() => setShowDropdown(true)}
-        // onClose={() => setShowDropdown(false)}
         options={options}
-        // onFocus={() => setShowDropdown(true)}
         getOptionLabel={(option) => option.fullData?.country || ""}
         isOptionEqualToValue={(option, value) =>
           option.fullData?.country === value.fullData?.country
         }
         onInputChange={(event, newValue) => setInputValue(newValue)}
         inputValue={inputValue}
-        value={selectedOption} // Ensure the selected option remains after API call
+        value={selectedOption}
         onChange={handleSelectionChange}
+        loading={loading}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -134,17 +117,13 @@ function FormAutoCompleteWithTable(props) {
             fullWidth
             error={Boolean(error)}
             helperText={error}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "10px",
-                fontSize: "14px",
-              },
-            }}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
                 <>
-                  {loading ? <CircularProgress color="inherit" size={15} /> : null}
+                  {loading ? (
+                    <CircularProgress color="inherit" size={15} />
+                  ) : null}
                   {params.InputProps.endAdornment}
                 </>
               ),
@@ -175,41 +154,49 @@ function FormAutoCompleteWithTable(props) {
               border: "1px solid #ddd",
             }}
           >
+            {/* Fixed Header */}
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 fontWeight: "bold",
-                // backgroundColor: "#f0f0f0",
                 backgroundColor: theme.palette.primary.main, 
                 color: theme.palette.common.white,
+
                 padding: "8px",
                 borderBottom: "1px solid #ddd",
                 position: "sticky",
-                top: '-15px',
+                top: "-15px",
                 zIndex: 2, // Ensure it stays above the list
               }}
             >
-              <span style={{
-                color: "white",
-                fontSize: "14px",
-                // fontWeight: "bold",
-              }}>Country</span>
-              <span style={{
-                color: "white",
-                fontSize: "14px",
-                fontWeight: "bold",
-              }}>Port</span>
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "14px",
+                  // fontWeight: "bold",
+                }}
+              >
+                Country
+              </span>
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                }}
+              >
+                Port
+              </span>
             </Box>
-                    {/ Scrollable Options List /}
-                    {props.children}
-                  </Paper>
-                )} 
+
+            {/* Scrollable Options List */}
+            {props.children}
+          </Paper>
+        )}
       />
-           
     </Box>
   );
 }
-
 
 export default FormAutoCompleteWithTable;

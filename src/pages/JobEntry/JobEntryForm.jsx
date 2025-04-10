@@ -459,6 +459,8 @@ console.log(page,"page")
                     error={formik.errors.moveType}
                     onChange={formik.handleChange}
                     disabled={disabled}
+                    getPage={getPage}
+
                   />
                 </Grid>
 
