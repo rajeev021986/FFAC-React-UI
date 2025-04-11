@@ -36,7 +36,7 @@ export default function DateTimeField({
         inputRef={inputRef}
         sx={{
           "& .MuiInputBase-root": {
-            fontSize: "18px",
+            fontSize: "14px",
             borderRadius: "10px",
             width: "100%",
             height: "44px",
