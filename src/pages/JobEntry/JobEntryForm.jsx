@@ -435,7 +435,7 @@ console.log(page,"page")
 
           <TabPanel value="1" sx={{ padding: "0px" }}>
             <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+              <Grid paddingLeft={1} marginTop={2} container spacing={1}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <SelectShipment
                     label="Shipment Type"

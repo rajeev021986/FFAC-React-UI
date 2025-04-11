@@ -117,9 +117,12 @@ export default function JobEntryGridForm({
         {
           field: "containerNo",
           headerName: "Container No.",
-          flex: 1,
+          flex: 1.5,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
+          renderCell: (params) =>
+            
+            
+            <InputBoxForGrid {...params} type="number" />,
           renderEditCell: (params) => (
             <InputBoxForGrid field = "Container" {...params} type="number" />
           ),
@@ -155,7 +158,7 @@ export default function JobEntryGridForm({
         {
           field: "dischargeDate",
           headerName: "Discharge Date",
-          flex: 1,
+          flex: 2,
           renderCell: (params) => (
             <DateTimeField
               value={params.value}
@@ -257,7 +260,7 @@ export default function JobEntryGridForm({
         {
           field: "tflSealNo",
           headerName: "Seal No.",
-          flex: 1,
+          flex: 1.5,
           editable: true,
           renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
           renderEditCell: (params) => (

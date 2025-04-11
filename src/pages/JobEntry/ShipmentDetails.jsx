@@ -27,7 +27,7 @@ export default function ShipmentDetails({ formik }) {
   return (
     <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
-        <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+        <Grid paddingLeft={1} marginTop={0} container spacing={1}>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoCompleteWithTable
               label="Origin Country"

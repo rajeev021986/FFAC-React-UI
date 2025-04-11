@@ -27,7 +27,7 @@ export default function SelectShipment({
       fullWidth={fullWidth}
       size="small"
       error={error ? true : false}
-      sx={{ marginLeft: "0px !important" }}
+      sx={{ marginLeft: "0px !important"  }}
     >
       <InputLabel id={`${id}-simple-select-label`}>{label}</InputLabel>
       <Select
@@ -55,6 +55,7 @@ export default function SelectShipment({
         sx={{
           ...styles.root,
           ...sx,
+          height: "44px",
           "& .MuiSelect-select span::before": {
             content: placeholder ? "'Select an option'" : "''",
             color: "#9090A5",
@@ -67,7 +68,7 @@ export default function SelectShipment({
           defaultValue="General/Common"
           value="General/common"
           disabled={getPage == "editJobEntry"}
-          sx={{ fontSize: "14px" }}
+          sx={{ fontSize: "14px", minHeight: "48px" }}
       
         >
           <em>General/Common</em>

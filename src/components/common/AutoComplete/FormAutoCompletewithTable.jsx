@@ -113,6 +113,12 @@ function FormAutoCompleteWithTable(props) {
             variant="outlined"
             placeholder="Type to search"
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+                // fontSize: "18px",
+              },
+            }}
             error={Boolean(error)}
             helperText={error}
             InputProps={{
@@ -136,6 +142,7 @@ function FormAutoCompleteWithTable(props) {
                 justifyContent: "space-between",
                 width: "100%",
                 padding: "1px",
+                
               }}
             >
               <span>{option.fullData.country}</span>

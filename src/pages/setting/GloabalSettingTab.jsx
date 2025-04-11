@@ -22,6 +22,7 @@ import Loader from "../../components/common/Loader/Loader";
 import toast from "react-hot-toast";
 import GlobalDrrpdownSetting from "./GlobalDrrpdownSetting";
 import CustomToast from "../../components/common/Toast/CustomToast";
+import DeleteDialog from "../../components/common/DeleteDialog";
 
 const GlobalSetting = () => {
   const [addOptons, { isloading }] = useAddOptonsMutation();
@@ -43,6 +44,12 @@ const GlobalSetting = () => {
       data.body.shipmentType && setShipmentType(data.body.shipmentType);
     }
   }, [data, geterror]);
+
+    const [modal, setModal] = useState({
+      open: false,
+      type: "",
+      data: {},
+    });
 
   const Postdata = async () => {
     setIsLoading(true);
@@ -82,6 +89,14 @@ const GlobalSetting = () => {
       .catch(() => console.log("filteredData"));
     setIsLoading(false);
   };
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+
   return (
     <div style={{ padding: "1rem" }}>
       <Grid xs={12} sx={{ marginBottom: "10px" }}>
@@ -121,6 +136,13 @@ const GlobalSetting = () => {
           {isLoadingsave ? "Saving..." : "Save"}
         </OutlinedButton>
       </Grid>
+      {/* <DeleteDialog
+        source="job-entry"
+        sourceName={modal?.data?.deleteName}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      /> */}
     </div>
   );
 };

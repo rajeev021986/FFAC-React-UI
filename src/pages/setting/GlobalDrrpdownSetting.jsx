@@ -37,6 +37,13 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
 
   const handleDeleteRow = (id) => {
     setvalue((prevStatus) => prevStatus.filter((item) => item.id !== id));
+    toast.custom(
+      <CustomToast message="Deleted Successfully" toast="success" />,
+      {
+        closeButton: false,
+      }
+    );
+
   };
   const handleProcessRowUpdate = (newRow, oldRow) => {
     const updatedRows = value.map((row) =>
@@ -83,7 +90,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
         }}
       >
         <h3>{title}</h3>
-        <OutlinedButton color="primary" size="small" onClick={handleAddRow}>
+        <OutlinedButton  color="primary" size="small" onClick={handleAddRow}>
           Add
         </OutlinedButton>
       </div>

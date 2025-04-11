@@ -52,17 +52,23 @@ export default function GlobalDrrpdownSettingVoucher({
   // };
   const handleDeleteRow = (id) => {
     const rowToDelete = value.find((item) => item.id === id);
-    if (rowToDelete?.shipmentType === "General/Common") {
-      toast.custom(
-        <CustomToast
-          message="This default row cannot be deleted"
-          toast="error"
-        />,
-        { closeButton: false }
-      );
-      return;
-    }
+    // if (rowToDelete?.shipmentType === "General/Common") {
+    //   toast.custom(
+    //     <CustomToast
+    //       message="This default row cannot be deleted"
+    //       toast="error"
+    //     />,
+    //     { closeButton: false }
+    //   );
+    //   return;
+    // }
 
+    toast.custom(
+      <CustomToast message="Deleted Successfully" toast="success" />,
+      {
+        closeButton: false,
+      }
+    );
     setvalue((prevStatus) => prevStatus.filter((item) => item.id !== id));
   };
 
@@ -119,7 +125,7 @@ export default function GlobalDrrpdownSettingVoucher({
   const handleDropdownChange = (id, newValue) => {
     setvalue((prevValues) =>
       prevValues.map((row) =>
-        row.id === id ? { ...row, shipmentType: newValue } : row
+        row.id === id  ? { ...row, shipmentType: newValue } : row
       )
     );
   };
@@ -278,7 +284,7 @@ export default function GlobalDrrpdownSettingVoucher({
 
       renderHeader: () => (
         <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-          <span>Job Pattern</span>
+          <span style={{color:'white'}}>Job Pattern</span>
           <Tooltip
             title={<pre style={{ whiteSpace: "pre-wrap" }}>{tooltipText}</pre>}
             arrow
@@ -380,6 +386,7 @@ export default function GlobalDrrpdownSettingVoucher({
         <DataGrid
           key={value.length}
           rows={value}
+          editMode="cell"
           columns={columns}
           processRowUpdate={handleProcessRowUpdate}
           experimentalFeatures={{ newEditingApi: true }}
