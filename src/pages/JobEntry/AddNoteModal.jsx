@@ -45,7 +45,8 @@ export default function AddNoteModal({
   useEffect(() => {
     if (selectedNote) {
       setNoteData(selectedNote);
-    } else {
+    }
+     else {
       setNoteData({
         id: Date.now(),
         subject: "",

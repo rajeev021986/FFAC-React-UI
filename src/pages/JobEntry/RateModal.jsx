@@ -107,9 +107,10 @@ export default function AddRateModal({
           headerName: "Charge Head",
           flex: 1,
           editable: true,
+          
           renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
           renderEditCell: (params) => (
-            <InputBoxForGrid {...params} type="number" />
+            <InputBoxForGrid {...params} type="text" />
           ),
         },
         {
@@ -303,6 +304,7 @@ export default function AddRateModal({
                               ...column,
                               headerAlign: "center",
                               align: "center",
+                           
                             }))}
                             disableSelectionOnClick
                             processRowUpdate={ob.handleProcessRowUpdate}
