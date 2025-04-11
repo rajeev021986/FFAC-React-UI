@@ -10,7 +10,7 @@ import { GetAutoCompleteDataWithLoader } from "../../utils/GetAutoCompleteDataWi
 import useDebounce from "../../../hooks/useDebounce";
 
 function FormAutoCompleteBond(props) {
-  const { label, id, suggestionName, dataLabel, value, error, onChange,size } =
+  const { label, id, suggestionName, dataLabel, value, error, onChange, size } =
     props;
 
   const [options, setOptions] = useState([]);
@@ -48,14 +48,14 @@ function FormAutoCompleteBond(props) {
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      onChange({ 
-        target: { name: id, value: newValue.value }, 
-        fullData: newValue.fullData // Pass the entire bond data
+      onChange({
+        target: { name: id, value: newValue.value },
+        fullData: newValue.fullData, // Pass the entire bond data
       });
     } else {
-      onChange({ 
-        target: { name: id, value: null }, 
-        fullData: null
+      onChange({
+        target: { name: id, value: null },
+        fullData: null,
       });
     }
   };
@@ -65,6 +65,7 @@ function FormAutoCompleteBond(props) {
       <Autocomplete
         sx={{
           border: "none !important",
+          marginTop: "5px !important",
         }}
         size="small"
         id={id}
@@ -102,7 +103,11 @@ function FormAutoCompleteBond(props) {
           />
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option.value || "87343874"} sx={{ fontSize: "14px" }}>
+          <MenuItem
+            {...props}
+            key={option.value || "87343874"}
+            sx={{ fontSize: "14px" }}
+          >
             {option.label}
           </MenuItem>
         )}

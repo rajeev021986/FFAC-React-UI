@@ -13,7 +13,7 @@ export default function InputBoxForGrid(props) {
     placeholder,
     fieldType = "text",
     inputRef,
-    isEditable
+    isEditable,
   } = props;
 
   const tooltipMessage = value ? value : "This field is empty";
@@ -39,28 +39,26 @@ export default function InputBoxForGrid(props) {
   };
   const handleChangeContainerNo = (event) => {
     let newValue = event.target.value;
-  
+
     // Remove non-alphanumeric characters
-    newValue = newValue.replace(/[^a-zA-Z0-9]/g, '');
-  
+    newValue = newValue.replace(/[^a-zA-Z0-9]/g, "");
+
     // Extract letters and digits in sequence
-    const letters = newValue.slice(0, 4).replace(/[^a-zA-Z]/g, '');
-    const digits = newValue.slice(4).replace(/\D/g, '').slice(0, 7);
-  
+    const letters = newValue.slice(0, 4).replace(/[^a-zA-Z]/g, "");
+    const digits = newValue.slice(4).replace(/\D/g, "").slice(0, 7);
+
     const formattedValue = letters + digits;
-  
+
     setInputValue(formattedValue);
-  
+
     const isValid = /^[a-zA-Z]{4}\d{7}$/.test(formattedValue);
-  
+
     console.log(isValid, "isValid");
     if (isValid) {
       api.setEditCellValue({ id, field, value: formattedValue }, event);
     }
   };
-  
-  
-  
+
   return (
     <div
       key={id}
@@ -72,17 +70,17 @@ export default function InputBoxForGrid(props) {
         height: "100%",
       }}
       onMouseEnter={() => {
-    // ✅ Prevent edit mode if the field is NOT editable
-    if (props?.cellMode === "view" && props?.isEditable !== false) {
-      api?.startCellEditMode({ id, field });
-    }
-  }}
-  onMouseLeave={() => {
-    // ✅ Only stop edit mode if the field is actually editable
-    if (props?.cellMode === "edit") {
-      api?.stopCellEditMode({ id, field });
-    }
-  }}
+        // ✅ Prevent edit mode if the field is NOT editable
+        if (props?.cellMode === "view" && props?.isEditable !== false) {
+          api?.startCellEditMode({ id, field });
+        }
+      }}
+      onMouseLeave={() => {
+        // ✅ Only stop edit mode if the field is actually editable
+        if (props?.cellMode === "edit") {
+          api?.stopCellEditMode({ id, field });
+        }
+      }}
     >
       {(() => {
         switch (type) {
@@ -112,17 +110,25 @@ export default function InputBoxForGrid(props) {
           default:
             return (
               <Tooltip title={tooltipMessage} arrow>
-               <TextField
+                <TextField
                   size="small"
                   type={type || fieldType}
                   fullWidth
-                  disabled= { field == "balanceBondAmount" && true}
+                  disabled={field === "balanceBondAmount" || props.disabled}
                   value={inputValue}
-                  onChange={ field == "containerNo"? handleChangeContainerNo :handleChange}
+                  onChange={
+                    field == "containerNo"
+                      ? handleChangeContainerNo
+                      : handleChange
+                  }
                   inputRef={inputRef}
                   placeholder={placeholder}
                   error={error}
-                  helperText={error ? "Must be 4 letters & 7 digits (e.g., ABCD1234567)" : ""}
+                  helperText={
+                    error
+                      ? "Must be 4 letters & 7 digits (e.g., ABCD1234567)"
+                      : ""
+                  }
                   InputProps={{
                     disableUnderline: true,
                     style: {

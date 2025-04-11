@@ -15,6 +15,8 @@ import InputBoxForGrid from "../../components/common/InputBoxForGrid";
 import { StyledDataGrid } from "../../components/common/Grid/styles";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 import FormAutoCompleteBond from "../../components/common/AutoComplete/FormAutoCompleteBond";
+import toast from "react-hot-toast";
+import CustomToast from "../../components/common/Toast/CustomToast";
 
 export default function BondDetailsGridForm({ formik }) {
   const [editDialogData, setEditDialogData] = useState();
@@ -61,25 +63,32 @@ export default function BondDetailsGridForm({ formik }) {
         formik.setFieldValue("bondDetails", updatedRows);
       },
       handleProcessRowUpdate: (newRow, oldRow) => {
-        const runningBalance = parseFloat(oldRow.runningBalance) || 0;
-        const enteredAmount = parseFloat(newRow.bondAmount) || 0;
-
         const rowIndex = formik.values.bondDetails.findIndex(
           (row) => row.id === newRow.id
         );
 
-        if (enteredAmount > runningBalance) {
-          formik.setFieldError(
-            `bondDetails.${rowIndex}.bondAmount`,
-            "Bond Amount cannot exceed Running Balance"
+        const runningBalance = parseFloat(newRow.runningBalance);
+        const enteredBondAmount = parseFloat(newRow.bondAmount);
+
+        if (enteredBondAmount > runningBalance) {
+          console.log("Bond Amount exceeds Running Balance");
+          toast.custom(
+            <CustomToast
+              message={"Bond Amount cannot exceed Running Balance"}
+              toast="error"
+            />
           );
+          // formik.setFieldError(
+          //   `bondDetails.${rowIndex}.bondAmount`,
+          //   "Bond Amount cannot exceed Running Balance"
+          // );
           return oldRow; // Reject update
         } else {
-          // Clear any previous error
-          // formik.setFieldError(`bondDetails.${rowIndex}.bondAmount`, "");
+          console.log("Bond Amount not exceeds Running Balance");
+
           const updatedRow = {
             ...newRow,
-            balanceBondAmount: runningBalance - enteredAmount,
+            balanceBondAmount: runningBalance - enteredBondAmount, // Update balance bond amount
           };
 
           const updatedRows = formik.values.bondDetails.map((row) =>
@@ -96,33 +105,33 @@ export default function BondDetailsGridForm({ formik }) {
           field: "bondNumber",
           headerName: "Bond Number",
           flex: 1,
-          renderCell: (params) => (
-            <FormAutoCompleteBond
-              placeholder="Enter Bond Number"
-              id="bond_number"
-              label="Bond Number"
-              suggestionName="bond_number"
-              value={params.value}
-              onChange={(e) => {
-                const selectedBondNumber = e.target.value;
-                const selectedBondData = e.fullData; // Get full bond data
+          renderCell: (params) => {
+            return (
+              <FormAutoCompleteBond
+                id="bond_number"
+                suggestionName="bond_number"
+                value={params.row.bondNumber} // Use params.row to get correct row
+                onChange={(e) => {
+                  const selectedBondNumber = e.target.value;
+                  const selectedBondData = e.fullData; // Get full bond data
 
-                const updatedRows = formik.values.bondDetails.map((row) => {
-                  if (row.id === params.id) {
-                    return {
-                      ...row,
-                      bondNumber: selectedBondNumber,
-                      runningBalance: selectedBondData?.amount || "", // Set running balance
-                    };
-                  }
-                  return row;
-                });
+                  const updatedRows = formik.values.bondDetails.map((row) =>
+                    row.id === params.row.id // Use row.id for exact match
+                      ? {
+                          ...row,
+                          bondNumber: selectedBondNumber,
+                          runningBalance: selectedBondData?.amount || "", // Set running balance
+                        }
+                      : row
+                  );
 
-                formik.setFieldValue("bondDetails", updatedRows);
-              }}
-            />
-          ),
+                  formik.setFieldValue("bondDetails", updatedRows);
+                }}
+              />
+            );
+          },
         },
+
         {
           field: "balanceBondAmount",
           headerName: "Balance Bond Amount",
@@ -180,15 +189,39 @@ export default function BondDetailsGridForm({ formik }) {
           field: "runningBalance",
           headerName: "Running Balance",
           flex: 1,
-          // editable:true,
+          editable: true, // Allow users to edit this field
           renderCell: (params) => (
-            <InputBoxForGrid
-              {...params}
-              placeholder="Running Balance"
-              // disabled // Make the field read-only
-            />
+            <InputBoxForGrid {...params} placeholder="Enter Bond Amount" />
           ),
+          renderEditCell: (params) => {
+            const row = formik.values.bondDetails.find(
+              (r) => r.id === params.id
+            );
+            return (
+              <InputBoxForGrid
+                {...params}
+                placeholder="Running Balance"
+                type="number"
+                disabled={!row?.bondNumber}
+                onChange={(e) => {
+                  const newRunningBalance = e.target.value;
+                  const updatedRows = formik.values.bondDetails.map((row) =>
+                    row.id === params.id
+                      ? { ...row, runningBalance: newRunningBalance }
+                      : row
+                  );
+
+                  formik.setFieldValue("bondDetails", updatedRows);
+                  TabsHosts[0].handleProcessRowUpdate(
+                    { ...params.row, runningBalance: newRunningBalance },
+                    params.row
+                  );
+                }}
+              />
+            );
+          },
         },
+
         {
           field: "actions",
           sortable: false,
@@ -243,7 +276,7 @@ export default function BondDetailsGridForm({ formik }) {
           {TabsHosts?.map((ob, index) => (
             <TabPanel value={index} sx={{ padding: 0, marginTop: 2 }}>
               <Box sx={{ width: "100%" }}>
-                <Box >
+                <Box>
                   {openTable ? (
                     <StyledDataGrid
                       rows={ob.value}

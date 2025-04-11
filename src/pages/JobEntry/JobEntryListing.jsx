@@ -309,6 +309,7 @@ export default function JobEntryScreen({ page }) {
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                   selectedIds={selectedIds} // Pass selected IDs
+                  setSelectedIds={setSelectedIds}
                   handleApproveAllRequest={handleApproveAllRequest} // Pass function
                   page={page}
                 >

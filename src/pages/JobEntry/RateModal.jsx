@@ -105,9 +105,11 @@ export default function AddRateModal({
         {
           field: "chargeHead",
           headerName: "Charge Head",
-          flex: 1,
+          flex: 2.6,
+          headerAlign: "center",
+          align: "center",
           editable: true,
-          
+
           renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
           renderEditCell: (params) => (
             <InputBoxForGrid {...params} type="text" />
@@ -116,7 +118,7 @@ export default function AddRateModal({
         {
           field: "currency",
           headerName: "Currency",
-          flex: 1,
+          flex: 2.1,
           renderCell: (params) => (
             <div
               style={{
@@ -144,7 +146,7 @@ export default function AddRateModal({
         {
           field: "unitType",
           headerName: "Unit Type",
-          flex: 1,
+          flex: 2.1,
           editable: true,
           renderCell: (params) => (
             <div
@@ -173,7 +175,7 @@ export default function AddRateModal({
         {
           field: "noOfUnits",
           headerName: "No of Units",
-          flex: 1,
+          flex: 1.5,
           editable: true,
           renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
           renderEditCell: (params) => (
@@ -183,7 +185,7 @@ export default function AddRateModal({
         {
           field: "rate",
           headerName: "Rate",
-          flex: 1,
+          flex: 1.5,
           editable: true,
           renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
           renderEditCell: (params) => (
@@ -193,7 +195,7 @@ export default function AddRateModal({
         {
           field: "amount",
           headerName: "Amount",
-          flex: 1,
+          flex: 1.5,
           editable: true,
           renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
           renderEditCell: (params) => (
@@ -296,7 +298,7 @@ export default function AddRateModal({
                 {TabsHosts?.map((ob, index) => (
                   <TabPanel value={index} sx={{ padding: 0, marginTop: 2 }}>
                     <Box sx={{ width: "100%" }}>
-                      <Box sx={{ height: 400 }}>
+                      <Box>
                         {openTable ? (
                           <StyledDataGrid
                             rows={ob.value}
@@ -304,7 +306,6 @@ export default function AddRateModal({
                               ...column,
                               headerAlign: "center",
                               align: "center",
-                           
                             }))}
                             disableSelectionOnClick
                             processRowUpdate={ob.handleProcessRowUpdate}

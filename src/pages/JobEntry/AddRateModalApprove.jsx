@@ -33,7 +33,11 @@ const style = {
   p: 4,
 };
 
-export default function AddRateModalApprove({ sourceId, handleOpen, handleClose }) {
+export default function AddRateModalApprove({
+  sourceId,
+  handleOpen,
+  handleClose,
+}) {
   const [loading, setLoading] = useState(false);
   const [rateDetails, setRateDetails] = useState([]);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
@@ -61,19 +65,18 @@ export default function AddRateModalApprove({ sourceId, handleOpen, handleClose 
           createdDate: row.createdDate || new Date().toISOString(),
           modifiedDate: new Date().toISOString(),
         }));
-  
+
         const payload = {
           id: values.id,
           totalAmount: values.totalAmount,
           remarks: values.remarks,
           rateDetails: formattedRateDetails,
         };
-  
-  
+
         const res = await ApiManager.updateAddRateDetails(payload);
         if (res.success) {
           const message = res.message;
-            toast.custom(<CustomToast message={message} toast="success" />)
+          toast.custom(<CustomToast message={message} toast="success" />);
           handleClose(); // Close modal after successful update
         } else {
           console.error("Failed to update rate details:", res);
@@ -85,8 +88,6 @@ export default function AddRateModalApprove({ sourceId, handleOpen, handleClose 
       }
     },
   });
-  
-  
 
   useEffect(() => {
     const fetchAddRateDetails = async () => {
@@ -138,7 +139,6 @@ export default function AddRateModalApprove({ sourceId, handleOpen, handleClose 
     };
     setRateDetails([...rateDetails, newRow]);
   };
-  
 
   const deleteRow = (id) => {
     setRateDetails(rateDetails.filter((row) => row.id !== id));
@@ -148,7 +148,7 @@ export default function AddRateModalApprove({ sourceId, handleOpen, handleClose 
     {
       field: "chargeHead",
       headerName: "Charge Head",
-      flex: 1,
+      flex: 2,
       headerAlign: "center",
       align: "center",
       editable: true,
@@ -158,7 +158,7 @@ export default function AddRateModalApprove({ sourceId, handleOpen, handleClose 
     {
       field: "currency",
       headerName: "Currency",
-      flex: 1,
+      flex: 1.8,
       headerAlign: "center",
       align: "center",
       editable: false,
@@ -168,14 +168,16 @@ export default function AddRateModalApprove({ sourceId, handleOpen, handleClose 
           size="small"
           options={jobSettingData?.body?.currency}
           value={params.value}
-          onChange={(e) => handleProcessRowUpdate({ ...params.row, currency: e.target.value })}
+          onChange={(e) =>
+            handleProcessRowUpdate({ ...params.row, currency: e.target.value })
+          }
         />
       ),
     },
     {
       field: "unitType",
       headerName: "Unit Type",
-      flex: 1,
+      flex: 1.8,
       editable: false,
       headerAlign: "center",
       align: "center",
@@ -185,7 +187,9 @@ export default function AddRateModalApprove({ sourceId, handleOpen, handleClose 
           size="small"
           options={jobSettingData?.body?.unitTypes}
           value={params.value}
-          onChange={(e) => handleProcessRowUpdate({ ...params.row, unitType: e.target.value })}
+          onChange={(e) =>
+            handleProcessRowUpdate({ ...params.row, unitType: e.target.value })
+          }
         />
       ),
     },
@@ -283,17 +287,20 @@ export default function AddRateModalApprove({ sourceId, handleOpen, handleClose 
             disableColumnMenu
           />
         </Box>
-        <br/>
+        <br />
         <ThemeButton
-  onClick={async () => {
-    await formik.submitForm();
-  }}
-  sx={{ fontWeight: "500", borderRadius: "12px", color: "white !important" }}
->
-  Update
-</ThemeButton>
+          onClick={async () => {
+            await formik.submitForm();
+          }}
+          sx={{
+            fontWeight: "500",
+            borderRadius: "12px",
+            color: "white !important",
+          }}
+        >
+          Update
+        </ThemeButton>
       </Box>
-      
     </Modal>
   );
 }

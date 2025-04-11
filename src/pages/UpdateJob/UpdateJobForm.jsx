@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import { AppBar, CircularProgress, Toolbar, Typography } from "@mui/material";
 import { MenuItem, Select, Stack, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -39,7 +39,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
     setValue(newValue);
   };
   const [open, setOpen] = useState(false);
-console.log(initialValues,"initialValues")
   const [SourceType, setSourceType] = useState("");
   const handleOpen = (type) => {
     setSourceType(type);
@@ -246,7 +245,7 @@ console.log(initialValues,"initialValues")
                   />
                 </Grid>
                 <span
-                  onClick={ () =>handleOpen("shipping_Line")}
+                  onClick={() => handleOpen("shipping_Line")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
@@ -271,7 +270,7 @@ console.log(initialValues,"initialValues")
                   />
                 </Grid>
                 <span
-                  onClick={()=> handleOpen("custom_Release_Date")}
+                  onClick={() => handleOpen("custom_Release_Date")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
@@ -282,7 +281,7 @@ console.log(initialValues,"initialValues")
                     fontWeight: "500",
                   }}
                 >
-                  Upload  File
+                  Upload File
                 </span>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -297,7 +296,7 @@ console.log(initialValues,"initialValues")
                   />
                 </Grid>
                 <span
-                  onClick={()=> handleOpen("taxExemption_Certificate_Date")}
+                  onClick={() => handleOpen("taxExemption_Certificate_Date")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
@@ -393,7 +392,7 @@ console.log(initialValues,"initialValues")
                   />
                 </Grid>
                 <span
-                  onClick={ () =>handleOpen("idf_Date")}
+                  onClick={() => handleOpen("idf_Date")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
@@ -534,7 +533,7 @@ console.log(initialValues,"initialValues")
                   />
                 </Grid>
                 <span
-                  onClick={()=> handleOpen("entry_Date")}
+                  onClick={() => handleOpen("entry_Date")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
@@ -543,7 +542,6 @@ console.log(initialValues,"initialValues")
                     textDecoration: "underline",
                     fontSize: "14px",
                     fontWeight: "500",
-                  
                   }}
                 >
                   Upload File
@@ -628,19 +626,24 @@ console.log(initialValues,"initialValues")
 
         <Modal open={open} onClose={handleClose}>
           <Box sx={style}>
-          <Button onClick={handleClose}  sx={{
-              position: 'absolute',
-              top: 10,
-              right: 8,
-              color: 'red',
-              backgroundColor: 'transparent',
-            }}>
-            <CloseIcon color="red"/>
+            <Button
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                top: 10,
+                right: 8,
+                color: "red",
+                backgroundColor: "transparent",
+              }}
+            >
+              <CloseIcon color="red" />
             </Button>
             <UploadFile
-             customer_id={initialValues.id}
-            isNotShowType={true} sourceType={'JOB_DETAIL'} type={SourceType} />
-           
+              customer_id={initialValues.id}
+              isNotShowType={true}
+              sourceType={"JOB_DETAIL"}
+              type={SourceType}
+            />
           </Box>
         </Modal>
       </Box>
