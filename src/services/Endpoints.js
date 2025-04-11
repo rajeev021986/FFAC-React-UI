@@ -72,6 +72,8 @@ const ENDPOINTS = {
     `/${BasePageUrl}/approval/approved/${type}`,
   JOB_ENTRY_REJECT_REQUEST: (id, type,BasePageUrl) =>
     `/${BasePageUrl}/approval/rejected/${type}/${id}`,
+  JOB_ENTRY_CANCEL_REQUEST: (id, type,BasePageUrl) =>
+    `/${BasePageUrl}/approval/cancel/${type}/${id}`,
   GET_UPDATE_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-update/${id}`,
   GET_UPDATE_CONTAINER_NUMBER: (id,BasePageUrl) => `/${BasePageUrl}/job-update/container/${id}`,
   GET_VEHICLE_BY_ID: (id,BasePageUrl) => `/${BasePageUrl}/job-update/vehicle/${id}`,

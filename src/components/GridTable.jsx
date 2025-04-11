@@ -12,7 +12,7 @@ function GridDataTable({ data }) {
       minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value || "No Value"} arrow>
-          <span>{params.value || "N/A"}</span>
+          <span>{params.value || ""}</span>
         </Tooltip>
       ),
       headerAlign: "center",
@@ -25,7 +25,7 @@ function GridDataTable({ data }) {
       minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value || "No Value"} arrow>
-          <span>{params.value || "N/A"}</span>
+          <span>{params.value || ""}</span>
         </Tooltip>
       ),
       headerAlign: "center",
@@ -38,7 +38,7 @@ function GridDataTable({ data }) {
       minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value || "No Value"} arrow>
-          <span>{params.value || "N/A"}</span>
+          <span>{params.value || ""}</span>
         </Tooltip>
       ),
       headerAlign: "center",
@@ -51,7 +51,7 @@ function GridDataTable({ data }) {
       minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value || "No Value"} arrow>
-          <span>{params.value || "N/A"}</span>
+          <span>{params.value || ""}</span>
         </Tooltip>
       ),
       headerAlign: "center",

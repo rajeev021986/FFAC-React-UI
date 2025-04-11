@@ -19,6 +19,8 @@ export function StatusChip(status, field) {
                 return <div style={{ ...styles.chip, backgroundColor: "#e67e22", borderColor: "#e67e22", color: "#ffffff" }}>PENDING DOC</div>
             case "rejected":
                 return <div style={{ ...styles.chip, backgroundColor: "#c0392b", borderColor: "#c0392b", color: "#ffffff" }}>REJECTED</div>
+                case "cancel":
+                    return <div style={{ ...styles.chip, backgroundColor: "#ff3336", borderColor: "#ff3336", color: "#ffffff" }}>CANCEL</div>
             default:
                 return
 

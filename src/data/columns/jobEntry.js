@@ -39,7 +39,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -56,7 +56,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -72,7 +72,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -86,7 +86,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -100,7 +100,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -114,7 +114,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -128,7 +128,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -162,7 +162,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -174,7 +174,7 @@ export const JOB_ENTRY_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => params.value?.trim() || "N/A",
+    renderCell: (params) => params.value?.trim() || "",
   },
   {
     flex: 1,
@@ -184,7 +184,7 @@ export const JOB_ENTRY_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => params.value?.trim() || "N/A",
+    renderCell: (params) => params.value?.trim() || "",
   },
   {
     flex: 1,
@@ -266,6 +266,25 @@ export const CONTAINER_COLUMNS = [
   },
   {
     flex: 1,
+    field: "modifiedDate",
+    headerName: "Modified Date",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+  {
+    flex: 1,
+    field: "modifiedBy",
+    headerName: "Modified By",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+
+  {
+    flex: 1,
     field: "action",
     headerName: "Action",
     width: 110,
@@ -341,6 +360,24 @@ export const VEHICLE_COLUMNS = [
   },
   {
     flex: 1,
+    field: "modifiedDate",
+    headerName: "Modified Date",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+  {
+    flex: 1,
+    field: "modifiedBy",
+    headerName: "Modified By",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+  {
+    flex: 1,
     field: "action",
     headerName: "Action",
     width: 110,
@@ -390,7 +427,7 @@ export const LOOSECARGO_COLUMNS = [
   {
     flex: 1,
     field: "truckTrailerNo",
-    headerName: "TruckTrailer No.", 
+    headerName: "TruckTrailer No.",
     width: 110,
     headerAlign: "center",
     align: "center",
@@ -409,6 +446,24 @@ export const LOOSECARGO_COLUMNS = [
     flex: 1,
     field: "createdDate",
     headerName: "Created Date",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+  {
+    flex: 1,
+    field: "modifiedDate",
+    headerName: "Modified Date",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
+  {
+    flex: 1,
+    field: "modifiedBy",
+    headerName: "Modified By",
     width: 110,
     headerAlign: "center",
     align: "center",

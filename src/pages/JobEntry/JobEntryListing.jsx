@@ -46,6 +46,7 @@ import { JOB_ENTRY_NEW_COLUMNS } from "../../data/columns/jobEntry(New)";
 import DocumentDialog from "../../components/common/DocumentDialog";
 import AddRateModalApprove from "./AddRateModalApprove";
 import AddRejectedRemarks from "./RejectedRemarks";
+import CancelModalApprove from "./CancelModalApprove";
 
 export default function JobEntryScreen({ page }) {
   const location = useLocation();
@@ -188,7 +189,26 @@ export default function JobEntryScreen({ page }) {
       );
     }
   };
-
+  const handleCancel = async () => {
+    try {
+      const response = await ApiManager.canceljobEntryApprove(
+        modal?.data?.id,
+        "JOB_DETAIL"
+      )
+      const message = response.message;
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+      handleClose();
+    } catch (error) {
+      toast.custom(
+        <CustomToast message="Failed to cancel." toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+  };
   useEffect(() => {
     dispatch(jobEntrySetView("grid"));
   }, []);
@@ -397,6 +417,13 @@ export default function JobEntryScreen({ page }) {
         rowId={modal?.data?.id}
         handleOpen={modal.open && modal.type === "reject"}
         handleClose={handleClose}
+      />
+      <CancelModalApprove
+         rowId={modal?.data?.id}
+        sourceName={modal?.data?.customerName}
+         handleOpen={modal.open && modal.type === "cancel"}
+         handleClose={handleClose}
+         handleCancel={handleCancel}
       />
 
       <DeleteDialog

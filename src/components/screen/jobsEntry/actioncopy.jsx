@@ -3,7 +3,7 @@ import AuditIconDropdown from "../../common/commonIconDropdown/AuditIconDropdown
 import DocumentIconDropdown from "../../common/commonIconDropdown/DocumentIconDropdown/DocumentIconDropdown";
 import AddRateIconDropdown from "../../common/commonIconDropdown/DocumentIconDropdown/AddRateIconDropdown/AddRateIconDropdown";
 import CloseIcon from "@mui/icons-material/Close";
-
+import CancelIcon from '@mui/icons-material/Cancel';
 export const getJobEntryListGridActionsApprovel = (nav, setModal) => {
   return [
     {
@@ -42,6 +42,13 @@ export const getJobEntryListGridActionsApprovel = (nav, setModal) => {
         setModal({ open: true, type: "reject", data: params.row });
       },
       icon: <CloseIcon sx={{ width: "20px", marginTop: "5px" }} />,
+    },
+    {
+      label: "Cancel",
+      onClick: (params) => {
+        setModal({ open: true, type: "cancel", data: params.row });
+      },
+      icon: <CancelIcon sx={{ width: "20px", marginTop: "5px" }} />,
     },
   ];
 };
