@@ -39,6 +39,8 @@ export default function SelectBox({
         sx={{
           ...styles.root,
           ...sx,
+          height: "44px",
+
           "& .MuiSelect-select span::before": {
             content: placeholder ? "'Select an option'" : "''",
             color: "#9090A5",

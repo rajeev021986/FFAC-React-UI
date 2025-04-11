@@ -132,7 +132,7 @@ function FormAutoCompleteWithVoyage(props) {
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderRadius: "10px",
-                fontSize: "14px",
+                fontSize: "18px",
               },
             }}
             InputProps={{

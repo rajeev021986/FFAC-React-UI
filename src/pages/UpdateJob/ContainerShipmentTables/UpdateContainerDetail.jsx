@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Box, Card, CardContent, Stack } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
-import ApiManager from "../../services/ApiManager";
+import ApiManager from "../../../services/ApiManager";
 
 // Components
-import ScreenToolbar from "../../components/common/ScreenToolbar";
-import ThemedBreadcrumb from "../../components/common/Breadcrumb";
-import CustomToast from "../../components/common/Toast/CustomToast";
-import Loader from "../../components/common/Loader/Loader";
-import UpdateForm from "./UpdateJobForm";
+import ScreenToolbar from "../../../components/common/ScreenToolbar";
+import ScreenToolbar from "../../../components/common/ScreenToolbar";
+import ThemedBreadcrumb from "../../../components/common/Breadcrumb";
+import CustomToast from "../../../components/common/Toast/CustomToast";
+import Loader from "../../../components/common/Loader/Loader";
+import UpdateForm from "../UpdateJobForm";
 
 export default function UpdateJobDetails({ page }) {
   const [loading, setLoading] = useState(true);
@@ -59,7 +60,7 @@ export default function UpdateJobDetails({ page }) {
           sct: res.body?.sct || "NO",
           urgent: res.body?.urgent || "NO",
           shippingLineDOCollectionDate:
-            res.body?.shippingLineDOCollectionDate || "",
+            res.body?.shippingLineDOCollection1Date || "",
           customReleaseDate: res.body?.customReleaseDate || "",
           taxExemptionCertificateDate:
             res.body?.taxExemptionCertificateDate || "",
@@ -72,6 +73,7 @@ export default function UpdateJobDetails({ page }) {
           entryNo: res.body?.entryNo || "",
           entryDate: res.body?.entryDate || "",
           bondDetails: res.body?.bondDetails || [],
+          containerDetails: res.body?.containerDetails || [],
         });
         setLoading(false);
       } catch (error) {

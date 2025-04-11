@@ -28,9 +28,13 @@ export default function LineVessel({ formik }) {
 
   return (
     <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
-      <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
-        <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+      <Grid container sx={{ 
+        
+        
+        margin: 0, padding: 1, paddingRight: 1 }}>
+        <Grid  container spacing={1}>
+          <Grid 
+          item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Shipping Line"
               id="shippingLine"
@@ -42,7 +46,10 @@ export default function LineVessel({ formik }) {
             ></FormAutoComplete>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid
+            paddingLeft={1}
+          
+          item xs={12} sm={6} md={4} lg={3} xl={2}>
             <DateTimeField
               name="eta"
               label="ETA"
@@ -79,7 +86,7 @@ export default function LineVessel({ formik }) {
           </Grid>
         </Grid>
 
-        <Grid container>
+        <Grid container spacing={1}>
           <Grid
             item
             xs={12}
@@ -173,7 +180,7 @@ export default function LineVessel({ formik }) {
           </Grid>
         </Grid>
 
-        <Grid container>
+        <Grid container spacing={1}>
           {/* Select */}
           <Grid
             item

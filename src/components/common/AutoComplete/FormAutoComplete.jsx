@@ -90,7 +90,7 @@ function FormAutoComplete(props) {
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderRadius: "10px",
-                fontSize: "14px",
+                fontSize: "18px",
               },
             }}
             InputProps={{
@@ -112,9 +112,9 @@ function FormAutoComplete(props) {
             {option.label}
           </MenuItem>
         )}
-        noOptionsText={
-          filteredOptions?.length === 0 ? "No data available" : "Loading..."
-        }
+        // noOptionsText={
+        //   filteredOptions?.length === 0 ? "No data available" : "Loading..."
+        // }
       />
     </Box>
   );

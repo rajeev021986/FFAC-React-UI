@@ -298,6 +298,24 @@ class ApiManager {
     );
     return ApiMethods.get(url);
   };
+
+  static getUpdateContainerNumber = async (id) => {
+    const url = ENDPOINTS.GET_UPDATE_CONTAINER_NUMBER(
+      id,
+      menuConfigUrl.document
+    );
+    return ApiMethods.get(url);
+  };
+
+  static getVehicleById = async (id) => {
+    const url = ENDPOINTS.GET_VEHICLE_BY_ID(id, menuConfigUrl.document);
+    return ApiMethods.get(url);
+  };
+
+  static getLooseCargoById = async (id) => {
+    const url = ENDPOINTS.GET_LOOSECARGO_BY_ID(id, menuConfigUrl.document);
+    return ApiMethods.get(url);
+  };
 }
 
 export default ApiManager;

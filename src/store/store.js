@@ -20,6 +20,7 @@ import { chargesDataApi } from "./api/chargesDataApi";
 import { exchangeRateDataApi } from "./api/exchangeRateDataApi";
 import { otmBolDataApi } from "./api/otmBolDataApi";
 import { jobEntry } from "./api/jobEntryApi";
+import { containerAPI } from "./api/containerApi";
 
 import userManagementReducer from "./freatures/userManagementSlice";
 import authReducer from "./freatures/authSlice";
@@ -48,6 +49,9 @@ import vesselVoyagaReducer from "./freatures/VesselVoyageSlice";
 import chargesReducer from "./freatures/ChargesSlice";
 import exchangeRateReducer from "./freatures/ExchangeRateSlice";
 import jonEntryReducer from "./freatures/JobEntrySlice";
+import containerReducer from "./freatures/containersSlice";
+import vehicleReducer from "./freatures/vehicleSlice";
+import looseCargoReducer from "./freatures/LoseCargoSlice";
 
 const store = configureStore({
   reducer: {
@@ -72,8 +76,8 @@ const store = configureStore({
     [vesselVoyageDataApi.reducerPath]: vesselVoyageDataApi.reducer,
     [chargesDataApi.reducerPath]: chargesDataApi.reducer,
     [exchangeRateDataApi.reducerPath]: exchangeRateDataApi.reducer,
-
     [jobEntry.reducerPath]: jobEntry.reducer,
+    [containerAPI.reducerPath]: containerAPI.reducer,
 
     // slice
     userManagement: userManagementReducer,
@@ -104,6 +108,9 @@ const store = configureStore({
     chargesStore: chargesReducer,
     exchangeRateStore: exchangeRateReducer,
     jobEntries: jonEntryReducer,
+    containers: containerReducer,
+    vehicle: vehicleReducer,
+    looseCargo: looseCargoReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -128,7 +135,8 @@ const store = configureStore({
       vesselVoyageDataApi.middleware,
       chargesDataApi.middleware,
       exchangeRateDataApi.middleware,
-      jobEntry.middleware
+      jobEntry.middleware,
+      containerAPI.middleware
     ),
 });
 

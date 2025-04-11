@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import toast from "react-hot-toast";
 import CloseIcon from "@mui/icons-material/Close";
 import { AppBar, CircularProgress, Toolbar, Typography } from "@mui/material";
-import { MenuItem, Select, Stack, Grid } from "@mui/material";
+import { Stack, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -23,20 +23,24 @@ import { OutlinedButton, ThemeButton } from "../../components/common/Button";
 import InputBox from "../../components/common/InputBox";
 import PopupAlert from "../../components/common/Alert/PopupAlert";
 import BondDetailsGridForm from "./UpdateJobEntryGrid";
-import ContainerDetails from "./UpdateDetailsForm";
+// import ContainerDetails from "./UpdateDetailsForm";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../components/UploadFile";
+
+// Container Table
+import ContainerShipmentView from "./ContainerShipmentTables/ShipmentContainer/ContainerShipmentView";
+import VehicleShipmentView from "./ContainerShipmentTables/Vehicle/VehicleShipmentView";
+import LooseShipmentView from "./ContainerShipmentTables/LooseCargo/LooseCargoShipmentView";
 
 export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
   const [updateJobDetailsEntry, { isLoading }] =
     useUpdateJobDetailsEntryMutation();
   const [dropdownData, setDropdownData] = useState({});
-  const [rejectError, setRejectError] = useState(false);
   const nav = useNavigate();
   const [detailTab, setdetailTab] = useState("1");
   const [value, setValue] = React.useState("1");
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setdetailTab(newValue);
   };
   const [open, setOpen] = useState(false);
   const [SourceType, setSourceType] = useState("");
@@ -152,7 +156,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList
-              onChange={handleChange}
+              // onChange={handleChange}
               aria-label="lab API tabs example"
               sx={{ paddingBottom: "20px" }}
             >
@@ -187,48 +191,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     </Typography>
                   </Box>
 
-                  {/* <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Typography variant="body1">
-                        <strong>SCT</strong>
-                      </Typography>
-                      <Select
-                        name="sct"
-                        id="sct"
-                        value={formik.values.sct}
-                        onChange={formik.handleChange}
-                        error={Boolean(formik.errors.sct)}
-                        disabled={disabled || false}
-                        size="small"
-                        sx={{ backgroundColor: "#fff", minWidth: 80 }}
-                      >
-                        <MenuItem value="" disabled>
-                          Select Type
-                        </MenuItem>{" "}
-                        <MenuItem value="NO">NO</MenuItem>
-                        <MenuItem value="YES">YES</MenuItem>
-                      </Select>
-                    </Box>
 
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Typography variant="body1">
-                        <strong>URGENT</strong>
-                      </Typography>
-                      <Select
-                        name="urgent"
-                        value={formik.values.urgent}
-                        onChange={formik.handleChange}
-                        error={Boolean(formik.errors.urgent)}
-                        disabled={disabled || false}
-                        defaultValue="NO"
-                        size="small"
-                        sx={{ backgroundColor: "#fff", minWidth: 80 }}
-                      >
-                        <MenuItem value="NO">NO</MenuItem>
-                        <MenuItem value="YES">YES</MenuItem>
-                      </Select>
-                    </Box>
-                  </Box> */}
                 </Toolbar>
               </AppBar>
 
@@ -245,16 +208,18 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                  onClick={() => handleOpen("shipping_Line")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                  }}
+                 onClick={() => formik.values.shippingLineDOCollectionDate && handleOpen("shipping_Line")}
+               //   onClick={() => handleOpen("shipping_Line")}
+               style={{
+                marginTop: "20px",
+                marginLeft: "10px",
+                cursor: formik.values.shippingLineDOCollectionDate ? "pointer" : "not-allowed",
+                color: formik.values.shippingLineDOCollectionDate ? "#1976d2" : "#999",
+                textDecoration: formik.values.shippingLineDOCollectionDate ? "underline" : "none",
+                fontSize: "14px",
+                fontWeight: "500",
+                pointerEvents: formik.values.shippingLineDOCollectionDate ? "auto" : "none",
+              }}
                 >
                   Upload File
                 </span>
@@ -270,15 +235,18 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                  onClick={() => handleOpen("custom_Release_Date")}
+                 onClick={() => formik.values.customReleaseDate && handleOpen("custom_Release_Date")}
+
+                //  onClick={() => handleOpen("custom_Release_Date")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
+                    cursor: formik.values.customReleaseDate ? "pointer" : "not-allowed",
+                    color: formik.values.customReleaseDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.customReleaseDate ? "underline" : "none",
                     fontSize: "14px",
                     fontWeight: "500",
+                    pointerEvents: formik.values.customReleaseDate ? "auto" : "none",
                   }}
                 >
                   Upload File
@@ -296,16 +264,19 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                  onClick={() => handleOpen("taxExemption_Certificate_Date")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                  }}
+
+                  onClick={() => formik.values.taxExemptionCertificateDate && handleOpen("tax_Exemption_Certificate_Date")}
+                 // onClick={() => handleOpen("taxExemption_Certificate_Date")}
+                 style={{
+                  marginTop: "20px",
+                  marginLeft: "10px",
+                  cursor: formik.values.taxExemptionCertificateDate ? "pointer" : "not-allowed",
+                  color: formik.values.taxExemptionCertificateDate ? "#1976d2" : "#999",
+                  textDecoration: formik.values.taxExemptionCertificateDate ? "underline" : "none",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  pointerEvents: formik.values.taxExemptionCertificateDate ? "auto" : "none",
+                }}
                 >
                   Upload File
                 </span>
@@ -320,20 +291,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     disabled={disabled}
                   />
                 </Grid>
-                {/* <span
-                  onClick={()=> handleOpen("bt_Number")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Upload File
-                </span> */}
+
               </Grid>
 
               <Grid container>
@@ -357,20 +315,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={customerNameRef}
                   />
                 </Grid>
-                {/* <span
-                  onClick={()=> handleOpen("id_fNo")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Upload File
-                </span> */}
+
                 <Grid
                   item
                   xs={12}
@@ -392,16 +337,19 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                  onClick={() => handleOpen("idf_Date")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                  }}
+                 onClick={() => formik.values.idfDate && handleOpen("idf_Date")}
+
+              //    onClick={() => handleOpen("idf_Date")}
+              style={{
+                marginTop: "20px",
+                marginLeft: "10px",
+                cursor: formik.values.idfDate ? "pointer" : "not-allowed",
+                color: formik.values.idfDate ? "#1976d2" : "#999",
+                textDecoration: formik.values.idfDate ? "underline" : "none",
+                fontSize: "14px",
+                fontWeight: "500",
+                pointerEvents: formik.values.idfDate ? "auto" : "none",
+              }}
                 >
                   Upload File
                 </span>
@@ -425,20 +373,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     disabled={disabled}
                   />
                 </Grid>
-                {/* <span
-                  onClick={ () =>handleOpen("entry_Loadged_Ref")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Upload File
-                </span> */}
+
 
                 <Grid
                   item
@@ -460,20 +395,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
-                {/* <span
-                  onClick={ () =>handleOpen("entry_Loadged_Date")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Upload File
-                </span> */}
+
               </Grid>
 
               <Grid container>
@@ -497,20 +419,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={customerNameRef}
                   />
                 </Grid>
-                {/* <span
-                  onClick={ () =>handleOpen("entry_No")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Upload File
-                </span> */}
+
 
                 <Grid
                   item
@@ -533,16 +442,18 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                  onClick={() => handleOpen("entry_Date")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                  }}
+                  onClick={() => formik.values.entryDate && handleOpen("entry_Date")}
+                 // onClick={() => handleOpen("entry_Date")}
+                 style={{
+                  marginTop: "20px",
+                  marginLeft: "10px",
+                  cursor: formik.values.entryDate ? "pointer" : "not-allowed",
+                  color: formik.values.entryDate ? "#1976d2" : "#999",
+                  textDecoration: formik.values.entryDate ? "underline" : "none",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  pointerEvents: formik.values.entryDate ? "auto" : "none",
+                }}
                 >
                   Upload File
                 </span>
@@ -557,39 +468,9 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           <BondDetailsGridForm formik={formik} dropdownData={dropdownData} />
         </Grid>
 
-        {formik.values.containerDetails?.length > 0 && (
-          <TabContext value={detailTab}>
-            <Box
-              sx={{ borderBottom: 1, borderColor: "divider", paddingTop: 2 }}
-            >
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="Container Details / Update Details"
-                  value="1"
-                  sx={{
-                    width: "100%",
-                    typography: "body1",
-                    borderBottom: 1,
-                    border: "1px solid",
-                    borderColor: "divider",
-                    borderRadius: "10px",
-                  }}
-                  iconPosition="start"
-                />
-              </TabList>
-            </Box>
-            <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
-              <ContainerDetails formik={formik} />
-            </TabPanel>
-          </TabContext>
-        )}
-
         {page == "update-job" && (
           <Grid
-            paddingLeft={6}
+            paddingLeft={3}
             marginTop={2}
             marginBottom={2}
             container
@@ -626,26 +507,75 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
 
         <Modal open={open} onClose={handleClose}>
           <Box sx={style}>
-            <Button
-              onClick={handleClose}
-              sx={{
-                position: "absolute",
-                top: 10,
-                right: 8,
-                color: "red",
-                backgroundColor: "transparent",
-              }}
-            >
+            <Button onClick={handleClose} sx={{
+              position: 'absolute',
+              top: 10,
+              right: 8,
+              color: 'red',
+              backgroundColor: 'transparent',
+            }}>
               <CloseIcon color="red" />
             </Button>
             <UploadFile
               customer_id={initialValues.id}
-              isNotShowType={true}
-              sourceType={"JOB_DETAIL"}
-              type={SourceType}
-            />
+              isNotShowType={true} sourceType={'JOB_DETAIL'} type={SourceType} />
+
           </Box>
         </Modal>
+
+        <hr />
+
+        <TabContext value={detailTab}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", paddingTop: 2 }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab
+                label="Container Details / Update Details"
+                value="1"
+                sx={{
+                  width: "100%",
+                  typography: "body1",
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  borderRadius: "10px",
+                }}
+              />
+              <Tab
+                label="Vehicle Shipment"
+                value="2"
+                sx={{
+                  width: "100%",
+                  typography: "body1",
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  borderRadius: "10px",
+                }}
+              />
+              <Tab
+                label="Loose Cargo Shipment"
+                value="3"
+                sx={{
+                  width: "100%",
+                  typography: "body1",
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  borderRadius: "10px",
+                }}
+              />
+            </TabList>
+          </Box>
+
+          <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
+            <ContainerShipmentView page={"containerNo"} />
+          </TabPanel>
+
+          <TabPanel value="2" sx={{ paddingBottom: "15px" }}>
+            <VehicleShipmentView page={"vehicleShipment"} />
+          </TabPanel>
+
+          <TabPanel value="3" sx={{ paddingBottom: "15px" }}>
+            <LooseShipmentView page={"looseShipment"} />
+          </TabPanel>
+        </TabContext>
       </Box>
     </>
   );

@@ -39,7 +39,7 @@ export default function DateTimeField({
             fontSize: "14px",
             borderRadius: "10px",
             width: "100%",
-            height: "42px",
+            height: "44px",
             borderColor: error ? "#f56962" : "",
           },
         }}

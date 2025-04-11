@@ -28,7 +28,7 @@ const CommonTabForm = ({ formik, dropdownData }) => {
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   return (
-    <Box sx={{ p: 3, bgcolor: "white", borderRadius: 3, boxShadow: 2 }}>
+    <Box sx={{ p: 0.5, bgcolor: "white", borderRadius: 3, boxShadow: 2 }}>
       <Box
         className="ThemeTabBox"
         sx={{
@@ -44,7 +44,7 @@ const CommonTabForm = ({ formik, dropdownData }) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: 1,
+              // marginBottom: 1,
             }}
           >
             <Box sx={tabStyle.container}>

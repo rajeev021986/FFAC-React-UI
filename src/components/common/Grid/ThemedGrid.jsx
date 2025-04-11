@@ -23,7 +23,7 @@ const ThemedGrid = (props) => {
   const handleDate = (date) => {
     return date.split("T")[0];
   };
-
+console.log(columns, "columns");
   const gridData = data?.map((obj) => {
     return {
       ...obj,
@@ -53,6 +53,7 @@ const ThemedGrid = (props) => {
         field: "isDoc",
         headerName: "Document",
         width: 150,
+        
         headerAlign: "center",
         align: "center",
         renderCell: (params) => {
@@ -60,11 +61,11 @@ const ThemedGrid = (props) => {
         },
       };
     } else {
-      const smallFields = ["id","Approve"];
+      const smallFields = ["jobNo","customerName","supplierName","shipmentType","dateOfReceipt"];
      return {
     ...a,
     flex: 1,
-    minWidth: smallFields.includes(a.field) ? 100 : 210, 
+    minWidth: smallFields.includes(a.field) ? 210 : 60, 
     align: 'center',
     headerAlign: 'center',
   };

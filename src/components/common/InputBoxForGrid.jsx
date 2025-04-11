@@ -25,39 +25,51 @@ export default function InputBoxForGrid(props) {
     }
   }, [props.value]);
   const handleChange = (event) => {
-    let isValid = true;
-    const newValue = event.target.value;
-    if (field == "tflSealNo ") {
-      isValid = /^\d{11}$/.test(newValue); // Must be exactly 11 digits
-    }
-
-    setInputValue(newValue);
-    setError(!isValid);
-    if (isValid) {
-      api.setEditCellValue({ id, field, value: newValue }, event);
+    const rawValue = event.target.value;
+  
+    // Remove any non-alphanumeric characters
+    const sanitizedValue = rawValue.replace(/[^a-zA-Z0-9]/g, '');
+  
+    setInputValue(sanitizedValue);
+    setError(false);
+  
+    if (field === "tflSealNo") {
+      api.setEditCellValue({ id, field, value: sanitizedValue }, event);
+    } else {
+      api.setEditCellValue({ id, field, value: rawValue }, event);
     }
   };
+  
   const handleChangeContainerNo = (event) => {
-    let newValue = event.target.value;
-
-    // Remove non-alphanumeric characters
-    newValue = newValue.replace(/[^a-zA-Z0-9]/g, "");
-
-    // Extract letters and digits in sequence
-    const letters = newValue.slice(0, 4).replace(/[^a-zA-Z]/g, "");
-    const digits = newValue.slice(4).replace(/\D/g, "").slice(0, 7);
-
-    const formattedValue = letters + digits;
-
-    setInputValue(formattedValue);
-
-    const isValid = /^[a-zA-Z]{4}\d{7}$/.test(formattedValue);
-
-    console.log(isValid, "isValid");
+    let newValue = event.target.value.replace(/[^a-zA-Z0-9]/g, '');
+  
+    let lettersCount = 0;
+    let digitsCount = 0;
+    let finalValue = "";
+  
+    for (let char of newValue) {
+      if (/[a-zA-Z]/.test(char) && lettersCount < 4) {
+        finalValue += char;
+        lettersCount++;
+      } else if (/\d/.test(char) && digitsCount < 7) {
+        finalValue += char;
+        digitsCount++;
+      }
+  
+      // Stop processing if both limits are reached
+      if (lettersCount === 4 && digitsCount === 7) break;
+    }
+  
+    setInputValue(finalValue);
+  
+    const isValid = /^[a-zA-Z]{4}\d{7}$/.test(finalValue);
+  
     if (isValid) {
-      api.setEditCellValue({ id, field, value: formattedValue }, event);
+      api.setEditCellValue({ id, field, value: finalValue }, event);
     }
   };
+  
+  
 
   return (
     <div
@@ -142,7 +154,7 @@ export default function InputBoxForGrid(props) {
                   }}
                   inputProps={{
                     style: { textAlign: "center" },
-                    maxLength: 11, // Prevents extra characters
+                    // maxLength: 11, // Prevents extra characters
                   }}
                   // {...props}
                 />
