@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
-
+import CloseIcon from '@mui/icons-material/Close';
 import { AppBar, CircularProgress, Toolbar, Typography } from "@mui/material";
 import { Stack, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -10,7 +10,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-
+import { Modal, Button } from "@mui/material";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import getFirstError from "../../components/common/FieldToastError";
@@ -25,6 +25,7 @@ import PopupAlert from "../../components/common/Alert/PopupAlert";
 import BondDetailsGridForm from "./UpdateJobEntryGrid";
 // import ContainerDetails from "./UpdateDetailsForm";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
+import UploadFile from "../../components/UploadFile";
 
 // Container Table
 import ContainerShipmentView from "./ContainerShipmentTables/ShipmentContainer/ContainerShipmentView";
@@ -38,11 +39,17 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
   const nav = useNavigate();
   const [detailTab, setdetailTab] = useState("1");
   const [value, setValue] = React.useState("1");
-
   const handleChange = (event, newValue) => {
     setdetailTab(newValue);
   };
-
+  const [open, setOpen] = useState(false);
+console.log(initialValues,"initialValues")
+  const [SourceType, setSourceType] = useState("");
+  const handleOpen = (type) => {
+    setSourceType(type);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",
@@ -125,6 +132,17 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
       customerNameRef.current.focus();
     }
   }, []);
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 1200,
+    bgcolor: "background.paper",
+    borderRadius: 2,
+    boxShadow: 24,
+    p: 4,
+  };
 
   const FieldRef = useRef(null);
   useEffect(() => {
@@ -231,7 +249,20 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
-
+                <span
+                  onClick={ () =>handleOpen("shipping_Line")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload File
+                </span>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Custom Release Date"
@@ -243,6 +274,20 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <span
+                  onClick={()=> handleOpen("custom_Release_Date")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload  File
+                </span>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
@@ -255,6 +300,20 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <span
+                  onClick={()=> handleOpen("taxExemption_Certificate_Date")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload File
+                </span>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
@@ -266,6 +325,20 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     disabled={disabled}
                   />
                 </Grid>
+                {/* <span
+                  onClick={()=> handleOpen("bt_Number")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload File
+                </span> */}
               </Grid>
 
               <Grid container>
@@ -289,7 +362,20 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={customerNameRef}
                   />
                 </Grid>
-
+                {/* <span
+                  onClick={()=> handleOpen("id_fNo")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload File
+                </span> */}
                 <Grid
                   item
                   xs={12}
@@ -310,6 +396,20 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <span
+                  onClick={ () =>handleOpen("idf_Date")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload File
+                </span>
 
                 <Grid
                   item
@@ -330,6 +430,20 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     disabled={disabled}
                   />
                 </Grid>
+                {/* <span
+                  onClick={ () =>handleOpen("entry_Loadged_Ref")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload File
+                </span> */}
 
                 <Grid
                   item
@@ -351,6 +465,20 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+                {/* <span
+                  onClick={ () =>handleOpen("entry_Loadged_Date")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload File
+                </span> */}
               </Grid>
 
               <Grid container>
@@ -374,6 +502,20 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={customerNameRef}
                   />
                 </Grid>
+                {/* <span
+                  onClick={ () =>handleOpen("entry_No")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload File
+                </span> */}
 
                 <Grid
                   item
@@ -395,6 +537,21 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <span
+                  onClick={()=> handleOpen("entry_Date")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  
+                  }}
+                >
+                  Upload File
+                </span>
               </Grid>
 
               <PopupAlert alertConfig={alertConfig} />
@@ -442,6 +599,24 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
             </Stack>
           </Grid>
         )}
+
+        <Modal open={open} onClose={handleClose}>
+          <Box sx={style}>
+          <Button onClick={handleClose}  sx={{
+              position: 'absolute',
+              top: 10,
+              right: 8,
+              color: 'red',
+              backgroundColor: 'transparent',
+            }}>
+            <CloseIcon color="red"/>
+            </Button>
+            <UploadFile
+             customer_id={initialValues.id}
+            isNotShowType={true} sourceType={'JOB_DETAIL'} type={SourceType} />
+           
+          </Box>
+        </Modal>
 
         <hr />
 

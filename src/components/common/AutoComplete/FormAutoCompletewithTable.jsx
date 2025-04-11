@@ -1,38 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { useTheme } from '@mui/material/styles';
 import {
-  TextField,
-  Autocomplete,
-  Box,
-  CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
+TextField,
+Autocomplete,
+Box,
+CircularProgress,
+Paper,
 } from "@mui/material";
-import { GetAutoCompleteDataWithLoader } from "../../utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
-
+import { GetAutoCompleteDataWithCountry } from "../../utils/GetAutoCompleteDataCountry";
+import toast from "react-hot-toast";
+import CustomToast from "../Toast/CustomToast";
 function FormAutoCompleteWithTable(props) {
-  const {
-    label,
-    id,
-    suggestionName,
-    dataLabel,
-    value,
-    error,
-    onChange,
-    formik,
-  } = props;
+  const { label, id, suggestionName, dataLabel, error, formik } = props;
 
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const debounceValue = useDebounce(inputValue, 800); // Custom Hook
+  const debounceValue = useDebounce(inputValue, 800);
+  const theme = useTheme();
 
   useEffect(() => {
     if (!debounceValue) return; // Avoid API call on empty input
@@ -40,13 +27,15 @@ function FormAutoCompleteWithTable(props) {
       setLoading(true);
       try {
         const searchQuery = inputValue.trim() === "" ? "" : debounceValue;
-        const data = await GetAutoCompleteDataWithLoader(
+        const data = await GetAutoCompleteDataWithCountry(
           suggestionName,
           id,
           dataLabel || suggestionName,
           searchQuery
         );
+
         setOptions(data);
+
         if (formik.values.originCountry) {
           const preloadedOption = data.find(
             (item) => item.fullData.country === formik.values.originCountry
@@ -56,7 +45,9 @@ function FormAutoCompleteWithTable(props) {
           }
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        toast.custom(
+          <CustomToast message={"Something went wrong!"} toast="error" />
+        );
       } finally {
         setLoading(false);
       }
@@ -65,7 +56,7 @@ function FormAutoCompleteWithTable(props) {
     fetchData();
   }, [debounceValue, suggestionName, id, dataLabel]);
 
-  // Sync inputValue when formik value changes (for preloaded data)
+  // Sync inputValue when formik value changes
   useEffect(() => {
     if (formik.values.originCountry) {
       setInputValue(formik.values.originCountry);
@@ -86,6 +77,7 @@ function FormAutoCompleteWithTable(props) {
         portOfLoading: newValue.fullData.port_name,
       });
       setInputValue(newValue.fullData.country);
+      setSelectedOption(newValue);
     } else {
       formik.setValues({
         ...formik.values,
@@ -96,42 +88,33 @@ function FormAutoCompleteWithTable(props) {
       setOptions([]);
       setSelectedOption(null);
     }
-    setShowDropdown(false);
   };
+  console.log("options", options);
+
   return (
     <Box sx={{ width: "100%" }}>
-    <Autocomplete
-    sx={{
-          border: "none !important",
-        }}
-           size="small"
-           id={id}
-    open={showDropdown}
-    onOpen={() => setShowDropdown(true)}
-    onClose={() => setShowDropdown(false)}
-    options={options}
-    onFocus={()=>   setShowDropdown(true)}
-    getOptionLabel={(option) => option.fullData?.country || ""}
-    isOptionEqualToValue={(option, value) => option.fullData?.country === value.fullData?.country}
-    onInputChange={(event, newValue) => setInputValue(newValue)}
-    inputValue={inputValue}
-    value={selectedOption} // Ensure the selected option remains after API call
-    onChange={handleSelectionChange}
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        label={label}
-        variant="outlined"
-       placeholder="Type to search"
-        fullWidth
-        error={Boolean(error)}
-        helperText={error}
-        sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "10px",
-                fontSize: "14px",
-              },
-            }}
+      <Autocomplete
+        size="small"
+        id={id}
+        options={options}
+        getOptionLabel={(option) => option.fullData?.country || ""}
+        isOptionEqualToValue={(option, value) =>
+          option.fullData?.country === value.fullData?.country
+        }
+        onInputChange={(event, newValue) => setInputValue(newValue)}
+        inputValue={inputValue}
+        value={selectedOption}
+        onChange={handleSelectionChange}
+        loading={loading}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={label}
+            variant="outlined"
+            placeholder="Type to search"
+            fullWidth
+            error={Boolean(error)}
+            helperText={error}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
@@ -143,64 +126,75 @@ function FormAutoCompleteWithTable(props) {
                 </>
               ),
             }}
+          />
+        )}
+        renderOption={(props, option) => (
+          <Box component="li" {...props} key={option.value}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                padding: "1px",
+              }}
+            >
+              <span>{option.fullData.country}</span>
+              <span>{option.fullData.port_name}</span>
+            </Box>
+          </Box>
+        )}
+        ListboxComponent={(props) => (
+          <Paper
+            {...props}
+            sx={{
+              maxHeight: 300, // Limit height to enable scrolling
+              overflowY: "auto",
+              border: "1px solid #ddd",
+            }}
+          >
+            {/* Fixed Header */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontWeight: "bold",
+                backgroundColor: theme.palette.primary.main, 
+                color: theme.palette.common.white,
+
+                padding: "8px",
+                borderBottom: "1px solid #ddd",
+                position: "sticky",
+                top: "-15px",
+                zIndex: 2, // Ensure it stays above the list
+              }}
+            >
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "14px",
+                  // fontWeight: "bold",
+                }}
+              >
+                Country
+              </span>
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                }}
+              >
+                Port
+              </span>
+            </Box>
+
+            {/* Scrollable Options List */}
+            {props.children}
+          </Paper>
+        )}
       />
-    )}
-    renderOption={(props, option) => (
-  <Box component="li" {...props} key={option.value}>
-    <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", padding: "1px" }}>
-      <span>{option.fullData.country}</span>
-      <span>{option.fullData.port_name}</span>
     </Box>
-  </Box>
-)}
-
-ListboxComponent={(props) => (
-  <Paper
-    {...props}
-    sx={{
-      maxHeight: 300, // Limit height to enable scrolling
-      overflowY: "auto",
-      border: "1px solid #ddd",
-    }}
-  >
-    {/* Fixed Header */}
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        fontWeight: "bold",
-        // backgroundColor: "#f0f0f0",
-   backgroundColor: '#166de0',
-
-        padding: "8px",
-        borderBottom: "1px solid #ddd",
-        position: "sticky",
-        top: 0,
-        zIndex: 2, // Ensure it stays above the list
-      }}
-    >
-      <span style={{
-        color: "white",
-        fontSize: "14px",
-        // fontWeight: "bold",
-      }}>Country Name</span>
-      <span style={{
-        color: "white",
-        fontSize: "14px",
-        fontWeight: "bold",
-      }}>Port Name</span>
-    </Box>
-
-    {/* Scrollable Options List */}
-    {props.children}
-  </Paper>
-)}
-
-
-  />
- 
-</Box>
   );
 }
 
-export default FormAutoCompleteWithTable; 
+export default FormAutoCompleteWithTable;

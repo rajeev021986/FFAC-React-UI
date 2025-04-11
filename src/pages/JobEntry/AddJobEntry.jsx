@@ -171,6 +171,7 @@ export default function AddJobEntry({ page }) {
           notes: res.body?.notes || [],
           rate: res.body?.rate
             ? {
+                id: res.body?.rate.id || 0,
                 totalAmount: res.body?.rate.totalAmount || 0,
                 remarks: res.body?.rate.remarks || "",
                 rateDetails: res.body?.rate.rateDetails || [],

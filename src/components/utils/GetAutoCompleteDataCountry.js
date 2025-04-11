@@ -21,10 +21,9 @@ const suggestionName = {
   portOfLoading: "PORT_LOADING",
   portOfDischarge: "PORT",
   placeOfDelivery: "PORT",
-  bond_number:"BOND",
 };
 
-export const GetAutoCompleteDataWithLoader = async (
+export const GetAutoCompleteDataWithCountry = async (
     dataKey,
     inputId,
     dataLabel,
@@ -37,13 +36,11 @@ export const GetAutoCompleteDataWithLoader = async (
         inputId
       );
       const data = await response.body;
-  
-      let uniqueSuggestions = data
-        .filter(
-          (value, index, self) =>
-            index === self.findIndex((t) => t[dataKey] === value[dataKey])
-        )
-        .map((item) => ({ label: item[dataLabel], value: item[dataKey], fullData:item }));
+      let uniqueSuggestions = data.map((item) => ({
+        label: item[dataLabel],
+        value: item[dataKey],
+        fullData: item,
+      }));
   
       return uniqueSuggestions;
     } catch (error) {

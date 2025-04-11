@@ -18,6 +18,10 @@ const ENDPOINTS = {
     `/getAutoComplete?name=${name}&search=${search}`,
   GET_DOCUMENT_FILES: (source, id,BasePageUrl) =>
     `/${BasePageUrl}/file?source=${source}&sourceId=${id}`,
+
+  GET_DOCUMENT_EDIT_JOB_FILES: (source,type, id,BasePageUrl) =>
+    `/${BasePageUrl}/file/type?source=${source}&docType=${type}&sourceId=${id}`,
+
   GET_SHIPPER_DOCUMENT_FILE: (source, id) =>
     `/entity-service/file/get?source=${source}&sourceId=${id}`,
   DOWNLOAD_DOCUMENT: (id, source, sourceId,BasePageUrl) =>
@@ -61,6 +65,7 @@ const ENDPOINTS = {
   GET_JOBENTRIES: (limit, page) => `/job-detail/filter?limit=${limit}&page=${page}`,
   GET_JOBENTRY_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail/${id}`,
   GET_ADDRATE_DETAILS: (id,BasePageUrl) => `/${BasePageUrl}/job-detail/rate/${id}`,
+  UPDATE_ADDRATE_DETAILS: (BasePageUrl) => `/${BasePageUrl}/job-detail/rate`,
   JOB_APPROVE_REQUEST: (id, type,BasePageUrl) =>
     `/${BasePageUrl}/approval/approved/${type}/${id}`,
   ALL_JOBS_APPROVE_REQUEST: (type,BasePageUrl) =>

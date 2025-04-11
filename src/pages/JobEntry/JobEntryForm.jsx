@@ -95,6 +95,7 @@ console.log(page,"page")
         let rateData = {
           totalAmount: values.rate.totalAmount || 0,
           remarks: values.rate.remarks || "",
+          id: values.rate.id || "",
           rateDetails: values.rate.rateDetails.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           ),
@@ -159,6 +160,7 @@ console.log(page,"page")
           let rateData = {
             totalAmount: values.rate.totalAmount || 0,
             remarks: values.rate.remarks || "",
+            id: values.rate.id || "",
             rateDetails: values.rate.rateDetails.map((item) =>
               item?.new ? { ...item, id: null, new: false } : item
             ),
@@ -216,10 +218,7 @@ console.log(page,"page")
     useGetOptionsSettingsQuery("customer_settings");
 
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-  console.log(
-    jobSettingData?.body?.jobPatternData?.map((i) => i.shipmentType),
-    "manish"
-  );
+
   const validType = jobSettingData?.body?.jobPatternData?.map(
     (i) => i.shipmentType
   );
@@ -237,7 +236,6 @@ console.log(page,"page")
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
-  console.log(optionsSettingsData?.body?.shipmentType, "optionsSettingsData");
 
   const handleApproveRequest = async () => {
     setRejectError(false);
@@ -317,12 +315,12 @@ console.log(page,"page")
   };
 
 
+console.log("page",page);
 
    const disabled = page == "job-entry" || "jobApprove" ? false : true;
 
 
   const getPage = location?.pathname.split("/").slice(-1)[0];
-  console.log(getPage, "getPage");
   
   // const disabled =
   //   getPage === "editJobEntry" ? true : !(page === "job-entry" || page === "jobApprove");
@@ -357,7 +355,7 @@ console.log(page,"page")
   useEffect(() => {
     const selectedValue = formik.values.shipmentType;
 
-    if (selectedValue && !validType?.includes(selectedValue)) {
+    if ( selectedValue && !validType?.includes(selectedValue) && getPage == "newEntry") {
       toast.custom(
         <CustomToast
           message={'Invalid shipment type selected.'}
@@ -369,7 +367,7 @@ console.log(page,"page")
       );
       // formik.setFieldError('shipmentType', 'Invalid shipment type selected.');
     }
-  }, [formik.values.shipmentType, optionsSettingsData]);
+  }, [formik.values.shipmentType,]);
 
   return (
     <>
@@ -443,7 +441,7 @@ console.log(page,"page")
                     value={formik.values.shipmentType}
                     error={formik.errors.shipmentType}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={getPage === 'newEntry' ? false : true}
                     getPage={getPage}
 
                   />
@@ -457,7 +455,9 @@ console.log(page,"page")
                     value={formik.values.moveType}
                     error={formik.errors.moveType}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={getPage === 'newEntry' ? false : true}
+                    getPage={getPage}
+
                   />
                 </Grid>
 
@@ -466,14 +466,16 @@ console.log(page,"page")
                   location?.pathname ===
                     "/app/documentation/job-approve/file/approveJobRequest" ||
                   formik?.values?.createdBy === getUserId) && (
-                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Grid item xs={12} sm={6} md={4} lg={6} xl={2} style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                  }}>
                     <ThemeButton
                       onClick={() => toggleRateModal()}
                       sx={{
                         fontWeight: "500",
                         color: "white !important",
-                        height: "38px",
-                        
                       }}
                     >
                       Add Rate

@@ -18,6 +18,7 @@ export default function SelectShipment({
   getPage,
   helperText,
   options,
+  disabled,
   error,
   fullWidth = true,
   ...props
@@ -33,6 +34,7 @@ export default function SelectShipment({
       <Select
         labelId={`${id}-simple-select-label`}
         id={id}
+        disabled={disabled}
         defaultValue={"General/common"}
         name={id}
         value={value}

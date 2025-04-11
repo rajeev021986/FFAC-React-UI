@@ -22,7 +22,7 @@ import TextViewer from "./FileViewer/TextViewer";
 import ImageViewer from "./FileViewer/ImageViewer";
 
 export default function DocumentDialog({
-  source,
+  // source,
   sourceId,
   customerRefNo,
   job_No,
@@ -82,7 +82,9 @@ export default function DocumentDialog({
   const [listData, setListData] = useState([]);
   const sourceType = "JOB_DETAIL";
   useEffect(() => {
-    reloadDataHandler(sourceType, sourceId, setListData, setLoader);
+    if(handleOpen){
+      reloadDataHandler(sourceType, sourceId, setListData, setLoader);
+    }
   }, [sourceId]);
   const handleViewDialogClose = () => {
     setViewDialogOpen(false);

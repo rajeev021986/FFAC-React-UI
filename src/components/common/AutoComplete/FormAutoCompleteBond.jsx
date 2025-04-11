@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Autocomplete,
@@ -6,24 +6,29 @@ import {
   CircularProgress,
   MenuItem,
 } from "@mui/material";
-import { GetAutoCompleteData } from "../../utils/GetAutoCompleteData";
+import { GetAutoCompleteDataWithLoader } from "../../utils/GetAutoCompleteDataWithLoader";
+import useDebounce from "../../../hooks/useDebounce";
 
-function FormAutoComplete(props) {
-  const { label, id, suggestionName, dataLabel, value, error, onChange } =
+function FormAutoCompleteBond(props) {
+  const { label, id, suggestionName, dataLabel, value, error, onChange,size } =
     props;
 
   const [options, setOptions] = useState([]);
-  const [filteredOptions, setFilteredOptions] = useState(options);
+  const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  const debounceValue = useDebounce(inputValue, 800); // Custom Hook
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await GetAutoCompleteData(
+        const data = await GetAutoCompleteDataWithLoader(
           suggestionName,
           id,
-          !dataLabel ? suggestionName : dataLabel
+          dataLabel || suggestionName,
+          debounceValue
         );
         setOptions(data);
         setFilteredOptions(data);
@@ -33,33 +38,25 @@ function FormAutoComplete(props) {
         setLoading(false);
       }
     };
+
     fetchData();
-  }, [suggestionName, id]);
+  }, [debounceValue, suggestionName, id, dataLabel]);
 
   const handleInputChange = (event, newValue) => {
-    setLoading(false);
-    const filtered = options.filter((option) =>
-      option.label.toLowerCase().includes(newValue.toLowerCase())
-    );
-    setFilteredOptions(filtered);
+    setInputValue(newValue);
   };
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      const { fullData } = newValue;
-      const selectedAddress =
-        fullData.address1?.trim() ||
-        fullData.address2?.trim() ||
-        fullData.address3?.trim() ||
-        "";
-        const selectedCity = fullData.city || "";
-        const selectedCountry = fullData.country || "";
-        const formattedAddress = selectedAddress
-        ? `${selectedAddress}, ${selectedCity}, ${selectedCountry}`
-        : "";
-      onChange({ target: { name: id, value: newValue.value, formattedAddress , } });
+      onChange({ 
+        target: { name: id, value: newValue.value }, 
+        fullData: newValue.fullData // Pass the entire bond data
+      });
     } else {
-      onChange({ target: { name: id, value: null, formattedAddress: "" } });
+      onChange({ 
+        target: { name: id, value: null }, 
+        fullData: null
+      });
     }
   };
 
@@ -67,12 +64,10 @@ function FormAutoComplete(props) {
     <Box sx={{ width: "100%" }}>
       <Autocomplete
         sx={{
-          border: "none ! important",
+          border: "none !important",
         }}
         size="small"
         id={id}
-        noOptionsText="Type to Search"
-
         value={options.find((option) => option.value === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
@@ -98,26 +93,23 @@ function FormAutoComplete(props) {
               endAdornment: (
                 <>
                   {loading ? (
-                    <CircularProgress color="inherit" size={20} />
+                    <CircularProgress color="inherit" size={15} />
                   ) : null}
                   {params.InputProps.endAdornment}
                 </>
               ),
             }}
-            {...params}
           />
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option.value} sx={{ fontSize: "14px" }}>
+          <MenuItem {...props} key={option.value || "87343874"} sx={{ fontSize: "14px" }}>
             {option.label}
           </MenuItem>
         )}
-        noOptionsText={
-          filteredOptions?.length === 0 ? "No data available" : "Loading..."
-        }
+        noOptionsText={inputValue ? "No results found" : "Type to search..."}
       />
     </Box>
   );
 }
 
-export default FormAutoComplete;
+export default FormAutoCompleteBond;

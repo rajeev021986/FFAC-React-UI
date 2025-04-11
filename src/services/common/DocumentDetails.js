@@ -10,3 +10,13 @@ export const reloadDataHandler = async (source, id, setListData, setLoading) => 
         setLoading(false);
     }
 };
+export const reloadDocumentDataHandler = async (source, id,type, setListData, setLoading) => {
+    try {
+        setLoading(true);
+        const res = await ApiManager.getEditJobDocumentFiles(source,type, id);
+        setListData(res.body);
+        setLoading(false);
+    } catch (error) {
+        setLoading(false);
+    }
+};

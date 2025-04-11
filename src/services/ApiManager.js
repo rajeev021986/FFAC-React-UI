@@ -248,7 +248,10 @@ class ApiManager {
     const url = ENDPOINTS.GET_DOCUMENT_FILES(source, id, menuConfigUrl.entity);
     return ApiMethods.get(url);
   };
-
+  static getEditJobDocumentFiles = async (source, type,id) => {
+    const url = ENDPOINTS.GET_DOCUMENT_EDIT_JOB_FILES(source,type, id, menuConfigUrl.entity);
+    return ApiMethods.get(url);
+  };
   static getJobEntries = async (limit, page) => {
     const url = ENDPOINTS.GET_JOBENTRIES(limit, page);
     return ApiMethods.get(url);
@@ -262,6 +265,11 @@ class ApiManager {
     const url = ENDPOINTS.GET_ADDRATE_DETAILS(id, menuConfigUrl.document);
     return ApiMethods.get(url);
   };
+  static updateAddRateDetails = async (payload) => {
+    const url = ENDPOINTS.UPDATE_ADDRATE_DETAILS(menuConfigUrl.document);
+    return ApiMethods.put(url,payload);
+  };
+  
   static approveJobEntryRequest = async (id, type) => {
     const url = ENDPOINTS.JOB_APPROVE_REQUEST(id, type, menuConfigUrl.document);
     return ApiMethods.put(url);
