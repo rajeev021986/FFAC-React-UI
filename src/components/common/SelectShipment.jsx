@@ -66,7 +66,7 @@ export default function SelectShipment({
         {...props}
         inputRef={inputRef}
       >
-        <MenuItem
+        {/* <MenuItem
           defaultValue="General/Common"
           value="General/common"
           disabled={getPage == "editJobEntry"}
@@ -74,7 +74,7 @@ export default function SelectShipment({
       
         >
           <em>General/Common</em>
-        </MenuItem>
+        </MenuItem> */}
         {options?.map((option, idx) => (
           <MenuItem disabled ={getPage == "editJobEntry"} key={idx} value={option?.value}>
             {option?.value}

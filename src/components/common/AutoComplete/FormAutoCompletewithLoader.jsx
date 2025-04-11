@@ -79,7 +79,7 @@ function FormAutoCompleteWithLoader(props) {
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderRadius: "10px",
-                fontSize: "18px",
+                fontSize: "14px",
               },
             }}
             InputProps={{

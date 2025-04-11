@@ -61,11 +61,11 @@ console.log(columns, "columns");
         },
       };
     } else {
-      const smallFields = ["jobNo","customerName","supplierName","shipmentType","dateOfReceipt"];
+      const smallFields = ["jobNo","customerName","supplierName","shipmentType","dateOfReceipt","customerRefNo"];
      return {
     ...a,
-    flex: 1,
-    minWidth: smallFields.includes(a.field) ? 210 : 60, 
+    // flex: smallFields.includes(a.field) ? 3 : 1,
+    minWidth: smallFields.includes(a.field) ? 190 : 60, 
     align: 'center',
     headerAlign: 'center',
   };

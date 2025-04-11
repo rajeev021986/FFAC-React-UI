@@ -27,21 +27,46 @@ export default function InputBoxForGrid(props) {
   const handleChange = (event) => {
     const rawValue = event.target.value;
   
-    // Remove any non-alphanumeric characters
-    const sanitizedValue = rawValue.replace(/[^a-zA-Z0-9]/g, '');
-  
-    setInputValue(sanitizedValue);
-    setError(false);
+    // Remove non-alphanumeric characters
+    const cleaned = rawValue.replace(/[^a-zA-Z0-9]/g, '');
   
     if (field === "tflSealNo") {
-      api.setEditCellValue({ id, field, value: sanitizedValue }, event);
+      let digitsCount = 0;
+      let lettersCount = 0;
+      let finalValue = '';
+  
+      for (const char of cleaned) {
+        if (/\d/.test(char) && digitsCount < 7) {
+          finalValue += char;
+          digitsCount++;
+        } else if (/[a-zA-Z]/.test(char) && lettersCount < 4) {
+          finalValue += char;
+          lettersCount++;
+        }
+  
+        if (finalValue.length === 11) break;
+      }
+  
+      setInputValue(finalValue);
+      setError(false);
+  
+      if (finalValue.length === 11) {
+        api.setEditCellValue({ id, field, value: finalValue }, event);
+      }
     } else {
-      api.setEditCellValue({ id, field, value: rawValue }, event);
+      // For all other fields
+      const sanitized = rawValue.replace(/[^a-zA-Z0-9]/g, '');
+      setInputValue(sanitized);
+      setError(false);
+      api.setEditCellValue({ id, field, value: sanitized }, event);
     }
   };
   
+  
+  
+  
   const handleChangeContainerNo = (event) => {
-    let newValue = event.target.value.replace(/[^a-zA-Z0-9]/g, '');
+    const newValue = event.target.value.replace(/[^a-zA-Z0-9]/g, '');
   
     let lettersCount = 0;
     let digitsCount = 0;
@@ -56,18 +81,29 @@ export default function InputBoxForGrid(props) {
         digitsCount++;
       }
   
-      // Stop processing if both limits are reached
       if (lettersCount === 4 && digitsCount === 7) break;
     }
   
     setInputValue(finalValue);
+    setError(false); // Don’t show red border while typing
   
-    const isValid = /^[a-zA-Z]{4}\d{7}$/.test(finalValue);
-  
-    if (isValid) {
+    if (finalValue.length === 11) {
       api.setEditCellValue({ id, field, value: finalValue }, event);
     }
   };
+  
+  
+  const handleBlur = () => {
+    if (
+      (field === "containerNo" || field === "tflSealNo") &&
+      inputValue.length !== 11
+    ) {
+      setError(true); // Show red border if not 11 characters
+    } else {
+      setError(false); // Hide error if it's valid
+    }
+  };
+  
   
   
 
@@ -124,10 +160,11 @@ export default function InputBoxForGrid(props) {
               <Tooltip title={tooltipMessage} arrow>
                 <TextField
                   size="small"
-                  type={type || fieldType}
+                  type={  fieldType}
                   fullWidth
                   disabled={field === "balanceBondAmount" || props.disabled}
                   value={inputValue}
+                  onBlur={handleBlur} 
                   onChange={
                     field == "containerNo"
                       ? handleChangeContainerNo
@@ -136,11 +173,17 @@ export default function InputBoxForGrid(props) {
                   inputRef={inputRef}
                   placeholder={placeholder}
                   error={error}
-                  helperText={
-                    error
-                      ? "Must be 4 letters & 7 digits (e.g., ABCD1234567)"
-                      : ""
-                  }
+                  // helperText={
+                  //   error
+                  //     ? "Container number must be exactly 11 characters."
+                  //     : " " // ← reserve space
+                  // }
+                  FormHelperTextProps={{
+                    style: {
+                      marginTop: 0,
+                      minHeight: "2em",
+                    },
+                  }}
                   InputProps={{
                     disableUnderline: true,
                     style: {
