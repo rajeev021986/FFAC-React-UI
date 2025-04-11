@@ -48,10 +48,10 @@ const GridSearchInput = ({
 
   const handleCloseApproveDialog = () => {
     setOpenApproveDialog(false);
-  
+
     // Reset selectedIds if setSelectedIds function is provided
     if (setSelectedIds) {
-      setSelectedIds([]); 
+      setSelectedIds([]);
     }
   };
 
@@ -139,26 +139,25 @@ const GridSearchInput = ({
           Do you want to approve all the selected job IDs?
         </DialogContent>
         <DialogActions>
-                 <Grid item xs={12} sx={{ margin: 1, padding: 0 }}>
-                              <Stack direction="row" spacing={2}>
-                                <OutlinedButton
-                                  sx={{ fontWeight: "500", borderRadius: "12px" }}
-                                  onClick={handleCloseApproveDialog}
-                                >
-                                  Cancel
-                                </OutlinedButton>
-                                <ThemeButton
-                                  onClick={handleApproveConfirm}
-                                  sx={{
-                                    fontWeight: "500",
-                                    borderRadius: "12px",
-                                    color: "white !important",
-                                  }}
-                                >
-                                  Yes
-                                </ThemeButton>
-                              </Stack>
-                            </Grid>
+          <Grid item xs={12} sx={{ margin: 1, padding: 0 }}>
+            <Stack direction="row" spacing={2}>
+              <OutlinedButton
+                sx={{ fontWeight: "500" }}
+                onClick={handleCloseApproveDialog}
+              >
+                Cancel
+              </OutlinedButton>
+              <ThemeButton
+                onClick={handleApproveConfirm}
+                sx={{
+                  fontWeight: "500",
+                  color: "white !important",
+                }}
+              >
+                Submit
+              </ThemeButton>
+            </Stack>
+          </Grid>
         </DialogActions>
       </Dialog>
     </>
