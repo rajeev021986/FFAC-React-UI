@@ -60,7 +60,7 @@ export default function ContainerNumberForm({ initialValues, page }) {
           toast.custom(<CustomToast message={message} toast="success" />, {
             closeButton: false,
           });
-          nav("/app/documentation/update/job");
+          nav(-1);
         } else {
           toast.custom(<CustomToast message={message} toast="error" />, {
             closeButton: false,
@@ -100,8 +100,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
-
-  const disabled = page == "update-job" ? false : true;
 
   useEffect(() => {
     getFirstError(formik.errors);
@@ -166,7 +164,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="transporter"
                     value={formik.values.transporter}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
@@ -176,7 +173,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="truckTrailerNoTransporter"
                     value={formik.values.truckTrailerNoTransporter}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
@@ -186,7 +182,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="driver"
                     value={formik.values.driver}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
@@ -196,7 +191,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="agreedRate"
                     value={formik.values.agreedRate}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
               </Grid>
@@ -217,7 +211,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="telNo"
                     value={formik.values.telNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
@@ -254,7 +247,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="licenceNo"
                     value={formik.values.licenceNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
               </Grid>
@@ -288,7 +280,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="clerkName"
                     value={formik.values.clerkName}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
@@ -307,7 +298,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="clerkTelNo"
                     value={formik.values.clerkTelNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
@@ -326,7 +316,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="reportingPlace"
                     value={formik.values.reportingPlace}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
@@ -347,7 +336,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.reportingDate}
                     error={formik.errors.reportingDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -369,7 +357,7 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="containerNo"
                     value={formik.values.containerNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled
                   />
                 </Grid>
 
@@ -390,7 +378,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.transferDate}
                     error={formik.errors.transferDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -412,7 +399,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.t1C1ReadyDate}
                     error={formik.errors.t1C1ReadyDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -434,7 +420,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.loadingDate}
                     error={formik.errors.loadingDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -457,7 +442,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="bondNumber"
                     value={formik.values.bondNumber}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -477,7 +461,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     id="bondAmount"
                     value={formik.values.bondAmount}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -499,7 +482,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.cancellationDate}
                     error={formik.errors.cancellationDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -521,7 +503,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.arrivalBorderDate}
                     error={formik.errors.arrivalBorderDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -545,7 +526,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.crossedBorderDate}
                     error={formik.errors.crossedBorderDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -567,7 +547,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.arrivalICDDate}
                     error={formik.errors.arrivalICDDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -589,7 +568,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.cargoReleaseDate}
                     error={formik.errors.cargoReleaseDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -611,7 +589,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.departICDDate}
                     error={formik.errors.departICDDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -636,7 +613,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.arrivalCustomerPlaceDate}
                     error={formik.errors.arrivalCustomerPlaceDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -658,7 +634,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.emptyReleasedDate}
                     error={formik.errors.emptyReleasedDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -680,7 +655,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.emptyReturnPlace}
                     error={formik.errors.emptyReturnPlace}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
@@ -701,7 +675,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.podNo}
                     error={formik.errors.podNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
               </Grid>
@@ -724,7 +697,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.podDate}
                     error={formik.errors.podDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -746,7 +718,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.emptyReturnDate}
                     error={formik.errors.emptyReturnDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -768,7 +739,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.certificateOfExportDate}
                     error={formik.errors.certificateOfExportDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -790,7 +760,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.portGateInDate}
                     error={formik.errors.portGateInDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -814,7 +783,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.nominationDate}
                     error={formik.errors.nominationDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -836,7 +804,6 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     value={formik.values.remark}
                     error={formik.errors.remark}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
               </Grid>
