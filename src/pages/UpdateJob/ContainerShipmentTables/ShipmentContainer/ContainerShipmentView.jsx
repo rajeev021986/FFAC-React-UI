@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
@@ -6,7 +6,6 @@ import {
 import { Box, IconButton, Stack } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDeleteCustomerMutation } from "../../../../store/api/codeDataApi";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { LoaderIcon } from "react-hot-toast";
 
@@ -16,8 +15,6 @@ import {
   containerSetSortModel,
   updateInput,
 } from "../../../../store/freatures/containersSlice";
-
-import { useEffect } from "react";
 
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -30,8 +27,7 @@ import CardsView from "../../../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../../../components/common/ScreenToolbar";
 import GridActions from "../../../../components/common/Grid/GridActions";
 import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
-import CustomToast from "../../../../components/common/Toast/CustomToast";
-import FilterForm from "../../../../components/screen/code/customer/FilterForm";
+import FilterForm from "./FilterForm";
 
 import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getContaienrListGridActions } from "./containerAction";
@@ -79,14 +75,14 @@ export default function ContainerShipmentView({ page }) {
         : containerSelector?.sortBy?.split("*")[0] === "cname"
     )
   ) {
-    query.sortBy = "customerName";
+    query.sortBy = "containerNo";
   }
 
   const payload = Object.entries(containerSelector?.formData)
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key == "cname") && (fieldname = "customerName");
+      Boolean(key == "cname") && (fieldname = "containerNo");
       return {
         fieldName: fieldname,
         operator: "=",
@@ -136,41 +132,6 @@ export default function ContainerShipmentView({ page }) {
       dispatch(containerView("card"));
     }
   }, [containerSelector.view, dispatch]);
-
-  const [deleteCustomer] = useDeleteCustomerMutation();
-
-  const handleClose = () => {
-    setModal({
-      open: false,
-      type: "",
-      data: {},
-    });
-  };
-
-  const handleDelete = async () => {
-    try {
-      await deleteCustomer(modal.data.id)
-        .unwrap()
-        .then(() => refetch());
-      toast.custom(
-        <CustomToast
-          message="Customer deleted successfully!"
-          toast="success"
-        />,
-        {
-          closeButton: false,
-        }
-      );
-      handleClose();
-    } catch (error) {
-      toast.custom(
-        <CustomToast message="Failed to delete customer." toast="error" />,
-        {
-          closeButton: false,
-        }
-      );
-    }
-  };
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
