@@ -53,7 +53,6 @@ import VehicleParent from "./pages/UpdateJob/ContainerShipmentTables/Vehicle/ind
 import LooseCargoParent from "./pages/UpdateJob/ContainerShipmentTables/LooseCargo/index";
 
 function App() {
-  // const { menuItems } = useMenuSetting();
   const theme = getTheme(
     useSelector((state) => state.dashboard.theme),
     useSelector((state) => state.dashboard.mode)
