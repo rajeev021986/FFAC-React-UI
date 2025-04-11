@@ -98,7 +98,7 @@ const handleToggleNote = () => {
       renderCell: (params) => {
         const createdBy = params.row?.new 
           ? localStorage.getItem("userId") || "Unknown User" 
-          : params.row?.createdBy || "N/A";
+          : params.row?.createdBy || "";
     
         return <span>{createdBy}</span>;
       },

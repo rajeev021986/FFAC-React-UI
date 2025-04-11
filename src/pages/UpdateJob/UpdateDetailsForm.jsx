@@ -37,10 +37,10 @@ export default function ContainerDetails({ formik }) {
                 fontSize: "18px",
               }}
             >
-              {`Container No: ${container.containerNo || "N/A"} | Size Type: ${
-                container.sizeType || "N/A"
-              } | Seal No: ${container.sealNo || "N/A"} | Truck/Trailer No: ${
-                container.truckTrailerNo || "N/A"
+              {`Container No: ${container.containerNo || ""} | Size Type: ${
+                container.sizeType || ""
+              } | Seal No: ${container.sealNo || ""} | Truck/Trailer No: ${
+                container.truckTrailerNo || ""
               }`}
             </Typography>
           </AccordionSummary>

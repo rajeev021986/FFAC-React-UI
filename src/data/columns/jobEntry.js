@@ -39,7 +39,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -56,7 +56,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -72,7 +72,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -86,7 +86,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -100,7 +100,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -114,7 +114,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -128,7 +128,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -162,7 +162,7 @@ export const JOB_ENTRY_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || "N/A"} {/* Show "N/A" if empty */}
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -174,7 +174,7 @@ export const JOB_ENTRY_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => params.value?.trim() || "N/A",
+    renderCell: (params) => params.value?.trim() || "",
   },
   {
     flex: 1,
@@ -184,7 +184,7 @@ export const JOB_ENTRY_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => params.value?.trim() || "N/A",
+    renderCell: (params) => params.value?.trim() || "",
   },
   {
     flex: 1,

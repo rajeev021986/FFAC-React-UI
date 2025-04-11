@@ -290,7 +290,14 @@ class ApiManager {
     );
     return ApiMethods.put(url, payload);
   };
-
+  static canceljobEntryApprove = async (id, type) => {
+    const url = ENDPOINTS.JOB_ENTRY_CANCEL_REQUEST(
+      id,
+      type,
+      menuConfigUrl.document
+    );
+    return ApiMethods.put(url);
+  };
   static getUpdateJobEntryDetails = async (id) => {
     const url = ENDPOINTS.GET_UPDATE_JOBENTRY_DETAILS(
       id,

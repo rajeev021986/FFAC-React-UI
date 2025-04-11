@@ -2,10 +2,11 @@ import * as Yup from "yup";
 
 export const JobEntryValidationSchema = () =>
   Yup.object({
-    customerName: Yup.string().required("Name is required"),
+    customerName: Yup.string().required("Customer Name is required"),
     shipmentType: Yup.string().required("Select Shipment type"),
     moveType: Yup.string().required("Select Move type"),
     dateOfReceipt: Yup.string().required("Date of Receipt is required"),
+    mblNo: Yup.string().required("MBL/NO. is required"),
 
     //     CustomerName
     // Shipment type

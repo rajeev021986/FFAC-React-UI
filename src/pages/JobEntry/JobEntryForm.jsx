@@ -49,7 +49,6 @@ export default function JobEntryForm({
   const [addJobEntry, { isLoading }] = useAddJobEntryMutation();
   const [updateJobEntry, { isLoading: loadingUpdate }] =
     useUpdateJobEntryMutation();
-console.log(page,"page")
   const [toggleRate, settoggleRate] = useState(false);
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
@@ -314,17 +313,12 @@ console.log(page,"page")
     }));
   };
 
-
-console.log("page",page);
-
-   const disabled = page == "job-entry" || "jobApprove" ? false : true;
-
+  const disabled = page == "job-entry" || "jobApprove" ? false : true;
 
   const getPage = location?.pathname.split("/").slice(-1)[0];
-  
+
   // const disabled =
   //   getPage === "editJobEntry" ? true : !(page === "job-entry" || page === "jobApprove");
-
 
   useEffect(() => {
     getFirstError(formik.errors);
@@ -349,16 +343,19 @@ console.log("page",page);
     }
   }, []);
 
-
-// const disabled =
-//   getPage === "editJobEntry" ? true : !(page === "job-entry" || page === "jobApprove");
+  // const disabled =
+  //   getPage === "editJobEntry" ? true : !(page === "job-entry" || page === "jobApprove");
   useEffect(() => {
     const selectedValue = formik.values.shipmentType;
 
-    if ( selectedValue && !validType?.includes(selectedValue) && getPage == "newEntry") {
+    if (
+      selectedValue &&
+      !validType?.includes(selectedValue) &&
+      getPage == "newEntry"
+    ) {
       toast.custom(
         <CustomToast
-          message={'Invalid shipment type selected.'}
+          message={"Invalid shipment type selected."}
           toast="error"
         />,
         {
@@ -367,7 +364,7 @@ console.log("page",page);
       );
       // formik.setFieldError('shipmentType', 'Invalid shipment type selected.');
     }
-  }, [formik.values.shipmentType,]);
+  }, [formik.values.shipmentType]);
 
   return (
     <>
@@ -435,29 +432,27 @@ console.log("page",page);
               <Grid paddingLeft={1} marginTop={2} container spacing={1}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <SelectShipment
-                    label="Shipment Type"
+                    label="Shipment Type*"
                     id="shipmentType"
                     options={optionsSettingsData?.body?.shipmentType}
                     value={formik.values.shipmentType}
                     error={formik.errors.shipmentType}
                     onChange={formik.handleChange}
-                    disabled={getPage === 'newEntry' ? false : true}
+                    disabled={getPage === "newEntry" ? false : true}
                     getPage={getPage}
-
                   />
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <SelectBox
-                    label="Move Type"
+                    label="Move Type*"
                     id="moveType"
                     options={jobSettingData?.body.moveType}
                     value={formik.values.moveType}
                     error={formik.errors.moveType}
                     onChange={formik.handleChange}
-                    disabled={getPage === 'newEntry' ? false : true}
+                    disabled={getPage === "newEntry" ? false : true}
                     getPage={getPage}
-
                   />
                 </Grid>
 
@@ -466,11 +461,19 @@ console.log("page",page);
                   location?.pathname ===
                     "/app/documentation/job-approve/file/approveJobRequest" ||
                   formik?.values?.createdBy === getUserId) && (
-                  <Grid item xs={12} sm={6} md={4} lg={6} xl={2} style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    alignItems: "center",
-                  }}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={6}
+                    xl={2}
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                    }}
+                  >
                     <ThemeButton
                       onClick={() => toggleRateModal()}
                       sx={{
@@ -496,7 +499,7 @@ console.log("page",page);
                   marginTop={2}
                 >
                   <InputBox
-                    label="MBL No."
+                    label="MBL No.*"
                     id="mblNo"
                     value={formik.values.mblNo}
                     error={formik.errors.mblNo}
@@ -545,7 +548,7 @@ console.log("page",page);
                 >
                   <DateTimeField
                     name="dateOfReceipt"
-                    label="Date Of Receipt"
+                    label="Date Of Receipt*"
                     id="dateOfReceipt"
                     value={formik.values.dateOfReceipt}
                     error={formik.errors.dateOfReceipt}

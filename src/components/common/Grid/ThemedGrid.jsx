@@ -23,7 +23,6 @@ const ThemedGrid = (props) => {
   const handleDate = (date) => {
     return date.split("T")[0];
   };
-console.log(columns, "columns");
   const gridData = data?.map((obj) => {
     return {
       ...obj,

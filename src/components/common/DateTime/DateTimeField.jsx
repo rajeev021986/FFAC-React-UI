@@ -24,6 +24,7 @@ export default function DateTimeField({
     // .toDate();
     onChange(id, timeAsDate);
   };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
@@ -40,13 +41,14 @@ export default function DateTimeField({
             borderRadius: "10px",
             width: "100%",
             height: "44px",
-            borderColor: error ? "#f56962" : "",
+            border: error ? "1px solid #f54336" : "",
           },
         }}
         slotProps={{
           textField: { size: "small", fullWidth: true },
         }}
       />
+      <span  style={{fontSize:"12px", color:"#f54336"}}>{error}</span>
     </LocalizationProvider>
   );
 }
