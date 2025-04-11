@@ -39,9 +39,19 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
   const nav = useNavigate();
   const [detailTab, setdetailTab] = useState("1");
   const [value, setValue] = React.useState("1");
+
   const handleChange = (event, newValue) => {
     setdetailTab(newValue);
+    localStorage.setItem("tab", newValue);
   };
+
+  const localTabValue = localStorage.getItem("tab");
+  useEffect(() => {
+    if (localTabValue) {
+      setdetailTab(localTabValue);
+    }
+  }, [localTabValue]);
+
   const [open, setOpen] = useState(false);
   const [SourceType, setSourceType] = useState("");
   const handleOpen = (type) => {
@@ -190,8 +200,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       <strong>Customer: </strong> {formik.values.customer}
                     </Typography>
                   </Box>
-
-
                 </Toolbar>
               </AppBar>
 
@@ -208,18 +216,29 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                 onClick={() => formik.values.shippingLineDOCollectionDate && handleOpen("shipping_Line")}
-               //   onClick={() => handleOpen("shipping_Line")}
-               style={{
-                marginTop: "20px",
-                marginLeft: "10px",
-                cursor: formik.values.shippingLineDOCollectionDate ? "pointer" : "not-allowed",
-                color: formik.values.shippingLineDOCollectionDate ? "#1976d2" : "#999",
-                textDecoration: formik.values.shippingLineDOCollectionDate ? "underline" : "none",
-                fontSize: "14px",
-                fontWeight: "500",
-                pointerEvents: formik.values.shippingLineDOCollectionDate ? "auto" : "none",
-              }}
+                  onClick={() =>
+                    formik.values.shippingLineDOCollectionDate &&
+                    handleOpen("shipping_Line")
+                  }
+                  //   onClick={() => handleOpen("shipping_Line")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.shippingLineDOCollectionDate
+                      ? "pointer"
+                      : "not-allowed",
+                    color: formik.values.shippingLineDOCollectionDate
+                      ? "#1976d2"
+                      : "#999",
+                    textDecoration: formik.values.shippingLineDOCollectionDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.shippingLineDOCollectionDate
+                      ? "auto"
+                      : "none",
+                  }}
                 >
                   Upload File
                 </span>
@@ -235,18 +254,26 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                 onClick={() => formik.values.customReleaseDate && handleOpen("custom_Release_Date")}
-
-                //  onClick={() => handleOpen("custom_Release_Date")}
+                  onClick={() =>
+                    formik.values.customReleaseDate &&
+                    handleOpen("custom_Release_Date")
+                  }
+                  //  onClick={() => handleOpen("custom_Release_Date")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
-                    cursor: formik.values.customReleaseDate ? "pointer" : "not-allowed",
+                    cursor: formik.values.customReleaseDate
+                      ? "pointer"
+                      : "not-allowed",
                     color: formik.values.customReleaseDate ? "#1976d2" : "#999",
-                    textDecoration: formik.values.customReleaseDate ? "underline" : "none",
+                    textDecoration: formik.values.customReleaseDate
+                      ? "underline"
+                      : "none",
                     fontSize: "14px",
                     fontWeight: "500",
-                    pointerEvents: formik.values.customReleaseDate ? "auto" : "none",
+                    pointerEvents: formik.values.customReleaseDate
+                      ? "auto"
+                      : "none",
                   }}
                 >
                   Upload File
@@ -264,19 +291,29 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-
-                  onClick={() => formik.values.taxExemptionCertificateDate && handleOpen("tax_Exemption_Certificate_Date")}
-                 // onClick={() => handleOpen("taxExemption_Certificate_Date")}
-                 style={{
-                  marginTop: "20px",
-                  marginLeft: "10px",
-                  cursor: formik.values.taxExemptionCertificateDate ? "pointer" : "not-allowed",
-                  color: formik.values.taxExemptionCertificateDate ? "#1976d2" : "#999",
-                  textDecoration: formik.values.taxExemptionCertificateDate ? "underline" : "none",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  pointerEvents: formik.values.taxExemptionCertificateDate ? "auto" : "none",
-                }}
+                  onClick={() =>
+                    formik.values.taxExemptionCertificateDate &&
+                    handleOpen("tax_Exemption_Certificate_Date")
+                  }
+                  // onClick={() => handleOpen("taxExemption_Certificate_Date")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.taxExemptionCertificateDate
+                      ? "pointer"
+                      : "not-allowed",
+                    color: formik.values.taxExemptionCertificateDate
+                      ? "#1976d2"
+                      : "#999",
+                    textDecoration: formik.values.taxExemptionCertificateDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.taxExemptionCertificateDate
+                      ? "auto"
+                      : "none",
+                  }}
                 >
                   Upload File
                 </span>
@@ -291,7 +328,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     disabled={disabled}
                   />
                 </Grid>
-
               </Grid>
 
               <Grid container>
@@ -337,19 +373,22 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                 onClick={() => formik.values.idfDate && handleOpen("idf_Date")}
-
-              //    onClick={() => handleOpen("idf_Date")}
-              style={{
-                marginTop: "20px",
-                marginLeft: "10px",
-                cursor: formik.values.idfDate ? "pointer" : "not-allowed",
-                color: formik.values.idfDate ? "#1976d2" : "#999",
-                textDecoration: formik.values.idfDate ? "underline" : "none",
-                fontSize: "14px",
-                fontWeight: "500",
-                pointerEvents: formik.values.idfDate ? "auto" : "none",
-              }}
+                  onClick={() =>
+                    formik.values.idfDate && handleOpen("idf_Date")
+                  }
+                  //    onClick={() => handleOpen("idf_Date")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.idfDate ? "pointer" : "not-allowed",
+                    color: formik.values.idfDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.idfDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.idfDate ? "auto" : "none",
+                  }}
                 >
                   Upload File
                 </span>
@@ -374,7 +413,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-
                 <Grid
                   item
                   xs={12}
@@ -395,7 +433,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
-
               </Grid>
 
               <Grid container>
@@ -420,7 +457,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-
                 <Grid
                   item
                   xs={12}
@@ -442,18 +478,22 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                  onClick={() => formik.values.entryDate && handleOpen("entry_Date")}
-                 // onClick={() => handleOpen("entry_Date")}
-                 style={{
-                  marginTop: "20px",
-                  marginLeft: "10px",
-                  cursor: formik.values.entryDate ? "pointer" : "not-allowed",
-                  color: formik.values.entryDate ? "#1976d2" : "#999",
-                  textDecoration: formik.values.entryDate ? "underline" : "none",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  pointerEvents: formik.values.entryDate ? "auto" : "none",
-                }}
+                  onClick={() =>
+                    formik.values.entryDate && handleOpen("entry_Date")
+                  }
+                  // onClick={() => handleOpen("entry_Date")}
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.entryDate ? "pointer" : "not-allowed",
+                    color: formik.values.entryDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.entryDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.entryDate ? "auto" : "none",
+                  }}
                 >
                   Upload File
                 </span>
@@ -507,19 +547,24 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
 
         <Modal open={open} onClose={handleClose}>
           <Box sx={style}>
-            <Button onClick={handleClose} sx={{
-              position: 'absolute',
-              top: 10,
-              right: 8,
-              color: 'red',
-              backgroundColor: 'transparent',
-            }}>
+            <Button
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                top: 10,
+                right: 8,
+                color: "red",
+                backgroundColor: "transparent",
+              }}
+            >
               <CloseIcon color="red" />
             </Button>
             <UploadFile
               customer_id={initialValues.id}
-              isNotShowType={true} sourceType={'JOB_DETAIL'} type={SourceType} />
-
+              isNotShowType={true}
+              sourceType={"JOB_DETAIL"}
+              type={SourceType}
+            />
           </Box>
         </Modal>
 

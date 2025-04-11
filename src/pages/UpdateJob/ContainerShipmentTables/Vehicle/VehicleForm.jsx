@@ -59,7 +59,7 @@ export default function VehicleNumberForm({ initialValues, page }) {
           toast.custom(<CustomToast message={message} toast="success" />, {
             closeButton: false,
           });
-          nav("/app/documentation/update/job");
+          nav(-1);
         } else {
           toast.custom(<CustomToast message={message} toast="error" />, {
             closeButton: false,
@@ -99,8 +99,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
-
-  const disabled = page == "update-job" ? false : true;
 
   useEffect(() => {
     getFirstError(formik.errors);
@@ -179,7 +177,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.reportingDate}
                     error={formik.errors.reportingDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -221,7 +218,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.transferDate}
                     error={formik.errors.transferDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -243,7 +239,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.t1C1ReadyDate}
                     error={formik.errors.t1C1ReadyDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -256,7 +251,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.loadingDate}
                     error={formik.errors.loadingDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -280,7 +274,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.cancellationDate}
                     error={formik.errors.cancellationDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -302,7 +295,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.arrivalBorderDate}
                     error={formik.errors.arrivalBorderDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -324,7 +316,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.crossedBorderDate}
                     error={formik.errors.crossedBorderDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -346,7 +337,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.arrivalICDDate}
                     error={formik.errors.arrivalICDDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -370,7 +360,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.cargoReleaseDate}
                     error={formik.errors.cargoReleaseDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />{" "}
                 </Grid>
@@ -392,7 +381,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.departICDDate}
                     error={formik.errors.departICDDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
@@ -452,7 +440,6 @@ export default function VehicleNumberForm({ initialValues, page }) {
                     value={formik.values.arrivalCustomerPlaceDate}
                     error={formik.errors.arrivalCustomerPlaceDate}
                     onChange={formik.setFieldValue}
-                    disabled={disabled}
                     inputRef={FieldRef}
                   />
                 </Grid>
