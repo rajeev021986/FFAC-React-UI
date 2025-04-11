@@ -146,7 +146,7 @@ export default function BondDetailsGridForm({ formik }) {
                 {...params}
                 type="number"
                 placeholder="Enter Balance Bond Amount"
-                value={row?.balanceBondAmount || ""}
+                value={row?.balanceBondAmount || 0}
                 disabled={true} // Make it read-only
               />
             );
