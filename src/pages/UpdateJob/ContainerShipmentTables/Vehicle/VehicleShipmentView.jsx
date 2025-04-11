@@ -7,16 +7,16 @@ import {
 import { Box, IconButton, Stack } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDeleteCustomerMutation } from "../../../store/api/codeDataApi";
+import { useDeleteCustomerMutation } from "../../../../store/api/codeDataApi";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { LoaderIcon } from "react-hot-toast";
 
 import {
-  setVehiclePagination,
-  vehicleShipmentView,
-  VehicleSetSortModel,
-  updateVehicleInput,
-} from "../../../store/freatures/containersSlice";
+  setPagination,
+  vehicleView,
+  vehicleSetSortModel,
+  updateInput,
+} from "../../../../store/freatures/vehicleSlice";
 
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -24,21 +24,20 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 // Components
-import GridSearchInput from "../../../components/common/Filter/GridSearchInput";
-import CardsView from "../../../components/common/Cards/CardsView";
-import ScreenToolbar from "../../../components/common/ScreenToolbar";
-import GridActions from "../../../components/common/Grid/GridActions";
-import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
-import DeleteDialog from "../../../components/common/DeleteDialog";
-import CustomToast from "../../../components/common/Toast/CustomToast";
-import FilterForm from "../../../components/screen/code/customer/FilterForm";
+import GridSearchInput from "../../../../components/common/Filter/GridSearchInput";
+import CardsView from "../../../../components/common/Cards/CardsView";
+import ScreenToolbar from "../../../../components/common/ScreenToolbar";
+import GridActions from "../../../../components/common/Grid/GridActions";
+import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
+import CustomToast from "../../../../components/common/Toast/CustomToast";
+import FilterForm from "../../../../components/screen/code/customer/FilterForm";
 
-import { useFetchContainerQuery } from "../../../store/api/containerApi";
-import { getContaienrListGridActions } from "./containerAction";
-import { VEHICLE_COLUMNS } from "../../../data/columns/jobEntry";
+import { useFetchContainerQuery } from "../../../../store/api/containerApi";
+import { getVehicleListGridActions } from "./vehicleAction";
+import { VEHICLE_COLUMNS } from "../../../../data/columns/jobEntry";
 
 export default function VehicleShipmentView({ page }) {
-  const containerSelector = useSelector((state) => state?.containers);
+  const vehicleSelector = useSelector((s) => s?.vehicle);
 
   const location = useLocation();
   const nav = useNavigate();
@@ -61,28 +60,28 @@ export default function VehicleShipmentView({ page }) {
     : "";
 
   const query = {
-    page: containerSelector?.pagination?.page + 1,
-    size: containerSelector?.pagination?.pageSize,
+    page: vehicleSelector?.pagination?.page + 1,
+    size: vehicleSelector?.pagination?.pageSize,
     sortBy:
-      containerSelector.sortModel.length > 0
-        ? containerSelector.sortModel[0].field
-        : containerSelector?.sortBy?.split("*")[0],
+      vehicleSelector.sortModel.length > 0
+        ? vehicleSelector.sortModel[0].field
+        : vehicleSelector?.sortBy?.split("*")[0],
     sortOrder:
-      containerSelector.sortModel.length > 0
-        ? containerSelector?.sortModel[0]?.sort
-        : containerSelector?.sortBy?.split("*")[1] || "",
+      vehicleSelector.sortModel.length > 0
+        ? vehicleSelector?.sortModel[0]?.sort
+        : vehicleSelector?.sortBy?.split("*")[1] || "",
   };
   if (
     Boolean(
-      containerSelector.sortModel.length > 0
-        ? containerSelector.sortModel[0].field === "cname"
-        : containerSelector?.sortBy?.split("*")[0] === "cname"
+      vehicleSelector.sortModel.length > 0
+        ? vehicleSelector.sortModel[0].field === "cname"
+        : vehicleSelector?.sortBy?.split("*")[0] === "cname"
     )
   ) {
     query.sortBy = "customerName";
   }
 
-  const payload = Object.entries(containerSelector?.formData)
+  const payload = Object.entries(vehicleSelector?.formData)
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
@@ -124,18 +123,18 @@ export default function VehicleShipmentView({ page }) {
 
   const handlePage = (params) => {
     let { page, pageSize } = params;
-    dispatch(setVehiclePagination({ page, pageSize }));
+    dispatch(setPagination({ page, pageSize }));
   };
 
   VEHICLE_COLUMNS[VEHICLE_COLUMNS.length - 1].renderCell = GridActions({
-    actions: getContaienrListGridActions(nav, setModal),
+    actions: getVehicleListGridActions(nav, setModal),
   });
 
   useEffect(() => {
-    if (!containerSelector.view) {
-      dispatch(vehicleShipmentView("card"));
+    if (!vehicleSelector.view) {
+      dispatch(vehicleView("card"));
     }
-  }, [containerSelector.view, dispatch]);
+  }, [vehicleSelector.view, dispatch]);
 
   const [deleteCustomer] = useDeleteCustomerMutation();
 
@@ -230,35 +229,25 @@ export default function VehicleShipmentView({ page }) {
             <Stack direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
-                  filters={containerSelector?.formData}
-                  setFilters={(filters) =>
-                    dispatch(updateVehicleInput(filters))
-                  }
+                  filters={vehicleSelector?.formData}
+                  setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
                   <FilterForm />
                 </GridSearchInput>
               </Box>
               <Box>
-                <IconButton
-                  onClick={() => dispatch(vehicleShipmentView("card"))}
-                >
+                <IconButton onClick={() => dispatch(vehicleView("card"))}>
                   <FormatListBulletedOutlined
                     color={
-                      containerSelector.view === "card"
-                        ? "primary"
-                        : "secondary"
+                      vehicleSelector.view === "card" ? "primary" : "secondary"
                     }
                   />
                 </IconButton>
-                <IconButton
-                  onClick={() => dispatch(vehicleShipmentView("grid"))}
-                >
+                <IconButton onClick={() => dispatch(vehicleView("grid"))}>
                   <GridOnOutlined
                     color={
-                      containerSelector.view === "grid"
-                        ? "primary"
-                        : "secondary"
+                      vehicleSelector.view === "grid" ? "primary" : "secondary"
                     }
                   />
                 </IconButton>
@@ -267,7 +256,7 @@ export default function VehicleShipmentView({ page }) {
           }
         />
 
-        {containerSelector.view === "grid" ? (
+        {vehicleSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
             columns={VEHICLE_COLUMNS}
@@ -276,11 +265,11 @@ export default function VehicleShipmentView({ page }) {
             data={vehicleListData?.body?.data}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
-            paginationModel={containerSelector.pagination}
+            paginationModel={vehicleSelector.pagination}
             loading={isLoading || isFetching}
-            sortModel={containerSelector.sortModel}
+            sortModel={vehicleSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(VehicleSetSortModel(sortModel))
+              dispatch(vehicleSetSortModel(sortModel))
             }
           />
         ) : (
@@ -290,22 +279,14 @@ export default function VehicleShipmentView({ page }) {
             count={vehicleListData?.body?.totalElements || 0}
             handlePage={handlePage}
             data={vehicleListData?.body?.data}
-            paginationModel={containerSelector?.pagination}
+            paginationModel={vehicleSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={getContaienrListGridActions(nav, setModal)}
+            actions={getVehicleListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
           />
         )}
       </Card>
-
-      <DeleteDialog
-        source="customer"
-        sourceName={modal?.data?.deleteName}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-        handleOpen={modal.open && modal.type === "delete"}
-      />
     </Box>
   );
 }

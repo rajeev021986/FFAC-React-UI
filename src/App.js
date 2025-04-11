@@ -47,8 +47,10 @@ import AddJobEntry from "./pages/JobEntry/AddJobEntry";
 import UpdateJobDetails from "./pages/UpdateJob/UpdateJob";
 import UpdateJobListingScreen from "./pages/JobEntry/UpdateJob/updateJobListing";
 
-// Container 
-import ContainerForm from "./pages/UpdateJob/ContainerTable/Forms";
+// Container
+import ParentShipmentContainer from "./pages/UpdateJob/ContainerShipmentTables/ShipmentContainer/index";
+import VehicleParent from "./pages/UpdateJob/ContainerShipmentTables/Vehicle/index";
+import LooseCargoParent from "./pages/UpdateJob/ContainerShipmentTables/LooseCargo/index";
 
 function App() {
   // const { menuItems } = useMenuSetting();
@@ -80,7 +82,6 @@ function App() {
           <Route path="/app" element={<Layout />}>
             <Route path="profile" element={<ProfileScreen />} />
             <Route index element={<DashboardScreen />} />
-
             <Route
               path="entity/customer"
               element={<Component page="customer" />}
@@ -89,7 +90,6 @@ function App() {
               path="entity/customer/newcustomer"
               element={<CustomerFormScreen page="customer" />}
             />
-
             <Route
               path="entity/customer/editcustomer"
               element={<CustomerFormScreen page="customer" />}
@@ -98,12 +98,10 @@ function App() {
               path="entity/approve"
               element={<Component page="customerApprove" />}
             />
-
             <Route
               path="entity/approve/approveRequest"
               element={<CustomerFormScreen page="customerApprove" />}
             />
-
             <Route
               path="entity/vendor"
               element={<VendorScreen page="vendor" />}
@@ -142,7 +140,6 @@ function App() {
               path="entity/consignee/editconsignee"
               element={<ConsigneeFormScreen page="consignee" />}
             />
-
             <Route
               path="documentation/job/entry"
               element={<JobEntryScreen page="job-entry" />}
@@ -151,37 +148,38 @@ function App() {
               path="documentation/job-approve/file"
               element={<JobEntryScreen page="jobApprove" />}
             />
-
             <Route
               path="documentation/job/entry/newEntry"
               element={<AddJobEntry page="job-entry" />}
             />
-
             <Route
               path="documentation/job/entry/editJobEntry"
               element={<AddJobEntry page="job-entry" />}
             />
-
             <Route
               path="documentation/job-approve/file/approveJobRequest"
               element={<AddJobEntry page="jobApprove" />}
             />
-
             <Route
               path="documentation/update/job"
               element={<UpdateJobListingScreen page="update-jobs" />}
             />
-
             <Route
               path="documentation/update/job/edit-job"
               element={<UpdateJobDetails page="update-job" />}
             />
-
             <Route
-              path="documentation/update/job/edit-job/editcontainerNumber"
-              element={<ContainerForm page="update-job" />}
+              path="documentation/update/job/edit-job/containerNumber"
+              element={<ParentShipmentContainer page="container_number" />}
             />
-
+            <Route
+              path="documentation/update/job/edit-job/vehicleNumber"
+              element={<VehicleParent page="vehicle_number" />}
+            />
+            <Route
+              path="documentation/update/job/edit-job/looseCargoNumber"
+              element={<LooseCargoParent page="loose_cargo_number" />}
+            />
 
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
@@ -215,7 +213,6 @@ function App() {
               path="admin/exchangeRate/newexchangerate"
               element={<Exchange />}
             />
-
             <Route path="master/vessel" element={<VesselScreen />} />
             <Route
               path="master/vessel/newvessel"

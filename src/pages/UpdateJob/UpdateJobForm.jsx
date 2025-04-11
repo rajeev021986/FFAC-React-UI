@@ -27,9 +27,9 @@ import BondDetailsGridForm from "./UpdateJobEntryGrid";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
 // Container Table
-import ContainerShipmentView from "./ContainerTable/ContainerShipmentView";
-import VehicleShipmentView from "./ContainerTable/VehicleShipmentView";
-import LooseShipmentView from "./ContainerTable/LooseCargoShipmentView";
+import ContainerShipmentView from "./ContainerShipmentTables/ShipmentContainer/ContainerShipmentView";
+import VehicleShipmentView from "./ContainerShipmentTables/Vehicle/VehicleShipmentView";
+import LooseShipmentView from "./ContainerShipmentTables/LooseCargo/LooseCargoShipmentView";
 
 export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
   const [updateJobDetailsEntry, { isLoading }] =
@@ -406,6 +406,45 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           <BondDetailsGridForm formik={formik} dropdownData={dropdownData} />
         </Grid>
 
+        {page == "update-job" && (
+          <Grid
+            paddingLeft={3}
+            marginTop={2}
+            marginBottom={2}
+            container
+            spacing={2}
+          >
+            <Stack
+              direction="row"
+              spacing={2}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Stack direction="row" spacing={2}>
+                <OutlinedButton
+                  sx={{ fontWeight: "500" }}
+                  onClick={() => nav(-1)}
+                >
+                  Cancel
+                </OutlinedButton>
+                <ThemeButton
+                  onClick={formik.handleSubmit}
+                  sx={{
+                    fontWeight: "500",
+                    color: "white !important",
+                  }}
+                >
+                  {isLoading && <CircularProgress size={20} color="white" />}
+                  Submit
+                </ThemeButton>
+              </Stack>
+            </Stack>
+          </Grid>
+        )}
+
+        <hr />
+
         <TabContext value={detailTab}>
           <Box sx={{ borderBottom: 1, borderColor: "divider", paddingTop: 2 }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -454,46 +493,9 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           </TabPanel>
 
           <TabPanel value="3" sx={{ paddingBottom: "15px" }}>
-            <LooseShipmentView page={"looseShipment"}/>
+            <LooseShipmentView page={"looseShipment"} />
           </TabPanel>
         </TabContext>
-
-        {page == "update-job" && (
-          <Grid
-            paddingLeft={6}
-            marginTop={2}
-            marginBottom={2}
-            container
-            spacing={2}
-          >
-            <Stack
-              direction="row"
-              spacing={2}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Stack direction="row" spacing={2}>
-                <OutlinedButton
-                  sx={{ fontWeight: "500" }}
-                  onClick={() => nav(-1)}
-                >
-                  Cancel
-                </OutlinedButton>
-                <ThemeButton
-                  onClick={formik.handleSubmit}
-                  sx={{
-                    fontWeight: "500",
-                    color: "white !important",
-                  }}
-                >
-                  {isLoading && <CircularProgress size={20} color="white" />}
-                  Submit
-                </ThemeButton>
-              </Stack>
-            </Stack>
-          </Grid>
-        )}
       </Box>
     </>
   );

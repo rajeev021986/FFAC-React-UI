@@ -37,10 +37,42 @@ export const containerAPI = createApi({
       },
       invalidatesTags: ["Code"],
     }),
+
+    updateVehicleNumber: builder.mutation({
+      query: (params) => {
+        const headers = {
+          Authorization: getAppHeaders()["Authorization"],
+        };
+        return {
+          url: `${menuConfigUrl.document}/job-update/vehicle`,
+          method: "PUT",
+          body: params,
+          headers: headers,
+        };
+      },
+      invalidatesTags: ["Code"],
+    }),
+
+    updateLooseCargoNumber: builder.mutation({
+      query: (params) => {
+        const headers = {
+          Authorization: getAppHeaders()["Authorization"],
+        };
+        return {
+          url: `${menuConfigUrl.document}/job-update/loose-cargo`,
+          method: "PUT",
+          body: params,
+          headers: headers,
+        };
+      },
+      invalidatesTags: ["Code"],
+    }),
   }),
 });
 
 export const {
   useFetchContainerQuery,
   useUpdateContainerNumberMutation,
+  useUpdateVehicleNumberMutation,
+  useUpdateLooseCargoNumberMutation,
 } = containerAPI;

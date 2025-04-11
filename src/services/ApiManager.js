@@ -266,9 +266,12 @@ class ApiManager {
     const url = ENDPOINTS.JOB_APPROVE_REQUEST(id, type, menuConfigUrl.document);
     return ApiMethods.put(url);
   };
-  static approveAllJobEntryRequest = async (type,payload) => {
-    const url = ENDPOINTS.ALL_JOBS_APPROVE_REQUEST(type, menuConfigUrl.document);
-    return ApiMethods.put(url,payload);
+  static approveAllJobEntryRequest = async (type, payload) => {
+    const url = ENDPOINTS.ALL_JOBS_APPROVE_REQUEST(
+      type,
+      menuConfigUrl.document
+    );
+    return ApiMethods.put(url, payload);
   };
   static rejectjobEntryApprove = async (id, type, remarkMessage) => {
     let payload = { remarks: remarkMessage };
@@ -295,7 +298,16 @@ class ApiManager {
     );
     return ApiMethods.get(url);
   };
-  
+
+  static getVehicleById = async (id) => {
+    const url = ENDPOINTS.GET_VEHICLE_BY_ID(id, menuConfigUrl.document);
+    return ApiMethods.get(url);
+  };
+
+  static getLooseCargoById = async (id) => {
+    const url = ENDPOINTS.GET_LOOSECARGO_BY_ID(id, menuConfigUrl.document);
+    return ApiMethods.get(url);
+  };
 }
 
 export default ApiManager;

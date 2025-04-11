@@ -17,7 +17,7 @@ import getFirstError from "../../../../components/common/FieldToastError";
 import EditIconForHeader from "../../../../components/common/commonIcons/EditIcons/EditIconForHeader";
 
 // API's
-import { useUpdateContainerNumberMutation } from "../../../../store/api/containerApi";
+import { useUpdateVehicleNumberMutation } from "../../../../store/api/containerApi";
 
 // Components
 import {
@@ -27,9 +27,8 @@ import {
 import InputBox from "../../../../components/common/InputBox";
 import DateTimeField from "../../../../components/common/DateTime/DateTimeField";
 
-export default function ContainerNumberForm({ initialValues, page }) {
-  const [updateContainerNumber, { isLoading }] =
-    useUpdateContainerNumberMutation();
+export default function VehicleNumberForm({ initialValues, page }) {
+  const [updateVehicleNumber, { isLoading }] = useUpdateVehicleNumberMutation();
 
   const [dropdownData, setDropdownData] = useState({});
   const nav = useNavigate();
@@ -52,7 +51,7 @@ export default function ContainerNumberForm({ initialValues, page }) {
       try {
         values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
         values.status = "";
-        let response = await updateContainerNumber({
+        let response = await updateVehicleNumber({
           ...values,
         }).unwrap();
         const message = response.message;
@@ -131,7 +130,7 @@ export default function ContainerNumberForm({ initialValues, page }) {
               sx={{ paddingBottom: "20px" }}
             >
               <Tab
-                label="Update Container Details"
+                label="Update Vehicle Details"
                 value="1"
                 sx={{
                   textTransform: "capitalize",
@@ -143,203 +142,36 @@ export default function ContainerNumberForm({ initialValues, page }) {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: "0px" }}>
-            <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
-              <Typography
-                color="primary.main"
-                variant="h5"
-                gutterBottom
-                style={{
-                  width: "100%",
-                  margin: "0px ! important",
-                  paddingLeft: "10px",
-                  fontSize: "16px",
-                  marginTop: "10px",
-                }}
-              >
-                Transport Details
-              </Typography>
-
+            <Grid container sx={{ marginTop: 3, padding: 0, paddingRight: 1 }}>
               <Grid paddingLeft={1} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <InputBox
-                    label="TRANSPORTER"
-                    id="transporter"
-                    value={formik.values.transporter}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <InputBox
-                    label="TRUCK/TRAILER NO."
-                    id="truckTrailerNoTransporter"
-                    value={formik.values.truckTrailerNoTransporter}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <InputBox
-                    label="Driver"
-                    id="driver"
-                    value={formik.values.driver}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <InputBox
-                    label="Agreed Rate"
-                    id="agreedRate"
-                    value={formik.values.agreedRate}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Tel No."
-                    id="telNo"
-                    value={formik.values.telNo}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                  />
-                </Grid>
-
-                <Grid
-                  paddingLeft={1}
-                  marginTop={2}
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                >
-                  <InputBox
-                    label="Passport No."
-                    id="passportNo"
-                    value={formik.values.passportNo}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Licence No."
-                    id="licenceNo"
-                    value={formik.values.licenceNo}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid marginTop={2} container>
-                <Typography
-                  variant="h5"
-                  color="primary.main"
-                  gutterBottom
-                  style={{
-                    width: "100%",
-                    margin: "0px ! important",
-                    paddingLeft: "10px",
-                    fontSize: "16px",
-                  }}
-                >
-                  Operation Clerk Details
-                </Typography>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
                   <InputBox
                     label="Clerk Name"
                     id="clerkName"
                     value={formik.values.clerkName}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="Clerk Tel No."
                     id="clerkTelNo"
                     value={formik.values.clerkTelNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="Reporting Place"
                     id="reportingPlace"
                     value={formik.values.reportingPlace}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <DateTimeField
                     label="Reporting Date"
                     name="reportingDate"
@@ -353,7 +185,7 @@ export default function ContainerNumberForm({ initialValues, page }) {
                 </Grid>
               </Grid>
 
-              <Grid container>
+              <Grid paddingLeft={1} container spacing={2}>
                 <Grid
                   item
                   xs={12}
@@ -365,23 +197,22 @@ export default function ContainerNumberForm({ initialValues, page }) {
                   marginTop={2}
                 >
                   <InputBox
-                    label="ContainerNO"
-                    id="containerNo"
-                    value={formik.values.containerNo}
+                    label="Reporting Time"
+                    id="reportingTime"
+                    value={formik.values.reportingTime}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
 
                 <Grid
+                  paddingLeft={1}
+                  marginTop={2}
                   item
                   xs={12}
                   sm={6}
                   md={4}
                   lg={3}
                   xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
                 >
                   <DateTimeField
                     label="Transfer Date"
@@ -417,16 +248,7 @@ export default function ContainerNumberForm({ initialValues, page }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
                   <DateTimeField
                     label="LOADING DATE"
                     name="loadingDate"
@@ -440,48 +262,7 @@ export default function ContainerNumberForm({ initialValues, page }) {
                 </Grid>
               </Grid>
 
-              <Grid container>
-                {/* Keys are not available */}
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Bond No."
-                    id="bondNumber"
-                    value={formik.values.bondNumber}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Bond Amount"
-                    id="bondAmount"
-                    value={formik.values.bondAmount}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-
+              <Grid paddingLeft={1} container spacing={2}>
                 <Grid
                   item
                   xs={12}
@@ -525,9 +306,7 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
 
-              <Grid container>
                 <Grid
                   item
                   xs={12}
@@ -571,7 +350,9 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
 
+              <Grid paddingLeft={1} container spacing={2}>
                 <Grid
                   item
                   xs={12}
@@ -591,7 +372,7 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     onChange={formik.setFieldValue}
                     disabled={disabled}
                     inputRef={FieldRef}
-                  />
+                  />{" "}
                 </Grid>
 
                 <Grid
@@ -615,10 +396,45 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={3}
+                  paddingLeft={1}
+                  marginTop={2}
+                >
+                  <InputBox
+                    label="Bond Number"
+                    id="bondNumber"
+                    value={formik.values.bondNumber}
+                    onChange={formik.handleChange}
+                  />
+                </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={3}
+                  paddingLeft={1}
+                  marginTop={2}
+                >
+                  <InputBox
+                    label="Bond Amount"
+                    id="bondAmount"
+                    value={formik.values.bondAmount}
+                    onChange={formik.handleChange}
+                  />
+                </Grid>
               </Grid>
 
-              {/*  */}
-              <Grid container>
+              <Grid paddingLeft={1} container spacing={2}>
                 <Grid
                   item
                   xs={12}
@@ -647,196 +463,15 @@ export default function ContainerNumberForm({ initialValues, page }) {
                   sm={6}
                   md={4}
                   lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="Empty Released"
-                    name="emptyReleasedDate"
-                    id="emptyReleasedDate"
-                    value={formik.values.emptyReleasedDate}
-                    error={formik.errors.emptyReleasedDate}
-                    onChange={formik.setFieldValue}
-                    disabled={disabled}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
+                  xl={3}
                   paddingLeft={1}
                   marginTop={2}
                 >
                   <InputBox
-                    label="Empty Return Place"
-                    id="emptyReturnPlace"
-                    name="emptyReturnPlace"
-                    value={formik.values.emptyReturnPlace}
-                    error={formik.errors.emptyReturnPlace}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="POD NO."
-                    id="podNo"
-                    name="podNo"
-                    value={formik.values.podNo}
-                    error={formik.errors.podNo}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="Pod DATE"
-                    name="podDate"
-                    id="podDate"
-                    value={formik.values.podDate}
-                    error={formik.errors.podDate}
-                    onChange={formik.setFieldValue}
-                    disabled={disabled}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="Empty Return Date"
-                    name="emptyReturnDate"
-                    id="emptyReturnDate"
-                    value={formik.values.emptyReturnDate}
-                    error={formik.errors.emptyReturnDate}
-                    onChange={formik.setFieldValue}
-                    disabled={disabled}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="Certificate of Export"
-                    name="certificateOfExportDate"
-                    id="certificateOfExportDate"
-                    value={formik.values.certificateOfExportDate}
-                    error={formik.errors.certificateOfExportDate}
-                    onChange={formik.setFieldValue}
-                    disabled={disabled}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="Port Gate In Date"
-                    name="portGateInDate"
-                    id="portGateInDate"
-                    value={formik.values.portGateInDate}
-                    error={formik.errors.portGateInDate}
-                    onChange={formik.setFieldValue}
-                    disabled={disabled}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="Nomination Date"
-                    name="nominationDate"
-                    id="nominationDate"
-                    value={formik.values.nominationDate}
-                    error={formik.errors.nominationDate}
-                    onChange={formik.setFieldValue}
-                    disabled={disabled}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Remark"
+                    label="Remarks"
                     id="remark"
-                    name="remark"
                     value={formik.values.remark}
-                    error={formik.errors.remark}
                     onChange={formik.handleChange}
-                    disabled={disabled}
                   />
                 </Grid>
               </Grid>
@@ -844,9 +479,9 @@ export default function ContainerNumberForm({ initialValues, page }) {
           </TabPanel>
         </TabContext>
 
-        {page == "update-job" && (
+        {page == "vehicle_number" && (
           <Grid
-            paddingLeft={6}
+            paddingLeft={3}
             marginTop={2}
             marginBottom={2}
             container

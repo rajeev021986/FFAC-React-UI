@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
@@ -6,20 +6,16 @@ import {
 import { Box, IconButton, Stack } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  useDeleteCustomerMutation,
-} from "../../../store/api/codeDataApi";
+import { useDeleteCustomerMutation } from "../../../../store/api/codeDataApi";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { LoaderIcon } from "react-hot-toast";
 
 import {
   setPagination,
-  containerView,
-  containerSetSortModel,
   updateInput,
-} from "../../../store/freatures/containersSlice";
-
-import { useEffect } from "react";
+  looseCargoView,
+  looseCargoSetSortModel,
+} from "../../../../store/freatures/LoseCargoSlice";
 
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -27,21 +23,20 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 // Components
-import GridSearchInput from "../../../components/common/Filter/GridSearchInput";
-import CardsView from "../../../components/common/Cards/CardsView";
-import ScreenToolbar from "../../../components/common/ScreenToolbar";
-import GridActions from "../../../components/common/Grid/GridActions";
-import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
-import DeleteDialog from "../../../components/common/DeleteDialog";
-import CustomToast from "../../../components/common/Toast/CustomToast";
-import FilterForm from "../../../components/screen/code/customer/FilterForm";
+import GridSearchInput from "../../../../components/common/Filter/GridSearchInput";
+import CardsView from "../../../../components/common/Cards/CardsView";
+import ScreenToolbar from "../../../../components/common/ScreenToolbar";
+import GridActions from "../../../../components/common/Grid/GridActions";
+import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
+import CustomToast from "../../../../components/common/Toast/CustomToast";
+import FilterForm from "../../../../components/screen/code/customer/FilterForm";
 
-import { useFetchContainerQuery } from "../../../store/api/containerApi";
-import { getContaienrListGridActions } from "./containerAction";
-import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
+import { useFetchContainerQuery } from "../../../../store/api/containerApi";
+import { getLooseCargoListGridActions } from "./LooseCargoAction";
+import { LOOSECARGO_COLUMNS } from "../../../../data/columns/jobEntry";
 
-export default function ContainerShipmentView({ page }) {
-  const containerSelector = useSelector((state) => state?.containers);
+export default function LooseShipmentView({ page }) {
+  const loooseCargoSelector = useSelector((s) => s?.looseCargo);
 
   const location = useLocation();
   const nav = useNavigate();
@@ -57,35 +52,35 @@ export default function ContainerShipmentView({ page }) {
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
-      { name: "New Customer" },
-      { name: "Copy" },
-      { name: exportLoader ? <LoaderIcon /> : "Export" },
-    ]
+        { name: "New Customer" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
     : "";
 
   const query = {
-    page: containerSelector?.pagination?.page + 1,
-    size: containerSelector?.pagination?.pageSize,
+    page: loooseCargoSelector?.pagination?.page + 1,
+    size: loooseCargoSelector?.pagination?.pageSize,
     sortBy:
-      containerSelector.sortModel.length > 0
-        ? containerSelector.sortModel[0].field
-        : containerSelector?.sortBy?.split("*")[0],
+      loooseCargoSelector.sortModel.length > 0
+        ? loooseCargoSelector.sortModel[0].field
+        : loooseCargoSelector?.sortBy?.split("*")[0],
     sortOrder:
-      containerSelector.sortModel.length > 0
-        ? containerSelector?.sortModel[0]?.sort
-        : containerSelector?.sortBy?.split("*")[1] || "",
+      loooseCargoSelector.sortModel.length > 0
+        ? loooseCargoSelector?.sortModel[0]?.sort
+        : loooseCargoSelector?.sortBy?.split("*")[1] || "",
   };
   if (
     Boolean(
-      containerSelector.sortModel.length > 0
-        ? containerSelector.sortModel[0].field === "cname"
-        : containerSelector?.sortBy?.split("*")[0] === "cname"
+      loooseCargoSelector.sortModel.length > 0
+        ? loooseCargoSelector.sortModel[0].field === "cname"
+        : loooseCargoSelector?.sortBy?.split("*")[0] === "cname"
     )
   ) {
     query.sortBy = "customerName";
   }
 
-  const payload = Object.entries(containerSelector?.formData)
+  const payload = Object.entries(loooseCargoSelector?.formData)
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
@@ -99,14 +94,14 @@ export default function ContainerShipmentView({ page }) {
     });
 
   const {
-    data: containerListData,
+    data: vehicleListData,
     isLoading,
     isFetching,
     refetch,
   } = useFetchContainerQuery({
     params: query,
     payload,
-    page: page == "containerNo" ? "job-update/container/filter" : "",
+    page: page == "looseShipment" ? "job-update/loose-cargo/filter" : "",
   });
 
   const handleActionClick = async (actionName) => {
@@ -130,17 +125,15 @@ export default function ContainerShipmentView({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  CONTAINER_COLUMNS[CONTAINER_COLUMNS.length - 1].renderCell =
-    GridActions({
-      actions:
-        getContaienrListGridActions(nav, setModal)
-    });
+  LOOSECARGO_COLUMNS[LOOSECARGO_COLUMNS.length - 1].renderCell = GridActions({
+    actions: getLooseCargoListGridActions(nav, setModal),
+  });
 
   useEffect(() => {
-    if (!containerSelector.view) {
-      dispatch(containerView("card"));
+    if (!loooseCargoSelector.view) {
+      dispatch(looseCargoView("card"));
     }
-  }, [containerSelector.view, dispatch]);
+  }, [loooseCargoSelector.view, dispatch]);
 
   const [deleteCustomer] = useDeleteCustomerMutation();
 
@@ -235,7 +228,7 @@ export default function ContainerShipmentView({ page }) {
             <Stack direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
-                  filters={containerSelector?.formData}
+                  filters={loooseCargoSelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
@@ -243,19 +236,19 @@ export default function ContainerShipmentView({ page }) {
                 </GridSearchInput>
               </Box>
               <Box>
-                <IconButton onClick={() => dispatch(containerView("card"))}>
+                <IconButton onClick={() => dispatch(looseCargoView("card"))}>
                   <FormatListBulletedOutlined
                     color={
-                      containerSelector.view === "card"
+                      loooseCargoSelector.view === "card"
                         ? "primary"
                         : "secondary"
                     }
                   />
                 </IconButton>
-                <IconButton onClick={() => dispatch(containerView("grid"))}>
+                <IconButton onClick={() => dispatch(looseCargoView("grid"))}>
                   <GridOnOutlined
                     color={
-                      containerSelector.view === "grid"
+                      loooseCargoSelector.view === "grid"
                         ? "primary"
                         : "secondary"
                     }
@@ -265,45 +258,38 @@ export default function ContainerShipmentView({ page }) {
             </Stack>
           }
         />
-        {containerSelector.view === "grid" ? (
+
+        {loooseCargoSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={CONTAINER_COLUMNS}
-            count={containerListData?.body?.totalElements || 0}
+            columns={LOOSECARGO_COLUMNS}
+            count={vehicleListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={containerListData?.body?.data}
+            data={vehicleListData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => { }}
-            paginationModel={containerSelector.pagination}
+            columnVisibilityHandler={() => {}}
+            paginationModel={loooseCargoSelector.pagination}
             loading={isLoading || isFetching}
-            sortModel={containerSelector.sortModel}
+            sortModel={loooseCargoSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(containerSetSortModel(sortModel))
+              dispatch(looseCargoSetSortModel(sortModel))
             }
           />
         ) : (
           <CardsView
             uniqueId="id"
-            columns={CONTAINER_COLUMNS}
-            count={containerListData?.body?.totalElements || 0}
+            columns={LOOSECARGO_COLUMNS}
+            count={vehicleListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={containerListData?.body?.data}
-            paginationModel={containerSelector?.pagination}
+            data={vehicleListData?.body?.data}
+            paginationModel={loooseCargoSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={getContaienrListGridActions(nav, setModal)}
+            actions={getLooseCargoListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
           />
         )}
       </Card>
-
-      <DeleteDialog
-        source="customer"
-        sourceName={modal?.data?.deleteName}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-        handleOpen={modal.open && modal.type === "delete"}
-      />
     </Box>
   );
 }

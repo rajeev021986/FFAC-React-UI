@@ -17,8 +17,8 @@ const initialState = {
   sortBy: "",
 };
 
-const containerSlice = createSlice({
-  name: "containerSlice",
+const LooseCargoSlice = createSlice({
+  name: "LooseCargoSlice",
   initialState,
   reducers: {
     toggleFilter: (state, action) => {
@@ -32,10 +32,10 @@ const containerSlice = createSlice({
     updateInput: (state, action) => {
       state.formData = action.payload;
     },
-    containerView: (state, action) => {
+    looseCargoView: (state, action) => {
       state.view = action.payload;
     },
-    containerSetSortModel: (state, action) => {
+    looseCargoSetSortModel: (state, action) => {
       state.sortModel = action.payload;
     },
     setPagination: (state, action) => {
@@ -50,9 +50,9 @@ const containerSlice = createSlice({
 export const {
   toggleFilter,
   updateInput,
-  containerView,
-  containerSetSortModel,
+  looseCargoView,
+  looseCargoSetSortModel,
   setPagination,
   setSortBy,
-} = containerSlice.actions;
-export default containerSlice.reducer;
+} = LooseCargoSlice.actions;
+export default LooseCargoSlice.reducer;

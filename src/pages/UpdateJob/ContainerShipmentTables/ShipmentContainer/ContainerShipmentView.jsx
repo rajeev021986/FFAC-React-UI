@@ -6,7 +6,7 @@ import {
 import { Box, IconButton, Stack } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDeleteCustomerMutation } from "../../../store/api/codeDataApi";
+import { useDeleteCustomerMutation } from "../../../../store/api/codeDataApi";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { LoaderIcon } from "react-hot-toast";
 
@@ -15,7 +15,7 @@ import {
   containerView,
   containerSetSortModel,
   updateInput,
-} from "../../../store/freatures/containersSlice";
+} from "../../../../store/freatures/containersSlice";
 
 import { useEffect } from "react";
 
@@ -25,20 +25,19 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 // Components
-import GridSearchInput from "../../../components/common/Filter/GridSearchInput";
-import CardsView from "../../../components/common/Cards/CardsView";
-import ScreenToolbar from "../../../components/common/ScreenToolbar";
-import GridActions from "../../../components/common/Grid/GridActions";
-import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
-import DeleteDialog from "../../../components/common/DeleteDialog";
-import CustomToast from "../../../components/common/Toast/CustomToast";
-import FilterForm from "../../../components/screen/code/customer/FilterForm";
+import GridSearchInput from "../../../../components/common/Filter/GridSearchInput";
+import CardsView from "../../../../components/common/Cards/CardsView";
+import ScreenToolbar from "../../../../components/common/ScreenToolbar";
+import GridActions from "../../../../components/common/Grid/GridActions";
+import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
+import CustomToast from "../../../../components/common/Toast/CustomToast";
+import FilterForm from "../../../../components/screen/code/customer/FilterForm";
 
-import { useFetchContainerQuery } from "../../../store/api/containerApi";
+import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getContaienrListGridActions } from "./containerAction";
-import { LOOSECARGO_COLUMNS } from "../../../data/columns/jobEntry";
+import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 
-export default function LooseShipmentView({ page }) {
+export default function ContainerShipmentView({ page }) {
   const containerSelector = useSelector((state) => state?.containers);
 
   const location = useLocation();
@@ -97,14 +96,14 @@ export default function LooseShipmentView({ page }) {
     });
 
   const {
-    data: vehicleListData,
+    data: containerListData,
     isLoading,
     isFetching,
     refetch,
   } = useFetchContainerQuery({
     params: query,
     payload,
-    page: page == "looseShipment" ? "job-update/loose-cargo/filter" : "",
+    page: page == "containerNo" ? "job-update/container/filter" : "",
   });
 
   const handleActionClick = async (actionName) => {
@@ -128,7 +127,7 @@ export default function LooseShipmentView({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  LOOSECARGO_COLUMNS[LOOSECARGO_COLUMNS.length - 1].renderCell = GridActions({
+  CONTAINER_COLUMNS[CONTAINER_COLUMNS.length - 1].renderCell = GridActions({
     actions: getContaienrListGridActions(nav, setModal),
   });
 
@@ -261,14 +260,13 @@ export default function LooseShipmentView({ page }) {
             </Stack>
           }
         />
-
         {containerSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={LOOSECARGO_COLUMNS}
-            count={vehicleListData?.body?.totalElements || 0}
+            columns={CONTAINER_COLUMNS}
+            count={containerListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={vehicleListData?.body?.data}
+            data={containerListData?.body?.data}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={containerSelector.pagination}
@@ -281,10 +279,10 @@ export default function LooseShipmentView({ page }) {
         ) : (
           <CardsView
             uniqueId="id"
-            columns={LOOSECARGO_COLUMNS}
-            count={vehicleListData?.body?.totalElements || 0}
+            columns={CONTAINER_COLUMNS}
+            count={containerListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={vehicleListData?.body?.data}
+            data={containerListData?.body?.data}
             paginationModel={containerSelector?.pagination}
             loading={isLoading || isFetching}
             actions={getContaienrListGridActions(nav, setModal)}
@@ -293,14 +291,6 @@ export default function LooseShipmentView({ page }) {
           />
         )}
       </Card>
-
-      <DeleteDialog
-        source="customer"
-        sourceName={modal?.data?.deleteName}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-        handleOpen={modal.open && modal.type === "delete"}
-      />
     </Box>
   );
 }

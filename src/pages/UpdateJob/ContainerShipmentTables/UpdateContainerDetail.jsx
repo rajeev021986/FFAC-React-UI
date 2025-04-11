@@ -60,7 +60,7 @@ export default function UpdateJobDetails({ page }) {
           sct: res.body?.sct || "NO",
           urgent: res.body?.urgent || "NO",
           shippingLineDOCollectionDate:
-            res.body?.shippingLineDOCollectionDate || "",
+            res.body?.shippingLineDOCollection1Date || "",
           customReleaseDate: res.body?.customReleaseDate || "",
           taxExemptionCertificateDate:
             res.body?.taxExemptionCertificateDate || "",
