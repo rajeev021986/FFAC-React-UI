@@ -23,6 +23,7 @@ const ThemedGrid = (props) => {
   const handleDate = (date) => {
     return date.split("T")[0];
   };
+  console.log(columns,"columns")
   const gridData = data?.map((obj) => {
     return {
       ...obj,
@@ -60,7 +61,7 @@ const ThemedGrid = (props) => {
         },
       };
     } else {
-      const smallFields = ["jobNo","customerName","supplierName","shipmentType","dateOfReceipt","customerRefNo"];
+      const smallFields = ["jobNo","customerName","supplierName","shipmentType","dateOfReceipt","customerRefNo","consigneeName","portOfLoading","portOfDelivery"];
      return {
     ...a,
     // flex: smallFields.includes(a.field) ? 3 : 1,

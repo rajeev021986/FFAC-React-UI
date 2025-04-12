@@ -54,16 +54,24 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 50 },
+    { field: "id", headerName: "ID", width: 50 ,
+
+      align:"center",
+      headerAlign: "center",
+    },
     {
       field: "value",
       headerName: "Value",
+      align:"center",
+      headerAlign: "center",
       width: 150,
       editable: true,
     },
     {
       field: "actions",
       headerName: "Actions",
+      align:"center",
+      headerAlign: "center",
       width: 100,
       renderCell: (params) => (
         <DeleteIcon

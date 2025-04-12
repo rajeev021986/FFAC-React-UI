@@ -127,7 +127,7 @@ export default function JobEntryGridForm({
         {
           field: "sizeType",
           headerName: "Size Type",
-          flex: 1,
+          flex: 1.5,
           renderCell: (params) => (
             <div
               style={{
@@ -142,7 +142,7 @@ export default function JobEntryGridForm({
                 placeholder={true}
                 size="small"
                 sx={{
-                  marginTop: "0px",
+                  marginTop: "5px",
                   marginBottom: "0px",
                 }}
                 options={jobSettingData?.body?.sizeType}
@@ -178,7 +178,7 @@ export default function JobEntryGridForm({
         {
           field: "soc",
           headerName: "SOC",
-          flex: 1,
+          flex: 1.5,
           renderCell: (params) => (
             <div
               style={{
@@ -194,7 +194,7 @@ export default function JobEntryGridForm({
                 placeholder={true}
                 size="small"
                 sx={{
-                  marginTop: "0px",
+                  marginTop: "5px",
                   marginBottom: "0px",
                 }}
                 options={SocData}
@@ -710,7 +710,7 @@ export default function JobEntryGridForm({
     setValue(newValue);
   };
   return (
-    <Box sx={{ width: "100%", marginTop: 2 }}>
+    <Box sx={{ width: "100%", marginTop: 2, }}>
       <Box
         sx={{
           width: "100%",
@@ -747,6 +747,7 @@ export default function JobEntryGridForm({
                         headerAlign: "center",
                         align: "center",
                       }))}
+                     
                       disableSelectionOnClick
                       processRowUpdate={ob.handleProcessRowUpdate}
                       experimentalFeatures={{ newEditingApi: true }}

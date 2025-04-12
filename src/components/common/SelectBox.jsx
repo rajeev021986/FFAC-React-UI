@@ -39,7 +39,7 @@ export default function SelectBox({
         sx={{
           ...styles.root,
           ...sx,
-          height: "44px",
+          height: "43px",
 
           "& .MuiSelect-select span::before": {
             content: placeholder ? "'Select an option'" : "''",
