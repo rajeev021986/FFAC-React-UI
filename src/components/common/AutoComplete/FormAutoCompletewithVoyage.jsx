@@ -22,6 +22,7 @@ function FormAutoCompleteWithVoyage(props) {
     onChange,
     setFieldValue,
     formik,
+    disabled,
   } = props;
 
   const [options, setOptions] = useState([]);
@@ -98,7 +99,6 @@ function FormAutoCompleteWithVoyage(props) {
       }
     }
   };
-  console.log(theme.palette.primary.main, "main");
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
@@ -108,7 +108,7 @@ function FormAutoCompleteWithVoyage(props) {
         size="small"
         id={id}
         noOptionsText="Type to Search"
-
+        disabled={disabled}
         value={formik.values[id] ? { label: formik.values[id] } : null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}

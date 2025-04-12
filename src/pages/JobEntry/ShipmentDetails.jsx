@@ -38,6 +38,7 @@ export default function ShipmentDetails({ formik }) {
               onChange={formik.handleChange}
               inputRef={FieldRef}
               formik={formik}
+              disabled={disabled}
             />
           </Grid>
 
@@ -72,6 +73,7 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.portOfDischarge}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -84,6 +86,7 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.placeOfDelivery}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
         </Grid>
@@ -291,6 +294,7 @@ export default function ShipmentDetails({ formik }) {
               value={formik.values.preAssessmentDate}
               error={formik.errors.preAssessmentDate}
               onChange={formik.setFieldValue}
+              disabled={disabled}
               inputRef={FieldRef}
             />
           </Grid>
@@ -312,6 +316,7 @@ export default function ShipmentDetails({ formik }) {
               value={formik.values.finalAssessmentDate}
               error={formik.errors.finalAssessmentDate}
               onChange={formik.setFieldValue}
+              disabled={disabled}
               inputRef={FieldRef}
             />
           </Grid>
@@ -355,6 +360,7 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.loadingDateForAirShipment}
               onChange={formik.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
         </Grid>

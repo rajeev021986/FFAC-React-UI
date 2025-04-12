@@ -46,6 +46,7 @@ export default function LineVessel({ formik }) {
               error={formik.errors.shippingLine}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+              disabled={disabled}
             ></FormAutoComplete>
           </Grid>
 
@@ -58,6 +59,7 @@ export default function LineVessel({ formik }) {
               error={formik?.errors?.eta}
               onChange={formik?.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -70,6 +72,7 @@ export default function LineVessel({ formik }) {
               error={formik?.errors?.arrivalDate}
               onChange={formik?.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -82,6 +85,7 @@ export default function LineVessel({ formik }) {
               error={formik?.errors?.berthingDate}
               onChange={formik?.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
         </Grid>
@@ -107,6 +111,7 @@ export default function LineVessel({ formik }) {
               setFieldValue={formik.setFieldValue} // Pass setFieldValue
               formik={formik} // Pass formik to access values and errors
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -130,6 +135,7 @@ export default function LineVessel({ formik }) {
               formik={formik} // Pass formik to access values and errors
               setFieldValue={formik.setFieldValue} // Pass setFieldValue
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -153,6 +159,7 @@ export default function LineVessel({ formik }) {
               formik={formik} // Pass formik to access values and errors
               setFieldValue={formik.setFieldValue} // Pass setFieldValue
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -176,6 +183,7 @@ export default function LineVessel({ formik }) {
               formik={formik} // Pass formik to access values and errors
               setFieldValue={formik.setFieldValue} // Pass setFieldValue
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
         </Grid>
@@ -200,6 +208,7 @@ export default function LineVessel({ formik }) {
               error={formik.errors.vesselAgent}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+              disabled={disabled}
             ></FormAutoComplete>
           </Grid>
 
@@ -284,6 +293,7 @@ export default function LineVessel({ formik }) {
               error={formik?.errors?.icdTransferDate}
               onChange={formik?.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
         </Grid>

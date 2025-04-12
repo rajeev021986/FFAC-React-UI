@@ -19,7 +19,7 @@ const modalStyle = {
 
 export default function AddNoteModal({
   formik,
-  disabled = false,
+  disabled = formik?.values?.statusCode === -3,
   toggleNotes,
   handleToggleNote,
   onNoteAdded,
@@ -38,15 +38,14 @@ export default function AddNoteModal({
     note: "",
     createdDate: new Date().toISOString(),
     createdBy: localStorage.getItem("userId") || "Unknown User",
-    new:true
+    new: true,
   });
 
   // Sync selectedNote into local state when editing
   useEffect(() => {
     if (selectedNote) {
       setNoteData(selectedNote);
-    }
-     else {
+    } else {
       setNoteData({
         id: Date.now(),
         subject: "",
@@ -61,29 +60,29 @@ export default function AddNoteModal({
   const handleChange = (field, value) => {
     setNoteData((prev) => ({ ...prev, [field]: value }));
   };
-  
+
   // Handle form submission
   const handleSubmit = () => {
     if (!noteData.subject || !noteData.note) {
       alert("Please fill in all fields.");
       return;
     }
-  
+
     // Ensure new notes have `new: true`
     const updatedNote = selectedNote
       ? noteData // If editing, keep the existing noteData
       : { ...noteData, id: Date.now(), new: true }; // If new, mark `new: true`
-  
+
     // Update Formik notes field
     const updatedNotes = selectedNote
       ? formik.values.notes.map((note) =>
           note.id === noteData.id ? updatedNote : note
         )
       : [...formik.values.notes, updatedNote];
-  
+
     formik.setFieldValue("notes", updatedNotes);
     onNoteAdded(updatedNote); // Update parent state
-  
+
     // Reset noteData
     setNoteData({
       id: Date.now(),
@@ -91,22 +90,22 @@ export default function AddNoteModal({
       note: "",
       createdDate: new Date().toISOString(),
       new: true, // Ensure it's set for new notes
-      createdBy: localStorage.getItem("userId") || "Unknown User", 
+      createdBy: localStorage.getItem("userId") || "Unknown User",
     });
-  
+
     handleToggleNote(); // Close modal
   };
-  
-// Reset fields when closing the modal manually
-const handleClose = () => {
-  setNoteData({
-    id: Date.now(),
-    subject: "",
-    note: "",
-    createdDate: new Date().toISOString(),
-  });
-  handleToggleNote();
-};
+
+  // Reset fields when closing the modal manually
+  const handleClose = () => {
+    setNoteData({
+      id: Date.now(),
+      subject: "",
+      note: "",
+      createdDate: new Date().toISOString(),
+    });
+    handleToggleNote();
+  };
 
   return (
     <Modal
@@ -118,7 +117,7 @@ const handleClose = () => {
     >
       <Box sx={{ ...modalStyle, position: "relative" }}>
         <IconButton
-           onClick={handleClose} // Reset fields when clicking close
+          onClick={handleClose} // Reset fields when clicking close
           sx={{ position: "absolute", top: 8, right: 8, color: "grey.600" }}
         >
           <CloseIcon />
@@ -156,6 +155,7 @@ const handleClose = () => {
 
           <ThemeButton
             onClick={handleSubmit}
+            disabled={disabled}
             sx={{
               marginTop: "10px",
               fontWeight: "500",

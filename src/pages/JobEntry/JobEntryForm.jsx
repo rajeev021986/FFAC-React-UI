@@ -317,7 +317,7 @@ export default function JobEntryForm({
   const getPage = location?.pathname.split("/").slice(-1)[0];
   useEffect(() => {
     const shouldDisable =
-      initialValues?.statusCode === -3 ||
+      initialValues?.statusCode === -3 &&
       !(getPage === "newEntry" || getPage === "approveJobRequest");
     setIsDisabled(shouldDisable);
   }, [initialValues?.statusCode, getPage]);
@@ -440,7 +440,7 @@ export default function JobEntryForm({
                     value={formik.values.shipmentType}
                     error={formik.errors.shipmentType}
                     onChange={formik.handleChange}
-                    disabled={isDisabled}
+                    disabled={getPage === "newEntry" ? false : true}
                     getPage={getPage}
                   />
                 </Grid>
@@ -453,7 +453,7 @@ export default function JobEntryForm({
                     value={formik.values.moveType}
                     error={formik.errors.moveType}
                     onChange={formik.handleChange}
-                    disabled={isDisabled}
+                    disabled={getPage === "newEntry" ? false : true}
                     getPage={getPage}
                   />
                 </Grid>
@@ -917,6 +917,7 @@ export default function JobEntryForm({
                             fontWeight: "500",
                             color: "white !important",
                           }}
+                          disabled={isDisabled}
                         >
                           {isLoading && (
                             <CircularProgress size={20} color="white" />

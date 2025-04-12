@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import CustomToast from "../Toast/CustomToast";
 function FormAutoCompleteWithTable(props) {
   const { label, id, suggestionName, dataLabel, error, formik } = props;
-
+  let disabled = formik?.values?.statusCode === -3;
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -125,13 +125,12 @@ function FormAutoCompleteWithTable(props) {
       setSelectedOption(null);
     }
   };
-  console.log("options", options);
-
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
         size="small"
         id={id}
+        disabled={disabled}
         options={options}
         getOptionLabel={(option) => option.fullData?.country || ""}
         isOptionEqualToValue={(option, value) =>

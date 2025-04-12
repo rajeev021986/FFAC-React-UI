@@ -9,32 +9,33 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { IconButton } from "@mui/material";
 
 const NotesTable = ({ formik }) => {
+  const disabled = formik?.values?.statusCode === -3;
   const location = useLocation();
   const [notes, setNotes] = useState([]);
   const [toggleNotes, setToggleNotes] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
- // Open modal & set selected note for editing
- const handleEditClick = (note) => {
-  setSelectedNote(note);
-  setToggleNotes(true);
-};
-const handleDeleteNote = (id) => {
-  // Remove note from state
-  const updatedNotes = notes.filter((note) => note.id !== id);
-  setNotes(updatedNotes);
+  // Open modal & set selected note for editing
+  const handleEditClick = (note) => {
+    setSelectedNote(note);
+    setToggleNotes(true);
+  };
+  const handleDeleteNote = (id) => {
+    // Remove note from state
+    const updatedNotes = notes.filter((note) => note.id !== id);
+    setNotes(updatedNotes);
 
-  // Update Formik state
-  formik.setFieldValue("notes", updatedNotes);
+    // Update Formik state
+    formik.setFieldValue("notes", updatedNotes);
 
-  // Update localStorage
-  localStorage.setItem("notes", JSON.stringify(updatedNotes));
-};
-const handleToggleNote = () => {
-  setToggleNotes((prev) => !prev); // Toggle modal state
-  if (toggleNotes) {
-    setSelectedNote(null); // Reset selected note when closing
-  }
-};
+    // Update localStorage
+    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+  };
+  const handleToggleNote = () => {
+    setToggleNotes((prev) => !prev); // Toggle modal state
+    if (toggleNotes) {
+      setSelectedNote(null); // Reset selected note when closing
+    }
+  };
 
   // Load notes from formik and localStorage
   const loadNotes = () => {
@@ -96,14 +97,14 @@ const handleToggleNote = () => {
       align: "center",
       editable: false,
       renderCell: (params) => {
-        const createdBy = params.row?.new 
-          ? localStorage.getItem("userId") || "Unknown User" 
+        const createdBy = params.row?.new
+          ? localStorage.getItem("userId") || "Unknown User"
           : params.row?.createdBy || "";
-    
+
         return <span>{createdBy}</span>;
       },
     },
-    
+
     {
       flex: 1,
       field: "subject",
@@ -126,13 +127,13 @@ const handleToggleNote = () => {
       field: "edit",
       headerName: "Edit",
       flex: 1,
-      sortable: false, 
+      sortable: false,
       headerAlign: "center",
-        renderHeader: () => (
-                  <IconButton color="white" onClick={handleToggleNote}>
-                    <AddCircleIcon />
-                  </IconButton>
-                ),
+      renderHeader: () => (
+        <IconButton color="white" onClick={handleToggleNote}>
+          <AddCircleIcon />
+        </IconButton>
+      ),
       renderCell: (params) => (
         <div
           style={{
@@ -143,11 +144,25 @@ const handleToggleNote = () => {
             height: "100%",
           }}
         >
-          <EditIcon   style={{ cursor: "pointer", color: "#166ee0" }}
-             onClick={() => handleEditClick(params.row)}/>
+          <EditIcon
+            style={{
+              cursor: disabled ? "not-allowed" : "pointer",
+              color: disabled ? "#ccc" : "#166ee0",
+              opacity: disabled ? 0.5 : 1,
+            }}
+            onClick={() => {
+              if (!disabled) handleEditClick(params.row);
+            }}
+          />
           <Delete
-            style={{ cursor: "pointer", color: "red" }}
-            onClick={() => handleDeleteNote(params.row.id)}
+            style={{
+              cursor: disabled ? "not-allowed" : "pointer",
+              color: disabled ? "#ccc" : "red",
+              opacity: disabled ? 0.5 : 1,
+            }}
+            onClick={() => {
+              if (!disabled) handleDeleteNote(params.row.id);
+            }}
           />
         </div>
       ),
