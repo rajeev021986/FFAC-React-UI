@@ -13,7 +13,7 @@ import FormAutoComplete from "../../components/common/AutoComplete/FormAutoCompl
 import FormAutoCompleteWithTable from "../../components/common/AutoComplete/FormAutoCompletewithTable";
 
 export default function ShipmentDetails({ formik }) {
-  let disabled = null;
+  let disabled = formik?.values?.statusCode === -3;
 
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
@@ -32,12 +32,13 @@ export default function ShipmentDetails({ formik }) {
             <FormAutoCompleteWithTable
               label="Origin Country"
               id="originCountry"
-               suggestionName="country"
+              suggestionName="country"
               value={formik.values.originCountry}
               error={formik.errors.originCountry}
               onChange={formik.handleChange}
               inputRef={FieldRef}
               formik={formik}
+              disabled={disabled}
             />
           </Grid>
 
@@ -52,7 +53,7 @@ export default function ShipmentDetails({ formik }) {
               inputRef={FieldRef}
             /> */}
             <InputBox
-            label="Port Of Loading"
+              label="Port Of Loading"
               id="portOfLoading"
               suggestionName="port_name"
               value={formik.values.portOfLoading}
@@ -72,11 +73,12 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.portOfDischarge}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-          <FormAutoComplete
+            <FormAutoComplete
               label="Place Of Delivery"
               id="placeOfDelivery"
               suggestionName="port_name"
@@ -84,9 +86,8 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.placeOfDelivery}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+              disabled={disabled}
             />
-
-           
           </Grid>
         </Grid>
 
@@ -293,6 +294,7 @@ export default function ShipmentDetails({ formik }) {
               value={formik.values.preAssessmentDate}
               error={formik.errors.preAssessmentDate}
               onChange={formik.setFieldValue}
+              disabled={disabled}
               inputRef={FieldRef}
             />
           </Grid>
@@ -314,6 +316,7 @@ export default function ShipmentDetails({ formik }) {
               value={formik.values.finalAssessmentDate}
               error={formik.errors.finalAssessmentDate}
               onChange={formik.setFieldValue}
+              disabled={disabled}
               inputRef={FieldRef}
             />
           </Grid>
@@ -357,6 +360,7 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.loadingDateForAirShipment}
               onChange={formik.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
         </Grid>

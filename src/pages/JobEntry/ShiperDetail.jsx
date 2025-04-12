@@ -11,7 +11,7 @@ import FormAutoComplete from "../../components/common/AutoComplete/FormAutoCompl
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 
 export default function ShipperDetails({ formik }) {
-  let disabled = null;
+  let disabled = formik?.values?.statusCode === -3;
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   const FieldRef = useRef(null);
@@ -40,6 +40,7 @@ export default function ShipperDetails({ formik }) {
                 );
               }}
               inputRef={FieldRef}
+              disabled={disabled}
             ></FormAutoComplete>
           </Grid>
 
@@ -69,6 +70,7 @@ export default function ShipperDetails({ formik }) {
                 );
               }}
               inputRef={FieldRef}
+              disabled={disabled}
             ></FormAutoComplete>
           </Grid>
 

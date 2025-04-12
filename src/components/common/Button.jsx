@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React from "react";
 
-export function ThemeButton({ sx, color, children, size, ...rest }) {
+export function ThemeButton({ sx, color, children, size, disabled, ...rest }) {
   styles.common = {
     ...styles.common,
     padding: size === "small" ? "5px 10px" : "10px 20px",
@@ -12,13 +12,13 @@ export function ThemeButton({ sx, color, children, size, ...rest }) {
     <Button
       variant="contained"
       color={color}
+      disabled={disabled}
       {...rest}
       sx={{
         ...styles.common,
         ...styles.contained[color],
         ...sx,
         borderRadius: "20px 19px 19px 20px",
-
       }}
     >
       {children}
@@ -42,7 +42,6 @@ export function OutlinedButton({ sx, color, children, size, ...rest }) {
         ...styles.common,
         ...styles.outlined[color],
         ...sx,
-
       }}
     >
       {children}

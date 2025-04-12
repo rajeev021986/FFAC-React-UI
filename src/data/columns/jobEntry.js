@@ -106,7 +106,7 @@ export const JOB_ENTRY_COLUMNS = [
   },
   {
     flex: 1,
-    field: "portOfDelivery",
+    field: "placeOfDelivery",
     headerName: "Port Of Delivery",
     width: 110,
     headerAlign: "center",

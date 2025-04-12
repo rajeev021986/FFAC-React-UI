@@ -14,7 +14,7 @@ import FormAutoComplete from "../../components/common/AutoComplete/FormAutoCompl
 import FormAutoCompleteWithVoyage from "../../components/common/AutoComplete/FormAutoCompletewithVoyage";
 
 export default function LineVessel({ formik }) {
-  let disabled = null;
+  let disabled = formik?.values?.statusCode === -3;
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   const FieldRef = useRef(null);
@@ -28,13 +28,16 @@ export default function LineVessel({ formik }) {
 
   return (
     <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
-      <Grid container sx={{ 
-        
-        
-        margin: 0, padding: 1, paddingRight: 1 }}>
-        <Grid  container spacing={1}>
-          <Grid 
-          item xs={12} sm={6} md={4} lg={3} xl={2}>
+      <Grid
+        container
+        sx={{
+          margin: 0,
+          padding: 1,
+          paddingRight: 1,
+        }}
+      >
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Shipping Line"
               id="shippingLine"
@@ -43,13 +46,11 @@ export default function LineVessel({ formik }) {
               error={formik.errors.shippingLine}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+              disabled={disabled}
             ></FormAutoComplete>
           </Grid>
 
-          <Grid
-            paddingLeft={1}
-          
-          item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Grid paddingLeft={1} item xs={12} sm={6} md={4} lg={3} xl={2}>
             <DateTimeField
               name="eta"
               label="ETA"
@@ -58,6 +59,7 @@ export default function LineVessel({ formik }) {
               error={formik?.errors?.eta}
               onChange={formik?.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -70,6 +72,7 @@ export default function LineVessel({ formik }) {
               error={formik?.errors?.arrivalDate}
               onChange={formik?.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -82,6 +85,7 @@ export default function LineVessel({ formik }) {
               error={formik?.errors?.berthingDate}
               onChange={formik?.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
         </Grid>
@@ -107,6 +111,7 @@ export default function LineVessel({ formik }) {
               setFieldValue={formik.setFieldValue} // Pass setFieldValue
               formik={formik} // Pass formik to access values and errors
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -130,6 +135,7 @@ export default function LineVessel({ formik }) {
               formik={formik} // Pass formik to access values and errors
               setFieldValue={formik.setFieldValue} // Pass setFieldValue
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -143,7 +149,7 @@ export default function LineVessel({ formik }) {
             paddingLeft={1}
             marginTop={2}
           >
-          <FormAutoCompleteWithVoyage
+            <FormAutoCompleteWithVoyage
               label="Discharging Vessel"
               id="dischargingVessel"
               suggestionName="dischargingVessel"
@@ -153,6 +159,7 @@ export default function LineVessel({ formik }) {
               formik={formik} // Pass formik to access values and errors
               setFieldValue={formik.setFieldValue} // Pass setFieldValue
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
 
@@ -166,7 +173,7 @@ export default function LineVessel({ formik }) {
             paddingLeft={1}
             marginTop={2}
           >
-               <FormAutoCompleteWithVoyage
+            <FormAutoCompleteWithVoyage
               label="Discharge Voyage"
               id="dischargeVoyage"
               suggestionName="dischargeVoyage"
@@ -176,6 +183,7 @@ export default function LineVessel({ formik }) {
               formik={formik} // Pass formik to access values and errors
               setFieldValue={formik.setFieldValue} // Pass setFieldValue
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
         </Grid>
@@ -200,6 +208,7 @@ export default function LineVessel({ formik }) {
               error={formik.errors.vesselAgent}
               onChange={formik.handleChange}
               inputRef={FieldRef}
+              disabled={disabled}
             ></FormAutoComplete>
           </Grid>
 
@@ -284,6 +293,7 @@ export default function LineVessel({ formik }) {
               error={formik?.errors?.icdTransferDate}
               onChange={formik?.setFieldValue}
               inputRef={FieldRef}
+              disabled={disabled}
             />
           </Grid>
         </Grid>
