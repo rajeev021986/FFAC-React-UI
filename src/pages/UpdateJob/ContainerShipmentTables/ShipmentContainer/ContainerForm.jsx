@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
 
-import { CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Modal, Button, Typography } from "@mui/material";
 import { Stack, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../../components/common/Toast/CustomToast";
@@ -26,6 +27,7 @@ import {
 } from "../../../../components/common/Button";
 import InputBox from "../../../../components/common/InputBox";
 import DateTimeField from "../../../../components/common/DateTime/DateTimeField";
+import UploadFile from "../../../../components/UploadFile";
 
 export default function ContainerNumberForm({ initialValues, page }) {
   const [updateContainerNumber, { isLoading }] =
@@ -34,6 +36,8 @@ export default function ContainerNumberForm({ initialValues, page }) {
   const [dropdownData, setDropdownData] = useState({});
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
+  const [open, setOpen] = useState(false);
+  const [SourceType, setSourceType] = useState("");
 
   const [alertConfig, setAlertConfig] = useState({
     open: false,
@@ -92,6 +96,12 @@ export default function ContainerNumberForm({ initialValues, page }) {
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
 
+  const handleClose = () => setOpen(false);
+  const handleOpen = (type) => {
+    setSourceType(type);
+    setOpen(true);
+  };
+
   useEffect(() => {
     if (optionsSettingsData?.body || customerSettingsData?.body) {
       setDropdownData({
@@ -118,6 +128,18 @@ export default function ContainerNumberForm({ initialValues, page }) {
       FieldRef.current.focus();
     }
   }, []);
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 1200,
+    bgcolor: "background.paper",
+    borderRadius: 2,
+    boxShadow: 24,
+    p: 4,
+  };
 
   return (
     <>
@@ -402,6 +424,29 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <span
+                  onClick={() =>
+                    formik.values.t1C1ReadyDate && handleOpen("t1C1Ready_Date")
+                  }
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.t1C1ReadyDate
+                      ? "pointer"
+                      : "not-allowed",
+                    color: formik.values.t1C1ReadyDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.t1C1ReadyDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.t1C1ReadyDate
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  Upload File
+                </span>
 
                 <Grid
                   item
@@ -571,6 +616,30 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <span
+                  onClick={() =>
+                    formik.values.cargoReleaseDate &&
+                    handleOpen("cargoRelease_Date")
+                  }
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.cargoReleaseDate
+                      ? "pointer"
+                      : "not-allowed",
+                    color: formik.values.cargoReleaseDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.cargoReleaseDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.cargoReleaseDate
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  Upload File
+                </span>
 
                 <Grid
                   item
@@ -700,7 +769,25 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
-
+                <span
+                  onClick={() =>
+                    formik.values.podDate && handleOpen("pod_Date")
+                  }
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.podDate ? "pointer" : "not-allowed",
+                    color: formik.values.podDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.podDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.podDate ? "auto" : "none",
+                  }}
+                >
+                  Upload File
+                </span>
                 <Grid
                   item
                   xs={12}
@@ -721,6 +808,30 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <span
+                  onClick={() =>
+                    formik.values.emptyReturnDate &&
+                    handleOpen("emptyReturn_Date")
+                  }
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.emptyReturnDate
+                      ? "pointer"
+                      : "not-allowed",
+                    color: formik.values.emptyReturnDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.emptyReturnDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.emptyReturnDate
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  Upload File
+                </span>
 
                 <Grid
                   item
@@ -742,6 +853,33 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+
+                <span
+                  onClick={() =>
+                    formik.values.certificateOfExportDate &&
+                    handleOpen("certificateOfExport_Date")
+                  }
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.certificateOfExportDate
+                      ? "pointer"
+                      : "not-allowed",
+                    color: formik.values.certificateOfExportDate
+                      ? "#1976d2"
+                      : "#999",
+                    textDecoration: formik.values.certificateOfExportDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.certificateOfExportDate
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  Upload COE
+                </span>
 
                 <Grid
                   item
@@ -786,6 +924,31 @@ export default function ContainerNumberForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+
+                <span
+                  onClick={() =>
+                    formik.values.nominationDate &&
+                    handleOpen("nomination_Date")
+                  }
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: formik.values.nominationDate
+                      ? "pointer"
+                      : "not-allowed",
+                    color: formik.values.nominationDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.nominationDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.nominationDate
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  Upload File
+                </span>
 
                 <Grid
                   item
@@ -848,6 +1011,29 @@ export default function ContainerNumberForm({ initialValues, page }) {
           </Grid>
         )}
       </Box>
+
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+          <Button
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 8,
+              color: "red",
+              backgroundColor: "transparent",
+            }}
+          >
+            <CloseIcon color="red" />
+          </Button>
+          <UploadFile
+            customer_id={formik?.initialValues.id}
+            isNotShowType={true}
+            sourceType={"JOB_CONTAINER"}
+            type={SourceType}
+          />
+        </Box>
+      </Modal>
     </>
   );
 }
