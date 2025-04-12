@@ -13,6 +13,7 @@ export default function DateTimeField({
   label,
   id,
   error,
+  isDisabled,
   ...props
 }) {
   const validValue = value ? dayjs(value) : null;
@@ -47,8 +48,9 @@ export default function DateTimeField({
         slotProps={{
           textField: { size: "small", fullWidth: true },
         }}
+        disabled={disabled}
       />
-      <span  style={{fontSize:"12px", color:"#f54336"}}>{error}</span>
+      <span style={{ fontSize: "12px", color: "#f54336" }}>{error}</span>
     </LocalizationProvider>
   );
 }

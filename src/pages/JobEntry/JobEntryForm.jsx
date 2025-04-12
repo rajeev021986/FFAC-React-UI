@@ -313,12 +313,14 @@ export default function JobEntryForm({
     }));
   };
 
-  const disabled = page == "job-entry" || "jobApprove" ? false : true;
-
+  const [isDisabled, setIsDisabled] = useState(false);
   const getPage = location?.pathname.split("/").slice(-1)[0];
-
-  // const disabled =
-  //   getPage === "editJobEntry" ? true : !(page === "job-entry" || page === "jobApprove");
+  useEffect(() => {
+    const shouldDisable =
+      initialValues?.statusCode === -3 ||
+      !(getPage === "newEntry" || getPage === "approveJobRequest");
+    setIsDisabled(shouldDisable);
+  }, [initialValues?.statusCode, getPage]);
 
   useEffect(() => {
     getFirstError(formik.errors);
@@ -343,8 +345,6 @@ export default function JobEntryForm({
     }
   }, []);
 
-  // const disabled =
-  //   getPage === "editJobEntry" ? true : !(page === "job-entry" || page === "jobApprove");
   useEffect(() => {
     const selectedValue = formik.values.shipmentType;
 
@@ -412,6 +412,7 @@ export default function JobEntryForm({
                     textTransform: "capitalize",
                     minHeight: "50px",
                   }}
+                  disabled={isDisabled}
                 />
                 <Tab
                   label="Audit Logs"
@@ -422,6 +423,7 @@ export default function JobEntryForm({
                     textTransform: "capitalize",
                     minHeight: "50px",
                   }}
+                  disabled={isDisabled}
                 />
               </TabList>
             )}
@@ -438,7 +440,7 @@ export default function JobEntryForm({
                     value={formik.values.shipmentType}
                     error={formik.errors.shipmentType}
                     onChange={formik.handleChange}
-                    disabled={getPage === "newEntry" ? false : true}
+                    disabled={isDisabled}
                     getPage={getPage}
                   />
                 </Grid>
@@ -451,7 +453,7 @@ export default function JobEntryForm({
                     value={formik.values.moveType}
                     error={formik.errors.moveType}
                     onChange={formik.handleChange}
-                    disabled={getPage === "newEntry" ? false : true}
+                    disabled={isDisabled}
                     getPage={getPage}
                   />
                 </Grid>
@@ -504,7 +506,7 @@ export default function JobEntryForm({
                     value={formik.values.mblNo}
                     error={formik.errors.mblNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={isDisabled}
                   />
                 </Grid>
 
@@ -532,6 +534,7 @@ export default function JobEntryForm({
                       onChange={formik.handleChange}
                       inputRef={FieldRef}
                       suggestionName="customer_name"
+                      disabled={isDisabled}
                     />
                   </Tooltip>
                 </Grid>
@@ -554,6 +557,7 @@ export default function JobEntryForm({
                     error={formik.errors.dateOfReceipt}
                     onChange={formik.setFieldValue}
                     inputRef={FieldRef}
+                    disabled={isDisabled}
                   />
                 </Grid>
 
@@ -573,7 +577,7 @@ export default function JobEntryForm({
                     value={formik.values.hblNo}
                     error={formik.errors.hblNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={isDisabled}
                   />
                 </Grid>
               </Grid>
@@ -597,7 +601,7 @@ export default function JobEntryForm({
                     value={formik.values.cargoType}
                     error={formik.errors.cargoType}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={isDisabled}
                   />
                 </Grid>
 
@@ -617,7 +621,7 @@ export default function JobEntryForm({
                     value={formik.values.customerRefNo}
                     error={formik.errors.customerRefNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={isDisabled}
                   />
                 </Grid>
 
@@ -639,7 +643,7 @@ export default function JobEntryForm({
                     value={formik.values.typeOfCargo}
                     error={formik.errors.typeOfCargo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={isDisabled}
                   />
                 </Grid>
 
@@ -659,7 +663,7 @@ export default function JobEntryForm({
                     value={formik.values.invoiceNo}
                     error={formik.errors.invoiceNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={isDisabled}
                   />
                 </Grid>
               </Grid>
@@ -681,7 +685,7 @@ export default function JobEntryForm({
                     value={formik.values.tansadNo}
                     error={formik.errors.tansadNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={isDisabled}
                   />
                 </Grid>
 
@@ -704,6 +708,7 @@ export default function JobEntryForm({
                     error={formik.errors.entryTansadDate}
                     onChange={formik.setFieldValue}
                     inputRef={FieldRef}
+                    disabled={isDisabled}
                   />
                 </Grid>
 
@@ -723,7 +728,7 @@ export default function JobEntryForm({
                     value={formik.values.entryNo}
                     error={formik.errors.entryNo}
                     onChange={formik.handleChange}
-                    disabled={disabled}
+                    disabled={isDisabled}
                   />
                 </Grid>
 
@@ -808,7 +813,6 @@ export default function JobEntryForm({
                       label="Status"
                       id="status"
                       options={optionsSettingsData?.body.status}
-                      // disabled={!initialValues.statusCode || disabled}
                       value={formik.values.status}
                       error={formik.errors.status}
                       onChange={formik.handleChange}
@@ -991,7 +995,7 @@ export default function JobEntryForm({
           <TabPanel value="2" sx={{ padding: "0px" }}>
             <UploadFile
               customer_id={initialValues.id}
-              disabled={disabled}
+              disabled={isDisabled}
               dropdownData={dropdownData.jobDocumentType}
               sourceType="JOB_DETAIL"
             />
@@ -1011,7 +1015,7 @@ export default function JobEntryForm({
         formik={formik}
         toggleRate={toggleRate}
         toggleRateModal={toggleRateModal}
-        disabled={disabled}
+        disabled={isDisabled}
       />
     </>
   );

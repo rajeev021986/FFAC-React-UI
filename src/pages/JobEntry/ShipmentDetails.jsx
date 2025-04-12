@@ -13,7 +13,7 @@ import FormAutoComplete from "../../components/common/AutoComplete/FormAutoCompl
 import FormAutoCompleteWithTable from "../../components/common/AutoComplete/FormAutoCompletewithTable";
 
 export default function ShipmentDetails({ formik }) {
-  let disabled = null;
+  let disabled = formik?.values?.statusCode === -3;
 
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
