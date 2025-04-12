@@ -95,12 +95,27 @@ export default function AddRateModal({
         formik.setFieldValue("rate.rateDetails", updatedRows);
       },
       handleProcessRowUpdate: (newRow, oldRow) => {
-        const updatedRows = TabsHosts?.[0]?.value?.map((row) =>
-          row?.id === newRow.id ? { ...row, ...newRow } : row
+        const updatedRow = {
+          ...newRow,
+          amount: Number(newRow.noOfUnits || 0) * Number(newRow.rate || 0),
+        };
+
+        const updatedRows = TabsHosts[0]?.value?.map((row) =>
+          row?.id === updatedRow.id ? updatedRow : row
         );
+
         formik.setFieldValue("rate.rateDetails", updatedRows);
-        return newRow;
+
+        // Optionally: update totalAmount field here
+        const totalAmount = updatedRows.reduce(
+          (acc, row) => acc + Number(row.amount || 0),
+          0
+        );
+        formik.setFieldValue("rate.totalAmount", totalAmount);
+
+        return updatedRow;
       },
+
       columns: [
         {
           field: "chargeHead",
@@ -138,6 +153,7 @@ export default function AddRateModal({
                 }}
                 options={jobSettingData?.body?.currency}
                 value={params.value}
+                disabled={params.row.chargeHead ? false : true}
                 onChange={(e) => OnChange(params, e, "rate.rateDetails")}
               />
             </div>
@@ -167,6 +183,7 @@ export default function AddRateModal({
                 }}
                 options={jobSettingData?.body?.unitTypes}
                 value={params.value}
+                disabled={params.row.currency ? false : true}
                 onChange={(e) => OnChange(params, e, "rate.rateDetails")}
               />
             </div>
@@ -177,9 +194,19 @@ export default function AddRateModal({
           headerName: "No of Units",
           flex: 1.5,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
+          renderCell: (params) => (
+            <InputBoxForGrid
+              {...params}
+              type="number"
+              disabled={params.row.unitType ? false : true}
+            />
+          ),
           renderEditCell: (params) => (
-            <InputBoxForGrid {...params} type="number" />
+            <InputBoxForGrid
+              {...params}
+              type="number"
+              disabled={params.row.unitType ? false : true}
+            />
           ),
         },
         {
@@ -187,20 +214,32 @@ export default function AddRateModal({
           headerName: "Rate",
           flex: 1.5,
           editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
+          renderCell: (params) => (
+            <InputBoxForGrid
+              {...params}
+              type="number"
+              disabled={params.row.noOfUnits ? false : true}
+            />
+          ),
           renderEditCell: (params) => (
-            <InputBoxForGrid {...params} type="number" />
+            <InputBoxForGrid
+              {...params}
+              type="number"
+              disabled={params.row.noOfUnits ? false : true}
+            />
           ),
         },
         {
           field: "amount",
           headerName: "Amount",
           flex: 1.5,
-          editable: true,
-          renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
-          renderEditCell: (params) => (
-            <InputBoxForGrid {...params} type="number" />
+          editable: false,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} type="number" disabled={true} />
           ),
+          // renderEditCell: (params) => (
+          //   <InputBoxForGrid {...params} type="number"  disabled={true}/>
+          // ),
         },
         {
           field: "actions",
@@ -253,6 +292,7 @@ export default function AddRateModal({
                 id="rate.totalAmount"
                 value={formik?.values?.rate?.totalAmount}
                 error={formik?.errors?.rate?.totalAmount}
+                disabled={true}
                 onChange={formik?.handleChange}
               />
             </Grid>
