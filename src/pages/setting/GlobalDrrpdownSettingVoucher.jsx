@@ -186,10 +186,16 @@ export default function GlobalDrrpdownSettingVoucher({
 
   console.log(value, "value");
   const columns = [
-    { field: "id", headerName: "ID", width: 50 },
+    { field: "id", headerName: "ID", width: 50,   headerAlign: "center", 
+      align: "center",
+
+    },
     {
       field: "shipmentType",
       headerName: "Shipment Type",
+      headerAlign: "center",
+      align: "center",
+
       width: 200,
       editable: true,
       renderCell: (params) => <span>{params.row.shipmentType}</span>,
@@ -235,79 +241,13 @@ export default function GlobalDrrpdownSettingVoucher({
       },
     },
     {
-      field: "jobPattern",
-      headerName: "Job Pattern",
-      width: 250,
-      editable: true,
-      preProcessEditCellProps: (params) => {
-        const value = params.props.value || "";
-
-        const allowedHash = ["#4", "#5", "#6", "#7", "#8"];
-        const allowedDollar = ["$Z", "$N", "$M", "$D", "$Y"];
-
-        const hashMatches = value.match(/#\d/g) || [];
-        const dollarMatches = value.match(/\$\w/g) || [];
-
-        const hasRequiredHash = value.includes("#");
-
-        const allHashesValid =
-          hashMatches.every((code) => allowedHash.includes(code)) &&
-          !value.match(/#\d{2,}/); // prevent #48, #55 etc
-
-        const allDollarsValid =
-          dollarMatches.every((code) => allowedDollar.includes(code)) &&
-          !value.match(/\$\w{2,}/); // prevent $YZ, $MM etc
-
-        let errorMessage = "";
-
-        if (!hasRequiredHash) {
-          errorMessage = "Pattern must include one of: #4, #5, #6, #7, or #8";
-        } else if (!allHashesValid) {
-          errorMessage =
-            "Invalid # code. Only #4 to #8 allowed. No multi-digit values like #48.";
-        } else if (!allDollarsValid) {
-          errorMessage =
-            "Invalid $ code. Only $Z, $N, $M, $D, $Y allowed. Only one letter after $.";
-        }
-
-        if (errorMessage) {
-          toast.custom(<CustomToast message={errorMessage} toast="error" />, {
-            closeButton: false,
-          });
-        }
-
-        return {
-          ...params.props,
-          error: !!errorMessage,
-        };
-      },
-
-      renderHeader: () => (
-        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-          <span style={{color:'white'}}>Job Pattern</span>
-          <Tooltip
-            title={<pre style={{ whiteSpace: "pre-wrap" }}>{tooltipText}</pre>}
-            arrow
-          >
-            <IconButton size="small">
-              <InfoOutlined fontSize="small" color="primary" />
-            </IconButton>
-          </Tooltip>
-        </div>
-      ),
-    },
-
-    {
-      field: "sampleJobNumber",
-      headerName: "Sample Job Number",
-      width: 250,
-      renderCell: (params) => <span>{params.row.sampleJobNumber || ""}</span>,
-    },
-    {
       field: "resetNumber",
       headerName: "Reset Number",
       width: 120,
       editable: true,
+      align: "center",
+
+      headerAlign: "center",
       renderEditCell: (params) => {
         const voucherNumber = params.row.jobPattern || "";
 
@@ -328,32 +268,93 @@ export default function GlobalDrrpdownSettingVoucher({
             value={params.value || ""}
             onChange={(e) => {
               const newValue = e.target.value;
+              const pattern =
+                newValue === "Yearly"
+                  ? "#4-$Y"
+                  : newValue === "Month"
+                  ? "#4-$M-$Y"
+                  : newValue === "Daily"
+                  ? "#4-$D-$M-$Y"
+                  : "";
+            
+              const updatedSample = replaceVoucherCodes(pattern);
+            
               params.api.setEditCellValue({
                 id: params.id,
                 field: "resetNumber",
                 value: newValue,
               });
+            
+              setvalue((prevValues) =>
+                prevValues.map((row) =>
+                  row.id === params.id
+                    ? {
+                        ...row,
+                        jobPattern: pattern,
+                        sampleJobNumber: updatedSample,
+                      }
+                    : row
+                )
+              );
             }}
+            
             fullWidth
           >
             <MenuItem value="Never">Never</MenuItem>
-            <MenuItem value="Yearly" disabled={!enableYearly}>
+            <MenuItem value="Yearly" >
               Yearly
             </MenuItem>
-            <MenuItem value="Month" disabled={!enableMonthly}>
+            <MenuItem value="Month" >
               Month
             </MenuItem>
-            <MenuItem value="Daily" disabled={!enableDaily}>
+            <MenuItem value="Daily" >
               Daily
             </MenuItem>
           </Select>
         );
       },
     },
+    {
+      field: "jobPattern",
+      headerName: "Job Pattern",
+      headerAlign: "center",
+      align: "center",
+      // width: 250,
+      flex:1,
+      editable: false, // <-- Make it non-editable
+      renderCell: (params) => <span>{params.row.jobPattern || ""}</span>,
+      renderHeader: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <span style={{ color: "white" }}>Job Pattern</span>
+          <Tooltip
+            title={<pre style={{ whiteSpace: "pre-wrap" }}>{tooltipText}</pre>}
+            arrow
+          >
+            <IconButton size="small">
+              <InfoOutlined fontSize="small" color="red" />
+            </IconButton>
+          </Tooltip>
+        </div>
+      ),
+    },
+    {
+      field: "sampleJobNumber",
+      headerName: "Sample Job Number",
+      width: 250,
+      align:"center",
+      headerAlign: "center",
+      editable: false, // <-- Make it non-editable
+      renderCell: (params) => <span>{params.row.sampleJobNumber || ""}</span>,
+    },
+    
+  
 
     {
       field: "actions",
       headerName: "Actions",
+      headerAlign: "center",
+      align: "center",
+
       width: 100,
       renderCell: (params) => {
         const isGeneral = params.row.shipmentType === "General/Common";
@@ -421,14 +422,7 @@ export default function GlobalDrrpdownSettingVoucher({
               </Box>
             ),
           }}
-      
-        //   components={{
-        //       Toolbar: () => (
-        //         <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
-        //           <GridToolbarColumnsButton />
-        //         </Box>
-        //       ),
-        //     }}
+     
         />
       </div>
     </Grid>

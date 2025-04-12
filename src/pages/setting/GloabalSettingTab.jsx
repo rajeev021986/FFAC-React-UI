@@ -105,7 +105,12 @@ const GlobalSetting = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Grid container spacing={2} flexWrap={"wrap"}>
+        <Grid 
+          xs={12}
+          md={8}
+          lg={12}
+        
+        container spacing={2} flexWrap={"wrap"}>
           <GlobalDrrpdownSetting
             value={status}
             setvalue={setStatus}
