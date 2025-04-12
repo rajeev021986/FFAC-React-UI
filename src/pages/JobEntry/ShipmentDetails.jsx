@@ -32,7 +32,7 @@ export default function ShipmentDetails({ formik }) {
             <FormAutoCompleteWithTable
               label="Origin Country"
               id="originCountry"
-               suggestionName="country"
+              suggestionName="country"
               value={formik.values.originCountry}
               error={formik.errors.originCountry}
               onChange={formik.handleChange}
@@ -52,7 +52,7 @@ export default function ShipmentDetails({ formik }) {
               inputRef={FieldRef}
             /> */}
             <InputBox
-            label="Port Of Loading"
+              label="Port Of Loading"
               id="portOfLoading"
               suggestionName="port_name"
               value={formik.values.portOfLoading}
@@ -76,7 +76,7 @@ export default function ShipmentDetails({ formik }) {
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-          <FormAutoComplete
+            <FormAutoComplete
               label="Place Of Delivery"
               id="placeOfDelivery"
               suggestionName="port_name"
@@ -85,8 +85,6 @@ export default function ShipmentDetails({ formik }) {
               onChange={formik.handleChange}
               inputRef={FieldRef}
             />
-
-           
           </Grid>
         </Grid>
 
