@@ -65,7 +65,7 @@ const CommonTabForm = ({ formik, dropdownData }) => {
             </Box>
           </Box>
 
-          <TabPanel value="1">
+          <TabPanel disabled value="1">
             <ShipperDetails formik={formik} />
           </TabPanel>
 

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import {
-TextField,
-Autocomplete,
-Box,
-CircularProgress,
-Paper,
+  TextField,
+  Autocomplete,
+  Box,
+  CircularProgress,
+  Paper,
 } from "@mui/material";
 import useDebounce from "../../../hooks/useDebounce";
 import { GetAutoCompleteDataWithCountry } from "../../utils/GetAutoCompleteDataCountry";
@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import CustomToast from "../Toast/CustomToast";
 function FormAutoCompleteWithTable(props) {
   const { label, id, suggestionName, dataLabel, error, formik } = props;
-
+  let disabled = formik?.values?.statusCode === -3;
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -56,6 +56,42 @@ function FormAutoCompleteWithTable(props) {
     fetchData();
   }, [debounceValue, suggestionName, id, dataLabel]);
 
+  useEffect(() => {
+    const preloadInitialValue = async () => {
+      if (formik.values.originCountry) {
+        setLoading(true);
+        try {
+          const data = await GetAutoCompleteDataWithCountry(
+            suggestionName,
+            id,
+            dataLabel || suggestionName,
+            formik.values.originCountry // use this directly to fetch matching record
+          );
+
+          setOptions(data); // optionally merge with existing options
+          const match = data.find(
+            (item) => item.fullData.country === formik.values.originCountry
+          );
+          if (match) {
+            setSelectedOption(match);
+            setInputValue(match.fullData.country);
+          }
+        } catch (error) {
+          toast.custom(
+            <CustomToast
+              message={"Failed to load default value"}
+              toast="error"
+            />
+          );
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    preloadInitialValue();
+  }, []); // only once on mount
+
   // Sync inputValue when formik value changes
   useEffect(() => {
     if (formik.values.originCountry) {
@@ -89,13 +125,12 @@ function FormAutoCompleteWithTable(props) {
       setSelectedOption(null);
     }
   };
-  console.log("options", options);
-
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
         size="small"
         id={id}
+        disabled={disabled}
         options={options}
         getOptionLabel={(option) => option.fullData?.country || ""}
         isOptionEqualToValue={(option, value) =>
@@ -142,7 +177,6 @@ function FormAutoCompleteWithTable(props) {
                 justifyContent: "space-between",
                 width: "100%",
                 padding: "1px",
-                
               }}
             >
               <span>{option.fullData.country}</span>
@@ -165,7 +199,7 @@ function FormAutoCompleteWithTable(props) {
                 display: "flex",
                 justifyContent: "space-between",
                 fontWeight: "bold",
-                backgroundColor: theme.palette.primary.main, 
+                backgroundColor: theme.palette.primary.main,
                 color: theme.palette.common.white,
 
                 padding: "8px",

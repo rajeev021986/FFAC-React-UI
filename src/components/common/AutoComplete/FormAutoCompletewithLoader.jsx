@@ -10,8 +10,16 @@ import { GetAutoCompleteDataWithLoader } from "../../utils/GetAutoCompleteDataWi
 import useDebounce from "../../../hooks/useDebounce";
 
 function FormAutoCompleteWithLoader(props) {
-  const { label, id, suggestionName, dataLabel, value, error, onChange } =
-    props;
+  const {
+    label,
+    id,
+    suggestionName,
+    dataLabel,
+    value,
+    error,
+    onChange,
+    disabled,
+  } = props;
 
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -62,6 +70,7 @@ function FormAutoCompleteWithLoader(props) {
         }}
         size="small"
         id={id}
+        disabled={disabled}
         value={options.find((option) => option.value === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
@@ -98,7 +107,11 @@ function FormAutoCompleteWithLoader(props) {
           />
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option.value || "87343874"} sx={{ fontSize: "14px" }}>
+          <MenuItem
+            {...props}
+            key={option.value || "87343874"}
+            sx={{ fontSize: "14px" }}
+          >
             {option.label}
           </MenuItem>
         )}

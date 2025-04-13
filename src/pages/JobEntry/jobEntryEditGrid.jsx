@@ -24,7 +24,7 @@ import DateTimeField from "../../components/common/DateTime/DateTimeField";
 
 export default function JobEntryGridForm({
   formik,
-  disabled = false,
+  disabled = formik?.values?.statusCode === -3,
   dropdownData,
   jobSettingData,
 }) {
@@ -119,12 +119,9 @@ export default function JobEntryGridForm({
           headerName: "Container No.",
           flex: 1.5,
           editable: true,
-          renderCell: (params) =>
-            
-            
-            <InputBoxForGrid {...params} type="number" />,
+          renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
           renderEditCell: (params) => (
-            <InputBoxForGrid field = "Container" {...params} type="number" />
+            <InputBoxForGrid field="Container" {...params} type="number" />
           ),
         },
         {
@@ -272,7 +269,11 @@ export default function JobEntryGridForm({
           sortable: false,
           flex: 0,
           renderHeader: () => (
-            <IconButton color="white" onClick={TabsHosts[0].addNewRow}>
+            <IconButton
+              color="white"
+              onClick={TabsHosts[0].addNewRow}
+              disabled={disabled}
+            >
               <AddCircleIcon />
             </IconButton>
           ),
@@ -281,6 +282,7 @@ export default function JobEntryGridForm({
               color="error"
               onClick={() => TabsHosts[0].deleteRow(params.row.id)}
               style={{ width: "5%" }}
+              disabled={disabled}
             >
               <DeleteIcon />
             </IconButton>
@@ -505,7 +507,11 @@ export default function JobEntryGridForm({
           sortable: false,
           flex: 0,
           renderHeader: () => (
-            <IconButton color="white" onClick={TabsHosts[1].addNewRow}>
+            <IconButton
+              color="white"
+              onClick={TabsHosts[1].addNewRow}
+              disabled={disabled}
+            >
               <AddCircleIcon />
             </IconButton>
           ),
@@ -514,6 +520,7 @@ export default function JobEntryGridForm({
               color="error"
               onClick={() => TabsHosts[1].deleteRow(params.row.id)}
               style={{ width: "20%" }}
+              disabled={disabled}
             >
               <DeleteIcon />
             </IconButton>
@@ -633,8 +640,7 @@ export default function JobEntryGridForm({
         //   renderEditCell: (params) => <InputBoxForGrid {...params} />,
         // },
 
-
-    {
+        {
           field: "grossWt",
           headerName: "Gross wt",
           flex: 1,
@@ -681,7 +687,7 @@ export default function JobEntryGridForm({
           sortable: false,
           flex: 0,
           renderHeader: () => (
-            <IconButton color="white">
+            <IconButton color="white" disabled={disabled}>
               <AddCircleIcon onClick={TabsHosts[2].addNewRow} />
             </IconButton>
           ),
@@ -689,6 +695,7 @@ export default function JobEntryGridForm({
             <IconButton
               color="error"
               onClick={() => TabsHosts[2].deleteRow(params.row.id)}
+              disabled={disabled}
             >
               <DeleteIcon />
             </IconButton>
@@ -731,7 +738,7 @@ export default function JobEntryGridForm({
           {TabsHosts?.map((ob, index) => (
             <TabPanel value={index} sx={{ padding: 0, marginTop: 2 }}>
               <Box sx={{ width: "100%" }}>
-                <Box >
+                <Box>
                   {openTable ? (
                     <StyledDataGrid
                       rows={ob.value}

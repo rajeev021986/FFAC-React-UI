@@ -9,8 +9,16 @@ import {
 import { GetAutoCompleteData } from "../../utils/GetAutoCompleteData";
 
 function FormAutoComplete(props) {
-  const { label, id, suggestionName, dataLabel, value, error, onChange } =
-    props;
+  const {
+    label,
+    id,
+    suggestionName,
+    dataLabel,
+    value,
+    error,
+    onChange,
+    disabled,
+  } = props;
 
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState(options);
@@ -52,12 +60,14 @@ function FormAutoComplete(props) {
         fullData.address2?.trim() ||
         fullData.address3?.trim() ||
         "";
-        const selectedCity = fullData.city || "";
-        const selectedCountry = fullData.country || "";
-        const formattedAddress = selectedAddress
+      const selectedCity = fullData.city || "";
+      const selectedCountry = fullData.country || "";
+      const formattedAddress = selectedAddress
         ? `${selectedAddress}, ${selectedCity}, ${selectedCountry}`
         : "";
-      onChange({ target: { name: id, value: newValue.value, formattedAddress , } });
+      onChange({
+        target: { name: id, value: newValue.value, formattedAddress },
+      });
     } else {
       onChange({ target: { name: id, value: null, formattedAddress: "" } });
     }
@@ -72,7 +82,6 @@ function FormAutoComplete(props) {
         size="small"
         id={id}
         noOptionsText="Type to Search"
-
         value={options.find((option) => option.value === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
@@ -113,6 +122,7 @@ function FormAutoComplete(props) {
             {option.label}
           </MenuItem>
         )}
+        disabled={disabled}
         // noOptionsText={
         //   filteredOptions?.length === 0 ? "No data available" : "Loading..."
         // }

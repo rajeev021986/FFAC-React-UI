@@ -39,7 +39,6 @@ export default function AddRateModalApprove({
   handleClose,
 }) {
   const [loading, setLoading] = useState(false);
-  const [rateDetails, setRateDetails] = useState([]);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   const formik = useFormik({
@@ -52,25 +51,28 @@ export default function AddRateModalApprove({
     enableReinitialize: true,
     onSubmit: async (values) => {
       try {
-        const formattedRateDetails = rateDetails.map((row) => ({
-          id: row.id || null, // Ensure new rows have `id: null`
-          chargeHead: row.chargeHead || "",
-          currency: row.currency || "",
-          unitType: row.unitType || "",
-          noOfUnits: row.noOfUnits || 0,
-          rate: row.rate || 0,
-          amount: row.amount || 0,
-          createdBy: row.createdBy || "admin",
-          modifiedBy: row.modifiedBy || "admin",
-          createdDate: row.createdDate || new Date().toISOString(),
-          modifiedDate: new Date().toISOString(),
-        }));
+        const rateId = values.rateDetails.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
 
         const payload = {
           id: values.id,
           totalAmount: values.totalAmount,
           remarks: values.remarks,
-          rateDetails: formattedRateDetails,
+          rateDetails: values.rateDetails.map((row) => ({
+            ...row,
+            id: row?.new ? null : row.id,
+            chargeHead: row.chargeHead || "",
+            currency: row.currency || "",
+            unitType: row.unitType || "",
+            noOfUnits: row.noOfUnits || 0,
+            rate: row.rate || 0,
+            amount: row.amount || 0,
+            createdBy: row.createdBy || "admin",
+            modifiedBy: "admin",
+            createdDate: row.createdDate || new Date().toISOString(),
+            modifiedDate: new Date().toISOString(),
+          })),
         };
 
         const res = await ApiManager.updateAddRateDetails(payload);
@@ -97,16 +99,17 @@ export default function AddRateModalApprove({
       try {
         const res = await ApiManager.getAddRateDetails(sourceId);
         if (res?.success === true) {
-          const data = res.body || {};
+          const data = res.body;
+
+          // Set Formik values properly here
+          const rateList = data.rateDetails || [];
 
           formik.setValues({
             id: data.id || 0,
             totalAmount: data.totalAmount || 0,
             remarks: data.remarks || "",
-            rateDetails: data.rateDetails || [],
+            rateDetails: rateList,
           });
-
-          setRateDetails(data.rateDetails || []);
         }
       } catch (error) {
         toast.custom(
@@ -120,28 +123,48 @@ export default function AddRateModalApprove({
     fetchAddRateDetails();
   }, [sourceId]);
 
-  const handleProcessRowUpdate = (newRow) => {
-    setRateDetails((prevDetails) =>
-      prevDetails.map((row) => (row.id === newRow.id ? newRow : row))
+  useEffect(() => {
+    const total = formik.values.rateDetails.reduce(
+      (acc, row) => acc + (Number(row.amount) || 0),
+      0
     );
-    return newRow;
+    formik.setFieldValue("totalAmount", total);
+  }, [formik.values.rateDetails]);
+  const handleProcessRowUpdate = (newRow) => {
+    const updatedRow = {
+      ...newRow,
+      amount:
+        newRow.noOfUnits && newRow.rate
+          ? Number(newRow.noOfUnits) * Number(newRow.rate)
+          : 0,
+    };
+
+    const updatedRows = formik.values.rateDetails.map((row) =>
+      row.id === updatedRow.id ? updatedRow : row
+    );
+    formik.setFieldValue("rateDetails", updatedRows);
+    return updatedRow;
   };
 
   const addNewRow = () => {
     const newRow = {
-      id: Date.now(), // Unique ID for tracking new rows
+      id: Date.now(),
       chargeHead: "",
       currency: "",
       unitType: "",
       noOfUnits: 0,
       rate: 0,
       amount: 0,
+      new: true,
     };
-    setRateDetails([...rateDetails, newRow]);
+    formik.setFieldValue("rateDetails", [...formik.values.rateDetails, newRow]);
   };
 
   const deleteRow = (id) => {
-    setRateDetails(rateDetails.filter((row) => row.id !== id));
+    const updatedRows = formik.values.rateDetails.filter(
+      (row) => row.id !== id
+    );
+    formik.setFieldValue("rateDetails", updatedRows);
   };
 
   const columns = [
@@ -153,7 +176,9 @@ export default function AddRateModalApprove({
       align: "center",
       editable: true,
       renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
-      renderEditCell: (params) => <InputBoxForGrid {...params} type="number" />,
+      renderEditCell: (params) => (
+        <InputBoxForGrid {...params} type="number" />
+      ),
     },
     {
       field: "currency",
@@ -168,6 +193,7 @@ export default function AddRateModalApprove({
           size="small"
           options={jobSettingData?.body?.currency}
           value={params.value}
+          disabled={params.row.chargeHead ? false : true}
           onChange={(e) =>
             handleProcessRowUpdate({ ...params.row, currency: e.target.value })
           }
@@ -187,6 +213,7 @@ export default function AddRateModalApprove({
           size="small"
           options={jobSettingData?.body?.unitTypes}
           value={params.value}
+          disabled={params.row.currency ? false : true}
           onChange={(e) =>
             handleProcessRowUpdate({ ...params.row, unitType: e.target.value })
           }
@@ -200,8 +227,20 @@ export default function AddRateModalApprove({
       editable: true,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
-      renderEditCell: (params) => <InputBoxForGrid {...params} type="number" />,
+      renderCell: (params) => (
+        <InputBoxForGrid
+          {...params}
+          type="number"
+          disabled={params.row.unitType ? false : true}
+        />
+      ),
+      renderEditCell: (params) => (
+        <InputBoxForGrid
+          {...params}
+          type="number"
+          disabled={params.row.unitType ? false : true}
+        />
+      ),
     },
     {
       field: "rate",
@@ -210,18 +249,34 @@ export default function AddRateModalApprove({
       headerAlign: "center",
       align: "center",
       editable: true,
-      renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
-      renderEditCell: (params) => <InputBoxForGrid {...params} type="number" />,
+      renderCell: (params) => (
+        <InputBoxForGrid
+          {...params}
+          type="number"
+          disabled={params.row.noOfUnits ? false : true}
+        />
+      ),
+      renderEditCell: (params) => (
+        <InputBoxForGrid
+          {...params}
+          type="number"
+          disabled={params.row.noOfUnits ? false : true}
+        />
+      ),
     },
     {
       field: "amount",
       headerName: "Amount",
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
-      renderEditCell: (params) => <InputBoxForGrid {...params} type="number" />,
+      renderCell: (params) => (
+        <InputBoxForGrid {...params} type="number" disabled={true} />
+      ),
+      renderEditCell: (params) => (
+        <InputBoxForGrid {...params} type="number" disabled={true} />
+      ),
     },
     {
       field: "actions",
@@ -260,7 +315,7 @@ export default function AddRateModalApprove({
               value={formik.values.totalAmount}
               error={formik.errors.totalAmount}
               onChange={formik.handleChange}
-              disabled={loading}
+              disabled={true}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={8} xl={2}>
@@ -278,7 +333,7 @@ export default function AddRateModalApprove({
         {/* Data Grid */}
         <Box sx={{ marginTop: 2 }}>
           <StyledDataGrid
-            rows={rateDetails}
+            rows={formik.values.rateDetails}
             columns={columns}
             disableSelectionOnClick
             processRowUpdate={handleProcessRowUpdate}

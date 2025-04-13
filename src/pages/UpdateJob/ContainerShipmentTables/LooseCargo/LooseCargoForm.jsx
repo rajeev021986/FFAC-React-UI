@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
 
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Modal, Button } from "@mui/material";
 import { Stack, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../../components/common/Toast/CustomToast";
@@ -26,6 +27,7 @@ import {
 } from "../../../../components/common/Button";
 import InputBox from "../../../../components/common/InputBox";
 import DateTimeField from "../../../../components/common/DateTime/DateTimeField";
+import UploadFile from "../../../../components/UploadFile";
 
 export default function LooseCargoForm({ initialValues, page }) {
   const [updateLooseCargoNumber, { isLoading }] =
@@ -43,6 +45,14 @@ export default function LooseCargoForm({ initialValues, page }) {
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
+
+  const [open, setOpen] = useState(false);
+  const [SourceType, setSourceType] = useState("");
+  const handleClose = () => setOpen(false);
+  const handleOpen = (type) => {
+    setSourceType(type);
+    setOpen(true);
+  };
 
   const formik = useFormik({
     initialValues,
@@ -118,6 +128,18 @@ export default function LooseCargoForm({ initialValues, page }) {
       FieldRef.current.focus();
     }
   }, []);
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 1200,
+    bgcolor: "background.paper",
+    borderRadius: 2,
+    boxShadow: 24,
+    p: 4,
+  };
 
   return (
     <>
@@ -282,6 +304,29 @@ export default function LooseCargoForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <span
+                  onClick={() =>
+                    formik.values.t1C1ReadyDate && handleOpen("t1C1Ready_Date")
+                  }
+                  style={{
+                    marginTop: "40px",
+                    marginLeft: "10px",
+                    cursor: formik.values.t1C1ReadyDate
+                      ? "pointer"
+                      : "not-allowed",
+                    color: formik.values.t1C1ReadyDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.t1C1ReadyDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.t1C1ReadyDate
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  Upload File
+                </span>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
                   <DateTimeField
@@ -403,6 +448,30 @@ export default function LooseCargoForm({ initialValues, page }) {
                     inputRef={FieldRef}
                   />{" "}
                 </Grid>
+                <span
+                  onClick={() =>
+                    formik.values.cargoReleaseDate &&
+                    handleOpen("cargoRelease_Date")
+                  }
+                  style={{
+                    marginTop: "40px",
+                    marginLeft: "10px",
+                    cursor: formik.values.cargoReleaseDate
+                      ? "pointer"
+                      : "not-allowed",
+                    color: formik.values.cargoReleaseDate ? "#1976d2" : "#999",
+                    textDecoration: formik.values.cargoReleaseDate
+                      ? "underline"
+                      : "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: formik.values.cargoReleaseDate
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  Upload File
+                </span>
 
                 <Grid
                   item
@@ -579,6 +648,29 @@ export default function LooseCargoForm({ initialValues, page }) {
           </Grid>
         )}
       </Box>
+
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+          <Button
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 8,
+              color: "red",
+              backgroundColor: "transparent",
+            }}
+          >
+            <CloseIcon color="red" />
+          </Button>
+          <UploadFile
+            customer_id={formik?.initialValues.id}
+            isNotShowType={true}
+            sourceType={"JOB_LOOSE_CARGO"}
+            type={SourceType}
+          />
+        </Box>
+      </Modal>
     </>
   );
 }
