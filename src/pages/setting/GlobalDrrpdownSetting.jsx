@@ -54,7 +54,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 50 ,
+    { field: "id", headerName: "ID",flex:1.5 ,
 
       align:"center",
       headerAlign: "center",
@@ -88,7 +88,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   );
   console.log(theme, "theme");
   return (
-    <Grid item xs={12} md={3} sm={6}>
+    <Grid item xs={12} md={4} sm={6}>
       <div
         style={{
           display: "flex",

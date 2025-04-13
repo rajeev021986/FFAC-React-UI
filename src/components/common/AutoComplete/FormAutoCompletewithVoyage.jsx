@@ -108,7 +108,7 @@ function FormAutoCompleteWithVoyage(props) {
         size="small"
         id={id}
         noOptionsText="Type to Search"
-        disabled={disabled}
+        disabled={disabled }
         value={formik.values[id] ? { label: formik.values[id] } : null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}

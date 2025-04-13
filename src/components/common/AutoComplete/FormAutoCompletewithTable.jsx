@@ -22,7 +22,7 @@ function FormAutoCompleteWithTable(props) {
   const theme = useTheme();
 
   useEffect(() => {
-    if (!debounceValue) return; // Avoid API call on empty input
+    if (!debounceValue || debounceValue.length < 3) return;
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -131,6 +131,8 @@ function FormAutoCompleteWithTable(props) {
         size="small"
         id={id}
         disabled={disabled}
+        noOptionsText="Type to Search"
+
         options={options}
         getOptionLabel={(option) => option.fullData?.country || ""}
         isOptionEqualToValue={(option, value) =>
@@ -146,7 +148,7 @@ function FormAutoCompleteWithTable(props) {
             {...params}
             label={label}
             variant="outlined"
-            placeholder="Type to search"
+            // placeholder="Type to search"
             fullWidth
             sx={{
               "& .MuiOutlinedInput-root": {

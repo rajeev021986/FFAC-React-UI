@@ -321,7 +321,7 @@ export default function GlobalDrrpdownSettingVoucher({
       align: "center",
       // width: 250,
       flex:1,
-      editable: false, // <-- Make it non-editable
+     editable: false, // <-- Make it non-editable
       renderCell: (params) => <span>{params.row.jobPattern || ""}</span>,
       renderHeader: () => (
         <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>

@@ -155,7 +155,7 @@ export default function JobEntryGridForm({
         {
           field: "dischargeDate",
           headerName: "Discharge Date",
-          flex: 2,
+          flex: 2.5,
           renderCell: (params) => (
             <DateTimeField
               value={params.value}
@@ -367,7 +367,7 @@ export default function JobEntryGridForm({
         {
           field: "berthingDate",
           headerName: "Berthing Date",
-          flex: 1,
+          flex: 2.5,
           renderCell: (params) => (
             <DateTimeField
               value={params.value}
@@ -388,7 +388,7 @@ export default function JobEntryGridForm({
         {
           field: "customReleaseODate",
           headerName: "Custom Release O Date",
-          flex: 1,
+          flex: 2.5,
           renderCell: (params) => (
             <DateTimeField
               value={params.value}
@@ -419,7 +419,7 @@ export default function JobEntryGridForm({
         {
           field: "dateOfDeparture",
           headerName: "Date of Departure",
-          flex: 1,
+          flex: 2.5,
           renderCell: (params) => (
             <DateTimeField
               value={params.value}
@@ -440,7 +440,7 @@ export default function JobEntryGridForm({
         {
           field: "dateOfArrivalAtBorder",
           headerName: "Date of Arrival at Border",
-          flex: 1,
+          flex: 2.5,
           renderCell: (params) => (
             <DateTimeField
               value={params.value}
@@ -461,7 +461,7 @@ export default function JobEntryGridForm({
         {
           field: "dateOfDepartureAtBorder",
           headerName: "Date of Depart at Border",
-          flex: 1,
+          flex: 2.5,
           renderCell: (params) => (
             <DateTimeField
               value={params.value}
@@ -484,7 +484,7 @@ export default function JobEntryGridForm({
         {
           field: "dateOfDelivery",
           headerName: "Date of Delivary",
-          flex: 1,
+          flex: 2.5,
           renderCell: (params) => (
             <DateTimeField
               value={params.value}

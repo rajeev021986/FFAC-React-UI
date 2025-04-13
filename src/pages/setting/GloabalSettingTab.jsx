@@ -110,7 +110,7 @@ const GlobalSetting = () => {
           md={8}
           lg={12}
         
-        container spacing={2} flexWrap={"wrap"}>
+        container spacing={1} flexWrap={"wrap"}>
           <GlobalDrrpdownSetting
             value={status}
             setvalue={setStatus}

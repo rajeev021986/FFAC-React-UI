@@ -427,7 +427,7 @@ const UploadFile = ({
     {
       field: "documentType",
       headerName: "Type",
-      flex: 1,
+      flex: 1.5,
       headerAlign: "center",
       renderCell: (params) => (
         <Tooltip title={`${params.value}`} arrow>
@@ -438,7 +438,7 @@ const UploadFile = ({
     {
       field: "fileName",
       headerName: "File Name",
-      flex: 1,
+      flex: 2,
       headerAlign: "center",
       renderCell: (params) => (
         <Tooltip title={`${params.value}`} arrow>
