@@ -387,7 +387,7 @@ export default function JobEntryGridForm({
         },
         {
           field: "customReleaseODate",
-          headerName: "Custom Release O Date",
+          headerName: "Custom Release Date",
           flex: 2.5,
           renderCell: (params) => (
             <DateTimeField
