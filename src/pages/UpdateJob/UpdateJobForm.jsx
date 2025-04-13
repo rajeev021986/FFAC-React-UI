@@ -610,15 +610,26 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           </Box>
 
           <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
-            <ContainerShipmentView page={"containerNo"} />
+              <ContainerShipmentView 
+              customer_id={initialValues.id}
+              
+              page={"containerNo"} />
           </TabPanel>
 
-          <TabPanel value="2" sx={{ paddingBottom: "15px" }}>
-            <VehicleShipmentView page={"vehicleShipment"} />
+          <TabPanel 
+          
+          value="2" sx={{ paddingBottom: "15px" }}>
+            <VehicleShipmentView
+              customer_id={initialValues.id}
+            
+            page={"vehicleShipment"} />
           </TabPanel>
 
           <TabPanel value="3" sx={{ paddingBottom: "15px" }}>
-            <LooseShipmentView page={"looseShipment"} />
+            <LooseShipmentView 
+              customer_id={initialValues.id}
+            
+            page={"looseShipment"} />
           </TabPanel>
         </TabContext>
       </Box>

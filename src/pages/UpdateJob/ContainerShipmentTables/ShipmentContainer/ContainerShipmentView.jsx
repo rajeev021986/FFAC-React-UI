@@ -33,7 +33,7 @@ import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getContaienrListGridActions } from "./containerAction";
 import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 
-export default function ContainerShipmentView({ page }) {
+export default function ContainerShipmentView({ page,customer_id }) {
   const containerSelector = useSelector((state) => state?.containers);
 
   const location = useLocation();
@@ -46,7 +46,7 @@ export default function ContainerShipmentView({ page }) {
     type: "",
     data: {},
   });
-
+console.log(customer_id, "customer_id");
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
@@ -59,6 +59,7 @@ export default function ContainerShipmentView({ page }) {
   const query = {
     page: containerSelector?.pagination?.page + 1,
     size: containerSelector?.pagination?.pageSize,
+    // id: customer_id,
     sortBy:
       containerSelector.sortModel.length > 0
         ? containerSelector.sortModel[0].field
@@ -99,7 +100,7 @@ export default function ContainerShipmentView({ page }) {
   } = useFetchContainerQuery({
     params: query,
     payload,
-    page: page == "containerNo" ? "job-update/container/filter" : "",
+    page: page == "containerNo" ? `job-update/container/filter/${customer_id}` : "",
   });
 
   const handleActionClick = async (actionName) => {

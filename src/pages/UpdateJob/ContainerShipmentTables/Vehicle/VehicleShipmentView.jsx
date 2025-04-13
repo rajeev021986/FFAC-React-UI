@@ -36,7 +36,7 @@ import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getVehicleListGridActions } from "./vehicleAction";
 import { VEHICLE_COLUMNS } from "../../../../data/columns/jobEntry";
 
-export default function VehicleShipmentView({ page }) {
+export default function VehicleShipmentView({ page,customer_id }) {
   const vehicleSelector = useSelector((s) => s?.vehicle);
 
   const location = useLocation();
@@ -102,7 +102,7 @@ export default function VehicleShipmentView({ page }) {
   } = useFetchContainerQuery({
     params: query,
     payload,
-    page: page == "vehicleShipment" ? "job-update/vehicle/filter" : "",
+    page: page == "vehicleShipment" ? `job-update/vehicle/filter/${customer_id}` : "",
   });
 
   const handleActionClick = async (actionName) => {

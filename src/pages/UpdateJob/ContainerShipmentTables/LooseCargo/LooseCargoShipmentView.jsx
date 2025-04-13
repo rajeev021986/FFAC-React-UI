@@ -35,7 +35,7 @@ import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getLooseCargoListGridActions } from "./LooseCargoAction";
 import { LOOSECARGO_COLUMNS } from "../../../../data/columns/jobEntry";
 
-export default function LooseShipmentView({ page }) {
+export default function LooseShipmentView({ page,customer_id }) {
   const loooseCargoSelector = useSelector((s) => s?.looseCargo);
 
   const location = useLocation();
@@ -101,7 +101,7 @@ export default function LooseShipmentView({ page }) {
   } = useFetchContainerQuery({
     params: query,
     payload,
-    page: page == "looseShipment" ? "job-update/loose-cargo/filter" : "",
+    page: page == "looseShipment" ? `job-update/loose-cargo/filter/${customer_id}` : "",
   });
 
   const handleActionClick = async (actionName) => {
