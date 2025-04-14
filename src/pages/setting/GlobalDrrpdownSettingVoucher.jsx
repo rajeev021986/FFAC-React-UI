@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridToolbarColumnsButton } from "@mui/x-data-grid";
-import { Box, Grid, TextField } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { OutlinedButton } from "../../components/common/Button";
 import toast from "react-hot-toast";
@@ -8,13 +8,20 @@ import CustomToast from "../../components/common/Toast/CustomToast";
 import { Tooltip, IconButton } from "@mui/material";
 import { InfoOutlined } from "@mui/icons-material";
 import dayjs from "dayjs";
+import { reindexRows } from "../../components/utils/utils";
+import { isValidPattern } from "../../components/utils/utils";
 import { MenuItem, Select } from "@mui/material";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+
 export default function GlobalDrrpdownSettingVoucher({
   value,
   setvalue,
   title,
 }) {
+  const [dropdownData, setDropdownData] = useState([]);
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
+
   const handleAddRow = () => {
     if (value.some((item) => item.jobPattern.includes("Type the"))) {
       toast.custom(
@@ -22,61 +29,72 @@ export default function GlobalDrrpdownSettingVoucher({
           message="Please complete the newly added field first"
           toast="error"
         />,
-        {
-          closeButton: false,
-        }
+        { closeButton: false }
       );
       return;
     }
 
-    const newId = value.length
-      ? Math.max(...value.map((item) => item.id)) + 1
-      : 1;
+    const newRow = {
+      shipmentType: "",
+      jobPattern: "",
+      sampleJobNumber: "",
+      resetNumber: "",
+    };
 
-    setvalue((prevStatus) => [
-      ...prevStatus,
-      {
-        id: newId,
-        shipmentType: "", // Add a default value
-        jobPattern: "", // Ensure a new JobPattern is added
-        sampleJobNumber: "",
-        resetNumber: "",
-      },
-    ]);
-
-    console.log("New Row Added:", value);
+    const updated = [...value, newRow];
+    setvalue(reindexRows(updated));
   };
 
-  // const handleDeleteRow = (id) => {
-  //   setvalue((prevStatus) => prevStatus.filter((item) => item.id !== id));
-  // };
-  const handleDeleteRow = (id) => {
-    const rowToDelete = value.find((item) => item.id === id);
-    // if (rowToDelete?.shipmentType === "General/Common") {
-    //   toast.custom(
-    //     <CustomToast
-    //       message="This default row cannot be deleted"
-    //       toast="error"
-    //     />,
-    //     { closeButton: false }
-    //   );
-    //   return;
-    // }
+  useEffect(() => {
+    if (!value.some((row) => row.shipmentType === "General/Common")) {
+      const updated = [
+        {
+          id: 1,
+          shipmentType: "General/Common",
+          jobPattern: "",
+          sampleJobNumber: "",
+          resetNumber: "",
+        },
+        ...value,
+      ];
+      setvalue(updated);
+    }
+  }, [value, setvalue]);
 
+  const handleDeleteRow = (id) => {
+    const updated = value.filter((item) => item.id !== id);
     toast.custom(
       <CustomToast message="Deleted Successfully" toast="success" />,
-      {
-        closeButton: false,
-      }
+      { closeButton: false }
     );
-    setvalue((prevStatus) => prevStatus.filter((item) => item.id !== id));
+    setvalue(reindexRows(updated));
   };
 
   const handleProcessRowUpdate = (newRow, oldRow) => {
-    const updatedRow = {
-      ...newRow,
-      sampleJobNumber: replaceVoucherCodes(newRow.jobPattern),
-    };
+    let updatedRow = { ...newRow };
+    let validationMessage = "";
+
+    if (newRow.jobPattern !== oldRow.jobPattern) {
+      if (!isValidPattern(newRow.jobPattern)) {
+        validationMessage = "Invalid pattern. Please use valid placeholders.";
+        updatedRow.jobPattern = oldRow.jobPattern; // revert to old value
+      } else {
+        updatedRow.sampleJobNumber = replaceVoucherCodes(newRow.jobPattern);
+      }
+    }
+
+    if (newRow.shipmentType !== oldRow.shipmentType) {
+      const shipmentCode = getShortShipmentCode(newRow.shipmentType);
+      const newPattern = `${shipmentCode}-#4-$M-$Y`;
+      updatedRow.jobPattern = newPattern;
+      updatedRow.sampleJobNumber = replaceVoucherCodes(newPattern);
+    }
+
+    if (validationMessage) {
+      toast.custom(<CustomToast message={validationMessage} toast="error" />, {
+        closeButton: false,
+      });
+    }
 
     setvalue((prevValues) =>
       prevValues.map((row) => (row.id === newRow.id ? updatedRow : row))
@@ -86,22 +104,20 @@ export default function GlobalDrrpdownSettingVoucher({
   };
 
   const tooltipText = `
-  #4 : 4 Digit Voucher Number (Zero Padded)
-  #5 : 5 Digit Voucher Number (Zero Padded)
-  #6 : 6 Digit Voucher Number (Zero Padded)
-  #7 : 7 Digit Voucher Number (Zero Padded)
-  #8 : 8 Digit Voucher Number (Zero Padded)
-  $Z : Month Number (Zero Padded)
-  $N : Month Name
-  $M : Month Number
-  $D : Day of the Month (Zero Padded)
-  $Y : Year (Current Year)
-  `;
+#4 : 4 Digit Voucher Number (Zero Padded)
+#5 : 5 Digit Voucher Number (Zero Padded)
+#6 : 6 Digit Voucher Number (Zero Padded)
+#7 : 7 Digit Voucher Number (Zero Padded)
+#8 : 8 Digit Voucher Number (Zero Padded)
+$Z : Month Number (Zero Padded)
+$N : Month Name
+$M : Month Number
+$D : Day of the Month (Zero Padded)
+$Y : Year (Current Year)
+`;
 
-  // Function to replace special codes with values
   const replaceVoucherCodes = (input) => {
-    if (!input) return ""; // Prevents errors when input is undefined
-    console.log(input, "input");
+    if (!input) return "";
     const currentDate = dayjs();
     const replacements = {
       "#4": String(1).padStart(4, "0"),
@@ -109,99 +125,65 @@ export default function GlobalDrrpdownSettingVoucher({
       "#6": String(1).padStart(6, "0"),
       "#7": String(1).padStart(7, "0"),
       "#8": String(1).padStart(8, "0"),
-      $Z: String(currentDate.month() + 1).padStart(2, "0"), // Zero-padded month
-      $N: currentDate.format("MMM"), // Three-letter month name
-      $M: String(currentDate.month() + 1), // Month number
-      $D: String(currentDate.date()).padStart(2, "0"), // Zero-padded day
-      $Y: String(currentDate.year()), // Year
+      $Z: String(currentDate.month() + 1).padStart(2, "0"),
+      $N: currentDate.format("MMM"),
+      $M: String(currentDate.month() + 1),
+      $D: String(currentDate.date()).padStart(2, "0"),
+      $Y: String(currentDate.year()),
     };
-
     return input.replace(
       /#4|#5|#6|#7|#8|\$Z|\$N|\$M|\$D|\$Y/g,
       (match) => replacements[match] || match
     );
   };
-  console.log(replaceVoucherCodes, "replace");
-  const handleDropdownChange = (id, newValue) => {
-    setvalue((prevValues) =>
-      prevValues.map((row) =>
-        row.id === id  ? { ...row, shipmentType: newValue } : row
-      )
-    );
-  };
 
-  // shipmentType - vovhernAME
-  // vOCUHERnUM -JOBpATTERN
-  // saplevoc - sampleJobNumber,
-  // createdDate -getTodayDate,
-
-  const handleInputChange = (id, newValue) => {
-    console.log("Row ID:", id, "New Value:", newValue);
-
-    setvalue((prevValues) => {
-      const updatedValues = prevValues.map((row) =>
-        row.id === id
-          ? {
-              ...row,
-              VoucherNumber: newValue,
-              sampleVoucherNumber: replaceVoucherCodes(newValue),
-            }
-          : row
-      );
-
-      console.log("Updated State:", updatedValues); // Debugging
-      return updatedValues;
-    });
+  const getShortShipmentCode = (shipmentType) => {
+    if (!shipmentType) return "XXX";
+    return shipmentType
+      .replace(/[^a-zA-Z]/g, "")
+      .substring(0, 3)
+      .toUpperCase();
   };
 
   useEffect(() => {
-    // Ensure "General/Common" row exists at all times
     if (!value.some((row) => row.shipmentType === "General/Common")) {
-      setvalue([
+      const updated = [
         {
-          id: 0,
           shipmentType: "General/Common",
           jobPattern: "",
           sampleJobNumber: "",
           resetNumber: "",
         },
         ...value,
-      ]);
+      ];
+      setvalue(reindexRows(updated));
     }
   }, [value, setvalue]);
 
-  const [dropdownData, setDropdownData] = useState([]);
-  console.log(dropdownData, "dropdownData");
-  const [disabled, setDisabled] = useState(false);
-  const { data: optionsSettingsData } =
-    useGetOptionsSettingsQuery("common_settings");
-
-  console.log(optionsSettingsData, "optionsSettingsData");
-
   useEffect(() => {
     if (optionsSettingsData?.body) {
-      setDropdownData(optionsSettingsData?.body?.shipmentType);
+      setDropdownData(optionsSettingsData.body.shipmentType);
     }
   }, [optionsSettingsData]);
 
-  console.log(value, "value");
   const columns = [
-    { field: "id", headerName: "ID", width: 50,   headerAlign: "center", 
+    {
+      field: "id",
+      headerName: "ID",
+      width: 50,
+      headerAlign: "center",
       align: "center",
-
     },
     {
       field: "shipmentType",
       headerName: "Shipment Type",
       headerAlign: "center",
       align: "center",
-
       width: 200,
       editable: true,
       renderCell: (params) => <span>{params.row.shipmentType}</span>,
       renderEditCell: (params) => {
         const isGeneral = params.row.shipmentType === "General/Common";
-
         return (
           <Select
             size="small"
@@ -225,7 +207,6 @@ export default function GlobalDrrpdownSettingVoucher({
                 (row) =>
                   row.shipmentType === option.value && row.id !== params.row.id
               );
-
               return (
                 <MenuItem
                   key={idx}
@@ -246,22 +227,18 @@ export default function GlobalDrrpdownSettingVoucher({
       width: 120,
       editable: true,
       align: "center",
-
       headerAlign: "center",
       renderEditCell: (params) => {
         const voucherNumber = params.row.jobPattern || "";
-
         const hasYear = voucherNumber.includes("$Y");
         const hasMonth =
           voucherNumber.includes("$M") ||
           voucherNumber.includes("$Z") ||
           voucherNumber.includes("$N");
         const hasDay = voucherNumber.includes("$D");
-
         const enableYearly = hasYear;
         const enableMonthly = hasYear && hasMonth;
         const enableDaily = hasYear && hasMonth && hasDay;
-
         return (
           <Select
             size="small"
@@ -276,15 +253,12 @@ export default function GlobalDrrpdownSettingVoucher({
                   : newValue === "Daily"
                   ? "#4-$D-$M-$Y"
                   : "";
-            
               const updatedSample = replaceVoucherCodes(pattern);
-            
               params.api.setEditCellValue({
                 id: params.id,
                 field: "resetNumber",
                 value: newValue,
               });
-            
               setvalue((prevValues) =>
                 prevValues.map((row) =>
                   row.id === params.id
@@ -297,17 +271,16 @@ export default function GlobalDrrpdownSettingVoucher({
                 )
               );
             }}
-            
             fullWidth
           >
             <MenuItem value="Never">Never</MenuItem>
-            <MenuItem value="Yearly" >
+            <MenuItem value="Yearly" disabled={!enableYearly}>
               Yearly
             </MenuItem>
-            <MenuItem value="Month" >
+            <MenuItem value="Month" disabled={!enableMonthly}>
               Month
             </MenuItem>
-            <MenuItem value="Daily" >
+            <MenuItem value="Daily" disabled={!enableDaily}>
               Daily
             </MenuItem>
           </Select>
@@ -319,19 +292,27 @@ export default function GlobalDrrpdownSettingVoucher({
       headerName: "Job Pattern",
       headerAlign: "center",
       align: "center",
-      // width: 250,
-      flex:1,
-     editable: false, // <-- Make it non-editable
+      flex: 1,
+      editable: true,
       renderCell: (params) => <span>{params.row.jobPattern || ""}</span>,
       renderHeader: () => (
         <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
           <span style={{ color: "white" }}>Job Pattern</span>
           <Tooltip
-            title={<pre style={{ whiteSpace: "pre-wrap" }}>{tooltipText}</pre>}
-            arrow
+            title={
+              <pre
+                style={{
+                  whiteSpace: "pre-wrap",
+                  fontSize: "14px",
+                  lineHeight: 1.75,
+                }}
+              >
+                {tooltipText}
+              </pre>
+            }
           >
             <IconButton size="small">
-              <InfoOutlined fontSize="small" color="red" />
+              <InfoOutlined fontSize="small" color="white" />
             </IconButton>
           </Tooltip>
         </div>
@@ -341,20 +322,16 @@ export default function GlobalDrrpdownSettingVoucher({
       field: "sampleJobNumber",
       headerName: "Sample Job Number",
       width: 250,
-      align:"center",
+      align: "center",
       headerAlign: "center",
-      editable: false, // <-- Make it non-editable
+      editable: false,
       renderCell: (params) => <span>{params.row.sampleJobNumber || ""}</span>,
     },
-    
-  
-
     {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
       align: "center",
-
       width: 100,
       renderCell: (params) => {
         const isGeneral = params.row.shipmentType === "General/Common";
@@ -379,22 +356,15 @@ export default function GlobalDrrpdownSettingVoucher({
         }}
       >
         <h3>{title}</h3>
-        <OutlinedButton color="primary" size="small" onClick={handleAddRow}>
-          Add
-        </OutlinedButton>
       </div>
+
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
-          key={value.length}
           rows={value}
           editMode="cell"
           columns={columns}
           processRowUpdate={handleProcessRowUpdate}
           experimentalFeatures={{ newEditingApi: true }}
-          // sx={{
-          //   backgroundColor: "white.main",
-          //   "& .MuiDataGrid-main": { overflow: "auto" },
-          // }}
           sx={{
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "primary.main",
@@ -403,13 +373,17 @@ export default function GlobalDrrpdownSettingVoucher({
             "& .MuiDataGrid-cell": {
               whiteSpace: "normal",
               wordWrap: "break-word",
+              fontSize: "14px",
             },
             "& .MuiDataGrid-columnHeaderTitle": {
               color: "#fff",
               fontSize: "14px",
             },
-            "& .MuiDataGrid-cell": {
-              fontSize: "14px",
+            "& .MuiDataGrid-sortIcon": {
+              color: "#fff",
+            },
+            "& .MuiDataGrid-menuIconButton .MuiSvgIcon-root": {
+              fill: "#fff",
             },
           }}
           disableRowSelectionOnClick
@@ -417,12 +391,20 @@ export default function GlobalDrrpdownSettingVoucher({
           hideFooter
           slots={{
             toolbar: () => (
-              <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", p: 1 }}
+              >
                 <GridToolbarColumnsButton />
+                <OutlinedButton
+                  color="primary"
+                  size="small"
+                  onClick={handleAddRow}
+                >
+                  Add
+                </OutlinedButton>
               </Box>
             ),
           }}
-     
         />
       </div>
     </Grid>
