@@ -36,13 +36,11 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import {
   useAddCustomerMutation,
-  useGetCustomerAuditQuery,
   useUpdateCustomerMutation,
 } from "../../../../store/api/codeDataApi";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuditTimeline from "../../../AuditTimeLine";
 import UploadFile from "../../../UploadFile";
-import { UploadFileOutlined } from "@mui/icons-material";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
