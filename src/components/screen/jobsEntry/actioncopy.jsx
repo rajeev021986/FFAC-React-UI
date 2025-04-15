@@ -1,9 +1,10 @@
 import EditIconDropdown from "../../common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
 import AuditIconDropdown from "../../common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
-import DocumentIconDropdown from "../../common/commonIconDropdown/DocumentIconDropdown/DocumentIconDropdown";
+import ViewIconDropdown from "../../common/commonIconDropdown/ViewIconDropdown/ViewIconDropDown";
 import AddRateIconDropdown from "../../common/commonIconDropdown/DocumentIconDropdown/AddRateIconDropdown/AddRateIconDropdown";
 import CloseIcon from "@mui/icons-material/Close";
-import CancelIcon from '@mui/icons-material/Cancel';
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+
 export const getJobEntryListGridActionsApprovel = (nav, setModal) => {
   return [
     {
@@ -23,11 +24,11 @@ export const getJobEntryListGridActionsApprovel = (nav, setModal) => {
       icon: <AuditIconDropdown />,
     },
     {
-      label: "Document",
+      label: "View Doc",
       onClick: (params) => {
         setModal({ open: true, type: "document", data: params.row });
       },
-      icon: <DocumentIconDropdown />,
+      icon: <ViewIconDropdown />,
     },
     {
       label: "Add Rate",
@@ -37,7 +38,7 @@ export const getJobEntryListGridActionsApprovel = (nav, setModal) => {
       icon: <AddRateIconDropdown />,
     },
     {
-      label: "Rejected",
+      label: "Reject",
       onClick: (params) => {
         setModal({ open: true, type: "reject", data: params.row });
       },
@@ -48,7 +49,7 @@ export const getJobEntryListGridActionsApprovel = (nav, setModal) => {
       onClick: (params) => {
         setModal({ open: true, type: "cancel", data: params.row });
       },
-      icon: <CancelIcon sx={{ width: "20px", marginTop: "5px" }} />,
+      icon: <CancelOutlinedIcon sx={{ width: "20px", marginTop: "5px" }} />,
     },
   ];
 };

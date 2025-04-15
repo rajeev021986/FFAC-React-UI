@@ -53,6 +53,7 @@ export default function JobEntryForm({
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
   const nav = useNavigate();
+  const shipmentTypeRef = useRef(null);
   const [value, setValue] = React.useState("1");
   const [loaderApprove, setLoaderApprove] = useState({
     approve: false,
@@ -346,6 +347,12 @@ export default function JobEntryForm({
   }, []);
 
   useEffect(() => {
+    if (shipmentTypeRef.current) {
+      shipmentTypeRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
     const selectedValue = formik.values.shipmentType;
 
     if (
@@ -442,9 +449,9 @@ export default function JobEntryForm({
                     onChange={formik.handleChange}
                     disabled={getPage === "newEntry" ? false : true}
                     getPage={getPage}
+                    inputRef={shipmentTypeRef}
                   />
                 </Grid>
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <SelectBox
                     label="Move Type*"

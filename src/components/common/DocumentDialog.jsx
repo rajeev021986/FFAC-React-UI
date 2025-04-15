@@ -10,6 +10,9 @@ import {
   Link,
 } from "@mui/material";
 import toast from "react-hot-toast";
+import IconButton from "@mui/material/IconButton";
+import { GridDeleteIcon } from "@mui/x-data-grid";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { reloadDataHandler } from "../../services/common/DocumentDetails";
 import { useEffect } from "react";
 import { StyledDataGrid } from "./Grid/styles";
@@ -36,10 +39,33 @@ export default function DocumentDialog({
     cancelButtonColor = "",
   } = props;
 
+  const handleDate = (date) => {
+    if (!date) {
+      return "";
+    }
+
+    return date.split("T")[0];
+  };
+
+  const deleteRow = (id) => {
+    setListData((prev) => prev.filter((row) => row.id !== id));
+  };
+
+  const addNewRow = () => {
+    const newRow = {
+      id: Date.now(), // unique temp ID
+      documentType: "",
+      fileName: "New Document",
+      createdBy: "You",
+      createdDate: new Date().toISOString(),
+    };
+    setListData((prev) => [...prev, newRow]);
+  };
+
   const columns = [
     {
       field: "documentType",
-      headerName: "Document Name",
+      headerName: "Type",
       flex: 1,
       headerAlign: "center",
       renderCell: (params) => (
@@ -71,6 +97,56 @@ export default function DocumentDialog({
         </Tooltip>
       ),
     },
+    {
+      field: "createdBy",
+      headerName: "Created By",
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Tooltip title={`${params.row.createdBy}`} arrow>
+          <div>{params.value}</div>
+        </Tooltip>
+      ),
+    },
+    {
+      field: "createdDate",
+      headerName: "Created Date",
+      width: 130,
+      flex: 1,
+
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => {
+        return (
+          <Tooltip title={`${handleDate(params.value)}`} arrow>
+            <div
+              style={{
+                marginTop: "42px",
+              }}
+            >
+              {handleDate(params.value)}
+            </div>
+            ;
+          </Tooltip>
+        );
+      },
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      sortable: false,
+      flex: 0,
+      renderHeader: () => (
+        <IconButton color="white">
+          <AddCircleIcon onClick={addNewRow} />
+        </IconButton>
+      ),
+      renderCell: (params) => (
+        <IconButton color="error" onClick={() => deleteRow(params.row.id)}>
+          <GridDeleteIcon />
+        </IconButton>
+      ),
+    },
   ];
   const [loader, setLoader] = useState(false);
   const [viewloader, setViewloader] = useState(false);
@@ -82,7 +158,7 @@ export default function DocumentDialog({
   const [listData, setListData] = useState([]);
   const sourceType = "JOB_DETAIL";
   useEffect(() => {
-    if(handleOpen){
+    if (handleOpen) {
       reloadDataHandler(sourceType, sourceId, setListData, setLoader);
     }
   }, [sourceId]);
@@ -156,7 +232,7 @@ export default function DocumentDialog({
             boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
           },
         }}
-        style={{overflowY: "hidden" }}
+        style={{ overflowY: "hidden" }}
         maxWidth="md"
         fullWidth
       >
@@ -169,7 +245,7 @@ export default function DocumentDialog({
             pb: 2,
           }}
         >
-          {headerContent || `Job detail for referenceNo : ${customerRefNo? customerRefNo : '-'}`}
+          {headerContent || `Document for Job No : ${job_No}`}
         </DialogTitle>
         <DialogContent
           sx={{
@@ -184,10 +260,10 @@ export default function DocumentDialog({
             <StyledDataGrid
               rows={listData}
               columns={columns}
-              pageSize={20}
+              pagination={false}
               disableSelectionOnClick
+              hideFooterPagination    
             />
-            {listData.length === 0 && <p> No Rows Found</p>}
           </Box>
         </DialogContent>
         <br />
