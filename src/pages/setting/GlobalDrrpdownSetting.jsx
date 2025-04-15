@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { DataGrid, GridToolbarColumnsButton } from "@mui/x-data-grid";
-import { Box, Grid, TextField } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { OutlinedButton } from "../../components/common/Button";
 import toast from "react-hot-toast";
@@ -43,7 +43,6 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
         closeButton: false,
       }
     );
-
   };
   const handleProcessRowUpdate = (newRow, oldRow) => {
     const updatedRows = value.map((row) =>
@@ -54,15 +53,18 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   };
 
   const columns = [
-    { field: "id", headerName: "ID",flex:1.5 ,
+    {
+      field: "id",
+      headerName: "ID",
+      flex: 1.5,
 
-      align:"center",
+      align: "center",
       headerAlign: "center",
     },
     {
       field: "value",
       headerName: "Value",
-      align:"center",
+      align: "center",
       headerAlign: "center",
       width: 150,
       editable: true,
@@ -70,7 +72,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
     {
       field: "actions",
       headerName: "Actions",
-      align:"center",
+      align: "center",
       headerAlign: "center",
       width: 100,
       renderCell: (params) => (
@@ -98,7 +100,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
         }}
       >
         <h3>{title}</h3>
-        <OutlinedButton  color="primary" size="small" onClick={handleAddRow}>
+        <OutlinedButton color="primary" size="small" onClick={handleAddRow}>
           Add
         </OutlinedButton>
       </div>
@@ -119,13 +121,17 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
             "& .MuiDataGrid-cell": {
               whiteSpace: "normal",
               wordWrap: "break-word",
+              fontSize: "14px",
             },
             "& .MuiDataGrid-columnHeaderTitle": {
               color: "#fff",
               fontSize: "14px",
             },
-            "& .MuiDataGrid-cell": {
-              fontSize: "14px",
+            "& .MuiDataGrid-sortIcon": {
+              color: "#fff",
+            },
+            "& .MuiDataGrid-menuIconButton .MuiSvgIcon-root": {
+              fill: "#fff",
             },
           }}
           slots={{
@@ -135,13 +141,6 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
               </Box>
             ),
           }}
-                 // components={{
-          //     Toolbar: () => (
-          //       <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
-          //         <GridToolbarColumnsButton />
-          //       </Box>
-          //     ),
-          //   }}
         />
       </div>
     </Grid>

@@ -40,7 +40,6 @@ const JobEntrySetting = () => {
   const [unitTypes, setunitTypes] = useState([]);
   const [jobDocumentType, setJobDocumentType] = useState([]);
 
- 
   const [voucherData, setVoucherData] = useState([
     { id: 1, shipmentType: "", jobPattern: "", sampleJobNumber: "" },
   ]);
@@ -60,9 +59,15 @@ const JobEntrySetting = () => {
     setsizeType(data?.body.sizeType || []);
     setunitTypes(data?.body.unitTypes || []);
     setJobDocumentType(data?.body.jobDocumentType || []);
-    setVoucherData(data?.body.jobPatternData ||  []);
+    const sorted = [...(data?.body.jobPatternData || [])].sort(
+      (a, b) => a.id - b.id
+    );
+    const remapped = sorted.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
+    setVoucherData(remapped);
   }, [data, geterror]);
-
   const Postdata = async () => {
     setIsLoading(true);
     const filteredData = {
@@ -172,7 +177,7 @@ const JobEntrySetting = () => {
           <GlobalDrrpdownSetting
             value={shiperStatus}
             setvalue={setShiperStatus}
-            title="Shiper Status"
+            title="Shipper Status"
           />
 
           <GlobalDrrpdownSetting
@@ -221,7 +226,6 @@ const JobEntrySetting = () => {
             setvalue={setVoucherData}
             title=" Job Number"
           />
-         
         </Grid>
       )}
 
