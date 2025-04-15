@@ -15,7 +15,6 @@ import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import getFirstError from "../../components/common/FieldToastError";
 import EditIconForHeader from "../../components/common/commonIcons/EditIcons/EditIconForHeader";
-
 import { useUpdateJobDetailsEntryMutation } from "../../store/api/jobEntryApi";
 
 // Components
@@ -23,7 +22,6 @@ import { OutlinedButton, ThemeButton } from "../../components/common/Button";
 import InputBox from "../../components/common/InputBox";
 import PopupAlert from "../../components/common/Alert/PopupAlert";
 import BondDetailsGridForm from "./UpdateJobEntryGrid";
-// import ContainerDetails from "./UpdateDetailsForm";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../components/UploadFile";
 
@@ -508,7 +506,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           <BondDetailsGridForm formik={formik} dropdownData={dropdownData} />
         </Grid>
 
-        {page == "update-job" && (
+        {page === "update-job" && (
           <Grid
             paddingLeft={3}
             marginTop={2}
@@ -577,6 +575,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 label="Container Details / Update Details"
                 value="1"
                 sx={{
+                  textTransform: "capitalize",
                   width: "100%",
                   typography: "body1",
                   borderBottom: 1,
@@ -588,6 +587,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 label="Vehicle Shipment"
                 value="2"
                 sx={{
+                  textTransform: "capitalize",
                   width: "100%",
                   typography: "body1",
                   borderBottom: 1,
@@ -599,6 +599,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 label="Loose Cargo Shipment"
                 value="3"
                 sx={{
+                  textTransform: "capitalize",
                   width: "100%",
                   typography: "body1",
                   borderBottom: 1,
@@ -610,26 +611,24 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           </Box>
 
           <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
-              <ContainerShipmentView 
+            <ContainerShipmentView
               customer_id={initialValues.id}
-              
-              page={"containerNo"} />
+              page={"containerNo"}
+            />
           </TabPanel>
 
-          <TabPanel 
-          
-          value="2" sx={{ paddingBottom: "15px" }}>
+          <TabPanel value="2" sx={{ paddingBottom: "15px" }}>
             <VehicleShipmentView
               customer_id={initialValues.id}
-            
-            page={"vehicleShipment"} />
+              page={"vehicleShipment"}
+            />
           </TabPanel>
 
           <TabPanel value="3" sx={{ paddingBottom: "15px" }}>
-            <LooseShipmentView 
+            <LooseShipmentView
               customer_id={initialValues.id}
-            
-            page={"looseShipment"} />
+              page={"looseShipment"}
+            />
           </TabPanel>
         </TabContext>
       </Box>

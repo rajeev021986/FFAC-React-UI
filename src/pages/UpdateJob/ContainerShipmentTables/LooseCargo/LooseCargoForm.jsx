@@ -29,7 +29,12 @@ import InputBox from "../../../../components/common/InputBox";
 import DateTimeField from "../../../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../../../components/UploadFile";
 
-export default function LooseCargoForm({ initialValues, page }) {
+export default function LooseCargoForm({
+  initialValues,
+  page,
+  onCancel,
+  onSubmit,
+}) {
   const [updateLooseCargoNumber, { isLoading }] =
     useUpdateLooseCargoNumberMutation();
 
@@ -66,11 +71,15 @@ export default function LooseCargoForm({ initialValues, page }) {
           ...values,
         }).unwrap();
         const message = response.message;
-        if (response.code == "SUCCESS") {
+        if (response.code === "SUCCESS") {
           toast.custom(<CustomToast message={message} toast="success" />, {
             closeButton: false,
           });
-          nav(-1);
+          if (onSubmit) {
+            onSubmit();
+          } else {
+            nav(-1);
+          }
         } else {
           toast.custom(<CustomToast message={message} toast="error" />, {
             closeButton: false,
@@ -611,7 +620,7 @@ export default function LooseCargoForm({ initialValues, page }) {
           </TabPanel>
         </TabContext>
 
-        {page == "loose_cargo_number" && (
+        {(page === "loose_cargo_number" || onCancel || onSubmit) && (
           <Grid
             paddingLeft={3}
             marginTop={2}
@@ -629,7 +638,13 @@ export default function LooseCargoForm({ initialValues, page }) {
               <Stack direction="row" spacing={2}>
                 <OutlinedButton
                   sx={{ fontWeight: "500" }}
-                  onClick={() => nav(-1)}
+                  onClick={() => {
+                    if (onCancel) {
+                      onCancel();
+                    } else {
+                      nav(-1);
+                    }
+                  }}
                 >
                   Cancel
                 </OutlinedButton>

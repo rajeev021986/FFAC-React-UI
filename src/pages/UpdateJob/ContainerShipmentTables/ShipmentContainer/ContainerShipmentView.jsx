@@ -3,11 +3,12 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { Box, IconButton, Stack } from "@mui/material";
+import ContainerNumberForm from "./ContainerForm";
+import { Box, IconButton, Stack, Dialog, DialogContent } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import toast, { LoaderIcon } from "react-hot-toast";
+import { LoaderIcon } from "react-hot-toast";
 
 import {
   setPagination,
@@ -33,7 +34,7 @@ import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getContaienrListGridActions } from "./containerAction";
 import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 
-export default function ContainerShipmentView({ page,customer_id }) {
+export default function ContainerShipmentView({ page, customer_id }) {
   const containerSelector = useSelector((state) => state?.containers);
 
   const location = useLocation();
@@ -46,7 +47,7 @@ export default function ContainerShipmentView({ page,customer_id }) {
     type: "",
     data: {},
   });
-console.log(customer_id, "customer_id");
+  console.log(customer_id, "customer_id");
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
@@ -83,7 +84,7 @@ console.log(customer_id, "customer_id");
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key == "cname") && (fieldname = "containerNo");
+      Boolean(key === "cname") && (fieldname = "containerNo");
       return {
         fieldName: fieldname,
         operator: "=",
@@ -100,7 +101,10 @@ console.log(customer_id, "customer_id");
   } = useFetchContainerQuery({
     params: query,
     payload,
-    page: page == "containerNo" ? `job-update/container/filter/${customer_id}` : "",
+    page:
+      page === "containerNo"
+        ? `job-update/container/filter/${customer_id}`
+        : "",
   });
 
   const handleActionClick = async (actionName) => {
@@ -125,7 +129,7 @@ console.log(customer_id, "customer_id");
   };
 
   CONTAINER_COLUMNS[CONTAINER_COLUMNS.length - 1].renderCell = GridActions({
-    actions: getContaienrListGridActions(nav, setModal),
+    actions: getContaienrListGridActions(setModal),
   });
 
   useEffect(() => {
@@ -140,7 +144,7 @@ console.log(customer_id, "customer_id");
         rightComps={
           <>
             <Backdrop open={open} />
-            {(page == "customer" || page == "customerApprove") && (
+            {(page === "customer" || page === "customerApprove") && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
@@ -162,7 +166,7 @@ console.log(customer_id, "customer_id");
                       justifyContent: "center",
                       alignItems: "center",
                       padding: 2,
-                      borderRadius: 1,
+                      // borderRadius: 1,
                       boxShadow: 3,
                       borderRadius: "20px 19px 19px 20px",
                       width: 72,
@@ -247,12 +251,31 @@ console.log(customer_id, "customer_id");
             data={containerListData?.body?.data}
             paginationModel={containerSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={getContaienrListGridActions(nav, setModal)}
+            actions={getContaienrListGridActions(setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
           />
         )}
       </Card>
+      <Dialog
+        open={modal.open}
+        onClose={() => setModal({ open: false, type: "", data: {} })}
+        maxWidth="lg"
+        fullWidth
+      >
+        <DialogContent>
+          <ContainerNumberForm
+            initialValues={modal.data}
+            type={modal.type}
+            page={page}
+            onCancel={() => setModal({ open: false, type: "", data: {} })}
+            onSubmit={() => {
+              setModal({ open: false, type: "", data: {} });
+              refetch();
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

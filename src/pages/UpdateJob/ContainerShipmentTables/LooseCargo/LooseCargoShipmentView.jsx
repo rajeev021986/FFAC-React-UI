@@ -3,39 +3,34 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { Box, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack, Dialog, DialogContent } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDeleteCustomerMutation } from "../../../../store/api/codeDataApi";
 import { useDispatch, useSelector } from "react-redux";
-import toast, { LoaderIcon } from "react-hot-toast";
-
+import { LoaderIcon } from "react-hot-toast";
 import {
   setPagination,
   updateInput,
   looseCargoView,
   looseCargoSetSortModel,
 } from "../../../../store/freatures/LoseCargoSlice";
-
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-
 // Components
+import LooseCargoForm from "./LooseCargoForm";
 import GridSearchInput from "../../../../components/common/Filter/GridSearchInput";
 import CardsView from "../../../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../../../components/common/ScreenToolbar";
 import GridActions from "../../../../components/common/Grid/GridActions";
 import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
-import CustomToast from "../../../../components/common/Toast/CustomToast";
 import FilterForm from "./FilterForm";
-
 import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getLooseCargoListGridActions } from "./LooseCargoAction";
 import { LOOSECARGO_COLUMNS } from "../../../../data/columns/jobEntry";
 
-export default function LooseShipmentView({ page,customer_id }) {
+export default function LooseShipmentView({ page, customer_id }) {
   const loooseCargoSelector = useSelector((s) => s?.looseCargo);
 
   const location = useLocation();
@@ -84,7 +79,7 @@ export default function LooseShipmentView({ page,customer_id }) {
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key == "cname") && (fieldname = "customerName");
+      Boolean(key === "cname") && (fieldname = "customerName");
       return {
         fieldName: fieldname,
         operator: "=",
@@ -101,7 +96,10 @@ export default function LooseShipmentView({ page,customer_id }) {
   } = useFetchContainerQuery({
     params: query,
     payload,
-    page: page == "looseShipment" ? `job-update/loose-cargo/filter/${customer_id}` : "",
+    page:
+      page === "looseShipment"
+        ? `job-update/loose-cargo/filter/${customer_id}`
+        : "",
   });
 
   const handleActionClick = async (actionName) => {
@@ -126,7 +124,7 @@ export default function LooseShipmentView({ page,customer_id }) {
   };
 
   LOOSECARGO_COLUMNS[LOOSECARGO_COLUMNS.length - 1].renderCell = GridActions({
-    actions: getLooseCargoListGridActions(nav, setModal),
+    actions: getLooseCargoListGridActions(setModal),
   });
 
   useEffect(() => {
@@ -135,48 +133,13 @@ export default function LooseShipmentView({ page,customer_id }) {
     }
   }, [loooseCargoSelector.view, dispatch]);
 
-  const [deleteCustomer] = useDeleteCustomerMutation();
-
-  const handleClose = () => {
-    setModal({
-      open: false,
-      type: "",
-      data: {},
-    });
-  };
-
-  const handleDelete = async () => {
-    try {
-      await deleteCustomer(modal.data.id)
-        .unwrap()
-        .then(() => refetch());
-      toast.custom(
-        <CustomToast
-          message="Customer deleted successfully!"
-          toast="success"
-        />,
-        {
-          closeButton: false,
-        }
-      );
-      handleClose();
-    } catch (error) {
-      toast.custom(
-        <CustomToast message="Failed to delete customer." toast="error" />,
-        {
-          closeButton: false,
-        }
-      );
-    }
-  };
-
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
         rightComps={
           <>
             <Backdrop open={open} />
-            {(page == "customer" || page == "customerApprove") && (
+            {(page === "customer" || page === "customerApprove") && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
@@ -198,7 +161,7 @@ export default function LooseShipmentView({ page,customer_id }) {
                       justifyContent: "center",
                       alignItems: "center",
                       padding: 2,
-                      borderRadius: 1,
+                      // borderRadius: 1,
                       boxShadow: 3,
                       borderRadius: "20px 19px 19px 20px",
                       width: 72,
@@ -284,12 +247,31 @@ export default function LooseShipmentView({ page,customer_id }) {
             data={vehicleListData?.body?.data}
             paginationModel={loooseCargoSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={getLooseCargoListGridActions(nav, setModal)}
+            actions={getLooseCargoListGridActions(setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
           />
         )}
       </Card>
+      <Dialog
+        open={modal.open}
+        onClose={() => setModal({ open: false, type: "", data: {} })}
+        maxWidth="lg"
+        fullWidth
+      >
+        <DialogContent>
+          <LooseCargoForm
+            initialValues={modal.data}
+            type={modal.type}
+            page={page}
+            onCancel={() => setModal({ open: false, type: "", data: {} })}
+            onSubmit={() => {
+              setModal({ open: false, type: "", data: {} });
+              refetch();
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box, Card, CardContent, Stack } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Stack,
+} from "@mui/material";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import ApiManager from "../../../../services/ApiManager";
-
 // Components
 import ScreenToolbar from "../../../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../../../components/common/Breadcrumb";
@@ -100,27 +104,30 @@ export default function VehicleParent({ page }) {
           rightComps={<div></div>}
         />
       </Stack>
-
-      {loading ? (
-        <Loader />
-      ) : (
-        <Card
-          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
-        >
-          <CardContent
-            sx={{
-              margin: "0px",
-              padding: "0px ! important",
-            }}
-          >
-            <VehicleNumberForm
-              initialValues={initialValues}
-              type={state?.formAction}
-              page={page}
-            />
-          </CardContent>
-        </Card>
-      )}
+          {loading ? (
+            <Loader />
+          ) : (
+            <Card
+              sx={{
+                borderWidth: 1,
+                borderColor: "border.main",
+                padding: "0px",
+              }}
+            >
+              <CardContent
+                sx={{
+                  margin: "0px",
+                  padding: "0px ! important",
+                }}
+              >
+                <VehicleNumberForm
+                  initialValues={initialValues}
+                  type={state?.formAction}
+                  page={page}
+                />
+              </CardContent>
+            </Card>
+          )}
     </Box>
   );
 }

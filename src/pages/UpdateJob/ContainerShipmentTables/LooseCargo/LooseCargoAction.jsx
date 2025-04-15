@@ -1,12 +1,14 @@
 import EditIconDropdown from "../../../../components/common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
 
-export const getLooseCargoListGridActions = (nav, setModal) => {
+export const getLooseCargoListGridActions = (setModal) => {
   return [
     {
       label: "Edit",
       onClick: (params) => {
-        nav(`looseCargoNumber`, {
-          state: { formAction: "edit", initialValues: params.row },
+        setModal({
+          open: true,
+          type: "edit",
+          data: params.row,
         });
       },
       icon: <EditIconDropdown />,
