@@ -4,13 +4,10 @@ import {
   Card,
   CardContent,
   Stack,
-  Dialog,
-  DialogContent,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import ApiManager from "../../../../services/ApiManager";
-
 // Components
 import ScreenToolbar from "../../../../components/common/ScreenToolbar";
 import ThemedBreadcrumb from "../../../../components/common/Breadcrumb";
@@ -20,7 +17,6 @@ import VehicleNumberForm from "./VehicleForm";
 
 export default function VehicleParent({ page }) {
   const [loading, setLoading] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
   const { state } = useLocation();
 
   const [initialValues, setInitialValues] = React.useState({
@@ -96,9 +92,6 @@ export default function VehicleParent({ page }) {
     }
   }, [state?.initialValues?.id]);
 
-  // const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
-
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
       <Stack sx={{ padding: "8px 0px" }}>
@@ -111,13 +104,6 @@ export default function VehicleParent({ page }) {
           rightComps={<div></div>}
         />
       </Stack>
-      <Dialog
-        open={openModal}
-        onClose={handleCloseModal}
-        maxWidth="lg"
-        fullWidth
-      >
-        <DialogContent>
           {loading ? (
             <Loader />
           ) : (
@@ -142,8 +128,6 @@ export default function VehicleParent({ page }) {
               </CardContent>
             </Card>
           )}
-        </DialogContent>
-      </Dialog>
     </Box>
   );
 }

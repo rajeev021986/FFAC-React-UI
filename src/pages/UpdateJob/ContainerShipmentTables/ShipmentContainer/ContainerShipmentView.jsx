@@ -8,7 +8,7 @@ import { Box, IconButton, Stack, Dialog, DialogContent } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import toast, { LoaderIcon } from "react-hot-toast";
+import { LoaderIcon } from "react-hot-toast";
 
 import {
   setPagination,
@@ -84,7 +84,7 @@ export default function ContainerShipmentView({ page, customer_id }) {
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key == "cname") && (fieldname = "containerNo");
+      Boolean(key === "cname") && (fieldname = "containerNo");
       return {
         fieldName: fieldname,
         operator: "=",
@@ -102,7 +102,9 @@ export default function ContainerShipmentView({ page, customer_id }) {
     params: query,
     payload,
     page:
-      page == "containerNo" ? `job-update/container/filter/${customer_id}` : "",
+      page === "containerNo"
+        ? `job-update/container/filter/${customer_id}`
+        : "",
   });
 
   const handleActionClick = async (actionName) => {
@@ -142,7 +144,7 @@ export default function ContainerShipmentView({ page, customer_id }) {
         rightComps={
           <>
             <Backdrop open={open} />
-            {(page == "customer" || page == "customerApprove") && (
+            {(page === "customer" || page === "customerApprove") && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
@@ -164,7 +166,7 @@ export default function ContainerShipmentView({ page, customer_id }) {
                       justifyContent: "center",
                       alignItems: "center",
                       padding: 2,
-                      borderRadius: 1,
+                      // borderRadius: 1,
                       boxShadow: 3,
                       borderRadius: "20px 19px 19px 20px",
                       width: 72,
@@ -266,6 +268,11 @@ export default function ContainerShipmentView({ page, customer_id }) {
             initialValues={modal.data}
             type={modal.type}
             page={page}
+            onCancel={() => setModal({ open: false, type: "", data: {} })}
+            onSubmit={() => {
+              setModal({ open: false, type: "", data: {} });
+              refetch();
+            }}
           />
         </DialogContent>
       </Dialog>

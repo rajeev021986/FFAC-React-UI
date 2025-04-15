@@ -7,7 +7,6 @@ import { Box, IconButton, Stack, Dialog, DialogContent } from "@mui/material";
 import VehicleNumberForm from "./VehicleForm";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDeleteCustomerMutation } from "../../../../store/api/codeDataApi";
 import { useDispatch, useSelector } from "react-redux";
 import { LoaderIcon } from "react-hot-toast";
 import {
@@ -164,7 +163,7 @@ export default function VehicleShipmentView({ page, customer_id }) {
                       justifyContent: "center",
                       alignItems: "center",
                       padding: 2,
-                      borderRadius: 1,
+                      // borderRadius: 1,
                       boxShadow: 3,
                       borderRadius: "20px 19px 19px 20px",
                       width: 72,
@@ -263,6 +262,11 @@ export default function VehicleShipmentView({ page, customer_id }) {
             initialValues={modal.data}
             type={modal.type}
             page={page}
+            onCancel={() => setModal({ open: false, type: "", data: {} })}
+            onSubmit={() => {
+              setModal({ open: false, type: "", data: {} });
+              refetch();
+            }}
           />
         </DialogContent>
       </Dialog>
