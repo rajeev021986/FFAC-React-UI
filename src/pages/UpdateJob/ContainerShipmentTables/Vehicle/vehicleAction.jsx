@@ -1,12 +1,14 @@
 import EditIconDropdown from "../../../../components/common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
 
-export const getVehicleListGridActions = (nav, setModal) => {
+export const getVehicleListGridActions = (setModal) => {
   return [
     {
       label: "Edit",
       onClick: (params) => {
-        nav(`vehicleNumber`, {
-          state: { formAction: "edit", initialValues: params.row },
+        setModal({
+          open: true,
+          type: "edit",
+          data: params.row,
         });
       },
       icon: <EditIconDropdown />,

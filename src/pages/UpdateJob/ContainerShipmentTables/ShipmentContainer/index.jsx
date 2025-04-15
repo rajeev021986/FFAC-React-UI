@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box, Card, CardContent, Stack } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import ApiManager from "../../../../services/ApiManager";
@@ -13,6 +21,7 @@ import ContainerNumberForm from "./ContainerForm";
 
 export default function ContainerForm({ page }) {
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const { state } = useLocation();
 
   const [initialValues, setInitialValues] = React.useState({
@@ -128,6 +137,9 @@ export default function ContainerForm({ page }) {
     }
   }, [state?.initialValues?.id]);
 
+  // const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
       <Stack sx={{ padding: "8px 0px" }}>
@@ -141,26 +153,40 @@ export default function ContainerForm({ page }) {
         />
       </Stack>
 
-      {loading ? (
-        <Loader />
-      ) : (
-        <Card
-          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
-        >
-          <CardContent
-            sx={{
-              margin: "0px",
-              padding: "0px ! important",
-            }}
-          >
-            <ContainerNumberForm
-              initialValues={initialValues}
-              type={state?.formAction}
-              page={page}
-            />
-          </CardContent>
-        </Card>
-      )}
+      <Dialog
+        open={openModal}
+        onClose={handleCloseModal}
+        maxWidth="lg"
+        fullWidth
+      >
+        <DialogTitle>Container Form</DialogTitle>
+        <DialogContent>
+          {loading ? (
+            <Loader />
+          ) : (
+            <Card
+              sx={{
+                borderWidth: 1,
+                borderColor: "border.main",
+                padding: "0px",
+              }}
+            >
+              <CardContent
+                sx={{
+                  margin: "0px",
+                  padding: "0px ! important",
+                }}
+              >
+                <ContainerNumberForm
+                  initialValues={initialValues}
+                  type={state?.formAction}
+                  page={page}
+                />
+              </CardContent>
+            </Card>
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }
