@@ -634,6 +634,7 @@ const UploadFile = ({
                 )}
                 pageSize={20}
                 disableSelectionOnClick
+                hideFooterPagination
               />
             </Box>
           </Grid>
