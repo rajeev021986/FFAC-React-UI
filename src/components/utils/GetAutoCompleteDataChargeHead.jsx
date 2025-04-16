@@ -13,25 +13,23 @@ const suggestionName = {
   customerName: "CUSTOMER",
   supplierName: "SHIPPER",
   consigneeName: "CONSIGNEE",
-  shippingLine: "LINE",
-  loadingVoyage: "VOYAGE",
-  dischargeVoyage: "VOYAGE",
-  dischargingVessel : "VESSEL_VOYAGE",
-  loadingVessel : "VESSEL_VOYAGE",
-  vesselAgent: "LINE",
+  shippingLine: "VENDOR_TYPE",
+  loadingVoyage: "VESSEL_VOYAGE",
+  dischargeVoyage: "VESSEL_VOYAGE",
+  vesselAgent: "VENDOR_TYPE",
   originCountry: "PORT_LOADING",
   portOfLoading: "PORT_LOADING",
   portOfDischarge: "PORT",
   placeOfDelivery: "PORT",
+  bond_number:"BOND",
 };
 
-export const GetAutoCompleteDataWithVoyage = async (
+export const GetAutoCompleteDataChargeHead = async (
     dataKey,
     inputId,
     dataLabel,
     searchText
   ) => {
-    
     inputId = suggestionName[inputId];
     try {
       const response = await ApiManager.fetchAutoCompleteData(
@@ -39,16 +37,13 @@ export const GetAutoCompleteDataWithVoyage = async (
         inputId
       );
       const data = await response.body;
-    let formattedData = data.map((item) => ({
-      label: `${item.vessel} - ${item.voyage}`, // Show vessel and voyage together
-      value: item.id, // Use a unique identifier (like ID)
-      fullData: item, // Store full data object
-    }));
-  
+   const formattedData = data.map((item) => ({
+    label: item.charge_name,           // what user sees
+    value: item.charge_name,           // what you POST to Formik's `chargeHead`
+    fullData: item,                    // full backend object (not just first index)
+  }));
       return formattedData;
-    
-}
-     catch (error) {
+    } catch (error) {
       return [];
     }
   };

@@ -299,6 +299,7 @@ export default function JobEntryScreen({ page }) {
                       boxShadow: 3,
                       borderRadius: "20px 19px 19px 20px",
                       width: 72,
+                      textTransform: "none",
                       minWidth: 92,
                       "& .MuiSvgIcon-root": {
                         fontSize: 16,

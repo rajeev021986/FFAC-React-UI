@@ -180,7 +180,6 @@ export default function DocumentDialog({
       );
   };
   const handleView = async (event, id, documentType) => {
-    console.log("documentType", documentType);
     setViewloader(true);
     setViewLoaderId(id);
     event.preventDefault();

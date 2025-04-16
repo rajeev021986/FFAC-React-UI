@@ -130,7 +130,6 @@ const InputWithChips = ({
         )
       ),
     };
-    console.log(index, "index", filters);
     delete updatedFilters[Object.keys(updatedFilters)[index]];
     onFilterChange(updatedFilters);
   };

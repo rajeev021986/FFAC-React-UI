@@ -348,6 +348,24 @@ export default function LooseCargoForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={2}
+                  paddingLeft={1}
+                  marginTop={2}
+                >
+                  <InputBox
+                    label="TruckNo."
+                    id="truckNo"
+                    value={formik.values.truckNo}
+                    onChange={formik.handleChange}
+                    disabled
+                  />
+                </Grid>
               </Grid>
 
               <Grid paddingLeft={1} container spacing={2}>
@@ -598,7 +616,9 @@ export default function LooseCargoForm({
                   />
                 </Grid>
 
-                <Grid
+              
+              </Grid>
+              <Grid
                   item
                   xs={12}
                   sm={6}
@@ -611,11 +631,12 @@ export default function LooseCargoForm({
                   <InputBox
                     label="Remarks"
                     id="remark"
+                    multiline
+                    minRows={4}
                     value={formik.values.remark}
                     onChange={formik.handleChange}
                   />
                 </Grid>
-              </Grid>
             </Grid>
           </TabPanel>
         </TabContext>

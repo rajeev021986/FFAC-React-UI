@@ -315,7 +315,33 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 >
                   Upload File
                 </span>
-
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <InputBox
+                    label="Pick Up Order"
+                    id="pickUpOrder"
+                    value={formik.values.pickUpOrder}
+                    error={formik.errors.pickUpOrder}
+                    onChange={formik.handleChange}
+                    disabled={disabled}
+                  />
+                </Grid>
+                <span
+                  onClick={() =>
+                    handleOpen("pickUpOrder")
+                  }
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: '#1976d2',
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: "auto",
+                  }}
+                >
+                  Upload File
+                </span>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="BT Number"

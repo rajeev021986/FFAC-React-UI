@@ -53,8 +53,6 @@ const UploadFile = ({
   isNotShowType,
   type,
 }) => {
-  console.log(customer_id, "customer_id");
-  console.log(type,"type")
   const [viewloader, setViewloader] = useState(false);
   const [viewloaderId, setViewLoaderId] = useState();
   const [uploadCustomerFile] = useUploadCustomerFileMutation();
@@ -238,7 +236,6 @@ const UploadFile = ({
             : type,
       },
     };
-    console.log(uploadData, "uploadData");
     try {
       setLoading(true);
       let response = await uploadCustomerFile(uploadData).unwrap();

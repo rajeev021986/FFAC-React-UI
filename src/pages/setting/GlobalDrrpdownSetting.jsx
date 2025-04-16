@@ -88,7 +88,6 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
     useSelector((state) => state.dashboard.theme),
     useSelector((state) => state.dashboard.mode)
   );
-  console.log(theme, "theme");
   return (
     <Grid item xs={12} md={4} sm={6}>
       <div

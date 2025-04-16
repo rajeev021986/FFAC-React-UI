@@ -71,7 +71,6 @@ export default function BondDetailsGridForm({ formik }) {
         const enteredBondAmount = parseFloat(newRow.bondAmount);
 
         if (enteredBondAmount > runningBalance) {
-          console.log("Bond Amount exceeds Running Balance");
           toast.custom(
             <CustomToast
               message={"Bond Amount cannot exceed Running Balance"}
@@ -84,8 +83,6 @@ export default function BondDetailsGridForm({ formik }) {
           // );
           return oldRow; // Reject update
         } else {
-          console.log("Bond Amount not exceeds Running Balance");
-
           const updatedRow = {
             ...newRow,
             balanceBondAmount: runningBalance - enteredBondAmount, // Update balance bond amount
