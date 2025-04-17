@@ -264,7 +264,7 @@ export default function VehicleNumberForm({
                   marginTop={2}
                 >
                   <DateTimeField
-                    label="T1/C1 READY"
+                    label="T1/C1 Ready"
                     name="t1C1ReadyDate"
                     id="t1C1ReadyDate"
                     value={formik.values.t1C1ReadyDate}
@@ -272,8 +272,8 @@ export default function VehicleNumberForm({
                     onChange={formik.setFieldValue}
                     inputRef={FieldRef}
                   />
+                
                 </Grid>
-
                 <span
                   onClick={() =>
                     formik.values.t1C1ReadyDate && handleOpen("t1C1Ready_Date")
@@ -297,10 +297,11 @@ export default function VehicleNumberForm({
                 >
                   Upload File
                 </span>
+              
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
                   <DateTimeField
-                    label="LOADING DATE"
+                    label="Loading Date"
                     name="loadingDate"
                     id="loadingDate"
                     value={formik.values.loadingDate}
@@ -309,6 +310,7 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+
                 <Grid
                   item
                   xs={12}
@@ -325,6 +327,41 @@ export default function VehicleNumberForm({
                     value={formik.values.chasisNo}
                     onChange={formik.handleChange}
                     disabled
+                  />
+                  
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={3}
+                  paddingLeft={1}
+                  marginTop={2}
+                >
+                  <InputBox
+                    label="Bond Number"
+                    id="bondNumber"
+                    value={formik.values.bondNumber}
+                    onChange={formik.handleChange}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={3}
+                  paddingLeft={1}
+                  marginTop={2}
+                >
+                  <InputBox
+                    label="Bond Amount"
+                    id="bondAmount"
+                    value={formik.values.bondAmount}
+                    onChange={formik.handleChange}
                   />
                 </Grid>
               </Grid>
@@ -481,45 +518,6 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={3}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Bond Number"
-                    id="bondNumber"
-                    value={formik.values.bondNumber}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} container spacing={2}>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={3}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Bond Amount"
-                    id="bondAmount"
-                    value={formik.values.bondAmount}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
-
                 <Grid
                   item
                   xs={12}
@@ -540,6 +538,13 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              
+              </Grid>
+
+              <Grid paddingLeft={1} container spacing={2}>
+              
+
+               
 
                
               </Grid>
