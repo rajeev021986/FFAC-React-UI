@@ -1428,7 +1428,8 @@ export default function CustomerForm({
                       </ThemeTabs>
                     </Box>
                   </Grid>
-                  {formik.values.status.toLowerCase() === "rejected" ||
+                
+                  {formik.values.statusCode === -1 ||
                   page == "customerApprove" ? (
                     <Grid item xs={12} paddingLeft={1} paddingTop={1}>
                       <TextField

@@ -102,8 +102,9 @@ const UploadFile = ({
       const res = await ApiManager.downloadDocumnent(id, source, sourceId);
       setFileDaat({
         base64Data: res.body.base64,
-        mimeType: res.body.mimeTsype,
+        mimeType: res.body.mimeType,
       });
+      
       Boolean(res.body.mimeType.includes("spreadsheetml.sheet")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "XL" }));
       Boolean(res.body.mimeType.includes("image")) &&
@@ -114,6 +115,12 @@ const UploadFile = ({
         setFileDaat((prev) => ({ ...prev, documentType: "MSW" }));
       Boolean(res.body.mimeType.includes("plain")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "TXT" }));
+        Boolean(res.body.mimeType.includes("text/csv")) &&
+        setFileDaat((prev) => ({ ...prev, documentType: "CSV" }));
+        Boolean(res.body.mimeType.includes("application/msword")) &&
+        setFileDaat((prev) => ({ ...prev, documentType: "WORD" }));
+        Boolean(res.body.mimeType.includes("application/vnd.ms-excel")) &&
+        setFileDaat((prev) => ({ ...prev, documentType: "EXCEL" }));
       const binaryString = atob(res.body.base64);
       const binaryArray = new Uint8Array(binaryString.length);
       for (let i = 0; i < binaryString.length; i++) {
@@ -222,18 +229,36 @@ const UploadFile = ({
     // if (!validateForm()) {
     //   return;
     // }
+    const resolvedDocumentType =
+      formData.documentType === "Other"
+        ? formData.other
+        : type == null
+        ? formData.documentType
+        : type;
+    const isDuplicate = listData?.some(
+      (item) =>
+        item.fileName?.trim().toLowerCase() ===
+          uploadedFile?.name?.trim().toLowerCase() &&
+        item.documentType?.trim().toLowerCase() ===
+          resolvedDocumentType?.trim().toLowerCase()
+    );
+    if (isDuplicate) {
+      toast.custom(
+        <CustomToast
+          message={
+            "You’ve already uploaded this file under the same document type."
+          }
+        />
+      );
+      return;
+    }
     const uploadData = {
       file: uploadedFile,
       entityFile: {
         ...formData,
         source: sourceType,
         sourceId: customer_id,
-        documentType:
-          formData.documentType == "Other"
-            ? formData.other
-            : type == null
-            ? formData.documentType
-            : type,
+        documentType: resolvedDocumentType,
       },
     };
     try {
@@ -248,9 +273,8 @@ const UploadFile = ({
           setListData,
           setLoading
         );
-      }else{
+      } else {
         reloadDataHandler(sourceType, customer_id, setListData, setLoading);
-
       }
 
       setLoading(false);
@@ -461,7 +485,7 @@ const UploadFile = ({
       headerAlign: "center",
       renderCell: (params) => (
         <Tooltip title={`${params.row.createdBy}`} arrow>
-          <div >{params.value}</div>
+          <div>{params.value}</div>
         </Tooltip>
       ),
     },
@@ -487,9 +511,14 @@ const UploadFile = ({
       renderCell: (params) => {
         return (
           <Tooltip title={`${handleDate(params.value)}`} arrow>
-            <div  style={{
-            marginTop:'42px'
-          }}>{handleDate(params.value)}</div>;
+            <div
+              style={{
+                marginTop: "42px",
+              }}
+            >
+              {handleDate(params.value)}
+            </div>
+            ;
           </Tooltip>
         );
       },
