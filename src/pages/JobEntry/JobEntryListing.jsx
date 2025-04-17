@@ -190,6 +190,14 @@ export default function JobEntryScreen({ page }) {
     }
   };
   const handleCancel = async () => {
+    const jobStatus = modal?.data?.label;
+  if (jobStatus === "Approved Successfully") {
+    toast.custom(
+      <CustomToast message="Cannot cancel an approved job." toast="error" />
+    );
+    return;
+  }
+
     try {
       const response = await ApiManager.canceljobEntryApprove(
         modal?.data?.id,
@@ -222,14 +230,32 @@ export default function JobEntryScreen({ page }) {
       );
       return;
     }
+  
+    // Filter out canceled jobs before approval
+    const selectedRows = jobEntriesData?.body?.data?.filter((job) =>
+      selectedIds.includes(job.id)
+    );
+  
+    const canceledJobs = selectedRows.filter((job) => job.status === "CANCELED");
+  
+    if (canceledJobs.length > 0) {
+      toast.custom(
+        <CustomToast
+          message="You cannot approve a job that is canceled."
+          toast="error"
+        />
+      );
+      return;
+    }
+  
     try {
       const response = await ApiManager.approveAllJobEntryRequest(
         "JOB_DETAIL",
         selectedIds
-      ); // Send selected IDs in the request);
+      );
       refetch();
       toast.custom(<CustomToast message={response.message} toast="success" />);
-      setSelectedIds([]); // Clear selection after approval
+      setSelectedIds([]);
     } catch (error) {
       toast.custom(
         <CustomToast
@@ -241,6 +267,33 @@ export default function JobEntryScreen({ page }) {
       setSelectedIds([]);
     }
   };
+  
+  // const handleApproveAllRequest = async () => {
+  //   if (selectedIds.length === 0) {
+  //     toast.custom(
+  //       <CustomToast message="No job entries selected!" toast="error" />
+  //     );
+  //     return;
+  //   }
+  //   try {
+  //     const response = await ApiManager.approveAllJobEntryRequest(
+  //       "JOB_DETAIL",
+  //       selectedIds
+  //     ); // Send selected IDs in the request);
+  //     refetch();
+  //     toast.custom(<CustomToast message={response.message} toast="success" />);
+  //     setSelectedIds([]); // Clear selection after approval
+  //   } catch (error) {
+  //     toast.custom(
+  //       <CustomToast
+  //         message="Error occurred while approving entries"
+  //         toast="error"
+  //       />
+  //     );
+  //   } finally {
+  //     setSelectedIds([]);
+  //   }
+  // };
   const jobEntryColumns = [
     ...(page === "jobApprove"
       ? [
