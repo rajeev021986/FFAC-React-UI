@@ -12,7 +12,7 @@ import {
 import toast from "react-hot-toast";
 import IconButton from "@mui/material/IconButton";
 import { GridDeleteIcon } from "@mui/x-data-grid";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { reloadDataHandler } from "../../services/common/DocumentDetails";
 import { useEffect } from "react";
 import { StyledDataGrid } from "./Grid/styles";
@@ -136,15 +136,15 @@ export default function DocumentDialog({
       headerName: "Actions",
       sortable: false,
       flex: 0,
-      renderHeader: () => (
-        <IconButton color="white">
-          <AddCircleIcon onClick={addNewRow} />
-        </IconButton>
-      ),
       renderCell: (params) => (
+        <div>
+        <IconButton color="primary" onClick={() => deleteRow(params.row.id)}>
+          <VisibilityIcon />
+        </IconButton>
         <IconButton color="error" onClick={() => deleteRow(params.row.id)}>
           <GridDeleteIcon />
         </IconButton>
+        </div>
       ),
     },
   ];

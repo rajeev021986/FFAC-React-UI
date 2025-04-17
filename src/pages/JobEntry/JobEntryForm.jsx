@@ -369,7 +369,7 @@ export default function JobEntryForm({
           closeButton: false,
         }
       );
-      // formik.setFieldError('shipmentType', 'Invalid shipment type selected.');
+      formik.setFieldError('shipmentType', 'Please contact the administrator.');
     }
   }, [formik.values.shipmentType]);
 
