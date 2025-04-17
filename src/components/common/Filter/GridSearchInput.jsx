@@ -127,6 +127,7 @@ const GridSearchInput = ({
             padding: "6px 16px",
             boxShadow: 3,
             borderRadius: "20px 19px 19px 20px",
+            textTransform: "none", 
           }}
         >
           Approve

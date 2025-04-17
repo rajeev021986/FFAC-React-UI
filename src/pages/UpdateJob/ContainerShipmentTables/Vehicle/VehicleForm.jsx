@@ -29,7 +29,12 @@ import InputBox from "../../../../components/common/InputBox";
 import DateTimeField from "../../../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../../../components/UploadFile";
 
-export default function VehicleNumberForm({ initialValues, page, onCancel, onSubmit }) {
+export default function VehicleNumberForm({
+  initialValues,
+  page,
+  onCancel,
+  onSubmit,
+}) {
   const [updateVehicleNumber, { isLoading }] = useUpdateVehicleNumberMutation();
 
   const [dropdownData, setDropdownData] = useState({});
@@ -70,7 +75,7 @@ export default function VehicleNumberForm({ initialValues, page, onCancel, onSub
             closeButton: false,
           });
           if (onSubmit) {
-            onSubmit(); 
+            onSubmit();
           } else {
             nav(-1);
           }
@@ -304,6 +309,24 @@ export default function VehicleNumberForm({ initialValues, page, onCancel, onSub
                     inputRef={FieldRef}
                   />
                 </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={2}
+                  paddingLeft={1}
+                  marginTop={2}
+                >
+                  <InputBox
+                    label="ChasisNo."
+                    id="chasisNo"
+                    value={formik.values.chasisNo}
+                    onChange={formik.handleChange}
+                    disabled
+                  />
+                </Grid>
               </Grid>
 
               <Grid paddingLeft={1} container spacing={2}>
@@ -518,7 +541,9 @@ export default function VehicleNumberForm({ initialValues, page, onCancel, onSub
                   />
                 </Grid>
 
-                <Grid
+               
+              </Grid>
+              <Grid
                   item
                   xs={12}
                   sm={6}
@@ -531,11 +556,12 @@ export default function VehicleNumberForm({ initialValues, page, onCancel, onSub
                   <InputBox
                     label="Remarks"
                     id="remark"
+                    multiline
+                    minRows={4}
                     value={formik.values.remark}
                     onChange={formik.handleChange}
                   />
                 </Grid>
-              </Grid>
             </Grid>
           </TabPanel>
         </TabContext>
@@ -560,7 +586,7 @@ export default function VehicleNumberForm({ initialValues, page, onCancel, onSub
                   sx={{ fontWeight: "500" }}
                   onClick={() => {
                     if (onCancel) {
-                      onCancel(); 
+                      onCancel();
                     } else {
                       nav(-1);
                     }

@@ -24,8 +24,6 @@ export default function LineVessel({ formik }) {
     }
   }, []);
 
-  console.log(formik.values, "formik.values");
-
   return (
     <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
       <Grid

@@ -87,12 +87,12 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       .typeError("phone number must be number")
       .positive("A phone number can't start with a minus")
       .integer("A phone number can't include a decimal point")
-      .min(8),
+      .max(8),
     mobile: Yup.number()
       .typeError("Mobile number must be number")
       .positive("A Mobile number can't start with a minus")
       .integer("A Mobile number can't include a decimal point")
-      .min(8),
+      .max(10),
   });
 
   const handleChange = (event, newValue) => {

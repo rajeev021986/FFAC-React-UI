@@ -8,8 +8,10 @@ import CustomToast from "../../components/common/Toast/CustomToast";
 import { Tooltip, IconButton } from "@mui/material";
 import { InfoOutlined } from "@mui/icons-material";
 import dayjs from "dayjs";
+import { useGridApiRef } from "@mui/x-data-grid";
+import ResetNumberEdit from "../../components/utils/resetNumberEdit";
 import { reindexRows } from "../../components/utils/utils";
-import { isValidPattern } from "../../components/utils/utils";
+import { generatePattern } from "../../components/utils/utils";
 import { MenuItem, Select } from "@mui/material";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 
@@ -21,6 +23,7 @@ export default function GlobalDrrpdownSettingVoucher({
   const [dropdownData, setDropdownData] = useState([]);
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
+  const apiRef = useGridApiRef();
 
   const handleAddRow = () => {
     if (value.some((item) => item.jobPattern.includes("Type the"))) {
@@ -72,32 +75,105 @@ export default function GlobalDrrpdownSettingVoucher({
 
   const handleProcessRowUpdate = (newRow, oldRow) => {
     let updatedRow = { ...newRow };
-    let validationMessage = "";
+
+    const tokenRegex = /#\d|\$[A-Z]/g;
+    const allowedTokens = [
+      "#4",
+      "#5",
+      "#6",
+      "#7",
+      "#8",
+      "$Z",
+      "$N",
+      "$M",
+      "$D",
+      "$Y",
+    ];
+    const monthTokens = ["$Z", "$N", "$M"];
+
+    if (
+      newRow.resetNumber !== oldRow.resetNumber ||
+      newRow.shipmentType !== oldRow.shipmentType
+    ) {
+      const shipmentCode = (newRow.shipmentType || "GEN")
+        .replace(/[^a-zA-Z]/g, "")
+        .substring(0, 3)
+        .toUpperCase();
+
+      const newPattern = generatePattern({
+        shipmentType: shipmentCode,
+        resetNumber: newRow.resetNumber || "Month",
+        voucherDigits: 4,
+      });
+
+      updatedRow.jobPattern = newPattern;
+      updatedRow.sampleJobNumber = replaceVoucherCodes(newPattern);
+    }
 
     if (newRow.jobPattern !== oldRow.jobPattern) {
-      if (!isValidPattern(newRow.jobPattern)) {
-        validationMessage = "Invalid pattern. Please use valid placeholders.";
-        updatedRow.jobPattern = oldRow.jobPattern; // revert to old value
+      const tokensInPattern = newRow.jobPattern.match(tokenRegex) || [];
+
+      // Check if pattern ends with $Y and there are no extra characters
+      const endsWithYear = newRow.jobPattern.trim().endsWith("$Y");
+
+      // Ensure no invalid tokens in the pattern
+      const hasInvalidToken = tokensInPattern.some(
+        (token) => !allowedTokens.includes(token)
+      );
+
+      // Ensure no extra characters or tokens after $Y
+      const patternBeforeYear = newRow.jobPattern.split("$Y")[0];
+      const isValidPatternBeforeYear = allowedTokens.every((token) =>
+        patternBeforeYear.includes(token)
+      );
+
+      const hasInvalidMonthToken = tokensInPattern
+        .filter((t) => t.startsWith("$") && t !== "$Y")
+        .some((t) => !monthTokens.includes(t));
+
+      // Validation based on resetNumber
+      const requiredTokensMap = {
+        Never: [],
+        Yearly: ["$Y"],
+        Month: ["$Y", "$M", "$N", "$Z"], // Accept any one of M/N/Z
+        Daily: ["$Y", "$M", "$N", "$Z", "$D"],
+      };
+
+      const resetValue = newRow.resetNumber || "Month";
+      const requiredTokens = requiredTokensMap[resetValue];
+
+      const hasRequiredTokens = requiredTokens.every((token) => {
+        if (["$M", "$N", "$Z"].includes(token)) {
+          // At least one of the valid month tokens should be present
+          return monthTokens.some((mt) => tokensInPattern.includes(mt));
+        } else {
+          return tokensInPattern.includes(token);
+        }
+      });
+
+      // Final validation check
+      if (
+        hasInvalidToken ||
+        !endsWithYear ||
+        !isValidPatternBeforeYear ||
+        hasInvalidMonthToken ||
+        !hasRequiredTokens
+      ) {
+        toast.custom(
+          <CustomToast
+            message="Invalid pattern! Ensure it ends with $Y, contains only allowed tokens, and matches the reset logic."
+            toast="error"
+          />,
+          { closeButton: false }
+        );
+        updatedRow.jobPattern = oldRow.jobPattern; // Revert the value if validation fails
       } else {
         updatedRow.sampleJobNumber = replaceVoucherCodes(newRow.jobPattern);
       }
     }
 
-    if (newRow.shipmentType !== oldRow.shipmentType) {
-      const shipmentCode = getShortShipmentCode(newRow.shipmentType);
-      const newPattern = `${shipmentCode}-#4-$M-$Y`;
-      updatedRow.jobPattern = newPattern;
-      updatedRow.sampleJobNumber = replaceVoucherCodes(newPattern);
-    }
-
-    if (validationMessage) {
-      toast.custom(<CustomToast message={validationMessage} toast="error" />, {
-        closeButton: false,
-      });
-    }
-
-    setvalue((prevValues) =>
-      prevValues.map((row) => (row.id === newRow.id ? updatedRow : row))
+    setvalue((prev) =>
+      prev.map((row) => (row.id === newRow.id ? updatedRow : row))
     );
 
     return updatedRow;
@@ -135,14 +211,6 @@ $Y : Year (Current Year)
       /#4|#5|#6|#7|#8|\$Z|\$N|\$M|\$D|\$Y/g,
       (match) => replacements[match] || match
     );
-  };
-
-  const getShortShipmentCode = (shipmentType) => {
-    if (!shipmentType) return "XXX";
-    return shipmentType
-      .replace(/[^a-zA-Z]/g, "")
-      .substring(0, 3)
-      .toUpperCase();
   };
 
   useEffect(() => {
@@ -183,6 +251,7 @@ $Y : Year (Current Year)
       editable: true,
       renderCell: (params) => <span>{params.row.shipmentType}</span>,
       renderEditCell: (params) => {
+        const apiRef = params.api;
         const isGeneral = params.row.shipmentType === "General/Common";
         return (
           <Select
@@ -190,7 +259,7 @@ $Y : Year (Current Year)
             value={params.value || ""}
             onChange={(e) => {
               const newValue = e.target.value;
-              params.api.setEditCellValue({
+              apiRef.setEditCellValue({
                 id: params.id,
                 field: "shipmentType",
                 value: newValue,
@@ -228,64 +297,15 @@ $Y : Year (Current Year)
       editable: true,
       align: "center",
       headerAlign: "center",
-      renderEditCell: (params) => {
-        const voucherNumber = params.row.jobPattern || "";
-        const hasYear = voucherNumber.includes("$Y");
-        const hasMonth =
-          voucherNumber.includes("$M") ||
-          voucherNumber.includes("$Z") ||
-          voucherNumber.includes("$N");
-        const hasDay = voucherNumber.includes("$D");
-        const enableYearly = hasYear;
-        const enableMonthly = hasYear && hasMonth;
-        const enableDaily = hasYear && hasMonth && hasDay;
-        return (
-          <Select
-            size="small"
-            value={params.value || ""}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              const pattern =
-                newValue === "Yearly"
-                  ? "#4-$Y"
-                  : newValue === "Month"
-                  ? "#4-$M-$Y"
-                  : newValue === "Daily"
-                  ? "#4-$D-$M-$Y"
-                  : "";
-              const updatedSample = replaceVoucherCodes(pattern);
-              params.api.setEditCellValue({
-                id: params.id,
-                field: "resetNumber",
-                value: newValue,
-              });
-              setvalue((prevValues) =>
-                prevValues.map((row) =>
-                  row.id === params.id
-                    ? {
-                        ...row,
-                        jobPattern: pattern,
-                        sampleJobNumber: updatedSample,
-                      }
-                    : row
-                )
-              );
-            }}
-            fullWidth
-          >
-            <MenuItem value="Never">Never</MenuItem>
-            <MenuItem value="Yearly" disabled={!enableYearly}>
-              Yearly
-            </MenuItem>
-            <MenuItem value="Month" disabled={!enableMonthly}>
-              Month
-            </MenuItem>
-            <MenuItem value="Daily" disabled={!enableDaily}>
-              Daily
-            </MenuItem>
-          </Select>
-        );
-      },
+      renderEditCell: (params) => (
+        <ResetNumberEdit
+          id={params.id}
+          value={params.value}
+          field={params.field}
+          api={params.api}
+          row={params.row}
+        />
+      ),
     },
     {
       field: "jobPattern",
@@ -360,6 +380,7 @@ $Y : Year (Current Year)
 
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
+          apiRef={apiRef}
           rows={value}
           editMode="cell"
           columns={columns}

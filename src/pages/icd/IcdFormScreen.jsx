@@ -94,7 +94,6 @@ export default function IcdFormScreen({ page }) {
     }
     setLoading(false);
   }, [state?.initialValues?.id]);
-  console.log(loading, optionsLoading, icdSettingsLoading, "asdfg");
   return (
     <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
       <Stack sx={{ padding: "8px 0px" }}>

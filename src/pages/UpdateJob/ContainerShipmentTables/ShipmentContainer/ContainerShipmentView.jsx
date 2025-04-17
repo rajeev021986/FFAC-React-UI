@@ -47,7 +47,6 @@ export default function ContainerShipmentView({ page, customer_id }) {
     type: "",
     data: {},
   });
-  console.log(customer_id, "customer_id");
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
@@ -262,6 +261,7 @@ export default function ContainerShipmentView({ page, customer_id }) {
         onClose={() => setModal({ open: false, type: "", data: {} })}
         maxWidth="lg"
         fullWidth
+        fullScreen
       >
         <DialogContent>
           <ContainerNumberForm

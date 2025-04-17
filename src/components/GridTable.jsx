@@ -61,19 +61,19 @@ function GridDataTable({ data }) {
 
   return (
     <Box sx={{ width: "100%", textAlign: "right" }}>
-      <Box sx={{ height: "auto" }}>
+      <Box sx={{ height: 100 }}>
         <DataGrid
           rows={data}
           columns={columns}
           disableSelectionOnClick
           disableColumnMenu
           getRowId={(row) => row.id}
-          autoHeight={true}
           hideFooter
           sx={{
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "primary.main",
               lineHeight: 10,
+              height: "38px !important",
             },
             "& .MuiDataGrid-cell": {
               whiteSpace: "normal",
@@ -85,6 +85,9 @@ function GridDataTable({ data }) {
             },
             "& .MuiDataGrid-cell": {
               fontSize: "14px",
+            },
+            "& .MuiDataGrid-sortIcon": {
+              color: "#fff",
             },
           }}
         />

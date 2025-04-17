@@ -54,6 +54,7 @@ export default function VehicleParent({ page }) {
           id: res.body?.id || "",
           status: status,
           clerkName: res?.body?.clerkName,
+          chasisNo: res?.body?.chasisNo,
           clerkTelNo: res?.body?.clerkTelNo,
           reportingPlace: res?.body?.reportingPlace,
           reportingDate: res?.body?.reportingDate,

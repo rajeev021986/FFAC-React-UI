@@ -15,6 +15,7 @@ import InputBoxForGrid from "../../components/common/InputBoxForGrid";
 import { StyledDataGrid } from "../../components/common/Grid/styles";
 import SelectBox from "../../components/common/SelectBox";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
+import FormAutoCompleteChargeHead from "../../components/common/AutoComplete/FormAutoCompleteChargeHead";
 
 const style = {
   position: "absolute",
@@ -125,10 +126,17 @@ export default function AddRateModal({
           align: "center",
           editable: true,
 
-          renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
-          renderEditCell: (params) => (
-            <InputBoxForGrid {...params} type="text" />
+          renderCell: (params) => (
+            <FormAutoCompleteChargeHead
+            id="chargeName" // this will map to "CHARGE"
+            suggestionName="chargeName"
+            dataLabel="charge_name"  // <-- this tells what to show in dropdown
+            value={params.value}
+            onChange={(e) => OnChange(params, e, "rate.rateDetails")}
+            disabled={false}
+          />
           ),
+
         },
         {
           field: "currency",

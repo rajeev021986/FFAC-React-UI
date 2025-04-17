@@ -207,7 +207,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
-                    label="Line DO Collection Doc"
+                    label="Shipping Line DO Collection Date"
                     name="shippingLineDOCollectionDate"
                     id="shippingLineDOCollectionDate"
                     value={formik.values.shippingLineDOCollectionDate}
@@ -245,7 +245,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 </span>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
-                    label="Custom Release Doc"
+                    label="Custom Release Date"
                     name="customReleaseDate"
                     id="customReleaseDate"
                     value={formik.values.customReleaseDate}
@@ -282,7 +282,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
-                    label="TAX Exemption Certificate Doc"
+                    label="TAX Exemption Certificate"
                     name="taxExemptionCertificateDate"
                     id="taxExemptionCertificateDate"
                     value={formik.values.taxExemptionCertificateDate}
@@ -318,7 +318,33 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 >
                   Upload File
                 </span>
-
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <InputBox
+                    label="Pick Up Order"
+                    id="pickUpOrder"
+                    value={formik.values.pickUpOrder}
+                    error={formik.errors.pickUpOrder}
+                    onChange={formik.handleChange}
+                    disabled={disabled}
+                  />
+                </Grid>
+                <span
+                  onClick={() =>
+                    handleOpen("pickUpOrder")
+                  }
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    color: '#1976d2',
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pointerEvents: "auto",
+                  }}
+                >
+                  Upload File
+                </span>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="BT Number"
@@ -364,7 +390,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   marginTop={2}
                 >
                   <DateTimeField
-                    label="IDF Doc"
+                    label="IDF Date"
                     name="idfDate"
                     id="idfDate"
                     value={formik.values.idfDate}
@@ -469,7 +495,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   marginTop={2}
                 >
                   <DateTimeField
-                    label="Entry Doc"
+                    label="Entry Date"
                     name="entryDate"
                     id="entryDate"
                     value={formik.values.entryDate}

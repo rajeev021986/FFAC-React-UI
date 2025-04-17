@@ -68,9 +68,10 @@ const Routes = {
 
   documentation: { label: "Documentation", disabled: true },
   job: { label: "Job Entries", disabled: false },
-  
+
   newEntry: { label: "Add New Entry", disabled: true },
   editJobEntry: { label: "Edit Job Entry", disabled: false },
+  "job-approve": { label: "Approve New File", disabled: false },
   update: { label: "Update Job", disabled: false },
 };
 

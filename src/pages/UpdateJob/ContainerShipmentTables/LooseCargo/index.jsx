@@ -58,6 +58,7 @@ export default function LooseCargoParent({ page }) {
         setInitialValues({
           id: res.body?.id || "",
           status: status,
+          truckNo: res.body?.truckNo,
           transporter: res.body?.transporter,
           truckTrailerNo: res.body?.truckTrailerNo,
           driver: res.body?.driver,

@@ -370,9 +370,6 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid container>
                 <Grid
                   item
                   xs={12}
@@ -384,7 +381,28 @@ export default function ContainerNumberForm({
                   marginTop={2}
                 >
                   <InputBox
-                    label="ContainerNO"
+                    label="Reporting Time"
+                    id="reportingTime"
+                    value={formik.values.reportingTime}
+                    onChange={formik.handleChange}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container>
+              
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={2}
+                  paddingLeft={1}
+                  marginTop={2}
+                >
+                  <InputBox
+                    label="ContainerNo."
                     id="containerNo"
                     value={formik.values.containerNo}
                     onChange={formik.handleChange}
@@ -973,6 +991,8 @@ export default function ContainerNumberForm({
                     label="Remark"
                     id="remark"
                     name="remark"
+                    multiline
+                    minRows={4}
                     value={formik.values.remark}
                     error={formik.errors.remark}
                     onChange={formik.handleChange}

@@ -43,7 +43,7 @@ export default function ShipmentDetails({ formik }) {
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            {/* <FormAutoComplete
+            <FormAutoComplete
               label="Port Of Loading"
               id="portOfLoading"
               suggestionName="port_name"
@@ -51,16 +51,6 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.portOfLoading}
               onChange={formik.handleChange}
               inputRef={FieldRef}
-            /> */}
-            <InputBox
-              label="Port Of Loading"
-              id="portOfLoading"
-              suggestionName="port_name"
-              value={formik.values.portOfLoading}
-              error={formik.errors.portOfLoading}
-              onChange={formik.handleChange}
-              inputRef={FieldRef}
-              disabled={true}
             />
           </Grid>
 

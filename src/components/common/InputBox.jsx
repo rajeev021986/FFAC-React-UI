@@ -23,6 +23,8 @@ export default function InputBox({
   inputRef,
   label,
   id,
+  minRows,
+  multiline = false,
   error,
   ...props
 }) {
@@ -39,6 +41,8 @@ export default function InputBox({
       onChange={onChange}
       inputRef={inputRef}
       helperText={error}
+      minRows={minRows}
+      multiline={multiline}
       autoComplete="off"
       error={error ? true : false}
       sx={{ ...styles.root, ...sx }}
