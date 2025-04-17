@@ -258,6 +258,7 @@ export default function LooseShipmentView({ page, customer_id }) {
         onClose={() => setModal({ open: false, type: "", data: {} })}
         maxWidth="lg"
         fullWidth
+        fullScreen
       >
         <DialogContent>
           <LooseCargoForm

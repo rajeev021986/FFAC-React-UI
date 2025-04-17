@@ -194,19 +194,16 @@ export default function JobEntryScreen({ page }) {
       const response = await ApiManager.canceljobEntryApprove(
         modal?.data?.id,
         "JOB_DETAIL"
-      )
+      );
       const message = response.message;
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
       });
       handleClose();
     } catch (error) {
-      toast.custom(
-        <CustomToast message="Failed to cancel." toast="error" />,
-        {
-          closeButton: false,
-        }
-      );
+      toast.custom(<CustomToast message="Failed to cancel." toast="error" />, {
+        closeButton: false,
+      });
     }
   };
   useEffect(() => {
@@ -420,11 +417,11 @@ export default function JobEntryScreen({ page }) {
         handleClose={handleClose}
       />
       <CancelModalApprove
-         rowId={modal?.data?.id}
+        rowId={modal?.data?.id}
         sourceName={modal?.data?.customerName}
-         handleOpen={modal.open && modal.type === "cancel"}
-         handleClose={handleClose}
-         handleCancel={handleCancel}
+        handleOpen={modal.open && modal.type === "cancel"}
+        handleClose={handleClose}
+        handleCancel={handleCancel}
       />
 
       <DeleteDialog

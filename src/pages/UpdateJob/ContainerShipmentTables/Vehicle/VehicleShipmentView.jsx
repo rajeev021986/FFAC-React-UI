@@ -256,6 +256,7 @@ export default function VehicleShipmentView({ page, customer_id }) {
         onClose={() => setModal({ open: false, type: "", data: {} })}
         maxWidth="lg"
         fullWidth
+        fullScreen
       >
         <DialogContent>
           <VehicleNumberForm
