@@ -418,6 +418,7 @@ export default function JobEntryScreen({ page }) {
             paginationModel={codeJobEntryrSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={codeJobEntryrSelector.sortModel}
+            
             onSortModelChange={(sortModel) =>
               dispatch(jobEntrySetSortModel(sortModel))
             }

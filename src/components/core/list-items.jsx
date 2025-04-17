@@ -17,11 +17,13 @@ import { Link, useLocation } from "react-router-dom";
 import { iconsMap } from "../../config/menu";
 import IconComponent from "../common/IconComponent";
 
-export const ExpandableListItems = ({ label, items, icon, hover }) => {
+export const ExpandableListItems = ({ label, items, icon, hover,  openItem,
+  setOpenItem, }) => {
   const [open, setOpen] = useState(false);
+  const isOpen = openItem === label; // Compare with current open item
   const { pathname } = useLocation();
   const handleClick = () => {
-    setOpen(!open);
+    setOpenItem(isOpen ? null : label); // Toggle open state
   };
   return (
     <>
@@ -45,9 +47,9 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
           )}
         </ListItemIcon>
         <ListItemText primary={label} />
-        {open ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
+        {isOpen  ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
       </ListItem>
-      <Collapse in={hover ? open : false} timeout="auto" unmountOnExit>
+      <Collapse in={hover ? isOpen  : false} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {items.map((item) => {
             return item.items?.length > 0 ? (
@@ -64,6 +66,8 @@ export const ExpandableListItems = ({ label, items, icon, hover }) => {
                   items={item.items}
                   icon={iconsMap[item.iconKey]}
                   hover={hover}
+                  openItem={openItem}
+                  setOpenItem={setOpenItem}
                 />
               </ListItem>
             ) : (

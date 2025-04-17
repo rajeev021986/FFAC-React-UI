@@ -152,7 +152,7 @@ export default function BondValue({
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <Stack direction="row" spacing={2}>
             <OutlinedButton sx={{ fontWeight: "500" }} onClick={() => nav(-1)}>
-              Cancel
+              Close
             </OutlinedButton>
             <ThemeButton
               onClick={formik.handleSubmit}

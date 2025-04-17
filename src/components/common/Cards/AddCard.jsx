@@ -557,7 +557,7 @@ export default function AddCard() {
                     sx={{ fontWeight: "500", borderRadius: "12px" }}
                     onClick={() => navigate("/app/admin/users")}
                   >
-                    Cancel
+                    Close
                   </OutlinedButton>
                   <ThemeButton
                     onClick={formik.handleSubmit}

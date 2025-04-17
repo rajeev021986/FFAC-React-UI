@@ -1029,7 +1029,7 @@ export default function ContainerNumberForm({
                     }
                   }}
                 >
-                  Cancel
+                  Close
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}

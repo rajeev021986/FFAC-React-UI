@@ -274,6 +274,10 @@ const UploadFile = ({
 
     return date.split("T")[0];
   };
+  function truncateMiddle(text, front = 6, back = 4) {
+    if (!text || text.length <= front + back + 3) return text;
+    return `${text.slice(0, front)}......${text.slice(-back)}`;
+  }
 
   const cusColumns = [
     {
@@ -424,25 +428,32 @@ const UploadFile = ({
     {
       field: "documentType",
       headerName: "Type",
-      flex: 1.5,
+      flex: 1,
       headerAlign: "center",
-      renderCell: (params) => (
-        <Tooltip title={`${params.value}`} arrow>
-          <div>{params.value}</div>
-        </Tooltip>
-      ),
+      renderCell: (params) => {
+        const truncated = truncateMiddle(params.value, 6, 4);
+        return (
+          <Tooltip title={params.value} arrow>
+            <div>{truncated}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       field: "fileName",
       headerName: "File Name",
-      flex: 2,
+      flex: 1,
       headerAlign: "center",
-      renderCell: (params) => (
-        <Tooltip title={`${params.value}`} arrow>
-          <div>{params.value}</div>
-        </Tooltip>
-      ),
+      renderCell: (params) => {
+        const truncated = truncateMiddle(params.value, 6, 4);
+        return (
+          <Tooltip title={params.value} arrow>
+            <div>{truncated}</div>
+          </Tooltip>
+        );
+      },
     },
+    
     {
       field: "createdBy",
       headerName: "Created By",

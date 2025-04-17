@@ -175,7 +175,7 @@ export default function ExpenseCodeForm({ modal, setModal }) {
             onClick={handleCloseModal}
             size="small"
           >
-            Cancel
+            Close
           </OutlinedButton>
           <ThemeButton
             onClick={formik.handleSubmit}

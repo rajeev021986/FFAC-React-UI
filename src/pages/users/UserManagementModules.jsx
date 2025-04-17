@@ -113,7 +113,7 @@ function UserManagementModules({ modal, setModal, refetch }) {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="primary">
-                Cancel
+              Close
               </Button>
               <Button onClick={handleDelete} color="error">
                 Delete
@@ -165,7 +165,7 @@ function UserManagementModules({ modal, setModal, refetch }) {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="primary">
-                Cancel
+              Close
               </Button>
               <Button onClick={handleReset} color="primary">
                 Reset

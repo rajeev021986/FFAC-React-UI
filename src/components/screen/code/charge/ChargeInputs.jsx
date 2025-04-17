@@ -374,7 +374,7 @@ export default function ChargeInputs({
                 sx={{ fontWeight: "500" }}
                 onClick={() => nav("/app/admin/charges")}
               >
-                Cancel
+                Close
               </OutlinedButton>
               <ThemeButton
                 onClick={formik.handleSubmit}

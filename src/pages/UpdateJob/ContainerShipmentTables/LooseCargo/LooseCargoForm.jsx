@@ -667,7 +667,7 @@ export default function LooseCargoForm({
                     }
                   }}
                 >
-                  Cancel
+                  Close
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}
