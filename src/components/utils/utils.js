@@ -1,4 +1,4 @@
-export function isValidPattern(pattern) {
+export function validatePattern(pattern) {
   const allowedTokens = [
     "#4",
     "#5",
@@ -13,25 +13,68 @@ export function isValidPattern(pattern) {
   ];
 
   const tokenRegex = /#4|#5|#6|#7|#8|\$Z|\$N|\$M|\$D|\$Y/g;
+
   const matches = pattern.match(tokenRegex) || [];
 
-  const invalidTokens = pattern
-    .replace(tokenRegex, "")
-    .match(/[#\$][A-Z0-9]+/g);
-  if (invalidTokens && invalidTokens.length) {
-    return false;
-  }
+  const remaining = pattern.replace(tokenRegex, "");
 
-  const monthTokens = ["$Z", "$M", "$N"];
-  const foundMonthTokens = matches.filter((token) =>
-    monthTokens.includes(token)
+  const invalidTokens = remaining.match(/[#\$][A-Za-z0-9]+/g);
+  if (invalidTokens && invalidTokens.length > 0) {
+    return {
+      valid: false,
+      error: `Invalid token(s) used: ${invalidTokens.join(", ")}`,
+    };
+  }
+  const allTokensValid = matches.every((token) =>
+    allowedTokens.includes(token)
   );
-  if (foundMonthTokens.length > 1) {
-    return false;
+  if (!allTokensValid) {
+    const unknownTokens = matches.filter(
+      (token) => !allowedTokens.includes(token)
+    );
+    return {
+      valid: false,
+      error: `Unknown token(s): ${unknownTokens.join(", ")}`,
+    };
   }
 
-  return matches.every((token) => allowedTokens.includes(token));
+  return {
+    valid: true,
+    error: null,
+  };
 }
+
+export function generatePattern({
+  shipmentType = "GEN",
+  resetNumber = "Never", // "Never", "Yearly", "Month", "Daily"
+  voucherDigits = 4,     // 4 to 8
+}) {
+  const voucherToken = `#${voucherDigits}`;
+  let datePart = "";
+
+  switch (resetNumber) {
+    case "Yearly":
+      datePart = "$Y";
+      break;
+    case "Month":
+      datePart = "$M-$Y";
+      break;
+    case "Daily":
+      datePart = "$D-$M-$Y";
+      break;
+    case "Never":
+    default:
+      datePart = "";
+  }
+
+  const code = shipmentType
+    .replace(/[^a-zA-Z]/g, "")
+    .substring(0, 3)
+    .toUpperCase();
+
+  return `${code}-${voucherToken}${datePart ? `-${datePart}` : ""}`;
+}
+
 
 export const reindexRows = (rows) => {
   return rows.map((row, index) => ({
