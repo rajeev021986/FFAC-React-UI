@@ -842,7 +842,7 @@ export default function CustomerForm({
                         sx={{ fontWeight: "500" }}
                         onClick={() => nav("/app/entity/customer")}
                       >
-                        Cancel
+                        Close
                       </OutlinedButton>
                       <ThemeButton
                         onClick={formik.handleSubmit}
@@ -1461,7 +1461,7 @@ export default function CustomerForm({
                             sx={{ fontWeight: "500" }}
                             onClick={() => nav(-1)}
                           >
-                            Cancel
+                            Close
                           </OutlinedButton>
                           <ThemeButton
                             onClick={formik.handleSubmit}
@@ -1492,7 +1492,7 @@ export default function CustomerForm({
                             sx={{ fontWeight: "500" }}
                             onClick={() => nav(-1)}
                           >
-                            Cancel
+                            Close
                           </OutlinedButton>
                           <ThemeButton
                             onClick={(event) => {

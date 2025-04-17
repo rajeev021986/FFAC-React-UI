@@ -28,28 +28,35 @@ export default function DateTimeField({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateTimePicker
-        id={id}
-        label={label}
-        value={validValue}
-        onChange={handleDateChange}
-        error={error ? true : false}
-        helperText={error}
-        inputRef={inputRef}
-        sx={{
-          "& .MuiInputBase-root": {
-            fontSize: "14px",
-            borderRadius: "10px",
-            width: "100%",
-            height: "44px",
-            border: error ? "1px solid #f54336" : "",
-          },
-        }}
-        slotProps={{
-          textField: { size: "small", fullWidth: true },
-        }}
-        disabled={disabled}
-      />
+   <DateTimePicker
+  id={id}
+  label={label}
+  value={validValue}
+  onChange={handleDateChange}
+  error={error ? true : false}
+
+  helperText={error}
+  inputRef={inputRef}
+  sx={{
+    "& .MuiInputBase-input": {
+      textTransform: "uppercase", // ✅ Capitalizes both placeholder & input
+    },
+    "& .MuiInputBase-root": {
+      fontSize: "14px",
+      borderRadius: "10px",
+      width: "100%",
+      height: "44px",
+      border: error ? "1px solid #f54336" : "",
+    },
+  }}
+  slotProps={{
+    textField: {
+      size: "small",
+      fullWidth: true,
+    },
+  }}
+/>
+
       <span style={{ fontSize: "12px", color: "#f54336" }}>{error}</span>
     </LocalizationProvider>
   );

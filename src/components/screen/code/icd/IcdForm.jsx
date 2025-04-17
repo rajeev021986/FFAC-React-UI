@@ -412,7 +412,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                         onClick={() => nav("/app/master/icd")}
                         sx={{ fontWeight: "500", borderRadius: "12px" }}
                       >
-                        Cancel
+                        Close
                       </OutlinedButton>
                       <ThemeButton
                         onClick={formik.handleSubmit}
@@ -695,7 +695,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                           sx={{ fontWeight: "500" }}
                           onClick={() => nav("/app/master/icd")}
                         >
-                          Cancel
+                          Close
                         </OutlinedButton>
                         <ThemeButton
                           onClick={formik.handleSubmit}

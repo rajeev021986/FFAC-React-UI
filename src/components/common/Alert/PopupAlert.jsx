@@ -15,7 +15,7 @@ const PopupAlert = ({ alertConfig }) => {
     onClose,
     onConfirm,
     confirmText = "Confirm",
-    cancelText = "Cancel",
+    cancelText = "Close",
   } = alertConfig;
 
   return (

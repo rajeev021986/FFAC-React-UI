@@ -23,7 +23,6 @@ const ThemedGrid = (props) => {
   const handleDate = (date) => {
     return date.split("T")[0];
   };
-  console.log(columns,"columns")
   const gridData = data?.map((obj) => {
     return {
       ...obj,
@@ -53,7 +52,7 @@ const ThemedGrid = (props) => {
         field: "isDoc",
         headerName: "Document",
         width: 150,
-        
+
         headerAlign: "center",
         align: "center",
         renderCell: (params) => {
@@ -61,14 +60,24 @@ const ThemedGrid = (props) => {
         },
       };
     } else {
-      const smallFields = ["jobNo","customerName","supplierName","shipmentType","dateOfReceipt","customerRefNo","consigneeName","portOfLoading","portOfDelivery"];
-     return {
-    ...a,
-    // flex: smallFields.includes(a.field) ? 3 : 1,
-    minWidth: smallFields.includes(a.field) ? 190 : 60, 
-    align: 'center',
-    headerAlign: 'center',
-  };
+      const smallFields = [
+        "jobNo",
+        "customerName",
+        "supplierName",
+        "shipmentType",
+        "dateOfReceipt",
+        "customerRefNo",
+        "consigneeName",
+        "portOfLoading",
+        "portOfDelivery",
+      ];
+      return {
+        ...a,
+        // flex: smallFields.includes(a.field) ? 3 : 1,
+        minWidth: smallFields.includes(a.field) ? 190 : 60,
+        align: "center",
+        headerAlign: "center",
+      };
     }
   });
 
@@ -81,38 +90,12 @@ const ThemedGrid = (props) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        // height: "calc(100vh - 190px)",
         overflowY: "auto",
-        
+        paddingBottom: "0px",
+        marginBottom: "0px",
+      
       }}
     >
-      {/* <StyledDataGrid
-        pagination
-        paginationMode="server"
-        sortingMode="server"
-        loading={loading}
-        columns={modifiedColumns}
-        rows={gridData}
-        columnHeaderHeight={42}
-        // columnVisibilityModel={columnVisibility}
-        // onColumnVisibilityModelChange={columnVisibilityHandler}
-        sortModel={sortModel || []}
-        onSortModelChange={onSortModelChange}
-        pageSizeOptions={[10, 20, 50, 100]}
-        rowCount={count}
-        paginationModel={paginationModel}
-        onPaginationModelChange={handlePage}
-        getRowId={(row) => row[uniqueId]}
-        disableColumnFilter
-        slots={{
-          toolbar: () => (
-            <Box sx={{ display: "flex", justifyContent: "flex-start", p: 0 }}>
-              <GridToolbarColumnsButton />
-            </Box>
-          ),
-        }}
-        {...rest}
-      /> */}
       <StyledDataGrid
         pagination={!!paginationModel}
         paginationMode={paginationModel ? "server" : null}
@@ -127,6 +110,7 @@ const ThemedGrid = (props) => {
         onPaginationModelChange={paginationModel ? handlePage : undefined}
         getRowId={(row) => row[uniqueId]}
         disableColumnFilter
+        
         slots={{
           toolbar: () => (
             <Box sx={{ display: "flex", justifyContent: "flex-start", p: 0 }}>

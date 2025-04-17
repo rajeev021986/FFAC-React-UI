@@ -212,7 +212,7 @@ export default function DestinationForm({ modal, setModal }) {
               onClick={handleCloseModal}
               size="small"
             >
-              Cancel
+              Close
             </OutlinedButton>
             <ThemeButton
               onClick={formik.handleSubmit}

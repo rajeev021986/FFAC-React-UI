@@ -533,7 +533,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                           onClick={() => nav("/app/entity/shipper")}
                           sx={{ fontWeight: "500", borderRadius: "12px" }}
                         >
-                          Cancel
+                          Close
                         </OutlinedButton>
                         <ThemeButton
                           onClick={formik.handleSubmit}
@@ -896,7 +896,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                           sx={{ fontWeight: "500" }}
                           onClick={() => nav("/app/entity/shipper")}
                         >
-                          Cancel
+                          Close
                         </OutlinedButton>
                         <ThemeButton
                           onClick={formik.handleSubmit}

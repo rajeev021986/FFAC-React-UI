@@ -566,7 +566,7 @@ export default function VehicleNumberForm({ initialValues, page, onCancel, onSub
                     }
                   }}
                 >
-                  Cancel
+                  Close
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}

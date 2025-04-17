@@ -148,7 +148,7 @@ export default function AddBolConfirmation({ rowSelectionModel, onClose, view })
           color="primary" size="lg"
           onClick={handleCancel}
         >
-          Cancel
+          Close
         </OutlinedButton>
         <ThemeButton
           color="primary"

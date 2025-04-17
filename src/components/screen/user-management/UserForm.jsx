@@ -309,7 +309,7 @@ export default function UserForm({ initialValues, formAction, refetch }) {
                 nav(BACK_BUTTON_PATH);
               }}
             >
-              Cancel
+              Close
             </OutlinedButton>
             <ThemeButton
               color="primary"

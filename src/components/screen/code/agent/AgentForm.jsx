@@ -301,7 +301,7 @@ export default function AgentForm({ initialValues }) {
       <Grid item xs={12}>
         <Stack direction="row" spacing={2} justifyContent="end">
           <Stack direction="row" spacing={2}>
-            <OutlinedButton sx={{ fontWeight: "500" }}>Cancel</OutlinedButton>
+            <OutlinedButton sx={{ fontWeight: "500" }}>Close</OutlinedButton>
             <ThemeButton
               onClick={formik.handleSubmit}
               sx={{ fontWeight: "500" }}

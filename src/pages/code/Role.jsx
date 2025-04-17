@@ -701,7 +701,7 @@ const Role = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)} color="primary">
-            Cancel
+          Close
           </Button>
           <Button
             onClick={

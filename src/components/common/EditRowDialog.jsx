@@ -73,7 +73,7 @@ const EditRowDialog = ({ state, EditRowDialogopen, handleClose }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">
-            Cancel
+            Close
           </Button>
           <Button
             onClick={() => {

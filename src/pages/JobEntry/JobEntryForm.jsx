@@ -909,7 +909,7 @@ export default function JobEntryForm({
                         sx={{ fontWeight: "500" }}
                         onClick={() => nav(-1)}
                       >
-                        Cancel
+                        Close
                       </OutlinedButton>
 
                       {!initialValues?.id ? (
@@ -959,7 +959,7 @@ export default function JobEntryForm({
                         sx={{ fontWeight: "500" }}
                         onClick={() => nav(-1)}
                       >
-                        Cancel
+                        Close
                       </OutlinedButton>
 
                       <ThemeButton

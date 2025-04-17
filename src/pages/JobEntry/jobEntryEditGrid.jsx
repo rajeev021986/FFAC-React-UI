@@ -747,7 +747,7 @@ export default function JobEntryGridForm({
                         headerAlign: "center",
                         align: "center",
                       }))}
-                     
+                     hideFooter
                       disableSelectionOnClick
                       processRowUpdate={ob.handleProcessRowUpdate}
                       experimentalFeatures={{ newEditingApi: true }}

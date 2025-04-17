@@ -130,7 +130,7 @@ export default function UploadFilesDialog({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose} color="secondary">
-            Cancel
+            Close
           </Button>
           <Button onClick={handleDialogSave} color="primary">
             Save

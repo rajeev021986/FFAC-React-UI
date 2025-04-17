@@ -145,7 +145,7 @@ const GridSearchInput = ({
                 sx={{ fontWeight: "500" }}
                 onClick={handleCloseApproveDialog}
               >
-                Cancel
+                Close
               </OutlinedButton>
               <ThemeButton
                 onClick={handleApproveConfirm}
