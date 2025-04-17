@@ -6,7 +6,7 @@ import { useMenuSetting } from "../../hooks/useMenuItems";
 
 const DrawerContainer = ({ hover }) => {
     const { menuItems } = useMenuSetting();
-    // const [openItem, setOpenItem] = useState(null);
+    const [openItem, setOpenItem] = useState(null); 
 
 
     return (
@@ -23,8 +23,8 @@ const DrawerContainer = ({ hover }) => {
                             icon={item.iconKey}
                             hover={hover}
                             items={item.items}
-                            // openItem={openItem}
-                            // setOpenItem={setOpenItem}
+                            openItem={openItem}
+                            setOpenItem={setOpenItem}
                         />
                     ) : (
                         <TListItem
