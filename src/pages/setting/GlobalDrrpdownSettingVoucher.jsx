@@ -11,7 +11,7 @@ import dayjs from "dayjs";
 import { useGridApiRef } from "@mui/x-data-grid";
 import ResetNumberEdit from "../../components/utils/resetNumberEdit";
 import { reindexRows } from "../../components/utils/utils";
-import { validatePattern, generatePattern } from "../../components/utils/utils";
+import { generatePattern } from "../../components/utils/utils";
 import { MenuItem, Select } from "@mui/material";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 
@@ -76,6 +76,21 @@ export default function GlobalDrrpdownSettingVoucher({
   const handleProcessRowUpdate = (newRow, oldRow) => {
     let updatedRow = { ...newRow };
 
+    const tokenRegex = /#\d|\$[A-Z]/g;
+    const allowedTokens = [
+      "#4",
+      "#5",
+      "#6",
+      "#7",
+      "#8",
+      "$Z",
+      "$N",
+      "$M",
+      "$D",
+      "$Y",
+    ];
+    const monthTokens = ["$Z", "$N", "$M"];
+
     if (
       newRow.resetNumber !== oldRow.resetNumber ||
       newRow.shipmentType !== oldRow.shipmentType
@@ -96,11 +111,62 @@ export default function GlobalDrrpdownSettingVoucher({
     }
 
     if (newRow.jobPattern !== oldRow.jobPattern) {
-      if (!validatePattern(newRow.jobPattern)) {
-        toast.custom(<CustomToast message="Invalid pattern" toast="error" />, {
-          closeButton: false,
-        });
-        updatedRow.jobPattern = oldRow.jobPattern;
+      const tokensInPattern = newRow.jobPattern.match(tokenRegex) || [];
+
+      // Check if pattern ends with $Y and there are no extra characters
+      const endsWithYear = newRow.jobPattern.trim().endsWith("$Y");
+
+      // Ensure no invalid tokens in the pattern
+      const hasInvalidToken = tokensInPattern.some(
+        (token) => !allowedTokens.includes(token)
+      );
+
+      // Ensure no extra characters or tokens after $Y
+      const patternBeforeYear = newRow.jobPattern.split("$Y")[0];
+      const isValidPatternBeforeYear = allowedTokens.every((token) =>
+        patternBeforeYear.includes(token)
+      );
+
+      const hasInvalidMonthToken = tokensInPattern
+        .filter((t) => t.startsWith("$") && t !== "$Y")
+        .some((t) => !monthTokens.includes(t));
+
+      // Validation based on resetNumber
+      const requiredTokensMap = {
+        Never: [],
+        Yearly: ["$Y"],
+        Month: ["$Y", "$M", "$N", "$Z"], // Accept any one of M/N/Z
+        Daily: ["$Y", "$M", "$N", "$Z", "$D"],
+      };
+
+      const resetValue = newRow.resetNumber || "Month";
+      const requiredTokens = requiredTokensMap[resetValue];
+
+      const hasRequiredTokens = requiredTokens.every((token) => {
+        if (["$M", "$N", "$Z"].includes(token)) {
+          // At least one of the valid month tokens should be present
+          return monthTokens.some((mt) => tokensInPattern.includes(mt));
+        } else {
+          return tokensInPattern.includes(token);
+        }
+      });
+
+      // Final validation check
+      if (
+        hasInvalidToken ||
+        !endsWithYear ||
+        !isValidPatternBeforeYear ||
+        hasInvalidMonthToken ||
+        !hasRequiredTokens
+      ) {
+        toast.custom(
+          <CustomToast
+            message="Invalid pattern! Ensure it ends with $Y, contains only allowed tokens, and matches the reset logic."
+            toast="error"
+          />,
+          { closeButton: false }
+        );
+        updatedRow.jobPattern = oldRow.jobPattern; // Revert the value if validation fails
       } else {
         updatedRow.sampleJobNumber = replaceVoucherCodes(newRow.jobPattern);
       }
@@ -193,7 +259,7 @@ $Y : Year (Current Year)
             value={params.value || ""}
             onChange={(e) => {
               const newValue = e.target.value;
-              apiRef.current.setEditCellValue({
+              apiRef.setEditCellValue({
                 id: params.id,
                 field: "shipmentType",
                 value: newValue,
@@ -240,63 +306,6 @@ $Y : Year (Current Year)
           row={params.row}
         />
       ),
-      // renderEditCell: (params) => {
-      //   const voucherNumber = params.row.jobPattern || "";
-      //   const hasYear = voucherNumber.includes("$Y");
-      //   const hasMonth =
-      //     voucherNumber.includes("$M") ||
-      //     voucherNumber.includes("$Z") ||
-      //     voucherNumber.includes("$N");
-      //   const hasDay = voucherNumber.includes("$D");
-      //   const enableYearly = hasYear;
-      //   const enableMonthly = hasYear && hasMonth;
-      //   const enableDaily = hasYear && hasMonth && hasDay;
-      //   return (
-      //     <Select
-      //       size="small"
-      //       value={params.value || ""}
-      //       onChange={(e) => {
-      //         const newValue = e.target.value;
-      //         const shipmentType = params.row.shipmentType || "GEN";
-      //         const voucherDigits = 4; // You can later add UI control for this
-      //         const pattern = generatePattern({
-      //           shipmentType,
-      //           resetNumber: newValue,
-      //           voucherDigits,
-      //         });
-      //         const updatedSample = replaceVoucherCodes(pattern);
-      //         params.api.setEditCellValue({
-      //           id: params.id,
-      //           field: "resetNumber",
-      //           value: newValue,
-      //         });
-      //         setvalue((prevValues) =>
-      //           prevValues.map((row) =>
-      //             row.id === params.id
-      //               ? {
-      //                   ...row,
-      //                   jobPattern: pattern,
-      //                   sampleJobNumber: updatedSample,
-      //                 }
-      //               : row
-      //           )
-      //         );
-      //       }}
-      //       fullWidth
-      //     >
-      //       <MenuItem value="Never">Never</MenuItem>
-      //       <MenuItem value="Yearly" disabled={!enableYearly}>
-      //         Yearly
-      //       </MenuItem>
-      //       <MenuItem value="Month" disabled={!enableMonthly}>
-      //         Month
-      //       </MenuItem>
-      //       <MenuItem value="Daily" disabled={!enableDaily}>
-      //         Daily
-      //       </MenuItem>
-      //     </Select>
-      //   );
-      // },
     },
     {
       field: "jobPattern",
