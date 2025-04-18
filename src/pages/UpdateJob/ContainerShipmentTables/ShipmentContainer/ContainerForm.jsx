@@ -28,6 +28,7 @@ import {
 import InputBox from "../../../../components/common/InputBox";
 import DateTimeField from "../../../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../../../components/UploadFile";
+import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
 
 export default function ContainerNumberForm({
   initialValues,
@@ -306,10 +307,12 @@ export default function ContainerNumberForm({
                   paddingLeft={1}
                   marginTop={2}
                 >
-                  <InputBox
+                  <FormAutoComplete
                     label="Clerk Name"
                     id="clerkName"
+                    suggestionName="first_name"
                     value={formik.values.clerkName}
+                    error={formik.errors.clerkName}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -390,7 +393,6 @@ export default function ContainerNumberForm({
               </Grid>
 
               <Grid container>
-              
                 <Grid
                   item
                   xs={12}

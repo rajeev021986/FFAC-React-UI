@@ -3,7 +3,15 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { Box, IconButton, Stack, Dialog, DialogContent } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Stack,
+  Dialog,
+  DialogContent,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 import VehicleNumberForm from "./VehicleForm";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -13,8 +21,9 @@ import {
   setPagination,
   vehicleView,
   vehicleSetSortModel,
-  updateInput,
+  // updateInput,
 } from "../../../../store/freatures/vehicleSlice";
+import ClearIcon from "@mui/icons-material/Clear";
 
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -27,11 +36,12 @@ import CardsView from "../../../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../../../components/common/ScreenToolbar";
 import GridActions from "../../../../components/common/Grid/GridActions";
 import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
-import FilterForm from "./FilterForm";
+import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
+
 import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getVehicleListGridActions } from "./vehicleAction";
 import { VEHICLE_COLUMNS } from "../../../../data/columns/jobEntry";
-
+import useDebounce from "../../../../hooks/useDebounce";
 export default function VehicleShipmentView({ page, customer_id }) {
   const vehicleSelector = useSelector((s) => s?.vehicle);
 
@@ -40,6 +50,11 @@ export default function VehicleShipmentView({ page, customer_id }) {
   const dispatch = useDispatch();
   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
+
+  const [searchValue, setsearchValue] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  const debounceValue = useDebounce(searchValue, 500);
+
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -125,9 +140,27 @@ export default function VehicleShipmentView({ page, customer_id }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
+  const handleSearchBar = (e) => {
+    setsearchValue(e.target.value);
+  };
+
   VEHICLE_COLUMNS[VEHICLE_COLUMNS.length - 1].renderCell = GridActions({
     actions: getVehicleListGridActions(setModal),
   });
+
+  useEffect(() => {
+    if (debounceValue.trim()) {
+      const lowerSearch = debounceValue.toLowerCase();
+      const filtered = vehicleListData?.body?.data?.filter((item) =>
+        Object.values(item).some((val) =>
+          String(val).toLowerCase().includes(lowerSearch)
+        )
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(vehicleListData?.body?.data);
+    }
+  }, [debounceValue, vehicleListData]);
 
   useEffect(() => {
     if (!vehicleSelector.view) {
@@ -191,14 +224,32 @@ export default function VehicleShipmentView({ page, customer_id }) {
           sx={{ padding: "8px" }}
           title={
             <Stack direction="row" justifyContent="space-between">
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <GridSearchInput
-                  filters={vehicleSelector?.formData}
-                  setFilters={(filters) => dispatch(updateInput(filters))}
-                  width="650px"
-                >
-                  <FilterForm />
-                </GridSearchInput>
+              <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
+                <TextField
+                  hiddenLabel
+                  id="search"
+                  name="search"
+                  label="Search Vehicle"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  value={searchValue}
+                  onChange={handleSearchBar}
+                  sx={{ ...muiTextFieldStyles.root }}
+                  InputProps={{
+                    endAdornment: searchValue && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          onClick={() => setsearchValue("")}
+                          edge="end"
+                        >
+                          <ClearIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </Box>
               <Box>
                 <IconButton onClick={() => dispatch(vehicleView("card"))}>
@@ -226,7 +277,7 @@ export default function VehicleShipmentView({ page, customer_id }) {
             columns={VEHICLE_COLUMNS}
             count={vehicleListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={vehicleListData?.body?.data}
+            data={filteredData}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={vehicleSelector.pagination}
@@ -242,7 +293,7 @@ export default function VehicleShipmentView({ page, customer_id }) {
             columns={VEHICLE_COLUMNS}
             count={vehicleListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={vehicleListData?.body?.data}
+            data={filteredData}
             paginationModel={vehicleSelector?.pagination}
             loading={isLoading || isFetching}
             actions={getVehicleListGridActions(setModal)}
@@ -257,6 +308,12 @@ export default function VehicleShipmentView({ page, customer_id }) {
         maxWidth="lg"
         fullWidth
         fullScreen
+        PaperProps={{
+          sx: {
+            m: 4,
+            borderRadius: 2,
+          },
+        }}
       >
         <DialogContent>
           <VehicleNumberForm

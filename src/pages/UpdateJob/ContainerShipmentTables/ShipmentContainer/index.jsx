@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  Stack,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent } from "@mui/material";
+import { Box, Card, CardContent, Stack } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import ApiManager from "../../../../services/ApiManager";
@@ -63,6 +56,8 @@ export default function ContainerForm({ page }) {
     nominationDate: "",
     remark: "",
   });
+
+  const handleCloseModal = () => setOpenModal(false);
 
   useEffect(() => {
     const fetchContainerNumbers = async () => {
@@ -136,9 +131,6 @@ export default function ContainerForm({ page }) {
       setLoading(false);
     }
   }, [state?.initialValues?.id]);
-
-  // const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>

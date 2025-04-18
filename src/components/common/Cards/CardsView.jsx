@@ -1,4 +1,10 @@
-import { Box, CircularProgress, Grid, TablePagination } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Grid,
+  TablePagination,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import CardItem from "./CardItem";
 
@@ -63,13 +69,12 @@ export default function CardsView({
         : obj.createdDate,
     };
   });
-
   return (
     <Grid
       sx={{
         maxWidth: "100%",
         borderRadius: "5px",
-        height: "calc(100vh - 250px)",
+        // height: "calc(100vh - 250px)",
         overflowY: "auto",
         position: "relative",
         pt: 1,
@@ -93,6 +98,19 @@ export default function CardsView({
             page={page}
           />
         ))}
+
+        {gridData?.length === 0 && (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="50px"
+            width="100%"
+          >
+            <Typography className="text-center">No Data Found!!</Typography>
+          </Box>
+        )}
+
         {loading && (
           <Box
             sx={{

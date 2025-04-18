@@ -326,14 +326,12 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
                 <span
-                  onClick={() =>
-                    handleOpen("pickUpOrder")
-                  }
+                  onClick={() => handleOpen("pickUpOrder")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
                     cursor: "pointer",
-                    color: '#1976d2',
+                    color: "#1976d2",
                     textDecoration: "underline",
                     fontSize: "14px",
                     fontWeight: "500",
@@ -366,7 +364,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   marginTop={2}
                 >
                   <InputBox
-                    label="IDF Date"
+                    label="IDF No."
                     id="idfNo"
                     value={formik.values.idfNo}
                     disabled={disabled}

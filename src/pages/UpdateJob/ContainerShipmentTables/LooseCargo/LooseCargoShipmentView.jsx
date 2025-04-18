@@ -3,14 +3,21 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { Box, IconButton, Stack, Dialog, DialogContent } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Stack,
+  Dialog,
+  DialogContent,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LoaderIcon } from "react-hot-toast";
 import {
   setPagination,
-  updateInput,
   looseCargoView,
   looseCargoSetSortModel,
 } from "../../../../store/freatures/LoseCargoSlice";
@@ -18,17 +25,19 @@ import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+
 // Components
 import LooseCargoForm from "./LooseCargoForm";
-import GridSearchInput from "../../../../components/common/Filter/GridSearchInput";
 import CardsView from "../../../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../../../components/common/ScreenToolbar";
 import GridActions from "../../../../components/common/Grid/GridActions";
 import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
-import FilterForm from "./FilterForm";
 import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getLooseCargoListGridActions } from "./LooseCargoAction";
 import { LOOSECARGO_COLUMNS } from "../../../../data/columns/jobEntry";
+import ClearIcon from "@mui/icons-material/Clear";
+import useDebounce from "../../../../hooks/useDebounce";
+import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
 
 export default function LooseShipmentView({ page, customer_id }) {
   const loooseCargoSelector = useSelector((s) => s?.looseCargo);
@@ -38,6 +47,9 @@ export default function LooseShipmentView({ page, customer_id }) {
   const dispatch = useDispatch();
   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
+  const [searchValue, setsearchValue] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  const debounceValue = useDebounce(searchValue, 500);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -114,6 +126,10 @@ export default function LooseShipmentView({ page, customer_id }) {
     }
   };
 
+  const handleSearchBar = (e) => {
+    setsearchValue(e.target.value);
+  };
+
   useEffect(() => {
     refetch();
   }, [location.pathname]);
@@ -126,6 +142,20 @@ export default function LooseShipmentView({ page, customer_id }) {
   LOOSECARGO_COLUMNS[LOOSECARGO_COLUMNS.length - 1].renderCell = GridActions({
     actions: getLooseCargoListGridActions(setModal),
   });
+
+  useEffect(() => {
+    if (debounceValue.trim()) {
+      const lowerSearch = debounceValue.toLowerCase();
+      const filtered = vehicleListData?.body?.data?.filter((item) =>
+        Object.values(item).some((val) =>
+          String(val).toLowerCase().includes(lowerSearch)
+        )
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(vehicleListData?.body?.data);
+    }
+  }, [debounceValue, vehicleListData]);
 
   useEffect(() => {
     if (!loooseCargoSelector.view) {
@@ -189,15 +219,34 @@ export default function LooseShipmentView({ page, customer_id }) {
           sx={{ padding: "8px" }}
           title={
             <Stack direction="row" justifyContent="space-between">
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <GridSearchInput
-                  filters={loooseCargoSelector?.formData}
-                  setFilters={(filters) => dispatch(updateInput(filters))}
-                  width="650px"
-                >
-                  <FilterForm />
-                </GridSearchInput>
+              <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
+                <TextField
+                  hiddenLabel
+                  id="search"
+                  name="search"
+                  label="Search Cargo"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  value={searchValue}
+                  onChange={handleSearchBar}
+                  sx={{ ...muiTextFieldStyles.root }}
+                  InputProps={{
+                    endAdornment: searchValue && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          onClick={() => setsearchValue("")}
+                          edge="end"
+                        >
+                          <ClearIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </Box>
+
               <Box>
                 <IconButton onClick={() => dispatch(looseCargoView("card"))}>
                   <FormatListBulletedOutlined
@@ -228,7 +277,7 @@ export default function LooseShipmentView({ page, customer_id }) {
             columns={LOOSECARGO_COLUMNS}
             count={vehicleListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={vehicleListData?.body?.data}
+            data={filteredData}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={loooseCargoSelector.pagination}
@@ -244,7 +293,7 @@ export default function LooseShipmentView({ page, customer_id }) {
             columns={LOOSECARGO_COLUMNS}
             count={vehicleListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={vehicleListData?.body?.data}
+            data={filteredData}
             paginationModel={loooseCargoSelector?.pagination}
             loading={isLoading || isFetching}
             actions={getLooseCargoListGridActions(setModal)}
@@ -259,6 +308,12 @@ export default function LooseShipmentView({ page, customer_id }) {
         maxWidth="lg"
         fullWidth
         fullScreen
+        PaperProps={{
+          sx: {
+            m: 4,
+            borderRadius: 2,
+          },
+        }}
       >
         <DialogContent>
           <LooseCargoForm

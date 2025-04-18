@@ -4,17 +4,26 @@ import {
   GridOnOutlined,
 } from "@mui/icons-material";
 import ContainerNumberForm from "./ContainerForm";
-import { Box, IconButton, Stack, Dialog, DialogContent } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Stack,
+  Dialog,
+  DialogContent,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LoaderIcon } from "react-hot-toast";
+import ClearIcon from "@mui/icons-material/Clear";
 
 import {
   setPagination,
   containerView,
   containerSetSortModel,
-  updateInput,
+  // updateInput,
 } from "../../../../store/freatures/containersSlice";
 
 import Backdrop from "@mui/material/Backdrop";
@@ -23,16 +32,16 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 // Components
-import GridSearchInput from "../../../../components/common/Filter/GridSearchInput";
 import CardsView from "../../../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../../../components/common/ScreenToolbar";
 import GridActions from "../../../../components/common/Grid/GridActions";
 import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
-import FilterForm from "./FilterForm";
 
 import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getContaienrListGridActions } from "./containerAction";
 import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
+import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
+import useDebounce from "../../../../hooks/useDebounce";
 
 export default function ContainerShipmentView({ page, customer_id }) {
   const containerSelector = useSelector((state) => state?.containers);
@@ -42,6 +51,11 @@ export default function ContainerShipmentView({ page, customer_id }) {
   const dispatch = useDispatch();
   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
+
+  const [searchValue, setsearchValue] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  const debounceValue = useDebounce(searchValue, 500);
+
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -127,6 +141,10 @@ export default function ContainerShipmentView({ page, customer_id }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
+  const handleSearchBar = (e) => {
+    setsearchValue(e.target.value);
+  };
+
   CONTAINER_COLUMNS[CONTAINER_COLUMNS.length - 1].renderCell = GridActions({
     actions: getContaienrListGridActions(setModal),
   });
@@ -136,6 +154,20 @@ export default function ContainerShipmentView({ page, customer_id }) {
       dispatch(containerView("card"));
     }
   }, [containerSelector.view, dispatch]);
+
+  useEffect(() => {
+    if (debounceValue.trim()) {
+      const lowerSearch = debounceValue.toLowerCase();
+      const filtered = containerListData?.body?.data?.filter((item) =>
+        Object.values(item).some((val) =>
+          String(val).toLowerCase().includes(lowerSearch)
+        )
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(containerListData?.body?.data);
+    }
+  }, [debounceValue, containerListData]);
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
@@ -193,14 +225,32 @@ export default function ContainerShipmentView({ page, customer_id }) {
           sx={{ padding: "8px" }}
           title={
             <Stack direction="row" justifyContent="space-between">
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <GridSearchInput
-                  filters={containerSelector?.formData}
-                  setFilters={(filters) => dispatch(updateInput(filters))}
-                  width="650px"
-                >
-                  <FilterForm />
-                </GridSearchInput>
+              <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
+                <TextField
+                  hiddenLabel
+                  id="search"
+                  name="search"
+                  label="Search container"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  value={searchValue}
+                  onChange={handleSearchBar}
+                  sx={{ ...muiTextFieldStyles.root }}
+                  InputProps={{
+                    endAdornment: searchValue && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          onClick={() => setsearchValue("")}
+                          edge="end"
+                        >
+                          <ClearIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </Box>
               <Box>
                 <IconButton onClick={() => dispatch(containerView("card"))}>
@@ -231,7 +281,7 @@ export default function ContainerShipmentView({ page, customer_id }) {
             columns={CONTAINER_COLUMNS}
             count={containerListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={containerListData?.body?.data}
+            data={filteredData}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={containerSelector.pagination}
@@ -247,7 +297,7 @@ export default function ContainerShipmentView({ page, customer_id }) {
             columns={CONTAINER_COLUMNS}
             count={containerListData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={containerListData?.body?.data}
+            data={filteredData}
             paginationModel={containerSelector?.pagination}
             loading={isLoading || isFetching}
             actions={getContaienrListGridActions(setModal)}
@@ -259,9 +309,15 @@ export default function ContainerShipmentView({ page, customer_id }) {
       <Dialog
         open={modal.open}
         onClose={() => setModal({ open: false, type: "", data: {} })}
-        maxWidth="lg"
+        maxWidth="md"
         fullWidth
         fullScreen
+        PaperProps={{
+          sx: {
+            m: 4,
+            borderRadius: 2,
+          },
+        }}
       >
         <DialogContent>
           <ContainerNumberForm

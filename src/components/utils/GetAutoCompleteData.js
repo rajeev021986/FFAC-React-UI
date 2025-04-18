@@ -20,6 +20,7 @@ const suggestionName = {
   portOfLoading: "PORT_LOADING",
   portOfDischarge: "PORT",
   placeOfDelivery: "PORT",
+  clerkName: "USER",
 };
 
 export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {
@@ -33,7 +34,7 @@ export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {
         index === self.findIndex((t) => t[dataKey] === value[dataKey])
     );
     uniqueSuggestions = uniqueSuggestions.map((item) => {
-      return { label: item[dataLabel], value: item[dataKey], fullData:item };
+      return { label: item[dataLabel], value: item[dataKey], fullData: item };
     });
 
     return uniqueSuggestions;
