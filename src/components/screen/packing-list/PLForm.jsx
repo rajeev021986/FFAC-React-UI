@@ -534,7 +534,7 @@ export default function PLForm({
 
           {/* Cancel and Save buttons on the right */}
           <Stack direction="row" spacing={2}>
-            <OutlinedButton sx={{ fontWeight: "500" }}>Cancel</OutlinedButton>
+            <OutlinedButton sx={{ fontWeight: "500" }}>Close</OutlinedButton>
             <ThemeButton
               onClick={formik.handleSubmit}
               sx={{ fontWeight: "500" }}

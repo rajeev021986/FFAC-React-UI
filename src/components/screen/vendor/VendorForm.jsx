@@ -247,7 +247,7 @@ export default function VendorForm({ modal, setModal }) {
               onClick={handleCloseModal}
               size="small"
             >
-              Cancel
+              Close
             </OutlinedButton>
             <ThemeButton
               onClick={formik.handleSubmit}

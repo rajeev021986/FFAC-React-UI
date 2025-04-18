@@ -77,31 +77,39 @@ export default function FilterForm({ setFilterOpen }) {
     <div>
       <Stack spacing={3} direction="column" justifyContent="space-between">
         <Stack direction="row" spacing={2}>
-          <InputBox
-            label="Customer Name"
-            id="customerName"
-            value={formik.values.customerName}
-            onChange={formik.handleChange}
-          />
-          <InputBox
+        <InputBox
             label="Customer Reference No."
             id="customerRefNo"
             value={formik.values.customerRefNo}
             onChange={formik.handleChange}
           />
-          {/* <InputBox
+            <InputBox
             label="Entry No."
             id="entryNo"
             value={formik.values.entryNo}
             onChange={formik.handleChange}
-          /> */}
-        </Stack>
-
-        <Stack direction="row" spacing={2}>
-          <InputBox
+          />
+           <InputBox
             label="MBL No."
             id="mblNo"
             value={formik.values.mblNo}
+            onChange={formik.handleChange}
+          />
+      
+        </Stack>
+
+        <Stack direction="row" spacing={2}>
+
+            <InputBox
+            label="Customer Name"
+            id="customerName"
+            value={formik.values.customerName}
+            onChange={formik.handleChange}
+          />
+              <InputBox
+            label="Job No."
+            id="jobNo"
+            value={formik.values.jobNo}
             onChange={formik.handleChange}
           />
 

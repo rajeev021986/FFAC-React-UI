@@ -1,37 +1,34 @@
-export function isValidPattern(pattern) {
-  const allowedTokens = [
-    "#4",
-    "#5",
-    "#6",
-    "#7",
-    "#8",
-    "$Z",
-    "$N",
-    "$M",
-    "$D",
-    "$Y",
-  ];
+export function generatePattern({
+  shipmentType = "GEN",
+  resetNumber = "Never", // "Never", "Yearly", "Month", "Daily"
+  voucherDigits = 4,     // 4 to 8
+}) {
+  const voucherToken = `#${voucherDigits}`;
+  let datePart = "";
 
-  const tokenRegex = /#4|#5|#6|#7|#8|\$Z|\$N|\$M|\$D|\$Y/g;
-  const matches = pattern.match(tokenRegex) || [];
-
-  const invalidTokens = pattern
-    .replace(tokenRegex, "")
-    .match(/[#\$][A-Z0-9]+/g);
-  if (invalidTokens && invalidTokens.length) {
-    return false;
+  switch (resetNumber) {
+    case "Yearly":
+      datePart = "$Y";
+      break;
+    case "Month":
+      datePart = "$M-$Y";
+      break;
+    case "Daily":
+      datePart = "$D-$M-$Y";
+      break;
+    case "Never":
+    default:
+      datePart = "";
   }
 
-  const monthTokens = ["$Z", "$M", "$N"];
-  const foundMonthTokens = matches.filter((token) =>
-    monthTokens.includes(token)
-  );
-  if (foundMonthTokens.length > 1) {
-    return false;
-  }
+  const code = shipmentType
+    .replace(/[^a-zA-Z]/g, "")
+    .substring(0, 3)
+    .toUpperCase();
 
-  return matches.every((token) => allowedTokens.includes(token));
+  return `${code}-${voucherToken}${datePart ? `-${datePart}` : ""}`;
 }
+
 
 export const reindexRows = (rows) => {
   return rows.map((row, index) => ({

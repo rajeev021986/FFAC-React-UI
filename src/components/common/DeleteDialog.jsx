@@ -83,7 +83,7 @@ export default function DeleteDialog({
             color: cancelButtonColor || "primary.main",
           }}
         >
-          {cancelButton || "Cancel"}
+          {cancelButton || "Close"}
         </Button>
         <Button
           onClick={async () => {

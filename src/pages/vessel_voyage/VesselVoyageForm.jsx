@@ -470,7 +470,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         sx={{ fontWeight: "500", borderRadius: "12px" }}
                         onClick={() => nav("/app/master/vesselVoyage")}
                       >
-                        Cancel
+                        Close
                       </OutlinedButton>
                       <ThemeButton
                         onClick={formik.handleSubmit}
@@ -844,7 +844,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                         sx={{ fontWeight: "500", borderRadius: "12px" }}
                         onClick={() => nav("/app/master/vesselVoyage")}
                       >
-                        Cancel
+                        Close
                       </OutlinedButton>
                       <ThemeButton
                         onClick={formik.handleSubmit}

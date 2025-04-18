@@ -56,12 +56,12 @@ const NotesTable = ({ formik }) => {
     loadNotes();
   }, [formik?.values?.notes]);
 
-  useEffect(() => {
-    if (location.pathname !== "/app/documentation/job/entry/editJobEntry") {
-      localStorage.removeItem("notes");
-      setNotes([]);
-    }
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   if (location.pathname !== "/app/documentation/job/entry/editJobEntry") {
+  //     localStorage.removeItem("notes");
+  //     setNotes([]);
+  //   }
+  // }, [location.pathname]);
 
   // const handleNoteAdded = (newNote) => {
   //   const updatedNotes = [...notes, newNote];
@@ -83,10 +83,9 @@ const NotesTable = ({ formik }) => {
 
     setNotes(updatedNotes);
     formik.setFieldValue("notes", updatedNotes);
-    // localStorage.setItem("notes", JSON.stringify(updatedNotes));
+    localStorage.setItem("notes", JSON.stringify(updatedNotes));
     setSelectedNote(null); // Reset selection after update
   };
-
   const NOTE_COLUMNS = [
     {
       flex: 1,

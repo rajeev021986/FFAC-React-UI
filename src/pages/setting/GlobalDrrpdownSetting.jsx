@@ -5,8 +5,6 @@ import { Delete as DeleteIcon } from "@mui/icons-material";
 import { OutlinedButton } from "../../components/common/Button";
 import toast from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
-import { useSelector } from "react-redux";
-import { getTheme } from "../../config/theme";
 
 export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   const handleAddRow = () => {
@@ -84,10 +82,6 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
     },
   ];
 
-  const theme = getTheme(
-    useSelector((state) => state.dashboard.theme),
-    useSelector((state) => state.dashboard.mode)
-  );
   return (
     <Grid item xs={12} md={4} sm={6}>
       <div

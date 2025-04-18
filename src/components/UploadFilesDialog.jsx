@@ -130,7 +130,7 @@ export default function UploadFilesDialog({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose} color="secondary">
-            Cancel
+            Close
           </Button>
           <Button onClick={handleDialogSave} color="primary">
             Save
@@ -152,7 +152,19 @@ export default function UploadFilesDialog({
       >
         <DialogTitle>{viewDocument.documentType}</DialogTitle>
         <DialogContent>
-          {fileData.documentType == "XL" && (
+          {fileData.documentType == "XL"  && (
+            <ExcelViewer
+              mimeType={fileData.mimeType}
+              base64Data={fileData.base64Data}
+            />
+          )}
+          {fileData.documentType ==  'CSV' && (
+            <ExcelViewer
+              mimeType={fileData.mimeType}
+              base64Data={fileData.base64Data}
+            />
+          )}
+          {fileData.documentType ==  'EXCEL' && (
             <ExcelViewer
               mimeType={fileData.mimeType}
               base64Data={fileData.base64Data}

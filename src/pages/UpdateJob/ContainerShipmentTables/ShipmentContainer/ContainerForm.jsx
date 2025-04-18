@@ -308,7 +308,7 @@ export default function ContainerNumberForm({
               <Grid paddingLeft={1} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
-                    label="TRANSPORTER"
+                    label="Transporter"
                     id="transporter"
                     value={formik.values.transporter}
                     onChange={formik.handleChange}
@@ -317,7 +317,7 @@ export default function ContainerNumberForm({
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
-                    label="TRUCK/TRAILER NO."
+                    label="Truck/Trailer No."
                     id="truckTrailerNoTransporter"
                     value={formik.values.truckTrailerNoTransporter}
                     onChange={formik.handleChange}
@@ -560,7 +560,7 @@ export default function ContainerNumberForm({
                   marginTop={2}
                 >
                   <DateTimeField
-                    label="T1/C1 READY"
+                    label="T1/C1 Ready"
                     name="t1C1ReadyDate"
                     id="t1C1ReadyDate"
                     value={formik.values.t1C1ReadyDate}
@@ -604,7 +604,7 @@ export default function ContainerNumberForm({
                   marginTop={2}
                 >
                   <DateTimeField
-                    label="LOADING DATE"
+                    label="Loading Date"
                     name="loadingDate"
                     id="loadingDate"
                     value={formik.values.loadingDate}
@@ -883,7 +883,7 @@ export default function ContainerNumberForm({
                   marginTop={2}
                 >
                   <InputBox
-                    label="POD NO."
+                    label="POD No."
                     id="podNo"
                     name="podNo"
                     value={formik.values.podNo}
@@ -905,7 +905,7 @@ export default function ContainerNumberForm({
                   marginTop={2}
                 >
                   <DateTimeField
-                    label="Pod DATE"
+                    label="Pod Date"
                     name="podDate"
                     id="podDate"
                     value={formik.values.podDate}
@@ -1046,9 +1046,6 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid container>
                 <Grid
                   item
                   xs={12}
@@ -1094,6 +1091,10 @@ export default function ContainerNumberForm({
                 >
                   <CloudUploadIcon />
                 </span>
+              </Grid>
+
+              <Grid container>
+            
 
                 <Grid
                   item
@@ -1147,7 +1148,7 @@ export default function ContainerNumberForm({
                     }
                   }}
                 >
-                  Cancel
+                  Close
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}

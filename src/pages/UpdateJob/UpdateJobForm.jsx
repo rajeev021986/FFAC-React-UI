@@ -72,6 +72,9 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
     enableReinitialize: true,
     validateOnChange: false,
     onSubmit: async (values) => {
+      if(isLoading) {
+        return;
+      }
       let bondData = values.bondDetails.map((item) =>
         item?.new ? { ...item, id: null, new: false } : item
       );
@@ -202,9 +205,9 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     <Typography variant="body1">
                       <strong>JOB NO: </strong> {formik.values.jobNo}
                     </Typography>
-                    <Typography variant="body1">
+                    {/* <Typography variant="body1">
                       <strong>MBL NO: </strong> {formik.values.mblNo}
-                    </Typography>
+                    </Typography> */}
                     <Typography variant="body1">
                       <strong>Customer: </strong> {formik.values.customer}
                     </Typography>
@@ -559,7 +562,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   sx={{ fontWeight: "500" }}
                   onClick={() => nav(-1)}
                 >
-                  Cancel
+                  Close
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}

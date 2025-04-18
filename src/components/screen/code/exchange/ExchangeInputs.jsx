@@ -105,7 +105,7 @@ export default function ExchangeInputs({
               sx={{ fontWeight: "500" }}
               onClick={() => nav("/app/admin/exchangeRate")}
             >
-              Cancel
+              Close
             </OutlinedButton>
             <ThemeButton
               onClick={formik.handleSubmit}

@@ -301,7 +301,7 @@ export default function BOLForm({
             sx={{ fontWeight: "500" }}
             onClick={() => navigate("/app/spr/packing_list")}
           >
-            Cancel
+            Close
           </OutlinedButton>
           <ThemeButton onClick={handleSubmit} sx={{ fontWeight: "500" }}>
             {loader && <CircularProgress size={20} color="white" />} Save

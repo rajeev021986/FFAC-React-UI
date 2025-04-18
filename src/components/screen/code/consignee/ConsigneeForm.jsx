@@ -435,7 +435,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                           sx={{ fontWeight: "500", borderRadius: "12px" }}
                           onClick={() => nav("/app/entity/consignee")}
                         >
-                          Cancel
+                          Close
                         </OutlinedButton>
                         <ThemeButton
                           onClick={formik.handleSubmit}
@@ -734,7 +734,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                           onClick={() => nav("/app/entity/consignee")}
                           sx={{ fontWeight: "500" }}
                         >
-                          Cancel
+                          Close
                         </OutlinedButton>
 
                         <ThemeButton

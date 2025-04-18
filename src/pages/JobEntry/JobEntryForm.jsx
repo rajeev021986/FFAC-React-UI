@@ -79,6 +79,9 @@ export default function JobEntryForm({
     validateOnChange: false,
     validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
+      if(isLoading) {
+        return;
+      }
       if (!values.id || type == "copy") {
         let containerShipment = values.containerShipments.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
@@ -121,6 +124,7 @@ export default function JobEntryForm({
             nav("/app/documentation/job/entry");
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
+              duration: 1000, // 2 seconds
               closeButton: false,
             });
           }
@@ -128,6 +132,8 @@ export default function JobEntryForm({
           if (error.status === 409) {
             const message = error.data.message;
             toast.custom(<CustomToast message={message} toast="error" />, {
+              duration: 1000, // 2 seconds
+             
               closeButton: false,
             });
           } else {
@@ -137,6 +143,8 @@ export default function JobEntryForm({
                 toast="error"
               />,
               {
+              duration: 2000, // 2 seconds
+
                 closeButton: false,
               }
             );
@@ -901,7 +909,7 @@ export default function JobEntryForm({
                         sx={{ fontWeight: "500" }}
                         onClick={() => nav(-1)}
                       >
-                        Cancel
+                        Close
                       </OutlinedButton>
 
                       {!initialValues?.id ? (
@@ -951,7 +959,7 @@ export default function JobEntryForm({
                         sx={{ fontWeight: "500" }}
                         onClick={() => nav(-1)}
                       >
-                        Cancel
+                        Close
                       </OutlinedButton>
 
                       <ThemeButton

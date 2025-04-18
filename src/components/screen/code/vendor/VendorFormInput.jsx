@@ -57,15 +57,15 @@ export default function VendorFormInput({
     reject: false,
   });
   const handleApproveRequest = async () => {
-    if (formik.values.status == "Pending_Documents") {
-      toast.custom(
-        <CustomToast message="Document is Pending!" toast="warn" />,
-        {
-          closeButton: false,
-        }
-      );
-      return;
-    }
+    // if (formik.values.status == "Pending_Documents") {
+    //   toast.custom(
+    //     <CustomToast message="Document is Pending!" toast="warn" />,
+    //     {
+    //       closeButton: false,
+    //     }
+    //   );
+    //   return;
+    // }
     try {
       setLoaderApprove((prevState) => ({
         ...prevState,
@@ -584,7 +584,7 @@ export default function VendorFormInput({
           />
         </Grid>
 
-        {formik.values.status.toLowerCase() === "rejected" ||
+        {formik.values.statusCode === -1 ||
         page == "vendorApproval" ? (
           <Grid item xs={12} sx={{ padding: "10px 3px", margin: "auto" }}>
             <TextField
@@ -611,7 +611,7 @@ export default function VendorFormInput({
                   sx={{ fontWeight: "500" }}
                   onClick={() => nav(-1)}
                 >
-                  Cancel
+                  Close
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}
@@ -631,7 +631,7 @@ export default function VendorFormInput({
                   sx={{ fontWeight: "500" }}
                   onClick={() => nav(-1)}
                 >
-                  Cancel
+                  Close
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}
