@@ -711,23 +711,10 @@ export default function LooseCargoForm({
                 </Grid>
               </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={3}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="License No."
-                    id="licenceNo"
-                    value={formik.values.licenceNo}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
+              <Grid paddingLeft={1} container spacing={2}>
+             
+
+              
               </Grid>
 
               <Grid paddingLeft={1} container spacing={2}></Grid>
