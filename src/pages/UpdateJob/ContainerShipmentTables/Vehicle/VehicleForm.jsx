@@ -16,6 +16,7 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../../components/common/Toast/CustomToast";
 import getFirstError from "../../../../components/common/FieldToastError";
 import EditIconForHeader from "../../../../components/common/commonIcons/EditIcons/EditIconForHeader";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 // API's
 import { useUpdateVehicleNumberMutation } from "../../../../store/api/containerApi";
@@ -28,12 +29,14 @@ import {
 import InputBox from "../../../../components/common/InputBox";
 import DateTimeField from "../../../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../../../components/UploadFile";
+import ApiManager from "../../../../services/ApiManager";
+import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
 
 export default function VehicleNumberForm({
-  initialValues,
   page,
   onCancel,
   onSubmit,
+  vehicleId,
 }) {
   const [updateVehicleNumber, { isLoading }] = useUpdateVehicleNumberMutation();
 
@@ -53,10 +56,33 @@ export default function VehicleNumberForm({
   const [open, setOpen] = useState(false);
   const [SourceType, setSourceType] = useState("");
   const handleClose = () => setOpen(false);
+  const [loading, setLoading] = useState(true);
+
   const handleOpen = (type) => {
     setSourceType(type);
     setOpen(true);
   };
+
+  const [initialValues, setInitialValues] = React.useState({
+    clerkName: "",
+    clerkTelNo: "",
+    reportingPlace: "",
+    reportingDate: "",
+    reportingTime: "",
+    transferDate: "",
+    t1C1ReadyDate: "",
+    loadingDate: "",
+    cancellationDate: "",
+    arrivalBorderDate: "",
+    crossedBorderDate: "",
+    arrivalICDDate: "",
+    cargoReleaseDate: "",
+    departICDDate: "",
+    bondNumber: 0,
+    bondAmount: 0,
+    arrivalCustomerPlaceDate: "",
+    remark: "",
+  });
 
   const formik = useFormik({
     initialValues,
@@ -109,6 +135,60 @@ export default function VehicleNumberForm({
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
+
+  const fetchContainerNumbers = async () => {
+    try {
+      const res = await ApiManager.getVehicleById(vehicleId);
+      let status = "";
+      if (res.body?.status) {
+        status =
+          res.body?.status.charAt(0).toUpperCase() +
+          res.body?.status.slice(1).toLowerCase();
+      }
+      setInitialValues({
+        id: res.body?.id || "",
+        status: status,
+        clerkName: res?.body?.clerkName,
+        chasisNo: res?.body?.chasisNo,
+        clerkTelNo: res?.body?.clerkTelNo,
+        reportingPlace: res?.body?.reportingPlace,
+        reportingDate: res?.body?.reportingDate,
+        reportingTime: res?.body?.reportingTime,
+        transferDate: res?.body?.transferDate,
+        t1C1ReadyDate: res?.body?.t1C1ReadyDate,
+        loadingDate: res?.body?.loadingDate,
+        cancellationDate: res?.body?.cancellationDate,
+        arrivalBorderDate: res?.body?.arrivalBorderDate,
+        crossedBorderDate: res?.body?.crossedBorderDate,
+        arrivalICDDate: res?.body?.arrivalICDDate,
+        cargoReleaseDate: res?.body?.cargoReleaseDate,
+        departICDDate: res?.body?.departICDDate,
+        bondNumber: res?.body?.bondNumber,
+        bondAmount: res?.body?.bondAmount,
+        arrivalCustomerPlaceDate: res?.body?.arrivalCustomerPlaceDate,
+        remark: res?.body?.remark,
+      });
+      setLoading(false);
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while loading form"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (vehicleId) {
+      fetchContainerNumbers();
+    } else {
+      setLoading(false);
+    }
+  }, [vehicleId]);
 
   useEffect(() => {
     if (optionsSettingsData?.body || customerSettingsData?.body) {
@@ -174,10 +254,12 @@ export default function VehicleNumberForm({
             <Grid container sx={{ marginTop: 3, padding: 0, paddingRight: 1 }}>
               <Grid paddingLeft={1} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <InputBox
+                  <FormAutoComplete
                     label="Clerk Name"
                     id="clerkName"
+                    suggestionName="first_name"
                     value={formik.values.clerkName}
+                    error={formik.errors.clerkName}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -295,7 +377,7 @@ export default function VehicleNumberForm({
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
@@ -458,7 +540,7 @@ export default function VehicleNumberForm({
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
 
                 <Grid
@@ -540,28 +622,26 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-
-               
               </Grid>
               <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={3}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Remarks"
-                    id="remark"
-                    multiline
-                    minRows={4}
-                    value={formik.values.remark}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={3}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <InputBox
+                  label="Remarks"
+                  id="remark"
+                  multiline
+                  minRows={4}
+                  value={formik.values.remark}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
             </Grid>
           </TabPanel>
         </TabContext>

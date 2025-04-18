@@ -43,61 +43,62 @@ export default function LooseCargoParent({ page }) {
     remark: "",
   });
 
-  useEffect(() => {
-    const fetchContainerNumbers = async () => {
-      try {
-        const res = await ApiManager.getLooseCargoById(
-          state?.initialValues?.id
-        );
-        let status = "";
-        if (res.body?.status) {
-          status =
-            res.body?.status.charAt(0).toUpperCase() +
-            res.body?.status.slice(1).toLowerCase();
-        }
-        setInitialValues({
-          id: res.body?.id || "",
-          status: status,
-          truckNo: res.body?.truckNo,
-          transporter: res.body?.transporter,
-          truckTrailerNo: res.body?.truckTrailerNo,
-          driver: res.body?.driver,
-          agreedRate: res.body?.agreedRate,
-          telNo: res.body?.telNo,
-          passportNo: res.body?.passportNo,
-          licenceNo: res.body?.licenceNo,
-          clerkName: res.body?.clerkName,
-          clerkTelNo: res.body?.clerkTelNo,
-          reportingPlace: res.body?.reportingPlace,
-          reportingDate: res.body?.reportingDate,
-          reportingTime: res.body?.reportingTime,
-          transferDate: res.body?.transferDate,
-          t1C1ReadyDate: res.body?.t1C1ReadyDate,
-          loadingDate: res.body?.loadingDate,
-          cancellationDate: res.body?.cancellationDate,
-          arrivalBorderDate: res.body?.arrivalBorderDate,
-          crossedBorderDate: res.body?.crossedBorderDate,
-          arrivalICDDate: res.body?.arrivalICDDate,
-          cargoReleaseDate: res.body?.cargoReleaseDate,
-          departICDDate: res.body?.departICDDate,
-          bondNumber: res.body?.bondNumber,
-          bondAmount: res.body?.bondAmount,
-          arrivalCustomerPlaceDate: res.body?.arrivalCustomerPlaceDate,
-          remark: res.body?.remark,
-        });
-        setLoading(false);
-      } catch (error) {
-        toast.custom(
-          <CustomToast
-            message="Error occurred while loading form"
-            toast="error"
-          />,
-          {
-            closeButton: false,
-          }
-        );
+  const fetchContainerNumbers = async () => {
+    try {
+      const res = await ApiManager.getLooseCargoById(
+        state?.initialValues?.id
+      );
+      let status = "";
+      if (res.body?.status) {
+        status =
+          res.body?.status.charAt(0).toUpperCase() +
+          res.body?.status.slice(1).toLowerCase();
       }
-    };
+      setInitialValues({
+        id: res.body?.id || "",
+        status: status,
+        truckNo: res.body?.truckNo,
+        transporter: res.body?.transporter,
+        truckTrailerNo: res.body?.truckTrailerNo,
+        driver: res.body?.driver,
+        agreedRate: res.body?.agreedRate,
+        telNo: res.body?.telNo,
+        passportNo: res.body?.passportNo,
+        licenceNo: res.body?.licenceNo,
+        clerkName: res.body?.clerkName,
+        clerkTelNo: res.body?.clerkTelNo,
+        reportingPlace: res.body?.reportingPlace,
+        reportingDate: res.body?.reportingDate,
+        reportingTime: res.body?.reportingTime,
+        transferDate: res.body?.transferDate,
+        t1C1ReadyDate: res.body?.t1C1ReadyDate,
+        loadingDate: res.body?.loadingDate,
+        cancellationDate: res.body?.cancellationDate,
+        arrivalBorderDate: res.body?.arrivalBorderDate,
+        crossedBorderDate: res.body?.crossedBorderDate,
+        arrivalICDDate: res.body?.arrivalICDDate,
+        cargoReleaseDate: res.body?.cargoReleaseDate,
+        departICDDate: res.body?.departICDDate,
+        bondNumber: res.body?.bondNumber,
+        bondAmount: res.body?.bondAmount,
+        arrivalCustomerPlaceDate: res.body?.arrivalCustomerPlaceDate,
+        remark: res.body?.remark,
+      });
+      setLoading(false);
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while loading form"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+  };
+  
+  useEffect(() => {
     if (state?.initialValues?.id) {
       fetchContainerNumbers();
     } else {

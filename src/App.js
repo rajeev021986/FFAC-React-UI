@@ -47,11 +47,6 @@ import AddJobEntry from "./pages/JobEntry/AddJobEntry";
 import UpdateJobDetails from "./pages/UpdateJob/UpdateJob";
 import UpdateJobListingScreen from "./pages/JobEntry/UpdateJob/updateJobListing";
 
-// Container
-import ParentShipmentContainer from "./pages/UpdateJob/ContainerShipmentTables/ShipmentContainer/index";
-import VehicleParent from "./pages/UpdateJob/ContainerShipmentTables/Vehicle/index";
-import LooseCargoParent from "./pages/UpdateJob/ContainerShipmentTables/LooseCargo/index";
-
 function App() {
   const theme = getTheme(
     useSelector((state) => state.dashboard.theme),
@@ -167,19 +162,6 @@ function App() {
               path="documentation/update/job/edit-job"
               element={<UpdateJobDetails page="update-job" />}
             />
-            <Route
-              path="documentation/update/job/edit-job/containerNumber"
-              element={<ParentShipmentContainer page="container_number" />}
-            />
-            <Route
-              path="documentation/update/job/edit-job/vehicleNumber"
-              element={<VehicleParent page="vehicle_number" />}
-            />
-            <Route
-              path="documentation/update/job/edit-job/looseCargoNumber"
-              element={<LooseCargoParent page="loose_cargo_number" />}
-            />
-
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="admin/users" element={<UserManagementScreen />} />

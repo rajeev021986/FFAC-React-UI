@@ -24,6 +24,7 @@ import PopupAlert from "../../components/common/Alert/PopupAlert";
 import BondDetailsGridForm from "./UpdateJobEntryGrid";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../components/UploadFile";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 // Container Table
 import ContainerShipmentView from "./ContainerShipmentTables/ShipmentContainer/ContainerShipmentView";
@@ -139,6 +140,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
       customerNameRef.current.focus();
     }
   }, []);
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -183,9 +185,18 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
 
           <TabPanel value="1" sx={{ padding: "0px" }}>
             <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
-              <AppBar position="static">
+              <AppBar
+                position="static"
+                sx={{ minHeight: "40px", borderRadius: "5px" }}
+              >
                 <Toolbar
-                  sx={{ display: "flex", justifyContent: "space-between" }}
+                  sx={{
+                    minHeight: "40px !important",
+                    px: 2,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    borderRadius: "8px !important",
+                  }}
                 >
                   <Box sx={{ display: "flex", gap: 2 }}>
                     <Typography variant="body1">
@@ -218,7 +229,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     formik.values.shippingLineDOCollectionDate &&
                     handleOpen("shipping_Line")
                   }
-                  //   onClick={() => handleOpen("shipping_Line")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
@@ -238,7 +248,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
@@ -274,7 +284,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -313,7 +323,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
@@ -338,7 +348,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     pointerEvents: "auto",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
@@ -412,7 +422,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     pointerEvents: formik.values.idfDate ? "auto" : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
 
                 <Grid
@@ -503,7 +513,6 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   onClick={() =>
                     formik.values.entryDate && handleOpen("entry_Date")
                   }
-                  // onClick={() => handleOpen("entry_Date")}
                   style={{
                     marginTop: "20px",
                     marginLeft: "10px",
@@ -517,7 +526,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     pointerEvents: formik.values.entryDate ? "auto" : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
               </Grid>
 

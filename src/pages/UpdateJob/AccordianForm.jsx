@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Grid, Typography } from "@mui/material";
 import InputBox from "../../components/common/InputBox";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
+import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 
 const AccordianForm = ({ formik, index }) => {
   let disabled = null;
@@ -164,13 +165,13 @@ const AccordianForm = ({ formik, index }) => {
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            <FormAutoComplete
               label="Clerk Name"
               id="clerkName"
-              name={`containerDetails[${index}].clerkName`}
-              value={formik.values.containerDetails[index].clerkName}
+              suggestionName="first_name"
+              value={formik.values.clerkName}
+              error={formik.errors.clerkName}
               onChange={formik.handleChange}
-              disabled={disabled}
             />
           </Grid>
 

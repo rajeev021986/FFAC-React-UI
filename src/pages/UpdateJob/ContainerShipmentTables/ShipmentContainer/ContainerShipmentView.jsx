@@ -321,7 +321,7 @@ export default function ContainerShipmentView({ page, customer_id }) {
       >
         <DialogContent>
           <ContainerNumberForm
-            initialValues={modal.data}
+            containerId={modal.data?.id}
             type={modal.type}
             page={page}
             onCancel={() => setModal({ open: false, type: "", data: {} })}

@@ -317,7 +317,7 @@ export default function LooseShipmentView({ page, customer_id }) {
       >
         <DialogContent>
           <LooseCargoForm
-            initialValues={modal.data}
+            looseCargoId={modal?.data?.id}
             type={modal.type}
             page={page}
             onCancel={() => setModal({ open: false, type: "", data: {} })}

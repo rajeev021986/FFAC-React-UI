@@ -19,6 +19,7 @@ import EditIconForHeader from "../../../../components/common/commonIcons/EditIco
 
 // API's
 import { useUpdateLooseCargoNumberMutation } from "../../../../store/api/containerApi";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 // Components
 import {
@@ -28,17 +29,21 @@ import {
 import InputBox from "../../../../components/common/InputBox";
 import DateTimeField from "../../../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../../../components/UploadFile";
+import ApiManager from "../../../../services/ApiManager";
+import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
 
 export default function LooseCargoForm({
-  initialValues,
   page,
   onCancel,
   onSubmit,
+  looseCargoId,
 }) {
   const [updateLooseCargoNumber, { isLoading }] =
     useUpdateLooseCargoNumberMutation();
 
   const [dropdownData, setDropdownData] = useState({});
+  const [loading, setLoading] = useState(true);
+
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
 
@@ -57,6 +62,87 @@ export default function LooseCargoForm({
   const handleOpen = (type) => {
     setSourceType(type);
     setOpen(true);
+  };
+
+  const [initialValues, setInitialValues] = React.useState({
+    transporter: "",
+    truckTrailerNo: "",
+    driver: "",
+    agreedRate: "",
+    telNo: "",
+    passportNo: "",
+    licenceNo: "",
+    clerkName: "",
+    clerkTelNo: "",
+    reportingPlace: "",
+    reportingDate: "",
+    reportingTime: "",
+    transferDate: "",
+    t1C1ReadyDate: "",
+    loadingDate: "",
+    cancellationDate: "",
+    arrivalBorderDate: "",
+    crossedBorderDate: "",
+    arrivalICDDate: "",
+    cargoReleaseDate: "",
+    departICDDate: "",
+    bondNumber: "",
+    bondAmount: "",
+    arrivalCustomerPlaceDate: "",
+    remark: "",
+  });
+
+  const fetchContainerNumbers = async () => {
+    try {
+      const res = await ApiManager.getLooseCargoById(looseCargoId);
+      let status = "";
+      if (res.body?.status) {
+        status =
+          res.body?.status.charAt(0).toUpperCase() +
+          res.body?.status.slice(1).toLowerCase();
+      }
+      setInitialValues({
+        id: res.body?.id || "",
+        status: status,
+        truckNo: res.body?.truckNo,
+        transporter: res.body?.transporter,
+        truckTrailerNo: res.body?.truckTrailerNo,
+        driver: res.body?.driver,
+        agreedRate: res.body?.agreedRate,
+        telNo: res.body?.telNo,
+        passportNo: res.body?.passportNo,
+        licenceNo: res.body?.licenceNo,
+        clerkName: res.body?.clerkName,
+        clerkTelNo: res.body?.clerkTelNo,
+        reportingPlace: res.body?.reportingPlace,
+        reportingDate: res.body?.reportingDate,
+        reportingTime: res.body?.reportingTime,
+        transferDate: res.body?.transferDate,
+        t1C1ReadyDate: res.body?.t1C1ReadyDate,
+        loadingDate: res.body?.loadingDate,
+        cancellationDate: res.body?.cancellationDate,
+        arrivalBorderDate: res.body?.arrivalBorderDate,
+        crossedBorderDate: res.body?.crossedBorderDate,
+        arrivalICDDate: res.body?.arrivalICDDate,
+        cargoReleaseDate: res.body?.cargoReleaseDate,
+        departICDDate: res.body?.departICDDate,
+        bondNumber: res.body?.bondNumber,
+        bondAmount: res.body?.bondAmount,
+        arrivalCustomerPlaceDate: res.body?.arrivalCustomerPlaceDate,
+        remark: res.body?.remark,
+      });
+      setLoading(false);
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while loading form"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
   };
 
   const formik = useFormik({
@@ -138,6 +224,14 @@ export default function LooseCargoForm({
     }
   }, []);
 
+  useEffect(() => {
+    if (looseCargoId) {
+      fetchContainerNumbers();
+    } else {
+      setLoading(false);
+    }
+  }, [looseCargoId]);
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -214,10 +308,12 @@ export default function LooseCargoForm({
 
               <Grid paddingLeft={1} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3} marginTop={2}>
-                  <InputBox
+                  <FormAutoComplete
                     label="Clerk Name"
                     id="clerkName"
+                    suggestionName="first_name"
                     value={formik.values.clerkName}
+                    error={formik.errors.clerkName}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -334,7 +430,7 @@ export default function LooseCargoForm({
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
@@ -497,7 +593,7 @@ export default function LooseCargoForm({
                       : "none",
                   }}
                 >
-                  Upload File
+                 <CloudUploadIcon />
                 </span>
 
                 <Grid
@@ -615,28 +711,26 @@ export default function LooseCargoForm({
                     onChange={formik.handleChange}
                   />
                 </Grid>
-
-              
               </Grid>
               <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={3}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Remarks"
-                    id="remark"
-                    multiline
-                    minRows={4}
-                    value={formik.values.remark}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={3}
+                paddingLeft={1}
+                marginTop={2}
+              >
+                <InputBox
+                  label="Remarks"
+                  id="remark"
+                  multiline
+                  minRows={4}
+                  value={formik.values.remark}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
             </Grid>
           </TabPanel>
         </TabContext>

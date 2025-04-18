@@ -317,7 +317,7 @@ export default function VehicleShipmentView({ page, customer_id }) {
       >
         <DialogContent>
           <VehicleNumberForm
-            initialValues={modal.data}
+            vehicleId={modal.data?.id}
             type={modal.type}
             page={page}
             onCancel={() => setModal({ open: false, type: "", data: {} })}

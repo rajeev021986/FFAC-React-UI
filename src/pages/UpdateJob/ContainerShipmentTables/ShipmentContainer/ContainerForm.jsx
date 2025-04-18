@@ -19,6 +19,7 @@ import EditIconForHeader from "../../../../components/common/commonIcons/EditIco
 
 // API's
 import { useUpdateContainerNumberMutation } from "../../../../store/api/containerApi";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 // Components
 import {
@@ -29,9 +30,11 @@ import InputBox from "../../../../components/common/InputBox";
 import DateTimeField from "../../../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../../../components/UploadFile";
 import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
+import ApiManager from "../../../../services/ApiManager";
 
 export default function ContainerNumberForm({
-  initialValues,
+  // initialValues,
+  containerId,
   page,
   onCancel,
   onSubmit,
@@ -44,6 +47,7 @@ export default function ContainerNumberForm({
   const [value, setValue] = React.useState("1");
   const [open, setOpen] = useState(false);
   const [SourceType, setSourceType] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const [alertConfig, setAlertConfig] = useState({
     open: false,
@@ -53,6 +57,110 @@ export default function ContainerNumberForm({
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
+
+  const [initialValues, setInitialValues] = React.useState({
+    containerNo: "",
+    sizeType: "",
+    sealNo: "",
+    truckTrailerNo: "",
+    transporter: "",
+    truckTrailerNoTransporter: "",
+    driver: "",
+    agreedRate: "",
+    telNo: "",
+    passportNo: "",
+    licenceNo: "",
+    clerkName: "",
+    clerkTelNo: "",
+    reportingPlace: "",
+    reportingDate: "",
+    reportingTime: "",
+    transferDate: "",
+    t1C1ReadyDate: "",
+    loadingDate: "",
+    cancellationDate: "",
+    arrivalBorderDate: "",
+    crossedBorderDate: "",
+    arrivalICDDate: "",
+    cargoReleaseDate: "",
+    departICDDate: "",
+    bondNumber: "",
+    bondAmount: "",
+    arrivalCustomerPlaceDate: "",
+    emptyReleasedDate: "",
+    emptyReturnPlace: "",
+    podNo: "",
+    podDate: "",
+    emptyReturnDate: "",
+    certificateOfExportDate: "",
+    portGateInDate: "",
+    nominationDate: "",
+    remark: "",
+  });
+
+  const fetchContainerNumbers = async () => {
+    try {
+      const res = await ApiManager.getUpdateContainerNumber(containerId);
+      let status = "";
+      if (res.body?.status) {
+        status =
+          res.body?.status.charAt(0).toUpperCase() +
+          res.body?.status.slice(1).toLowerCase();
+      }
+      setInitialValues({
+        id: res.body?.id || "",
+        status: status,
+        containerNo: res?.body?.containerNo,
+        sizeType: res?.body?.sizeType,
+        sealNo: res?.body?.sealNo,
+        truckTrailerNo: res?.body?.truckTrailerNo,
+        transporter: res?.body?.transporter,
+        truckTrailerNoTransporter: res?.body?.truckTrailerNoTransporter,
+        driver: res?.body?.driver,
+        agreedRate: res?.body?.agreedRate,
+        telNo: res?.body?.telNo,
+        passportNo: res?.body?.passportNo,
+        licenceNo: res?.body?.licenceNo,
+        clerkName: res?.body?.clerkName,
+        clerkTelNo: res?.body?.clerkTelNo,
+        reportingPlace: res?.body?.reportingPlace,
+        reportingDate: res?.body?.reportingDate,
+        reportingTime: res?.body?.reportingTime,
+        transferDate: res?.body?.transferDate,
+        t1C1ReadyDate: res?.body?.t1C1ReadyDate,
+        loadingDate: res?.body?.loadingDate,
+        cancellationDate: res?.body?.cancellationDate,
+        arrivalBorderDate: res?.body?.arrivalBorderDate,
+        crossedBorderDate: res?.body?.crossedBorderDate,
+        arrivalICDDate: res?.body?.arrivalICDDate,
+        cargoReleaseDate: res?.body?.cargoReleaseDate,
+        departICDDate: res?.body?.departICDDate,
+        bondNumber: res?.body?.bondNumber,
+        bondAmount: res?.body?.bondAmount,
+        arrivalCustomerPlaceDate: res?.body?.arrivalCustomerPlaceDate,
+        emptyReleasedDate: res?.body?.emptyReleasedDate,
+        emptyReturnPlace: res?.body?.emptyReturnPlace,
+        podNo: res?.body?.podNo,
+        podDate: res?.body?.podDate,
+        emptyReturnDate: res?.body?.emptyReturnDate,
+        certificateOfExportDate: res?.body?.certificateOfExportDate,
+        portGateInDate: res?.body?.portGateInDate,
+        nominationDate: res?.body?.nominationDate,
+        remark: res?.body?.remark,
+      });
+      setLoading(false);
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while loading form"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+  };
 
   const formik = useFormik({
     initialValues,
@@ -138,6 +246,14 @@ export default function ContainerNumberForm({
       FieldRef.current.focus();
     }
   }, []);
+
+  useEffect(() => {
+    if (containerId) {
+      fetchContainerNumbers();
+    } else {
+      setLoading(false);
+    }
+  }, [containerId]);
 
   const style = {
     position: "absolute",
@@ -474,7 +590,7 @@ export default function ContainerNumberForm({
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
 
                 <Grid
@@ -667,7 +783,7 @@ export default function ContainerNumberForm({
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
 
                 <Grid
@@ -815,7 +931,7 @@ export default function ContainerNumberForm({
                     pointerEvents: formik.values.podDate ? "auto" : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
                 <Grid
                   item
@@ -859,7 +975,7 @@ export default function ContainerNumberForm({
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
 
                 <Grid
@@ -976,7 +1092,7 @@ export default function ContainerNumberForm({
                       : "none",
                   }}
                 >
-                  Upload File
+                  <CloudUploadIcon />
                 </span>
 
                 <Grid
