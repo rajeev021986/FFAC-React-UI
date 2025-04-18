@@ -83,7 +83,7 @@ const NotesTable = ({ formik }) => {
 
     setNotes(updatedNotes);
     formik.setFieldValue("notes", updatedNotes);
-    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+    // localStorage.setItem("notes", JSON.stringify(updatedNotes));
     setSelectedNote(null); // Reset selection after update
   };
   const NOTE_COLUMNS = [
