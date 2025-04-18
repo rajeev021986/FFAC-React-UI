@@ -75,22 +75,12 @@ export default function GlobalDrrpdownSettingVoucher({
 
   const handleProcessRowUpdate = (newRow, oldRow) => {
     let updatedRow = { ...newRow };
-
+  
     const tokenRegex = /#\d|\$[A-Z]/g;
-    const allowedTokens = [
-      "#4",
-      "#5",
-      "#6",
-      "#7",
-      "#8",
-      "$Z",
-      "$N",
-      "$M",
-      "$D",
-      "$Y",
-    ];
+    const allowedTokens = ["#4", "#5", "#6", "#7", "#8", "$Z", "$N", "$M", "$D", "$Y"];
+    const voucherTokens = ["#4", "#5", "#6", "#7", "#8"];
     const monthTokens = ["$Z", "$N", "$M"];
-
+  
     if (
       newRow.resetNumber !== oldRow.resetNumber ||
       newRow.shipmentType !== oldRow.shipmentType
@@ -99,85 +89,98 @@ export default function GlobalDrrpdownSettingVoucher({
         .replace(/[^a-zA-Z]/g, "")
         .substring(0, 3)
         .toUpperCase();
-
+  
       const newPattern = generatePattern({
         shipmentType: shipmentCode,
         resetNumber: newRow.resetNumber || "Month",
         voucherDigits: 4,
       });
-
+  
       updatedRow.jobPattern = newPattern;
       updatedRow.sampleJobNumber = replaceVoucherCodes(newPattern);
     }
-
+  
     if (newRow.jobPattern !== oldRow.jobPattern) {
-      const tokensInPattern = newRow.jobPattern.match(tokenRegex) || [];
-
-      // Check if pattern ends with $Y and there are no extra characters
-      const endsWithYear = newRow.jobPattern.trim().endsWith("$Y");
-
-      // Ensure no invalid tokens in the pattern
-      const hasInvalidToken = tokensInPattern.some(
-        (token) => !allowedTokens.includes(token)
-      );
-
-      // Ensure no extra characters or tokens after $Y
-      const patternBeforeYear = newRow.jobPattern.split("$Y")[0];
-      const isValidPatternBeforeYear = allowedTokens.every((token) =>
-        patternBeforeYear.includes(token)
-      );
-
-      const hasInvalidMonthToken = tokensInPattern
-        .filter((t) => t.startsWith("$") && t !== "$Y")
-        .some((t) => !monthTokens.includes(t));
-
-      // Validation based on resetNumber
-      const requiredTokensMap = {
-        Never: [],
-        Yearly: ["$Y"],
-        Month: ["$Y", "$M", "$N", "$Z"], // Accept any one of M/N/Z
-        Daily: ["$Y", "$M", "$N", "$Z", "$D"],
-      };
-
+      const pattern = newRow.jobPattern;
+      const tokensInPattern = pattern.match(tokenRegex) || [];
+  
+      const hasInvalidToken = tokensInPattern.some((t) => !allowedTokens.includes(t));
+      const hasDuplicateTokens = new Set(tokensInPattern).size !== tokensInPattern.length;
+  
+      const voucherTokensUsed = tokensInPattern.filter((t) => voucherTokens.includes(t));
+      const hasOneVoucher = voucherTokensUsed.length === 1;
+      const hasMultipleVouchers = voucherTokensUsed.length > 1;
+  
+      const hasYear = tokensInPattern.includes("$Y");
+      const hasDay = tokensInPattern.includes("$D");
+      const hasMonthToken = tokensInPattern.some((t) => monthTokens.includes(t));
+  
+      // Disallow repeated monthTokens like $Z-$Z
+      const monthTokenCounts = tokensInPattern.filter((t) => monthTokens.includes(t));
+      const hasDuplicateMonthToken = new Set(monthTokenCounts).size !== monthTokenCounts.length;
+  
+      // Detect copy paste patterns like $Y-$Y or $Z-$Z etc.
+      const hasInvalidCopyPattern = tokensInPattern.some((token, i, arr) => token === arr[i + 1]);
+  
       const resetValue = newRow.resetNumber || "Month";
-      const requiredTokens = requiredTokensMap[resetValue];
+    // Trim pattern and check start/end characters
+    const trimmedPattern = pattern.trim();
+    const startsOrEndsWithDash = trimmedPattern.startsWith("-") || trimmedPattern.endsWith("-");
+    // ✅ Special character validation (only #, $, - allowed)
+    const disallowedSpecialCharRegex = /[^a-zA-Z0-9#$\-\s]/;
+    const hasInvalidSpecialChar = disallowedSpecialCharRegex.test(pattern);
 
-      const hasRequiredTokens = requiredTokens.every((token) => {
-        if (["$M", "$N", "$Z"].includes(token)) {
-          // At least one of the valid month tokens should be present
-          return monthTokens.some((mt) => tokensInPattern.includes(mt));
-        } else {
-          return tokensInPattern.includes(token);
-        }
-      });
-
-      // Final validation check
-      if (
-        hasInvalidToken ||
-        !endsWithYear ||
-        !isValidPatternBeforeYear ||
-        hasInvalidMonthToken ||
-        !hasRequiredTokens
-      ) {
+      let meetsRequired = true;
+      let hasDisallowed = false;
+  
+      if (resetValue === "Yearly") {
+        // Must include exactly one voucherToken and $Y, no other tokens
+        meetsRequired = hasYear && hasOneVoucher;
+        hasDisallowed = tokensInPattern.some((t) => ["$M", "$N", "$Z", "$D"].includes(t));
+      } else if (resetValue === "Month") {
+        // Must include $Y, one voucher token and one month token
+        meetsRequired = hasYear && hasMonthToken && hasOneVoucher;
+        hasDisallowed = tokensInPattern.includes("$D");
+      } else if (resetValue === "Daily") {
+        // Must include $Y, $D, one month token and one voucher token
+        meetsRequired = hasYear && hasDay && hasMonthToken && hasOneVoucher;
+      }
+  
+      const isValid =
+        !hasInvalidToken &&
+        !hasDisallowed &&
+        !hasDuplicateTokens &&
+        !hasMultipleVouchers &&
+        !hasInvalidCopyPattern &&
+        !hasDuplicateMonthToken &&
+        !startsOrEndsWithDash &&
+        !hasInvalidSpecialChar &&
+        meetsRequired;
+  
+      if (!isValid) {
         toast.custom(
           <CustomToast
-            message="Invalid pattern! Ensure it ends with $Y, contains only allowed tokens, and matches the reset logic."
+            message="Invalid pattern! Ensure it follows the correct token rules based on reset number."
             toast="error"
           />,
           { closeButton: false }
         );
-        updatedRow.jobPattern = oldRow.jobPattern; // Revert the value if validation fails
+        updatedRow.jobPattern = oldRow.jobPattern; // Revert
       } else {
         updatedRow.sampleJobNumber = replaceVoucherCodes(newRow.jobPattern);
       }
     }
-
+  
     setvalue((prev) =>
       prev.map((row) => (row.id === newRow.id ? updatedRow : row))
     );
-
+  
     return updatedRow;
   };
+  
+  
+  
+  
 
   const tooltipText = `
 #4 : 4 Digit Voucher Number (Zero Padded)
