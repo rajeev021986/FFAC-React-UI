@@ -218,7 +218,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
-                    label="Shipping Line DO Collection Date"
+                    label="Line DO Collection Doc"
                     name="shippingLineDOCollectionDate"
                     id="shippingLineDOCollectionDate"
                     value={formik.values.shippingLineDOCollectionDate}
@@ -255,7 +255,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                 </span>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
-                    label="Custom Release Date"
+                    label="Custom Release Doc"
                     name="customReleaseDate"
                     id="customReleaseDate"
                     value={formik.values.customReleaseDate}
@@ -292,7 +292,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
-                    label="TAX Exemption Certificate"
+                    label="TAX Exemption Certificate Doc"
                     name="taxExemptionCertificateDate"
                     id="taxExemptionCertificateDate"
                     value={formik.values.taxExemptionCertificateDate}
@@ -398,7 +398,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   marginTop={2}
                 >
                   <DateTimeField
-                    label="IDF Date"
+                    label="IDF Doc"
                     name="idfDate"
                     id="idfDate"
                     value={formik.values.idfDate}
@@ -503,7 +503,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   marginTop={2}
                 >
                   <DateTimeField
-                    label="Entry Date"
+                    label="Entry Doc"
                     name="entryDate"
                     id="entryDate"
                     value={formik.values.entryDate}
