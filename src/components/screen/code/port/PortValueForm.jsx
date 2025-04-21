@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import SelectBox from "../../../common/SelectBox";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import getFirstError from "../../../common/FieldToastError";
+import FormAutoCompleteWithLoader from "../../../common/AutoComplete/FormAutoCompletewithLoader";
+import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 
 export default function PortValueForm({
   formik,
@@ -14,6 +16,9 @@ export default function PortValueForm({
   loading,
 }) {
   const nav = useNavigate();
+    const { data: portSettingsData } = useGetOptionsSettingsQuery("port_settings");
+    console.log("portSettingsData",portSettingsData);
+    
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -56,9 +61,10 @@ export default function PortValueForm({
           paddingLeft={1}
           marginTop={2}
         >
-          <InputBox
+          <SelectBox
             label="Type*"
             id="type"
+            options={portSettingsData?.body?.type}
             value={formik.values.type}
             error={formik.errors.type}
             onChange={formik.handleChange}
@@ -74,9 +80,10 @@ export default function PortValueForm({
           paddingLeft={1}
           marginTop={2}
         >
-          <InputBox
+          <SelectBox
             label="Base Port"
             id="basePort"
+            options={portSettingsData?.body?.basePort}
             value={formik.values.basePort}
             error={formik.errors.basePort}
             onChange={formik.handleChange}
@@ -211,9 +218,11 @@ export default function PortValueForm({
           paddingLeft={1}
           marginTop={2}
         >
-          <InputBox
+          <FormAutoCompleteWithLoader
             label="Region"
             id="region"
+            dataKey="port_name"
+            suggestionName="region"
             value={formik.values.region}
             error={formik.errors.region}
             onChange={formik.handleChange}

@@ -258,7 +258,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="Shipping Line DO Collection Date"
+                      label="Line DO Collection Doc"
                       name="shippingLineDOCollectionDate"
                       id="shippingLineDOCollectionDate"
                       value={formik.values.shippingLineDOCollectionDate}
@@ -331,7 +331,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="Custom Release Date"
+                      label="Custom Release Doc"
                       name="customReleaseDate"
                       id="customReleaseDate"
                       value={formik.values.customReleaseDate}
@@ -402,7 +402,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="TAX Exemption Certificate"
+                      label="TAX Exemption Certificate Doc"
                       name="taxExemptionCertificateDate"
                       id="taxExemptionCertificateDate"
                       value={formik.values.taxExemptionCertificateDate}
@@ -566,7 +566,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="IDF Date"
+                      label="IDF Doc"
                       name="idfDate"
                       id="idfDate"
                       value={formik.values.idfDate}
@@ -669,7 +669,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="Shipping Line DO Collection Date"
+                      label="Shipping Line DO Collection Doc"
                       name="entryDate"
                       id="entryDate"
                       value={formik.values.entryDate}

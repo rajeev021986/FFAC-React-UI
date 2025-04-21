@@ -25,15 +25,25 @@ const PortSetting = () => {
     refetch,
   } = useGetOptionsSettingsQuery("port_settings");
   const [documentType, setDocumentType] = useState([]);
+  const [basePort, setBasePort] = useState([]);
+  const [type, setType] = useState([]);
   const [isLoadingsave, setIsLoading] = useState(false);
 
   useEffect(() => {
     setDocumentType(data?.body.documentType || []);
+    setBasePort(data?.body.basePort || []);
+    setType(data?.body.type || []);
   }, [data, geterror]);
 
   const Postdata = async () => {
     const filteredData = {
       documentType: documentType.filter(
+        (item) => !item.value.includes("Type the")
+      ),
+      basePort: basePort.filter(
+        (item) => !item.value.includes("Type the")
+      ),
+      type: type.filter(
         (item) => !item.value.includes("Type the")
       ),
     };
@@ -81,6 +91,16 @@ const PortSetting = () => {
             value={documentType}
             setvalue={setDocumentType}
             title="Document Type"
+          />
+            <GlobalDrrpdownSetting
+            value={basePort}
+            setvalue={setBasePort}
+            title="Base Port"
+          />
+             <GlobalDrrpdownSetting
+            value={type}
+            setvalue={setType}
+            title="Type"
           />
         </Grid>
       )}

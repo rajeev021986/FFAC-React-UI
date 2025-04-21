@@ -75,12 +75,23 @@ export default function GlobalDrrpdownSettingVoucher({
 
   const handleProcessRowUpdate = (newRow, oldRow) => {
     let updatedRow = { ...newRow };
-  
+
     const tokenRegex = /#\d|\$[A-Z]/g;
-    const allowedTokens = ["#4", "#5", "#6", "#7", "#8", "$Z", "$N", "$M", "$D", "$Y"];
+    const allowedTokens = [
+      "#4",
+      "#5",
+      "#6",
+      "#7",
+      "#8",
+      "$Z",
+      "$N",
+      "$M",
+      "$D",
+      "$Y",
+    ];
     const voucherTokens = ["#4", "#5", "#6", "#7", "#8"];
     const monthTokens = ["$Z", "$N", "$M"];
-  
+
     if (
       newRow.resetNumber !== oldRow.resetNumber ||
       newRow.shipmentType !== oldRow.shipmentType
@@ -89,54 +100,77 @@ export default function GlobalDrrpdownSettingVoucher({
         .replace(/[^a-zA-Z]/g, "")
         .substring(0, 3)
         .toUpperCase();
-  
+
       const newPattern = generatePattern({
         shipmentType: shipmentCode,
         resetNumber: newRow.resetNumber || "Month",
         voucherDigits: 4,
       });
-  
+
       updatedRow.jobPattern = newPattern;
       updatedRow.sampleJobNumber = replaceVoucherCodes(newPattern);
     }
-  
+
     if (newRow.jobPattern !== oldRow.jobPattern) {
       const pattern = newRow.jobPattern;
       const tokensInPattern = pattern.match(tokenRegex) || [];
-  
-      const hasInvalidToken = tokensInPattern.some((t) => !allowedTokens.includes(t));
-      const hasDuplicateTokens = new Set(tokensInPattern).size !== tokensInPattern.length;
-  
-      const voucherTokensUsed = tokensInPattern.filter((t) => voucherTokens.includes(t));
+
+      const hasInvalidToken = tokensInPattern.some(
+        (t) => !allowedTokens.includes(t)
+      );
+      const hasDuplicateTokens =
+        new Set(tokensInPattern).size !== tokensInPattern.length;
+
+      const voucherTokensUsed = tokensInPattern.filter((t) =>
+        voucherTokens.includes(t)
+      );
       const hasOneVoucher = voucherTokensUsed.length === 1;
       const hasMultipleVouchers = voucherTokensUsed.length > 1;
-  
+      const hasMultipleDistinctVouchers = new Set(voucherTokensUsed).size > 1;
+
       const hasYear = tokensInPattern.includes("$Y");
       const hasDay = tokensInPattern.includes("$D");
-      const hasMonthToken = tokensInPattern.some((t) => monthTokens.includes(t));
-  
-      // Disallow repeated monthTokens like $Z-$Z
-      const monthTokenCounts = tokensInPattern.filter((t) => monthTokens.includes(t));
-      const hasDuplicateMonthToken = new Set(monthTokenCounts).size !== monthTokenCounts.length;
-  
+
+      const monthTokensUsed = tokensInPattern.filter((t) =>
+        monthTokens.includes(t)
+      );
+      const hasMonthToken = monthTokensUsed.length > 0;
+      const hasMultipleDistinctMonthTokens = new Set(monthTokensUsed).size > 1;
       // Detect copy paste patterns like $Y-$Y or $Z-$Z etc.
-      const hasInvalidCopyPattern = tokensInPattern.some((token, i, arr) => token === arr[i + 1]);
-  
+      const hasInvalidCopyPattern = tokensInPattern.some(
+        (token, i, arr) => token === arr[i + 1]
+      );
+
       const resetValue = newRow.resetNumber || "Month";
-    // Trim pattern and check start/end characters
-    const trimmedPattern = pattern.trim();
-    const startsOrEndsWithDash = trimmedPattern.startsWith("-") || trimmedPattern.endsWith("-");
-    // ✅ Special character validation (only #, $, - allowed)
-    const disallowedSpecialCharRegex = /[^a-zA-Z0-9#$\-\s]/;
-    const hasInvalidSpecialChar = disallowedSpecialCharRegex.test(pattern);
+
+      // Trim pattern and check start/end characters
+      const trimmedPattern = pattern.trim();
+      const startsOrEndsWithDash =
+        trimmedPattern.startsWith("-") || trimmedPattern.endsWith("-");
+
+      // ✅ Existing special character validation (only #, $, - allowed)
+      const disallowedSpecialCharRegex = /[^a-zA-Z0-9#$\-\s]/;
+      const hasInvalidSpecialChar = disallowedSpecialCharRegex.test(pattern);
+
+      // ✅ NEW: Disallow lone special characters or partial tokens (like #, $, *, @, etc.)
+      const fragments = trimmedPattern.split(/[\s\-]/); // split by space or dash
+      const hasInvalidStandaloneSpecial = fragments.some((frag) => {
+        if (!frag) return false;
+        return (
+          !allowedTokens.includes(frag) && // Not a valid token
+          !/^[a-zA-Z0-9]+$/.test(frag) // Not a normal word (like EMP, etc.)
+        );
+      });
 
       let meetsRequired = true;
       let hasDisallowed = false;
-  
+
       if (resetValue === "Yearly") {
         // Must include exactly one voucherToken and $Y, no other tokens
         meetsRequired = hasYear && hasOneVoucher;
-        hasDisallowed = tokensInPattern.some((t) => ["$M", "$N", "$Z", "$D"].includes(t));
+        hasDisallowed = tokensInPattern.some((t) =>
+          ["$M", "$N", "$Z", "$D"].includes(t)
+        );
       } else if (resetValue === "Month") {
         // Must include $Y, one voucher token and one month token
         meetsRequired = hasYear && hasMonthToken && hasOneVoucher;
@@ -145,22 +179,28 @@ export default function GlobalDrrpdownSettingVoucher({
         // Must include $Y, $D, one month token and one voucher token
         meetsRequired = hasYear && hasDay && hasMonthToken && hasOneVoucher;
       }
-  
+      // ✅ Catch invalid standalone or partial special character usage
+      const standaloneSpecialsRegex = /(^|[^#$])([#$])($|[^0-9A-Z])/g;
+      const hasInvalidStandaloneSpecials =
+        standaloneSpecialsRegex.test(pattern);
       const isValid =
-        !hasInvalidToken &&
-        !hasDisallowed &&
-        !hasDuplicateTokens &&
-        !hasMultipleVouchers &&
-        !hasInvalidCopyPattern &&
-        !hasDuplicateMonthToken &&
-        !startsOrEndsWithDash &&
-        !hasInvalidSpecialChar &&
-        meetsRequired;
-  
+        resetValue === "Never"
+          ? !hasInvalidStandaloneSpecials && !hasInvalidSpecialChar // only these 2 checks apply
+          : !hasInvalidToken &&
+            !hasDisallowed &&
+            !hasDuplicateTokens &&
+            !hasMultipleVouchers &&
+            !hasInvalidCopyPattern &&
+            !hasMultipleDistinctVouchers &&
+            !hasMultipleDistinctMonthTokens &&
+            !startsOrEndsWithDash &&
+            !hasInvalidSpecialChar &&
+            !hasInvalidStandaloneSpecial &&
+            meetsRequired;
       if (!isValid) {
         toast.custom(
           <CustomToast
-            message="Invalid pattern! Ensure it follows the correct token rules based on reset number."
+            message="Invalid pattern! Ensure it follows the correct token rules and avoids standalone special characters or duplicates."
             toast="error"
           />,
           { closeButton: false }
@@ -170,17 +210,13 @@ export default function GlobalDrrpdownSettingVoucher({
         updatedRow.sampleJobNumber = replaceVoucherCodes(newRow.jobPattern);
       }
     }
-  
+
     setvalue((prev) =>
       prev.map((row) => (row.id === newRow.id ? updatedRow : row))
     );
-  
+
     return updatedRow;
   };
-  
-  
-  
-  
 
   const tooltipText = `
 #4 : 4 Digit Voucher Number (Zero Padded)
