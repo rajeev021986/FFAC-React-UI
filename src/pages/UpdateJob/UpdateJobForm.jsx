@@ -3,7 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
 import CloseIcon from "@mui/icons-material/Close";
-import { AppBar, CircularProgress, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  CircularProgress,
+  IconButton,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { Stack, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -72,7 +78,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
     enableReinitialize: true,
     validateOnChange: false,
     onSubmit: async (values) => {
-      if(isLoading) {
+      if (isLoading) {
         return;
       }
       let bondData = values.bondDetails.map((item) =>
@@ -217,142 +223,290 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <DateTimeField
-                    label="Shipping Line DO Collection Date"
-                    name="shippingLineDOCollectionDate"
-                    id="shippingLineDOCollectionDate"
-                    value={formik.values.shippingLineDOCollectionDate}
-                    error={formik.errors.shippingLineDOCollectionDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                  />
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      "&:hover": {
+                        borderColor: "#000",
+                      },
+                      "&:focus-within": {
+                        borderColor: " #166de0",
+                        borderWidth: "2px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none", // hides MUI default border
+                        borderRight: "1px solid #ccc",
+                      },
+
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#041238", // border color on hover
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        backgroundColor: "#fff",
+                        paddingRight: "5px",
+                        maxWidth: "calc(100% - 57px)",
+                      },
+                      "& .css-1uf3ruz-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
+                        {
+                          borderRadius: "0",
+                          height: "39px",
+                        },
+                    }}
+                  >
+                    <DateTimeField
+                      label="Shipping Line DO Collection Date"
+                      name="shippingLineDOCollectionDate"
+                      id="shippingLineDOCollectionDate"
+                      value={formik.values.shippingLineDOCollectionDate}
+                      error={formik.errors.shippingLineDOCollectionDate}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload"
+                      onClick={() =>
+                        formik.values.shippingLineDOCollectionDate &&
+                        handleOpen("shipping_Line")
+                      }
+                      style={{
+                        cursor: formik.values.shippingLineDOCollectionDate
+                          ? "pointer"
+                          : "not-allowed",
+                        color: formik.values.shippingLineDOCollectionDate
+                          ? "#1976d2"
+                          : "#999",
+                        textDecoration: formik.values
+                          .shippingLineDOCollectionDate
+                          ? "underline"
+                          : "none",
+                        pointerEvents: formik.values
+                          .shippingLineDOCollectionDate
+                          ? "auto"
+                          : "none",
+                      }}
+                    >
+                      <CloudUploadIcon />
+                    </IconButton>
+                  </Box>
                 </Grid>
-                <span
-                  onClick={() =>
-                    formik.values.shippingLineDOCollectionDate &&
-                    handleOpen("shipping_Line")
-                  }
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: formik.values.shippingLineDOCollectionDate
-                      ? "pointer"
-                      : "not-allowed",
-                    color: formik.values.shippingLineDOCollectionDate
-                      ? "#1976d2"
-                      : "#999",
-                    textDecoration: formik.values.shippingLineDOCollectionDate
-                      ? "underline"
-                      : "none",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    pointerEvents: formik.values.shippingLineDOCollectionDate
-                      ? "auto"
-                      : "none",
-                  }}
-                >
-                  <CloudUploadIcon />
-                </span>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <DateTimeField
-                    label="Custom Release Date"
-                    name="customReleaseDate"
-                    id="customReleaseDate"
-                    value={formik.values.customReleaseDate}
-                    error={formik.errors.customReleaseDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-                <span
-                  onClick={() =>
-                    formik.values.customReleaseDate &&
-                    handleOpen("custom_Release_Date")
-                  }
-                  //  onClick={() => handleOpen("custom_Release_Date")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: formik.values.customReleaseDate
-                      ? "pointer"
-                      : "not-allowed",
-                    color: formik.values.customReleaseDate ? "#1976d2" : "#999",
-                    textDecoration: formik.values.customReleaseDate
-                      ? "underline"
-                      : "none",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    pointerEvents: formik.values.customReleaseDate
-                      ? "auto"
-                      : "none",
-                  }}
-                >
-                  <CloudUploadIcon />
-                </span>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <DateTimeField
-                    label="TAX Exemption Certificate"
-                    name="taxExemptionCertificateDate"
-                    id="taxExemptionCertificateDate"
-                    value={formik.values.taxExemptionCertificateDate}
-                    error={formik.errors.taxExemptionCertificateDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                  />
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      "&:hover": {
+                        borderColor: "#000",
+                      },
+                      "&:focus-within": {
+                        borderColor: " #166de0",
+                        borderWidth: "2px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none", // hides MUI default border
+                        borderRight: "1px solid #ccc",
+                      },
+
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#041238", // border color on hover
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        backgroundColor: "#fff",
+                        paddingRight: "5px",
+                        maxWidth: "calc(100% - 57px)",
+                      },
+                      "& .css-1uf3ruz-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
+                        {
+                          borderRadius: "0",
+                          height: "39px",
+                        },
+                    }}
+                  >
+                    <DateTimeField
+                      label="Custom Release Date"
+                      name="customReleaseDate"
+                      id="customReleaseDate"
+                      value={formik.values.customReleaseDate}
+                      error={formik.errors.customReleaseDate}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload"
+                      onClick={() =>
+                        formik.values.customReleaseDate &&
+                        handleOpen("custom_ReleaseDate")
+                      }
+                      style={{
+                        cursor: formik.values.customReleaseDate
+                          ? "pointer"
+                          : "not-allowed",
+                        color: formik.values.customReleaseDate
+                          ? "#1976d2"
+                          : "#999",
+                        textDecoration: formik.values.customReleaseDate
+                          ? "underline"
+                          : "none",
+                        pointerEvents: formik.values.customReleaseDate
+                          ? "auto"
+                          : "none",
+                      }}
+                    >
+                      <CloudUploadIcon />
+                    </IconButton>
+                  </Box>
                 </Grid>
-                <span
-                  onClick={() =>
-                    formik.values.taxExemptionCertificateDate &&
-                    handleOpen("tax_Exemption_Certificate_Date")
-                  }
-                  // onClick={() => handleOpen("taxExemption_Certificate_Date")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: formik.values.taxExemptionCertificateDate
-                      ? "pointer"
-                      : "not-allowed",
-                    color: formik.values.taxExemptionCertificateDate
-                      ? "#1976d2"
-                      : "#999",
-                    textDecoration: formik.values.taxExemptionCertificateDate
-                      ? "underline"
-                      : "none",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    pointerEvents: formik.values.taxExemptionCertificateDate
-                      ? "auto"
-                      : "none",
-                  }}
-                >
-                  <CloudUploadIcon />
-                </span>
+
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
-                    label="Pick Up Order"
-                    id="pickUpOrder"
-                    value={formik.values.pickUpOrder}
-                    error={formik.errors.pickUpOrder}
-                    onChange={formik.handleChange}
-                    disabled={disabled}
-                  />
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      "&:hover": {
+                        borderColor: "#000",
+                      },
+                      "&:focus-within": {
+                        borderColor: " #166de0",
+                        borderWidth: "2px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none", // hides MUI default border
+                        borderRight: "1px solid #ccc",
+                      },
+
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#041238", // border color on hover
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        backgroundColor: "#fff",
+                        paddingRight: "5px",
+                        maxWidth: "calc(100% - 57px)",
+                      },
+                      "& .css-1uf3ruz-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
+                        {
+                          borderRadius: "0",
+                          height: "39px",
+                        },
+                    }}
+                  >
+                    <DateTimeField
+                      label="TAX Exemption Certificate"
+                      name="taxExemptionCertificateDate"
+                      id="taxExemptionCertificateDate"
+                      value={formik.values.taxExemptionCertificateDate}
+                      error={formik.errors.taxExemptionCertificateDate}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload"
+                      onClick={() =>
+                        formik.values.taxExemptionCertificateDate &&
+                        handleOpen("tax_Exemption_Certificate_Date")
+                      }
+                      style={{
+                        cursor: formik.values.taxExemptionCertificateDate
+                          ? "pointer"
+                          : "not-allowed",
+                        color: formik.values.taxExemptionCertificateDate
+                          ? "#1976d2"
+                          : "#999",
+                        textDecoration: formik.values
+                          .taxExemptionCertificateDate
+                          ? "underline"
+                          : "none",
+                        pointerEvents: formik.values.taxExemptionCertificateDate
+                          ? "auto"
+                          : "none",
+                      }}
+                    >
+                      <CloudUploadIcon />
+                    </IconButton>
+                  </Box>
                 </Grid>
-                <span
-                  onClick={() => handleOpen("pickUpOrder")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: "pointer",
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    pointerEvents: "auto",
-                  }}
-                >
-                  <CloudUploadIcon />
-                </span>
+
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      "&:hover": {
+                        borderColor: "#000",
+                      },
+                      "&:focus-within": {
+                        borderColor: " #166de0",
+                        borderWidth: "2px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                        borderRight: "1px solid #ccc",
+                      },
+
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#041238",
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        backgroundColor: "#fff",
+                        paddingRight: "5px",
+                        maxWidth: "calc(100% - 57px)",
+                      },
+                      "& .css-6gn99m-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
+                        {
+                          borderRadius: "0 !important",
+                          height: "39px",
+                        },
+                    }}
+                  >
+                    <InputBox
+                      label="Pick Up Order"
+                      id="pickUpOrder"
+                      value={formik.values.pickUpOrder}
+                      error={formik.errors.pickUpOrder}
+                      onChange={formik.handleChange}
+                      disabled={disabled}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload"
+                      onClick={() =>
+                        formik.values.pickUpOrder && handleOpen("pickUpOrder")
+                      }
+                      style={{
+                        cursor: formik.values.pickUpOrder
+                          ? "pointer"
+                          : "not-allowed",
+                        color: formik.values.pickUpOrder ? "#1976d2" : "#999",
+                        textDecoration: formik.values.pickUpOrder
+                          ? "underline"
+                          : "none",
+                        pointerEvents: formik.values.pickUpOrder
+                          ? "auto"
+                          : "none",
+                      }}
+                    >
+                      <CloudUploadIcon />
+                    </IconButton>
+                  </Box>
+                </Grid>
+              </Grid>
+
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="BT Number"
@@ -363,19 +517,8 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     disabled={disabled}
                   />
                 </Grid>
-              </Grid>
 
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="IDF No."
                     id="idfNo"
@@ -387,57 +530,73 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="IDF Date"
-                    name="idfDate"
-                    id="idfDate"
-                    value={formik.values.idfDate}
-                    error={formik.errors.idfDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-                <span
-                  onClick={() =>
-                    formik.values.idfDate && handleOpen("idf_Date")
-                  }
-                  //    onClick={() => handleOpen("idf_Date")}
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: formik.values.idfDate ? "pointer" : "not-allowed",
-                    color: formik.values.idfDate ? "#1976d2" : "#999",
-                    textDecoration: formik.values.idfDate
-                      ? "underline"
-                      : "none",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    pointerEvents: formik.values.idfDate ? "auto" : "none",
-                  }}
-                >
-                  <CloudUploadIcon />
-                </span>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      "&:hover": {
+                        borderColor: "#000",
+                      },
+                      "&:focus-within": {
+                        borderColor: " #166de0",
+                        borderWidth: "2px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none", // hides MUI default border
+                        borderRight: "1px solid #ccc",
+                      },
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#041238", // border color on hover
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        backgroundColor: "#fff",
+                        paddingRight: "5px",
+                        maxWidth: "calc(100% - 57px)",
+                      },
+                      "& .css-1uf3ruz-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
+                        {
+                          borderRadius: "0",
+                          height: "39px",
+                        },
+                    }}
+                  >
+                    <DateTimeField
+                      label="IDF Date"
+                      name="idfDate"
+                      id="idfDate"
+                      value={formik.values.idfDate}
+                      error={formik.errors.idfDate}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload"
+                      onClick={() =>
+                        formik.values.idfDate && handleOpen("idf_Date")
+                      }
+                      style={{
+                        cursor: formik.values.idfDate
+                          ? "pointer"
+                          : "not-allowed",
+                        color: formik.values.idfDate ? "#1976d2" : "#999",
+                        textDecoration: formik.values.idfDate
+                          ? "underline"
+                          : "none",
+                        pointerEvents: formik.values.idfDate ? "auto" : "none",
+                      }}
+                    >
+                      <CloudUploadIcon />
+                    </IconButton>
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="Entry Loadged Ref."
                     id="entryLoadgedRef"
@@ -447,17 +606,10 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     disabled={disabled}
                   />
                 </Grid>
+              </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Entry Loadged Ref. Date"
                     name="entryLoadgedDate"
@@ -468,19 +620,8 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
 
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="Entry No."
                     id="entryNo"
@@ -492,47 +633,74 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="Entry Date"
-                    name="entryDate"
-                    id="entryDate"
-                    value={formik.values.entryDate}
-                    error={formik.errors.entryDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-                <span
-                  onClick={() =>
-                    formik.values.entryDate && handleOpen("entry_Date")
-                  }
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "10px",
-                    cursor: formik.values.entryDate ? "pointer" : "not-allowed",
-                    color: formik.values.entryDate ? "#1976d2" : "#999",
-                    textDecoration: formik.values.entryDate
-                      ? "underline"
-                      : "none",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    pointerEvents: formik.values.entryDate ? "auto" : "none",
-                  }}
-                >
-                  <CloudUploadIcon />
-                </span>
-              </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      "&:hover": {
+                        borderColor: "#000",
+                      },
+                      "&:focus-within": {
+                        borderColor: " #166de0",
+                        borderWidth: "2px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none", // hides MUI default border
+                        borderRight: "1px solid #ccc",
+                      },
 
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#041238", // border color on hover
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        backgroundColor: "#fff",
+                        paddingRight: "5px",
+                        maxWidth: "calc(100% - 57px)",
+                      },
+                      "& .css-1uf3ruz-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
+                        {
+                          borderRadius: "0",
+                          height: "39px",
+                        },
+                    }}
+                  >
+                    <DateTimeField
+                      label="Shipping Line DO Collection Date"
+                      name="entryDate"
+                      id="entryDate"
+                      value={formik.values.entryDate}
+                      error={formik.errors.entryDate}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload"
+                      onClick={() =>
+                        formik.values.entryDate && handleOpen("entry_Date")
+                      }
+                      style={{
+                        cursor: formik.values.entryDate
+                          ? "pointer"
+                          : "not-allowed",
+                        color: formik.values.entryDate ? "#1976d2" : "#999",
+                        textDecoration: formik.values.entryDate
+                          ? "underline"
+                          : "none",
+                        pointerEvents: formik.values.entryDate
+                          ? "auto"
+                          : "none",
+                      }}
+                    >
+                      <CloudUploadIcon />
+                    </IconButton>
+                  </Box>
+                </Grid>
+              </Grid>
               <PopupAlert alertConfig={alertConfig} />
             </Grid>
           </TabPanel>

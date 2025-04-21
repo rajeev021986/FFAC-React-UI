@@ -93,10 +93,14 @@ const ThemedGrid = (props) => {
         overflowY: "auto",
         paddingBottom: "0px",
         marginBottom: "0px",
-      
       }}
     >
       <StyledDataGrid
+        // onCellClick={(e) => {
+        //   if (e.field == "containerNo") {
+        //     handleClick(e);
+        //   }
+        // }}
         pagination={!!paginationModel}
         paginationMode={paginationModel ? "server" : null}
         sortingMode="server"

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
 
-import { CircularProgress, Modal, Button } from "@mui/material";
+import { CircularProgress, Modal, Button, IconButton } from "@mui/material";
 import { Stack, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -252,7 +252,7 @@ export default function VehicleNumberForm({
           </Box>
           <TabPanel value="1" sx={{ padding: "0px" }}>
             <Grid container sx={{ marginTop: 3, padding: 0, paddingRight: 1 }}>
-              <Grid paddingLeft={1} container spacing={2}>
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <FormAutoComplete
                     label="Clerk Name"
@@ -295,17 +295,8 @@ export default function VehicleNumberForm({
                 </Grid>
               </Grid>
 
-              <Grid paddingLeft={1} container spacing={2}>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="Reporting Time"
                     id="reportingTime"
@@ -314,16 +305,7 @@ export default function VehicleNumberForm({
                   />
                 </Grid>
 
-                <Grid
-                  paddingLeft={1}
-                  marginTop={2}
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Transfer Date"
                     name="transferDate"
@@ -335,53 +317,76 @@ export default function VehicleNumberForm({
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="T1/C1 Ready"
-                    name="t1C1ReadyDate"
-                    id="t1C1ReadyDate"
-                    value={formik.values.t1C1ReadyDate}
-                    error={formik.errors.t1C1ReadyDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                  />
-                
-                </Grid>
-                <span
-                  onClick={() =>
-                    formik.values.t1C1ReadyDate && handleOpen("t1C1Ready_Date")
-                  }
-                  style={{
-                    marginTop: "40px",
-                    marginLeft: "10px",
-                    cursor: formik.values.t1C1ReadyDate
-                      ? "pointer"
-                      : "not-allowed",
-                    color: formik.values.t1C1ReadyDate ? "#1976d2" : "#999",
-                    textDecoration: formik.values.t1C1ReadyDate
-                      ? "underline"
-                      : "none",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    pointerEvents: formik.values.t1C1ReadyDate
-                      ? "auto"
-                      : "none",
-                  }}
-                >
-                  <CloudUploadIcon />
-                </span>
-              
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      "&:hover": {
+                        borderColor: "#000",
+                      },
+                      "&:focus-within": {
+                        borderColor: " #166de0",
+                        borderWidth: "2px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none", // hides MUI default border
+                        borderRight: "1px solid #ccc",
+                      },
 
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2} marginTop={2}>
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#041238", // border color on hover
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        backgroundColor: "#fff",
+                        paddingRight: "5px",
+                        maxWidth: "calc(100% - 57px)",
+                      },
+                      "& .css-1uf3ruz-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
+                        {
+                          borderRadius: "0",
+                          height: "39px",
+                        },
+                    }}
+                  >
+                    <DateTimeField
+                      label="T1/C1 Ready"
+                      name="t1C1ReadyDate"
+                      id="t1C1ReadyDate"
+                      value={formik.values.t1C1ReadyDate}
+                      error={formik.errors.t1C1ReadyDate}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload"
+                      onClick={() =>
+                        formik.values.t1C1ReadyDate &&
+                        handleOpen("t1C1Ready_Date")
+                      }
+                      style={{
+                        cursor: formik.values.t1C1ReadyDate
+                          ? "pointer"
+                          : "not-allowed",
+                        color: formik.values.t1C1ReadyDate ? "#1976d2" : "#999",
+                        textDecoration: formik.values.t1C1ReadyDate
+                          ? "underline"
+                          : "none",
+                        pointerEvents: formik.values.t1C1ReadyDate
+                          ? "auto"
+                          : "none",
+                      }}
+                    >
+                      <CloudUploadIcon />
+                    </IconButton>
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Loading Date"
                     name="loadingDate"
@@ -392,36 +397,19 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="ChasisNo."
                     id="chasisNo"
                     value={formik.values.chasisNo}
                     onChange={formik.handleChange}
-                    // disabled
                   />
-                  
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={3}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="Bond Number"
                     id="bondNumber"
@@ -429,16 +417,8 @@ export default function VehicleNumberForm({
                     onChange={formik.handleChange}
                   />
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={3}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="Bond Amount"
                     id="bondAmount"
@@ -446,19 +426,8 @@ export default function VehicleNumberForm({
                     onChange={formik.handleChange}
                   />
                 </Grid>
-              </Grid>
 
-              <Grid paddingLeft={1} container spacing={2}>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Cancellation Date"
                     name="cancellationDate"
@@ -469,17 +438,10 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival Border"
                     name="arrivalBorderDate"
@@ -491,16 +453,7 @@ export default function VehicleNumberForm({
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Crossed Border"
                     name="crossedBorderDate"
@@ -512,16 +465,7 @@ export default function VehicleNumberForm({
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival ICD"
                     name="arrivalICDDate"
@@ -532,64 +476,81 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      "&:hover": {
+                        borderColor: "#000",
+                      },
+                      "&:focus-within": {
+                        borderColor: " #166de0",
+                        borderWidth: "2px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none", // hides MUI default border
+                        borderRight: "1px solid #ccc",
+                      },
+
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#041238", // border color on hover
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        backgroundColor: "#fff",
+                        paddingRight: "5px",
+                        maxWidth: "calc(100% - 57px)",
+                      },
+                      "& .css-1uf3ruz-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
+                        {
+                          borderRadius: "0",
+                          height: "39px",
+                        },
+                    }}
+                  >
+                    <DateTimeField
+                      label="Cargo Release Date"
+                      name="cargoReleaseDate"
+                      id="cargoReleaseDate"
+                      value={formik.values.cargoReleaseDate}
+                      error={formik.errors.cargoReleaseDate}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload"
+                      onClick={() =>
+                        formik.values.cargoReleaseDate &&
+                        handleOpen("cargoRelease_Date")
+                      }
+                      style={{
+                        cursor: formik.values.cargoReleaseDate
+                          ? "pointer"
+                          : "not-allowed",
+                        color: formik.values.cargoReleaseDate
+                          ? "#1976d2"
+                          : "#999",
+                        textDecoration: formik.values.cargoReleaseDate
+                          ? "underline"
+                          : "none",
+                        pointerEvents: formik.values.cargoReleaseDate
+                          ? "auto"
+                          : "none",
+                      }}
+                    >
+                      <CloudUploadIcon />
+                    </IconButton>
+                  </Box>
+                </Grid>
               </Grid>
 
-              <Grid paddingLeft={1} container spacing={2}>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    label="Cargo Release Date"
-                    name="cargoReleaseDate"
-                    id="cargoReleaseDate"
-                    value={formik.values.cargoReleaseDate}
-                    error={formik.errors.cargoReleaseDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                  />{" "}
-                </Grid>
-                <span
-                  onClick={() =>
-                    formik.values.cargoReleaseDate &&
-                    handleOpen("cargoRelease_Date")
-                  }
-                  style={{
-                    marginTop: "40px",
-                    marginLeft: "10px",
-                    cursor: formik.values.cargoReleaseDate
-                      ? "pointer"
-                      : "not-allowed",
-                    color: formik.values.cargoReleaseDate ? "#1976d2" : "#999",
-                    textDecoration: formik.values.cargoReleaseDate
-                      ? "underline"
-                      : "none",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    pointerEvents: formik.values.cargoReleaseDate
-                      ? "auto"
-                      : "none",
-                  }}
-                >
-                  <CloudUploadIcon />
-                </span>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Depart ICD"
                     name="departICDDate"
@@ -600,16 +561,8 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival Customer Place"
                     name="arrivalCustomerPlaceDate"
@@ -620,34 +573,17 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              
-              </Grid>
 
-              <Grid paddingLeft={1} container spacing={2}>
-              
-
-               
-
-               
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={3}
-                paddingLeft={1}
-                marginTop={2}
-              >
-                <InputBox
-                  label="Remarks"
-                  id="remark"
-                  multiline
-                  minRows={4}
-                  value={formik.values.remark}
-                  onChange={formik.handleChange}
-                />
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+                  <InputBox
+                    label="Remarks"
+                    id="remark"
+                    multiline
+                    minRows={4}
+                    value={formik.values.remark}
+                    onChange={formik.handleChange}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </TabPanel>

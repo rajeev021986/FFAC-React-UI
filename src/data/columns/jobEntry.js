@@ -219,7 +219,7 @@ export const CONTAINER_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div onClick={() => alert("asdfghjkl")} className="word-wrap-cell">
+      <div className="word-wrap-cell">
         {params.value?.trim() || ""} 
       </div>
     ),
