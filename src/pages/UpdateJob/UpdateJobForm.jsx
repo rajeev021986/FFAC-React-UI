@@ -12,7 +12,6 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Modal, Button } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
-import UploadIcon from '@mui/icons-material/Upload';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import CustomToast from "../../components/common/Toast/CustomToast";
@@ -27,6 +26,7 @@ import PopupAlert from "../../components/common/Alert/PopupAlert";
 import BondDetailsGridForm from "./UpdateJobEntryGrid";
 import DateTimeField from "../../components/common/DateTime/DateTimeField";
 import UploadFile from "../../components/UploadFile";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 // Container Table
 import ContainerShipmentView from "./ContainerShipmentTables/ShipmentContainer/ContainerShipmentView";
@@ -74,6 +74,9 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
     enableReinitialize: true,
     validateOnChange: false,
     onSubmit: async (values) => {
+      if(isLoading) {
+        return;
+      }
       let bondData = values.bondDetails.map((item) =>
         item?.new ? { ...item, id: null, new: false } : item
       );
@@ -142,6 +145,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
       customerNameRef.current.focus();
     }
   }, []);
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -186,9 +190,19 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
 
           <TabPanel value="1" sx={{ padding: "0px" }}>
             <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
-              <AppBar position="static">
+              <AppBar
+                position="static"
+                sx={{ minHeight: "40px", borderRadius: "5px" }}
+              >
                 <Toolbar
-                  sx={{ display: "flex", justifyContent: "space-between",  minHeight: '40px!important' }}
+             
+                  sx={{
+                    minHeight: "40px !important",
+                    px: 2,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    borderRadius: "8px !important",
+                  }}
                 >
                   <Box sx={{
                     display: "flex", gap: 2,
@@ -196,9 +210,9 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     <Typography variant="body1">
                       <strong>JOB NO: </strong> {formik.values.jobNo}
                     </Typography>
-                    <Typography variant="body1">
+                    {/* <Typography variant="body1">
                       <strong>MBL NO: </strong> {formik.values.mblNo}
-                    </Typography>
+                    </Typography> */}
                     <Typography variant="body1">
                       <strong>Customer: </strong> {formik.values.customer}
                     </Typography>
@@ -275,9 +289,18 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       }}
 
                     >
-                      <UploadIcon />
+                      <CloudUploadIcon />
                     </IconButton>
                   </Box>
+                  <DateTimeField
+                    label="Shipping Line DO Collection Date"
+                    name="shippingLineDOCollectionDate"
+                    id="shippingLineDOCollectionDate"
+                    value={formik.values.shippingLineDOCollectionDate}
+                    error={formik.errors.shippingLineDOCollectionDate}
+                    onChange={formik.setFieldValue}
+                    inputRef={FieldRef}
+                  />
                 </Grid>
 
                 {/* <span
@@ -369,7 +392,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       }}
 
                     >
-                      <UploadIcon />
+                      <CloudUploadIcon />
                     </IconButton>
                   </Box>
                 </Grid>
@@ -463,7 +486,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       }}
 
                     >
-                      <UploadIcon />
+                      <CloudUploadIcon />
                     </IconButton>
                   </Box>
                 </Grid>
@@ -519,7 +542,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   marginTop={2}
                 >
                   <InputBox
-                    label="IDF Date"
+                    label="IDF No."
                     id="idfNo"
                     value={formik.values.idfNo}
                     disabled={disabled}
@@ -594,7 +617,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       }}
 
                     >
-                      <UploadIcon />
+                      <CloudUploadIcon />
                     </IconButton>
                   </Box>
                 </Grid>
@@ -745,7 +768,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                         pointerEvents: formik.values.entryDate ? "auto" : "none",
                       }}
                     >
-                      <UploadIcon />
+                      <CloudUploadIcon />
                     </IconButton>
                   </Box>
                 </Grid>
@@ -800,7 +823,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                   sx={{ fontWeight: "500" }}
                   onClick={() => nav(-1)}
                 >
-                  Cancel
+                  Close
                 </OutlinedButton>
                 <ThemeButton
                   onClick={formik.handleSubmit}
