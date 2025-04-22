@@ -50,9 +50,9 @@ export default function InputBoxForGrid(props) {
       setInputValue(finalValue);
       setError(false);
   
-      if (finalValue.length === 11) {
+      // if (finalValue.length === 11) {
         api.setEditCellValue({ id, field, value: finalValue }, event);
-      }
+      // }
     } else {
       // For all other fields
       const sanitized = rawValue.replace(/[^a-zA-Z0-9]/g, '');
@@ -66,13 +66,13 @@ export default function InputBoxForGrid(props) {
   
   
   const handleChangeContainerNo = (event) => {
-    const newValue = event.target.value.replace(/[^a-zA-Z0-9]/g, '');
+    const rawValue = event.target.value.replace(/[^a-zA-Z0-9]/g, '');
   
     let lettersCount = 0;
     let digitsCount = 0;
-    let finalValue = "";
+    let finalValue = '';
   
-    for (let char of newValue) {
+    for (let char of rawValue) {
       if (/[a-zA-Z]/.test(char) && lettersCount < 4) {
         finalValue += char;
         lettersCount++;
@@ -83,14 +83,16 @@ export default function InputBoxForGrid(props) {
   
       if (lettersCount === 4 && digitsCount === 7) break;
     }
-  
     setInputValue(finalValue);
-    setError(false); // Don’t show red border while typing
+    setError(false);
   
-    if (finalValue.length === 11) {
-      api.setEditCellValue({ id, field, value: finalValue }, event);
-    }
-  };
+    // if (finalValue.length === 11) {
+      api.setEditCellValue(
+        { id, field, value: finalValue },
+        event 
+      );
+    // }
+  }; 
   
   
   const handleBlur = () => {
