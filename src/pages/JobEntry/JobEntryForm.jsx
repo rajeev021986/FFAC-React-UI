@@ -359,14 +359,26 @@ export default function JobEntryForm({
       shipmentTypeRef.current.focus();
     }
   }, []);
-
   useEffect(() => {
     const selectedValue = formik.values.shipmentType;
-
+    const jobPatternData = jobSettingData?.body?.jobPatternData || [];
+  
+    // Extract all shipment types
+    const validShipmentTypes = jobPatternData.map(i => i.shipmentType);
+  
+    // Check if General/Common pattern is empty
+    const generalCommonPattern = jobPatternData.find(
+      i => i.shipmentType === "General/Common"
+    )?.jobPattern;
+  
+    const isSelectedTypeValid = validShipmentTypes.includes(selectedValue);
+    const isGeneralCommonPatternEmpty = !generalCommonPattern;
+  
     if (
       selectedValue &&
-      !validType?.includes(selectedValue) &&
-      getPage == "newEntry"
+      !isSelectedTypeValid &&
+      isGeneralCommonPatternEmpty &&
+      getPage === "newEntry"
     ) {
       toast.custom(
         <CustomToast
@@ -377,9 +389,12 @@ export default function JobEntryForm({
           closeButton: false,
         }
       );
-      formik.setFieldError('shipmentType', 'Please contact the administrator.');
+      formik.setFieldError("shipmentType", "Please contact the administrator.");
     }
   }, [formik.values.shipmentType]);
+  
+  
+  
 
   return (
     <>
