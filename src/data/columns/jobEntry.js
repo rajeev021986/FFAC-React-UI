@@ -1,14 +1,5 @@
 import dayjs from "dayjs";
 export const JOB_ENTRY_COLUMNS = [
-  // {
-  //   flex: 1,
-  //   field: "isapprove",
-  //   headerName: "Approve",
-  //   width: 110,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   editable: false,
-  // },
   {
     flex: 1,
     field: "isDoc",
@@ -219,9 +210,7 @@ export const CONTAINER_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">
-        {params.value?.trim() || ""} 
-      </div>
+      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
     ),
   },
   {
