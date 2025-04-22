@@ -67,7 +67,7 @@ export default function GlobalDrrpdownSettingVoucher({
   const handleDeleteRow = (id) => {
     const updated = value.filter((item) => item.id !== id);
     toast.custom(
-      <CustomToast message="Deleted Successfully" toast="success" />,
+      <CustomToast message="Click 'Save' to confirm deletion" toast="info" />,
       { closeButton: false }
     );
     setvalue(reindexRows(updated));

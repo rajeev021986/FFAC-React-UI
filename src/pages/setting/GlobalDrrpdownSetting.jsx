@@ -36,7 +36,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   const handleDeleteRow = (id) => {
     setvalue((prevStatus) => prevStatus.filter((item) => item.id !== id));
     toast.custom(
-      <CustomToast message="Deleted Successfully" toast="success" />,
+      <CustomToast message="Click Save to confirm deletion" toast="info" />,
       {
         closeButton: false,
       }
