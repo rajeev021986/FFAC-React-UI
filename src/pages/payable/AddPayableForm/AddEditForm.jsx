@@ -1,5 +1,11 @@
-import { CircularProgress, Grid } from "@mui/material";
-import { Radio, RadioGroup, Stack, TextField, Tooltip } from "@mui/material";
+import {
+  Backdrop,
+  CircularProgress,
+  Grid,
+  IconButton,
+  SpeedDialAction,
+} from "@mui/material";
+import { Stack } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../components/common/InputBox";
@@ -7,15 +13,14 @@ import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
 import ApiManager from "../../../services/ApiManager";
 import PopupAlert from "../../../components/common/Alert/PopupAlert";
 import toast from "react-hot-toast";
-import SelectBox from "../../../components/common/SelectBox";
-import ThemeTabs from "../../../components/common/Tab/ThemeTab";
-import AddMapping from "../../../components/screen/code/customer/AddMapping";
 import { CustomerValidationSchema } from "../../../components/screen/code/customer/validationSchema";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 
 import {
   useAddCustomerMutation,
@@ -25,21 +30,38 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 import CustomToast from "../../../components/common/Toast/CustomToast";
-import FormAutoComplete from "../../../components/common/AutoComplete/FormAutoComplete";
 import getFirstError from "../../../components/common/FieldToastError";
-import CustomerBankDetails from "../../../components/screen/code/customer/BankDetails";
 import EditIconForHeader from "../../../components/common/commonIcons/EditIcons/EditIconForHeader";
 import DocumentIcon from "../../../components/common/commonIcons/DocumentIcons/DocumentIcon";
 import AuditIcon from "../../../components/common/commonIcons/AuditIcon/AuditIcon";
+import PayableEntryList from "./PayableEntryList";
+import {
+  formView,
+  payableSetSortModal,
+} from "../../../store/freatures/payableEntrySlice";
+import { useDispatch, useSelector } from "react-redux";
+import ScreenToolbar from "../../../components/common/ScreenToolbar";
+import {
+  FormatListBulletedOutlined,
+  GridOnOutlined,
+} from "@mui/icons-material";
+import PayableCardView from "../../../components/common/PayableCard/PayableCard";
+import { USER_MANAGEMENT_COLUMNS } from "../../../data/columns/user";
+import { useFetchUsersQuery } from "../../../store/api/userDataApi";
+import { getUserListGridActions } from "../../../components/screen/user-management/action";
+import { dashboardSetPagination } from "../../../store/freatures/dashboardSlice";
 
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
+  const actionsSelector = useSelector((s) => s?.payableAction);
   const [loaderApprove, setLoaderApprove] = useState({
     approve: false,
     reject: false,
   });
   const [updateCustomer] = useUpdateCustomerMutation();
+  const dispatch = useDispatch();
   const [dropdownData, setDropdownData] = useState({});
+  const [open, setOpen] = React.useState(false);
   const [rejectError, setRejectError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -274,8 +296,14 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     }));
   };
 
-  const disabled =
-    page == "customer" || page == "customerApprove" ? false : true;
+  const handleActionClick = async (actionName) => {
+    if (actionName === "New Entry") {
+      nav("addpayable", {
+        replace: true,
+        state: { formAction: "add" },
+      });
+    }
+  };
 
   useEffect(() => {
     getFirstError(formik.errors);
@@ -288,8 +316,69 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (!actionsSelector.view) {
+      dispatch(formView("card"));
+    }
+  }, [actionsSelector.view, dispatch]);
+
+  const query = {
+    page: actionsSelector?.pagination?.page + 1,
+    size: actionsSelector?.pagination?.pageSize,
+    sortBy:
+      actionsSelector.sortModel.length > 0
+        ? actionsSelector.sortModel[0].field
+        : actionsSelector?.sortBy?.split("*")[0],
+    sortOrder:
+      actionsSelector.sortModel.length > 0
+        ? actionsSelector?.sortModel[0]?.sort
+        : actionsSelector?.sortBy?.split("*")[1] || "",
+  };
+
+  const payload = Object.entries(actionsSelector?.formData)
+    .filter(([key, value]) => value)
+    .map(([key, value]) => {
+      return {
+        fieldName: key,
+        operator: "=",
+        value: value,
+        logicalOperator: "and",
+      };
+    });
+  Boolean(actionsSelector?.status?.length > 0) &&
+    payload.push({
+      fieldName: "status",
+      operator: "=",
+      value: actionsSelector?.status[0],
+      logicalOperator: "and",
+    });
+
+  const { data: UserData } = useFetchUsersQuery({
+    params: query,
+    payload,
+  });
+
+  const handlePage = (params) => {
+    let { page, pageSize } = params;
+    dispatch(dashboardSetPagination({ page, pageSize }));
+  };
+
   return (
     <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
+      <Stack direction="row" justifyContent="right">
+        <Box>
+          <IconButton onClick={() => dispatch(formView("card"))}>
+            <FormatListBulletedOutlined
+              color={actionsSelector.view === "card" ? "primary" : "secondary"}
+            />
+          </IconButton>
+          <IconButton onClick={() => dispatch(formView("grid"))}>
+            <GridOnOutlined
+              color={actionsSelector.view === "grid" ? "primary" : "secondary"}
+            />
+          </IconButton>
+        </Box>
+      </Stack>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           {type === "add" ? (
@@ -341,38 +430,29 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               margin: 0,
             }}
           >
-            <Box sx={{ width: "20%", paddingRight: 2 }}>
+            <Box sx={{ width: "30%", paddingRight: 2 }}>
               <Grid container sx={{ padding: 0, margin: 0 }}>
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Invoice Type*"
-                    id="customerName"
-                    value={formik.values.customerName}
-                    error={formik.errors.customerName}
+                    id="invoiceType"
+                    value={formik.values.invoiceType}
+                    error={formik.errors.invoiceType}
                     onChange={formik.handleChange}
-                    inputRef={customerNameRef}
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
+                  <InputBox
+                    label="Payable Ref. No.*"
+                    id="payableRefNo"
+                    value={formik.values.payableRefNo}
+                    error={formik.errors.payableRefNo}
+                    onChange={formik.handleChange}
+                  />
+                </Grid>
+
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Payable Ref. No.*"
                     id="customerName"
@@ -383,16 +463,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Job No."
                     id="customerName"
@@ -403,16 +474,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Invoice Date."
                     id="customerName"
@@ -423,16 +485,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Vendor Name"
                     id="customerName"
@@ -443,16 +496,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Vendor Invoice No."
                     id="customerName"
@@ -463,16 +507,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Vendor Invoice Date"
                     id="customerName"
@@ -483,16 +518,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Currency"
                     id="customerName"
@@ -503,16 +529,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Ex. Rate"
                     id="customerName"
@@ -523,16 +540,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="Amount"
                     id="customerName"
@@ -543,16 +551,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
+                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                   <InputBox
                     label="VAT"
                     id="customerName"
@@ -630,20 +629,36 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               <PopupAlert alertConfig={alertConfig} />
             </Box>
 
-            <Box sx={{ width: "80%" }}>
-              <Box
-                sx={{
-                  border: "1px solid #ccc",
-                  borderRadius: "10px",
-                  margin: "8px",
-                }}
-              >
-                <CustomerBankDetails
-                  formik={formik}
-                  dropdownData={dropdownData}
+            {actionsSelector?.view === "card" ? (
+              <Box sx={{ width: "80%" }}>
+                <PayableCardView
+                  uniqueId="id"
+                  columns={USER_MANAGEMENT_COLUMNS}
+                  count={20}
+                  handlePage={handlePage}
+                  data={UserData?.body?.data}
+                  paginationModel={actionsSelector.pagination}
+                  loading={isLoading}
+                  actions={getUserListGridActions(nav, payableSetSortModal)}
+                  page="user_management"
                 />
               </Box>
-            </Box>
+            ) : (
+              <Box sx={{ width: "80%" }}>
+                <Box
+                  sx={{
+                    border: "1px solid #ccc",
+                    borderRadius: "10px",
+                    margin: "8px",
+                  }}
+                >
+                  <PayableEntryList
+                    formik={formik}
+                    dropdownData={dropdownData}
+                  />
+                </Box>
+              </Box>
+            )}
           </Box>
         </TabPanel>
       </TabContext>

@@ -82,7 +82,7 @@ export default function SelectShipment({
         ))}
       </Select>
 
-      <FormHelperText>{error}</FormHelperText>
+      {error && <FormHelperText>{error}</FormHelperText>}
     </FormControl>
   );
 }

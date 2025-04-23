@@ -2,8 +2,11 @@
 import React from "react";
 import { Breadcrumbs as MUIBreadcrumbs, Link, Typography } from "@mui/material";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home"; // Icon import
+import NavigateNextIcon from "@mui/icons-material/NavigateNext"; // Optional: custom separator
 
 const Routes = {
+  home: { label: "Home", disabled: false },
   user_management: { label: "User Management", disabled: false },
   entity: { label: "Entity", disabled: true },
   master: { label: "Master", disabled: true },
@@ -65,7 +68,6 @@ const Routes = {
   bond: { label: "Bond", disabled: false },
   bondAdd: { label: "Add Bond", disabled: false },
   editBond: { label: "Edit Bond", disabled: false },
-
   documentation: { label: "Documentation", disabled: true },
   jobEntry: { label: "Job Entries", disabled: false },
   newEntry: { label: "Add New Entry", disabled: true },
@@ -79,13 +81,29 @@ const ThemedBreadcrumb = () => {
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   return (
-    <MUIBreadcrumbs aria-label="breadcrumb">
+    <MUIBreadcrumbs aria-label="breadcrumb" sx={{ paddingBottom: "5px" }}
+      separator={<NavigateNextIcon fontSize="small" />}
+    >
+      <Link
+        key="home"
+        component={RouterLink}
+        to="/"
+        underline="hover"
+        color="primary.main"
+        sx={{ display: "flex", alignItems: "center", fontSize: "14px" }}
+      >
+        <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+        Home
+      </Link>
       {pathnames.map((value, index) => {
         const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
         const isLast = index === pathnames?.length - 1;
         if (!Routes[value]?.label) return null;
         return isLast || Routes[value]?.disabled ? (
-          <Typography key={routeTo} fontSize="18px">
+          <Typography key={routeTo}
+            sx={{ display: "flex", alignItems: "center", fontSize: "14px" }}
+            color="text.primary"
+          >
             {Routes[value]?.label}
           </Typography>
         ) : (
@@ -95,9 +113,9 @@ const ThemedBreadcrumb = () => {
             underline="hover"
             color="primary.main"
             key={routeTo}
-            fontSize="14px"
+            sx={{ display: "flex", alignItems: "center", fontSize: "16px" }}
           >
-            <Typography fontSize="18px">{Routes[value]?.label}</Typography>
+            <Typography>{Routes[value]?.label}</Typography>
           </Link>
         );
       })}
