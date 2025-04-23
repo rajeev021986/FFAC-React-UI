@@ -32,15 +32,18 @@ import UploadFile from "../../../../components/UploadFile";
 import ApiManager from "../../../../services/ApiManager";
 import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
 import { LooseCargoValidationSchema } from "./LooseCargoValidationSchema";
+import SelectBox from "../../../../components/common/SelectBox";
 
 export default function LooseCargoForm({
   page,
   onCancel,
   onSubmit,
   looseCargoId,
+  bondDetails,
 }) {
   const [updateLooseCargoNumber, { isLoading }] =
     useUpdateLooseCargoNumberMutation();
+  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   const [dropdownData, setDropdownData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -68,6 +71,7 @@ export default function LooseCargoForm({
   const [initialValues, setInitialValues] = React.useState({
     transporter: "",
     truckTrailerNo: "",
+    truckNo:"",
     driver: "",
     agreedRate: "",
     telNo: "",
@@ -127,7 +131,7 @@ export default function LooseCargoForm({
         arrivalICDDate: res.body?.arrivalICDDate,
         cargoReleaseDate: res.body?.cargoReleaseDate,
         departICDDate: res.body?.departICDDate,
-        bondNumber: res.body?.bondNumber,
+        bondNumber: bondDetails[0]?.bondNumber,
         bondAmount: res.body?.bondAmount,
         arrivalCustomerPlaceDate: res.body?.arrivalCustomerPlaceDate,
         remark: res.body?.remark,
@@ -150,7 +154,7 @@ export default function LooseCargoForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-     validationSchema: LooseCargoValidationSchema(),
+    validationSchema: LooseCargoValidationSchema(),
     onSubmit: async (values) => {
       try {
         values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
@@ -272,12 +276,14 @@ export default function LooseCargoForm({
             <Grid container sx={{ marginTop: 3, padding: 0, paddingRight: 1 }}>
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <InputBox
+                  <FormAutoComplete
                     label="Transporter"
                     id="transporter"
+                    suggestionName="vendor_name"
                     value={formik.values.transporter}
+                    error={formik.errors.transporter}
                     onChange={formik.handleChange}
-                  />
+                  ></FormAutoComplete>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
@@ -359,11 +365,13 @@ export default function LooseCargoForm({
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <InputBox
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <SelectBox
                     label="Reporting Place"
                     id="reportingPlace"
+                    options={jobSettingData?.body.reportingPlace}
                     value={formik.values.reportingPlace}
+                    error={formik.errors.reportingPlace}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -379,18 +387,6 @@ export default function LooseCargoForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
-                    label="Reporting Time"
-                    id="reportingTime"
-                    value={formik.values.reportingTime}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="TruckNo."
@@ -401,6 +397,10 @@ export default function LooseCargoForm({
                   />
                 </Grid>
 
+              </Grid>
+
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+                
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Transfer Date"
@@ -493,9 +493,6 @@ export default function LooseCargoForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="Bond Number"
@@ -504,6 +501,10 @@ export default function LooseCargoForm({
                     onChange={formik.handleChange}
                   />
                 </Grid>
+              </Grid>
+
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+               
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
@@ -537,9 +538,6 @@ export default function LooseCargoForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Crossed Border"
@@ -551,7 +549,9 @@ export default function LooseCargoForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
 
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival ICD"
@@ -646,9 +646,6 @@ export default function LooseCargoForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival Customer Place"
@@ -660,6 +657,10 @@ export default function LooseCargoForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
+
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+             
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox

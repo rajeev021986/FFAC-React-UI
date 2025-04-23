@@ -38,17 +38,20 @@ import UploadFile from "../../../../components/UploadFile";
 import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
 import ApiManager from "../../../../services/ApiManager";
 import { ContainerValidationSchema } from "./ContainerValidationSchema";
+import SelectBox from "../../../../components/common/SelectBox";
+import DocumentIcon from "../../../../components/common/commonIcons/DocumentIcons/DocumentIcon";
+import AuditIcon from "../../../../components/common/commonIcons/AuditIcon/AuditIcon";
 
 export default function ContainerNumberForm({
   // initialValues,
   containerId,
   page,
   onCancel,
+  bondDetails,
   onSubmit,
 }) {
   const [updateContainerNumber, { isLoading }] =
     useUpdateContainerNumberMutation();
-
   const [dropdownData, setDropdownData] = useState({});
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
@@ -71,7 +74,7 @@ export default function ContainerNumberForm({
     sealNo: "",
     truckTrailerNo: "",
     transporter: "",
-    truckTrailerNoTransporter: "",
+    // truckTrailerNoTransporter: "",
     driver: "",
     agreedRate: "",
     telNo: "",
@@ -81,7 +84,7 @@ export default function ContainerNumberForm({
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
-    reportingTime: "",
+    // reportingTime: "",
     transferDate: "",
     t1C1ReadyDate: "",
     loadingDate: "",
@@ -122,7 +125,7 @@ export default function ContainerNumberForm({
         sealNo: res?.body?.sealNo,
         truckTrailerNo: res?.body?.truckTrailerNo,
         transporter: res?.body?.transporter,
-        truckTrailerNoTransporter: res?.body?.truckTrailerNoTransporter,
+        // truckTrailerNoTransporter: res?.body?.truckTrailerNoTransporter,
         driver: res?.body?.driver,
         agreedRate: res?.body?.agreedRate,
         telNo: res?.body?.telNo,
@@ -132,7 +135,7 @@ export default function ContainerNumberForm({
         clerkTelNo: res?.body?.clerkTelNo,
         reportingPlace: res?.body?.reportingPlace,
         reportingDate: res?.body?.reportingDate,
-        reportingTime: res?.body?.reportingTime,
+        // reportingTime: res?.body?.reportingTime,
         transferDate: res?.body?.transferDate,
         t1C1ReadyDate: res?.body?.t1C1ReadyDate,
         loadingDate: res?.body?.loadingDate,
@@ -142,7 +145,7 @@ export default function ContainerNumberForm({
         arrivalICDDate: res?.body?.arrivalICDDate,
         cargoReleaseDate: res?.body?.cargoReleaseDate,
         departICDDate: res?.body?.departICDDate,
-        bondNumber: res?.body?.bondNumber,
+        bondNumber: bondDetails[0]?.bondNumber,
         bondAmount: res?.body?.bondAmount,
         arrivalCustomerPlaceDate: res?.body?.arrivalCustomerPlaceDate,
         emptyReleasedDate: res?.body?.emptyReleasedDate,
@@ -172,10 +175,10 @@ export default function ContainerNumberForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-     validationSchema: ContainerValidationSchema(),
+    validationSchema: ContainerValidationSchema(),
     onSubmit: async (values) => {
       console.log(formik.errors, "errors");
-      
+
       try {
         values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
         values.status = "";
@@ -222,6 +225,7 @@ export default function ContainerNumberForm({
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
+  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   const handleClose = () => setOpen(false);
   const handleOpen = (type) => {
@@ -295,6 +299,26 @@ export default function ContainerNumberForm({
                 icon={<EditIconForHeader />}
                 iconPosition="start"
               />
+              <Tab
+                label="Document Details"
+                value="2"
+                icon={<DocumentIcon />}
+                iconPosition="start"
+                sx={{
+                  textTransform: "capitalize",
+                  minHeight: "50px",
+                }}
+              />
+              <Tab
+                label="Audit Logs"
+                value="3"
+                icon={<AuditIcon />}
+                iconPosition="start"
+                sx={{
+                  textTransform: "capitalize",
+                  minHeight: "50px",
+                }}
+              />
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: "0px" }}>
@@ -316,19 +340,21 @@ export default function ContainerNumberForm({
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
+                  <FormAutoComplete
                     label="Transporter"
                     id="transporter"
+                    suggestionName="vendor_name"
                     value={formik.values.transporter}
+                    error={formik.errors.transporter}
                     onChange={formik.handleChange}
-                  />
+                  ></FormAutoComplete>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="Truck/Trailer No."
-                    id="truckTrailerNoTransporter"
-                    value={formik.values.truckTrailerNoTransporter}
+                    id="truckTrailerNo"
+                    value={formik.values.truckTrailerNo}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -420,10 +446,12 @@ export default function ContainerNumberForm({
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
+                  <SelectBox
                     label="Reporting Place"
                     id="reportingPlace"
+                    options={jobSettingData?.body.reportingPlace}
                     value={formik.values.reportingPlace}
+                    error={formik.errors.reportingPlace}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -442,15 +470,14 @@ export default function ContainerNumberForm({
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                {/* <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="Reporting Time"
                     id="reportingTime"
                     value={formik.values.reportingTime}
                     onChange={formik.handleChange}
                   />
-                </Grid>
-
+                </Grid> */}
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="ContainerNo."
@@ -460,7 +487,6 @@ export default function ContainerNumberForm({
                     disabled
                   />
                 </Grid>
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Transfer Date"
@@ -541,9 +567,6 @@ export default function ContainerNumberForm({
                     </IconButton>
                   </Box>
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Loading Date"
@@ -555,7 +578,9 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
 
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="Bond No."
@@ -587,9 +612,6 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival Border"
@@ -601,7 +623,9 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
 
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Crossed Border"
@@ -696,21 +720,6 @@ export default function ContainerNumberForm({
                     </IconButton>
                   </Box>
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <DateTimeField
-                    label="Depart ICD"
-                    name="departICDDate"
-                    id="departICDDate"
-                    value={formik.values.departICDDate}
-                    error={formik.errors.departICDDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                  />
-                </Grid>
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival Customer Place"
@@ -722,7 +731,9 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
 
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Empty Released"
@@ -745,9 +756,6 @@ export default function ContainerNumberForm({
                     onChange={formik.handleChange}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="POD No."
@@ -758,7 +766,6 @@ export default function ContainerNumberForm({
                     onChange={formik.handleChange}
                   />
                 </Grid>
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <Box
                     display="flex"
@@ -824,78 +831,9 @@ export default function ContainerNumberForm({
                     </IconButton>
                   </Box>
                 </Grid>
+              </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    sx={{
-                      border: "1px solid #ccc",
-                      borderRadius: "10px",
-                      "&:hover": {
-                        borderColor: "#000",
-                      },
-                      "&:focus-within": {
-                        borderColor: " #166de0",
-                        borderWidth: "2px",
-                      },
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        border: "none", // hides MUI default border
-                        borderRight: "1px solid #ccc",
-                      },
-
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#041238", // border color on hover
-                      },
-
-                      "& .MuiInputLabel-root": {
-                        backgroundColor: "#fff",
-                        paddingRight: "5px",
-                        maxWidth: "calc(100% - 57px)",
-                      },
-                      "& .css-1uf3ruz-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
-                        {
-                          borderRadius: "0",
-                          height: "39px",
-                        },
-                    }}
-                  >
-                    <DateTimeField
-                      label="Empty Return Date"
-                      name="emptyReturnDate"
-                      id="emptyReturnDate"
-                      value={formik.values.emptyReturnDate}
-                      error={formik.errors.emptyReturnDate}
-                      onChange={formik.setFieldValue}
-                      inputRef={FieldRef}
-                    />
-                    <IconButton
-                      color="primary"
-                      aria-label="upload"
-                      onClick={() =>
-                        formik.values.emptyReturnDate &&
-                        handleOpen("emptyReturn_Date")
-                      }
-                      style={{
-                        cursor: formik.values.emptyReturnDate
-                          ? "pointer"
-                          : "not-allowed",
-                        color: formik.values.emptyReturnDate
-                          ? "#1976d2"
-                          : "#999",
-                        textDecoration: formik.values.emptyReturnDate
-                          ? "underline"
-                          : "none",
-                        pointerEvents: formik.values.emptyReturnDate
-                          ? "auto"
-                          : "none",
-                      }}
-                    >
-                      <CloudUploadIcon />
-                    </IconButton>
-                  </Box>
-                </Grid>
-
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <Box
                     display="flex"
@@ -966,9 +904,6 @@ export default function ContainerNumberForm({
                     </IconButton>
                   </Box>
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Port Gate In Date"
@@ -980,7 +915,6 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <Box
                     display="flex"
@@ -1051,7 +985,6 @@ export default function ContainerNumberForm({
                     </IconButton>
                   </Box>
                 </Grid>
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <InputBox
                     label="Remark"

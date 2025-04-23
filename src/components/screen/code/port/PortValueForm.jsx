@@ -17,8 +17,6 @@ export default function PortValueForm({
 }) {
   const nav = useNavigate();
     const { data: portSettingsData } = useGetOptionsSettingsQuery("port_settings");
-    console.log("portSettingsData",portSettingsData);
-    
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -218,15 +216,16 @@ export default function PortValueForm({
           paddingLeft={1}
           marginTop={2}
         >
-          <FormAutoCompleteWithLoader
+          <FormAutoComplete
             label="Region"
             id="region"
-            dataKey="port_name"
             suggestionName="region"
             value={formik.values.region}
             error={formik.errors.region}
             onChange={formik.handleChange}
-          />
+            inputRef={FieldRef}
+
+          ></FormAutoComplete>
         </Grid>
       </Grid>
       <Grid container sx={{ marginTop: 2, paddingLeft: 1 }}>

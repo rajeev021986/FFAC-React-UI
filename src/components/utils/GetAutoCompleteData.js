@@ -21,6 +21,8 @@ const suggestionName = {
   portOfDischarge: "PORT",
   placeOfDelivery: "PORT",
   clerkName: "USER",
+  transporter: 'VENDOR_TYPE',
+  region : "PORT_REGION",
 };
 
 export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {

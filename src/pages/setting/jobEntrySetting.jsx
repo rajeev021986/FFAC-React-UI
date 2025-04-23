@@ -39,6 +39,8 @@ const JobEntrySetting = () => {
   const [sizeType, setsizeType] = useState([]);
   const [unitTypes, setunitTypes] = useState([]);
   const [jobDocumentType, setJobDocumentType] = useState([]);
+  const [reportingPlace, setReportingPlace] = useState([]);
+
 
   const [voucherData, setVoucherData] = useState([
     { id: 1, shipmentType: "", jobPattern: "", sampleJobNumber: "" },
@@ -59,6 +61,7 @@ const JobEntrySetting = () => {
     setsizeType(data?.body.sizeType || []);
     setunitTypes(data?.body.unitTypes || []);
     setJobDocumentType(data?.body.jobDocumentType || []);
+    setReportingPlace(data?.body.reportingPlace || []);
     const sorted = [...(data?.body.jobPatternData || [])].sort(
       (a, b) => a.id - b.id
     );
@@ -94,6 +97,9 @@ const JobEntrySetting = () => {
       sizeType: sizeType.filter((item) => !item.value.includes("Type the")),
       unitTypes: unitTypes.filter((item) => !item.value.includes("Type the")),
       jobDocumentType: jobDocumentType.filter(
+        (item) => !item.value.includes("Type the")
+      ),
+      reportingPlace: reportingPlace.filter(
         (item) => !item.value.includes("Type the")
       ),
       jobPatternData: voucherData.filter(
@@ -220,6 +226,11 @@ const JobEntrySetting = () => {
             value={jobDocumentType}
             setvalue={setJobDocumentType}
             title="Document Job Type"
+          />
+            <GlobalDrrpdownSetting
+            value={reportingPlace}
+            setvalue={setReportingPlace}
+            title="Reporting Place"
           />
           <GlobalDrrpdownSettingVoucher
             value={voucherData}

@@ -39,7 +39,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import useDebounce from "../../../../hooks/useDebounce";
 import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
 
-export default function LooseShipmentView({ page, customer_id }) {
+export default function LooseShipmentView({ page, customer_id,bondDetails }) {
   const loooseCargoSelector = useSelector((s) => s?.looseCargo);
 
   const location = useLocation();
@@ -318,6 +318,7 @@ export default function LooseShipmentView({ page, customer_id }) {
         <DialogContent>
           <LooseCargoForm
             looseCargoId={modal?.data?.id}
+            bondDetails={bondDetails}
             type={modal.type}
             page={page}
             onCancel={() => setModal({ open: false, type: "", data: {} })}

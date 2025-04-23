@@ -43,9 +43,8 @@ import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
 import useDebounce from "../../../../hooks/useDebounce";
 
-export default function ContainerShipmentView({ page, customer_id }) {
+export default function ContainerShipmentView({ page, customer_id,bondDetails }) {
   const containerSelector = useSelector((state) => state?.containers);
-
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -322,6 +321,7 @@ export default function ContainerShipmentView({ page, customer_id }) {
         <DialogContent>
           <ContainerNumberForm
             containerId={modal.data?.id}
+            bondDetails={bondDetails}
             type={modal.type}
             page={page}
             onCancel={() => setModal({ open: false, type: "", data: {} })}
