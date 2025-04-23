@@ -67,12 +67,11 @@ const Routes = {
   editBond: { label: "Edit Bond", disabled: false },
 
   documentation: { label: "Documentation", disabled: true },
-  job: { label: "Job Entries", disabled: false },
-
+  jobEntry: { label: "Job Entries", disabled: false },
   newEntry: { label: "Add New Entry", disabled: true },
   editJobEntry: { label: "Edit Job Entry", disabled: false },
-  "job-approve": { label: "Approve New File", disabled: false },
-  update: { label: "Update Job", disabled: false },
+  approveJobfile: { label: "Approve New File", disabled: false },
+  updateJob: { label: "Update Job", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {
