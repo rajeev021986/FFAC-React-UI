@@ -52,6 +52,7 @@ import jonEntryReducer from "./freatures/JobEntrySlice";
 import containerReducer from "./freatures/containersSlice";
 import vehicleReducer from "./freatures/vehicleSlice";
 import looseCargoReducer from "./freatures/LoseCargoSlice";
+import payableReducer from "./freatures/payableEntrySlice";
 
 const store = configureStore({
   reducer: {
@@ -111,6 +112,7 @@ const store = configureStore({
     containers: containerReducer,
     vehicle: vehicleReducer,
     looseCargo: looseCargoReducer,
+    payableAction: payableReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

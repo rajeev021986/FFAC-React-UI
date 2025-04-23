@@ -162,15 +162,14 @@ function App() {
             />
             <Route
               path="documentation/update/job/edit-job"
-              element={<UpdateJobDetails page="update-job" />}
+              element={<UpdateJobDetails page="-updatejob" />}
             />
-
             <Route
-              path="documentation/payble"
+              path="documentation/paybleEntry"
               element={<PayableList page="payable_list" />}
             />
             <Route
-              path="documentation/payble/addpayable"
+              path="documentation/paybleEntry/addpayable"
               element={<AddPayableEntry page="payable" />}
             />
 
