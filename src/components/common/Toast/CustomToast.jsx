@@ -1,6 +1,7 @@
 import WarningIcon from "@mui/icons-material/Error";
 import ErrorIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import InfoIcon from "@mui/icons-material/Info";
 
 function CustomToast({ message, toast }) {
 
@@ -40,7 +41,19 @@ function CustomToast({ message, toast }) {
             fontSize: "20px",
           }}
         />
-      ) : (
+      ) :
+      toast === "info" ? (
+        <InfoIcon
+          style={{
+            toastStyle,
+            marginRight: "8px",
+            color: "#3498db",
+            fontSize: "20px",
+          }}
+        />
+      ) : 
+
+      (
         <ErrorIcon
           style={{
             toastStyle,

@@ -29,29 +29,29 @@ export default function ShipmentDetails({ formik }) {
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
         <Grid paddingLeft={1} marginTop={0} container spacing={1}>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <FormAutoCompleteWithTable
-              label="Origin Country"
-              id="originCountry"
-              suggestionName="country"
-              value={formik.values.originCountry}
-              error={formik.errors.originCountry}
-              onChange={formik.handleChange}
-              inputRef={FieldRef}
-              formik={formik}
-              disabled={disabled}
-            />
+          <FormAutoCompleteWithTable
+            label="Origin Country"
+            id="originCountry"
+            suggestionName="originCountry"
+            value={formik.values.originCountry}
+            formik={formik}
+            setFieldValue={formik.setFieldValue}
+            error={formik.errors.originCountry}
+            disabled={false}
+          />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <FormAutoComplete
-              label="Port Of Loading"
-              id="portOfLoading"
-              suggestionName="port_name"
-              value={formik.values.portOfLoading}
-              error={formik.errors.portOfLoading}
-              onChange={formik.handleChange}
-              inputRef={FieldRef}
-            />
+          <FormAutoCompleteWithTable
+            label="Port of Loading"
+            id="portOfLoading"
+            suggestionName="portOfLoading"
+            value={formik.values.portOfLoading}
+            formik={formik}
+            setFieldValue={formik.setFieldValue}
+            error={formik.errors.portOfLoading}
+            disabled={false}
+          />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>

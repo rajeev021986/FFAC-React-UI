@@ -31,6 +31,7 @@ import DateTimeField from "../../../../components/common/DateTime/DateTimeField"
 import UploadFile from "../../../../components/UploadFile";
 import ApiManager from "../../../../services/ApiManager";
 import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
+import { VehicleValidationSchema } from "./VehicleValidationSchema";
 
 export default function VehicleNumberForm({
   page,
@@ -88,6 +89,8 @@ export default function VehicleNumberForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
+    validationSchema: VehicleValidationSchema(),
+
     onSubmit: async (values) => {
       try {
         values.statusCode = dropdownData?.approvalRequest ? 0 : 1;

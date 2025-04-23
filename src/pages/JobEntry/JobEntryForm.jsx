@@ -79,13 +79,44 @@ export default function JobEntryForm({
     validateOnChange: false,
     validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
-      if(isLoading) {
+      if (isLoading) {
         return;
       }
+      let hasError = false;
+     
       if (!values.id || type == "copy") {
-        let containerShipment = values.containerShipments.map((item) =>
-          item?.new ? { ...item, id: null, new: false } : item
-        );
+        let containerShipment = values.containerShipments.map((item) =>{
+          if (item.containerNo.length < 11) {
+            // formik.setFieldError("containerNo", "Container No. is required");
+            toast.custom(
+              <CustomToast
+                message="Container No. must be 11 characters"
+                toast="error"
+              />,
+              {
+                closeButton: false,
+              }
+            );
+            hasError = true;
+            return item; // Still return something to avoid undefined
+          }
+        
+          else if (item.tflSealNo.length < 11) {
+            // formik.setFieldError("sellno", "Sell No is required");
+            toast.custom(
+              <CustomToast message="Seal No must be 11 characters" toast="error" />,
+              {
+                closeButton: false,
+              }
+            );
+            hasError = true;
+            return item;
+          } else {
+            return item?.new ? { ...item, id: null, new: false } : item;
+          }
+        });
+        if (hasError) return;
+
         let vehicleShipment = values.vehicleShipments.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
         );
@@ -133,7 +164,7 @@ export default function JobEntryForm({
             const message = error.data.message;
             toast.custom(<CustomToast message={message} toast="error" />, {
               duration: 1000, // 2 seconds
-             
+
               closeButton: false,
             });
           } else {
@@ -143,7 +174,7 @@ export default function JobEntryForm({
                 toast="error"
               />,
               {
-              duration: 2000, // 2 seconds
+                duration: 2000, // 2 seconds
 
                 closeButton: false,
               }
@@ -151,11 +182,42 @@ export default function JobEntryForm({
           }
         }
       } else {
+      //  console.log(values.containerShipments,"mmmm")
+        // return;
         try {
           setRejectError(false);
-          let containerShipment = values.containerShipments.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
+          let containerShipment = values.containerShipments.map((item) =>{
+            if (item.containerNo.length < 11) {
+              // formik.setFieldError("containerNo", "Container No. is required");
+              toast.custom(
+                <CustomToast
+                  message="Container No. must be 11 characters"
+                  toast="error"
+                />,
+                {
+                  closeButton: false,
+                }
+              );
+              hasError = true;
+              return item; // Still return something to avoid undefined
+            }
+          
+            else if (item.tflSealNo.length < 11) {
+              // formik.setFieldError("sellno", "Sell No is required");
+              toast.custom(
+                <CustomToast message="Seal No must be 11 characters" toast="error" />,
+                {
+                  closeButton: false,
+                }
+              );
+              hasError = true;
+              return item;
+            } else {
+              return item?.new ? { ...item, id: null, new: false } : item;
+            }
+          });
+        if (hasError) return;
+
           let vehicleShipment = values.vehicleShipments.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           );
@@ -172,7 +234,7 @@ export default function JobEntryForm({
             rateDetails: values.rate.rateDetails.map((item) =>
               item?.new ? { ...item, id: null, new: false } : item
             ),
-          };
+          };    
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
           let response = await updateJobEntry({
@@ -359,14 +421,26 @@ export default function JobEntryForm({
       shipmentTypeRef.current.focus();
     }
   }, []);
-
   useEffect(() => {
     const selectedValue = formik.values.shipmentType;
-
+    const jobPatternData = jobSettingData?.body?.jobPatternData || [];
+  
+    // Extract all shipment types
+    const validShipmentTypes = jobPatternData.map(i => i.shipmentType);
+  
+    // Check if General/Common pattern is empty
+    const generalCommonPattern = jobPatternData.find(
+      i => i.shipmentType === "General/Common"
+    )?.jobPattern;
+  
+    const isSelectedTypeValid = validShipmentTypes.includes(selectedValue);
+    const isGeneralCommonPatternEmpty = !generalCommonPattern;
+  
     if (
       selectedValue &&
-      !validType?.includes(selectedValue) &&
-      getPage == "newEntry"
+      !isSelectedTypeValid &&
+      isGeneralCommonPatternEmpty &&
+      getPage === "newEntry"
     ) {
       toast.custom(
         <CustomToast
@@ -377,9 +451,12 @@ export default function JobEntryForm({
           closeButton: false,
         }
       );
-      formik.setFieldError('shipmentType', 'Please contact the administrator.');
+      formik.setFieldError("shipmentType", "Please contact the administrator.");
     }
   }, [formik.values.shipmentType]);
+  
+  
+  
 
   return (
     <>

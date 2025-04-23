@@ -23,7 +23,7 @@ export default function DateTimeField({
     // .toDate();
     onChange(id, timeAsDate);
   };
-
+//const now = dayjs()
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
    <DateTimePicker
@@ -32,6 +32,7 @@ export default function DateTimeField({
   value={validValue}
   onChange={handleDateChange}
   error={error ? true : false}
+  // minDateTime={now}
 
   helperText={error}
   inputRef={inputRef}

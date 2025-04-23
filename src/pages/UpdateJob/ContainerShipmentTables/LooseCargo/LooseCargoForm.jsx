@@ -31,6 +31,7 @@ import DateTimeField from "../../../../components/common/DateTime/DateTimeField"
 import UploadFile from "../../../../components/UploadFile";
 import ApiManager from "../../../../services/ApiManager";
 import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
+import { LooseCargoValidationSchema } from "./LooseCargoValidationSchema";
 
 export default function LooseCargoForm({
   page,
@@ -149,6 +150,7 @@ export default function LooseCargoForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
+     validationSchema: LooseCargoValidationSchema(),
     onSubmit: async (values) => {
       try {
         values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
@@ -312,6 +314,7 @@ export default function LooseCargoForm({
                     label="Tel No."
                     id="telNo"
                     value={formik.values.telNo}
+                    error={formik.errors.telNo}
                     onChange={formik.handleChange}
                   />
                 </Grid>

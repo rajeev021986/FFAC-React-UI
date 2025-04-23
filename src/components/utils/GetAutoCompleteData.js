@@ -17,7 +17,7 @@ const suggestionName = {
   dischargeVoyage: "VESSEL_VOYAGE",
   vesselAgent: "VENDOR_TYPE",
   originCountry: "PORT_COUNTRY",
-  portOfLoading: "PORT_LOADING",
+  portOfLoading: "PORT",
   portOfDischarge: "PORT",
   placeOfDelivery: "PORT",
   clerkName: "USER",
