@@ -407,22 +407,25 @@ export default function JobEntryScreen({ page }) {
         />
 
         {codeJobEntryrSelector.view === "grid" && (
-          <ThemedGrid
-            uniqueId="id"
-            columns={jobEntryColumns}
-            count={jobEntriesData?.body?.totalElements || 0}
-            handlePage={handlePage}
-            data={jobEntriesData?.body?.data}
-            columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
-            paginationModel={codeJobEntryrSelector.pagination}
-            loading={isLoading || isFetching}
-            sortModel={codeJobEntryrSelector.sortModel}
+     <ThemedGrid
+          uniqueId="id"
+          columns={jobEntryColumns}
+          count={jobEntriesData?.body?.totalElements || 0}
+          handlePage={handlePage}
+          data={jobEntriesData?.body?.data}
+          columnVisibility={{}}
+          columnVisibilityHandler={() => {}}
+          paginationModel={codeJobEntryrSelector.pagination}
+          loading={isLoading || isFetching}
+
+          // sortModel={codeJobEntryrSelector.sortModel}
             
-            onSortModelChange={(sortModel) =>
-              dispatch(jobEntrySetSortModel(sortModel))
-            }
-          />
+          // onSortModelChange={(sortModel) =>
+          //   dispatch(jobEntrySetSortModel(sortModel))
+          // }
+        />
+     
+        
         )}
       </Card>
 

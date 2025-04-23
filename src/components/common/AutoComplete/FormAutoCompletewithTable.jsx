@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useTheme } from "@mui/material/styles";
 import {
   TextField,
   Autocomplete,
@@ -9,155 +8,124 @@ import {
 } from "@mui/material";
 import useDebounce from "../../../hooks/useDebounce";
 import { GetAutoCompleteDataWithCountry } from "../../utils/GetAutoCompleteDataCountry";
-import toast from "react-hot-toast";
-import CustomToast from "../Toast/CustomToast";
+import { useTheme } from "@mui/material/styles";
+
 function FormAutoCompleteWithTable(props) {
-  const { label, id, suggestionName, dataLabel, error, formik } = props;
-  let disabled = formik?.values?.statusCode === -3;
+  const {
+    label,
+    id,
+    suggestionName,
+    dataLabel,
+    value,
+    error,
+    onChange,
+    setFieldValue,
+    formik,
+    disabled,
+  } = props;
+
   const [options, setOptions] = useState([]);
+  const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
-  const debounceValue = useDebounce(inputValue, 800);
-  const theme = useTheme();
+
+  const debounceValue = useDebounce(inputValue, 800); // Custom Hook
 
   useEffect(() => {
-    if (!debounceValue || debounceValue.length < 3) return;
+    if (!debounceValue|| debounceValue.length < 3)  return; // Avoid API call on empty input
+
+    let isMounted = true; // To prevent state updates on unmounted component
+
     const fetchData = async () => {
       setLoading(true);
       try {
-        const searchQuery = inputValue.trim() === "" ? "" : debounceValue;
         const data = await GetAutoCompleteDataWithCountry(
           suggestionName,
           id,
-          dataLabel || suggestionName,
-          searchQuery
+          suggestionName,
+          debounceValue
         );
-
-        setOptions(data);
-
-        if (formik.values.originCountry) {
-          const preloadedOption = data.find(
-            (item) => item.fullData.country === formik.values.originCountry
-          );
-          if (preloadedOption) {
-            setSelectedOption(preloadedOption);
-          }
+        if (isMounted) {
+          setOptions(data);
+          setFilteredOptions(data);
         }
       } catch (error) {
-        toast.custom(
-          <CustomToast message={"Something went wrong!"} toast="error" />
-        );
+        console.error("Error fetching data:", error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchData();
-  }, [debounceValue, suggestionName, id, dataLabel]);
 
-  useEffect(() => {
-    const preloadInitialValue = async () => {
-      if (formik.values.originCountry) {
-        setLoading(true);
-        try {
-          const data = await GetAutoCompleteDataWithCountry(
-            suggestionName,
-            id,
-            dataLabel || suggestionName,
-            formik.values.originCountry // use this directly to fetch matching record
-          );
-
-          setOptions(data); // optionally merge with existing options
-          const match = data.find(
-            (item) => item.fullData.country === formik.values.originCountry
-          );
-          if (match) {
-            setSelectedOption(match);
-            setInputValue(match.fullData.country);
-          }
-        } catch (error) {
-          toast.custom(
-            <CustomToast
-              message={"Failed to load default value"}
-              toast="error"
-            />
-          );
-        } finally {
-          setLoading(false);
-        }
-      }
+    return () => {
+      isMounted = false; // Cleanup function to prevent unnecessary state updates
     };
+  }, [debounceValue]); // ✅ Only triggers when typing
 
-    preloadInitialValue();
-  }, []); // only once on mount
-
-  // Sync inputValue when formik value changes
-  useEffect(() => {
-    if (formik.values.originCountry) {
-      setInputValue(formik.values.originCountry);
-      const matchedOption = options.find(
-        (opt) => opt.fullData.country === formik.values.originCountry
-      );
-      if (matchedOption) {
-        setSelectedOption(matchedOption);
-      }
-    }
-  }, [formik.values.originCountry, options]);
-
+  const theme = useTheme();
+  const handleInputChange = (event, newValue) => {
+    setInputValue(newValue);
+  };
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      formik.setValues({
-        ...formik.values,
-        originCountry: newValue.fullData.country,
-        portOfLoading: newValue.fullData.port_name,
-      });
-      setInputValue(newValue.fullData.country);
-      setSelectedOption(newValue);
+      const { country, port_name } = newValue.fullData;
+
+      if (id === "originCountry") {
+        setFieldValue("originCountry", country);
+        setFieldValue("portOfLoading", port_name || "");
+      } else if (id === "portOfLoading") {
+        setFieldValue("portOfLoading", port_name);
+        setFieldValue("originCountry", country || "");
+      }
     } else {
-      formik.setValues({
-        ...formik.values,
-        originCountry: "",
-        portOfLoading: "",
-      });
-      setInputValue("");
-      setOptions([]);
-      setSelectedOption(null);
+      // Clear both fields when selection is removed
+      setFieldValue(id, "");
+      if (id === "originCountry") {
+        setFieldValue("portOfLoading", "");
+      } else if (id === "portOfLoading") {
+        setFieldValue("originCountry", "");
+      }
     }
   };
+
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
+        sx={{
+          border: "none !important",
+        }}
         size="small"
         id={id}
-        disabled={disabled}
         noOptionsText="Type to Search"
-
-        options={options}
-        getOptionLabel={(option) => option.fullData?.country || ""}
-        isOptionEqualToValue={(option, value) =>
-          option.fullData?.country === value.fullData?.country
-        }
-        onInputChange={(event, newValue) => setInputValue(newValue)}
-        inputValue={inputValue}
-        value={selectedOption}
+        disabled={disabled}
+        value={formik.values[id] ? { label: formik.values[id] } : null}
+        onInputChange={handleInputChange}
         onChange={handleSelectionChange}
-        loading={loading}
+        options={filteredOptions}
+        getOptionLabel={(option) =>
+          option.label
+            ? option.label
+            : `${option.fullData?.country || ""} - ${
+                option.fullData?.port_name || ""
+              }`
+        }
         renderInput={(params) => (
           <TextField
             {...params}
             label={label}
+            placeholder="Type to search"
+            error={Boolean(error)}
+            helperText={error}
             variant="outlined"
-            // placeholder="Type to search"
             fullWidth
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderRadius: "10px",
-                // fontSize: "18px",
+                fontSize: "14px",
+                height: "43px", // Increase height here
               },
             }}
-            error={Boolean(error)}
-            helperText={error}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
@@ -201,34 +169,18 @@ function FormAutoCompleteWithTable(props) {
                 display: "flex",
                 justifyContent: "space-between",
                 fontWeight: "bold",
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.common.white,
-
+                backgroundColor: "#f0f0f0",
                 padding: "8px",
                 borderBottom: "1px solid #ddd",
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.common.white,
                 position: "sticky",
-                top: "-15px",
+                top: 0,
                 zIndex: 2, // Ensure it stays above the list
               }}
             >
-              <span
-                style={{
-                  color: "white",
-                  fontSize: "14px",
-                  // fontWeight: "bold",
-                }}
-              >
-                Country
-              </span>
-              <span
-                style={{
-                  color: "white",
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                }}
-              >
-                Port
-              </span>
+              <span>Country</span>
+              <span>Port</span>
             </Box>
 
             {/* Scrollable Options List */}

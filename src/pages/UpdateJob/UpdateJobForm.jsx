@@ -258,7 +258,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="Line DO Collection Doc"
+                      label="Shipping Line DO Collection Date"
                       name="shippingLineDOCollectionDate"
                       id="shippingLineDOCollectionDate"
                       value={formik.values.shippingLineDOCollectionDate}
@@ -271,7 +271,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       aria-label="upload"
                       onClick={() =>
                         formik.values.shippingLineDOCollectionDate &&
-                        handleOpen("shipping_Line")
+                        handleOpen("shippingLineDOCollectionDoc")
                       }
                       style={{
                         cursor: formik.values.shippingLineDOCollectionDate
@@ -331,7 +331,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="Custom Release Doc"
+                      label="Custom Release Date"
                       name="customReleaseDate"
                       id="customReleaseDate"
                       value={formik.values.customReleaseDate}
@@ -344,7 +344,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       aria-label="upload"
                       onClick={() =>
                         formik.values.customReleaseDate &&
-                        handleOpen("custom_ReleaseDate")
+                        handleOpen("custom_ReleaseDoc")
                       }
                       style={{
                         cursor: formik.values.customReleaseDate
@@ -402,7 +402,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="TAX Exemption Certificate Doc"
+                      label="TAX Exemption Certificate Date"
                       name="taxExemptionCertificateDate"
                       id="taxExemptionCertificateDate"
                       value={formik.values.taxExemptionCertificateDate}
@@ -415,7 +415,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       aria-label="upload"
                       onClick={() =>
                         formik.values.taxExemptionCertificateDate &&
-                        handleOpen("tax_Exemption_Certificate_Date")
+                        handleOpen("tax_Exemption_Certificate_Doc")
                       }
                       style={{
                         cursor: formik.values.taxExemptionCertificateDate
@@ -566,7 +566,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="IDF Doc"
+                      label="IDF Date"
                       name="idfDate"
                       id="idfDate"
                       value={formik.values.idfDate}
@@ -578,7 +578,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       color="primary"
                       aria-label="upload"
                       onClick={() =>
-                        formik.values.idfDate && handleOpen("idf_Date")
+                        formik.values.idfDate && handleOpen("idf_Doc")
                       }
                       style={{
                         cursor: formik.values.idfDate
@@ -669,7 +669,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                     }}
                   >
                     <DateTimeField
-                      label="Shipping Line DO Collection Doc"
+                      label="Entry Date"
                       name="entryDate"
                       id="entryDate"
                       value={formik.values.entryDate}
@@ -681,7 +681,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       color="primary"
                       aria-label="upload"
                       onClick={() =>
-                        formik.values.entryDate && handleOpen("entry_Date")
+                        formik.values.entryDate && handleOpen("entry_Doc")
                       }
                       style={{
                         cursor: formik.values.entryDate

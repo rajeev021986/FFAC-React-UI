@@ -7,7 +7,19 @@ export const JobEntryValidationSchema = () =>
     moveType: Yup.string().required("Select Move type"),
     dateOfReceipt: Yup.string().required("Date of Receipt is required"),
     mblNo: Yup.string().required("MBL/NO. is required"),
+    // containerShipments: Yup.array().of(
+    //   Yup.object().shape({
+    //     containerNo: Yup.string()
+    //       .required("Container No. must be exactly 11 characters")
+    //       .length(11, "Container No. must be exactly 11 characters"),
+    //     tflSealNo: Yup.string()
+    //       .required("TFL Seal No. must be exactly 11 characters")
+    //       .length(11, "TFL Seal No. must be exactly 11 characters"),
+    //   })
+    // ),
 
+    // containerNo: Yup.string().required("Container No. is required"),
+    // tflSealNo: Yup.string().required("TFL Seal No. is required"),
     //     CustomerName
     // Shipment type
     // Date of receipt

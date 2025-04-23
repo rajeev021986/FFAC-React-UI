@@ -69,7 +69,7 @@ const ThemedGrid = (props) => {
         "customerRefNo",
         "consigneeName",
         "portOfLoading",
-        "portOfDelivery",
+      "placeOfDelivery",
       ];
       return {
         ...a,
@@ -103,7 +103,7 @@ const ThemedGrid = (props) => {
         // }}
         pagination={!!paginationModel}
         paginationMode={paginationModel ? "server" : null}
-        sortingMode="server"
+        // sortingMode="server"
         loading={loading}
         columns={modifiedColumns}
         rows={gridData}

@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Grid, Checkbox } from "@mui/material";
 import { MoreVert, VerifiedUserOutlined } from "@mui/icons-material";
-import CardField from "./CardField";
+import CardField from "../Cards/CardField";
 import TMenu from "../TMenu";
-import CardItemUser from "./CardItemUser";
+import CardItemUser from "../Cards/CardItemUser";
 
 export default function CardItem({
   item,

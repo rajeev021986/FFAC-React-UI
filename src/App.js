@@ -46,6 +46,8 @@ import AddJobEntry from "./pages/JobEntry/AddJobEntry";
 // Update Job Page
 import UpdateJobDetails from "./pages/UpdateJob/UpdateJob";
 import UpdateJobListingScreen from "./pages/JobEntry/UpdateJob/updateJobListing";
+import PayableList from "./pages/payable";
+import AddPayableEntry from "./pages/payable/AddPayableForm";
 
 function App() {
   const theme = getTheme(
@@ -160,8 +162,17 @@ function App() {
             />
             <Route
               path="documentation/update/job/edit-job"
-              element={<UpdateJobDetails page="update-job" />}
+              element={<UpdateJobDetails page="-updatejob" />}
             />
+            <Route
+              path="documentation/paybleEntry"
+              element={<PayableList page="payable_list" />}
+            />
+            <Route
+              path="documentation/paybleEntry/addpayable"
+              element={<AddPayableEntry page="payable" />}
+            />
+
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="admin/users" element={<UserManagementScreen />} />

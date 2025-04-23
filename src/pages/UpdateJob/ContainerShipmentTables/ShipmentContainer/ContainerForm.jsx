@@ -37,6 +37,7 @@ import DateTimeField from "../../../../components/common/DateTime/DateTimeField"
 import UploadFile from "../../../../components/UploadFile";
 import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
 import ApiManager from "../../../../services/ApiManager";
+import { ContainerValidationSchema } from "./ContainerValidationSchema";
 
 export default function ContainerNumberForm({
   // initialValues,
@@ -167,12 +168,14 @@ export default function ContainerNumberForm({
       );
     }
   };
-
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
+     validationSchema: ContainerValidationSchema(),
     onSubmit: async (values) => {
+      console.log(formik.errors, "errors");
+      
       try {
         values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
         values.status = "";
@@ -355,6 +358,8 @@ export default function ContainerNumberForm({
                     label="Tel No."
                     id="telNo"
                     value={formik.values.telNo}
+                    errors={formik.errors.telNo}
+                    inputRef={FieldRef}
                     onChange={formik.handleChange}
                   />
                 </Grid>

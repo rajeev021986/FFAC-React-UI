@@ -67,7 +67,7 @@ export default function GlobalDrrpdownSettingVoucher({
   const handleDeleteRow = (id) => {
     const updated = value.filter((item) => item.id !== id);
     toast.custom(
-      <CustomToast message="Deleted Successfully" toast="success" />,
+      <CustomToast message="Click 'Save' to confirm deletion" toast="info" />,
       { closeButton: false }
     );
     setvalue(reindexRows(updated));
@@ -183,9 +183,12 @@ export default function GlobalDrrpdownSettingVoucher({
       const standaloneSpecialsRegex = /(^|[^#$])([#$])($|[^0-9A-Z])/g;
       const hasInvalidStandaloneSpecials =
         standaloneSpecialsRegex.test(pattern);
+        const hasOnlyAllowedTokens = tokensInPattern.every((t) =>
+          allowedTokens.includes(t)
+        );
       const isValid =
         resetValue === "Never"
-          ? !hasInvalidStandaloneSpecials && !hasInvalidSpecialChar // only these 2 checks apply
+          ? !hasInvalidStandaloneSpecials && !hasInvalidSpecialChar && hasOnlyAllowedTokens// only these 2 checks apply
           : !hasInvalidToken &&
             !hasDisallowed &&
             !hasDuplicateTokens &&
