@@ -42,7 +42,7 @@ import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 import { getVehicleListGridActions } from "./vehicleAction";
 import { VEHICLE_COLUMNS } from "../../../../data/columns/jobEntry";
 import useDebounce from "../../../../hooks/useDebounce";
-export default function VehicleShipmentView({ page, customer_id }) {
+export default function VehicleShipmentView({ page, customer_id,bondDetails}) {
   const vehicleSelector = useSelector((s) => s?.vehicle);
 
   const location = useLocation();
@@ -319,6 +319,7 @@ export default function VehicleShipmentView({ page, customer_id }) {
           <VehicleNumberForm
             vehicleId={modal.data?.id}
             type={modal.type}
+            bondDetails={bondDetails}
             page={page}
             onCancel={() => setModal({ open: false, type: "", data: {} })}
             onSubmit={() => {

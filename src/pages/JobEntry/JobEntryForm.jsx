@@ -46,6 +46,7 @@ export default function JobEntryForm({
   getUserId,
 }) {
   const location = useLocation();
+
   const [addJobEntry, { isLoading }] = useAddJobEntryMutation();
   const [updateJobEntry, { isLoading: loadingUpdate }] =
     useUpdateJobEntryMutation();
@@ -54,6 +55,7 @@ export default function JobEntryForm({
   const [rejectError, setRejectError] = useState(false);
   const nav = useNavigate();
   const shipmentTypeRef = useRef(null);
+  const toastRef = useRef(null);
   const [value, setValue] = React.useState("1");
   const [loaderApprove, setLoaderApprove] = useState({
     approve: false,
@@ -152,7 +154,7 @@ export default function JobEntryForm({
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
-            nav("/app/documentation/job/entry");
+            nav("/app/documentation/jobEntry");
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
               duration: 1000, // 2 seconds
@@ -319,7 +321,7 @@ export default function JobEntryForm({
         "JOB_DETAIL"
       );
       const message = response.message;
-      nav("/app/documentation/job/entry");
+      nav("/app/documentation/jobEntry");
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
       });
@@ -362,7 +364,7 @@ export default function JobEntryForm({
         formik.values.rejectRemarks
       );
       const message = response.message;
-      nav("/app/documentation/job/entry");
+      nav("/app/documentation/jobEntry");
 
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
@@ -425,35 +427,46 @@ export default function JobEntryForm({
     const selectedValue = formik.values.shipmentType;
     const jobPatternData = jobSettingData?.body?.jobPatternData || [];
   
-    // Extract all shipment types
     const validShipmentTypes = jobPatternData.map(i => i.shipmentType);
   
-    // Check if General/Common pattern is empty
-    const generalCommonPattern = jobPatternData.find(
+    const generalCommonEntry = jobPatternData.find(
       i => i.shipmentType === "General/Common"
-    )?.jobPattern;
+    );
+    const generalCommonPattern = generalCommonEntry?.jobPattern;
   
     const isSelectedTypeValid = validShipmentTypes.includes(selectedValue);
+    const isGeneralCommonMissing = !generalCommonEntry;
     const isGeneralCommonPatternEmpty = !generalCommonPattern;
   
-    if (
+    const shouldShowError =
       selectedValue &&
       !isSelectedTypeValid &&
-      isGeneralCommonPatternEmpty &&
-      getPage === "newEntry"
-    ) {
-      toast.custom(
-        <CustomToast
-          message={"Invalid shipment type selected."}
-          toast="error"
-        />,
-        {
-          closeButton: false,
+      (isGeneralCommonMissing || isGeneralCommonPatternEmpty) &&
+      getPage === "newEntry";
+  
+      if (shouldShowError) {
+        if (!toastRef.current) {
+          toastRef.current = toast.custom(
+            <CustomToast
+              message={"Invalid shipment type selected."}
+              toast="error"
+            />,
+            { closeButton: false }
+          );
         }
-      );
-      formik.setFieldError("shipmentType", "Please contact the administrator.");
-    }
-  }, [formik.values.shipmentType]);
+        formik.setFieldError("shipmentType", "Please contact the administrator.");
+      } else {
+        // Clear the error and dismiss toast if showing
+        if (formik.errors.shipmentType === "Please contact the administrator.") {
+          formik.setFieldError("shipmentType", undefined);
+        }
+        if (toastRef.current) {
+          toast.dismiss(toastRef.current);
+          toastRef.current = null;
+        }
+      }
+    }, [formik.values.shipmentType, jobSettingData]);
+  
   
   
   
@@ -551,9 +564,9 @@ export default function JobEntryForm({
                 </Grid>
 
                 {(location?.pathname ===
-                  "/app/documentation/job/entry/newEntry" ||
+                  "/app/documentation/jobEntry/newEntry" ||
                   location?.pathname ===
-                    "/app/documentation/job-approve/file/approveJobRequest" ||
+                    "/app/documentation/approveJobfile/approveJobRequest" ||
                   formik?.values?.createdBy === getUserId) && (
                   <Grid
                     item

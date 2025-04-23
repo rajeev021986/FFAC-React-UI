@@ -96,7 +96,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           toast.custom(<CustomToast message={message} toast="success" />, {
             closeButton: false,
           });
-          nav("/app/documentation/update/job");
+          nav("/app/documentation/updateJob");
         } else {
           toast.custom(<CustomToast message={message} toast="error" />, {
             closeButton: false,
@@ -817,6 +817,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           <TabPanel value="1" sx={{ paddingBottom: "15px" }}>
             <ContainerShipmentView
               customer_id={initialValues.id}
+              bondDetails={formik.values.bondDetails}
               page={"containerNo"}
             />
           </TabPanel>
@@ -824,6 +825,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
           <TabPanel value="2" sx={{ paddingBottom: "15px" }}>
             <VehicleShipmentView
               customer_id={initialValues.id}
+              bondDetails={formik.values.bondDetails}
               page={"vehicleShipment"}
             />
           </TabPanel>
@@ -832,6 +834,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
             <LooseShipmentView
               customer_id={initialValues.id}
               page={"looseShipment"}
+              bondDetails={formik.values.bondDetails}
             />
           </TabPanel>
         </TabContext>

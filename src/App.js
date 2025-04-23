@@ -137,40 +137,39 @@ function App() {
               element={<ConsigneeFormScreen page="consignee" />}
             />
             <Route
-              path="documentation/job/entry"
+              path="documentation/jobEntry"
               element={<JobEntryScreen page="job-entry" />}
             />
             <Route
-              path="documentation/job-approve/file"
+              path="documentation/approveJobfile"
               element={<JobEntryScreen page="jobApprove" />}
             />
             <Route
-              path="documentation/job/entry/newEntry"
+              path="documentation/jobEntry/newEntry"
               element={<AddJobEntry page="job-entry" />}
             />
             <Route
-              path="documentation/job/entry/editJobEntry"
+              path="documentation/jobEntry/editJobEntry"
               element={<AddJobEntry page="job-entry" />}
             />
             <Route
-              path="documentation/job-approve/file/approveJobRequest"
+              path="documentation/approveJobfile/approveJobRequest"
               element={<AddJobEntry page="jobApprove" />}
             />
             <Route
-              path="documentation/update/job"
+              path="documentation/updateJob"
               element={<UpdateJobListingScreen page="update-jobs" />}
             />
             <Route
-              path="documentation/update/job/edit-job"
+              path="documentation/updateJob/edit-job"
               element={<UpdateJobDetails page="update-job" />}
             />
-
             <Route
-              path="documentation/payble"
+              path="documentation/paybleEntry"
               element={<PayableList page="payable_list" />}
             />
             <Route
-              path="documentation/payble/addpayable"
+              path="documentation/paybleEntry/addpayable"
               element={<AddPayableEntry page="payable" />}
             />
 

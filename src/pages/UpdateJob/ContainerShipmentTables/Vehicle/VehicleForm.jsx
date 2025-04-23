@@ -32,15 +32,17 @@ import UploadFile from "../../../../components/UploadFile";
 import ApiManager from "../../../../services/ApiManager";
 import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
 import { VehicleValidationSchema } from "./VehicleValidationSchema";
+import SelectBox from "../../../../components/common/SelectBox";
 
 export default function VehicleNumberForm({
   page,
   onCancel,
   onSubmit,
   vehicleId,
+  bondDetails,
 }) {
   const [updateVehicleNumber, { isLoading }] = useUpdateVehicleNumberMutation();
-
+  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
   const [dropdownData, setDropdownData] = useState({});
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
@@ -69,7 +71,6 @@ export default function VehicleNumberForm({
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
-    reportingTime: "",
     transferDate: "",
     t1C1ReadyDate: "",
     loadingDate: "",
@@ -79,8 +80,9 @@ export default function VehicleNumberForm({
     arrivalICDDate: "",
     cargoReleaseDate: "",
     departICDDate: "",
-    bondNumber: 0,
+    bondNumber: "",
     bondAmount: 0,
+    chasisNo: "",
     arrivalCustomerPlaceDate: "",
     remark: "",
   });
@@ -156,7 +158,6 @@ export default function VehicleNumberForm({
         clerkTelNo: res?.body?.clerkTelNo,
         reportingPlace: res?.body?.reportingPlace,
         reportingDate: res?.body?.reportingDate,
-        reportingTime: res?.body?.reportingTime,
         transferDate: res?.body?.transferDate,
         t1C1ReadyDate: res?.body?.t1C1ReadyDate,
         loadingDate: res?.body?.loadingDate,
@@ -166,7 +167,7 @@ export default function VehicleNumberForm({
         arrivalICDDate: res?.body?.arrivalICDDate,
         cargoReleaseDate: res?.body?.cargoReleaseDate,
         departICDDate: res?.body?.departICDDate,
-        bondNumber: res?.body?.bondNumber,
+        bondNumber: bondDetails[0]?.bondNumber,
         bondAmount: res?.body?.bondAmount,
         arrivalCustomerPlaceDate: res?.body?.arrivalCustomerPlaceDate,
         remark: res?.body?.remark,
@@ -277,10 +278,12 @@ export default function VehicleNumberForm({
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <InputBox
+                  <SelectBox
                     label="Reporting Place"
                     id="reportingPlace"
+                    options={jobSettingData?.body.reportingPlace}
                     value={formik.values.reportingPlace}
+                    error={formik.errors.reportingPlace}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -299,15 +302,6 @@ export default function VehicleNumberForm({
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <InputBox
-                    label="Reporting Time"
-                    id="reportingTime"
-                    value={formik.values.reportingTime}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Transfer Date"
@@ -400,17 +394,19 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="ChasisNo."
                     id="chasisNo"
                     value={formik.values.chasisNo}
                     onChange={formik.handleChange}
+                    disabled
                   />
                 </Grid>
+              </Grid>
+
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+              
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
@@ -441,9 +437,6 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival Border"
@@ -455,6 +448,10 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
+
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+               
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
@@ -550,9 +547,6 @@ export default function VehicleNumberForm({
                     </IconButton>
                   </Box>
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Depart ICD"
@@ -564,6 +558,10 @@ export default function VehicleNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
+              </Grid>
+
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+               
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
