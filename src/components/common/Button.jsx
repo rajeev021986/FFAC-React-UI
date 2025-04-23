@@ -18,7 +18,9 @@ export function ThemeButton({ sx, color, children, size, disabled, ...rest }) {
         ...styles.common,
         ...styles.contained[color],
         ...sx,
-        borderRadius: "20px 19px 19px 20px",
+        borderRadius: "10px",
+        minWidth: "100px",
+        height: "40px"
       }}
     >
       {children}
@@ -54,7 +56,7 @@ const styles = {
     textTransform: "none",
     fontWeight: "bold",
     fontSize: "1rem",
-    borderRadius: "20px",
+    borderRadius: "10px",
     padding: "5px 10px",
     cursor: "pointer",
     boxShadow: "none",
@@ -62,7 +64,8 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     gap: "5px",
-    width: "150px",
+    minWidth: "100px",
+    height: "40px"
   },
   contained: {
     primary: {
