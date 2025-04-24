@@ -21,9 +21,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
       return;
     }
 
-    const newId = value.length
-      ? Math.max(...value.map((item) => item.id)) + 1
-      : 1;
+    const newId = value.length + 1;
     setvalue((prevStatus) => [
       ...prevStatus,
       {
@@ -34,7 +32,13 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
   };
 
   const handleDeleteRow = (id) => {
-    setvalue((prevStatus) => prevStatus.filter((item) => item.id !== id));
+    const updated = value.filter((item) => item.id !== id);
+    // Re-index to keep ids as index + 1
+    const reIndexed = updated.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
+    setvalue(reIndexed);
     toast.custom(
       <CustomToast message="Click Save to confirm deletion" toast="info" />,
       {
@@ -109,7 +113,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
           sx={{
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "primary.main",
-              lineHeight: 10,
+              lineHeight: 1,
             },
             "& .MuiDataGrid-cell": {
               whiteSpace: "normal",
@@ -127,13 +131,13 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
               fill: "#fff",
             },
           }}
-          slots={{
-            toolbar: () => (
-              <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
-                <GridToolbarColumnsButton />
-              </Box>
-            ),
-          }}
+          // slots={{
+          //   toolbar: () => (
+          //     <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
+          //       <GridToolbarColumnsButton />
+          //     </Box>
+          //   ),
+          // }}
         />
       </div>
     </Grid>

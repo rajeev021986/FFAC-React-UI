@@ -7,7 +7,6 @@ const styles = {
       borderRadius: "10px",
       fontSize: "14px",
       padding: "3px 0",
-      height: "44px",
     },
   },
 };

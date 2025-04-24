@@ -187,7 +187,7 @@ export default function GlobalDrrpdownSettingVoucher({
         );
       const isValid =
         resetValue === "Never"
-          ? !hasInvalidStandaloneSpecials && !hasInvalidSpecialChar && hasOnlyAllowedTokens && !hasInvalidToken // only these 2 checks apply
+          ? !hasInvalidStandaloneSpecials && !hasInvalidSpecialChar && hasOnlyAllowedTokens && !hasInvalidToken && hasOneVoucher// only these 2 checks apply
           : !hasInvalidToken &&
             !hasDisallowed &&
             !hasDuplicateTokens &&

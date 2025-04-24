@@ -33,6 +33,10 @@ import ApiManager from "../../../../services/ApiManager";
 import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
 import { VehicleValidationSchema } from "./VehicleValidationSchema";
 import SelectBox from "../../../../components/common/SelectBox";
+import DocumentIcon from "../../../../components/common/commonIcons/DocumentIcons/DocumentIcon";
+import AuditIcon from "../../../../components/common/commonIcons/AuditIcon/AuditIcon";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import AuditTimeLine from "../../../../components/AuditTimeLine";
 
 export default function VehicleNumberForm({
   page,
@@ -41,6 +45,8 @@ export default function VehicleNumberForm({
   vehicleId,
   bondDetails,
 }) {
+  console.log("page",page);
+  
   const [updateVehicleNumber, { isLoading }] = useUpdateVehicleNumberMutation();
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
   const [dropdownData, setDropdownData] = useState({});
@@ -195,10 +201,11 @@ export default function VehicleNumberForm({
   }, [vehicleId]);
 
   useEffect(() => {
-    if (optionsSettingsData?.body || customerSettingsData?.body) {
+    if (optionsSettingsData?.body || customerSettingsData?.body || jobSettingData?.body) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
+        ...jobSettingData?.body,
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
@@ -240,6 +247,10 @@ export default function VehicleNumberForm({
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList
               aria-label="lab API tabs example"
+              onChange={(event, newValue) => {
+                console.log("New Tab Value:", newValue);
+                setValue(newValue); // <-- this updates the tab
+              }}
               sx={{ paddingBottom: "20px" }}
             >
               <Tab
@@ -251,6 +262,26 @@ export default function VehicleNumberForm({
                 }}
                 icon={<EditIconForHeader />}
                 iconPosition="start"
+              />
+              <Tab
+                label="Document Details"
+                value="2"
+                icon={<DocumentIcon />}
+                iconPosition="start"
+                sx={{
+                  textTransform: "capitalize",
+                  minHeight: "50px",
+                }}
+              />
+              <Tab
+                label="Audit Logs"
+                value="3"
+                icon={<AuditIcon />}
+                iconPosition="start"
+                sx={{
+                  textTransform: "capitalize",
+                  minHeight: "50px",
+                }}
               />
             </TabList>
           </Box>
@@ -406,8 +437,6 @@ export default function VehicleNumberForm({
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-              
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="Bond Number"
@@ -451,8 +480,6 @@ export default function VehicleNumberForm({
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-               
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Crossed Border"
@@ -561,8 +588,6 @@ export default function VehicleNumberForm({
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-               
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival Customer Place"
@@ -588,9 +613,24 @@ export default function VehicleNumberForm({
               </Grid>
             </Grid>
           </TabPanel>
+          <TabPanel value="2" sx={{ padding: "0px" }}>
+            <UploadFile
+              customer_id={vehicleId}
+              disabled={false}
+              dropdownData={dropdownData.jobDocumentType}
+              sourceType="JOB_VEHICLE"
+            />
+          </TabPanel>
+          <TabPanel value="3" sx={{ padding: "0px" }}>
+            <AuditTimeLine
+              id={vehicleId}
+              page="job-update/vehicle"
+              service={menuConfigUrl.document}
+            />
+          </TabPanel>
         </TabContext>
 
-        {(page === "vehicle_number" || onCancel || onSubmit) && (
+        {(page === "vehicleShipment"  && value == "1") && (
           <Grid
             paddingLeft={3}
             marginTop={2}

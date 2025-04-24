@@ -41,6 +41,8 @@ import { ContainerValidationSchema } from "./ContainerValidationSchema";
 import SelectBox from "../../../../components/common/SelectBox";
 import DocumentIcon from "../../../../components/common/commonIcons/DocumentIcons/DocumentIcon";
 import AuditIcon from "../../../../components/common/commonIcons/AuditIcon/AuditIcon";
+import AuditTimeLine from "../../../../components/AuditTimeLine";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 
 export default function ContainerNumberForm({
   // initialValues,
@@ -58,6 +60,11 @@ export default function ContainerNumberForm({
   const [open, setOpen] = useState(false);
   const [SourceType, setSourceType] = useState("");
   const [loading, setLoading] = useState(true);
+  const handleChange = (event, newValue) => {
+    console.log("newValue");
+
+    setValue(newValue);
+  };
 
   const [alertConfig, setAlertConfig] = useState({
     open: false,
@@ -234,10 +241,15 @@ export default function ContainerNumberForm({
   };
 
   useEffect(() => {
-    if (optionsSettingsData?.body || customerSettingsData?.body) {
+    if (
+      optionsSettingsData?.body ||
+      customerSettingsData?.body ||
+      jobSettingData?.body
+    ) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
+        ...jobSettingData?.body,
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
@@ -279,6 +291,7 @@ export default function ContainerNumberForm({
     boxShadow: 24,
     p: 4,
   };
+console.log("page",page);
 
   return (
     <>
@@ -286,6 +299,9 @@ export default function ContainerNumberForm({
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList
+              onChange={(event, newValue) => {
+                setValue(newValue); // <-- this updates the tab
+              }}
               aria-label="lab API tabs example"
               sx={{ paddingBottom: "20px" }}
             >
@@ -722,6 +738,21 @@ export default function ContainerNumberForm({
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
+                    label="Depart ICD"
+                    name="departICDDate"
+                    id="departICDDate"
+                    value={formik.values.departICDDate}
+                    error={formik.errors.departICDDate}
+                    onChange={formik.setFieldValue}
+                    inputRef={FieldRef}
+                  />
+                </Grid>
+             
+              </Grid>
+
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                  <DateTimeField
                     label="Arrival Customer Place"
                     name="arrivalCustomerPlaceDate"
                     id="arrivalCustomerPlaceDate"
@@ -731,9 +762,6 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Empty Released"
@@ -766,7 +794,11 @@ export default function ContainerNumberForm({
                     onChange={formik.handleChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+             
+              </Grid>
+
+              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <Box
                     display="flex"
                     alignItems="center"
@@ -831,9 +863,6 @@ export default function ContainerNumberForm({
                     </IconButton>
                   </Box>
                 </Grid>
-              </Grid>
-
-              <Grid paddingLeft={1} marginTop={2} container spacing={2}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <Box
                     display="flex"
@@ -1000,9 +1029,24 @@ export default function ContainerNumberForm({
               </Grid>
             </Grid>
           </TabPanel>
+          <TabPanel value="2" sx={{ padding: "0px" }}>
+            <UploadFile
+              customer_id={containerId}
+              disabled={false}
+              dropdownData={dropdownData.jobDocumentType}
+              sourceType="JOB_CONTAINER"
+            />
+          </TabPanel>
+          <TabPanel value="3" sx={{ padding: "0px" }}>
+            <AuditTimeLine
+              id={containerId}
+              page="job-update/container"
+              service={menuConfigUrl.document}
+            />
+          </TabPanel>
         </TabContext>
 
-        {(page === "container_number" || onCancel || onSubmit) && (
+        {(page === "containerNo" && value== '1') && (
           <Grid
             paddingLeft={3}
             marginTop={2}

@@ -53,6 +53,7 @@ export default function JobEntryForm({
   const [toggleRate, settoggleRate] = useState(false);
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
+  const [isSelectedShipmentTypeValid, setIsSelectedShipmentTypeValid] = useState(false);
   const nav = useNavigate();
   const shipmentTypeRef = useRef(null);
   const toastRef = useRef(null);
@@ -81,11 +82,22 @@ export default function JobEntryForm({
     validateOnChange: false,
     validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
+      console.log("isSelectedShipmentTypeValid", isSelectedShipmentTypeValid);
+      
       if (isLoading) {
         return;
       }
       let hasError = false;
-     
+     if(isSelectedShipmentTypeValid){
+      toast.custom(
+        <CustomToast
+          message={"Please contact the administrator."}
+          toast="error"
+        />,
+        { closeButton: false }
+      );
+      return
+     }
       if (!values.id || type == "copy") {
         let containerShipment = values.containerShipments.map((item) =>{
           if (item.containerNo.length < 11) {
@@ -283,6 +295,7 @@ export default function JobEntryForm({
       }
     },
   });
+  console.log(formik.errors,"formik.errors");
 
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -443,28 +456,37 @@ export default function JobEntryForm({
       !isSelectedTypeValid &&
       (isGeneralCommonMissing || isGeneralCommonPatternEmpty) &&
       getPage === "newEntry";
+  console.log("shouldShowError", shouldShowError);
   
       if (shouldShowError) {
-        if (!toastRef.current) {
-          toastRef.current = toast.custom(
+        // if (!toastRef.current) {
+          setIsSelectedShipmentTypeValid(true);
+          // toastRef.current =
+           toast.custom(
             <CustomToast
               message={"Invalid shipment type selected."}
               toast="error"
             />,
             { closeButton: false }
           );
-        }
+        // }
         formik.setFieldError("shipmentType", "Please contact the administrator.");
-      } else {
-        // Clear the error and dismiss toast if showing
-        if (formik.errors.shipmentType === "Please contact the administrator.") {
-          formik.setFieldError("shipmentType", undefined);
-        }
-        if (toastRef.current) {
-          toast.dismiss(toastRef.current);
-          toastRef.current = null;
-        }
+      } 
+      else {
+        setIsSelectedShipmentTypeValid(false);
+        formik.setFieldError("shipmentType", undefined);
       }
+      // else {
+      //   // Clear the error and dismiss toast if showing
+      //   if (formik.errors.shipmentType === "Please contact the administrator.") {
+      //     formik.setFieldError("shipmentType", undefined);
+
+      //   }
+      //   if (toastRef.current) {
+      //     toast.dismiss(toastRef.current);
+      //     toastRef.current = null;
+      //   }
+      // }
     }, [formik.values.shipmentType, jobSettingData]);
   
   
