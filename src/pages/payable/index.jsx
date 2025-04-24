@@ -19,22 +19,15 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
+
 import {
-  useDeleteCustomerMutation,
-  useFetchCustomerDatasQuery,
-} from "../../store/api/codeDataApi";
-import {
-  setPagination,
-  //  setSortBy,
-  customerSetView,
-  customerSetSortModel,
+  payableDashboardView,
   updateInput,
-} from "../../store/freatures/CustomerSlice";
+  setPagination,
+  payableSetSortModal,
+} from "../../store/freatures/payableEntrySlice";
 
 import GridActions from "../../components/common/Grid/GridActions";
-// import SelectBox from "../../components/common/SelectBox";
-// import { CUSTOMER_SORT_OPTIONS } from "../../data/options";
-
 import { PAYABLE_COLUMNS } from "../../data/columns/paybleColumn";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 
@@ -50,13 +43,18 @@ import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import CustomToast from "../../components/common/Toast/CustomToast";
-import FilterForm from "../../components/screen/code/customer/FilterForm";
+import FilterForm from "./Actions/FilterForm";
 
 import { menuConfigUrl } from "../../store/menuConfigUrl";
 import { downloadExcel } from "../../utils/downloadExcel";
 
-export default function CustomerScreen({ page }) {
-  const codeCustomerSelector = useSelector((state) => state.codeCustomer);
+import {
+  useFetchPaybleEntryDatasQuery,
+  useDeletePaybleEntryMutation,
+} from "../../store/api/payableApi";
+
+export default function PayableListScreen({ page }) {
+  const payableActionSelector = useSelector((state) => state.payableAction);
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -84,27 +82,27 @@ export default function CustomerScreen({ page }) {
       ];
 
   const query = {
-    page: codeCustomerSelector?.pagination?.page + 1,
-    size: codeCustomerSelector?.pagination?.pageSize,
+    page: payableActionSelector?.pagination?.page + 1,
+    size: payableActionSelector?.pagination?.pageSize,
     sortBy:
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector.sortModel[0].field
-        : codeCustomerSelector?.sortBy?.split("*")[0],
+      payableActionSelector.sortModel.length > 0
+        ? payableActionSelector.sortModel[0].field
+        : payableActionSelector?.sortBy?.split("*")[0],
     sortOrder:
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector?.sortModel[0]?.sort
-        : codeCustomerSelector?.sortBy?.split("*")[1] || "",
+      payableActionSelector.sortModel.length > 0
+        ? payableActionSelector?.sortModel[0]?.sort
+        : payableActionSelector?.sortBy?.split("*")[1] || "",
   };
   if (
     Boolean(
-      codeCustomerSelector.sortModel.length > 0
-        ? codeCustomerSelector.sortModel[0].field === "cname"
-        : codeCustomerSelector?.sortBy?.split("*")[0] === "cname"
+      payableActionSelector.sortModel.length > 0
+        ? payableActionSelector.sortModel[0].field === "cname"
+        : payableActionSelector?.sortBy?.split("*")[0] === "cname"
     )
   ) {
     query.sortBy = "customerName";
   }
-  const payload = Object.entries(codeCustomerSelector?.formData)
+  const payload = Object.entries(payableActionSelector?.formData)
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
@@ -118,15 +116,17 @@ export default function CustomerScreen({ page }) {
     });
 
   const {
-    data: CustomerData,
+    data: payableLisData,
     isLoading,
     isFetching,
     refetch,
-  } = useFetchCustomerDatasQuery({
+  } = useFetchPaybleEntryDatasQuery({
     params: query,
     payload,
     page:
-      page == "payable_list" ? "customer/filter" : "approval/filter/customer",
+      page == "payable_list"
+        ? "payble/entry/filter"
+        : "approval/filter/payable",
   });
 
   const handlePage = (params) => {
@@ -170,7 +170,7 @@ export default function CustomerScreen({ page }) {
     }
   };
 
-  const [deleteCustomer] = useDeleteCustomerMutation();
+  const [deletePaybleEntry] = useDeletePaybleEntryMutation();
 
   const handleClose = () => {
     setModal({
@@ -182,7 +182,7 @@ export default function CustomerScreen({ page }) {
 
   const handleDelete = async () => {
     try {
-      await deleteCustomer(modal.data.id)
+      await deletePaybleEntry(modal.data.id)
         .unwrap()
         .then(() => refetch());
       toast.custom(
@@ -210,10 +210,10 @@ export default function CustomerScreen({ page }) {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (!codeCustomerSelector.view) {
-      dispatch(customerSetView("card"));
+    if (!payableActionSelector.view) {
+      dispatch(payableDashboardView("card"));
     }
-  }, [codeCustomerSelector.view, dispatch]);
+  }, [payableActionSelector.view, dispatch]);
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
@@ -273,7 +273,7 @@ export default function CustomerScreen({ page }) {
             <Stack direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
-                  filters={codeCustomerSelector?.formData}
+                  filters={payableActionSelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
@@ -281,19 +281,23 @@ export default function CustomerScreen({ page }) {
                 </GridSearchInput>
               </Box>
               <Box>
-                <IconButton onClick={() => dispatch(customerSetView("card"))}>
+                <IconButton
+                  onClick={() => dispatch(payableDashboardView("card"))}
+                >
                   <FormatListBulletedOutlined
                     color={
-                      codeCustomerSelector.view === "card"
+                      payableActionSelector.view === "card"
                         ? "primary"
                         : "secondary"
                     }
                   />
                 </IconButton>
-                <IconButton onClick={() => dispatch(customerSetView("grid"))}>
+                <IconButton
+                  onClick={() => dispatch(payableDashboardView("grid"))}
+                >
                   <GridOnOutlined
                     color={
-                      codeCustomerSelector.view === "grid"
+                      payableActionSelector.view === "grid"
                         ? "primary"
                         : "secondary"
                     }
@@ -303,30 +307,30 @@ export default function CustomerScreen({ page }) {
             </Stack>
           }
         />
-        {codeCustomerSelector.view === "grid" ? (
+        {payableActionSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
             columns={PAYABLE_COLUMNS}
-            count={CustomerData?.body?.totalElements || 0}
+            count={payableLisData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={CustomerData?.body?.data}
+            data={payableLisData?.body?.data}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
-            paginationModel={codeCustomerSelector.pagination}
+            paginationModel={payableActionSelector.pagination}
             loading={isLoading || isFetching}
-            sortModel={codeCustomerSelector.sortModel}
+            sortModel={payableActionSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(customerSetSortModel(sortModel))
+              dispatch(payableSetSortModal(sortModel))
             }
           />
         ) : (
           <CardsView
             uniqueId="id"
             columns={PAYABLE_COLUMNS}
-            count={CustomerData?.body?.totalElements || 0}
+            count={payableLisData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={CustomerData?.body?.data}
-            paginationModel={codeCustomerSelector?.pagination}
+            data={payableLisData?.body?.data}
+            paginationModel={payableActionSelector?.pagination}
             loading={isLoading || isFetching}
             actions={
               page == "payable_list"

@@ -1,10 +1,4 @@
-import {
-  Backdrop,
-  CircularProgress,
-  Grid,
-  IconButton,
-  SpeedDialAction,
-} from "@mui/material";
+import { CircularProgress, Grid, IconButton } from "@mui/material";
 import { Stack } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
@@ -19,8 +13,6 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 
 import {
   useAddCustomerMutation,
@@ -40,7 +32,6 @@ import {
   payableSetSortModal,
 } from "../../../store/freatures/payableEntrySlice";
 import { useDispatch, useSelector } from "react-redux";
-import ScreenToolbar from "../../../components/common/ScreenToolbar";
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
@@ -50,6 +41,8 @@ import { USER_MANAGEMENT_COLUMNS } from "../../../data/columns/user";
 import { useFetchUsersQuery } from "../../../store/api/userDataApi";
 import { getUserListGridActions } from "../../../components/screen/user-management/action";
 import { dashboardSetPagination } from "../../../store/freatures/dashboardSlice";
+
+import AddIcon from "@mui/icons-material/Add";
 
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
@@ -61,7 +54,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [updateCustomer] = useUpdateCustomerMutation();
   const dispatch = useDispatch();
   const [dropdownData, setDropdownData] = useState({});
-  const [open, setOpen] = React.useState(false);
   const [rejectError, setRejectError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -377,6 +369,12 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               color={actionsSelector.view === "grid" ? "primary" : "secondary"}
             />
           </IconButton>
+
+          {actionsSelector?.view === "card" && (
+            <IconButton onClick={() => dispatch(formView("grid"))}>
+              <AddIcon />
+            </IconButton>
+          )}
         </Box>
       </Stack>
       <TabContext value={value}>
@@ -561,34 +559,36 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     inputRef={customerNameRef}
                   />
                 </Grid>
-              </Grid>
 
-              {page === "payable" && (
-                <>
-                  <Grid item xs={12} sx={{ marginLeft: 1, marginTop: 4 }}>
-                    <Stack direction="row" spacing={2}>
+                {page === "payable" && (
+                  <>
+                    <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                       <OutlinedButton
-                        sx={{ fontWeight: "500" }}
+                        sx={{ fontWeight: "500", width: "100%" }}
                         onClick={() => nav("/app/entity/customer")}
                       >
                         Close
                       </OutlinedButton>
+                    </Grid>
+
+                    <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
                       <ThemeButton
                         onClick={formik.handleSubmit}
                         sx={{
                           fontWeight: "500",
                           borderRadius: "12px",
                           color: "white !important",
+                          width: "100%",
                         }}
                       >
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
-                        )}{" "}
+                        )}
                         Add
                       </ThemeButton>
-                    </Stack>
-                  </Grid>
-                  {/* 
+                    </Grid>
+
+                    {/* 
                   <Grid item xs={12}>
                     <Stack
                       direction="row"
@@ -624,8 +624,10 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       </Stack>
                     </Stack>
                   </Grid> */}
-                </>
-              )}
+                  </>
+                )}
+              </Grid>
+
               <PopupAlert alertConfig={alertConfig} />
             </Box>
 

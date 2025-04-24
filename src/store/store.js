@@ -21,6 +21,7 @@ import { exchangeRateDataApi } from "./api/exchangeRateDataApi";
 import { otmBolDataApi } from "./api/otmBolDataApi";
 import { jobEntry } from "./api/jobEntryApi";
 import { containerAPI } from "./api/containerApi";
+import { payableCodeAPI } from "./api/payableApi";
 
 import userManagementReducer from "./freatures/userManagementSlice";
 import authReducer from "./freatures/authSlice";
@@ -79,6 +80,7 @@ const store = configureStore({
     [exchangeRateDataApi.reducerPath]: exchangeRateDataApi.reducer,
     [jobEntry.reducerPath]: jobEntry.reducer,
     [containerAPI.reducerPath]: containerAPI.reducer,
+    [payableCodeAPI.reducerPath]: payableCodeAPI.reducer,
 
     // slice
     userManagement: userManagementReducer,
@@ -138,7 +140,8 @@ const store = configureStore({
       chargesDataApi.middleware,
       exchangeRateDataApi.middleware,
       jobEntry.middleware,
-      containerAPI.middleware
+      containerAPI.middleware,
+      payableCodeAPI.middleware
     ),
 });
 
