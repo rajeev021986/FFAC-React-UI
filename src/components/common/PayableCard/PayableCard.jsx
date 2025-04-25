@@ -27,6 +27,7 @@ export default function PayableCardView({
       pageSize: parseInt(event.target.value, 10),
     });
   };
+
   var styles = {
     pagination: {
       position: "sticky",
@@ -39,11 +40,12 @@ export default function PayableCardView({
       marginTop: "auto",
     },
   };
-  Boolean(page === "user_management") &&
-    (styles = {
-      ...styles,
-      grid: { display: "flex", flexWrap: "wrap", gap: "10px" },
-    });
+
+  // Boolean(page === "user_management") &&
+  //   (styles = {
+  //     ...styles,
+  //     grid: { display: "flex", flexWrap: "wrap", gap: "10px" },
+  //   });
 
   const handleDate = (date) => {
     return date.split("T")[0];
@@ -61,36 +63,26 @@ export default function PayableCardView({
     };
   });
   return (
-    <Grid
-      sx={{
-        maxWidth: "100%",
-        borderRadius: "5px",
-        overflowY: "auto",
-        position: "relative",
-        pt: 1,
-        backgroundColor: "white.main",
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "10px",
-      }}
-    >
-      <Grid container width="100%" gap={2} sx={styles.grid}>
-        
+    <>
+      <Box sx={{ padding: "15px",paddingTop: "0" }}>
+        <Grid container spacing={2}>
           {gridData?.map((item, index) => (
-            <CardItem
-              key={item.id}
-              item={item}
-              columns={columns}
-              selectedBox={seletectBox}
-              setSelectedBox={setSelectedBox}
-              uniqueId={item.id}
-              actions={actions}
-              icon={null}
-              page={page}
-            />
+            <Grid item lg={3} gap={2} sx={{}}>
+              <CardItem
+                key={item.id}
+                item={item}
+                columns={columns}
+                selectedBox={seletectBox}
+                setSelectedBox={setSelectedBox}
+                uniqueId={item.id}
+                actions={actions}
+                icon={null}
+                page={page}
+              />
+            </Grid>
           ))}
-       
-      </Grid>
+        </Grid>
+      </Box>
 
       {gridData?.length === 0 && (
         <Box
@@ -133,6 +125,6 @@ export default function PayableCardView({
           />
         </Box>
       )}
-    </Grid>
+    </>
   );
 }
