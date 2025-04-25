@@ -527,6 +527,8 @@ export default function JobEntryForm({
                   sx={{
                     textTransform: "capitalize",
                     minHeight: "50px",
+                    fontSize: { xs: "0.8rem", sm: "1.125rem" },
+                    padding: { xs: "5px", sm: "10px 16px"}
                   }}
                 />
 
@@ -538,6 +540,8 @@ export default function JobEntryForm({
                   sx={{
                     textTransform: "capitalize",
                     minHeight: "50px",
+                    fontSize: { xs: "0.8rem", sm: "1.125rem" },
+                    padding: { xs: "5px", sm: "10px 16px"}
                   }}
                   disabled={isDisabled}
                 />
@@ -549,6 +553,8 @@ export default function JobEntryForm({
                   sx={{
                     textTransform: "capitalize",
                     minHeight: "50px",
+                    fontSize: { xs: "0.8rem", sm: "1.125rem" },
+                    padding: { xs: "5px", sm: "10px 16px"}
                   }}
                   disabled={isDisabled}
                 />
@@ -556,34 +562,33 @@ export default function JobEntryForm({
             )}
           </Box>
 
-          <TabPanel value="1" sx={{ padding: "0px" }}>
-            <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
-              <Grid paddingLeft={1} marginTop={2} container spacing={1}>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <SelectShipment
-                    label="Shipment Type*"
-                    id="shipmentType"
-                    options={optionsSettingsData?.body?.shipmentType}
-                    value={formik.values.shipmentType}
-                    error={formik.errors.shipmentType}
-                    onChange={formik.handleChange}
-                    disabled={getPage === "newEntry" ? false : true}
-                    getPage={getPage}
-                    inputRef={shipmentTypeRef}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <SelectBox
-                    label="Move Type*"
-                    id="moveType"
-                    options={jobSettingData?.body.moveType}
-                    value={formik.values.moveType}
-                    error={formik.errors.moveType}
-                    onChange={formik.handleChange}
-                    disabled={getPage === "newEntry" ? false : true}
-                    getPage={getPage}
-                  />
-                </Grid>
+          <TabPanel value="1">
+            <Grid container rowSpacing={2} columnSpacing={3}>
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
+                <SelectShipment
+                  label="Shipment Type*"
+                  id="shipmentType"
+                  options={optionsSettingsData?.body?.shipmentType}
+                  value={formik.values.shipmentType}
+                  error={formik.errors.shipmentType}
+                  onChange={formik.handleChange}
+                  disabled={getPage === "newEntry" ? false : true}
+                  getPage={getPage}
+                  inputRef={shipmentTypeRef}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
+                <SelectBox
+                  label="Move Type*"
+                  id="moveType"
+                  options={jobSettingData?.body.moveType}
+                  value={formik.values.moveType}
+                  error={formik.errors.moveType}
+                  onChange={formik.handleChange}
+                  disabled={getPage === "newEntry" ? false : true}
+                  getPage={getPage}
+                />
+              </Grid>
 
                 {(location?.pathname ===
                   "/app/documentation/jobEntry/newEntry" ||
@@ -597,10 +602,10 @@ export default function JobEntryForm({
                     md={4}
                     lg={6}
                     xl={2}
-                    style={{
+                    sx={{
                       display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "center",
+                      //justifyContent: "flex-end",
+                      alignItems: "flex-start",
                     }}
                   >
                     <ThemeButton
@@ -608,365 +613,342 @@ export default function JobEntryForm({
                       sx={{
                         fontWeight: "500",
                         color: "white !important",
+                        height: "44px",
+                        padding: "5px 20px"
                       }}
                     >
                       Add Rate
                     </ThemeButton>
                   </Grid>
                 )}
+
+            </Grid>
+            <Grid container rowSpacing={2} columnSpacing={3} marginTop={0}>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+              >
+                <InputBox
+                  label="MBL No.*"
+                  id="mblNo"
+                  value={formik.values.mblNo}
+                  error={formik.errors.mblNo}
+                  onChange={formik.handleChange}
+                  disabled={isDisabled}
+                />
               </Grid>
 
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+              >
+                <Tooltip
+                  title={
+                    !formik.values.customerName ? "Field is mandatory" : ""
+                  }
+                  arrow
                 >
-                  <InputBox
-                    label="MBL No.*"
-                    id="mblNo"
-                    value={formik.values.mblNo}
-                    error={formik.errors.mblNo}
+                  <FormAutoCompleteWithLoader
+                    label="Customer Name*"
+                    id="customerName"
+                    value={formik.values.customerName}
+                    error={formik.errors.customerName}
                     onChange={formik.handleChange}
-                    disabled={isDisabled}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <Tooltip
-                    title={
-                      !formik.values.customerName ? "Field is mandatory" : ""
-                    }
-                    arrow
-                  >
-                    <FormAutoCompleteWithLoader
-                      label="Customer Name*"
-                      id="customerName"
-                      value={formik.values.customerName}
-                      error={formik.errors.customerName}
-                      onChange={formik.handleChange}
-                      inputRef={FieldRef}
-                      suggestionName="customer_name"
-                      disabled={isDisabled}
-                    />
-                  </Tooltip>
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    name="dateOfReceipt"
-                    label="Date Of Receipt*"
-                    id="dateOfReceipt"
-                    value={formik.values.dateOfReceipt}
-                    error={formik.errors.dateOfReceipt}
-                    onChange={formik.setFieldValue}
                     inputRef={FieldRef}
+                    suggestionName="customer_name"
                     disabled={isDisabled}
                   />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="HBL/SO NO."
-                    id="hblNo"
-                    value={formik.values.hblNo}
-                    error={formik.errors.hblNo}
-                    onChange={formik.handleChange}
-                    disabled={isDisabled}
-                  />
-                </Grid>
+                </Tooltip>
               </Grid>
 
-              <Grid container>
-                {/* Select */}
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <SelectBox
-                    label="Cargo Type"
-                    id="cargoType"
-                    options={jobSettingData?.body.cargoType}
-                    value={formik.values.cargoType}
-                    error={formik.errors.cargoType}
-                    onChange={formik.handleChange}
-                    disabled={isDisabled}
-                  />
-                </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Customer Ref No."
-                    id="customerRefNo"
-                    value={formik.values.customerRefNo}
-                    error={formik.errors.customerRefNo}
-                    onChange={formik.handleChange}
-                    disabled={isDisabled}
-                  />
-                </Grid>
-
-                {/* Select */}
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <SelectBox
-                    label="Type Of Cargo"
-                    id="typeOfCargo"
-                    options={jobSettingData?.body.typesOfCargo}
-                    value={formik.values.typeOfCargo}
-                    error={formik.errors.typeOfCargo}
-                    onChange={formik.handleChange}
-                    disabled={isDisabled}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Invoice No."
-                    id="invoiceNo"
-                    value={formik.values.invoiceNo}
-                    error={formik.errors.invoiceNo}
-                    onChange={formik.handleChange}
-                    disabled={isDisabled}
-                  />
-                </Grid>
+              >
+                <DateTimeField
+                  name="dateOfReceipt"
+                  label="Date Of Receipt*"
+                  id="dateOfReceipt"
+                  value={formik.values.dateOfReceipt}
+                  error={formik.errors.dateOfReceipt}
+                  onChange={formik.setFieldValue}
+                  inputRef={FieldRef}
+                  disabled={isDisabled}
+                />
               </Grid>
 
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Tansad No."
-                    id="tansadNo"
-                    value={formik.values.tansadNo}
-                    error={formik.errors.tansadNo}
-                    onChange={formik.handleChange}
-                    disabled={isDisabled}
-                  />
-                </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
 
-                {/* Date selection */}
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <DateTimeField
-                    name="entryTansadDate"
-                    label="Entry/Tansad Date"
-                    id="entryTansadDate"
-                    value={formik.values.entryTansadDate}
-                    error={formik.errors.entryTansadDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                    disabled={isDisabled}
-                  />
-                </Grid>
+              >
+                <InputBox
+                  label="HBL/SO NO."
+                  id="hblNo"
+                  value={formik.values.hblNo}
+                  error={formik.errors.hblNo}
+                  onChange={formik.handleChange}
+                  disabled={isDisabled}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Entry No."
-                    id="entryNo"
-                    value={formik.values.entryNo}
-                    error={formik.errors.entryNo}
-                    onChange={formik.handleChange}
-                    disabled={isDisabled}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Reference No."
-                    id="refNo"
-                    value={formik.values.refNo}
-                    error={formik.errors.refNo}
-                    onChange={formik.handleChange}
-                    disabled={true}
-                  />
-                </Grid>
+              >
+                <SelectBox
+                  label="Cargo Type"
+                  id="cargoType"
+                  options={jobSettingData?.body.cargoType}
+                  value={formik.values.cargoType}
+                  error={formik.errors.cargoType}
+                  onChange={formik.handleChange}
+                  disabled={isDisabled}
+                />
               </Grid>
 
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                  display="flex"
-                  alignItems="center"
-                  gap={1}
-                >
-                  <InputBox
-                    label="File Manager"
-                    id="fileManager"
-                    value={formik.values.fileManager}
-                    error={formik.errors.fileManager}
-                    onChange={formik.handleChange}
-                    disabled
-                  />
-                </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
 
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  paddingLeft={1}
-                  marginTop={2}
-                >
-                  <InputBox
-                    label="Created By"
-                    id="createdBy"
-                    value={formik.values.createdBy}
-                    error={formik.errors.createdBy}
-                    onChange={formik.handleChange}
-                    disabled
-                  />
-                </Grid>
+              >
+                <InputBox
+                  label="Customer Ref No."
+                  id="customerRefNo"
+                  value={formik.values.customerRefNo}
+                  error={formik.errors.customerRefNo}
+                  onChange={formik.handleChange}
+                  disabled={isDisabled}
+                />
+              </Grid>
+
+              {/* Select */}
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+              >
+                <SelectBox
+                  label="Type Of Cargo"
+                  id="typeOfCargo"
+                  options={jobSettingData?.body.typesOfCargo}
+                  value={formik.values.typeOfCargo}
+                  error={formik.errors.typeOfCargo}
+                  onChange={formik.handleChange}
+                  disabled={isDisabled}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+              >
+                <InputBox
+                  label="Invoice No."
+                  id="invoiceNo"
+                  value={formik.values.invoiceNo}
+                  error={formik.errors.invoiceNo}
+                  onChange={formik.handleChange}
+                  disabled={isDisabled}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+              >
+                <InputBox
+                  label="Tansad No."
+                  id="tansadNo"
+                  value={formik.values.tansadNo}
+                  error={formik.errors.tansadNo}
+                  onChange={formik.handleChange}
+                  disabled={isDisabled}
+                />
+              </Grid>
+
+              {/* Date selection */}
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+              >
+                <DateTimeField
+                  name="entryTansadDate"
+                  label="Entry/Tansad Date"
+                  id="entryTansadDate"
+                  value={formik.values.entryTansadDate}
+                  error={formik.errors.entryTansadDate}
+                  onChange={formik.setFieldValue}
+                  inputRef={FieldRef}
+                  disabled={isDisabled}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+              >
+                <InputBox
+                  label="Entry No."
+                  id="entryNo"
+                  value={formik.values.entryNo}
+                  error={formik.errors.entryNo}
+                  onChange={formik.handleChange}
+                  disabled={isDisabled}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+              >
+                <InputBox
+                  label="Reference No."
+                  id="refNo"
+                  value={formik.values.refNo}
+                  error={formik.errors.refNo}
+                  onChange={formik.handleChange}
+                  disabled={true}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+                display="flex"
+                alignItems="center"
+                gap={1}
+              >
+                <InputBox
+                  label="File Manager"
+                  id="fileManager"
+                  value={formik.values.fileManager}
+                  error={formik.errors.fileManager}
+                  onChange={formik.handleChange}
+                  disabled
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={2}
+                xl={2}
+
+              >
+                <InputBox
+                  label="Created By"
+                  id="createdBy"
+                  value={formik.values.createdBy}
+                  error={formik.errors.createdBy}
+                  onChange={formik.handleChange}
+                  disabled
+                />
+              </Grid>
 
                 {initialValues.statusCode == -2 ||
                 initialValues.statusCode == 1 ? (
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    xl={2}
-                    sx={{ marginTop: 2 }}
-                    paddingLeft={1}
-                  >
-                    <SelectBox
-                      label="Status"
-                      id="status"
-                      options={optionsSettingsData?.body.status}
-                      value={formik.values.status}
-                      error={formik.errors.status}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-                ) : (
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    xl={2}
-                    paddingLeft={1}
-                    marginTop={2}
-                  >
-                    <InputBox
-                      label="Status"
-                      id="status"
-                      disabled={true}
-                      value={formik.values.status}
-                      error={formik.errors.status}
-                      onChange={formik.handleChange}
-                    />
-                  </Grid>
-                )}
-              </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={2}
+                  xl={2}
+
+                >
+                  <SelectBox
+                    label="Status"
+                    id="status"
+                    options={optionsSettingsData?.body.status}
+                    value={formik.values.status}
+                    error={formik.errors.status}
+                    onChange={formik.handleChange}
+                  />
+                </Grid>
+              ) : (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={2}
+                  xl={2}
+
+                >
+                  <InputBox
+                    label="Status"
+                    id="status"
+                    disabled={true}
+                    value={formik.values.status}
+                    error={formik.errors.status}
+                    onChange={formik.handleChange}
+                  />
+                </Grid>
+              )}
+
 
               <Grid item xs={12}>
                 <Box
@@ -974,7 +956,7 @@ export default function JobEntryForm({
                     borderBottom: 1,
                     border: "1px solid #0000001f",
                     borderRadius: "10px",
-                    margin: "8px 8px 0px 8px",
+                    marginTop: "10px",
                   }}
                 >
                   <CommonTabForm formik={formik} dropdownData={dropdownData} />
@@ -1000,6 +982,11 @@ export default function JobEntryForm({
                     rows={4}
                     variant="outlined"
                     fullWidth
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '10px',
+                      },
+                    }}
                   />
                 </Grid>
               ) : (
@@ -1008,7 +995,7 @@ export default function JobEntryForm({
 
               {/* Buttons */}
               {page == "job-entry" ? (
-                <Grid item xs={12} sx={{ margin: 1 }}>
+                <Grid item xs={12}>
                   <Stack
                     direction="row"
                     spacing={2}
@@ -1137,14 +1124,15 @@ export default function JobEntryForm({
             />
           </TabPanel>
         </TabContext>
-      </Box>
-
+      </Box >
+      {toggleRate && (
       <AddRateModal
         formik={formik}
         toggleRate={toggleRate}
         toggleRateModal={toggleRateModal}
         disabled={isDisabled}
       />
+      )}
     </>
   );
 }

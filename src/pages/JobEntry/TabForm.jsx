@@ -28,7 +28,7 @@ const CommonTabForm = ({ formik, dropdownData }) => {
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   return (
-    <Box sx={{ p: 0.5, bgcolor: "white", borderRadius: 3, boxShadow: 2 }}>
+    <Box sx={{ bgcolor: "white", borderRadius: 3, boxShadow: 2 }}>
       <Box
         className="ThemeTabBox"
         sx={{
@@ -43,7 +43,7 @@ const CommonTabForm = ({ formik, dropdownData }) => {
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              alignItems: "center",
+              alignItems: "center", borderBottom: 1, borderColor: "divider"
               // marginBottom: 1,
             }}
           >
@@ -117,8 +117,9 @@ const tabStyle = {
   tabPanel: {
     width: "100%",
     "& .MuiTabPanel-root": {
-      padding: "0px !important",
+      padding: "10px !important",
       width: "100%",
+      // minHeight: "calc(60vh - 210px)"
     },
   },
   tabHeader: {

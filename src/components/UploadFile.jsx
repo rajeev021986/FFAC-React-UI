@@ -33,7 +33,7 @@ const DropZone = styled(Box)(({ theme }) => ({
   borderRadius: "8px",
   padding: theme.spacing(4),
   textAlign: "center",
-  width: "300px",
+  width: "100%",
   color: theme.palette.primary.main,
   display: "flex",
   flexDirection: "column",
@@ -72,12 +72,12 @@ const UploadFile = ({
     type == null
       ? reloadDataHandler(sourceType, customer_id, setListData, setLoading)
       : reloadDocumentDataHandler(
-          sourceType,
-          customer_id,
-          type,
-          setListData,
-          setLoading
-        );
+        sourceType,
+        customer_id,
+        type,
+        setListData,
+        setLoading
+      );
   }, []);
 
   const downloadIntgater = async () => {
@@ -104,7 +104,7 @@ const UploadFile = ({
         base64Data: res.body.base64,
         mimeType: res.body.mimeType,
       });
-      
+
       Boolean(res.body.mimeType.includes("spreadsheetml.sheet")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "XL" }));
       Boolean(res.body.mimeType.includes("image")) &&
@@ -115,11 +115,11 @@ const UploadFile = ({
         setFileDaat((prev) => ({ ...prev, documentType: "MSW" }));
       Boolean(res.body.mimeType.includes("plain")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "TXT" }));
-        Boolean(res.body.mimeType.includes("text/csv")) &&
+      Boolean(res.body.mimeType.includes("text/csv")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "CSV" }));
-        Boolean(res.body.mimeType.includes("application/msword")) &&
+      Boolean(res.body.mimeType.includes("application/msword")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "WORD" }));
-        Boolean(res.body.mimeType.includes("application/vnd.ms-excel")) &&
+      Boolean(res.body.mimeType.includes("application/vnd.ms-excel")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "EXCEL" }));
       const binaryString = atob(res.body.base64);
       const binaryArray = new Uint8Array(binaryString.length);
@@ -159,12 +159,12 @@ const UploadFile = ({
       type == null
         ? reloadDataHandler(sourceType, customer_id, setListData, setLoading)
         : reloadDocumentDataHandler(
-            sourceType,
-            customer_id,
-            type,
-            setListData,
-            setLoading
-          );
+          sourceType,
+          customer_id,
+          type,
+          setListData,
+          setLoading
+        );
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -233,14 +233,14 @@ const UploadFile = ({
       formData.documentType === "Other"
         ? formData.other
         : type == null
-        ? formData.documentType
-        : type;
+          ? formData.documentType
+          : type;
     const isDuplicate = listData?.some(
       (item) =>
         item.fileName?.trim().toLowerCase() ===
-          uploadedFile?.name?.trim().toLowerCase() &&
+        uploadedFile?.name?.trim().toLowerCase() &&
         item.documentType?.trim().toLowerCase() ===
-          resolvedDocumentType?.trim().toLowerCase()
+        resolvedDocumentType?.trim().toLowerCase()
     );
     if (isDuplicate) {
       toast.custom(
@@ -432,7 +432,10 @@ const UploadFile = ({
             />
           )}
           <Delete
-            style={{ cursor: "pointer", color: "red" }}
+             sx={{
+              cursor: "pointer",
+              color: "red",
+            }}
             onClick={() => {
               setDeleteData({
                 id: params.row.id,
@@ -477,7 +480,7 @@ const UploadFile = ({
         );
       },
     },
-    
+
     {
       field: "createdBy",
       headerName: "Created By",
@@ -600,26 +603,18 @@ const UploadFile = ({
           <Loader />
         </Grid>
       ) : (
-        <Grid
-          container
-          spacing={2}
-          paddingLeft={1}
-          paddingRight={1}
-          marginTop={1}
-        >
-          <Typography
-            variant="h5"
-            gutterBottom
-            style={{
-              width: "100%",
-              margin: "0px ! important",
-              paddingLeft: "16px",
-            }}
-          >
-            Select Files
-          </Typography>
-          <Grid item xs={12} sm={4} margin={0} padding={0}>
-            <Box display="flex" flexDirection="column" height="100%" gap={2}>
+        <Grid container >
+          <Grid item xs={12}>
+            <Typography
+              variant="h5"
+              sx={{ padding: "10px 15px 5px 15px" }}
+            >
+              Select Files
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Box
+              sx={{ display: "flex", padding: "15px", height: "100%", width: "100%" }}>
               <DropZone
                 onClick={() => document.getElementById("file-input").click()}
                 onDragOver={(e) => e.preventDefault()}
@@ -659,8 +654,8 @@ const UploadFile = ({
               </DropZone>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={8}>
-            <Box style={{ height: 400, width: "100%" }}>
+          <Grid item xs={12} md={8}>
+            <Box style={{ height: 400, width: "100%", padding: "15px", overflow: "auto" }}>
               <StyledDataGrid
                 rows={listData}
                 columns={(sourceType === "CUSTOMER" ? cusColumns : columns).map(
@@ -672,6 +667,14 @@ const UploadFile = ({
                 pageSize={20}
                 disableSelectionOnClick
                 hideFooterPagination
+                sx={{
+                  "& .MuiDataGrid-columnHeaders": {
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                  },
+                  "& .MuiDataGrid-cell": {
+                    fontSize: { xs: "0.7rem", sm: "0.85rem" },
+                  },
+                }}
               />
             </Box>
           </Grid>
