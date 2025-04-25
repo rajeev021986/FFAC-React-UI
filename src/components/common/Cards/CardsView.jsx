@@ -137,7 +137,7 @@ export default function CardsView({
             rowsPerPageOptions={[10, 20, 50, 100]}
             color="primary"
             size="small"
-            sx={{ mergin: "auto", backgroundColor: "white.main" }}
+            sx={{ margin: "auto", backgroundColor: "white.main" }}
           />
         </Box>
       )}

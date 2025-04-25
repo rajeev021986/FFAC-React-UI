@@ -100,7 +100,6 @@ export default function LooseCargoForm({
     arrivalCustomerPlaceDate: "",
     remark: "",
   });
-console.log("ap",page);
 
   const fetchContainerNumbers = async () => {
     try {

@@ -113,7 +113,8 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
           sx={{
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "primary.main",
-              lineHeight: 1,
+              lineHeight: 10,
+              height: "38px !important",
             },
             "& .MuiDataGrid-cell": {
               whiteSpace: "normal",

@@ -60,12 +60,6 @@ export default function ContainerNumberForm({
   const [open, setOpen] = useState(false);
   const [SourceType, setSourceType] = useState("");
   const [loading, setLoading] = useState(true);
-  const handleChange = (event, newValue) => {
-    console.log("newValue");
-
-    setValue(newValue);
-  };
-
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",
@@ -184,8 +178,6 @@ export default function ContainerNumberForm({
     validateOnChange: false,
     validationSchema: ContainerValidationSchema(),
     onSubmit: async (values) => {
-      console.log(formik.errors, "errors");
-
       try {
         values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
         values.status = "";
@@ -291,8 +283,6 @@ export default function ContainerNumberForm({
     boxShadow: 24,
     p: 4,
   };
-console.log("page",page);
-
   return (
     <>
       <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>

@@ -53,7 +53,8 @@ export default function JobEntryForm({
   const [toggleRate, settoggleRate] = useState(false);
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
-  const [isSelectedShipmentTypeValid, setIsSelectedShipmentTypeValid] = useState(false);
+  const [isSelectedShipmentTypeValid, setIsSelectedShipmentTypeValid] =
+    useState(false);
   const nav = useNavigate();
   const shipmentTypeRef = useRef(null);
   const toastRef = useRef(null);
@@ -82,24 +83,22 @@ export default function JobEntryForm({
     validateOnChange: false,
     validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
-      console.log("isSelectedShipmentTypeValid", isSelectedShipmentTypeValid);
-      
       if (isLoading) {
         return;
       }
       let hasError = false;
-     if(isSelectedShipmentTypeValid){
-      toast.custom(
-        <CustomToast
-          message={"Please contact the administrator."}
-          toast="error"
-        />,
-        { closeButton: false }
-      );
-      return
-     }
+      if (isSelectedShipmentTypeValid) {
+        toast.custom(
+          <CustomToast
+            message={"Please contact the administrator."}
+            toast="error"
+          />,
+          { closeButton: false }
+        );
+        return;
+      }
       if (!values.id || type == "copy") {
-        let containerShipment = values.containerShipments.map((item) =>{
+        let containerShipment = values.containerShipments.map((item) => {
           if (item.containerNo.length < 11) {
             // formik.setFieldError("containerNo", "Container No. is required");
             toast.custom(
@@ -113,12 +112,13 @@ export default function JobEntryForm({
             );
             hasError = true;
             return item; // Still return something to avoid undefined
-          }
-        
-          else if (item.tflSealNo.length < 11) {
+          } else if (item.tflSealNo.length < 11) {
             // formik.setFieldError("sellno", "Sell No is required");
             toast.custom(
-              <CustomToast message="Seal No must be 11 characters" toast="error" />,
+              <CustomToast
+                message="Seal No must be 11 characters"
+                toast="error"
+              />,
               {
                 closeButton: false,
               }
@@ -196,11 +196,11 @@ export default function JobEntryForm({
           }
         }
       } else {
-      //  console.log(values.containerShipments,"mmmm")
+        //  console.log(values.containerShipments,"mmmm")
         // return;
         try {
           setRejectError(false);
-          let containerShipment = values.containerShipments.map((item) =>{
+          let containerShipment = values.containerShipments.map((item) => {
             if (item.containerNo.length < 11) {
               // formik.setFieldError("containerNo", "Container No. is required");
               toast.custom(
@@ -214,12 +214,13 @@ export default function JobEntryForm({
               );
               hasError = true;
               return item; // Still return something to avoid undefined
-            }
-          
-            else if (item.tflSealNo.length < 11) {
+            } else if (item.tflSealNo.length < 11) {
               // formik.setFieldError("sellno", "Sell No is required");
               toast.custom(
-                <CustomToast message="Seal No must be 11 characters" toast="error" />,
+                <CustomToast
+                  message="Seal No must be 11 characters"
+                  toast="error"
+                />,
                 {
                   closeButton: false,
                 }
@@ -230,7 +231,7 @@ export default function JobEntryForm({
               return item?.new ? { ...item, id: null, new: false } : item;
             }
           });
-        if (hasError) return;
+          if (hasError) return;
 
           let vehicleShipment = values.vehicleShipments.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
@@ -248,7 +249,7 @@ export default function JobEntryForm({
             rateDetails: values.rate.rateDetails.map((item) =>
               item?.new ? { ...item, id: null, new: false } : item
             ),
-          };    
+          };
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
           let response = await updateJobEntry({
@@ -295,7 +296,6 @@ export default function JobEntryForm({
       }
     },
   });
-  console.log(formik.errors,"formik.errors");
 
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -398,7 +398,7 @@ export default function JobEntryForm({
       reject: false,
     }));
   };
-
+ console.log("formik.values.dateOfReceipt",formik.values.dateOfReceipt)
   const [isDisabled, setIsDisabled] = useState(false);
   const getPage = location?.pathname.split("/").slice(-1)[0];
   useEffect(() => {
@@ -439,59 +439,53 @@ export default function JobEntryForm({
   useEffect(() => {
     const selectedValue = formik.values.shipmentType;
     const jobPatternData = jobSettingData?.body?.jobPatternData || [];
-  
-    const validShipmentTypes = jobPatternData.map(i => i.shipmentType);
-  
+
+    const validShipmentTypes = jobPatternData.map((i) => i.shipmentType);
+
     const generalCommonEntry = jobPatternData.find(
-      i => i.shipmentType === "General/Common"
+      (i) => i.shipmentType === "General/Common"
     );
     const generalCommonPattern = generalCommonEntry?.jobPattern;
-  
+
     const isSelectedTypeValid = validShipmentTypes.includes(selectedValue);
     const isGeneralCommonMissing = !generalCommonEntry;
     const isGeneralCommonPatternEmpty = !generalCommonPattern;
-  
+
     const shouldShowError =
       selectedValue &&
       !isSelectedTypeValid &&
       (isGeneralCommonMissing || isGeneralCommonPatternEmpty) &&
       getPage === "newEntry";
-  console.log("shouldShowError", shouldShowError);
-  
-      if (shouldShowError) {
-        // if (!toastRef.current) {
-          setIsSelectedShipmentTypeValid(true);
-          // toastRef.current =
-           toast.custom(
-            <CustomToast
-              message={"Invalid shipment type selected."}
-              toast="error"
-            />,
-            { closeButton: false }
-          );
-        // }
-        formik.setFieldError("shipmentType", "Please contact the administrator.");
-      } 
-      else {
-        setIsSelectedShipmentTypeValid(false);
-        formik.setFieldError("shipmentType", undefined);
-      }
-      // else {
-      //   // Clear the error and dismiss toast if showing
-      //   if (formik.errors.shipmentType === "Please contact the administrator.") {
-      //     formik.setFieldError("shipmentType", undefined);
 
-      //   }
-      //   if (toastRef.current) {
-      //     toast.dismiss(toastRef.current);
-      //     toastRef.current = null;
-      //   }
+    if (shouldShowError) {
+      // if (!toastRef.current) {
+      setIsSelectedShipmentTypeValid(true);
+      // toastRef.current =
+      toast.custom(
+        <CustomToast
+          message={"Invalid shipment type selected."}
+          toast="error"
+        />,
+        { closeButton: false }
+      );
       // }
-    }, [formik.values.shipmentType, jobSettingData]);
-  
-  
-  
-  
+      formik.setFieldError("shipmentType", "Please contact the administrator.");
+    } else {
+      setIsSelectedShipmentTypeValid(false);
+      formik.setFieldError("shipmentType", undefined);
+    }
+    // else {
+    //   // Clear the error and dismiss toast if showing
+    //   if (formik.errors.shipmentType === "Please contact the administrator.") {
+    //     formik.setFieldError("shipmentType", undefined);
+
+    //   }
+    //   if (toastRef.current) {
+    //     toast.dismiss(toastRef.current);
+    //     toastRef.current = null;
+    //   }
+    // }
+  }, [formik.values.shipmentType, jobSettingData]);
 
   return (
     <>
@@ -679,12 +673,19 @@ export default function JobEntryForm({
                   <DateTimeField
                     name="dateOfReceipt"
                     label="Date Of Receipt*"
-                    id="dateOfReceipt"
                     value={formik.values.dateOfReceipt}
-                    error={formik.errors.dateOfReceipt}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
+                    onChange={formik.handleChange}
+                    onBlur={() => formik.setFieldTouched("dateOfReceipt", true)}
+                    disablePast={true}
                     disabled={isDisabled}
+                    error={
+                      formik.touched.dateOfReceipt &&
+                      Boolean(formik.errors.dateOfReceipt)
+                    }
+                    helperText={
+                      formik.touched.dateOfReceipt &&
+                      formik.errors.dateOfReceipt
+                    }
                   />
                 </Grid>
 

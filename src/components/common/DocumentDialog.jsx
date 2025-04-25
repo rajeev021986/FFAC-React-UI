@@ -9,11 +9,11 @@ import {
   Tooltip,
   Link,
 } from "@mui/material";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
+import {Visibility, Delete } from "@mui/icons-material"; // Add Visibility icon
 import IconButton from "@mui/material/IconButton";
 import { GridDeleteIcon } from "@mui/x-data-grid";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { reloadDataHandler } from "../../services/common/DocumentDetails";
+import { reloadDataHandler, reloadDocumentDataHandler } from "../../services/common/DocumentDetails";
 import { useEffect } from "react";
 import { StyledDataGrid } from "./Grid/styles";
 import ApiManager from "../../services/ApiManager";
@@ -23,16 +23,19 @@ import PDFViewer from "./FileViewer/PDFViewer";
 import WordViewer from "./FileViewer/WordViewer";
 import TextViewer from "./FileViewer/TextViewer";
 import ImageViewer from "./FileViewer/ImageViewer";
+import DeleteDialog from "./DeleteDialog";
 
 export default function DocumentDialog({
   // source,
   sourceId,
   customerRefNo,
   job_No,
+  type,
   handleOpen,
   handleClose,
   ...props
 }) {
+ const [loading, setLoading] = useState(false);  
   const {
     headerContent = "",
     cancelButton = "",
@@ -50,7 +53,44 @@ export default function DocumentDialog({
   const deleteRow = (id) => {
     setListData((prev) => prev.filter((row) => row.id !== id));
   };
-
+   useEffect(() => {
+      type == null
+        ? reloadDataHandler(sourceType, sourceId, setListData, setLoading)
+        : reloadDocumentDataHandler(
+            sourceType,
+            sourceId,
+            type,
+            setListData,
+            setLoading
+          );
+    }, []);
+    const onDelete = async () => {
+      try {
+        setLoading(true);
+        const res = await ApiManager.deleteDocument(
+          deleteData.id,
+          deleteData.source,
+          deleteData.sourceId
+        );
+  
+        setOpenConfirmation(false);
+        type == null
+          ? reloadDataHandler(sourceType, sourceId, setListData, setLoading)
+          : reloadDocumentDataHandler(
+              sourceType,
+              sourceId,
+              type,
+              setListData,
+              setLoading
+            );
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+  const onCloseConfiramtion = () => {
+    setOpenConfirmation(false);
+  };
   const addNewRow = () => {
     const newRow = {
       id: Date.now(), // unique temp ID
@@ -70,7 +110,7 @@ export default function DocumentDialog({
       headerAlign: "center",
       renderCell: (params) => (
         <Tooltip title={`${params.value}`} arrow>
-          <div>{params.value}</div>
+          <div className="word-wrap-cell">{params.value}</div>
         </Tooltip>
       ),
     },
@@ -79,23 +119,28 @@ export default function DocumentDialog({
       headerName: "File Name",
       flex: 1,
       headerAlign: "center",
-      renderCell: (params) => (
-        <Tooltip title={`${params.value}`} arrow>
-          <div>
-            <Link
-              href="#"
-              underline="always"
-              style={{ color: "black" }}
-              onClick={(event) =>
-                handleView(event, params.row.id, params.row.fileName)
-              }
-            >
-              {" "}
-              {params.value}
-            </Link>
-          </div>
-        </Tooltip>
-      ),
+      // renderCell: (params) => (
+      //   <Tooltip title={`${params.value}`} arrow>
+      //     <div className="word-wrap-cell" >
+      //       <Link
+      //         href="#"
+      //         underline="always"
+      //         style={{ color: "black" }}
+      //         onClick={(event) =>
+      //           handleView(event, params.row.id, params.row.fileName)
+      //         }
+      //       >
+      //         {" "}
+      //         {params.value}
+      //       </Link>
+      //     </div>
+      //   </Tooltip>
+      // ),
+         renderCell: (params) => (
+              <Tooltip title={`${params.value}`} arrow>
+                <div className="word-wrap-cell">{params.value}</div>
+              </Tooltip>
+            ),
     },
     {
       field: "createdBy",
@@ -137,13 +182,43 @@ export default function DocumentDialog({
       sortable: false,
       flex: 0,
       renderCell: (params) => (
-        <div>
-        <IconButton color="primary" onClick={() => deleteRow(params.row.id)}>
-          <VisibilityIcon />
-        </IconButton>
-        <IconButton color="error" onClick={() => deleteRow(params.row.id)}>
-          <GridDeleteIcon />
-        </IconButton>
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          {viewloader && viewloaderId == params.id ? (
+            <LoaderIcon />
+          ) : (
+            <Visibility
+              style={{ cursor: "pointer", color: "#1976d2" }}
+              onClick={(event) =>
+                handleView(
+                  event,
+                  params.row.id,
+                  params.row.source,
+                  params.row.sourceId,
+                  params.row.fileName
+                )
+              }
+            />
+          )}
+          <Delete
+            style={{ cursor: "pointer", color: "red" }}
+            onClick={() => {
+              setDeleteData({
+                id: params.row.id,
+                source: params.row.source,
+                sourceId: params.row.sourceId,
+                fileName: params.row.fileName,
+              });
+              setOpenConfirmation(true);
+            }}
+          />
         </div>
       ),
     },
@@ -154,8 +229,9 @@ export default function DocumentDialog({
   const [fileData, setFileDaat] = useState({});
   const [viewDocument, setViewDocument] = useState({});
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
-
+  const [openConfirmation, setOpenConfirmation] = useState(false);
   const [listData, setListData] = useState([]);
+  const [deleteData, setDeleteData] = useState({});
   const sourceType = "JOB_DETAIL";
   useEffect(() => {
     if (handleOpen) {
@@ -188,7 +264,7 @@ export default function DocumentDialog({
       const res = await ApiManager.downloadDocumnent(id, source, sourceId);
       setFileDaat({
         base64Data: res.body.base64,
-        mimeType: res.body.mimeTsype,
+        mimeType: res.body.mimeType,
       });
       Boolean(res.body.mimeType.includes("spreadsheetml.sheet")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "XL" }));
@@ -286,7 +362,13 @@ export default function DocumentDialog({
           </Button>
         </DialogActions>
       </Dialog>
-
+       <DeleteDialog
+        source="file"
+        sourceName={deleteData.fileName}
+        handleClose={onCloseConfiramtion}
+        handleDelete={onDelete}
+        handleOpen={openConfirmation}
+      />
       <Dialog
         open={viewDialogOpen}
         onClose={handleViewDialogClose}

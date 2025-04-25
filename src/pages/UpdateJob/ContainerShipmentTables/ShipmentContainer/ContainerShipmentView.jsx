@@ -43,7 +43,11 @@ import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
 import useDebounce from "../../../../hooks/useDebounce";
 
-export default function ContainerShipmentView({ page, customer_id,bondDetails }) {
+export default function ContainerShipmentView({
+  page,
+  customer_id,
+  bondDetails,
+}) {
   const containerSelector = useSelector((state) => state?.containers);
   const location = useLocation();
   const nav = useNavigate();
@@ -104,7 +108,13 @@ export default function ContainerShipmentView({ page, customer_id,bondDetails })
         logicalOperator: "and",
       };
     });
-
+  const containerColumns = CONTAINER_COLUMNS((rowData) => {
+    setModal({
+      open: true,
+      type: "edit", // or "view" or whatever your types are
+      data: rowData,
+    });
+  });
   const {
     data: containerListData,
     isLoading,
@@ -144,9 +154,9 @@ export default function ContainerShipmentView({ page, customer_id,bondDetails })
     setsearchValue(e.target.value);
   };
 
-  CONTAINER_COLUMNS[CONTAINER_COLUMNS.length - 1].renderCell = GridActions({
-    actions: getContaienrListGridActions(setModal),
-  });
+  // CONTAINER_COLUMNS[CONTAINER_COLUMNS.length - 1].renderCell = GridActions({
+  //   actions: getContaienrListGridActions(setModal),
+  // });
 
   useEffect(() => {
     if (!containerSelector.view) {
@@ -167,7 +177,6 @@ export default function ContainerShipmentView({ page, customer_id,bondDetails })
       setFilteredData(containerListData?.body?.data);
     }
   }, [debounceValue, containerListData]);
-
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -277,7 +286,7 @@ export default function ContainerShipmentView({ page, customer_id,bondDetails })
         {containerSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={CONTAINER_COLUMNS}
+            columns={containerColumns}
             count={containerListData?.body?.totalElements || 0}
             handlePage={handlePage}
             data={filteredData}
@@ -293,13 +302,19 @@ export default function ContainerShipmentView({ page, customer_id,bondDetails })
         ) : (
           <CardsView
             uniqueId="id"
-            columns={CONTAINER_COLUMNS}
+            columns={containerColumns}
             count={containerListData?.body?.totalElements || 0}
             handlePage={handlePage}
             data={filteredData}
             paginationModel={containerSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={getContaienrListGridActions(setModal)}
+            actions={
+              containerSelector.view === "card"
+                ? getContaienrListGridActions(setModal).filter(
+                    (action) => action.type !== "hyperlink"
+                  )
+                : getContaienrListGridActions(setModal)
+            }
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
           />
@@ -319,17 +334,19 @@ export default function ContainerShipmentView({ page, customer_id,bondDetails })
         }}
       >
         <DialogContent>
-          <ContainerNumberForm
-            containerId={modal.data?.id}
-            bondDetails={bondDetails}
-            type={modal.type}
-            page={page}
-            onCancel={() => setModal({ open: false, type: "", data: {} })}
-            onSubmit={() => {
-              setModal({ open: false, type: "", data: {} });
-              refetch();
-            }}
-          />
+          {modal.open && modal.type === "edit" && (
+            <ContainerNumberForm
+              containerId={modal.data?.id}
+              bondDetails={bondDetails}
+              type={modal.type}
+              page={page}
+              onCancel={() => setModal({ open: false, type: "", data: {} })}
+              onSubmit={() => {
+                setModal({ open: false, type: "", data: {} });
+                refetch();
+              }}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </Box>

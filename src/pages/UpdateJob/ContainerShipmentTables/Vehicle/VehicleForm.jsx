@@ -45,8 +45,6 @@ export default function VehicleNumberForm({
   vehicleId,
   bondDetails,
 }) {
-  console.log("page",page);
-  
   const [updateVehicleNumber, { isLoading }] = useUpdateVehicleNumberMutation();
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
   const [dropdownData, setDropdownData] = useState({});
@@ -248,7 +246,6 @@ export default function VehicleNumberForm({
             <TabList
               aria-label="lab API tabs example"
               onChange={(event, newValue) => {
-                console.log("New Tab Value:", newValue);
                 setValue(newValue); // <-- this updates the tab
               }}
               sx={{ paddingBottom: "20px" }}

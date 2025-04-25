@@ -1,4 +1,6 @@
+import { Tooltip } from "@mui/material";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 export const JOB_ENTRY_COLUMNS = [
   {
     flex: 1,
@@ -200,7 +202,7 @@ export const JOB_ENTRY_COLUMNS = [
   },
 ];
 
-export const CONTAINER_COLUMNS = [
+export const CONTAINER_COLUMNS  = (onContainerClick) => [
   {
     flex: 1,
     field: "containerNo",
@@ -210,7 +212,25 @@ export const CONTAINER_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
+      <Tooltip title={`${params.value}`} arrow>
+        <div className="word-wrap-cell">
+          <Link
+            href="#"
+            underline="always"
+            style={{ color: "black" ,   textDecoration: 'underline', // enforce underline
+    '&:hover': {
+      textDecoration: 'underline', // ensure hover underline still works
+    },}}
+            
+            onClick={(event) => {
+              event.preventDefault();
+              onContainerClick(params.row);
+            }}
+          >
+            {params.value}
+          </Link>
+        </div>
+      </Tooltip>
     ),
   },
   {
@@ -240,15 +260,15 @@ export const CONTAINER_COLUMNS = [
     align: "center",
     editable: false,
   },
-  {
-    flex: 1,
-    field: "action",
-    headerName: "Action",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    editable: false,
-  },
+  // {
+  //   flex: 1,
+  //   field: "action",
+  //   headerName: "Action",
+  //   width: 110,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   editable: false,
+  // },
 ];
 
 export const VEHICLE_COLUMNS = [

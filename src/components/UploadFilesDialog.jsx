@@ -16,6 +16,7 @@ import PDFViewer from "./common/FileViewer/PDFViewer";
 import WordViewer from "./common/FileViewer/WordViewer";
 import TextViewer from "./common/FileViewer/TextViewer";
 import DeleteDialog from "./common/DeleteDialog";
+import dayjs from "dayjs";
 
 export default function UploadFilesDialog({
   dialogOpen,
@@ -97,6 +98,10 @@ export default function UploadFilesDialog({
                   value={formData.issueDate}
                   onChange={handleInputChange}
                   InputLabelProps={{ shrink: true }}
+                  inputProps={{
+        min: dayjs().format("YYYY-MM-DD"), // Restrict to today's date or future dates
+      }}
+      
                 />
               </Grid>
             )}
@@ -152,19 +157,19 @@ export default function UploadFilesDialog({
       >
         <DialogTitle>{viewDocument.documentType}</DialogTitle>
         <DialogContent>
-          {fileData.documentType == "XL"  && (
+          {fileData.documentType == "XL" && (
             <ExcelViewer
               mimeType={fileData.mimeType}
               base64Data={fileData.base64Data}
             />
           )}
-          {fileData.documentType ==  'CSV' && (
+          {fileData.documentType == "CSV" && (
             <ExcelViewer
               mimeType={fileData.mimeType}
               base64Data={fileData.base64Data}
             />
           )}
-          {fileData.documentType ==  'EXCEL' && (
+          {fileData.documentType == "EXCEL" && (
             <ExcelViewer
               mimeType={fileData.mimeType}
               base64Data={fileData.base64Data}

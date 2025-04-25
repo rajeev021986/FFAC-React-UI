@@ -104,7 +104,7 @@ const UploadFile = ({
         base64Data: res.body.base64,
         mimeType: res.body.mimeType,
       });
-      
+
       Boolean(res.body.mimeType.includes("spreadsheetml.sheet")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "XL" }));
       Boolean(res.body.mimeType.includes("image")) &&
@@ -115,11 +115,11 @@ const UploadFile = ({
         setFileDaat((prev) => ({ ...prev, documentType: "MSW" }));
       Boolean(res.body.mimeType.includes("plain")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "TXT" }));
-        Boolean(res.body.mimeType.includes("text/csv")) &&
+      Boolean(res.body.mimeType.includes("text/csv")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "CSV" }));
-        Boolean(res.body.mimeType.includes("application/msword")) &&
+      Boolean(res.body.mimeType.includes("application/msword")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "WORD" }));
-        Boolean(res.body.mimeType.includes("application/vnd.ms-excel")) &&
+      Boolean(res.body.mimeType.includes("application/vnd.ms-excel")) &&
         setFileDaat((prev) => ({ ...prev, documentType: "EXCEL" }));
       const binaryString = atob(res.body.base64);
       const binaryArray = new Uint8Array(binaryString.length);
@@ -229,6 +229,16 @@ const UploadFile = ({
     // if (!validateForm()) {
     //   return;
     // }
+    // Validate Issue Date
+    const today = new Date();
+    const issueDate = new Date(formData.issueDate);
+    if (issueDate < today) {
+      // Show error toast if the Issue Date is a past date
+      toast.custom(
+        <CustomToast message="Issue Date cannot be a past date." />
+      );
+      return; // Stop further execution if the date is invalid
+    }
     const resolvedDocumentType =
       formData.documentType === "Other"
         ? formData.other
@@ -455,10 +465,9 @@ const UploadFile = ({
       flex: 1,
       headerAlign: "center",
       renderCell: (params) => {
-        const truncated = truncateMiddle(params.value, 6, 4);
         return (
-          <Tooltip title={params.value} arrow>
-            <div>{truncated}</div>
+          <Tooltip title={`${params.value}`} arrow>
+            <div className="word-wrap-cell"> {params.value}</div>
           </Tooltip>
         );
       },
@@ -469,15 +478,14 @@ const UploadFile = ({
       flex: 1,
       headerAlign: "center",
       renderCell: (params) => {
-        const truncated = truncateMiddle(params.value, 6, 4);
         return (
-          <Tooltip title={params.value} arrow>
-            <div>{truncated}</div>
+          <Tooltip title={`${params.value}`} arrow>
+            <div className="word-wrap-cell"> {params.value}</div>
           </Tooltip>
         );
       },
     },
-    
+
     {
       field: "createdBy",
       headerName: "Created By",

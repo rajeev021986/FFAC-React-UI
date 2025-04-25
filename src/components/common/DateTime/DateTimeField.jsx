@@ -14,6 +14,7 @@ export default function DateTimeField({
   id,
   error,
   isDisabled,
+  disablePast,
   ...props
 }) {
   const validValue = value ? dayjs(value) : null;
@@ -33,7 +34,7 @@ export default function DateTimeField({
   onChange={handleDateChange}
   error={error ? true : false}
   // minDateTime={now}
-
+  disablePast ={disablePast}
   helperText={error}
   inputRef={inputRef}
   sx={{
