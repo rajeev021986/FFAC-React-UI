@@ -19,10 +19,10 @@ const modalStyle = {
 export default function AddEntry({
   formik,
   disabled = formik?.values?.statusCode === -3,
-  toggleNotes,
-  handleToggleNote,
-  onNoteAdded,
-  selectedNote,
+  togglePayEntry,
+  handleTogglePayEntry,
+  onAddPayEntry,
+  selectedPayEntry,
 }) {
   const [payableEntry, setPayableEntry] = useState({
     id: null,
@@ -41,8 +41,8 @@ export default function AddEntry({
   });
 
   useEffect(() => {
-    if (selectedNote) {
-      setPayableEntry(selectedNote);
+    if (selectedPayEntry) {
+      setPayableEntry(selectedPayEntry);
     } else {
       setPayableEntry({
         id: Date.now(),
@@ -60,7 +60,7 @@ export default function AddEntry({
         new: true,
       });
     }
-  }, [selectedNote]);
+  }, [selectedPayEntry]);
 
   const handleChange = (field, value) =>
     setPayableEntry((prev) => ({ ...prev, [field]: value }));
@@ -71,30 +71,30 @@ export default function AddEntry({
       return;
     }
 
-    const updatedEntry = selectedNote
+    const updatedEntry = selectedPayEntry
       ? payableEntry
       : { ...payableEntry, id: Date.now(), new: true };
 
-    const updatedList = selectedNote
-      ? formik.values.notes.map((n) =>
+    const updatedList = selectedPayEntry
+      ? formik.values.paybleDetails.map((n) =>
           n.id === updatedEntry.id ? updatedEntry : n
         )
-      : [...formik.values.notes, updatedEntry];
+      : [...formik.values.paybleDetails, updatedEntry];
 
-    formik.setFieldValue("notes", updatedList);
-    onNoteAdded(updatedEntry);
-    handleToggleNote();
+    formik.setFieldValue("paybleDetails", updatedList);
+    onAddPayEntry(updatedEntry);
+    handleTogglePayEntry();
   };
 
   const handleClose = () => {
-    handleToggleNote();
+    handleTogglePayEntry();
   };
 
   return (
     <Modal
       keepMounted
-      open={toggleNotes}
-      onClose={handleToggleNote}
+      open={togglePayEntry}
+      onClose={handleTogglePayEntry}
       aria-labelledby="add-note-modal-title"
       aria-describedby="add-note-modal-description"
     >
@@ -114,7 +114,7 @@ export default function AddEntry({
         </IconButton>
 
         <Typography id="add-note-modal-title" variant="h6" gutterBottom>
-          {selectedNote ? "Edit Payable Entry" : "Add Payable Entry"}
+          {selectedPayEntry ? "Edit Payable Entry" : "Add Payable Entry"}
         </Typography>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -250,7 +250,7 @@ export default function AddEntry({
               fullWidth
               sx={{ fontWeight: 500 }}
             >
-              {selectedNote ? "Update" : "Add"}
+              {selectedPayEntry ? "Update" : "Add"}
             </ThemeButton>
           </Grid>
         </Grid>

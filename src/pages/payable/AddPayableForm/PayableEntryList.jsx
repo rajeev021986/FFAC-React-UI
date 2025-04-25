@@ -10,8 +10,8 @@ import AddEntry from "./AddEntry";
 const PayableEntryList = ({ formik }) => {
   const disabled = formik?.values?.statusCode === -3;
   const [notes, setNotes] = useState([]);
-  const [toggleNotes, setToggleNotes] = useState(false);
-  const [selectedNote, setSelectedNote] = useState(null);
+  const [togglePayEntry, setToggleNotes] = useState(false);
+  const [selectedPayEntry, setSelectedNote] = useState(null);
   const handleEditClick = (note) => {
     setSelectedNote(note);
     setToggleNotes(true);
@@ -24,9 +24,9 @@ const PayableEntryList = ({ formik }) => {
     localStorage.setItem("notes", JSON.stringify(updatedNotes));
   };
 
-  const handleToggleNote = () => {
+  const handleTogglePayEntry = () => {
     setToggleNotes((prev) => !prev);
-    if (toggleNotes) {
+    if (togglePayEntry) {
       setSelectedNote(null);
     }
   };
@@ -47,11 +47,11 @@ const PayableEntryList = ({ formik }) => {
     loadNotes();
   }, [formik?.values?.notes]);
 
-  const handleNoteAdded = (newNote) => {
+  const handleAddPayEntry = (newNote) => {
     let updatedNotes;
-    if (selectedNote) {
+    if (selectedPayEntry) {
       updatedNotes = notes.map((note) =>
-        note.id === selectedNote.id ? newNote : note
+        note.id === selectedPayEntry.id ? newNote : note
       );
     } else {
       updatedNotes = [...notes, newNote];
@@ -96,7 +96,7 @@ const PayableEntryList = ({ formik }) => {
     },
     {
       flex: 1,
-      field: "noOfUnits",
+      field: "noOfUnit",
       headerName: "No Unit Units",
       headerAlign: "center",
       align: "center",
@@ -128,16 +128,24 @@ const PayableEntryList = ({ formik }) => {
     },
     {
       flex: 1,
-      field: "holdingTax",
-      headerName: "Holding Tax",
+      field: "vatAmount",
+      headerName: "Vat Amount",
       headerAlign: "center",
       align: "center",
       editable: false,
     },
     {
       flex: 1,
-      field: "holdingAmount",
-      headerName: "Holding Amount",
+      field: "withHoldingTax",
+      headerName: "With Holding Tax",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "withHoldingAmount",
+      headerName: "With holding amount",
       headerAlign: "center",
       align: "center",
       editable: false,
@@ -150,14 +158,7 @@ const PayableEntryList = ({ formik }) => {
       align: "center",
       editable: false,
     },
-    {
-      flex: 1,
-      field: "vatAmount",
-      headerName: "Vat Amount",
-      headerAlign: "center",
-      align: "center",
-      editable: false,
-    },
+
     {
       field: "edit",
       headerName: "Edit",
@@ -165,7 +166,7 @@ const PayableEntryList = ({ formik }) => {
       sortable: false,
       headerAlign: "center",
       renderHeader: () => (
-        <IconButton color="white" onClick={handleToggleNote}>
+        <IconButton color="white" onClick={handleTogglePayEntry}>
           <AddCircleIcon />
         </IconButton>
       ),
@@ -214,11 +215,11 @@ const PayableEntryList = ({ formik }) => {
       />
 
       <AddEntry
-        toggleNotes={toggleNotes}
-        handleToggleNote={handleToggleNote}
+        togglePayEntry={togglePayEntry}
+        handleTogglePayEntry={handleTogglePayEntry}
         formik={formik}
-        onNoteAdded={handleNoteAdded}
-        selectedNote={selectedNote}
+        onAddPayEntry={handleAddPayEntry}
+        selectedPayEntry={selectedPayEntry}
       />
     </React.Fragment>
   );

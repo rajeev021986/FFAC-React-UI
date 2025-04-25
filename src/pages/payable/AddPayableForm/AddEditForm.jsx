@@ -48,6 +48,8 @@ import { USER_MANAGEMENT_COLUMNS } from "../../../data/columns/user";
 import { useFetchUsersQuery } from "../../../store/api/userDataApi";
 import { getUserListGridActions } from "../../../components/screen/user-management/action";
 import { dashboardSetPagination } from "../../../store/freatures/dashboardSlice";
+import DateTimeField from "../../../components/common/DateTime/DateTimeField";
+import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
@@ -305,11 +307,11 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
-  const customerNameRef = useRef(null);
+  const payableRef = useRef(null);
 
   useEffect(() => {
-    if (customerNameRef.current) {
-      customerNameRef.current.focus();
+    if (payableRef.current) {
+      payableRef.current.focus();
     }
   }, []);
 
@@ -371,13 +373,12 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     },
   };
 
-  const borderClass = {
-    root: {
-      "& .MuiGrid-item": {
-        border: "1px solid black",
-      },
-    },
-  };
+  const FieldRef = useRef(null);
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
 
   return (
     <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -451,40 +452,43 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     value={formik.values.customerName}
                     error={formik.errors.customerName}
                     onChange={formik.handleChange}
-                    inputRef={customerNameRef}
+                    inputRef={payableRef}
+                    disabled
                   />
                 </Grid>
 
                 <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <InputBox
+                  <FormAutoCompleteWithLoader
                     label="Job No."
-                    id="customerName"
-                    value={formik.values.customerName}
-                    error={formik.errors.customerName}
+                    id="jobNo"
+                    value={formik.values.jobNo}
+                    error={formik.errors.jobNo}
                     onChange={formik.handleChange}
-                    inputRef={customerNameRef}
+                    suggestionName="job_no"
                   />
                 </Grid>
 
                 <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <InputBox
-                    label="Invoice Date."
-                    id="customerName"
-                    value={formik.values.customerName}
-                    error={formik.errors.customerName}
-                    onChange={formik.handleChange}
-                    inputRef={customerNameRef}
+                  <DateTimeField
+                    name="invoiceDate"
+                    label="Invoice Date"
+                    id="invoiceDate"
+                    value={formik.values.invoiceDate}
+                    error={formik.errors.invoiceDate}
+                    onChange={formik.setFieldValue}
+                    inputRef={FieldRef}
+                    disabled={isDisabled}
                   />
                 </Grid>
 
                 <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <InputBox
+                  <FormAutoCompleteWithLoader
                     label="Vendor Name"
-                    id="customerName"
-                    value={formik.values.customerName}
-                    error={formik.errors.customerName}
+                    id="vendorName"
+                    suggestionName="vendor_name"
+                    value={formik.values.vendorName}
+                    error={formik.errors.vendorName}
                     onChange={formik.handleChange}
-                    inputRef={customerNameRef}
                   />
                 </Grid>
 
@@ -495,7 +499,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     value={formik.values.vendorInvoiceNo}
                     error={formik.errors.vendorInvoiceNo}
                     onChange={formik.handleChange}
-                    inputRef={customerNameRef}
+                    inputRef={payableRef}
                   />
                 </Grid>
 
@@ -506,7 +510,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     value={formik.values.vendorInvoiceDate}
                     error={formik.errors.vendorInvoiceDate}
                     onChange={formik.handleChange}
-                    inputRef={customerNameRef}
+                    inputRef={payableRef}
                   />
                 </Grid>
 
@@ -517,7 +521,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     value={formik.values.currency}
                     error={formik.errors.currency}
                     onChange={formik.handleChange}
-                    inputRef={customerNameRef}
+                    inputRef={payableRef}
                   />
                 </Grid>
 
@@ -528,31 +532,9 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     value={formik.values.exChangeRate}
                     error={formik.errors.exChangeRate}
                     onChange={formik.handleChange}
-                    inputRef={customerNameRef}
+                    inputRef={payableRef}
                   />
                 </Grid>
-
-                {/* <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
-                  <InputBox
-                    label="Amount"
-                    id="amount"
-                    value={formik.values.amount}
-                    error={formik.errors.amount}
-                    onChange={formik.handleChange}
-                    inputRef={customerNameRef}
-                  />
-                </Grid>
-
-                <Grid item xs={12} lg={6} paddingLeft={1} marginTop={2}>
-                  <InputBox
-                    label="VAT"
-                    id="customerName"
-                    value={formik.values.customerName}
-                    error={formik.errors.customerName}
-                    onChange={formik.handleChange}
-                    inputRef={customerNameRef}
-                  />
-                </Grid> */}
 
                 <Grid item xs={12} lg={12} paddingLeft={1} marginTop={2}></Grid>
               </Grid>
@@ -762,7 +744,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
             <Box>
               {actionsSelector?.view === "card" && (
                 <IconButton onClick={() => dispatch(formView("grid"))}>
-                  <AddIcon  color="primary" />
+                  <AddIcon color="primary" />
                 </IconButton>
               )}
 
@@ -785,7 +767,13 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
           </Stack>
 
           {actionsSelector?.view === "card" ? (
-            <Box sx={{ width: "100%", borderBottom: "1px solid #ccc",paddingBottom: "3px" }}>
+            <Box
+              sx={{
+                width: "100%",
+                borderBottom: "1px solid #ccc",
+                paddingBottom: "3px",
+              }}
+            >
               <PayableCardView
                 uniqueId="id"
                 columns={USER_MANAGEMENT_COLUMNS}
@@ -814,14 +802,14 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
 
           {page === "payable" && (
             <>
-              <Box sx={{display: "flex", gap:"10px", padding: "15px"}}>
+              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
                 <OutlinedButton
                   sx={{ fontWeight: "500" }}
                   onClick={() => nav("/app/entity/customer")}
                 >
                   Close
                 </OutlinedButton>
-             
+
                 <ThemeButton
                   onClick={formik.handleSubmit}
                   sx={{
@@ -833,7 +821,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   {isLoading && <CircularProgress size={20} color="white" />}
                   Add
                 </ThemeButton>
-                </Box>
+              </Box>
 
               {/* 
                   <Grid item xs={12}>
