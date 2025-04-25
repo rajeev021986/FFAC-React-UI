@@ -8,13 +8,13 @@ export default function CardItemUser({ item, actions }) {
     <Card
       sx={{
         minWidth: "275px",
-        maxWidth: "350px",
+        //maxWidth: "350px",
         // margin: 2,
-        borderRadius: 3,
-        boxShadow: 5,
+        borderRadius: 2,
+        boxShadow: 1,
         transition: "transform 0.3s ease-in-out",
         "&:hover": {
-          transform: "scale(1.05)",
+          transform: "scale(1.01)",
         },
       }}
     >
@@ -25,7 +25,8 @@ export default function CardItemUser({ item, actions }) {
           alignItems: "center",
           width: "100%",
           borderBottom: "1px solid #ccc",
-          padding: "10px",
+          padding: "5px 10px",
+          boxShadow: "0px 1px 4px 0px rgba(204,204,204,0.79)"
         }}
       >
         <Typography
@@ -33,7 +34,7 @@ export default function CardItemUser({ item, actions }) {
           component="div"
           sx={{ fontWeight: "bold", fontSize: "16px" }}
         >
-          {"Charge Name"}: Test
+          {"Charge Name"}
         </Typography>
         <Box
           sx={{
@@ -48,44 +49,51 @@ export default function CardItemUser({ item, actions }) {
           >
             {actions[0].icon}
           </IconButton>
-
-          <DeleteForeverIcon sx={{ color: "red" }} />
+          <IconButton>
+            <DeleteForeverIcon sx={{ color: "red" }} />
+          </IconButton>
         </Box>
       </Box>
       <CardContent
-        sx={{ display: "flex", flexDirection: "column", alignItems: "left" }}
+        sx={{ display: "flex", flexDirection: "column", alignItems: "left", }}
       >
-        <Typography>
-          {"Unit Type:"} {"Flat"}
-        </Typography>
-        <Typography>
-          {"Unit Rate:"} {"4"}
-        </Typography>
-        <Typography>
-          {"Amount:"} {"345674"}
-        </Typography>
-        <Typography>
-          {"Vat Amount:"} {"13674"}
-        </Typography>
+        {[
+          { label: "Unit Type", value: "Flat" },
+          { label: "Unit Rate", value: "4" },
+          { label: "Amount", value: "345674" },
+          { label: "VAT Amount", value: "13674" },
+        ].map((item, index) => (
+          <Box
+          key={index}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "4px 0",
+              borderBottom: "1px dashed #ccc"
+            }}
+          >
+            <Typography fontWeight="bold">{item.label} </Typography>
+            <Typography> {item.value} </Typography>
+          </Box>
+        ))}
+        
       </CardContent>
 
-      <Box
+
+      <CardActions
         sx={{
           display: "flex",
+          alignItems: "center",
           justifyContent: "center",
-          paddingBottom: 2,
           borderTop: "1px solid #ccc",
+          boxShadow: "1px 0px 4px 0px rgba(204,204,204,0.79)",
+          padding: "12px 10px",
         }}
       >
-        <CardActions
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <Typography>Total: 23456789</Typography>
-        </CardActions>
-      </Box>
+        <Typography><Box component="span" fontWeight="fontWeightBold">Total:</Box> 23456789</Typography>
+      </CardActions>
+
     </Card>
   );
 }
