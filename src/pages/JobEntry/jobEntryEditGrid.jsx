@@ -206,7 +206,7 @@ export default function JobEntryGridForm({
         },
         {
           field: "shippingLineSealNo",
-          headerName: "Shipping Line, Seal No.",
+          headerName: "Shipping Line",
           flex: 1,
           editable: true,
           renderCell: (params) => <InputBoxForGrid {...params} type="number" />,
@@ -483,7 +483,7 @@ export default function JobEntryGridForm({
         },
         {
           field: "dateOfDelivery",
-          headerName: "Date of Delivary",
+          headerName: "Date of Delivery",
           flex: 2.5,
           renderCell: (params) => (
             <DateTimeField

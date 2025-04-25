@@ -33,6 +33,10 @@ import ApiManager from "../../../../services/ApiManager";
 import FormAutoComplete from "../../../../components/common/AutoComplete/FormAutoComplete";
 import { LooseCargoValidationSchema } from "./LooseCargoValidationSchema";
 import SelectBox from "../../../../components/common/SelectBox";
+import DocumentIcon from "../../../../components/common/commonIcons/DocumentIcons/DocumentIcon";
+import AuditIcon from "../../../../components/common/commonIcons/AuditIcon/AuditIcon";
+import AuditTimeLine from "../../../../components/AuditTimeLine";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 
 export default function LooseCargoForm({
   page,
@@ -71,7 +75,7 @@ export default function LooseCargoForm({
   const [initialValues, setInitialValues] = React.useState({
     transporter: "",
     truckTrailerNo: "",
-    truckNo:"",
+    truckNo: "",
     driver: "",
     agreedRate: "",
     telNo: "",
@@ -96,6 +100,7 @@ export default function LooseCargoForm({
     arrivalCustomerPlaceDate: "",
     remark: "",
   });
+console.log("ap",page);
 
   const fetchContainerNumbers = async () => {
     try {
@@ -204,10 +209,11 @@ export default function LooseCargoForm({
     useGetOptionsSettingsQuery("customer_settings");
 
   useEffect(() => {
-    if (optionsSettingsData?.body || customerSettingsData?.body) {
+    if (optionsSettingsData?.body || customerSettingsData?.body || jobSettingData?.body) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
+        ...jobSettingData?.body,
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
@@ -256,6 +262,9 @@ export default function LooseCargoForm({
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList
+              onChange={(event, newValue) => {
+                setValue(newValue); // <-- this updates the tab
+              }}
               aria-label="lab API tabs example"
               sx={{ paddingBottom: "20px" }}
             >
@@ -268,6 +277,26 @@ export default function LooseCargoForm({
                 }}
                 icon={<EditIconForHeader />}
                 iconPosition="start"
+              />
+              <Tab
+                label="Document Details"
+                value="2"
+                icon={<DocumentIcon />}
+                iconPosition="start"
+                sx={{
+                  textTransform: "capitalize",
+                  minHeight: "50px",
+                }}
+              />
+              <Tab
+                label="Audit Logs"
+                value="3"
+                icon={<AuditIcon />}
+                iconPosition="start"
+                sx={{
+                  textTransform: "capitalize",
+                  minHeight: "50px",
+                }}
               />
             </TabList>
           </Box>
@@ -396,11 +425,9 @@ export default function LooseCargoForm({
                     disabled
                   />
                 </Grid>
-
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-                
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Transfer Date"
@@ -504,8 +531,6 @@ export default function LooseCargoForm({
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-               
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="Bond Amount"
@@ -660,8 +685,6 @@ export default function LooseCargoForm({
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-             
-
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <InputBox
                     label="Remarks"
@@ -675,9 +698,24 @@ export default function LooseCargoForm({
               </Grid>
             </Grid>
           </TabPanel>
+          <TabPanel value="2" sx={{ padding: "0px" }}>
+            <UploadFile
+              customer_id={looseCargoId}
+              disabled={false}
+              dropdownData={dropdownData.jobDocumentType}
+              sourceType="JOB_LOOSE_CARGO"
+            />
+          </TabPanel>
+          <TabPanel value="3" sx={{ padding: "0px" }}>
+            <AuditTimeLine
+              id={looseCargoId}
+              page="job-update/loose-cargo"
+              service={menuConfigUrl.document}
+            />
+          </TabPanel>
         </TabContext>
 
-        {(page === "loose_cargo_number" || onCancel || onSubmit) && (
+        {(page === "looseShipment"  && value =="1") && (
           <Grid
             paddingLeft={3}
             marginTop={2}

@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const PAYABLE_COLUMNS = [
   {
     flex: 1,
@@ -19,111 +21,111 @@ export const PAYABLE_COLUMNS = [
   },
   {
     flex: 1,
-    field: "lineName",
-    headerName: "Line Name",
+    field: "invoiceType",
+    headerName: "Invoice Type",
     width: 140,
     headerAlign: "center",
     minWidth: 100,
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
     ),
   },
   {
     flex: 1,
-    field: "Line Invoice No.",
-    headerName: "line Invoice No",
+    field: "payableRefNo",
+    headerName: "Payable Ref. No.",
     width: 110,
     headerAlign: "center",
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
     ),
   },
   {
     flex: 1,
-    field: "lineInvoiceDate",
-    headerName: "Line Invoice Date",
+    field: "jobNo",
+    headerName: "Job No.",
     width: 110,
     headerAlign: "center",
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
     ),
   },
   {
     flex: 1,
-    field: "purchaseInvoiceNo.",
-    headerName: "Purchase Inv. No.",
+    field: "invoiceDate",
+    headerName: "Invoice Date",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+    renderCell: (params) => {
+      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    },
+  },
+  {
+    flex: 1,
+    field: "vendorName",
+    headerName: "Vendor Name",
     width: 110,
     headerAlign: "center",
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
     ),
   },
   {
     flex: 1,
-    field: "purchaseInvDate",
-    headerName: "Date",
+    field: "vendorInvoiceNo",
+    headerName: "Vendor Invoice No.",
     width: 110,
     headerAlign: "center",
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
     ),
   },
   {
     flex: 1,
-    field: "paymentVNO",
-    headerName: "Payment VNO",
+    field: "vendorInvoiceDate",
+    headerName: "Vendor Invoice Date",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+    renderCell: (params) => {
+      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    },
+  },
+  {
+    flex: 1,
+    field: "currency",
+    headerName: "Currency",
     width: 110,
     headerAlign: "center",
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
     ),
   },
   {
     flex: 1,
-    field: "paymentDate",
-    headerName: "Payment Date",
+    field: "exchangeRate",
+    headerName: "Ex. Rate",
     width: 110,
     headerAlign: "center",
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
-    ),
-  },
-  {
-    flex: 1,
-    field: "totalAmount",
-    headerName: "Total Amount",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    editable: false,
-    renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
-    ),
-  },
-  {
-    flex: 1,
-    field: "credit",
-    headerName: "Credit",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    editable: false,
-    renderCell: (params) => (
-      <div className="word-wrap-cell">{params.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{String(params?.value ?? "").trim()}</div>
     ),
   },
   {

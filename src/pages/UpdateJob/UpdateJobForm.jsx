@@ -271,7 +271,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       aria-label="upload"
                       onClick={() =>
                         formik.values.shippingLineDOCollectionDate &&
-                        handleOpen("shippingLineDOCollectionDoc")
+                        handleOpen("ShippingLineDOCollectionDoc")
                       }
                       style={{
                         cursor: formik.values.shippingLineDOCollectionDate
@@ -344,7 +344,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       aria-label="upload"
                       onClick={() =>
                         formik.values.customReleaseDate &&
-                        handleOpen("custom_ReleaseDoc")
+                        handleOpen("Custom_ReleaseDoc")
                       }
                       style={{
                         cursor: formik.values.customReleaseDate
@@ -415,7 +415,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       aria-label="upload"
                       onClick={() =>
                         formik.values.taxExemptionCertificateDate &&
-                        handleOpen("tax_Exemption_Certificate_Doc")
+                        handleOpen("Tax_Exemption_Certificate_Doc")
                       }
                       style={{
                         cursor: formik.values.taxExemptionCertificateDate
@@ -485,7 +485,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       color="primary"
                       aria-label="upload"
                       onClick={() =>
-                        formik.values.pickUpOrder && handleOpen("pickUpOrder")
+                        formik.values.pickUpOrder && handleOpen("PickUpOrder")
                       }
                       style={{
                         cursor: formik.values.pickUpOrder
@@ -578,7 +578,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       color="primary"
                       aria-label="upload"
                       onClick={() =>
-                        formik.values.idfDate && handleOpen("idf_Doc")
+                        formik.values.idfDate && handleOpen("Idf_Doc")
                       }
                       style={{
                         cursor: formik.values.idfDate
@@ -681,7 +681,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
                       color="primary"
                       aria-label="upload"
                       onClick={() =>
-                        formik.values.entryDate && handleOpen("entry_Doc")
+                        formik.values.entryDate && handleOpen("Entry_Doc")
                       }
                       style={{
                         cursor: formik.values.entryDate

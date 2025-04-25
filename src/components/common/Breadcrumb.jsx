@@ -74,6 +74,8 @@ const Routes = {
   editJobEntry: { label: "Edit Job Entry", disabled: false },
   approveJobfile: { label: "Approve New File", disabled: false },
   updateJob: { label: "Update Job", disabled: false },
+  paybleEntry: { label: "Payable Entry", disabled: false },
+  addpayable: { label: "Add Payable Entry", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {

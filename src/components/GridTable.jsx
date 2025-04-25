@@ -61,13 +61,14 @@ function GridDataTable({ data }) {
 
   return (
     <Box sx={{ width: "100%", textAlign: "right" }}>
-      <Box sx={{ height: 100 }}>
+      <Box sx={{ height: "auto" }}>
         <DataGrid
           rows={data}
           columns={columns}
           disableSelectionOnClick
           disableColumnMenu
           getRowId={(row) => row.id}
+          // autoHeight={true}
           hideFooter
           sx={{
             "& .MuiDataGrid-columnHeader": {
