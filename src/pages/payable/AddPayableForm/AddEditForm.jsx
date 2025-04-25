@@ -50,6 +50,7 @@ import { getUserListGridActions } from "../../../components/screen/user-manageme
 import { dashboardSetPagination } from "../../../store/freatures/dashboardSlice";
 import DateTimeField from "../../../components/common/DateTime/DateTimeField";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
+import SelectBox from "../../../components/common/SelectBox";
 
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
@@ -380,6 +381,17 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     }
   }, []);
 
+  const CurrencyData = [
+    {
+      label: "TZS",
+      value: "TZS",
+    },
+    {
+      label: "USD",
+      value: "USD",
+    },
+  ];
+
   return (
     <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
       <TabContext value={value}>
@@ -515,13 +527,13 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                 </Grid>
 
                 <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <InputBox
+                  <SelectBox
                     label="Currency"
                     id="currency"
+                    options={CurrencyData}
                     value={formik.values.currency}
                     error={formik.errors.currency}
                     onChange={formik.handleChange}
-                    inputRef={payableRef}
                   />
                 </Grid>
 
