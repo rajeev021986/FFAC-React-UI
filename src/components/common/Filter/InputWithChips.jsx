@@ -162,7 +162,7 @@ const InputWithChips = ({
         <IconButton
           aria-label=""
           onClick={endButtonHandler}
-          sx={{ padding: "5px" }}
+          sx={{ padding: "0px" }}
         >
           {formattedFilter.length > 0 ? <Clear /> : <FilterAltOutlined />}
         </IconButton>
@@ -179,9 +179,9 @@ const styles = {
     justifyContent: "space-between",
     gap: "5px",
     alignItems: "center",
-    padding: "2px",
+    padding: "8px 15px",
     border: "1px solid #ccc",
-    borderRadius: "25px",
+    borderRadius: "50px",
     cursor: "text",
     "& .MuiTextField-root": {
       flex: "1",
@@ -194,11 +194,12 @@ const styles = {
     display: "flex",
     flex: "1",
     alignItems: "center",
+    gap: "5px"
   },
   startIcon: {
     display: "flex",
     alignItems: "center",
-    padding: "5px",
+    //padding: "5px",
   },
 };
 

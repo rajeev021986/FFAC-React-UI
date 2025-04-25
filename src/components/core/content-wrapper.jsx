@@ -12,12 +12,12 @@ export default function ContentWrapper({
       component="main"
       sx={{
         flexGrow: 1,
-        p: 1,
+        p: 2,
         width: {
           sm: `calc(100% - ${hover ? expandedDrawerWidth : drawerWidth}px)`,
         },
         transition: "width 0.3s ease-in-out",
-        mt: "45px",
+        mt: "55px",
         backgroundColor: "white.main",
       }}
     >

@@ -67,13 +67,13 @@ export default function JobEntryScreen({ page }) {
   const [open, setOpen] = useState(false);
   const actions = seletectBox
     ? [
-        { name: "New Job Entry" },
-        { name: "Copy" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
-      ]
+      { name: "New Job Entry" },
+      { name: "Copy" },
+      { name: exportLoader ? <LoaderIcon /> : "Export" },
+    ]
     : page === "entry-approve"
-    ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
-    : [
+      ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
+      : [
         { name: "New Job Entry" },
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ];
@@ -191,12 +191,12 @@ export default function JobEntryScreen({ page }) {
   };
   const handleCancel = async () => {
     const jobStatus = modal?.data?.label;
-  if (jobStatus === "Approved Successfully") {
-    toast.custom(
-      <CustomToast message="Cannot cancel an approved job." toast="error" />
-    );
-    return;
-  }
+    if (jobStatus === "Approved Successfully") {
+      toast.custom(
+        <CustomToast message="Cannot cancel an approved job." toast="error" />
+      );
+      return;
+    }
 
     try {
       const response = await ApiManager.canceljobEntryApprove(
@@ -230,14 +230,14 @@ export default function JobEntryScreen({ page }) {
       );
       return;
     }
-  
+
     // Filter out canceled jobs before approval
     const selectedRows = jobEntriesData?.body?.data?.filter((job) =>
       selectedIds.includes(job.id)
     );
-  
+
     const canceledJobs = selectedRows.filter((job) => job.status === "CANCELED");
-  
+
     if (canceledJobs.length > 0) {
       toast.custom(
         <CustomToast
@@ -247,7 +247,7 @@ export default function JobEntryScreen({ page }) {
       );
       return;
     }
-  
+
     try {
       const response = await ApiManager.approveAllJobEntryRequest(
         "JOB_DETAIL",
@@ -267,7 +267,7 @@ export default function JobEntryScreen({ page }) {
       setSelectedIds([]);
     }
   };
-  
+
   // const handleApproveAllRequest = async () => {
   //   if (selectedIds.length === 0) {
   //     toast.custom(
@@ -297,23 +297,23 @@ export default function JobEntryScreen({ page }) {
   const jobEntryColumns = [
     ...(page === "jobApprove"
       ? [
-          {
-            field: "Approve",
-            headerName: "Approve",
-            width: 80,
-            headerAlign: "center",
-            align: "center",
-            renderCell: (params) => (
-              <input
-                type="checkbox"
-                style={{ cursor: "pointer" }}
-                checked={selectedIds.includes(params.row.id)}
-                onChange={() => handleCheckboxChange(params.row.id)}
-              />
-            ),
-          },
-          ...JOB_ENTRY_COLUMNS, // Use the new columns when on "job-entry" page
-        ]
+        {
+          field: "Approve",
+          headerName: "Approve",
+          width: 80,
+          headerAlign: "center",
+          align: "center",
+          renderCell: (params) => (
+            <input
+              type="checkbox"
+              style={{ cursor: "pointer" }}
+              checked={selectedIds.includes(params.row.id)}
+              onChange={() => handleCheckboxChange(params.row.id)}
+            />
+          ),
+        },
+        ...JOB_ENTRY_COLUMNS, // Use the new columns when on "job-entry" page
+      ]
       : [...JOB_ENTRY_NEW_COLUMNS]), // Use the default columns otherwise
   ];
   return (
@@ -327,13 +327,20 @@ export default function JobEntryScreen({ page }) {
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
-                  "& .MuiFab-root": {
-                    width: 50,
-                    height: 50,
-                    minHeight: 50,
+                  "& .MuiSpeedDial-fab": {
+                    width: 40,
+                    height: 40,
+                    minHeight: 40,
                   },
                 }}
-                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
+                icon={<SpeedDialIcon
+                  sx={{
+                    fontSize: 20,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                />}
                 direction="left"
               >
                 {actions.map((action) => (
@@ -344,16 +351,17 @@ export default function JobEntryScreen({ page }) {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      padding: 2,
-                      borderRadius: 1,
-                      boxShadow: 3,
-                      borderRadius: "20px 19px 19px 20px",
-                      width: 72,
-                      textTransform: "none",
+                      px: 2,
+                      py: 1,
+                      borderRadius: "20px",
                       minWidth: 92,
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 16,
-                      },
+                      width: "auto",
+                      height: 36,
+                      boxShadow: 3,
+                      textTransform: "none",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap"
                     }}
                     icon={
                       <span style={{ fontSize: "12px", fontWeight: "bold" }}>
@@ -373,7 +381,7 @@ export default function JobEntryScreen({ page }) {
         <CardHeader
           sx={{ padding: "8px" }}
           title={
-            <Stack direction="row" justifyContent="space-between">
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
                   filters={codeJobEntryrSelector?.formData}
@@ -383,6 +391,7 @@ export default function JobEntryScreen({ page }) {
                   setSelectedIds={setSelectedIds}
                   handleApproveAllRequest={handleApproveAllRequest} // Pass function
                   page={page}
+                  sx={{ padding: "10px" }}
                 >
                   <FilterForm />
                 </GridSearchInput>
@@ -396,7 +405,7 @@ export default function JobEntryScreen({ page }) {
                       dispatch(setSortBy(event.target.value));
                     }}
                     sx={{
-                      borderRadius: "20px",
+                      borderRadius: "50px",
                       width: "150px",
                     }}
                   />
@@ -407,25 +416,22 @@ export default function JobEntryScreen({ page }) {
         />
 
         {codeJobEntryrSelector.view === "grid" && (
-     <ThemedGrid
-          uniqueId="id"
-          columns={jobEntryColumns}
-          count={jobEntriesData?.body?.totalElements || 0}
-          handlePage={handlePage}
-          data={jobEntriesData?.body?.data}
-          columnVisibility={{}}
-          columnVisibilityHandler={() => {}}
-          paginationModel={codeJobEntryrSelector.pagination}
-          loading={isLoading || isFetching}
+          <ThemedGrid
+            uniqueId="id"
+            columns={jobEntryColumns}
+            count={jobEntriesData?.body?.totalElements || 0}
+            handlePage={handlePage}
+            data={jobEntriesData?.body?.data}
+            columnVisibility={{}}
+            columnVisibilityHandler={() => { }}
+            paginationModel={codeJobEntryrSelector.pagination}
+            loading={isLoading || isFetching}
+            sortModel={codeJobEntryrSelector.sortModel}
 
-          // sortModel={codeJobEntryrSelector.sortModel}
-            
-          // onSortModelChange={(sortModel) =>
-          //   dispatch(jobEntrySetSortModel(sortModel))
-          // }
-        />
-     
-        
+            onSortModelChange={(sortModel) =>
+              dispatch(jobEntrySetSortModel(sortModel))
+            }
+          />
         )}
       </Card>
 

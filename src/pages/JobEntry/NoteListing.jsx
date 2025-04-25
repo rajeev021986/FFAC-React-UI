@@ -184,13 +184,14 @@ const NotesTable = ({ formik }) => {
         Add Note
       </ThemeButton> */}
 
-      <AddNoteModal
+      {toggleNotes && (<AddNoteModal
         toggleNotes={toggleNotes}
         handleToggleNote={handleToggleNote}
         formik={formik}
         onNoteAdded={handleNoteAdded}
         selectedNote={selectedNote} // Pass selected note
       />
+      )}
     </React.Fragment>
   );
 };

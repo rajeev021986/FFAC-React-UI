@@ -1,8 +1,8 @@
 .css-6kt3cr-MuiPaper-root-MuiCard-root {
-  min-height: calc(100vh - 105px) !important;
+  min-height: calc(100vh - 130px) !important;
 }
 .css-172osot {
-  background-color: #ffffff;
+  background-color: transparent!important;
   /* padding: 0 24px; */
   border-radius: 8px;
 }
@@ -19,4 +19,8 @@
   overflow-wrap: break-word; /* Ensures text doesn't overflow */
   max-width: 100%; /* Ensures it stays within column width */
   line-height: 1.4; /* Improves readability */
+}
+.MuiInputLabel-root {
+  background: white;
+  padding-right: 5px!important;
 }

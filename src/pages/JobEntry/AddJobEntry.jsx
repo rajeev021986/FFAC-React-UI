@@ -200,7 +200,7 @@ export default function AddJobEntry({ page }) {
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
-      <Stack sx={{ padding: "8px 0px" }}>
+      <Stack>
         <ScreenToolbar
           leftComps={
             <div>

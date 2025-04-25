@@ -27,8 +27,9 @@ function AuditTimeLine({ id, page, service }) {
               startIcon={<RefreshOutlinedIcon />}
               onClick={refresher}
               sx={{
-                borderRadius: "17px 18px 18px 17px",
+                borderRadius: "50px",
                 color: "white !important",
+                fontSize: { xs: "0.8rem", sm: "0.875rem" }
               }}
             >
               Refresh
