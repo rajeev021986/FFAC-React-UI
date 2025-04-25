@@ -1,4 +1,3 @@
-
 import ApiManager from "../../services/ApiManager";
 
 const suggestionName = {
@@ -21,33 +20,39 @@ const suggestionName = {
   portOfLoading: "PORT_LOADING",
   portOfDischarge: "PORT",
   placeOfDelivery: "PORT",
-  bond_number:"BOND",
-  region : "PORT_REGION",
+  bond_number: "BOND",
+  region: "PORT_REGION",
+  jobNo: "JOB_ENTRY",
+  vendorName: "VENDOR",
 };
 
 export const GetAutoCompleteDataWithLoader = async (
-    dataKey,
-    inputId,
-    dataLabel,
-    searchText
-  ) => {
-    inputId = suggestionName[inputId];
-    try {
-      const response = await ApiManager.fetchAutoCompleteData(
-        searchText,
-        inputId
-      );
-      const data = await response.body;
-  
-      let uniqueSuggestions = data
-        .filter(
-          (value, index, self) =>
-            index === self.findIndex((t) => t[dataKey] === value[dataKey])
-        )
-        .map((item) => ({ label: item[dataLabel], value: item[dataKey], fullData:item }));
-  
-      return uniqueSuggestions;
-    } catch (error) {
-      return [];
-    }
-  };
+  dataKey,
+  inputId,
+  dataLabel,
+  searchText
+) => {
+  inputId = suggestionName[inputId];
+  try {
+    const response = await ApiManager.fetchAutoCompleteData(
+      searchText,
+      inputId
+    );
+    const data = await response.body;
+
+    let uniqueSuggestions = data
+      .filter(
+        (value, index, self) =>
+          index === self.findIndex((t) => t[dataKey] === value[dataKey])
+      )
+      .map((item) => ({
+        label: item[dataLabel],
+        value: item[dataKey],
+        fullData: item,
+      }));
+
+    return uniqueSuggestions;
+  } catch (error) {
+    return [];
+  }
+};
