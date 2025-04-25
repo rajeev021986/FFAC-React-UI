@@ -9,7 +9,7 @@ export default function CardItemUser({ item, actions }) {
       sx={{
         minWidth: "275px",
         maxWidth: "350px",
-        margin: 2,
+        // margin: 2,
         borderRadius: 3,
         boxShadow: 5,
         transition: "transform 0.3s ease-in-out",
