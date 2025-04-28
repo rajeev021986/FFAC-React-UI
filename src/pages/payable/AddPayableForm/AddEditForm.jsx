@@ -13,7 +13,6 @@ import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
 import ApiManager from "../../../services/ApiManager";
 import PopupAlert from "../../../components/common/Alert/PopupAlert";
 import toast from "react-hot-toast";
-import { CustomerValidationSchema } from "../../../components/screen/code/customer/validationSchema";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -25,6 +24,8 @@ import {
   useAddCustomerMutation,
   useUpdateCustomerMutation,
 } from "../../../store/api/codeDataApi";
+
+import { useAddPaybleEntryMutation } from "../../../store/api/payableApi";
 
 import { useNavigate } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
@@ -44,7 +45,6 @@ import {
   GridOnOutlined,
 } from "@mui/icons-material";
 import PayableCardView from "../../../components/common/PayableCard/PayableCard";
-import { USER_MANAGEMENT_COLUMNS } from "../../../data/columns/user";
 import { useFetchUsersQuery } from "../../../store/api/userDataApi";
 import { getUserListGridActions } from "../../../components/screen/user-management/action";
 import { dashboardSetPagination } from "../../../store/freatures/dashboardSlice";
@@ -52,13 +52,21 @@ import DateTimeField from "../../../components/common/DateTime/DateTimeField";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 import SelectBox from "../../../components/common/SelectBox";
 
+import { Delete } from "@mui/icons-material";
+import EditIcon from "@mui/icons-material/Edit";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AddPayableEntryModal from "./AddPayableEntryModal";
+import { payableValidationSchema } from "../Actions/ValidationSchema";
+
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
-  const [addCustomer, { isLoading }] = useAddCustomerMutation();
+  const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
   const actionsSelector = useSelector((s) => s?.payableAction);
-  const [loaderApprove, setLoaderApprove] = useState({
-    approve: false,
-    reject: false,
-  });
+
+  // const [loaderApprove, setLoaderApprove] = useState({
+  //   approve: false,
+  //   reject: false,
+  // });
+
   const [updateCustomer] = useUpdateCustomerMutation();
   const dispatch = useDispatch();
   const [dropdownData, setDropdownData] = useState({});
@@ -85,34 +93,15 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: CustomerValidationSchema(),
+    validationSchema: payableValidationSchema(),
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
-        let emails = values.customerEntityEmailsIds.map((item) =>
-          item?.new ? { ...item, id: null, new: false } : item
-        );
-        let tariffs = values.customerEntityTariffs.map((item) =>
-          item?.new ? { ...item, id: null, new: false } : item
-        );
-        let bank = values.bankDetails.map((item) =>
-          item?.new ? { ...item, id: null, new: false } : item
-        );
         try {
           delete values.id;
           values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
-
-          if (values.paymentType === "cash") {
-            delete values.creditAmount;
-            delete values.creditDays;
-          }
-          values.tinNo = values?.tinNo?.trim() || null;
-          values.vatNo = values?.vatNo?.trim() || null;
-          let response = await addCustomer({
+          let response = await addPaybleEntry({
             ...values,
-            customerEntityEmailsIds: emails,
-            customerEntityTariffs: tariffs,
-            bankDetails: bank,
           }).unwrap();
 
           const message = response.message;
@@ -147,29 +136,10 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       } else {
         try {
           setRejectError(false);
-          if (values.paymentType === "cash") {
-            delete values.creditAmount;
-            delete values.creditDays;
-          }
-          values.tinNo = values.tinNo.trim() || null;
-          values.vatNo = values.vatNo.trim() || null;
-
-          let emails = values.customerEntityEmailsIds.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
-          let tariffs = values.customerEntityTariffs.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
-          let bank = values.bankDetails.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
           let response = await updateCustomer({
             ...values,
-            customerEntityEmailsIds: emails,
-            customerEntityTariffs: tariffs,
-            bankDetails: bank,
           }).unwrap();
 
           const message = response.message;
@@ -205,6 +175,10 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     },
   });
 
+  const getFormData = formik?.values;
+
+  console.log(getFormData, "getFormData");
+
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -219,91 +193,91 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     }
   }, [optionsSettingsData, customerSettingsData]);
 
-  const handleApproveRequest = async () => {
-    setRejectError(false);
-    try {
-      setLoaderApprove((prevState) => ({
-        ...prevState,
-        approve: true,
-      }));
-      const response = await ApiManager.approveCustomerApprove(
-        initialValues.id,
-        "customer"
-      );
-      const message = response.message;
-      nav("/app/entity/approve");
-      toast.custom(<CustomToast message={message} toast="success" />, {
-        closeButton: false,
-      });
-    } catch (error) {
-      toast.custom(
-        <CustomToast
-          message="Error occurred while approve customer"
-          toast="error"
-        />,
-        {
-          closeButton: false,
-        }
-      );
-    }
-    setLoaderApprove((prevState) => ({
-      ...prevState,
-      approve: false,
-    }));
-  };
+  // const handleApproveRequest = async () => {
+  //   setRejectError(false);
+  //   try {
+  //     setLoaderApprove((prevState) => ({
+  //       ...prevState,
+  //       approve: true,
+  //     }));
+  //     const response = await ApiManager.approveCustomerApprove(
+  //       initialValues.id,
+  //       "customer"
+  //     );
+  //     const message = response.message;
+  //     nav("/app/entity/approve");
+  //     toast.custom(<CustomToast message={message} toast="success" />, {
+  //       closeButton: false,
+  //     });
+  //   } catch (error) {
+  //     toast.custom(
+  //       <CustomToast
+  //         message="Error occurred while approve customer"
+  //         toast="error"
+  //       />,
+  //       {
+  //         closeButton: false,
+  //       }
+  //     );
+  //   }
+  //   setLoaderApprove((prevState) => ({
+  //     ...prevState,
+  //     approve: false,
+  //   }));
+  // };
 
-  const handleRejectRequest = async () => {
-    if (!formik.values.rejectRemarks) {
-      setRejectError(true);
-      toast.custom(
-        <CustomToast message="Reject remarks to be filled!" toast="warn" />,
-        {
-          closeButton: false,
-        }
-      );
-      return;
-    }
-    try {
-      setLoaderApprove((prevState) => ({
-        ...prevState,
-        reject: true,
-      }));
-      const response = await ApiManager.rejectCustomerApprove(
-        initialValues.id,
-        "customer",
-        formik.values.rejectRemarks
-      );
-      const message = response.message;
-      nav("/app/entity/approve");
+  // const handleRejectRequest = async () => {
+  //   if (!formik.values.rejectRemarks) {
+  //     setRejectError(true);
+  //     toast.custom(
+  //       <CustomToast message="Reject remarks to be filled!" toast="warn" />,
+  //       {
+  //         closeButton: false,
+  //       }
+  //     );
+  //     return;
+  //   }
+  //   try {
+  //     setLoaderApprove((prevState) => ({
+  //       ...prevState,
+  //       reject: true,
+  //     }));
+  //     const response = await ApiManager.rejectCustomerApprove(
+  //       initialValues.id,
+  //       "customer",
+  //       formik.values.rejectRemarks
+  //     );
+  //     const message = response.message;
+  //     nav("/app/entity/approve");
 
-      toast.custom(<CustomToast message={message} toast="success" />, {
-        closeButton: false,
-      });
-    } catch (error) {
-      toast.custom(
-        <CustomToast
-          message="Error occurred while reject customer"
-          toast="error"
-        />,
-        {
-          closeButton: false,
-        }
-      );
-    }
-    setLoaderApprove((prevState) => ({
-      ...prevState,
-      reject: false,
-    }));
-  };
+  //     toast.custom(<CustomToast message={message} toast="success" />, {
+  //       closeButton: false,
+  //     });
+  //   } catch (error) {
+  //     toast.custom(
+  //       <CustomToast
+  //         message="Error occurred while reject customer"
+  //         toast="error"
+  //       />,
+  //       {
+  //         closeButton: false,
+  //       }
+  //     );
+  //   }
+  //   setLoaderApprove((prevState) => ({
+  //     ...prevState,
+  //     reject: false,
+  //   }));
+  // };
 
-  const handleActionClick = async (actionName) => {
-    if (actionName === "New Entry") {
-      nav("addpayable", {
-        replace: true,
-        state: { formAction: "add" },
-      });
-    }
-  };
+  // const handleActionClick = async (actionName) => {
+  //   if (actionName === "New Entry") {
+  //     nav("addpayable", {
+  //       replace: true,
+  //       state: { formAction: "add" },
+  //     });
+  //   }
+  // };
 
   useEffect(() => {
     getFirstError(formik.errors);
@@ -392,450 +366,675 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     },
   ];
 
-  return (
-    <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          {type === "add" ? (
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab
-                label="Payable Details"
-                value="1"
-                icon={<EditIconForHeader />}
-                iconPosition="start"
-                sx={{ textTransform: "capitalize", minHeight: "50px" }}
-              />
-            </TabList>
-          ) : (
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab
-                label="Job Entry Details"
-                value="1"
-                icon={<EditIconForHeader />}
-                iconPosition="start"
-                sx={{ textTransform: "capitalize", minHeight: "50px" }}
-              />
-              <Tab
-                label="Document Details"
-                value="2"
-                icon={<DocumentIcon />}
-                iconPosition="start"
-                sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                disabled={isDisabled}
-              />
-              <Tab
-                label="Audit Logs"
-                value="3"
-                icon={<AuditIcon />}
-                iconPosition="start"
-                sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                disabled={isDisabled}
-              />
-            </TabList>
-          )}
-        </Box>
+  //
+  const [chargesData, setChargesData] = useState([]);
+  const [togglePayEntry, setToggleNotes] = useState(false);
+  const [selectedPayEntry, setSelectedNote] = useState(null);
 
-        <TabPanel value="1" sx={{ padding: 0 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-              padding: 0,
-              margin: 0,
+  const disabled = formik?.values?.statusCode === -3;
+
+  const handleEditClick = (note) => {
+    setSelectedNote(note);
+    setToggleNotes(true);
+  };
+
+  const handleTogglePayEntry = () => {
+    setToggleNotes((prev) => !prev);
+    if (togglePayEntry) {
+      setSelectedNote(null);
+    }
+  };
+
+  const handleAddPayEntry = (newNote) => {
+    let updatedNotes;
+    if (selectedPayEntry) {
+      updatedNotes = chargesData.map((note) =>
+        note.id === selectedPayEntry.id ? newNote : note
+      );
+    } else {
+      updatedNotes = [...chargesData, newNote];
+    }
+    setChargesData(updatedNotes);
+    formik.setFieldValue("chargesData", updatedNotes);
+    setSelectedNote(null);
+  };
+
+  const handleDeleteNote = (id) => {
+    const updatedNotes = chargesData.filter((note) => note.id !== id);
+    setChargesData(updatedNotes);
+    formik.setFieldValue("chargesData", updatedNotes);
+    localStorage.setItem("chargesData", JSON.stringify(updatedNotes));
+  };
+
+  const handleFetchPayable = () => {
+    const storePayableData =
+      JSON.parse(localStorage.getItem("chargesData")) || [];
+    const apiPayableData = formik?.values?.chargesData || [];
+    const appendData = [...apiPayableData, ...storePayableData].reduce(
+      (acc, pay) => {
+        if (!acc.some((n) => n.id === pay.id)) {
+          acc.push(pay);
+        }
+        return acc;
+      },
+      []
+    );
+    setChargesData(appendData);
+  };
+
+  useEffect(() => {
+    handleFetchPayable();
+  }, [formik?.values?.chargesData]);
+
+  const PAYABLE_COLUMNS = [
+    {
+      flex: 1,
+      field: "jobNo",
+      headerName: "Job No.",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+      renderCell: (params) => {
+        const createdBy = params.row?.new
+          ? localStorage.getItem("userId") || "Unknown User"
+          : params.row?.createdBy || "";
+
+        return <span>{createdBy}</span>;
+      },
+    },
+
+    {
+      flex: 1,
+      field: "chargeName",
+      headerName: "Charge Name",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "unitType",
+      headerName: "Unit Type",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "noOfUnit",
+      headerName: "No Unit Units",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "unitRate",
+      headerName: "Unit Rate",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "amount",
+      headerName: "Amount",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "vatApplicable",
+      headerName: "Vat Applicable",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "vatAmount",
+      headerName: "Vat Amount",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "withHoldingTax",
+      headerName: "With Holding Tax",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "withHoldingAmount",
+      headerName: "With holding amount",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "totalAmount",
+      headerName: "Total Amount",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+
+    {
+      field: "edit",
+      headerName: "Edit",
+      flex: 1,
+      sortable: false,
+      headerAlign: "center",
+      renderHeader: () => (
+        <IconButton color="white" onClick={handleTogglePayEntry}>
+          <AddCircleIcon />
+        </IconButton>
+      ),
+      renderCell: (params) => (
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <EditIcon
+            style={{
+              cursor: disabled ? "not-allowed" : "pointer",
+              color: disabled ? "#ccc" : "#166ee0",
+              opacity: disabled ? 0.5 : 1,
             }}
-          >
-            <Box sx={{ width: "40%", paddingRight: 2 }}>
-              <Grid container sx={{ padding: 0, margin: 0 }}>
-                <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <InputBox
-                    label="Invoice Type*"
-                    id="invoiceType"
-                    value={formik.values.invoiceType}
-                    error={formik.errors.invoiceType}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
+            onClick={() => {
+              if (!disabled) handleEditClick(params.row);
+            }}
+          />
+          <Delete
+            style={{
+              cursor: disabled ? "not-allowed" : "pointer",
+              color: disabled ? "#ccc" : "red",
+              opacity: disabled ? 0.5 : 1,
+            }}
+            onClick={() => {
+              if (!disabled) handleDeleteNote(params.row.id);
+            }}
+          />
+        </div>
+      ),
+    },
+  ];
 
-                <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <InputBox
-                    label="Payable Ref. No.*"
-                    id="customerName"
-                    value={formik.values.customerName}
-                    error={formik.errors.customerName}
-                    onChange={formik.handleChange}
-                    inputRef={payableRef}
-                    disabled
-                  />
-                </Grid>
+  console.log(chargesData, "chargesData");
 
-                <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <FormAutoCompleteWithLoader
-                    label="Job No."
-                    id="jobNo"
-                    value={formik.values.jobNo}
-                    error={formik.errors.jobNo}
-                    onChange={formik.handleChange}
-                    suggestionName="job_no"
-                  />
-                </Grid>
-
-                <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <DateTimeField
-                    name="invoiceDate"
-                    label="Invoice Date"
-                    id="invoiceDate"
-                    value={formik.values.invoiceDate}
-                    error={formik.errors.invoiceDate}
-                    onChange={formik.setFieldValue}
-                    inputRef={FieldRef}
-                    disabled={isDisabled}
-                  />
-                </Grid>
-
-                <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <FormAutoCompleteWithLoader
-                    label="Vendor Name"
-                    id="vendorName"
-                    suggestionName="vendor_name"
-                    value={formik.values.vendorName}
-                    error={formik.errors.vendorName}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
-
-                <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <InputBox
-                    label="Vendor Invoice No."
-                    id="vendorInvoiceNo"
-                    value={formik.values.vendorInvoiceNo}
-                    error={formik.errors.vendorInvoiceNo}
-                    onChange={formik.handleChange}
-                    inputRef={payableRef}
-                  />
-                </Grid>
-
-                <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <InputBox
-                    label="Vendor Invoice Date"
-                    id="vendorInvoiceDate"
-                    value={formik.values.vendorInvoiceDate}
-                    error={formik.errors.vendorInvoiceDate}
-                    onChange={formik.handleChange}
-                    inputRef={payableRef}
-                  />
-                </Grid>
-
-                <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <SelectBox
-                    label="Currency"
-                    id="currency"
-                    options={CurrencyData}
-                    value={formik.values.currency}
-                    error={formik.errors.currency}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
-
-                <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                  <InputBox
-                    label="Ex. Rate"
-                    id="exChangeRate"
-                    value={formik.values.exChangeRate}
-                    error={formik.errors.exChangeRate}
-                    onChange={formik.handleChange}
-                    inputRef={payableRef}
-                  />
-                </Grid>
-
-                <Grid item xs={12} lg={12} paddingLeft={1} marginTop={2}></Grid>
-              </Grid>
-
-              <PopupAlert alertConfig={alertConfig} />
-            </Box>
-
-            <Box sx={{ width: "60%", padding: 2 }}>
-              <Box
-                sx={{
-                  border: "1px solid #ccc",
-                  borderRadius: "10px",
-                  overflow: "hidden",
-                }}
+  return (
+    <>
+      <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            {type === "add" ? (
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
               >
-                <Grid
-                  container
-                  sx={{
-                    "& > .MuiGrid-item": {
-                      border: "1px solid #ccc",
-                    },
-                    "& > .MuiGrid-item > .MuiTypography-root": {
-                      padding: "10px",
-                    },
-                    "& fieldset": {
-                      border: "none",
-                    },
-                    "&:hover fieldset": {
-                      border: "none",
-                    },
-                    "&.Mui-focused fieldset": {
-                      border: "none",
-                    },
-                  }}
-                >
-                  <Grid item xs={12} lg={4}></Grid>
-                  <Grid item xs={12} lg={4}>
-                    <Typography>{"Invoice Currency (TZS/USD)"}</Typography>
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <Typography>{"TZS"}</Typography>
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <Typography>Amount</Typography>
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <Typography>VAT</Typography>
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <Typography>With holding Tax</Typography>
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <Typography>Net amount payable</Typography>
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <Typography>Cost center</Typography>
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            </Box>
+                <Tab
+                  label="Payable Details"
+                  value="1"
+                  icon={<EditIconForHeader />}
+                  iconPosition="start"
+                  sx={{ textTransform: "capitalize", minHeight: "50px" }}
+                />
+              </TabList>
+            ) : (
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab
+                  label="Job Entry Details"
+                  value="1"
+                  icon={<EditIconForHeader />}
+                  iconPosition="start"
+                  sx={{ textTransform: "capitalize", minHeight: "50px" }}
+                />
+                <Tab
+                  label="Document Details"
+                  value="2"
+                  icon={<DocumentIcon />}
+                  iconPosition="start"
+                  sx={{ textTransform: "capitalize", minHeight: "50px" }}
+                  disabled={isDisabled}
+                />
+                <Tab
+                  label="Audit Logs"
+                  value="3"
+                  icon={<AuditIcon />}
+                  iconPosition="start"
+                  sx={{ textTransform: "capitalize", minHeight: "50px" }}
+                  disabled={isDisabled}
+                />
+              </TabList>
+            )}
           </Box>
 
-          <hr style={{ margin: "10px 0" }} />
-
-          <Stack direction="row" justifyContent="right" padding="5px 15px">
-            <Box>
-              {actionsSelector?.view === "card" && (
-                <IconButton onClick={() => dispatch(formView("grid"))}>
-                  <AddIcon color="primary" />
-                </IconButton>
-              )}
-
-              <IconButton onClick={() => dispatch(formView("card"))}>
-                <FormatListBulletedOutlined
-                  color={
-                    actionsSelector.view === "card" ? "primary" : "secondary"
-                  }
-                />
-              </IconButton>
-
-              <IconButton onClick={() => dispatch(formView("grid"))}>
-                <GridOnOutlined
-                  color={
-                    actionsSelector.view === "grid" ? "primary" : "secondary"
-                  }
-                />
-              </IconButton>
-            </Box>
-          </Stack>
-
-          {actionsSelector?.view === "card" ? (
+          <TabPanel value="1" sx={{ padding: 0 }}>
             <Box
               sx={{
+                display: "flex",
+                justifyContent: "space-between",
                 width: "100%",
-                borderBottom: "1px solid #ccc",
-                paddingBottom: "3px",
+                padding: 0,
+                margin: 0,
               }}
             >
-              <PayableCardView
-                uniqueId="id"
-                columns={USER_MANAGEMENT_COLUMNS}
-                count={20}
-                handlePage={handlePage}
-                data={UserData?.body?.data}
-                paginationModel={actionsSelector.pagination}
-                loading={isLoading}
-                actions={getUserListGridActions(nav, payableSetSortModal)}
-                page=""
-              />
-            </Box>
-          ) : (
-            <Box sx={{ width: "100%" }}>
-              <Box
-                sx={{
-                  border: "1px solid #ccc",
-                  borderRadius: "10px",
-                  margin: "8px",
-                }}
-              >
-                <PayableEntryList formik={formik} dropdownData={dropdownData} />
+              <Box sx={{ width: "40%", paddingRight: 2 }}>
+                <Grid container sx={{ padding: 0, margin: 0 }}>
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <InputBox
+                      label="Invoice Type*"
+                      id="invoiceType"
+                      value={formik.values.invoiceType}
+                      error={formik.errors.invoiceType}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <InputBox
+                      label="Payable Ref. No.*"
+                      id="customerName"
+                      value={formik.values.customerName}
+                      error={formik.errors.customerName}
+                      onChange={formik.handleChange}
+                      inputRef={payableRef}
+                      disabled
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <FormAutoCompleteWithLoader
+                      label="Job No."
+                      id="jobNo"
+                      value={formik.values.jobNo}
+                      error={formik.errors.jobNo}
+                      onChange={formik.handleChange}
+                      suggestionName="job_no"
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <DateTimeField
+                      name="invoiceDate"
+                      label="Invoice Date"
+                      id="invoiceDate"
+                      value={formik.values.invoiceDate}
+                      error={formik.errors.invoiceDate}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                      disabled={isDisabled}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <FormAutoCompleteWithLoader
+                      label="Vendor Name"
+                      id="vendorName"
+                      suggestionName="vendor_name"
+                      value={formik.values.vendorName}
+                      error={formik.errors.vendorName}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <InputBox
+                      label="Vendor Invoice No."
+                      id="vendorInvoiceNo"
+                      value={formik.values.vendorInvoiceNo}
+                      error={formik.errors.vendorInvoiceNo}
+                      onChange={formik.handleChange}
+                      inputRef={payableRef}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <InputBox
+                      label="Vendor Invoice Date"
+                      id="vendorInvoiceDate"
+                      value={formik.values.vendorInvoiceDate}
+                      error={formik.errors.vendorInvoiceDate}
+                      onChange={formik.handleChange}
+                      inputRef={payableRef}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <SelectBox
+                      label="Currency"
+                      id="currency"
+                      options={CurrencyData}
+                      value={formik.values.currency}
+                      error={formik.errors.currency}
+                      onChange={formik.handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <InputBox
+                      label="Ex. Rate"
+                      id="exChangeRate"
+                      value={formik.values.exChangeRate}
+                      error={formik.errors.exChangeRate}
+                      onChange={formik.handleChange}
+                      inputRef={payableRef}
+                    />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    lg={12}
+                    paddingLeft={1}
+                    marginTop={2}
+                  ></Grid>
+                </Grid>
+
+                <PopupAlert alertConfig={alertConfig} />
               </Box>
-            </Box>
-          )}
 
-          {page === "payable" && (
-            <>
-              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
-                <OutlinedButton
-                  sx={{ fontWeight: "500" }}
-                  onClick={() => nav("/app/entity/customer")}
-                >
-                  Close
-                </OutlinedButton>
-
-                <ThemeButton
-                  onClick={formik.handleSubmit}
+              <Box sx={{ width: "60%", padding: 2 }}>
+                <Box
                   sx={{
-                    fontWeight: "500",
-                    borderRadius: "12px",
-                    color: "white !important",
+                    border: "1px solid #ccc",
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    marginLeft: "100px",
                   }}
                 >
-                  {isLoading && <CircularProgress size={20} color="white" />}
-                  Add
-                </ThemeButton>
-              </Box>
+                  <Grid
+                    container
+                    sx={{
+                      "& > .MuiGrid-item": {
+                        border: "1px solid #ccc",
+                      },
+                      "& > .MuiGrid-item > .MuiTypography-root": {
+                        padding: "10px",
+                      },
+                      "& fieldset": {
+                        border: "none",
+                      },
+                      "&:hover fieldset": {
+                        border: "none",
+                      },
+                      "&.Mui-focused fieldset": {
+                        border: "none",
+                      },
+                    }}
+                  >
+                    <Grid item xs={12} lg={4}></Grid>
+                    <Grid item xs={12} lg={4}>
+                      <Typography>{`Invoice Currency (${getFormData?.currency})`}</Typography>
+                    </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <Typography>{"TZS"}</Typography>
+                    </Grid>
 
-              {/* 
+                    <Grid item xs={12} lg={4}>
+                      <Typography>Amount</Typography>
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <Typography>VAT</Typography>
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <Typography>With holding Tax</Typography>
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <Typography>Net amount payable</Typography>
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <Typography>Cost center</Typography>
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Box>
+            </Box>
+
+            <hr style={{ margin: "10px 0" }} />
+
+            <Stack direction="row" justifyContent="right" padding="5px 15px">
+              <Box>
+                {actionsSelector?.view === "card" && (
+                  <IconButton onClick={handleTogglePayEntry}>
+                    <AddIcon color="primary" />
+                  </IconButton>
+                )}
+
+                <IconButton onClick={() => dispatch(formView("card"))}>
+                  <FormatListBulletedOutlined
+                    color={
+                      actionsSelector.view === "card" ? "primary" : "secondary"
+                    }
+                  />
+                </IconButton>
+
+                <IconButton onClick={() => dispatch(formView("grid"))}>
+                  <GridOnOutlined
+                    color={
+                      actionsSelector.view === "grid" ? "primary" : "secondary"
+                    }
+                  />
+                </IconButton>
+              </Box>
+            </Stack>
+
+            {actionsSelector?.view === "card" ? (
+              <Box
+                sx={{
+                  width: "100%",
+                  borderBottom: "1px solid #ccc",
+                  paddingBottom: "3px",
+                }}
+              >
+                <PayableCardView
+                  uniqueId="id"
+                  columns={PAYABLE_COLUMNS}
+                  count={20}
+                  handlePage={handlePage}
+                  data={chargesData}
+                  paginationModel={actionsSelector.pagination}
+                  loading={isLoading}
+                  actions={getUserListGridActions(nav, payableSetSortModal)}
+                  page=""
+                />
+              </Box>
+            ) : (
+              <Box sx={{ width: "100%" }}>
+                <Box
+                  sx={{
+                    border: "1px solid #ccc",
+                    borderRadius: "10px",
+                    margin: "8px",
+                  }}
+                >
+                  <PayableEntryList
+                    formik={formik}
+                    dropdownData={dropdownData}
+                    //
+                    chargesData={chargesData}
+                    PAYABLE_COLUMNS={PAYABLE_COLUMNS}
+                  />
+                </Box>
+              </Box>
+            )}
+
+            {page === "payable" && (
+              <>
+                <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                  <OutlinedButton
+                    sx={{ fontWeight: "500" }}
+                    onClick={() => nav("/app/entity/customer")}
+                  >
+                    Close
+                  </OutlinedButton>
+
+                  <ThemeButton
+                    onClick={formik.handleSubmit}
+                    sx={{
+                      fontWeight: "500",
+                      borderRadius: "12px",
+                      color: "white !important",
+                    }}
+                  >
+                    {isLoading && <CircularProgress size={20} color="white" />}
+                    Add
+                  </ThemeButton>
+                </Box>
+
+                {/* 
                   <Grid item xs={12}>
                     <Stack
                       direction="row"
@@ -871,10 +1070,19 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       </Stack>
                     </Stack>
                   </Grid> */}
-            </>
-          )}
-        </TabPanel>
-      </TabContext>
-    </Box>
+              </>
+            )}
+          </TabPanel>
+        </TabContext>
+      </Box>
+
+      <AddPayableEntryModal
+        togglePayEntry={togglePayEntry}
+        handleTogglePayEntry={handleTogglePayEntry}
+        formik={formik}
+        onAddPayEntry={handleAddPayEntry}
+        selectedPayEntry={selectedPayEntry}
+      />
+    </>
   );
 }

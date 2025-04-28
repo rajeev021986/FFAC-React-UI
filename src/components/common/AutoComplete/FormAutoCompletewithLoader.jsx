@@ -56,9 +56,17 @@ function FormAutoCompleteWithLoader(props) {
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      onChange({ target: { name: id, value: newValue.value } });
+      onChange({
+        target: {
+          name: id,
+          value: newValue.value,
+          count: newValue?.fullData?.count,
+        },
+      });
     } else {
-      onChange({ target: { name: id, value: null } });
+      onChange({
+        target: { name: id, value: null, count: 0 },
+      });
     }
   };
 
@@ -90,7 +98,6 @@ function FormAutoCompleteWithLoader(props) {
                 borderRadius: "10px",
                 fontSize: "14px",
                 height: "43px", // Increase height here
-
               },
             }}
             InputProps={{
