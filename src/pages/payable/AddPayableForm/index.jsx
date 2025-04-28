@@ -44,7 +44,7 @@ export default function AddPayableEntry({ page }) {
 
   const fetchPayableData = async () => {
     try {
-      const res = await ApiManager.getCustomerDeatils(state?.initialValues?.id);
+      const res = await ApiManager.getPayableDeatils(state?.initialValues?.id);
       let status = "";
       if (res.body?.status) {
         status =
@@ -53,31 +53,31 @@ export default function AddPayableEntry({ page }) {
       }
       setInitialValues({
         id: res.body?.id || "",
-        customerName: res.body?.customerName || "",
-        tinNo: res.body?.tinNo || "",
-        vatNo: res.body?.vatNo || "",
-        status: status,
-        add1: res.body?.add1 || "",
-        add2: res.body?.add2 || "",
-        add3: res.body?.add3 || "",
-        poNo: res.body?.poNo || "",
-        city: res.body?.city || "",
-        country: res.body?.country || "",
-        province: res.body?.province || "",
-        contactPerson: res.body?.contactPerson || "",
-        emailId: res.body?.emailId || "",
-        telephone: res.body?.telephone || "",
-        fax: res.body?.fax || "",
-        bankName: res.body?.bankName || "",
-        accountNo: res.body?.accountNo || "",
-        customerType: res.body?.customerType || "",
-        companyCode: res.body?.companyCode || "",
-        paymentType: res.body?.paymentType || "cash",
-        creditDays: res.body?.creditDays || "",
-        creditAmount: res.body?.creditAmount || "",
-        rejectRemarks: res.body?.rejectRemarks || "",
+        status: res.body?.status,
         statusCode: res.body?.statusCode,
-        agreementExpiryDate: res.body?.agreementExpiryDate || "",
+        rejectRemarks: res.body?.rejectRemarks,
+        isDoc: res.body?.isDoc,
+        invoiceType: res.body?.invoiceType,
+        payableRefNo: res.body?.payableRefNo,
+        jobNo: res.body?.jobNo,
+        invoiceDate: res.body?.invoiceDate,
+        vendorName: res.body?.vendorName,
+        vendorInvoiceNo: res.body?.vendorInvoiceNo,
+        vendorInvoiceDate: res.body?.vendorInvoiceDate,
+        currency: res.body?.currency,
+        exchangeRate: res.body?.exchangeRate,
+        invoiceCurrencyAmount: res.body?.invoiceCurrencyAmount,
+        invoiceCurrencyVat: res.body?.invoiceCurrencyVat,
+        invoiceCurrencyWithHoldingTax: res.body?.invoiceCurrencyWithHoldingTax,
+        invoiceCurrencyNetAmountPayable:
+          res.body?.invoiceCurrencyNetAmountPayable,
+        invoiceCurrencyCostCentre: res.body?.invoiceCurrencyCostCentre,
+        shillingAmount: res.body?.shillingAmount,
+        shillingVat: res.body?.shillingVat,
+        shillingWithHoldingTax: res.body?.shillingWithHoldingTax,
+        shillingNetAmountPayable: res.body?.shillingNetAmountPayable,
+        shillingCostCentre: res.body?.shillingCostCentre,
+        paybleDetails: res?.body?.paybleDetails || [],
       });
       setLoading(false);
     } catch (error) {
@@ -113,7 +113,6 @@ export default function AddPayableEntry({ page }) {
           rightComps={<div></div>}
         />
       </Stack>
-
       {loading ? (
         <Loader />
       ) : (

@@ -41,12 +41,6 @@ export default function PayableCardView({
     },
   };
 
-  // Boolean(page === "user_management") &&
-  //   (styles = {
-  //     ...styles,
-  //     grid: { display: "flex", flexWrap: "wrap", gap: "10px" },
-  //   });
-
   const handleDate = (date) => {
     return date.split("T")[0];
   };
@@ -64,7 +58,7 @@ export default function PayableCardView({
   });
   return (
     <>
-      <Box sx={{ padding: "15px",paddingTop: "0" }}>
+      <Box sx={{ padding: "15px", paddingTop: "0" }}>
         <Grid container spacing={2}>
           {gridData?.map((item, index) => (
             <Grid item lg={3} gap={2} sx={{}}>

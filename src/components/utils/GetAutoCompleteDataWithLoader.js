@@ -24,6 +24,8 @@ const suggestionName = {
   region: "PORT_REGION",
   jobNo: "JOB_ENTRY",
   vendorName: "VENDOR",
+  unitType: "JOB_CONTAINER",
+  noOfUnit: "JOB_CONTAINER",
 };
 
 export const GetAutoCompleteDataWithLoader = async (
