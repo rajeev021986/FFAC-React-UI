@@ -6,8 +6,11 @@ import {
   TextField,
   IconButton,
   Tab,
+  Modal,
+  Tooltip,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import toast from "react-hot-toast";
 import dayjs from "dayjs";
@@ -18,11 +21,34 @@ import { StyledDataGrid } from "../../../common/Grid/styles";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
 import DateTimeField from "../../../common/DateTime/DateTimeField";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import UploadFile from "../../../UploadFile";
 
 export default function BondEditGrid({ formik, disabled }) {
   const [value, setValue] = React.useState(0);
+  const [openUploadModal, setOpenUploadModal] = React.useState(false);
+  const [currentRowId, setCurrentRowId] = React.useState(null);
+  const handleOpenUploadModal = (rowId) => {
+    setCurrentRowId(rowId);
+    setOpenUploadModal(true);
+  };
+
+  const handleCloseUploadModal = () => {
+    setCurrentRowId(null);
+    setOpenUploadModal(false);
+  };
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 1200,
+    bgcolor: "background.paper",
+    borderRadius: 2,
+    boxShadow: 24,
+    p: 4,
   };
   const newRowRef = useRef(null);
   const setFocus = () => {
@@ -190,6 +216,39 @@ export default function BondEditGrid({ formik, disabled }) {
             );
           },
         },
+        {
+          field: "uploadDocument",
+          headerName: "Upload Document",
+          flex: 1,
+          headerAlign: "center",
+          align: "center",
+          renderCell: (params) => {
+            const row = params.row;
+            const isExistingRow = row.id && !row.new;
+            return (
+              <Tooltip
+                title={
+                  isExistingRow
+                    ? ""
+                    : "Please first add/save the row to upload document."
+                }
+              >
+                <span>
+                  <Button
+                    variant="text"
+                    onClick={() => isExistingRow && handleOpenUploadModal(row.id)}
+                    sx={{ textTransform: "none" }}
+                    disabled={!isExistingRow}
+                  >
+                    Upload Document
+                  </Button>
+                </span>
+              </Tooltip>
+            );
+          },
+        },
+        
+
         // {
         //   field: "actions",
         //   headerName: "Actions",
@@ -275,6 +334,28 @@ export default function BondEditGrid({ formik, disabled }) {
           ))}
         </TabContext>
       </Box>
+      <Modal open={openUploadModal} onClose={handleCloseUploadModal}>
+        <Box sx={style}>
+          <Button
+            onClick={handleCloseUploadModal}
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 8,
+              color: "red",
+              backgroundColor: "transparent",
+            }}
+          >
+            <CloseIcon color="red" />
+          </Button>
+          <UploadFile
+            customer_id={currentRowId}
+            isNotShowType={true}
+            sourceType={"BOND_POLICY"}
+            type={"POLICY"}
+          />
+        </Box>
+      </Modal>
     </Box>
 
     // <Box sx={{ width: "100%", marginTop: 2 }}>

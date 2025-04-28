@@ -28,6 +28,7 @@ const JobEntrySetting = () => {
 
   const [approvalRequest, setApprovalRequest] = useState(false);
   const [moveType, setMoveType] = useState([]);
+  const [packageType, setPackageType] = useState([]);
   const [cargoType, setCargoType] = useState([]);
   const [typesOfCargo, setTypesOfCargo] = useState([]);
   const [routeCode, setRouteCode] = useState([]);
@@ -50,6 +51,7 @@ const JobEntrySetting = () => {
   useEffect(() => {
     setApprovalRequest(data?.body.approvalRequest || false);
     setMoveType(data?.body.moveType || []);
+    setPackageType(data?.body.packageType || []);
     setCargoType(data?.body.cargoType || []);
     setTypesOfCargo(data?.body.typesOfCargo || []);
     setRouteCode(data?.body.routeCode || []);
@@ -76,6 +78,7 @@ const JobEntrySetting = () => {
     const filteredData = {
       approvalRequest,
       moveType: moveType.filter((item) => !item.value.includes("Type the")),
+      packageType: packageType.filter((item) => !item.value.includes("Type the")),
       cargoType: cargoType.filter((item) => !item.value.includes("Type the")),
       typesOfCargo: typesOfCargo.filter(
         (item) => !item.value.includes("Type the")
@@ -231,6 +234,11 @@ const JobEntrySetting = () => {
             value={reportingPlace}
             setvalue={setReportingPlace}
             title="Reporting Place"
+          />
+           <GlobalDrrpdownSetting
+            value={packageType}
+            setvalue={setPackageType}
+            title="Package Type"
           />
           <GlobalDrrpdownSettingVoucher
             value={voucherData}
