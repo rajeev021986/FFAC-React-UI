@@ -54,13 +54,13 @@ function FormAutoCompleteWithLoader(props) {
     setInputValue(newValue);
   };
 
-  const handleSelectionChange = (event, newValue) => {
+ const  handleSelectionChange = (event, newValue) => {
     if (newValue) {
       onChange({
         target: {
           name: id,
           value: newValue.value,
-          count: newValue?.fullData?.count,
+          count: newValue?.fullData?.count || 0, 
         },
       });
     } else {
@@ -69,6 +69,7 @@ function FormAutoCompleteWithLoader(props) {
       });
     }
   };
+  
 
   return (
     <Box sx={{ width: "100%" }}>

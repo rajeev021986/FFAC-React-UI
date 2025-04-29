@@ -7,6 +7,7 @@ import {
   IconButton,
   Select,
   MenuItem,
+  TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import InputBox from "../../../components/common/InputBox";
@@ -72,32 +73,47 @@ export default function AddPayableEntryModal({
   }, [selectedPayEntry]);
 
   const handleChange = (field, value) => {
-    console.log(value, 234567890);
-    let updatedEntry = { ...payableEntry, [field]: value };
-
-    const noOfUnit = updatedEntry.noOfUnit ? Number(updatedEntry.noOfUnit) : 0;
-    const unitRate = updatedEntry.unitRate ? Number(updatedEntry.unitRate) : 0;
-
-    updatedEntry.amount = noOfUnit * unitRate;
-
-    if (updatedEntry.vatApplicable === "18%") {
-      updatedEntry.vatAmount = (updatedEntry.amount * 0.18).toFixed(2);
-    } else {
-      updatedEntry.vatAmount = 0;
+    // Handle unitType separately to avoid clearing it immediately
+    if (field === "unitType") {
+      setPayableEntry((prevEntry) => ({
+        ...prevEntry,
+        unitType: value,
+      }));
+      // return; // Early return to prevent further state overwriting
     }
-    const withHoldingTax = Number(updatedEntry.withHoldingTax || 0);
-    updatedEntry.withHoldingAmount = (
-      (updatedEntry.vatAmount * withHoldingTax) /
-      100
-    ).toFixed(2);
+    // Now update the rest of the fields
+    setPayableEntry((prevEntry) => {
+      let updatedEntry = { ...prevEntry, [field]: value };
 
-    updatedEntry.totalAmount = (
-      updatedEntry.amount +
-      Number(updatedEntry.vatAmount) -
-      Number(updatedEntry.withHoldingAmount)
-    ).toFixed(2);
+      // Calculate amount based on noOfUnit and unitRate
+      const noOfUnit = updatedEntry.noOfUnit ? Number(updatedEntry.noOfUnit) : 0;
+      const unitRate = updatedEntry.unitRate ? Number(updatedEntry.unitRate) : 0;
 
-    setPayableEntry(updatedEntry);
+      updatedEntry.amount = noOfUnit * unitRate;
+
+      // Calculate VAT and withholding amount
+      if (updatedEntry.vatApplicable === "18%") {
+        updatedEntry.vatAmount = (updatedEntry.amount * 0.18).toFixed(2);
+      } else {
+        updatedEntry.vatAmount = 0;
+      }
+
+      const withHoldingTax = Number(updatedEntry.withHoldingTax || 0);
+      updatedEntry.withHoldingAmount = (
+        (updatedEntry.vatAmount * withHoldingTax) / 100
+      ).toFixed(2);
+
+      updatedEntry.totalAmount = (
+        updatedEntry.amount +
+        Number(updatedEntry.vatAmount) -
+        Number(updatedEntry.withHoldingAmount)
+      ).toFixed(2);
+
+      console.log("updatedEntry", updatedEntry);
+      // setPayableEntry(updatedEntry);
+      return updatedEntry; // Return updated entry to set state correctly
+      
+    });
   };
 
   const handleSubmit = () => {
@@ -124,6 +140,7 @@ export default function AddPayableEntryModal({
   const handleClose = () => {
     handleTogglePayEntry();
   };
+  console.log(payableEntry.unitType, "payable unitType");
 
   return (
     <Modal
@@ -172,28 +189,32 @@ export default function AddPayableEntryModal({
               label="Unit Type"
               id="unitType"
               value={payableEntry.unitType}
-              onChange={(e) => handleChange("unitType", e.target.value)}
-              // onChange={(e) => {
-              //   formik?.values?.paybleDetails.setFieldValue(
-              //     "unitType",
-              //     e.target.value
-              //   );
-              //   formik?.values?.paybleDetails.setFieldValue(
-              //     "noOfUnit",
-              //     e.target.count || 0
-              //   );
-              // }}
+              onChange={(e) => {
+                handleChange("unitType", e.target.value);
+                handleChange("noOfUnit", e.target.count || "");
+              }}
               suggestionName="size_type"
             />
           </Grid>
 
           <Grid item xs={12} lg={4}>
-            <FormAutoCompleteWithLoader
+            <TextField
               label="No of Units"
               id="noOfUnit"
+              name="noOfUnit"
               value={payableEntry.noOfUnit}
+              disabled={true}
               onChange={(e) => handleChange("noOfUnit", e.target.value)}
-              suggestionName="count"
+              fullWidth
+              size="small"
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                  fontSize: "14px",
+                  height: "43px",
+                },
+              }}
             />
           </Grid>
 
