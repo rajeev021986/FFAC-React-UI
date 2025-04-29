@@ -197,6 +197,7 @@ export default function AddPayableEntryModal({
               onChange={(e) => handleChange("noOfUnit", e.target.value)}
               suggestionName="count"
             />
+
             {/* <InputBox
               label="No of Units"
               id="noOfUnit"
@@ -236,6 +237,14 @@ export default function AddPayableEntryModal({
               value={payableEntry.vatApplicable}
               onChange={(e) => handleChange("vatApplicable", e.target.value)}
               disabled={disabled}
+              sx={{
+                ...styles.root,
+                height: "44px",
+                "& .MuiSelect-select span::before": {
+                  content: "'Select an option'",
+                  color: "#9090A5",
+                },
+              }}
             >
               <MenuItem value="No">No</MenuItem>
               <MenuItem value="18%">18%</MenuItem>
@@ -259,6 +268,14 @@ export default function AddPayableEntryModal({
               value={payableEntry.withHoldingTax}
               onChange={(e) => handleChange("withHoldingTax", e.target.value)}
               disabled={disabled}
+              sx={{
+                ...styles.root,
+                height: "44px",
+                "& .MuiSelect-select span::before": {
+                  content: "'Select an option'",
+                  color: "#9090A5",
+                },
+              }}
             >
               <MenuItem value={0}>No</MenuItem>
               <MenuItem value={5}>5%</MenuItem>
@@ -305,3 +322,10 @@ export default function AddPayableEntryModal({
     </Modal>
   );
 }
+
+const styles = {
+  root: {
+    borderRadius: "10px",
+    fontSize: "14px",
+  },
+};
