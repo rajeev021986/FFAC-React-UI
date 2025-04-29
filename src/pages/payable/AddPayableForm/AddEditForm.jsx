@@ -57,9 +57,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPayableEntryModal from "./AddPayableEntryModal";
 import { payableValidationSchema } from "../Actions/ValidationSchema";
-import UploadFile from "../../../components/UploadFile";
-import AuditTimeLine from "../../../components/AuditTimeLine";
-import { menuConfigUrl } from "../../../store/menuConfigUrl";
+
+// import UploadFile from "../../../components/UploadFile";
+// import AuditTimeLine from "../../../components/AuditTimeLine";
+// import { menuConfigUrl } from "../../../store/menuConfigUrl";
+
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
   const actionsSelector = useSelector((s) => s?.payableAction);
@@ -588,7 +590,30 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     },
   ];
 
-  console.log(chargesData, "chargesData");
+  const getPaybleDetailsTotals = (paybleDetails) => {
+    const totals = {
+      amount: 0,
+      vatAmount: 0,
+      withHoldingAmount: 0,
+      totalAmount: 0,
+    };
+    paybleDetails.forEach((entry) => {
+      totals.amount += Number(entry.amount || 0);
+      totals.vatAmount += Number(entry.vatAmount || 0);
+      totals.withHoldingAmount += Number(entry.withHoldingAmount || 0);
+      totals.totalAmount += Number(entry.totalAmount || 0);
+    });
+    return {
+      amount: totals.amount.toFixed(2),
+      vatAmount: totals.vatAmount.toFixed(2),
+      withHoldingAmount: totals.withHoldingAmount.toFixed(2),
+      totalAmount: totals.totalAmount.toFixed(2),
+    };
+  };
+
+  const getAmountData = getPaybleDetailsTotals(chargesData);
+
+  console.log(getAmountData, "getAmountData");
 
   return (
     <>
@@ -753,6 +778,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       error={formik.errors.exChangeRate}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
+                      disabled={getFormData?.currency === "TZS"}
                     />
                   </Grid>
 
@@ -815,24 +841,31 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                         id="amount"
                         name="amount"
                         variant="outlined"
+                        value={getAmountData?.amount}
                         fullWidth
                         size="small"
                         sx={{
                           ...muiTextFieldStyles.root,
                           width: "100% !important",
                         }}
+                        disabled
                       />
                     </Grid>
 
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
                         variant="outlined"
                         fullWidth
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS"
+                            ? getAmountData?.amount * 1
+                            : getAmountData?.amount *
+                                getFormData?.exChangeRate || 0
+                        }
+                        disabled
                       />
                     </Grid>
 
@@ -843,27 +876,34 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
+                        id="vatAmount"
+                        name="vatAmount"
                         variant="outlined"
+                        value={getAmountData?.vatAmount}
                         fullWidth
                         size="small"
                         sx={{
                           ...muiTextFieldStyles.root,
                           width: "100% !important",
                         }}
+                        disabled
                       />
                     </Grid>
 
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
                         variant="outlined"
                         fullWidth
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS"
+                            ? getAmountData?.vatAmount * 1
+                            : getAmountData?.vatAmount *
+                                getFormData?.exChangeRate || 0
+                        }
+                        disabled
                       />
                     </Grid>
 
@@ -874,27 +914,34 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
+                        id="withHoldingAmount"
+                        name="withHoldingAmount"
                         variant="outlined"
+                        value={getAmountData?.withHoldingAmount}
                         fullWidth
                         size="small"
                         sx={{
                           ...muiTextFieldStyles.root,
                           width: "100% !important",
                         }}
+                        disabled
                       />
                     </Grid>
 
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
                         variant="outlined"
                         fullWidth
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS"
+                            ? getAmountData?.withHoldingAmount * 1
+                            : getAmountData?.withHoldingAmount *
+                                getFormData?.exChangeRate || 0
+                        }
+                        disabled
                       />
                     </Grid>
 
@@ -905,8 +952,9 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
+                        id="totalAmount"
+                        name="totalAmount"
+                        value={getAmountData?.totalAmount}
                         variant="outlined"
                         fullWidth
                         size="small"
@@ -914,18 +962,24 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                           ...muiTextFieldStyles.root,
                           width: "100% !important",
                         }}
+                        disabled
                       />
                     </Grid>
 
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
                         variant="outlined"
                         fullWidth
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS"
+                            ? getAmountData?.totalAmount * 1
+                            : getAmountData?.totalAmount *
+                                getFormData?.exChangeRate || 0
+                        }
+                        disabled
                       />
                     </Grid>
 

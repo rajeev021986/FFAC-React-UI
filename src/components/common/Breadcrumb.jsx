@@ -76,6 +76,7 @@ const Routes = {
   updateJob: { label: "Update Job", disabled: false },
   paybleEntry: { label: "Payable Entry", disabled: false },
   addpayable: { label: "Add Payable Entry", disabled: false },
+  approvePayable: { label: "Approve Payable", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {
@@ -83,7 +84,9 @@ const ThemedBreadcrumb = () => {
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   return (
-    <MUIBreadcrumbs aria-label="breadcrumb" sx={{ paddingBottom: "5px" }}
+    <MUIBreadcrumbs
+      aria-label="breadcrumb"
+      sx={{ paddingBottom: "5px" }}
       separator={<NavigateNextIcon fontSize="small" />}
     >
       <Link
@@ -102,7 +105,8 @@ const ThemedBreadcrumb = () => {
         const isLast = index === pathnames?.length - 1;
         if (!Routes[value]?.label) return null;
         return isLast || Routes[value]?.disabled ? (
-          <Typography key={routeTo}
+          <Typography
+            key={routeTo}
             sx={{ display: "flex", alignItems: "center", fontSize: "14px" }}
             color="text.primary"
           >

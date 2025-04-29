@@ -86,8 +86,12 @@ export default function AddPayableEntryModal({
       let updatedEntry = { ...prevEntry, [field]: value };
 
       // Calculate amount based on noOfUnit and unitRate
-      const noOfUnit = updatedEntry.noOfUnit ? Number(updatedEntry.noOfUnit) : 0;
-      const unitRate = updatedEntry.unitRate ? Number(updatedEntry.unitRate) : 0;
+      const noOfUnit = updatedEntry.noOfUnit
+        ? Number(updatedEntry.noOfUnit)
+        : 0;
+      const unitRate = updatedEntry.unitRate
+        ? Number(updatedEntry.unitRate)
+        : 0;
 
       updatedEntry.amount = noOfUnit * unitRate;
 
@@ -100,7 +104,8 @@ export default function AddPayableEntryModal({
 
       const withHoldingTax = Number(updatedEntry.withHoldingTax || 0);
       updatedEntry.withHoldingAmount = (
-        (updatedEntry.vatAmount * withHoldingTax) / 100
+        (updatedEntry.amount * withHoldingTax) /
+        100
       ).toFixed(2);
 
       updatedEntry.totalAmount = (
@@ -112,7 +117,6 @@ export default function AddPayableEntryModal({
       console.log("updatedEntry", updatedEntry);
       // setPayableEntry(updatedEntry);
       return updatedEntry; // Return updated entry to set state correctly
-      
     });
   };
 
@@ -140,6 +144,7 @@ export default function AddPayableEntryModal({
   const handleClose = () => {
     handleTogglePayEntry();
   };
+
   console.log(payableEntry.unitType, "payable unitType");
 
   return (
@@ -171,7 +176,6 @@ export default function AddPayableEntryModal({
               suggestionName="job_no"
             />
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <FormAutoCompleteWithLoader
               label="Charge Name"
@@ -181,9 +185,7 @@ export default function AddPayableEntryModal({
               suggestionName="charge_name"
             />
           </Grid>
-
           <Grid item xs={12} lg={4}></Grid>
-
           <Grid item xs={12} lg={4}>
             <FormAutoCompleteWithLoader
               label="Unit Type"
@@ -196,7 +198,6 @@ export default function AddPayableEntryModal({
               suggestionName="size_type"
             />
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <TextField
               label="No of Units"
@@ -217,7 +218,6 @@ export default function AddPayableEntryModal({
               }}
             />
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <InputBox
               label="Unit Rate"
@@ -227,7 +227,6 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
           {/* Amount */}
           <Grid item xs={12} lg={4}>
             <InputBox
@@ -238,7 +237,6 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
           {/* VAT Applicable */}
           <Grid item xs={12} lg={4}>
             <Select
@@ -260,7 +258,6 @@ export default function AddPayableEntryModal({
               <MenuItem value="18%">18%</MenuItem>
             </Select>
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <InputBox
               label="VAT Amount"
@@ -270,7 +267,6 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <Select
               fullWidth
@@ -293,7 +289,6 @@ export default function AddPayableEntryModal({
               <MenuItem value={15}>15%</MenuItem>
             </Select>
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <InputBox
               label="With Holding Amount"
@@ -303,9 +298,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
           <Grid item xs={12} lg={4}></Grid>
-
           <Grid item xs={12} lg={4}>
             <InputBox
               label="Total Amount"
@@ -315,7 +308,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
+          <Grid item xs={12} lg={4}></Grid> <Grid item xs={12} lg={4}></Grid>
           {/* Button */}
           <Grid item xs={4}>
             <ThemeButton
