@@ -703,13 +703,15 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <InputBox
+                    <DateTimeField
+                      name="vendorInvoiceDate"
                       label="Vendor Invoice Date"
                       id="vendorInvoiceDate"
                       value={formik.values.vendorInvoiceDate}
                       error={formik.errors.vendorInvoiceDate}
-                      onChange={formik.handleChange}
-                      inputRef={payableRef}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                      disabled={isDisabled}
                     />
                   </Grid>
 

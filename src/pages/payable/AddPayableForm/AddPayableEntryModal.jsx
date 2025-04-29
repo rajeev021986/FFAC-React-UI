@@ -73,8 +73,6 @@ export default function AddPayableEntryModal({
 
   const handleChange = (field, value) => {
     console.log(value, 234567890);
-
-    //
     let updatedEntry = { ...payableEntry, [field]: value };
 
     const noOfUnit = updatedEntry.noOfUnit ? Number(updatedEntry.noOfUnit) : 0;
@@ -197,15 +195,6 @@ export default function AddPayableEntryModal({
               onChange={(e) => handleChange("noOfUnit", e.target.value)}
               suggestionName="count"
             />
-
-            {/* <InputBox
-              label="No of Units"
-              id="noOfUnit"
-              value={payableEntry.noOfUnit}
-              onChange={(e) => handleChange("noOfUnit", e.target.value)}
-              fullWidth
-              // disabled
-            /> */}
           </Grid>
 
           <Grid item xs={12} lg={4}>
