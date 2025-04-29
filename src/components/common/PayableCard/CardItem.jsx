@@ -57,29 +57,30 @@ export default function CardItem({ item, columns, actions }) {
           </Box>
         </Box>
         <CardContent
-          sx={{ display: "flex", flexDirection: "column", alignItems: "left" }}
-        >
-          {[
-            { label: "Unit Type", value: "Flat" },
-            { label: "Unit Rate", value: "4" },
-            { label: "Amount", value: "345674" },
-            { label: "VAT Amount", value: "13674" },
-          ].map((item, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "4px 0",
-                borderBottom: "1px dashed #ccc",
-              }}
-            >
-              <Typography fontWeight="bold">{item.label} </Typography>
-              <Typography> {item.value} </Typography>
-            </Box>
-          ))}
-        </CardContent>
+  sx={{ display: "flex", flexDirection: "column", alignItems: "left" }}
+>
+  {[
+    { label: "Unit Type", value: item.unitType },
+    { label: "Unit Rate", value: item.unitRate },
+    { label: "No of Units", value: item.noOfUnit },
+    { label: "Amount", value: item.amount },
+    { label: "VAT Amount", value: item.vatAmount },
+  ].map((field, index) => (
+    <Box
+      key={index}
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "4px 0",
+        borderBottom: "1px dashed #ccc",
+      }}
+    >
+      <Typography fontWeight="bold">{field.label}</Typography>
+      <Typography>{field.value || " "}</Typography>
+    </Box>
+  ))}
+</CardContent>
 
         <CardActions
           sx={{
@@ -95,7 +96,7 @@ export default function CardItem({ item, columns, actions }) {
             <Box component="span" fontWeight="fontWeightBold">
               Total:
             </Box>{" "}
-            23456789
+           {item.totalAmount || " "}{" "}
           </Typography>
         </CardActions>
       </Card>

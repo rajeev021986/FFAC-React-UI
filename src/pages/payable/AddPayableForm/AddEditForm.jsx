@@ -111,7 +111,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
-            nav("/app/entity/customer");
+            nav("documentation/paybleEntry");
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
               closeButton: false,
@@ -413,7 +413,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       updatedNotes = [...chargesData, newNote];
     }
     setChargesData(updatedNotes);
-    formik.setFieldValue("chargesData", updatedNotes);
+    formik.setFieldValue("paybleDetails", updatedNotes);
     setSelectedNote(null);
   };
 
@@ -426,7 +426,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
 
   const handleFetchPayable = () => {
     const storePayableData =
-      JSON.parse(localStorage.getItem("chargesData")) || [];
+      JSON.parse(localStorage.getItem("paybleDetails")) || [];
     const apiPayableData = formik?.values?.chargesData || [];
     const appendData = [...apiPayableData, ...storePayableData].reduce(
       (acc, pay) => {
@@ -588,8 +588,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     },
   ];
 
-  console.log(chargesData, "chargesData");
-
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -748,9 +746,9 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
                       label="Ex. Rate"
-                      id="exChangeRate"
-                      value={formik.values.exChangeRate}
-                      error={formik.errors.exChangeRate}
+                      id="exchangeRate"
+                      value={formik.values.exchangeRate}
+                      error={formik.errors.exchangeRate}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
                     />
@@ -1037,7 +1035,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                 <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
                   <OutlinedButton
                     sx={{ fontWeight: "500" }}
-                    onClick={() => nav("/app/entity/customer")}
+                    onClick={() => nav("documentation/paybleEntry")}
                   >
                     Close
                   </OutlinedButton>
