@@ -34,6 +34,8 @@ export default function AddPayableEntryModal({
   onAddPayEntry,
   selectedPayEntry,
 }) {
+  console.log("formik", formik.values.paybleDetails);
+
   const [payableEntry, setPayableEntry] = useState({
     id: null,
     jobNo: "",
@@ -49,28 +51,7 @@ export default function AddPayableEntryModal({
     totalAmount: "",
     new: true,
   });
-
-  useEffect(() => {
-    if (selectedPayEntry) {
-      setPayableEntry(selectedPayEntry);
-    } else {
-      setPayableEntry({
-        id: Date.now(),
-        jobNo: "",
-        chargeName: "",
-        unitType: "",
-        noOfUnit: "",
-        unitRate: "",
-        amount: "",
-        vatApplicable: "",
-        vatAmount: "",
-        withHoldingTax: "",
-        withHoldingAmount: "",
-        totalAmount: "",
-        new: true,
-      });
-    }
-  }, [selectedPayEntry]);
+  console.log("selectedPayEntry", selectedPayEntry);
 
   const handleChange = (field, value) => {
     // Handle unitType separately to avoid clearing it immediately
@@ -138,6 +119,21 @@ export default function AddPayableEntryModal({
     if (onAddPayEntry) {
       onAddPayEntry(updatedEntry);
     }
+    setPayableEntry({
+      id: Date.now(),
+      jobNo: "",
+      chargeName: "",
+      unitType: "",
+      noOfUnit: "",
+      unitRate: "",
+      amount: "",
+      vatApplicable: "",
+      vatAmount: "",
+      withHoldingTax: "",
+      withHoldingAmount: "",
+      totalAmount: "",
+      new: true,
+    });
     handleTogglePayEntry();
   };
 
