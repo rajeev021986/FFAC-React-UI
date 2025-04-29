@@ -336,11 +336,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       logicalOperator: "and",
     });
 
-  const { data: UserData } = useFetchUsersQuery({
-    params: query,
-    payload,
-  });
-
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(dashboardSetPagination({ page, pageSize }));
@@ -609,10 +604,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       totalAmount: totals.totalAmount.toFixed(2),
     };
   };
-
   const getAmountData = getPaybleDetailsTotals(chargesData);
-
-  console.log(getAmountData, "getAmountData");
 
   return (
     <>
