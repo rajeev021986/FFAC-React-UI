@@ -180,7 +180,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   });
 
   const getFormData = formik?.values;
-
   console.log(getFormData, "getFormData");
 
   const { data: optionsSettingsData } =
@@ -863,7 +862,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                           getFormData?.currency === "TZS"
                             ? getAmountData?.amount * 1
                             : getAmountData?.amount *
-                                getFormData?.exChangeRate || 0
+                                Number(getFormData?.exchangeRate) || 0
                         }
                         disabled
                       />
@@ -901,7 +900,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                           getFormData?.currency === "TZS"
                             ? getAmountData?.vatAmount * 1
                             : getAmountData?.vatAmount *
-                                getFormData?.exChangeRate || 0
+                                getFormData?.exchangeRate || 0
                         }
                         disabled
                       />
@@ -939,7 +938,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                           getFormData?.currency === "TZS"
                             ? getAmountData?.withHoldingAmount * 1
                             : getAmountData?.withHoldingAmount *
-                                getFormData?.exChangeRate || 0
+                                getFormData?.exchangeRate || 0
                         }
                         disabled
                       />
@@ -977,7 +976,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                           getFormData?.currency === "TZS"
                             ? getAmountData?.totalAmount * 1
                             : getAmountData?.totalAmount *
-                                getFormData?.exChangeRate || 0
+                                getFormData?.exchangeRate || 0
                         }
                         disabled
                       />
