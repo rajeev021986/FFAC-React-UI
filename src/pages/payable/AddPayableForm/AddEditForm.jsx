@@ -113,7 +113,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
-            nav("documentation/paybleEntry");
+            nav("/app/documentation/paybleEntry");
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
               closeButton: false,
