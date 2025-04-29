@@ -3,15 +3,6 @@ import dayjs from "dayjs";
 export const PAYABLE_COLUMNS = [
   {
     flex: 1,
-    field: "isDoc",
-    headerName: "Document",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    editable: false,
-  },
-  {
-    flex: 1,
     field: "status",
     headerName: "Status",
     width: 110,

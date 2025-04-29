@@ -173,6 +173,21 @@ function App() {
               element={<AddPayableEntry page="payable" />}
             />
 
+            <Route
+              path="documentation/paybleEntry/editpayable"
+              element={<AddPayableEntry page="payable" />}
+            />
+
+            <Route
+              path="documentation/approvePayable"
+              element={<PayableList page="approve_payable" />}
+            />
+
+            <Route
+              path="documentation/approvePayable/approvePayableRequest"
+              element={<AddPayableEntry page="payableApprove" />}
+            />
+
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="admin/users" element={<UserManagementScreen />} />

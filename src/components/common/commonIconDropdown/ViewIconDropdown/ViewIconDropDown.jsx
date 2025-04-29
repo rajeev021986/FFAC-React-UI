@@ -1,5 +1,5 @@
 import React from "react";
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 export default function ViewIconDropdown() {
   return (
