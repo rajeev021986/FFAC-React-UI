@@ -373,6 +373,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       value: "USD",
     },
   ];
+
   const invoiceTypeData = [
     {
       label: "Tax",
@@ -655,7 +656,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <SelectBox
                       label="Invoice Type*"
                       id="invoiceType"
-                      option={invoiceTypeData}
+                      options={invoiceTypeData}
                       value={formik.values.invoiceType}
                       error={formik.errors.invoiceType}
                       onChange={formik.handleChange}
