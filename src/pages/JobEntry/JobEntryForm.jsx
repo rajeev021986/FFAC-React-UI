@@ -57,6 +57,7 @@ export default function JobEntryForm({
     useState(false);
   const nav = useNavigate();
   const shipmentTypeRef = useRef(null);
+ 
   const toastRef = useRef(null);
   const [value, setValue] = React.useState("1");
   const [loaderApprove, setLoaderApprove] = useState({
@@ -307,6 +308,7 @@ export default function JobEntryForm({
   const validType = jobSettingData?.body?.jobPatternData?.map(
     (i) => i.shipmentType
   );
+console.log("optionsSettingsData",optionsSettingsData);
 
   useEffect(() => {
     if (
@@ -943,6 +945,18 @@ export default function JobEntryForm({
                 </Grid>
               )}
 
+
+
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
+                <SelectBox
+                  label="Account Type*"
+                  id="accountType"
+                  options={optionsSettingsData?.body?.account_type}
+                  value={formik.values.accountType}
+                  error={formik.errors.accountType}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
 
               <Grid item xs={12}>
                 <Box

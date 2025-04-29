@@ -40,7 +40,7 @@ export default function JobEntryGridForm({
       }
     }, 1000);
   };
-  const OnChange = (params, e, name) => {
+   const OnChange = (params, e, name) => {
     const rowIndex = formik.values[name].findIndex(
       (entity) => entity.id === params.id
     );
@@ -676,9 +676,33 @@ export default function JobEntryGridForm({
           flex: 1,
           editable: true,
           renderCell: (params) => (
-            <InputBoxForGrid {...params} placeholder="Package Type" />
+          
+            // <InputBoxForGrid {...params} placeholder="Package Type" />
+            <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {" "}
+            <SelectBox
+              placeholder={true}
+              size="small"
+              sx={{
+                marginTop: "5px",
+                marginBottom: "0px",
+              }}
+              options={jobSettingData?.body?.packageType}
+              value={formik.values.packageType}
+              onChange={(e) => OnChange(params, e, "looseCargoShipments")}
+            />
+          </div>
+          
           ),
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
+          // renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
 
         {
@@ -709,7 +733,8 @@ export default function JobEntryGridForm({
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  return (
+
+  return (    
     <Box sx={{ width: "100%", marginTop: 2, }}>
       <Box
         sx={{
