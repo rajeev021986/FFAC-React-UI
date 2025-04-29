@@ -172,6 +172,11 @@ function App() {
               path="documentation/paybleEntry/addpayable"
               element={<AddPayableEntry page="payable" />}
             />
+            <Route
+              path="documentation/paybleEntry/editpayable"
+              element={<AddPayableEntry page="payable" />}
+            />
+ 
 
             <Route
               path="documentation/paybleEntry/editpayable"

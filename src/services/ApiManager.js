@@ -330,7 +330,7 @@ class ApiManager {
   };
 
   static getPayableDeatils = async (id) => {
-    const url = ENDPOINTS.GET_PAYABLE_DETAILS(id, menuConfigUrl.doc);
+    const url = ENDPOINTS.GET_PAYABLE_DETAILS(id, menuConfigUrl.document);
     return ApiMethods.get(url);
   };
 }

@@ -57,7 +57,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPayableEntryModal from "./AddPayableEntryModal";
 import { payableValidationSchema } from "../Actions/ValidationSchema";
-
+import UploadFile from "../../../components/UploadFile";
+import AuditTimeLine from "../../../components/AuditTimeLine";
+import { menuConfigUrl } from "../../../store/menuConfigUrl";
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
   const actionsSelector = useSelector((s) => s?.payableAction);
@@ -183,12 +185,18 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
+  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   useEffect(() => {
-    if (optionsSettingsData?.body || customerSettingsData?.body) {
+    if (
+      optionsSettingsData?.body ||
+      customerSettingsData?.body ||
+      jobSettingData?.body
+    ) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
+        ...jobSettingData?.body,
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
@@ -365,7 +373,16 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       value: "USD",
     },
   ];
-
+  const invoiceTypeData = [
+    {
+      label: "Tax",
+      value: "Tax",
+    },
+    {
+      label: "Performa",
+      value: "Performa",
+    },
+  ];
   //
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
@@ -596,7 +613,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                 aria-label="lab API tabs example"
               >
                 <Tab
-                  label="Job Entry Details"
+                  label="Payable Details"
                   value="1"
                   icon={<EditIconForHeader />}
                   iconPosition="start"
@@ -635,9 +652,10 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               <Box sx={{ width: "40%", paddingRight: 2 }}>
                 <Grid container sx={{ padding: 0, margin: 0 }}>
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <InputBox
+                    <SelectBox
                       label="Invoice Type*"
                       id="invoiceType"
+                      option={invoiceTypeData}
                       value={formik.values.invoiceType}
                       error={formik.errors.invoiceType}
                       onChange={formik.handleChange}
@@ -1075,6 +1093,23 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               </>
             )}
           </TabPanel>
+
+          {/* <TabPanel value="2" sx={{ padding: "0px" }}>
+            <UploadFile
+              customer_id={initialValues.id}
+              disabled={isDisabled}
+              dropdownData={dropdownData.jobDocumentType}
+              sourceType="PAYBLE_ENTRY"
+            />
+          </TabPanel>
+ 
+          <TabPanel value="3" sx={{ padding: "0px" }}>
+            <AuditTimeLine
+              id={initialValues.id}
+              page="job-detail"
+              service={menuConfigUrl.document}
+            />
+          </TabPanel> */}
         </TabContext>
       </Box>
 
