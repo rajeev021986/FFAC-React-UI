@@ -58,9 +58,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPayableEntryModal from "./AddPayableEntryModal";
 import { payableValidationSchema } from "../Actions/ValidationSchema";
 
-// import UploadFile from "../../../components/UploadFile";
-// import AuditTimeLine from "../../../components/AuditTimeLine";
-// import { menuConfigUrl } from "../../../store/menuConfigUrl";
+import UploadFile from "../../../components/UploadFile";
+import AuditTimeLine from "../../../components/AuditTimeLine";
+import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
@@ -180,8 +180,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   });
 
   const getFormData = formik?.values;
-  console.log(getFormData, "getFormData");
-
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -388,8 +386,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const disabled = formik?.values?.statusCode === -3;
 
   const handleEditClick = (data) => {
-    console.log(data, 234567);
-
     setSelectedPayEntry(data);
     setToggleNotes(true);
   };
@@ -418,8 +414,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const handleDeleteNote = (id) => {
     const updatedNotes = chargesData.filter((note) => note.id !== id);
     setChargesData(updatedNotes);
-    formik.setFieldValue("chargesData", updatedNotes);
-    localStorage.setItem("chargesData", JSON.stringify(updatedNotes));
+    formik.setFieldValue("paybleDetails", updatedNotes);
+    // localStorage.setItem("chargesData", JSON.stringify(updatedNotes));
   };
 
   const handleFetchPayable = () => {
@@ -1052,6 +1048,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   loading={isLoading}
                   actions={getUserListGridActions(nav, payableSetSortModal)}
                   page=""
+                  handleEditClick={handleEditClick} 
+                  handleDeleteClick= {handleDeleteNote}
                 />
               </Box>
             ) : (
@@ -1079,7 +1077,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                 <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
                   <OutlinedButton
                     sx={{ fontWeight: "500" }}
-                    onClick={() => nav("documentation/paybleEntry")}
+                    onClick={() => nav("/app/documentation/paybleEntry")}
                   >
                     Close
                   </OutlinedButton>
@@ -1136,23 +1134,22 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               </>
             )}
           </TabPanel>
-
-          {/* <TabPanel value="2" sx={{ padding: "0px" }}>
-            <UploadFile
-              customer_id={initialValues.id}
-              disabled={isDisabled}
-              dropdownData={dropdownData.jobDocumentType}
-              sourceType="PAYBLE_ENTRY"
-            />
+          <TabPanel value="2" sx={{ padding: "0px" }}>
+           <UploadFile
+            customer_id={initialValues.id}
+            disabled={isDisabled}
+            dropdownData={dropdownData.jobDocumentType}
+            sourceType="PAYBLE_ENTRY"
+          />
           </TabPanel>
  
           <TabPanel value="3" sx={{ padding: "0px" }}>
-            <AuditTimeLine
-              id={initialValues.id}
-              page="job-detail"
-              service={menuConfigUrl.document}
-            />
-          </TabPanel> */}
+           <AuditTimeLine
+            id={initialValues.id}
+            page="payble/entry"
+            service={menuConfigUrl.document}
+          />
+          </TabPanel>
         </TabContext>
       </Box>
 

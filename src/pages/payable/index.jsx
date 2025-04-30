@@ -362,8 +362,8 @@ export default function PayableListScreen({ page }) {
 
             <AuditTimeLine
               id={modal.data.id}
-              // page="payble/entry"
-              // service={menuConfigUrl.document}
+              page="payble/entry"
+              service={menuConfigUrl.document}
             />
           </Box>
         </Drawer>

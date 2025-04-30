@@ -38,8 +38,9 @@ function FormAutoCompleteWithLoader(props) {
           dataLabel || suggestionName,
           debounceValue
         );
-        setOptions(data);
-        setFilteredOptions(data);
+      const validData = data.filter((item) => item.label?.trim() !== "");
+        setOptions(validData);
+        setFilteredOptions(validData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

@@ -14,6 +14,8 @@ export default function PayableCardView({
   setSelectedBox,
   seletectBox,
   page,
+  handleEditClick, 
+  handleDeleteClick
 }) {
   const handleCardPagination = (event, page) => {
     handlePage({
@@ -72,6 +74,8 @@ export default function PayableCardView({
                 actions={actions}
                 icon={null}
                 page={page}
+                handleEditClick={handleEditClick} 
+                handleDeleteClick={handleDeleteClick}
               />
             </Grid>
           ))}

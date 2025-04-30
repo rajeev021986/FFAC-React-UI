@@ -87,6 +87,7 @@ const GlobalSetting = () => {
         }
       })
       .catch(() => console.log("filteredData"));
+      refetch();
     setIsLoading(false);
   };
   const handleClose = () => {

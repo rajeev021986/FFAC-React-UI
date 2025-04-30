@@ -2,8 +2,9 @@ import React from "react";
 import { Box, Card, IconButton } from "@mui/material";
 import { Typography, CardContent, CardActions } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
 
-export default function CardItem({ item, columns, actions }) {
+export default function CardItem({ item, columns, actions,handleEditClick, handleDeleteClick }) {
   columns = columns.filter(
     (column) => column.field !== "id" && column.field !== "action"
   );
@@ -47,40 +48,40 @@ export default function CardItem({ item, columns, actions }) {
           >
             <IconButton
               color="primary"
-              onClick={() => actions[0].onClick({ row: item })}
+              onClick={() => handleEditClick(item)} 
             >
-              {actions[0].icon}
+              <EditIcon />
             </IconButton>
-            <IconButton>
+            <IconButton onClick = {() => handleDeleteClick(item.id)}>
               <DeleteForeverIcon sx={{ color: "red" }} />
             </IconButton>
           </Box>
         </Box>
         <CardContent
-  sx={{ display: "flex", flexDirection: "column", alignItems: "left" }}
->
-  {[
-    { label: "Unit Type", value: item.unitType },
-    { label: "Unit Rate", value: item.unitRate },
-    { label: "No of Units", value: item.noOfUnit },
-    { label: "Amount", value: item.amount },
-    { label: "VAT Amount", value: item.vatAmount },
-  ].map((field, index) => (
-    <Box
-      key={index}
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "4px 0",
-        borderBottom: "1px dashed #ccc",
-      }}
-    >
-      <Typography fontWeight="bold">{field.label}</Typography>
-      <Typography>{field.value || " "}</Typography>
-    </Box>
-  ))}
-</CardContent>
+          sx={{ display: "flex", flexDirection: "column", alignItems: "left" }}
+        >
+          {[
+            { label: "Unit Type", value: item.unitType },
+            { label: "Unit Rate", value: item.unitRate },
+            { label: "No of Units", value: item.noOfUnit },
+            { label: "Amount", value: item.amount },
+            { label: "VAT Amount", value: item.vatAmount },
+          ].map((field, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "4px 0",
+                borderBottom: "1px dashed #ccc",
+              }}
+            >
+              <Typography fontWeight="bold">{field.label}</Typography>
+              <Typography>{field.value || " "}</Typography>
+            </Box>
+          ))}
+        </CardContent>
 
         <CardActions
           sx={{
@@ -96,7 +97,7 @@ export default function CardItem({ item, columns, actions }) {
             <Box component="span" fontWeight="fontWeightBold">
               Total:
             </Box>{" "}
-           {item.totalAmount || " "}{" "}
+            {item.totalAmount || " "}{" "}
           </Typography>
         </CardActions>
       </Card>

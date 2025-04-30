@@ -50,7 +50,6 @@ export default function AddPayableEntryModal({
     totalAmount: "",
     new: true,
   });
-  console.log("selectedPayEntry", selectedPayEntry);
 
   const handleChange = (field, value) => {
     if (field === "unitType") {
@@ -127,8 +126,31 @@ export default function AddPayableEntryModal({
   };
 
   const handleClose = () => {
+    setPayableEntry({
+      id: Date.now(),
+      jobNo: "",
+      chargeName: "",
+      unitType: "",
+      noOfUnit: "",
+      unitRate: "",
+      amount: "",
+      vatApplicable: "",
+      vatAmount: "",
+      withHoldingTax: "",
+      withHoldingAmount: "",
+      totalAmount: "",
+      new: true,
+    });
     handleTogglePayEntry();
   };
+useEffect(() => {
+if(formik.values.jobNo){
+  setPayableEntry((prevEntry) => ({
+    ...prevEntry,
+    jobNo: formik.values.jobNo,
+  }));
+}
+  },[formik.values.jobNo])
 
   useEffect(() => {
     if (selectedPayEntry) {
