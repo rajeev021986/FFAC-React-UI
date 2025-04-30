@@ -530,6 +530,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               opacity: disabled ? 0.5 : 1,
             }}
             onClick={() => {
+              console.log("heello")
               if (!disabled) handleEditClick(params.row);
             }}
           />

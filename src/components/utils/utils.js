@@ -10,7 +10,7 @@ export function generatePattern({
     case "Yearly":
       datePart = "$Y";
       break;
-    case "Monthy":
+    case "Monthly":
       datePart = "$M-$Y";
       break;
     case "Daily":

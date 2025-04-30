@@ -170,7 +170,7 @@ export default function GlobalDrrpdownSettingVoucher({
         hasDisallowed = tokensInPattern.some((t) =>
           ["$M", "$N", "$Z", "$D"].includes(t)
         );
-      } else if (resetValue === "Monthy") {
+      } else if (resetValue === "Monthly") {
         // Must include $Y, one voucher token and one month token
         meetsRequired = hasYear && hasMonthToken && hasOneVoucher;
         hasDisallowed = tokensInPattern.includes("$D");

@@ -37,7 +37,7 @@ export default function AddPayableEntryModal({
 }) {
   const [payableEntry, setPayableEntry] = useState({
     id: null,
-    jobNo: "",
+    jobNo:  formik.values.jobNo,
     chargeName: "",
     unitType: "",
     noOfUnit: "",
@@ -144,13 +144,18 @@ export default function AddPayableEntryModal({
     handleTogglePayEntry();
   };
 useEffect(() => {
-if(formik.values.jobNo){
+  console.log("gjyj");
+  
+if(togglePayEntry){
+  console.log("uhui");
+  
   setPayableEntry((prevEntry) => ({
     ...prevEntry,
     jobNo: formik.values.jobNo,
   }));
 }
-  },[formik.values.jobNo])
+  },[togglePayEntry]);
+
 
   useEffect(() => {
     if (selectedPayEntry) {
@@ -158,7 +163,7 @@ if(formik.values.jobNo){
     } else {
       setPayableEntry({
         id: Date.now(),
-        jobNo: "",
+        jobNo: formik.values.jobNo,
         chargeName: "",
         unitType: "",
         noOfUnit: "",
