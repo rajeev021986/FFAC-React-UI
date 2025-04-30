@@ -383,19 +383,21 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   //
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
-  const [selectedPayEntry, setSelectedNote] = useState(null);
+  const [selectedPayEntry, setSelectedPayEntry] = useState(null);
 
   const disabled = formik?.values?.statusCode === -3;
 
-  const handleEditClick = (note) => {
-    setSelectedNote(note);
+  const handleEditClick = (data) => {
+    console.log(data, 234567);
+
+    setSelectedPayEntry(data);
     setToggleNotes(true);
   };
 
   const handleTogglePayEntry = () => {
     setToggleNotes((prev) => !prev);
     if (togglePayEntry) {
-      setSelectedNote(null);
+      setSelectedPayEntry(null);
     }
   };
 
@@ -410,7 +412,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     }
     setChargesData(updatedNotes);
     formik.setFieldValue("paybleDetails", updatedNotes);
-    setSelectedNote(null);
+    setSelectedPayEntry(null);
   };
 
   const handleDeleteNote = (id) => {
@@ -421,18 +423,13 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   };
 
   const handleFetchPayable = () => {
-    const storePayableData =
-      JSON.parse(localStorage.getItem("paybleDetails")) || [];
-    const apiPayableData = formik?.values?.chargesData || [];
-    const appendData = [...apiPayableData, ...storePayableData].reduce(
-      (acc, pay) => {
-        if (!acc.some((n) => n.id === pay.id)) {
-          acc.push(pay);
-        }
-        return acc;
-      },
-      []
-    );
+    const apiPayableData = formik?.values?.paybleDetails || [];
+    const appendData = [...apiPayableData].reduce((acc, pay) => {
+      if (!acc.some((n) => n.id === pay.id)) {
+        acc.push(pay);
+      }
+      return acc;
+    }, []);
     setChargesData(appendData);
   };
 
@@ -1165,6 +1162,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
         formik={formik}
         onAddPayEntry={handleAddPayEntry}
         selectedPayEntry={selectedPayEntry}
+        setSelectedPayEntry={setSelectedPayEntry}
       />
     </>
   );
