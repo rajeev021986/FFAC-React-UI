@@ -1086,7 +1086,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
                         sx={{ fontWeight: "500" }}
-                        onClick={() => nav(-1)}
+                        onClick={() => nav("/app/documentation/paybleEntry")}
                       >
                         Close
                       </OutlinedButton>
@@ -1136,7 +1136,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
                         sx={{ fontWeight: "500" }}
-                        onClick={() => nav(-1)}
+                        onClick={() => nav("/app/documentation/paybleEntry")}
                       >
                         Close
                       </OutlinedButton>
