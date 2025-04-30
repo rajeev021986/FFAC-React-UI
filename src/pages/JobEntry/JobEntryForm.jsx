@@ -57,7 +57,6 @@ export default function JobEntryForm({
     useState(false);
   const nav = useNavigate();
   const shipmentTypeRef = useRef(null);
- 
   const toastRef = useRef(null);
   const [value, setValue] = React.useState("1");
   const [loaderApprove, setLoaderApprove] = useState({
@@ -308,7 +307,6 @@ export default function JobEntryForm({
   const validType = jobSettingData?.body?.jobPatternData?.map(
     (i) => i.shipmentType
   );
-console.log("optionsSettingsData",optionsSettingsData);
 
   useEffect(() => {
     if (
@@ -403,6 +401,7 @@ console.log("optionsSettingsData",optionsSettingsData);
  console.log("formik.values.dateOfReceipt",formik.values.dateOfReceipt)
   const [isDisabled, setIsDisabled] = useState(false);
   const getPage = location?.pathname.split("/").slice(-1)[0];
+  console.log("getPage",getPage)
   useEffect(() => {
     const shouldDisable =
       initialValues?.statusCode === -3 &&
@@ -488,7 +487,7 @@ console.log("optionsSettingsData",optionsSettingsData);
     //   }
     // }
   }, [formik.values.shipmentType, jobSettingData]);
-
+  console.log(page,"page")
   return (
     <>
       <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
@@ -646,7 +645,6 @@ console.log("optionsSettingsData",optionsSettingsData);
                 md={4}
                 lg={2}
                 xl={2}
-
               >
                 <Tooltip
                   title={
@@ -666,8 +664,25 @@ console.log("optionsSettingsData",optionsSettingsData);
                   />
                 </Tooltip>
               </Grid>
-
               <Grid
+  item
+  xs={12}
+  sm={6}
+  md={4}
+  lg={2}
+  xl={2}
+>
+  <FormAutoCompleteWithLoader
+    label="PORT CODE*"
+    id="portOfLoading"
+    value={formik.values.portCode}
+    error={formik.errors.portCode}
+    onChange={formik.handleChange}
+    suggestionName="port_code"
+    disabled={page === "job-entry"}
+  />
+</Grid>
+ <Grid
                 item
                 xs={12}
                 sm={6}
@@ -944,19 +959,32 @@ console.log("optionsSettingsData",optionsSettingsData);
                   />
                 </Grid>
               )}
+{page === "job-entry" && formik.values.statusCode === -1 ? (
+  <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
+    <SelectBox
+      label="Account Type*"
+      id="accountType"
+      options={optionsSettingsData?.body?.account_type}
+      value={formik.values.accountType}
+      error={formik.errors.accountType}
+      onChange={formik.handleChange}
+      disabled={true} 
+    />
+  </Grid>
+) : (
+  <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
+    <SelectBox
+      label="Account Type*"
+      id="accountType"
+      options={optionsSettingsData?.body?.account_type}
+      value={formik.values.accountType}
+      error={formik.errors.accountType}
+      onChange={formik.handleChange}
+    />
+  </Grid>
+)}
 
 
-
-              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
-                <SelectBox
-                  label="Account Type*"
-                  id="accountType"
-                  options={optionsSettingsData?.body?.account_type}
-                  value={formik.values.accountType}
-                  error={formik.errors.accountType}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
 
               <Grid item xs={12}>
                 <Box

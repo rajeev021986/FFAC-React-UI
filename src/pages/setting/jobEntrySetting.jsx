@@ -41,7 +41,7 @@ const JobEntrySetting = () => {
   const [unitTypes, setunitTypes] = useState([]);
   const [jobDocumentType, setJobDocumentType] = useState([]);
   const [reportingPlace, setReportingPlace] = useState([]);
-  const [packageType, setPackageType] = useState([]);
+
 
   const [voucherData, setVoucherData] = useState([
     { id: 1, shipmentType: "", jobPattern: "", sampleJobNumber: "" },
