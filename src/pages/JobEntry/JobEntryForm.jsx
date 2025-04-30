@@ -320,7 +320,7 @@ export default function JobEntryForm({
         ...jobSettingData?.body,
       });
     }
-  }, [optionsSettingsData, customerSettingsData]);
+  }, [optionsSettingsData, customerSettingsData,jobSettingData]);
 
   const handleApproveRequest = async () => {
     setRejectError(false);
@@ -398,7 +398,6 @@ export default function JobEntryForm({
       reject: false,
     }));
   };
-  console.log("formik.values.dateOfReceipt", formik.values.dateOfReceipt);
   const [isDisabled, setIsDisabled] = useState(false);
   const getPage = location?.pathname.split("/").slice(-1)[0];
   useEffect(() => {

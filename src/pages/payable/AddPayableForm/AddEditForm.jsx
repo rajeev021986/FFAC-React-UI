@@ -55,9 +55,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPayableEntryModal from "./AddPayableEntryModal";
 import { payableValidationSchema } from "../Actions/ValidationSchema";
 
-// import UploadFile from "../../../components/UploadFile";
-// import AuditTimeLine from "../../../components/AuditTimeLine";
-// import { menuConfigUrl } from "../../../store/menuConfigUrl";
+import UploadFile from "../../../components/UploadFile";
+import AuditTimeLine from "../../../components/AuditTimeLine";
+import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
@@ -385,8 +385,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const handleDeleteNote = (id) => {
     const updatedNotes = chargesData.filter((note) => note.id !== id);
     setChargesData(updatedNotes);
-    formik.setFieldValue("chargesData", updatedNotes);
-    localStorage.setItem("chargesData", JSON.stringify(updatedNotes));
+    formik.setFieldValue("paybleDetails", updatedNotes);
+    // localStorage.setItem("chargesData", JSON.stringify(updatedNotes));
   };
 
   const handleFetchPayable = () => {
@@ -1019,6 +1019,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   loading={isLoading}
                   actions={getUserListGridActions(nav, payableSetSortModal)}
                   page=""
+                  handleEditClick={handleEditClick}
+                  handleDeleteClick={handleDeleteNote}
                 />
               </Box>
             ) : (
@@ -1180,8 +1182,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               </Box>
             )}
           </TabPanel>
-
-          {/* <TabPanel value="2" sx={{ padding: "0px" }}>
+          <TabPanel value="2" sx={{ padding: "0px" }}>
             <UploadFile
               customer_id={initialValues.id}
               disabled={isDisabled}
@@ -1189,14 +1190,14 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               sourceType="PAYBLE_ENTRY"
             />
           </TabPanel>
- 
+
           <TabPanel value="3" sx={{ padding: "0px" }}>
             <AuditTimeLine
               id={initialValues.id}
-              page="job-detail"
+              page="payble/entry"
               service={menuConfigUrl.document}
             />
-          </TabPanel> */}
+          </TabPanel>
         </TabContext>
       </Box>
 
