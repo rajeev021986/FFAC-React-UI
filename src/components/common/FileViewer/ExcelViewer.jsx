@@ -26,7 +26,8 @@ const ExcelViewer = ({ base64Data, mimeType }) => {
 
     return (
         <div>
-            {excelData.length > 0 && (
+            {excelData.length > 0 ? 
+            (
                 <table border="1">
                     <thead>
                         <tr>
@@ -45,7 +46,8 @@ const ExcelViewer = ({ base64Data, mimeType }) => {
                         ))}
                     </tbody>
                 </table>
-            )}
+            )
+            : (<p>Loading........</p>)}
         </div>
     );
 };

@@ -178,19 +178,19 @@ export default function AddRateModalApprove({
       editable: false, // Keep it false if using renderCell, not in-place editable
       renderCell: (params) => (
         <FormAutoCompleteChargeHead
-        id="chargeName" // this will map to "CHARGE"
-        suggestionName="chargeName"
-        dataLabel="charge_name"  // <-- this tells what to show in dropdown
-        value={params.value}
-        onChange={(e) => {
-        const updatedRow = {
-          ...params.row,
-          chargeHead: e.target.value || "", // <-- Update value
-        };
-        handleProcessRowUpdate(updatedRow); // <-- update Formik's state
-      }}
-        disabled={false}
-      />
+          id="chargeName" // this will map to "CHARGE"
+          suggestionName="chargeName"
+          dataLabel="charge_name" // <-- this tells what to show in dropdown
+          value={params.value}
+          onChange={(e) => {
+            const updatedRow = {
+              ...params.row,
+              chargeHead: e.target.value || "", // <-- Update value
+            };
+            handleProcessRowUpdate(updatedRow); // <-- update Formik's state
+          }}
+          disabled={false}
+        />
       ),
     },
     {

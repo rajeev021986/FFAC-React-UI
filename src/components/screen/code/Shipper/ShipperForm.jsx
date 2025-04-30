@@ -64,8 +64,11 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       "Invalid email format",
       (value) => {
         if (!value) return true;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(value);
+        const emailRegex =/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value)) return false;
+        if (value.includes("..")) return false; // consecutive dots not allowed
+        return true;
+    
       }
     ),
     contactPerson: Yup.string().matches(

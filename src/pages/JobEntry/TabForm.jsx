@@ -43,7 +43,9 @@ const CommonTabForm = ({ formik, dropdownData }) => {
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              alignItems: "center", borderBottom: 1, borderColor: "divider"
+              alignItems: "center",
+              borderBottom: 1,
+              borderColor: "divider",
               // marginBottom: 1,
             }}
           >
