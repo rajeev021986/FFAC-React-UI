@@ -90,6 +90,10 @@ const ENDPOINTS = {
     `/${BasePageUrl}/job-update/loose-cargo/${id}`,
   GET_PAYABLE_DETAILS: (id, BasePageUrl) =>
     `/${BasePageUrl}/payble/entry/${id}`,
+  PAYABLE_APPROVE_REQUEST: (id, type, BasePageUrl) =>
+    `/${BasePageUrl}/approval/approved/${type}/${id}`,
+  PAYABLE_REJECT_REQUEST: (id, type, BasePageUrl) =>
+    `/${BasePageUrl}/approval/rejected/${type}/${id}`,
 };
 
 export default ENDPOINTS;

@@ -56,6 +56,7 @@ export default function PayableCardView({
         : obj.createdDate,
     };
   });
+
   return (
     <>
       <Box sx={{ padding: "15px", paddingTop: "0" }}>

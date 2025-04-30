@@ -333,6 +333,25 @@ class ApiManager {
     const url = ENDPOINTS.GET_PAYABLE_DETAILS(id, menuConfigUrl.document);
     return ApiMethods.get(url);
   };
+
+  static payableApproveHandler = async (id, type) => {
+    const url = ENDPOINTS.PAYABLE_APPROVE_REQUEST(
+      id,
+      type,
+      menuConfigUrl.document
+    );
+    return ApiMethods.put(url);
+  };
+
+  static payableRejectHandler = async (id, type, remarkMessage) => {
+    let payload = { remarks: remarkMessage };
+    const url = ENDPOINTS.PAYABLE_REJECT_REQUEST(
+      id,
+      type,
+      menuConfigUrl.document
+    );
+    return ApiMethods.put(url, payload);
+  };
 }
 
 export default ApiManager;

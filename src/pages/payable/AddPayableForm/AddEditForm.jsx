@@ -21,11 +21,9 @@ import TabPanel from "@mui/lab/TabPanel";
 import AddIcon from "@mui/icons-material/Add";
 
 import {
-  useAddCustomerMutation,
-  useUpdateCustomerMutation,
-} from "../../../store/api/codeDataApi";
-
-import { useAddPaybleEntryMutation } from "../../../store/api/payableApi";
+  useAddPaybleEntryMutation,
+  useUpdatePaybleEntryMutation,
+} from "../../../store/api/payableApi";
 
 import { useNavigate } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
@@ -45,7 +43,6 @@ import {
   GridOnOutlined,
 } from "@mui/icons-material";
 import PayableCardView from "../../../components/common/PayableCard/PayableCard";
-import { useFetchUsersQuery } from "../../../store/api/userDataApi";
 import { getUserListGridActions } from "../../../components/screen/user-management/action";
 import { dashboardSetPagination } from "../../../store/freatures/dashboardSlice";
 import DateTimeField from "../../../components/common/DateTime/DateTimeField";
@@ -64,14 +61,14 @@ import { payableValidationSchema } from "../Actions/ValidationSchema";
 
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
+  const [updatePaybleEntry, { isUpdateLoading }] =
+    useUpdatePaybleEntryMutation();
+
   const actionsSelector = useSelector((s) => s?.payableAction);
-
-  // const [loaderApprove, setLoaderApprove] = useState({
-  //   approve: false,
-  //   reject: false,
-  // });
-
-  const [updateCustomer] = useUpdateCustomerMutation();
+  const [loaderApprove, setLoaderApprove] = useState({
+    approve: false,
+    reject: false,
+  });
   const dispatch = useDispatch();
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
@@ -101,11 +98,14 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
         try {
-          delete values.id;
           values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
+          let paybleDetailsData = values.paybleDetails.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
           let response = await addPaybleEntry({
             ...values,
+            paybleDetails: paybleDetailsData,
           }).unwrap();
 
           const message = response.message;
@@ -140,10 +140,14 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       } else {
         try {
           setRejectError(false);
+          let paybleDetailsData = values.paybleDetails.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          let response = await updateCustomer({
+          let response = await updatePaybleEntry({
             ...values,
+            paybleDetails: paybleDetailsData,
           }).unwrap();
 
           const message = response.message;
@@ -180,8 +184,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   });
 
   const getFormData = formik?.values;
-  console.log(getFormData, "getFormData");
-
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -202,82 +204,81 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     }
   }, [optionsSettingsData, customerSettingsData]);
 
-  // const handleApproveRequest = async () => {
-  //   setRejectError(false);
-  //   try {
-  //     setLoaderApprove((prevState) => ({
-  //       ...prevState,
-  //       approve: true,
-  //     }));
-  //     const response = await ApiManager.approveCustomerApprove(
-  //       initialValues.id,
-  //       "customer"
-  //     );
-  //     const message = response.message;
-  //     nav("/app/entity/approve");
-  //     toast.custom(<CustomToast message={message} toast="success" />, {
-  //       closeButton: false,
-  //     });
-  //   } catch (error) {
-  //     toast.custom(
-  //       <CustomToast
-  //         message="Error occurred while approve customer"
-  //         toast="error"
-  //       />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //   }
-  //   setLoaderApprove((prevState) => ({
-  //     ...prevState,
-  //     approve: false,
-  //   }));
-  // };
+  const handleApproveRequest = async () => {
+    setRejectError(false);
+    try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        approve: true,
+      }));
+      const response = await ApiManager.payableApproveHandler(
+        initialValues.id,
+        "PAYBLE_ENTRY"
+      );
+      const message = response.message;
+      nav("/app/documentation/approvePayable");
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while approve payable"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      approve: false,
+    }));
+  };
 
-  // const handleRejectRequest = async () => {
-  //   if (!formik.values.rejectRemarks) {
-  //     setRejectError(true);
-  //     toast.custom(
-  //       <CustomToast message="Reject remarks to be filled!" toast="warn" />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //     return;
-  //   }
-  //   try {
-  //     setLoaderApprove((prevState) => ({
-  //       ...prevState,
-  //       reject: true,
-  //     }));
-  //     const response = await ApiManager.rejectCustomerApprove(
-  //       initialValues.id,
-  //       "customer",
-  //       formik.values.rejectRemarks
-  //     );
-  //     const message = response.message;
-  //     nav("/app/entity/approve");
-
-  //     toast.custom(<CustomToast message={message} toast="success" />, {
-  //       closeButton: false,
-  //     });
-  //   } catch (error) {
-  //     toast.custom(
-  //       <CustomToast
-  //         message="Error occurred while reject customer"
-  //         toast="error"
-  //       />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //   }
-  //   setLoaderApprove((prevState) => ({
-  //     ...prevState,
-  //     reject: false,
-  //   }));
-  // };
+  const handleRejectRequest = async () => {
+    if (!formik.values.rejectRemarks) {
+      setRejectError(true);
+      toast.custom(
+        <CustomToast message="Reject remarks to be filled!" toast="warn" />,
+        {
+          closeButton: false,
+        }
+      );
+      return;
+    }
+    try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        reject: true,
+      }));
+      const response = await ApiManager.payableRejectHandler(
+        initialValues.id,
+        "PAYBLE_ENTRY",
+        formik.values.rejectRemarks
+      );
+      const message = response.message;
+      nav("/app/documentation/approvePayable");
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while reject payable"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      reject: false,
+    }));
+  };
 
   // const handleActionClick = async (actionName) => {
   //   if (actionName === "New Entry") {
@@ -305,37 +306,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     }
   }, [actionsSelector.view, dispatch]);
 
-  const query = {
-    page: actionsSelector?.pagination?.page + 1,
-    size: actionsSelector?.pagination?.pageSize,
-    sortBy:
-      actionsSelector.sortModel.length > 0
-        ? actionsSelector.sortModel[0].field
-        : actionsSelector?.sortBy?.split("*")[0],
-    sortOrder:
-      actionsSelector.sortModel.length > 0
-        ? actionsSelector?.sortModel[0]?.sort
-        : actionsSelector?.sortBy?.split("*")[1] || "",
-  };
-
-  const payload = Object.entries(actionsSelector?.formData)
-    .filter(([key, value]) => value)
-    .map(([key, value]) => {
-      return {
-        fieldName: key,
-        operator: "=",
-        value: value,
-        logicalOperator: "and",
-      };
-    });
-  Boolean(actionsSelector?.status?.length > 0) &&
-    payload.push({
-      fieldName: "status",
-      operator: "=",
-      value: actionsSelector?.status[0],
-      logicalOperator: "and",
-    });
-
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(dashboardSetPagination({ page, pageSize }));
@@ -347,7 +317,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
         borderRadius: "10px",
         fontSize: "14px",
         padding: "3px 0",
-        // width: "300px",
       },
     },
   };
@@ -388,8 +357,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const disabled = formik?.values?.statusCode === -3;
 
   const handleEditClick = (data) => {
-    console.log(data, 234567);
-
     setSelectedPayEntry(data);
     setToggleNotes(true);
   };
@@ -1074,66 +1041,143 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               </Box>
             )}
 
-            {page === "payable" && (
-              <>
-                <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
-                  <OutlinedButton
-                    sx={{ fontWeight: "500" }}
-                    onClick={() => nav("documentation/paybleEntry")}
-                  >
-                    Close
-                  </OutlinedButton>
+            <Box sx={{ gap: "10px", padding: "15px" }}>
+              {formik?.values?.status?.toLowerCase() === "rejected" ||
+                (page == "payableApprove" && (
+                  <Grid item xs={12} paddingTop={1}>
+                    <TextField
+                      label="Reject Remarks"
+                      name="rejectRemarks"
+                      value={formik.values.rejectRemarks}
+                      error={rejectError}
+                      helperText={
+                        rejectError
+                          ? "Reject remarks are required when rejecting a customer*."
+                          : formik.errors.rejectRemarks
+                      }
+                      onChange={formik.handleChange}
+                      disabled={page === "job-entry" ? true : false}
+                      multiline
+                      rows={4}
+                      variant="outlined"
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "10px",
+                        },
+                      }}
+                    />
+                  </Grid>
+                ))}
+            </Box>
 
-                  <ThemeButton
-                    onClick={formik.handleSubmit}
-                    sx={{
-                      fontWeight: "500",
-                      borderRadius: "12px",
-                      color: "white !important",
-                    }}
+            {page == "payable" ? (
+              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                <Grid item xs={12}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
                   >
-                    {isLoading && <CircularProgress size={20} color="white" />}
-                    Add
-                  </ThemeButton>
-                </Box>
+                    <Stack direction="row" spacing={2}>
+                      <OutlinedButton
+                        sx={{ fontWeight: "500" }}
+                        onClick={() => nav(-1)}
+                      >
+                        Close
+                      </OutlinedButton>
 
-                {/* 
-                  <Grid item xs={12}>
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      justifyContent="space-between"
-                    >
-                      <Stack direction="row" spacing={2}>
+                      {!initialValues?.id ? (
                         <ThemeButton
+                          onClick={formik.handleSubmit}
                           sx={{
                             fontWeight: "500",
-                            backgroundColor: "red",
                             color: "white !important",
                           }}
-                          onClick={handleRejectRequest}
                         >
-                          {loaderApprove.reject && (
+                          {isLoading && (
                             <CircularProgress size={20} color="white" />
-                          )}{" "}
-                          Reject
+                          )}
+                          Submit
                         </ThemeButton>
+                      ) : (
                         <ThemeButton
+                          onClick={formik.handleSubmit}
                           sx={{
                             fontWeight: "500",
                             color: "white !important",
                           }}
-                          onClick={handleApproveRequest}
+                          disabled={isDisabled}
                         >
-                          {loaderApprove.approve && (
+                          {isUpdateLoading && (
                             <CircularProgress size={20} color="white" />
-                          )}{" "}
-                          Approve
+                          )}
+                          Update
                         </ThemeButton>
-                      </Stack>
+                      )}
                     </Stack>
-                  </Grid> */}
-              </>
+                  </Stack>
+                </Grid>
+              </Box>
+            ) : (
+              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                <Grid item xs={12} sx={{ margin: 1 }}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Stack direction="row" spacing={2}>
+                      <OutlinedButton
+                        sx={{ fontWeight: "500" }}
+                        onClick={() => nav(-1)}
+                      >
+                        Close
+                      </OutlinedButton>
+
+                      <ThemeButton
+                        onClick={formik.handleSubmit}
+                        sx={{
+                          fontWeight: "500",
+                          color: "white !important",
+                        }}
+                      >
+                        {isLoading && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Update
+                      </ThemeButton>
+
+                      <ThemeButton
+                        sx={{
+                          fontWeight: "500",
+                          backgroundColor: "red",
+                          color: "white !important",
+                        }}
+                        onClick={() => handleRejectRequest()}
+                      >
+                        {loaderApprove.reject && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Reject
+                      </ThemeButton>
+                      <ThemeButton
+                        sx={{ fontWeight: "500", color: "white !important" }}
+                        onClick={() => handleApproveRequest()}
+                      >
+                        {loaderApprove.approve && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Approve
+                      </ThemeButton>
+                    </Stack>
+                  </Stack>
+                </Grid>
+              </Box>
             )}
           </TabPanel>
 
