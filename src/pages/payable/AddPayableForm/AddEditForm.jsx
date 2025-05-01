@@ -59,7 +59,7 @@ import UploadFile from "../../../components/UploadFile";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
-export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
+export default function AddEditForm({ initialValues, page,viewPage, type = "notcopy" }) {
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
   const [updatePaybleEntry, { isUpdateLoading }] =
     useUpdatePaybleEntryMutation();
@@ -89,7 +89,14 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
-
+useEffect(()=>{
+if(viewPage === 'view'){
+  setIsDisabled(true)
+}
+else{ 
+  setIsDisabled(false)
+}
+},[viewPage])
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -354,7 +361,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
 
-  const disabled = formik?.values?.statusCode === -3;
+  const disabled = formik?.values?.statusCode === -3 || viewPage === 'view' ? true : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -509,7 +516,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       sortable: false,
       headerAlign: "center",
       renderHeader: () => (
-        <IconButton color="white" onClick={handleTogglePayEntry}>
+        <IconButton disabled ={isDisabled} color="white" onClick={handleTogglePayEntry}>
           <AddCircleIcon />
         </IconButton>
       ),
@@ -530,7 +537,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               opacity: disabled ? 0.5 : 1,
             }}
             onClick={() => {
-              console.log("heello")
               if (!disabled) handleEditClick(params.row);
             }}
           />
@@ -607,7 +613,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   icon={<DocumentIcon />}
                   iconPosition="start"
                   sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                  disabled={isDisabled}
+                  // disabled={isDisabled}
                 />
                 <Tab
                   label="Audit Logs"
@@ -615,7 +621,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   icon={<AuditIcon />}
                   iconPosition="start"
                   sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                  disabled={isDisabled}
+                  // disabled={isDisabled}
                 />
               </TabList>
             )}
@@ -641,6 +647,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       value={formik.values.invoiceType}
                       error={formik.errors.invoiceType}
                       onChange={formik.handleChange}
+                      disabled={viewPage === 'view'}
                     />
                   </Grid>
 
@@ -653,6 +660,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       onChange={formik.handleChange}
                       inputRef={payableRef}
                       disabled
+                      
                     />
                   </Grid>
 
@@ -664,6 +672,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       error={formik.errors.jobNo}
                       onChange={formik.handleChange}
                       suggestionName="job_no"
+                      disabled={viewPage === 'view'}
                     />
                   </Grid>
 
@@ -688,6 +697,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       value={formik.values.vendorName}
                       error={formik.errors.vendorName}
                       onChange={formik.handleChange}
+                      disabled = {isDisabled}
                     />
                   </Grid>
 
@@ -699,6 +709,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       error={formik.errors.vendorInvoiceNo}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -723,6 +734,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       value={formik.values.currency}
                       error={formik.errors.currency}
                       onChange={formik.handleChange}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -734,7 +746,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       error={formik.errors.exchangeRate}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
-                      disabled={getFormData?.currency === "TZS"}
+                      disabled={getFormData?.currency === "TZS" || viewPage === 'view'}
                     />
                   </Grid>
 
@@ -979,8 +991,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
             <Stack direction="row" justifyContent="right" padding="5px 15px">
               <Box>
                 {actionsSelector?.view === "card" && (
-                  <IconButton onClick={handleTogglePayEntry}>
-                    <AddIcon color="primary" />
+                  <IconButton color="primary" onClick={handleTogglePayEntry} disabled={isDisabled}>
+                    <AddIcon  />
                   </IconButton>
                 )}
 
@@ -1022,6 +1034,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   page=""
                   handleEditClick={handleEditClick}
                   handleDeleteClick={handleDeleteNote}
+                  disabled={isDisabled}
                 />
               </Box>
             ) : (
@@ -1036,7 +1049,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   <PayableEntryList
                     formik={formik}
                     dropdownData={dropdownData}
-                    //
+                    disabled={isDisabled}
                     chargesData={chargesData}
                     PAYABLE_COLUMNS={PAYABLE_COLUMNS}
                   />
@@ -1059,7 +1072,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                           : formik.errors.rejectRemarks
                       }
                       onChange={formik.handleChange}
-                      disabled={page === "job-entry" ? true : false}
+                      disabled={page === "payable_list" ? true : false}
                       multiline
                       rows={4}
                       variant="outlined"
@@ -1074,8 +1087,9 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                 ))}
             </Box>
 
-            {page == "payable" ? (
-              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+      {viewPage !== "view" && (
+        page == "payable" ? (
+          <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
                 <Grid item xs={12}>
                   <Stack
                     direction="row"
@@ -1087,7 +1101,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
                         sx={{ fontWeight: "500" }}
-                        onClick={() => nav("/app/documentation/paybleEntry")}
+                        onClick={() => nav(-1)}
                       >
                         Close
                       </OutlinedButton>
@@ -1124,7 +1138,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   </Stack>
                 </Grid>
               </Box>
-            ) : (
+        ) :
+        (
               <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
                 <Grid item xs={12} sx={{ margin: 1 }}>
                   <Stack
@@ -1137,7 +1152,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Stack direction="row" spacing={2}>
                       <OutlinedButton
                         sx={{ fontWeight: "500" }}
-                        onClick={() => nav("/app/documentation/paybleEntry")}
+                        onClick={() => nav(-1)}
                       >
                         Close
                       </OutlinedButton>
@@ -1181,7 +1196,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   </Stack>
                 </Grid>
               </Box>
-            )}
+            )
+      )} 
           </TabPanel>
           <TabPanel value="2" sx={{ padding: "0px" }}>
             <UploadFile

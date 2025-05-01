@@ -47,7 +47,7 @@ const DropZone = styled(Box)(({ theme }) => ({
 
 const UploadFile = ({
   customer_id,
-  disabled = false,
+  disabled = disabled || false,
   dropdownData,
   sourceType = null,
   isNotShowType,
@@ -67,7 +67,6 @@ const UploadFile = ({
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [viewDocument, setViewDocument] = useState({});
   const [fileData, setFileDaat] = useState({});
-
   useEffect(() => {
     type == null
       ? reloadDataHandler(sourceType, customer_id, setListData, setLoading)
@@ -308,10 +307,6 @@ const UploadFile = ({
 
     return date.split("T")[0];
   };
-  function truncateMiddle(text, front = 6, back = 4) {
-    if (!text || text.length <= front + back + 3) return text;
-    return `${text.slice(0, front)}......${text.slice(-back)}`;
-  }
 
   const cusColumns = [
     {
@@ -580,7 +575,8 @@ const UploadFile = ({
               }
             />
           )}
-          <Delete
+       {!disabled && (
+        <Delete
             style={{ cursor: "pointer", color: "red" }}
             onClick={() => {
               setDeleteData({
@@ -592,7 +588,7 @@ const UploadFile = ({
               setOpenConfirmation(true);
             }}
             disabled={disabled}
-          />
+          />)}
         </div>
       ),
     },
@@ -612,7 +608,8 @@ const UploadFile = ({
         </Grid>
       ) : (
         <Grid container >
-          <Grid item xs={12}>
+     { !disabled && (<>
+        <Grid item xs={12}>
             <Typography
               variant="h5"
               sx={{ padding: "10px 15px 5px 15px" }}
@@ -662,7 +659,8 @@ const UploadFile = ({
               </DropZone>
             </Box>
           </Grid>
-          <Grid item xs={12} md={8}>
+        </>)}
+          <Grid item xs={12} md={disabled ? 12 : 8}>
             <Box style={{ height: 400, width: "100%", padding: "15px", overflow: "auto" }}>
               <StyledDataGrid
                 rows={listData}

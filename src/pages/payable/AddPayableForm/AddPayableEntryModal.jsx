@@ -143,12 +143,8 @@ export default function AddPayableEntryModal({
     });
     handleTogglePayEntry();
   };
-useEffect(() => {
-  console.log("gjyj");
-  
+useEffect(() => { 
 if(togglePayEntry){
-  console.log("uhui");
-  
   setPayableEntry((prevEntry) => ({
     ...prevEntry,
     jobNo: formik.values.jobNo,

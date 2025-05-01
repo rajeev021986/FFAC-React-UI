@@ -27,7 +27,7 @@ const style = {
   p: 4,
 };
 
-export default function AddRejectedRemarks({ handleOpen, handleClose, rowId }) {
+export default function AddRejectedRemarks({ handleOpen, handleClose, rowId ,type }) {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
@@ -48,7 +48,7 @@ export default function AddRejectedRemarks({ handleOpen, handleClose, rowId }) {
       try {
         const res = await ApiManager.rejectjobEntryApprove(
           rowId,
-          "JOB_DETAIL",
+          type,
           values.remarks
         );
         if (res.success) {

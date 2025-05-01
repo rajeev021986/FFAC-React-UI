@@ -4,7 +4,7 @@ import { Typography, CardContent, CardActions } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 
-export default function CardItem({ item, columns, actions,handleEditClick, handleDeleteClick }) {
+export default function CardItem({ item, columns, actions,handleEditClick, handleDeleteClick,disabled }) {
   columns = columns.filter(
     (column) => column.field !== "id" && column.field !== "action"
   );
@@ -49,11 +49,12 @@ export default function CardItem({ item, columns, actions,handleEditClick, handl
             <IconButton
               color="primary"
               onClick={() => handleEditClick(item)} 
+              disabled = {disabled}
             >
               <EditIcon />
             </IconButton>
-            <IconButton onClick = {() => handleDeleteClick(item.id)}>
-              <DeleteForeverIcon sx={{ color: "red" }} />
+            <IconButton color="error" onClick = {() => handleDeleteClick(item.id)} disabled = {disabled}>
+              <DeleteForeverIcon  />
             </IconButton>
           </Box>
         </Box>

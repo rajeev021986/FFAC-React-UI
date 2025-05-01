@@ -476,6 +476,7 @@ export default function JobEntryScreen({ page }) {
 
       <AddRejectedRemarks
         rowId={modal?.data?.id}
+        type= "JOB_DETAIL"
         handleOpen={modal.open && modal.type === "reject"}
         handleClose={handleClose}
       />

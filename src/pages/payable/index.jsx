@@ -52,6 +52,11 @@ import {
   useFetchPaybleEntryDatasQuery,
   useDeletePaybleEntryMutation,
 } from "../../store/api/payableApi";
+import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
+import CancelModalApprove from "../JobEntry/CancelModalApprove";
+import ApiManager from "../../services/ApiManager";
+import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
+import PayableViewModal from "./Actions/PayableViewModal";
 
 export default function PayableListScreen({ page }) {
   const payableActionSelector = useSelector((state) => state.payableAction);
@@ -133,12 +138,11 @@ export default function PayableListScreen({ page }) {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
-
   PAYABLE_COLUMNS[PAYABLE_COLUMNS.length - 1].renderCell = GridActions({
     actions:
       page == "payable_list"
         ? getPayableListGridActions(nav, setModal)
-        : getPayableListGridActionApprove((nav, setModal)),
+        : getPayableListGridActionApprove(nav, setModal),
   });
 
   const handleActionClick = async (actionName) => {
@@ -171,7 +175,62 @@ export default function PayableListScreen({ page }) {
   };
 
   const [deletePaybleEntry] = useDeletePaybleEntryMutation();
+  const handleApprove = async () => {
+    const jobStatus = modal?.data?.label;
+    if (jobStatus === "Cancelled Successfully") {
+      toast.custom(
+        <CustomToast
+          message="Cannot approve a cancelled payable entry."
+          toast="error"
+        />
+      );
+      return;
+    }
 
+    try {
+      const response = await ApiManager.approveJobEntryRequest(
+        modal?.data?.id,
+        "PAYBLE_ENTRY"
+      );
+      const message = response.message;
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+      handleClose();
+    } catch (error) {
+      toast.custom(<CustomToast message="Failed to approve." toast="error" />, {
+        closeButton: false,
+      });
+    }
+  };
+  const handleCancel = async () => {
+    const jobStatus = modal?.data?.label;
+    if (jobStatus === "Approved Successfully") {
+      toast.custom(
+        <CustomToast
+          message="Cannot cancel an approved payable."
+          toast="error"
+        />
+      );
+      return;
+    }
+
+    try {
+      const response = await ApiManager.canceljobEntryApprove(
+        modal?.data?.id,
+        "PAYBLE_ENTRY"
+      );
+      const message = response.message;
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+      handleClose();
+    } catch (error) {
+      toast.custom(<CustomToast message="Failed to cancel." toast="error" />, {
+        closeButton: false,
+      });
+    }
+  };
   const handleClose = () => {
     setModal({
       open: false,
@@ -214,7 +273,6 @@ export default function PayableListScreen({ page }) {
       dispatch(payableDashboardView("card"));
     }
   }, [payableActionSelector.view, dispatch]);
-
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -368,7 +426,26 @@ export default function PayableListScreen({ page }) {
           </Box>
         </Drawer>
       )}
-
+      <AddRejectedRemarks
+        rowId={modal?.data?.id}
+        handleOpen={modal.open && modal.type === "reject"}
+        handleClose={handleClose}
+        type="PAYBLE_ENTRY"
+      />
+      <CancelModalApprove
+        rowId={modal?.data?.id}
+        sourceName={modal?.data?.vendorName}
+        handleOpen={modal.open && modal.type === "cancel"}
+        handleClose={handleClose}
+        handleCancel={handleCancel}
+      />
+      <ApprovePayableModal
+        rowId={modal?.data?.id}
+        sourceName={modal?.data?.vendorName}
+        handleOpen={modal.open && modal.type === "approve"}
+        handleClose={handleClose}
+        handleApprove={handleApprove}
+      />
       <DeleteDialog
         source="payable_list"
         sourceName={modal?.data?.deleteName}
@@ -376,6 +453,13 @@ export default function PayableListScreen({ page }) {
         handleDelete={handleDelete}
         handleOpen={modal.open && modal.type === "delete"}
       />
+      {modal.open && modal.type === "document" && (
+        <PayableViewModal
+          open={modal.open}
+          data={modal.data}
+          onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+        />
+      )}
     </Box>
   );
 }
