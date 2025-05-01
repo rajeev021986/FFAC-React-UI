@@ -147,19 +147,6 @@ export default function FilterForm({ setFilterOpen }) {
               }}
             />
           </div>
-          <div style={{ width: "48%", marginLeft: "0px" }}>
-            <SelectBox
-              label="Doc Status"
-              id="isDoc"
-              options={documentOptions}
-              value={formik.values.isDoc}
-              onChange={formik.handleChange}
-              sx={{ marginLeft: "0px !important" }}
-              MenuProps={{
-                disablePortal: true,
-              }}
-            />
-          </div>
         </Stack>
 
         <Stack direction="row" spacing={3} justifyContent={"end"}>

@@ -7,6 +7,7 @@ import {
   IconButton,
   Select,
   MenuItem,
+  TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import InputBox from "../../../components/common/InputBox";
@@ -32,10 +33,11 @@ export default function AddPayableEntryModal({
   handleTogglePayEntry,
   onAddPayEntry,
   selectedPayEntry,
+  setSelectedPayEntry,
 }) {
   const [payableEntry, setPayableEntry] = useState({
     id: null,
-    jobNo: "",
+    jobNo:  formik.values.jobNo,
     chargeName: "",
     unitType: "",
     noOfUnit: "",
@@ -49,57 +51,41 @@ export default function AddPayableEntryModal({
     new: true,
   });
 
-  useEffect(() => {
-    if (selectedPayEntry) {
-      setPayableEntry(selectedPayEntry);
-    } else {
-      setPayableEntry({
-        id: Date.now(),
-        jobNo: "",
-        chargeName: "",
-        unitType: "",
-        noOfUnit: "",
-        unitRate: "",
-        amount: "",
-        vatApplicable: "",
-        vatAmount: "",
-        withHoldingTax: "",
-        withHoldingAmount: "",
-        totalAmount: "",
-        new: true,
-      });
-    }
-  }, [selectedPayEntry]);
-
   const handleChange = (field, value) => {
-    console.log(value, 234567890);
-
-    //
-    let updatedEntry = { ...payableEntry, [field]: value };
-
-    const noOfUnit = updatedEntry.noOfUnit ? Number(updatedEntry.noOfUnit) : 0;
-    const unitRate = updatedEntry.unitRate ? Number(updatedEntry.unitRate) : 0;
-
-    updatedEntry.amount = noOfUnit * unitRate;
-
-    if (updatedEntry.vatApplicable === "18%") {
-      updatedEntry.vatAmount = (updatedEntry.amount * 0.18).toFixed(2);
-    } else {
-      updatedEntry.vatAmount = 0;
+    if (field === "unitType") {
+      setPayableEntry((prevEntry) => ({
+        ...prevEntry,
+        unitType: value,
+      }));
     }
-    const withHoldingTax = Number(updatedEntry.withHoldingTax || 0);
-    updatedEntry.withHoldingAmount = (
-      (updatedEntry.vatAmount * withHoldingTax) /
-      100
-    ).toFixed(2);
+    setPayableEntry((prevEntry) => {
+      let updatedEntry = { ...prevEntry, [field]: value };
+      const noOfUnit = updatedEntry.noOfUnit
+        ? Number(updatedEntry.noOfUnit)
+        : 0;
+      const unitRate = updatedEntry.unitRate
+        ? Number(updatedEntry.unitRate)
+        : 0;
 
-    updatedEntry.totalAmount = (
-      updatedEntry.amount +
-      Number(updatedEntry.vatAmount) -
-      Number(updatedEntry.withHoldingAmount)
-    ).toFixed(2);
+      updatedEntry.amount = noOfUnit * unitRate;
+      if (updatedEntry.vatApplicable === "18%") {
+        updatedEntry.vatAmount = (updatedEntry.amount * 0.18).toFixed(2);
+      } else {
+        updatedEntry.vatAmount = 0;
+      }
+      const withHoldingTax = Number(updatedEntry.withHoldingTax || 0);
+      updatedEntry.withHoldingAmount = (
+        (updatedEntry.amount * withHoldingTax) /
+        100
+      ).toFixed(2);
 
-    setPayableEntry(updatedEntry);
+      updatedEntry.totalAmount = (
+        updatedEntry.amount +
+        Number(updatedEntry.vatAmount) -
+        Number(updatedEntry.withHoldingAmount)
+      ).toFixed(2);
+      return updatedEntry;
+    });
   };
 
   const handleSubmit = () => {
@@ -119,13 +105,79 @@ export default function AddPayableEntryModal({
     formik.setFieldValue("paybleDetails", updatedList);
     if (onAddPayEntry) {
       onAddPayEntry(updatedEntry);
+      setSelectedPayEntry(updatedEntry);
     }
+    setPayableEntry({
+      id: Date.now(),
+      jobNo: "",
+      chargeName: "",
+      unitType: "",
+      noOfUnit: "",
+      unitRate: "",
+      amount: "",
+      vatApplicable: "",
+      vatAmount: "",
+      withHoldingTax: "",
+      withHoldingAmount: "",
+      totalAmount: "",
+      new: true,
+    });
     handleTogglePayEntry();
   };
 
   const handleClose = () => {
+    setPayableEntry({
+      id: Date.now(),
+      jobNo: "",
+      chargeName: "",
+      unitType: "",
+      noOfUnit: "",
+      unitRate: "",
+      amount: "",
+      vatApplicable: "",
+      vatAmount: "",
+      withHoldingTax: "",
+      withHoldingAmount: "",
+      totalAmount: "",
+      new: true,
+    });
     handleTogglePayEntry();
   };
+useEffect(() => {
+  console.log("gjyj");
+  
+if(togglePayEntry){
+  console.log("uhui");
+  
+  setPayableEntry((prevEntry) => ({
+    ...prevEntry,
+    jobNo: formik.values.jobNo,
+  }));
+}
+  },[togglePayEntry]);
+
+
+  useEffect(() => {
+    if (selectedPayEntry) {
+      setPayableEntry(selectedPayEntry);
+    } else {
+      setPayableEntry({
+        id: Date.now(),
+        jobNo: formik.values.jobNo,
+        chargeName: "",
+        unitType: "",
+        noOfUnit: "",
+        unitRate: "",
+        amount: "",
+        vatApplicable: "",
+        vatAmount: "",
+        withHoldingTax: "",
+        withHoldingAmount: "",
+        totalAmount: "",
+        new: true,
+      });
+    }
+  }, [selectedPayEntry]);
 
   return (
     <Modal
@@ -156,7 +208,6 @@ export default function AddPayableEntryModal({
               suggestionName="job_no"
             />
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <FormAutoCompleteWithLoader
               label="Charge Name"
@@ -166,47 +217,39 @@ export default function AddPayableEntryModal({
               suggestionName="charge_name"
             />
           </Grid>
-
           <Grid item xs={12} lg={4}></Grid>
-
           <Grid item xs={12} lg={4}>
             <FormAutoCompleteWithLoader
               label="Unit Type"
               id="unitType"
               value={payableEntry.unitType}
-              onChange={(e) => handleChange("unitType", e.target.value)}
-              // onChange={(e) => {
-              //   formik?.values?.paybleDetails.setFieldValue(
-              //     "unitType",
-              //     e.target.value
-              //   );
-              //   formik?.values?.paybleDetails.setFieldValue(
-              //     "noOfUnit",
-              //     e.target.count || 0
-              //   );
-              // }}
+              onChange={(e) => {
+                handleChange("unitType", e.target.value);
+                handleChange("noOfUnit", e.target.count || "");
+              }}
               suggestionName="size_type"
             />
           </Grid>
-
           <Grid item xs={12} lg={4}>
-            <FormAutoCompleteWithLoader
+            <TextField
               label="No of Units"
               id="noOfUnit"
+              name="noOfUnit"
               value={payableEntry.noOfUnit}
-              onChange={(e) => handleChange("noOfUnit", e.target.value)}
-              suggestionName="count"
-            />
-            {/* <InputBox
-              label="No of Units"
-              id="noOfUnit"
-              value={payableEntry.noOfUnit}
+              disabled={true}
               onChange={(e) => handleChange("noOfUnit", e.target.value)}
               fullWidth
-              // disabled
-            /> */}
+              size="small"
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                  fontSize: "14px",
+                  height: "43px",
+                },
+              }}
+            />
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <InputBox
               label="Unit Rate"
@@ -216,7 +259,6 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
           {/* Amount */}
           <Grid item xs={12} lg={4}>
             <InputBox
@@ -227,7 +269,6 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
           {/* VAT Applicable */}
           <Grid item xs={12} lg={4}>
             <Select
@@ -236,12 +277,19 @@ export default function AddPayableEntryModal({
               value={payableEntry.vatApplicable}
               onChange={(e) => handleChange("vatApplicable", e.target.value)}
               disabled={disabled}
+              sx={{
+                ...styles.root,
+                height: "44px",
+                "& .MuiSelect-select span::before": {
+                  content: "'VAT Applicable'",
+                  color: "#9090A5",
+                },
+              }}
             >
               <MenuItem value="No">No</MenuItem>
               <MenuItem value="18%">18%</MenuItem>
             </Select>
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <InputBox
               label="VAT Amount"
@@ -251,7 +299,6 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <Select
               fullWidth
@@ -259,6 +306,14 @@ export default function AddPayableEntryModal({
               value={payableEntry.withHoldingTax}
               onChange={(e) => handleChange("withHoldingTax", e.target.value)}
               disabled={disabled}
+              sx={{
+                ...styles.root,
+                height: "44px",
+                "& .MuiSelect-select span::before": {
+                  content: "'With Holding Tax'",
+                  color: "#9090A5",
+                },
+              }}
             >
               <MenuItem value={0}>No</MenuItem>
               <MenuItem value={5}>5%</MenuItem>
@@ -266,7 +321,6 @@ export default function AddPayableEntryModal({
               <MenuItem value={15}>15%</MenuItem>
             </Select>
           </Grid>
-
           <Grid item xs={12} lg={4}>
             <InputBox
               label="With Holding Amount"
@@ -276,9 +330,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
           <Grid item xs={12} lg={4}></Grid>
-
           <Grid item xs={12} lg={4}>
             <InputBox
               label="Total Amount"
@@ -288,7 +340,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-
+          <Grid item xs={12} lg={4}></Grid> <Grid item xs={12} lg={4}></Grid>
           {/* Button */}
           <Grid item xs={4}>
             <ThemeButton
@@ -305,3 +357,10 @@ export default function AddPayableEntryModal({
     </Modal>
   );
 }
+
+const styles = {
+  root: {
+    borderRadius: "10px",
+    fontSize: "14px",
+  },
+};

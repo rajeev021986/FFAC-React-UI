@@ -14,13 +14,11 @@ import CustomToast from "../../components/common/Toast/CustomToast";
 export default function AddJobEntry({ page }) {
   const [loading, setLoading] = useState(true);
   const { state } = useLocation();
-
   const getUserId = localStorage.getItem("userId");
   const [initialValues, setInitialValues] = React.useState({
     rejectRemarks: "",
     shipmentType: "",
     moveType: "",
-
     customerName: "",
     hblNo: "",
     mblNo: null,

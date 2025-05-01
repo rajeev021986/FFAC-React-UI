@@ -29,7 +29,7 @@ function AuditTimeLine({ id, page, service }) {
               sx={{
                 borderRadius: "50px",
                 color: "white !important",
-                fontSize: { xs: "0.8rem", sm: "0.875rem" }
+                fontSize: { xs: "0.8rem", sm: "0.875rem" },
               }}
             >
               Refresh

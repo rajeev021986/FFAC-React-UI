@@ -38,8 +38,9 @@ function FormAutoCompleteWithLoader(props) {
           dataLabel || suggestionName,
           debounceValue
         );
-        setOptions(data);
-        setFilteredOptions(data);
+      const validData = data.filter((item) => item.label?.trim() !== "");
+        setOptions(validData);
+        setFilteredOptions(validData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -54,13 +55,13 @@ function FormAutoCompleteWithLoader(props) {
     setInputValue(newValue);
   };
 
-  const handleSelectionChange = (event, newValue) => {
+ const  handleSelectionChange = (event, newValue) => {
     if (newValue) {
       onChange({
         target: {
           name: id,
           value: newValue.value,
-          count: newValue?.fullData?.count,
+          count: newValue?.fullData?.count || 0, 
         },
       });
     } else {
@@ -69,6 +70,7 @@ function FormAutoCompleteWithLoader(props) {
       });
     }
   };
+  
 
   return (
     <Box sx={{ width: "100%" }}>

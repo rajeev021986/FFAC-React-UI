@@ -320,7 +320,7 @@ export default function JobEntryForm({
         ...jobSettingData?.body,
       });
     }
-  }, [optionsSettingsData, customerSettingsData]);
+  }, [optionsSettingsData, customerSettingsData,jobSettingData]);
 
   const handleApproveRequest = async () => {
     setRejectError(false);
@@ -398,7 +398,6 @@ export default function JobEntryForm({
       reject: false,
     }));
   };
- console.log("formik.values.dateOfReceipt",formik.values.dateOfReceipt)
   const [isDisabled, setIsDisabled] = useState(false);
   const getPage = location?.pathname.split("/").slice(-1)[0];
   console.log("getPage",getPage)
@@ -523,7 +522,7 @@ export default function JobEntryForm({
                     textTransform: "capitalize",
                     minHeight: "50px",
                     fontSize: { xs: "0.8rem", sm: "1.125rem" },
-                    padding: { xs: "5px", sm: "10px 16px"}
+                    padding: { xs: "5px", sm: "10px 16px" },
                   }}
                 />
 
@@ -536,7 +535,7 @@ export default function JobEntryForm({
                     textTransform: "capitalize",
                     minHeight: "50px",
                     fontSize: { xs: "0.8rem", sm: "1.125rem" },
-                    padding: { xs: "5px", sm: "10px 16px"}
+                    padding: { xs: "5px", sm: "10px 16px" },
                   }}
                   disabled={isDisabled}
                 />
@@ -549,7 +548,7 @@ export default function JobEntryForm({
                     textTransform: "capitalize",
                     minHeight: "50px",
                     fontSize: { xs: "0.8rem", sm: "1.125rem" },
-                    padding: { xs: "5px", sm: "10px 16px"}
+                    padding: { xs: "5px", sm: "10px 16px" },
                   }}
                   disabled={isDisabled}
                 />
@@ -585,49 +584,39 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-                {(location?.pathname ===
-                  "/app/documentation/jobEntry/newEntry" ||
-                  location?.pathname ===
-                    "/app/documentation/approveJobfile/approveJobRequest" ||
-                  formik?.values?.createdBy === getUserId) && (
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={6}
-                    xl={2}
+              {(location?.pathname === "/app/documentation/jobEntry/newEntry" ||
+                location?.pathname ===
+                  "/app/documentation/approveJobfile/approveJobRequest" ||
+                formik?.values?.createdBy === getUserId) && (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={6}
+                  xl={2}
+                  sx={{
+                    display: "flex",
+                    //justifyContent: "flex-end",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <ThemeButton
+                    onClick={() => toggleRateModal()}
                     sx={{
-                      display: "flex",
-                      //justifyContent: "flex-end",
-                      alignItems: "flex-start",
+                      fontWeight: "500",
+                      color: "white !important",
+                      height: "44px",
+                      padding: "5px 20px",
                     }}
                   >
-                    <ThemeButton
-                      onClick={() => toggleRateModal()}
-                      sx={{
-                        fontWeight: "500",
-                        color: "white !important",
-                        height: "44px",
-                        padding: "5px 20px"
-                      }}
-                    >
-                      Add Rate
-                    </ThemeButton>
-                  </Grid>
-                )}
-
+                    Add Rate
+                  </ThemeButton>
+                </Grid>
+              )}
             </Grid>
             <Grid container rowSpacing={2} columnSpacing={3} marginTop={0}>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <InputBox
                   label="MBL No.*"
                   id="mblNo"
@@ -638,14 +627,7 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <Tooltip
                   title={
                     !formik.values.customerName ? "Field is mandatory" : ""
@@ -664,25 +646,8 @@ export default function JobEntryForm({
                   />
                 </Tooltip>
               </Grid>
+
               <Grid
-  item
-  xs={12}
-  sm={6}
-  md={4}
-  lg={2}
-  xl={2}
->
-  <FormAutoCompleteWithLoader
-    label="PORT CODE*"
-    id="portOfLoading"
-    value={formik.values.portCode}
-    error={formik.errors.portCode}
-    onChange={formik.handleChange}
-    suggestionName="port_code"
-    disabled={page === "job-entry"}
-  />
-</Grid>
- <Grid
                 item
                 xs={12}
                 sm={6}
@@ -703,15 +668,7 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <InputBox
                   label="HBL/SO NO."
                   id="hblNo"
@@ -721,15 +678,8 @@ export default function JobEntryForm({
                   disabled={isDisabled}
                 />
               </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
 
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <SelectBox
                   label="Cargo Type"
                   id="cargoType"
@@ -741,15 +691,7 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <InputBox
                   label="Customer Ref No."
                   id="customerRefNo"
@@ -761,15 +703,7 @@ export default function JobEntryForm({
               </Grid>
 
               {/* Select */}
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <SelectBox
                   label="Type Of Cargo"
                   id="typeOfCargo"
@@ -781,15 +715,7 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <InputBox
                   label="Invoice No."
                   id="invoiceNo"
@@ -800,15 +726,7 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <InputBox
                   label="Tansad No."
                   id="tansadNo"
@@ -820,15 +738,7 @@ export default function JobEntryForm({
               </Grid>
 
               {/* Date selection */}
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <DateTimeField
                   name="entryTansadDate"
                   label="Entry/Tansad Date"
@@ -841,15 +751,7 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <InputBox
                   label="Entry No."
                   id="entryNo"
@@ -860,15 +762,7 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <InputBox
                   label="Reference No."
                   id="refNo"
@@ -878,6 +772,7 @@ export default function JobEntryForm({
                   disabled={true}
                 />
               </Grid>
+
               <Grid
                 item
                 xs={12}
@@ -885,7 +780,6 @@ export default function JobEntryForm({
                 md={4}
                 lg={2}
                 xl={2}
-
                 display="flex"
                 alignItems="center"
                 gap={1}
@@ -900,15 +794,7 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2}
-                xl={2}
-
-              >
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <InputBox
                   label="Created By"
                   id="createdBy"
@@ -919,17 +805,9 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-                {initialValues.statusCode == -2 ||
-                initialValues.statusCode == 1 ? (
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={2}
-                  xl={2}
-
-                >
+              {initialValues.statusCode == -2 ||
+              initialValues.statusCode == 1 ? (
+                <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                   <SelectBox
                     label="Status"
                     id="status"
@@ -940,15 +818,7 @@ export default function JobEntryForm({
                   />
                 </Grid>
               ) : (
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={2}
-                  xl={2}
-
-                >
+                <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                   <InputBox
                     label="Status"
                     id="status"
@@ -959,31 +829,6 @@ export default function JobEntryForm({
                   />
                 </Grid>
               )}
-{page === "job-entry" && formik.values.statusCode === -1 ? (
-  <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
-    <SelectBox
-      label="Account Type*"
-      id="accountType"
-      options={optionsSettingsData?.body?.account_type}
-      value={formik.values.accountType}
-      error={formik.errors.accountType}
-      onChange={formik.handleChange}
-      disabled={true} 
-    />
-  </Grid>
-) : (
-  <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
-    <SelectBox
-      label="Account Type*"
-      id="accountType"
-      options={optionsSettingsData?.body?.account_type}
-      value={formik.values.accountType}
-      error={formik.errors.accountType}
-      onChange={formik.handleChange}
-    />
-  </Grid>
-)}
-
 
 
               <Grid item xs={12}>
@@ -1019,8 +864,8 @@ export default function JobEntryForm({
                     variant="outlined"
                     fullWidth
                     sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: '10px',
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "10px",
                       },
                     }}
                   />
@@ -1160,14 +1005,14 @@ export default function JobEntryForm({
             />
           </TabPanel>
         </TabContext>
-      </Box >
+      </Box>
       {toggleRate && (
-      <AddRateModal
-        formik={formik}
-        toggleRate={toggleRate}
-        toggleRateModal={toggleRateModal}
-        disabled={isDisabled}
-      />
+        <AddRateModal
+          formik={formik}
+          toggleRate={toggleRate}
+          toggleRateModal={toggleRateModal}
+          disabled={isDisabled}
+        />
       )}
     </>
   );

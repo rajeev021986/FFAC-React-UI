@@ -28,7 +28,7 @@ export const payableCodeAPI = createApi({
         };
 
         return {
-          url: `${menuConfigUrl.document}/customer`,
+          url: `${menuConfigUrl.document}/payble/entry`,
           method: "PUT",
           body: params,
           headers: headers,

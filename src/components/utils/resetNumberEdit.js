@@ -52,7 +52,7 @@ const ResetNumberEdit = ({ id, value, field, api, row }) => {
     <Select size="small" value={value || ""} onChange={handleChange} fullWidth>
       <MenuItem value="Never">Never</MenuItem>
       <MenuItem value="Yearly">Yearly</MenuItem>
-      <MenuItem value="Month">Monthy</MenuItem>
+      <MenuItem value="Monthly">Monthly</MenuItem>
       <MenuItem value="Daily">Daily</MenuItem>
     </Select>
   );

@@ -21,11 +21,9 @@ import TabPanel from "@mui/lab/TabPanel";
 import AddIcon from "@mui/icons-material/Add";
 
 import {
-  useAddCustomerMutation,
-  useUpdateCustomerMutation,
-} from "../../../store/api/codeDataApi";
-
-import { useAddPaybleEntryMutation } from "../../../store/api/payableApi";
+  useAddPaybleEntryMutation,
+  useUpdatePaybleEntryMutation,
+} from "../../../store/api/payableApi";
 
 import { useNavigate } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
@@ -45,7 +43,6 @@ import {
   GridOnOutlined,
 } from "@mui/icons-material";
 import PayableCardView from "../../../components/common/PayableCard/PayableCard";
-import { useFetchUsersQuery } from "../../../store/api/userDataApi";
 import { getUserListGridActions } from "../../../components/screen/user-management/action";
 import { dashboardSetPagination } from "../../../store/freatures/dashboardSlice";
 import DateTimeField from "../../../components/common/DateTime/DateTimeField";
@@ -58,16 +55,20 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPayableEntryModal from "./AddPayableEntryModal";
 import { payableValidationSchema } from "../Actions/ValidationSchema";
 
+import UploadFile from "../../../components/UploadFile";
+import AuditTimeLine from "../../../components/AuditTimeLine";
+import { menuConfigUrl } from "../../../store/menuConfigUrl";
+
 export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
+  const [updatePaybleEntry, { isUpdateLoading }] =
+    useUpdatePaybleEntryMutation();
+
   const actionsSelector = useSelector((s) => s?.payableAction);
-
-  // const [loaderApprove, setLoaderApprove] = useState({
-  //   approve: false,
-  //   reject: false,
-  // });
-
-  const [updateCustomer] = useUpdateCustomerMutation();
+  const [loaderApprove, setLoaderApprove] = useState({
+    approve: false,
+    reject: false,
+  });
   const dispatch = useDispatch();
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
@@ -97,11 +98,14 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
         try {
-          delete values.id;
           values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
+          let paybleDetailsData = values.paybleDetails.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
           let response = await addPaybleEntry({
             ...values,
+            paybleDetails: paybleDetailsData,
           }).unwrap();
 
           const message = response.message;
@@ -109,7 +113,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
-            nav("/app/entity/customer");
+            nav("/app/documentation/paybleEntry");
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
               closeButton: false,
@@ -136,10 +140,14 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       } else {
         try {
           setRejectError(false);
+          let paybleDetailsData = values.paybleDetails.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          let response = await updateCustomer({
+          let response = await updatePaybleEntry({
             ...values,
+            paybleDetails: paybleDetailsData,
           }).unwrap();
 
           const message = response.message;
@@ -176,99 +184,101 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   });
 
   const getFormData = formik?.values;
-
-  console.log(getFormData, "getFormData");
-
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
+  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   useEffect(() => {
-    if (optionsSettingsData?.body || customerSettingsData?.body) {
+    if (
+      optionsSettingsData?.body ||
+      customerSettingsData?.body ||
+      jobSettingData?.body
+    ) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
+        ...jobSettingData?.body,
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
 
-  // const handleApproveRequest = async () => {
-  //   setRejectError(false);
-  //   try {
-  //     setLoaderApprove((prevState) => ({
-  //       ...prevState,
-  //       approve: true,
-  //     }));
-  //     const response = await ApiManager.approveCustomerApprove(
-  //       initialValues.id,
-  //       "customer"
-  //     );
-  //     const message = response.message;
-  //     nav("/app/entity/approve");
-  //     toast.custom(<CustomToast message={message} toast="success" />, {
-  //       closeButton: false,
-  //     });
-  //   } catch (error) {
-  //     toast.custom(
-  //       <CustomToast
-  //         message="Error occurred while approve customer"
-  //         toast="error"
-  //       />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //   }
-  //   setLoaderApprove((prevState) => ({
-  //     ...prevState,
-  //     approve: false,
-  //   }));
-  // };
+  const handleApproveRequest = async () => {
+    setRejectError(false);
+    try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        approve: true,
+      }));
+      const response = await ApiManager.payableApproveHandler(
+        initialValues.id,
+        "PAYBLE_ENTRY"
+      );
+      const message = response.message;
+      nav("/app/documentation/approvePayable");
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while approve payable"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      approve: false,
+    }));
+  };
 
-  // const handleRejectRequest = async () => {
-  //   if (!formik.values.rejectRemarks) {
-  //     setRejectError(true);
-  //     toast.custom(
-  //       <CustomToast message="Reject remarks to be filled!" toast="warn" />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //     return;
-  //   }
-  //   try {
-  //     setLoaderApprove((prevState) => ({
-  //       ...prevState,
-  //       reject: true,
-  //     }));
-  //     const response = await ApiManager.rejectCustomerApprove(
-  //       initialValues.id,
-  //       "customer",
-  //       formik.values.rejectRemarks
-  //     );
-  //     const message = response.message;
-  //     nav("/app/entity/approve");
-
-  //     toast.custom(<CustomToast message={message} toast="success" />, {
-  //       closeButton: false,
-  //     });
-  //   } catch (error) {
-  //     toast.custom(
-  //       <CustomToast
-  //         message="Error occurred while reject customer"
-  //         toast="error"
-  //       />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //   }
-  //   setLoaderApprove((prevState) => ({
-  //     ...prevState,
-  //     reject: false,
-  //   }));
-  // };
+  const handleRejectRequest = async () => {
+    if (!formik.values.rejectRemarks) {
+      setRejectError(true);
+      toast.custom(
+        <CustomToast message="Reject remarks to be filled!" toast="warn" />,
+        {
+          closeButton: false,
+        }
+      );
+      return;
+    }
+    try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        reject: true,
+      }));
+      const response = await ApiManager.payableRejectHandler(
+        initialValues.id,
+        "PAYBLE_ENTRY",
+        formik.values.rejectRemarks
+      );
+      const message = response.message;
+      nav("/app/documentation/approvePayable");
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while reject payable"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      reject: false,
+    }));
+  };
 
   // const handleActionClick = async (actionName) => {
   //   if (actionName === "New Entry") {
@@ -296,42 +306,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     }
   }, [actionsSelector.view, dispatch]);
 
-  const query = {
-    page: actionsSelector?.pagination?.page + 1,
-    size: actionsSelector?.pagination?.pageSize,
-    sortBy:
-      actionsSelector.sortModel.length > 0
-        ? actionsSelector.sortModel[0].field
-        : actionsSelector?.sortBy?.split("*")[0],
-    sortOrder:
-      actionsSelector.sortModel.length > 0
-        ? actionsSelector?.sortModel[0]?.sort
-        : actionsSelector?.sortBy?.split("*")[1] || "",
-  };
-
-  const payload = Object.entries(actionsSelector?.formData)
-    .filter(([key, value]) => value)
-    .map(([key, value]) => {
-      return {
-        fieldName: key,
-        operator: "=",
-        value: value,
-        logicalOperator: "and",
-      };
-    });
-  Boolean(actionsSelector?.status?.length > 0) &&
-    payload.push({
-      fieldName: "status",
-      operator: "=",
-      value: actionsSelector?.status[0],
-      logicalOperator: "and",
-    });
-
-  const { data: UserData } = useFetchUsersQuery({
-    params: query,
-    payload,
-  });
-
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(dashboardSetPagination({ page, pageSize }));
@@ -343,7 +317,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
         borderRadius: "10px",
         fontSize: "14px",
         padding: "3px 0",
-        // width: "300px",
       },
     },
   };
@@ -366,22 +339,32 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     },
   ];
 
+  const invoiceTypeData = [
+    {
+      label: "Tax",
+      value: "Tax",
+    },
+    {
+      label: "Performa",
+      value: "Performa",
+    },
+  ];
   //
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
-  const [selectedPayEntry, setSelectedNote] = useState(null);
+  const [selectedPayEntry, setSelectedPayEntry] = useState(null);
 
   const disabled = formik?.values?.statusCode === -3;
 
-  const handleEditClick = (note) => {
-    setSelectedNote(note);
+  const handleEditClick = (data) => {
+    setSelectedPayEntry(data);
     setToggleNotes(true);
   };
 
   const handleTogglePayEntry = () => {
     setToggleNotes((prev) => !prev);
     if (togglePayEntry) {
-      setSelectedNote(null);
+      setSelectedPayEntry(null);
     }
   };
 
@@ -395,30 +378,25 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       updatedNotes = [...chargesData, newNote];
     }
     setChargesData(updatedNotes);
-    formik.setFieldValue("chargesData", updatedNotes);
-    setSelectedNote(null);
+    formik.setFieldValue("paybleDetails", updatedNotes);
+    setSelectedPayEntry(null);
   };
 
   const handleDeleteNote = (id) => {
     const updatedNotes = chargesData.filter((note) => note.id !== id);
     setChargesData(updatedNotes);
-    formik.setFieldValue("chargesData", updatedNotes);
-    localStorage.setItem("chargesData", JSON.stringify(updatedNotes));
+    formik.setFieldValue("paybleDetails", updatedNotes);
+    // localStorage.setItem("chargesData", JSON.stringify(updatedNotes));
   };
 
   const handleFetchPayable = () => {
-    const storePayableData =
-      JSON.parse(localStorage.getItem("chargesData")) || [];
-    const apiPayableData = formik?.values?.chargesData || [];
-    const appendData = [...apiPayableData, ...storePayableData].reduce(
-      (acc, pay) => {
-        if (!acc.some((n) => n.id === pay.id)) {
-          acc.push(pay);
-        }
-        return acc;
-      },
-      []
-    );
+    const apiPayableData = formik?.values?.paybleDetails || [];
+    const appendData = [...apiPayableData].reduce((acc, pay) => {
+      if (!acc.some((n) => n.id === pay.id)) {
+        acc.push(pay);
+      }
+      return acc;
+    }, []);
     setChargesData(appendData);
   };
 
@@ -552,6 +530,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               opacity: disabled ? 0.5 : 1,
             }}
             onClick={() => {
+              console.log("heello")
               if (!disabled) handleEditClick(params.row);
             }}
           />
@@ -570,7 +549,27 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     },
   ];
 
-  console.log(chargesData, "chargesData");
+  const getPaybleDetailsTotals = (paybleDetails) => {
+    const totals = {
+      amount: 0,
+      vatAmount: 0,
+      withHoldingAmount: 0,
+      totalAmount: 0,
+    };
+    paybleDetails.forEach((entry) => {
+      totals.amount += Number(entry.amount || 0);
+      totals.vatAmount += Number(entry.vatAmount || 0);
+      totals.withHoldingAmount += Number(entry.withHoldingAmount || 0);
+      totals.totalAmount += Number(entry.totalAmount || 0);
+    });
+    return {
+      amount: totals.amount.toFixed(2),
+      vatAmount: totals.vatAmount.toFixed(2),
+      withHoldingAmount: totals.withHoldingAmount.toFixed(2),
+      totalAmount: totals.totalAmount.toFixed(2),
+    };
+  };
+  const getAmountData = getPaybleDetailsTotals(chargesData);
 
   return (
     <>
@@ -596,7 +595,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                 aria-label="lab API tabs example"
               >
                 <Tab
-                  label="Job Entry Details"
+                  label="Payable Details"
                   value="1"
                   icon={<EditIconForHeader />}
                   iconPosition="start"
@@ -635,9 +634,10 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               <Box sx={{ width: "40%", paddingRight: 2 }}>
                 <Grid container sx={{ padding: 0, margin: 0 }}>
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <InputBox
+                    <SelectBox
                       label="Invoice Type*"
                       id="invoiceType"
+                      options={invoiceTypeData}
                       value={formik.values.invoiceType}
                       error={formik.errors.invoiceType}
                       onChange={formik.handleChange}
@@ -703,13 +703,15 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <InputBox
+                    <DateTimeField
+                      name="vendorInvoiceDate"
                       label="Vendor Invoice Date"
                       id="vendorInvoiceDate"
                       value={formik.values.vendorInvoiceDate}
                       error={formik.errors.vendorInvoiceDate}
-                      onChange={formik.handleChange}
-                      inputRef={payableRef}
+                      onChange={formik.setFieldValue}
+                      inputRef={FieldRef}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -727,11 +729,12 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
                       label="Ex. Rate"
-                      id="exChangeRate"
-                      value={formik.values.exChangeRate}
-                      error={formik.errors.exChangeRate}
+                      id="exchangeRate"
+                      value={formik.values.exchangeRate}
+                      error={formik.errors.exchangeRate}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
+                      disabled={getFormData?.currency === "TZS"}
                     />
                   </Grid>
 
@@ -794,24 +797,31 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                         id="amount"
                         name="amount"
                         variant="outlined"
+                        value={getAmountData?.amount}
                         fullWidth
                         size="small"
                         sx={{
                           ...muiTextFieldStyles.root,
                           width: "100% !important",
                         }}
+                        disabled
                       />
                     </Grid>
 
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
                         variant="outlined"
                         fullWidth
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS"
+                            ? getAmountData?.amount * 1
+                            : getAmountData?.amount *
+                                Number(getFormData?.exchangeRate) || 0
+                        }
+                        disabled
                       />
                     </Grid>
 
@@ -822,27 +832,34 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
+                        id="vatAmount"
+                        name="vatAmount"
                         variant="outlined"
+                        value={getAmountData?.vatAmount}
                         fullWidth
                         size="small"
                         sx={{
                           ...muiTextFieldStyles.root,
                           width: "100% !important",
                         }}
+                        disabled
                       />
                     </Grid>
 
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
                         variant="outlined"
                         fullWidth
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS"
+                            ? getAmountData?.vatAmount * 1
+                            : getAmountData?.vatAmount *
+                                getFormData?.exchangeRate || 0
+                        }
+                        disabled
                       />
                     </Grid>
 
@@ -853,27 +870,34 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
+                        id="withHoldingAmount"
+                        name="withHoldingAmount"
                         variant="outlined"
+                        value={getAmountData?.withHoldingAmount}
                         fullWidth
                         size="small"
                         sx={{
                           ...muiTextFieldStyles.root,
                           width: "100% !important",
                         }}
+                        disabled
                       />
                     </Grid>
 
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
                         variant="outlined"
                         fullWidth
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS"
+                            ? getAmountData?.withHoldingAmount * 1
+                            : getAmountData?.withHoldingAmount *
+                                getFormData?.exchangeRate || 0
+                        }
+                        disabled
                       />
                     </Grid>
 
@@ -884,8 +908,9 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
+                        id="totalAmount"
+                        name="totalAmount"
+                        value={getAmountData?.totalAmount}
                         variant="outlined"
                         fullWidth
                         size="small"
@@ -893,18 +918,24 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                           ...muiTextFieldStyles.root,
                           width: "100% !important",
                         }}
+                        disabled
                       />
                     </Grid>
 
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
-                        id="amount"
-                        name="amount"
                         variant="outlined"
                         fullWidth
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS"
+                            ? getAmountData?.totalAmount * 1
+                            : getAmountData?.totalAmount *
+                                getFormData?.exchangeRate || 0
+                        }
+                        disabled
                       />
                     </Grid>
 
@@ -989,6 +1020,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   loading={isLoading}
                   actions={getUserListGridActions(nav, payableSetSortModal)}
                   page=""
+                  handleEditClick={handleEditClick}
+                  handleDeleteClick={handleDeleteNote}
                 />
               </Box>
             ) : (
@@ -1011,67 +1044,160 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               </Box>
             )}
 
-            {page === "payable" && (
-              <>
-                <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
-                  <OutlinedButton
-                    sx={{ fontWeight: "500" }}
-                    onClick={() => nav("/app/entity/customer")}
-                  >
-                    Close
-                  </OutlinedButton>
+            <Box sx={{ gap: "10px", padding: "15px" }}>
+              {formik?.values?.status?.toLowerCase() === "rejected" ||
+                (page == "payableApprove" && (
+                  <Grid item xs={12} paddingTop={1}>
+                    <TextField
+                      label="Reject Remarks"
+                      name="rejectRemarks"
+                      value={formik.values.rejectRemarks}
+                      error={rejectError}
+                      helperText={
+                        rejectError
+                          ? "Reject remarks are required when rejecting a customer*."
+                          : formik.errors.rejectRemarks
+                      }
+                      onChange={formik.handleChange}
+                      disabled={page === "job-entry" ? true : false}
+                      multiline
+                      rows={4}
+                      variant="outlined"
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "10px",
+                        },
+                      }}
+                    />
+                  </Grid>
+                ))}
+            </Box>
 
-                  <ThemeButton
-                    onClick={formik.handleSubmit}
-                    sx={{
-                      fontWeight: "500",
-                      borderRadius: "12px",
-                      color: "white !important",
-                    }}
+            {page == "payable" ? (
+              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                <Grid item xs={12}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
                   >
-                    {isLoading && <CircularProgress size={20} color="white" />}
-                    Add
-                  </ThemeButton>
-                </Box>
+                    <Stack direction="row" spacing={2}>
+                      <OutlinedButton
+                        sx={{ fontWeight: "500" }}
+                        onClick={() => nav("/app/documentation/paybleEntry")}
+                      >
+                        Close
+                      </OutlinedButton>
 
-                {/* 
-                  <Grid item xs={12}>
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      justifyContent="space-between"
-                    >
-                      <Stack direction="row" spacing={2}>
+                      {!initialValues?.id ? (
                         <ThemeButton
+                          onClick={formik.handleSubmit}
                           sx={{
                             fontWeight: "500",
-                            backgroundColor: "red",
                             color: "white !important",
                           }}
-                          onClick={handleRejectRequest}
                         >
-                          {loaderApprove.reject && (
+                          {isLoading && (
                             <CircularProgress size={20} color="white" />
-                          )}{" "}
-                          Reject
+                          )}
+                          Submit
                         </ThemeButton>
+                      ) : (
                         <ThemeButton
+                          onClick={formik.handleSubmit}
                           sx={{
                             fontWeight: "500",
                             color: "white !important",
                           }}
-                          onClick={handleApproveRequest}
+                          disabled={isDisabled}
                         >
-                          {loaderApprove.approve && (
+                          {isUpdateLoading && (
                             <CircularProgress size={20} color="white" />
-                          )}{" "}
-                          Approve
+                          )}
+                          Update
                         </ThemeButton>
-                      </Stack>
+                      )}
                     </Stack>
-                  </Grid> */}
-              </>
+                  </Stack>
+                </Grid>
+              </Box>
+            ) : (
+              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                <Grid item xs={12} sx={{ margin: 1 }}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Stack direction="row" spacing={2}>
+                      <OutlinedButton
+                        sx={{ fontWeight: "500" }}
+                        onClick={() => nav("/app/documentation/paybleEntry")}
+                      >
+                        Close
+                      </OutlinedButton>
+
+                      <ThemeButton
+                        onClick={formik.handleSubmit}
+                        sx={{
+                          fontWeight: "500",
+                          color: "white !important",
+                        }}
+                      >
+                        {isLoading && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Update
+                      </ThemeButton>
+
+                      <ThemeButton
+                        sx={{
+                          fontWeight: "500",
+                          backgroundColor: "red",
+                          color: "white !important",
+                        }}
+                        onClick={() => handleRejectRequest()}
+                      >
+                        {loaderApprove.reject && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Reject
+                      </ThemeButton>
+                      <ThemeButton
+                        sx={{ fontWeight: "500", color: "white !important" }}
+                        onClick={() => handleApproveRequest()}
+                      >
+                        {loaderApprove.approve && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Approve
+                      </ThemeButton>
+                    </Stack>
+                  </Stack>
+                </Grid>
+              </Box>
             )}
+          </TabPanel>
+          <TabPanel value="2" sx={{ padding: "0px" }}>
+            <UploadFile
+              customer_id={initialValues.id}
+              disabled={isDisabled}
+              dropdownData={dropdownData.jobDocumentType}
+              sourceType="PAYBLE_ENTRY"
+            />
+          </TabPanel>
+
+          <TabPanel value="3" sx={{ padding: "0px" }}>
+            <AuditTimeLine
+              id={initialValues.id}
+              page="payble/entry"
+              service={menuConfigUrl.document}
+            />
           </TabPanel>
         </TabContext>
       </Box>
@@ -1082,6 +1208,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
         formik={formik}
         onAddPayEntry={handleAddPayEntry}
         selectedPayEntry={selectedPayEntry}
+        setSelectedPayEntry={setSelectedPayEntry}
       />
     </>
   );

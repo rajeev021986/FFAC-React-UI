@@ -126,7 +126,7 @@ export default function PayableListScreen({ page }) {
     page:
       page == "payable_list"
         ? "payble/entry/filter"
-        : "approval/filter/payable",
+        : "approval/filter/PAYBLE_ENTRY",
   });
 
   const handlePage = (params) => {
@@ -342,6 +342,7 @@ export default function PayableListScreen({ page }) {
           />
         )}
       </Card>
+
       {modal.type === "audit" && (
         <Drawer
           anchor="right"
@@ -356,16 +357,18 @@ export default function PayableListScreen({ page }) {
         >
           <Box>
             <Typography variant="h6" component="div" margin="8px">
-              Customer Audit Logs
+              Payable Audit Logs
             </Typography>
+
             <AuditTimeLine
               id={modal.data.id}
-              page="payable_list"
-              service={menuConfigUrl.entity}
+              page="payble/entry"
+              service={menuConfigUrl.document}
             />
           </Box>
         </Drawer>
       )}
+
       <DeleteDialog
         source="payable_list"
         sourceName={modal?.data?.deleteName}
