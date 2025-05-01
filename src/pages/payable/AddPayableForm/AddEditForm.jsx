@@ -59,7 +59,12 @@ import UploadFile from "../../../components/UploadFile";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
-export default function AddEditForm({ initialValues, page,viewPage, type = "notcopy" }) {
+export default function AddEditForm({
+  initialValues,
+  page,
+  viewPage,
+  type = "notcopy",
+}) {
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
   const [updatePaybleEntry, { isUpdateLoading }] =
     useUpdatePaybleEntryMutation();
@@ -89,14 +94,13 @@ export default function AddEditForm({ initialValues, page,viewPage, type = "notc
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
-useEffect(()=>{
-if(viewPage === 'view'){
-  setIsDisabled(true)
-}
-else{ 
-  setIsDisabled(false)
-}
-},[viewPage])
+  useEffect(() => {
+    if (viewPage === "view") {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [viewPage]);
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -361,7 +365,8 @@ else{
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
 
-  const disabled = formik?.values?.statusCode === -3 || viewPage === 'view' ? true : false;
+  const disabled =
+    formik?.values?.statusCode === -3 || viewPage === "view" ? true : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -516,7 +521,11 @@ else{
       sortable: false,
       headerAlign: "center",
       renderHeader: () => (
-        <IconButton disabled ={isDisabled} color="white" onClick={handleTogglePayEntry}>
+        <IconButton
+          disabled={isDisabled}
+          color="white"
+          onClick={handleTogglePayEntry}
+        >
           <AddCircleIcon />
         </IconButton>
       ),
@@ -647,7 +656,7 @@ else{
                       value={formik.values.invoiceType}
                       error={formik.errors.invoiceType}
                       onChange={formik.handleChange}
-                      disabled={viewPage === 'view'}
+                      disabled={viewPage === "view"}
                     />
                   </Grid>
 
@@ -660,7 +669,6 @@ else{
                       onChange={formik.handleChange}
                       inputRef={payableRef}
                       disabled
-                      
                     />
                   </Grid>
 
@@ -672,7 +680,7 @@ else{
                       error={formik.errors.jobNo}
                       onChange={formik.handleChange}
                       suggestionName="job_no"
-                      disabled={viewPage === 'view'}
+                      disabled={viewPage === "view"}
                     />
                   </Grid>
 
@@ -697,7 +705,7 @@ else{
                       value={formik.values.vendorName}
                       error={formik.errors.vendorName}
                       onChange={formik.handleChange}
-                      disabled = {isDisabled}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -746,7 +754,9 @@ else{
                       error={formik.errors.exchangeRate}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
-                      disabled={getFormData?.currency === "TZS" || viewPage === 'view'}
+                      disabled={
+                        getFormData?.currency === "TZS" || viewPage === "view"
+                      }
                     />
                   </Grid>
 
@@ -991,8 +1001,12 @@ else{
             <Stack direction="row" justifyContent="right" padding="5px 15px">
               <Box>
                 {actionsSelector?.view === "card" && (
-                  <IconButton color="primary" onClick={handleTogglePayEntry} disabled={isDisabled}>
-                    <AddIcon  />
+                  <IconButton
+                    color="primary"
+                    onClick={handleTogglePayEntry}
+                    disabled={isDisabled}
+                  >
+                    <AddIcon />
                   </IconButton>
                 )}
 
@@ -1056,57 +1070,107 @@ else{
                 </Box>
               </Box>
             )}
-
             <Box sx={{ gap: "10px", padding: "15px" }}>
               {formik?.values?.status?.toLowerCase() === "rejected" ||
-                (page == "payableApprove" && (
-                  <Grid item xs={12} paddingTop={1}>
-                    <TextField
-                      label="Reject Remarks"
-                      name="rejectRemarks"
-                      value={formik.values.rejectRemarks}
-                      error={rejectError}
-                      helperText={
-                        rejectError
-                          ? "Reject remarks are required when rejecting a customer*."
-                          : formik.errors.rejectRemarks
-                      }
-                      onChange={formik.handleChange}
-                      disabled={page === "payable_list" ? true : false}
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                      fullWidth
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "10px",
-                        },
-                      }}
-                    />
-                  </Grid>
-                ))}
+              page == "payableApprove" ? (
+                <Grid item xs={12} paddingLeft={1} paddingTop={1}>
+                  <TextField
+                    label="Reject Remarks"
+                    name="rejectRemarks"
+                    value={formik.values.rejectRemarks}
+                    error={rejectError}
+                    helperText={
+                      rejectError
+                        ? "Reject remarks are required when rejecting a customer*."
+                        : formik.errors.rejectRemarks
+                    }
+                    onChange={formik.handleChange}
+                    disabled={page === "payable" ? true : false}
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    fullWidth
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "10px",
+                      },
+                    }}
+                  />
+                </Grid>
+              ) : (
+                <></>
+              )}
             </Box>
 
-      {viewPage !== "view" && (
-        page == "payable" ? (
-          <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
-                <Grid item xs={12}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Stack direction="row" spacing={2}>
-                      <OutlinedButton
-                        sx={{ fontWeight: "500" }}
-                        onClick={() => nav(-1)}
-                      >
-                        Close
-                      </OutlinedButton>
+            {viewPage !== "view" &&
+              (page == "payable" ? (
+                <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                  <Grid item xs={12}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          sx={{ fontWeight: "500" }}
+                          onClick={() => nav(-1)}
+                        >
+                          Close
+                        </OutlinedButton>
 
-                      {!initialValues?.id ? (
+                        {!initialValues?.id ? (
+                          <ThemeButton
+                            onClick={formik.handleSubmit}
+                            sx={{
+                              fontWeight: "500",
+                              color: "white !important",
+                            }}
+                          >
+                            {isLoading && (
+                              <CircularProgress size={20} color="white" />
+                            )}
+                            Submit
+                          </ThemeButton>
+                        ) : (
+                          <ThemeButton
+                            onClick={formik.handleSubmit}
+                            sx={{
+                              fontWeight: "500",
+                              color: "white !important",
+                            }}
+                            disabled={isDisabled}
+                          >
+                            {isUpdateLoading && (
+                              <CircularProgress size={20} color="white" />
+                            )}
+                            Update
+                          </ThemeButton>
+                        )}
+                      </Stack>
+                    </Stack>
+                  </Grid>
+                </Box>
+              ) : (
+                <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                  <Grid item xs={12} sx={{ margin: 1 }}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          sx={{ fontWeight: "500" }}
+                          onClick={() => nav(-1)}
+                        >
+                          Close
+                        </OutlinedButton>
+
                         <ThemeButton
                           onClick={formik.handleSubmit}
                           sx={{
@@ -1117,87 +1181,36 @@ else{
                           {isLoading && (
                             <CircularProgress size={20} color="white" />
                           )}
-                          Submit
-                        </ThemeButton>
-                      ) : (
-                        <ThemeButton
-                          onClick={formik.handleSubmit}
-                          sx={{
-                            fontWeight: "500",
-                            color: "white !important",
-                          }}
-                          disabled={isDisabled}
-                        >
-                          {isUpdateLoading && (
-                            <CircularProgress size={20} color="white" />
-                          )}
                           Update
                         </ThemeButton>
-                      )}
-                    </Stack>
-                  </Stack>
-                </Grid>
-              </Box>
-        ) :
-        (
-              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
-                <Grid item xs={12} sx={{ margin: 1 }}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Stack direction="row" spacing={2}>
-                      <OutlinedButton
-                        sx={{ fontWeight: "500" }}
-                        onClick={() => nav(-1)}
-                      >
-                        Close
-                      </OutlinedButton>
 
-                      <ThemeButton
-                        onClick={formik.handleSubmit}
-                        sx={{
-                          fontWeight: "500",
-                          color: "white !important",
-                        }}
-                      >
-                        {isLoading && (
-                          <CircularProgress size={20} color="white" />
-                        )}
-                        Update
-                      </ThemeButton>
-
-                      <ThemeButton
-                        sx={{
-                          fontWeight: "500",
-                          backgroundColor: "red",
-                          color: "white !important",
-                        }}
-                        onClick={() => handleRejectRequest()}
-                      >
-                        {loaderApprove.reject && (
-                          <CircularProgress size={20} color="white" />
-                        )}
-                        Reject
-                      </ThemeButton>
-                      <ThemeButton
-                        sx={{ fontWeight: "500", color: "white !important" }}
-                        onClick={() => handleApproveRequest()}
-                      >
-                        {loaderApprove.approve && (
-                          <CircularProgress size={20} color="white" />
-                        )}
-                        Approve
-                      </ThemeButton>
+                        <ThemeButton
+                          sx={{
+                            fontWeight: "500",
+                            backgroundColor: "red",
+                            color: "white !important",
+                          }}
+                          onClick={() => handleRejectRequest()}
+                        >
+                          {loaderApprove.reject && (
+                            <CircularProgress size={20} color="white" />
+                          )}
+                          Reject
+                        </ThemeButton>
+                        <ThemeButton
+                          sx={{ fontWeight: "500", color: "white !important" }}
+                          onClick={() => handleApproveRequest()}
+                        >
+                          {loaderApprove.approve && (
+                            <CircularProgress size={20} color="white" />
+                          )}
+                          Approve
+                        </ThemeButton>
+                      </Stack>
                     </Stack>
-                  </Stack>
-                </Grid>
-              </Box>
-            )
-      )} 
+                  </Grid>
+                </Box>
+              ))}
           </TabPanel>
           <TabPanel value="2" sx={{ padding: "0px" }}>
             <UploadFile
