@@ -41,10 +41,10 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-        <div className="word-wrap-cell">
-          {params.value?.trim() || ""} {/* Show "N/A" if empty */}
-        </div>
-      ),
+      <div className="word-wrap-cell">
+        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
+      </div>
+    ),
   },
   {
     flex: 1,
@@ -81,16 +81,16 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     editable: false,
     renderCell: (params) => params.value?.trim() || "",
   },
-//   {
-//     flex: 1,
-//     field: "JobNo",
-//     headerName: "Job No.",
-//     width: 110,
-//     headerAlign: "center",
-//     align: "center",
-//     editable: false,
-//     renderCell: (params) => params.value?.trim() || "N/A",
-//   },
+  //   {
+  //     flex: 1,
+  //     field: "JobNo",
+  //     headerName: "Job No.",
+  //     width: 110,
+  //     headerAlign: "center",
+  //     align: "center",
+  //     editable: false,
+  //     renderCell: (params) => params.value?.trim() || "N/A",
+  //   },
   {
     flex: 1,
     field: "dateOfReceipt",
@@ -102,7 +102,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     renderCell: (params) => {
       return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
     },
-},
+  },
   {
     flex: 1,
     field: "createdBy",

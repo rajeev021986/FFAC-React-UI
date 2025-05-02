@@ -11,6 +11,8 @@ import VesselVoyageSetting from "./VesselVoyageSetting";
 import ShipperSetting from "./ShipperSettings";
 import ConsigneeSetting from "./ConsigneeSetting";
 import JobEntrySetting from "./jobEntrySetting";
+import PayableSettings from "./PayableSetting";
+
 const settingTabs = [
   {
     label: "Global",
@@ -48,7 +50,10 @@ const settingTabs = [
     label: "job Entry",
     value: "9",
   },
-
+  {
+    label: "Payable Entry",
+    value: "10",
+  },
 ];
 
 export default function SettingsPage() {
@@ -84,7 +89,12 @@ export default function SettingsPage() {
               sx={{ width: "100%", padding: 2 }}
             >
               {settingTabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} className="nested1" />
+                <Tab
+                  key={tab.value}
+                  label={tab.label}
+                  value={tab.value}
+                  className="nested1"
+                />
               ))}
             </Tabs>
           </Box>
@@ -98,7 +108,7 @@ export default function SettingsPage() {
             {activeTab === "7" && <ShipperSetting />}
             {activeTab === "8" && <ConsigneeSetting />}
             {activeTab === "9" && <JobEntrySetting />}
-
+            {activeTab === "10" && <PayableSettings />}
           </Box>
         </Box>
       </Grid>

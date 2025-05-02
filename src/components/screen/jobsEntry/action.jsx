@@ -3,6 +3,7 @@ import CustomToast from "../../common/Toast/CustomToast";
 import EditIconDropdown from "../../common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
 import AuditIconDropdown from "../../common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
 import DeleteIconDropdown from "../../common/commonIconDropdown/DeleteIconDropdown/DeleteIconDropdown";
+import PrintIcon from "@mui/icons-material/Print";
 
 export const getJobEntryListGridActions = (nav, setModal) => {
   return [
@@ -34,8 +35,7 @@ export const getJobEntryListGridActions = (nav, setModal) => {
               id: params.row.id,
             },
           });
-        }
-         else {
+        } else {
           toast.custom(
             <CustomToast
               message="Only for Inactive and Rejected Job Entry"
@@ -49,6 +49,21 @@ export const getJobEntryListGridActions = (nav, setModal) => {
         }
       },
       icon: <DeleteIconDropdown />,
+    },
+
+    {
+      label: "Print",
+      onClick: (params) => {
+        setModal({
+          open: true,
+          type: "print",
+          data: {
+            who: "Print PDF",
+            id: params.row.id,
+          },
+        });
+      },
+      icon: <PrintIcon sx={{ width: "20px", marginTop: "2px" }} />,
     },
   ];
 };

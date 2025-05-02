@@ -42,7 +42,6 @@ const JobEntrySetting = () => {
   const [jobDocumentType, setJobDocumentType] = useState([]);
   const [reportingPlace, setReportingPlace] = useState([]);
 
-
   const [voucherData, setVoucherData] = useState([
     { id: 1, shipmentType: "", jobPattern: "", sampleJobNumber: "" },
   ]);
@@ -78,7 +77,9 @@ const JobEntrySetting = () => {
     const filteredData = {
       approvalRequest,
       moveType: moveType.filter((item) => !item.value.includes("Type the")),
-      packageType: packageType.filter((item) => !item.value.includes("Type the")),
+      packageType: packageType.filter(
+        (item) => !item.value.includes("Type the")
+      ),
       cargoType: cargoType.filter((item) => !item.value.includes("Type the")),
       typesOfCargo: typesOfCargo.filter(
         (item) => !item.value.includes("Type the")
@@ -230,12 +231,12 @@ const JobEntrySetting = () => {
             setvalue={setJobDocumentType}
             title="Document Job Type"
           />
-            <GlobalDrrpdownSetting
+          <GlobalDrrpdownSetting
             value={reportingPlace}
             setvalue={setReportingPlace}
             title="Reporting Place"
           />
-           <GlobalDrrpdownSetting
+          <GlobalDrrpdownSetting
             value={packageType}
             setvalue={setPackageType}
             title="Package Type"

@@ -65,7 +65,7 @@ export const jobEntry = createApi({
       },
       providesTags: ["Code"],
     }),
-    
+
     updateJobDetailsEntry: builder.mutation({
       query: (params) => {
         const headers = {
@@ -81,6 +81,16 @@ export const jobEntry = createApi({
       invalidatesTags: ["Code"],
     }),
 
+    printJobEntry: builder.mutation({
+      query: (id) => {
+        return {
+          url: `${menuConfigUrl.document}/job-detail/print/${id}`,
+          method: "GET",
+          headers: getAppHeaders(),
+        };
+      },
+      invalidatesTags: ["Code"],
+    }),
   }),
 });
 
@@ -89,5 +99,6 @@ export const {
   useFetchJobEntriesQuery,
   useDeleteJobEntryMutation,
   useUpdateJobEntryMutation,
-  useUpdateJobDetailsEntryMutation
+  useUpdateJobDetailsEntryMutation,
+  usePrintJobEntryMutation,
 } = jobEntry;

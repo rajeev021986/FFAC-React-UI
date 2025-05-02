@@ -26,6 +26,7 @@ import { menuConfigUrl } from "../../store/menuConfigUrl";
 import {
   useFetchJobEntriesQuery,
   useDeleteJobEntryMutation,
+  usePrintJobEntryMutation,
 } from "../../store/api/jobEntryApi";
 
 // Tables Columns
@@ -57,23 +58,24 @@ export default function JobEntryScreen({ page }) {
   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
-  const [toggleRate, settoggleRate] = useState(false);
 
   const [modal, setModal] = useState({
     open: false,
     type: "",
     data: {},
   });
+
+  console.log(modal, "modal");
   const [open, setOpen] = useState(false);
   const actions = seletectBox
     ? [
-      { name: "New Job Entry" },
-      { name: "Copy" },
-      { name: exportLoader ? <LoaderIcon /> : "Export" },
-    ]
+        { name: "New Job Entry" },
+        { name: "Copy" },
+        { name: exportLoader ? <LoaderIcon /> : "Export" },
+      ]
     : page === "entry-approve"
-      ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
-      : [
+    ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
+    : [
         { name: "New Job Entry" },
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ];
@@ -113,6 +115,8 @@ export default function JobEntryScreen({ page }) {
     });
 
   const [deleteJobEntry] = useDeleteJobEntryMutation();
+  const [printJobEntry] = usePrintJobEntryMutation();
+
   const {
     data: jobEntriesData,
     isLoading,
@@ -125,10 +129,6 @@ export default function JobEntryScreen({ page }) {
       page == "job-entry" ? "job-detail/filter" : "approval/filter/JOB_DETAIL",
   });
 
-  useEffect(() => {
-    refetch();
-    setSelectedIds([]);
-  }, [location.pathname]);
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
@@ -141,12 +141,6 @@ export default function JobEntryScreen({ page }) {
         ? getJobEntryListGridActions(nav, setModal)
         : getJobEntryListGridActionsApprovel(nav, setModal),
   });
-
-  useEffect(() => {
-    if (!codeJobEntryrSelector.view) {
-      dispatch(jobEntrySetView("card"));
-    }
-  }, [codeJobEntryrSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
     if (actionName === "New Job Entry") {
@@ -189,6 +183,7 @@ export default function JobEntryScreen({ page }) {
       );
     }
   };
+
   const handleCancel = async () => {
     const jobStatus = modal?.data?.label;
     if (jobStatus === "Approved Successfully") {
@@ -214,15 +209,13 @@ export default function JobEntryScreen({ page }) {
       });
     }
   };
-  useEffect(() => {
-    dispatch(jobEntrySetView("grid"));
-  }, []);
 
   const handleCheckboxChange = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
+
   const handleApproveAllRequest = async () => {
     if (selectedIds.length === 0) {
       toast.custom(
@@ -236,7 +229,9 @@ export default function JobEntryScreen({ page }) {
       selectedIds.includes(job.id)
     );
 
-    const canceledJobs = selectedRows.filter((job) => job.status === "CANCELED");
+    const canceledJobs = selectedRows.filter(
+      (job) => job.status === "CANCELED"
+    );
 
     if (canceledJobs.length > 0) {
       toast.custom(
@@ -268,6 +263,47 @@ export default function JobEntryScreen({ page }) {
     }
   };
 
+  const handlePrintPDF = async () => {
+    try {
+      await printJobEntry(modal?.data?.id).unwrap();
+      toast.custom(
+        <CustomToast message="Download PDF successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
+      handleClose();
+    } catch (error) {
+      toast.custom(
+        <CustomToast message="Failed to download PDF!" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (modal?.type === "print") {
+      handlePrintPDF();
+    }
+  }, [modal?.type]);
+
+  useEffect(() => {
+    refetch();
+    setSelectedIds([]);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!codeJobEntryrSelector.view) {
+      dispatch(jobEntrySetView("card"));
+    }
+  }, [codeJobEntryrSelector.view, dispatch]);
+
+  useEffect(() => {
+    dispatch(jobEntrySetView("grid"));
+  }, []);
+
   // const handleApproveAllRequest = async () => {
   //   if (selectedIds.length === 0) {
   //     toast.custom(
@@ -294,28 +330,31 @@ export default function JobEntryScreen({ page }) {
   //     setSelectedIds([]);
   //   }
   // };
+
   const jobEntryColumns = [
     ...(page === "jobApprove"
       ? [
-        {
-          field: "Approve",
-          headerName: "Approve",
-          width: 80,
-          headerAlign: "center",
-          align: "center",
-          renderCell: (params) => (
-            <input
-              type="checkbox"
-              style={{ cursor: "pointer" }}
-              checked={selectedIds.includes(params.row.id)}
-              onChange={() => handleCheckboxChange(params.row.id)}
-            />
-          ),
-        },
-        ...JOB_ENTRY_COLUMNS, // Use the new columns when on "job-entry" page
-      ]
+          {
+            field: "Approve",
+            headerName: "Approve",
+            width: 80,
+            headerAlign: "center",
+            align: "center",
+            renderCell: (params) => (
+              <input
+                type="checkbox"
+                style={{ cursor: "pointer" }}
+                checked={selectedIds.includes(params.row.id)}
+                onChange={() => handleCheckboxChange(params.row.id)}
+              />
+            ),
+          },
+          ...JOB_ENTRY_COLUMNS, // Use the new columns when on "job-entry" page
+        ]
       : [...JOB_ENTRY_NEW_COLUMNS]), // Use the default columns otherwise
   ];
+
+  //
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -333,14 +372,16 @@ export default function JobEntryScreen({ page }) {
                     minHeight: 40,
                   },
                 }}
-                icon={<SpeedDialIcon
-                  sx={{
-                    fontSize: 20,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                />}
+                icon={
+                  <SpeedDialIcon
+                    sx={{
+                      fontSize: 20,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  />
+                }
                 direction="left"
               >
                 {actions.map((action) => (
@@ -361,7 +402,7 @@ export default function JobEntryScreen({ page }) {
                       textTransform: "none",
                       fontSize: "12px",
                       fontWeight: "bold",
-                      whiteSpace: "nowrap"
+                      whiteSpace: "nowrap",
                     }}
                     icon={
                       <span style={{ fontSize: "12px", fontWeight: "bold" }}>
@@ -381,7 +422,11 @@ export default function JobEntryScreen({ page }) {
         <CardHeader
           sx={{ padding: "8px" }}
           title={
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
                   filters={codeJobEntryrSelector?.formData}
@@ -423,11 +468,10 @@ export default function JobEntryScreen({ page }) {
             handlePage={handlePage}
             data={jobEntriesData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => { }}
+            columnVisibilityHandler={() => {}}
             paginationModel={codeJobEntryrSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={codeJobEntryrSelector.sortModel}
-
             onSortModelChange={(sortModel) =>
               dispatch(jobEntrySetSortModel(sortModel))
             }
@@ -476,10 +520,11 @@ export default function JobEntryScreen({ page }) {
 
       <AddRejectedRemarks
         rowId={modal?.data?.id}
-        type= "JOB_DETAIL"
+        type="JOB_DETAIL"
         handleOpen={modal.open && modal.type === "reject"}
         handleClose={handleClose}
       />
+
       <CancelModalApprove
         rowId={modal?.data?.id}
         sourceName={modal?.data?.customerName}

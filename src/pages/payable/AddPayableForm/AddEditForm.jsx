@@ -94,6 +94,7 @@ export default function AddEditForm({
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
+
   useEffect(() => {
     if (viewPage === "view") {
       setIsDisabled(true);
@@ -101,6 +102,7 @@ export default function AddEditForm({
       setIsDisabled(false);
     }
   }, [viewPage]);
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -290,15 +292,6 @@ export default function AddEditForm({
       reject: false,
     }));
   };
-
-  // const handleActionClick = async (actionName) => {
-  //   if (actionName === "New Entry") {
-  //     nav("addpayable", {
-  //       replace: true,
-  //       state: { formAction: "add" },
-  //     });
-  //   }
-  // };
 
   useEffect(() => {
     getFirstError(formik.errors);

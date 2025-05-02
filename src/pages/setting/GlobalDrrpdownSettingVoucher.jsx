@@ -75,7 +75,7 @@ export default function GlobalDrrpdownSettingVoucher({
 
   const handleProcessRowUpdate = (newRow, oldRow) => {
     let updatedRow = { ...newRow };
-    const tokenRegex =  /[#\$][A-Z0-9]/g;
+    const tokenRegex = /[#\$][A-Z0-9]/g;
     const allowedTokens = [
       "#4",
       "#5",
@@ -182,12 +182,16 @@ export default function GlobalDrrpdownSettingVoucher({
       const standaloneSpecialsRegex = /(^|[^#$])([#$])($|[^0-9A-Z])/g;
       const hasInvalidStandaloneSpecials =
         standaloneSpecialsRegex.test(pattern);
-        const hasOnlyAllowedTokens = tokensInPattern.every((t) =>
-          allowedTokens.includes(t)
-        );
+      const hasOnlyAllowedTokens = tokensInPattern.every((t) =>
+        allowedTokens.includes(t)
+      );
       const isValid =
         resetValue === "Never"
-          ? !hasInvalidStandaloneSpecials && !hasInvalidSpecialChar && hasOnlyAllowedTokens && !hasInvalidToken && hasOneVoucher// only these 2 checks apply
+          ? !hasInvalidStandaloneSpecials &&
+            !hasInvalidSpecialChar &&
+            hasOnlyAllowedTokens &&
+            !hasInvalidToken &&
+            hasOneVoucher // only these 2 checks apply
           : !hasInvalidToken &&
             !hasDisallowed &&
             !hasDuplicateTokens &&
