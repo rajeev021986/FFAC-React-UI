@@ -196,8 +196,6 @@ export default function JobEntryForm({
           }
         }
       } else {
-        //  console.log(values.containerShipments,"mmmm")
-        // return;
         try {
           setRejectError(false);
           let containerShipment = values.containerShipments.map((item) => {

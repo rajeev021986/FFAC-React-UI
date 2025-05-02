@@ -62,6 +62,7 @@ export default function CardItem({ item, columns, actions,handleEditClick, handl
           sx={{ display: "flex", flexDirection: "column", alignItems: "left" }}
         >
           {[
+            { label: "Job No.", value: item.jobNo },
             { label: "Unit Type", value: item.unitType },
             { label: "Unit Rate", value: item.unitRate },
             { label: "No of Units", value: item.noOfUnit },
