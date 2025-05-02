@@ -1,7 +1,7 @@
 import React from "react";
 import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 
-const PayableEntryList = ({ chargesData, PAYABLE_COLUMNS ,disabled }) => {
+const PayableEntryList = ({ chargesData, PAYABLE_COLUMNS, disabled }) => {
   return (
     <React.Fragment>
       <ThemedGrid
