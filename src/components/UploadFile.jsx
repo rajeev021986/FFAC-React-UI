@@ -47,7 +47,7 @@ const DropZone = styled(Box)(({ theme }) => ({
 
 const UploadFile = ({
   customer_id,
-  disabled = disabled || false,
+  disabled = disabled ? disabled : false,
   dropdownData,
   sourceType = null,
   isNotShowType,

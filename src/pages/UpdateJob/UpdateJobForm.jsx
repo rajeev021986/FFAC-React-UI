@@ -766,6 +766,7 @@ export default function UpdateForm({ initialValues, page, type = "notcopy" }) {
               isNotShowType={true}
               sourceType={"JOB_DETAIL"}
               type={SourceType}
+              disabled= {false}
             />
           </Box>
         </Modal>
