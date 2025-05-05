@@ -67,6 +67,8 @@ export default function AddPayableEntryModal({
     totalAmount: "",
     new: true,
   });
+
+  console.log(payableEntry, "payableEntry");
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
@@ -91,7 +93,9 @@ export default function AddPayableEntryModal({
       } else {
         updatedEntry.vatAmount = 0;
       }
-      const withHoldingTax = Number(updatedEntry.withHoldingTax || 0);
+      const withHoldingTax = Number(
+        (updatedEntry.withHoldingTax || "0").replace("%", "")
+      );
       updatedEntry.withHoldingAmount = (
         (updatedEntry.amount * withHoldingTax) /
         100
@@ -205,8 +209,6 @@ export default function AddPayableEntryModal({
       });
     }
   }, [selectedPayEntry]);
-
-  console.log(payableSettingData, "payableSettingData");
 
   return (
     <Modal
