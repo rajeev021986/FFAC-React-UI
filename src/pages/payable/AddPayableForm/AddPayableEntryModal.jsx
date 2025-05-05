@@ -97,14 +97,16 @@ export default function AddPayableEntryModal({
       } else {
         updatedEntry.vatAmount = 0;
       }
-      const withHoldingTax = Number(
+      let withHoldingTax = Number(
         (updatedEntry.withHoldingTax || "0").replace("%", "")
       );
+      if (isNaN(withHoldingTax)) {
+        withHoldingTax = 0;
+      }
       updatedEntry.withHoldingAmount = (
         (updatedEntry.amount * withHoldingTax) /
         100
       ).toFixed(2);
-
       updatedEntry.totalAmount = (
         updatedEntry.amount +
         Number(updatedEntry.vatAmount) -
@@ -244,7 +246,7 @@ export default function AddPayableEntryModal({
               error={errors.jobNo}
             />
           </Grid>
-          <Grid item xs={12} lg={4}>
+          <Grid item xs={12} lg={8}>
             <FormAutoCompleteWithLoader
               label="Charge Name"
               id="chargeName"
@@ -254,7 +256,6 @@ export default function AddPayableEntryModal({
               error={errors.chargeName}
             />
           </Grid>
-          <Grid item xs={12} lg={4}></Grid>
           <Grid item xs={12} lg={4}>
             <FormAutoCompleteWithLoader
               label="Unit Type"
@@ -332,7 +333,7 @@ export default function AddPayableEntryModal({
               options={optionsSettingsData?.body?.vatRate}
               value={payableEntry.vatApplicable}
               // error={formik.errors.vatApplicable}
-              error= {errors.vatApplicable}
+              error={errors.vatApplicable}
               onChange={(e) => handleChange("vatApplicable", e.target.value)}
             />
           </Grid>
@@ -352,7 +353,7 @@ export default function AddPayableEntryModal({
               options={payableSettingData?.body?.holdingTax}
               value={payableEntry.withHoldingTax}
               // error={formik.errors.withHoldingTax}
-              error= {errors.withHoldingTax}
+              error={errors.withHoldingTax}
               onChange={(e) => handleChange("withHoldingTax", e.target.value)}
             />
           </Grid>
