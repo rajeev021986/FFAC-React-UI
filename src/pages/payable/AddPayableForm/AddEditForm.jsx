@@ -236,8 +236,6 @@ export default function AddEditForm({
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
 
-  console.log(dropdownData, 3456789);
-
   const handleApproveRequest = async () => {
     setRejectError(false);
     try {

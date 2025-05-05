@@ -16,6 +16,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import InputBox from "../../../components/common/InputBox";
 import { ThemeButton } from "../../../components/common/Button";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
+import SelectBox from "../../../components/common/SelectBox";
+import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 
 const modalStyle = {
   position: "absolute",
@@ -44,6 +46,11 @@ export default function AddPayableEntryModal({
     unitType: Yup.string().required("Unit Type is required"),
     unitRate: Yup.string().required("Unit Rate is required"),
   });
+
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
+  const { data: payableSettingData } =
+    useGetOptionsSettingsQuery("payble_settings");
 
   const [payableEntry, setPayableEntry] = useState({
     id: null,
@@ -167,6 +174,7 @@ export default function AddPayableEntryModal({
     });
     handleTogglePayEntry();
   };
+
   useEffect(() => {
     if (togglePayEntry) {
       setPayableEntry((prevEntry) => ({
@@ -197,6 +205,9 @@ export default function AddPayableEntryModal({
       });
     }
   }, [selectedPayEntry]);
+
+  console.log(payableSettingData, "payableSettingData");
+
   return (
     <Modal
       keepMounted
@@ -293,27 +304,14 @@ export default function AddPayableEntryModal({
           </Grid>
           {/* VAT Applicable */}
           <Grid item xs={12} lg={4}>
-            <FormControl fullWidth>
-              <InputLabel>VAT Applicable</InputLabel>
-              <Select
-                fullWidth
-                id="vatApplicable"
-                value={payableEntry.vatApplicable}
-                onChange={(e) => handleChange("vatApplicable", e.target.value)}
-                disabled={disabled}
-                sx={{
-                  ...styles.root,
-                  height: "44px",
-                  "& .MuiSelect-select span::before": {
-                    content: "'VAT Applicable'",
-                    color: "#9090A5",
-                  },
-                }}
-              >
-                <MenuItem value="No">No</MenuItem>
-                <MenuItem value="18%">18%</MenuItem>
-              </Select>
-            </FormControl>
+            <SelectBox
+              label="VAT Applicable*"
+              id="vatApplicable"
+              options={optionsSettingsData?.body?.vatRate}
+              value={payableEntry.vatApplicable}
+              // error={formik.errors.vatApplicable}
+              onChange={(e) => handleChange("vatApplicable", e.target.value)}
+            />
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
@@ -325,29 +323,14 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={4}>
-            <FormControl fullWidth>
-              <InputLabel>With Holding Tax</InputLabel>
-              <Select
-                fullWidth
-                id="withHoldingTax"
-                value={payableEntry.withHoldingTax}
-                onChange={(e) => handleChange("withHoldingTax", e.target.value)}
-                disabled={disabled}
-                sx={{
-                  ...styles.root,
-                  height: "44px",
-                  "& .MuiSelect-select span::before": {
-                    content: "'With Holding Tax'",
-                    color: "#9090A5",
-                  },
-                }}
-              >
-                <MenuItem value={0}>No</MenuItem>
-                <MenuItem value={5}>5%</MenuItem>
-                <MenuItem value={10}>10%</MenuItem>
-                <MenuItem value={15}>15%</MenuItem>
-              </Select>
-            </FormControl>
+            <SelectBox
+              label="With Holding Tax*"
+              id="withHoldingTax"
+              options={payableSettingData?.body?.holdingTax}
+              value={payableEntry.withHoldingTax}
+              // error={formik.errors.withHoldingTax}
+              onChange={(e) => handleChange("withHoldingTax", e.target.value)}
+            />
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
