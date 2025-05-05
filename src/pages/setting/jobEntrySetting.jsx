@@ -34,7 +34,7 @@ const JobEntrySetting = () => {
   const [routeCode, setRouteCode] = useState([]);
   const [lineVesselType, setLineVesselType] = useState([]);
   const [IcdTransfer, setIcdTransfer] = useState([]);
-  const [currency, setCurrency] = useState([]);
+ 
   const [shiperStatus, setShiperStatus] = useState([]);
   const [ICDTransfer, setICDTransfer] = useState([]);
   const [sizeType, setsizeType] = useState([]);
@@ -56,7 +56,7 @@ const JobEntrySetting = () => {
     setRouteCode(data?.body.routeCode || []);
     setLineVesselType(data?.body.lineVesselType || []);
     setIcdTransfer(data?.body.IcdTransfer || []);
-    setCurrency(data?.body.currency || []);
+  
     setShiperStatus(data?.body.shiperStatus || []);
     setICDTransfer(data?.body.ICDTransfer || []);
     setsizeType(data?.body.sizeType || []);
@@ -90,10 +90,7 @@ const JobEntrySetting = () => {
       IcdTransfer: IcdTransfer.filter(
         (item) => !item.value.includes("Type the")
       ),
-      currency: currency.filter((item) => !item.value.includes("Type the")),
-      shiperStatus: shiperStatus.filter(
-        (item) => !item.value.includes("Type the")
-      ),
+     
       ICDTransfer: ICDTransfer.filter(
         (item) => !item.value.includes("Type the")
       ),
@@ -198,11 +195,7 @@ const JobEntrySetting = () => {
             title="Line Vessel Type"
           />
 
-          <GlobalDrrpdownSetting
-            value={currency}
-            setvalue={setCurrency}
-            title="Currency"
-          />
+         
 
           <GlobalDrrpdownSetting
             value={routeCode}
