@@ -3,6 +3,7 @@ import CustomToast from "../../../components/common/Toast/CustomToast";
 import EditIconDropdown from "../../../components/common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
 import AuditIconDropdown from "../../../components/common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
 import DeleteIconDropdown from "../../../components/common/commonIconDropdown/DeleteIconDropdown/DeleteIconDropdown";
+import PrintIcon from "@mui/icons-material/Print";
 
 export const getPayableListGridActions = (nav, setModal) => {
   return [
@@ -49,6 +50,21 @@ export const getPayableListGridActions = (nav, setModal) => {
         }
       },
       icon: <DeleteIconDropdown />,
+    },
+
+    {
+      label: "Print",
+      onClick: (params) => {
+        setModal({
+          open: true,
+          type: "print",
+          data: {
+            who: "Print PDF",
+            id: params.row.id,
+          },
+        });
+      },
+      icon: <PrintIcon sx={{ width: "20px", marginTop: "2px" }} />,
     },
   ];
 };

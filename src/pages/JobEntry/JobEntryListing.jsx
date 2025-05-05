@@ -48,6 +48,7 @@ import DocumentDialog from "../../components/common/DocumentDialog";
 import AddRateModalApprove from "./AddRateModalApprove";
 import AddRejectedRemarks from "./RejectedRemarks";
 import CancelModalApprove from "./CancelModalApprove";
+import { downloadBase64PDF } from "../../utils/downloadExcel";
 
 export default function JobEntryScreen({ page }) {
   const location = useLocation();
@@ -265,7 +266,8 @@ export default function JobEntryScreen({ page }) {
 
   const handlePrintPDF = async () => {
     try {
-      await printJobEntry(modal?.data?.id).unwrap();
+      const resp = await printJobEntry(modal?.data?.id).unwrap();
+      downloadBase64PDF(resp?.body, modal?.data?.id);
       toast.custom(
         <CustomToast message="Download PDF successfully!" toast="success" />,
         {
@@ -287,7 +289,7 @@ export default function JobEntryScreen({ page }) {
     if (modal?.type === "print") {
       handlePrintPDF();
     }
-  }, [modal?.type]);
+  }, [modal]);
 
   useEffect(() => {
     refetch();
