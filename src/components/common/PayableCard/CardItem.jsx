@@ -3,6 +3,7 @@ import { Box, Card, IconButton } from "@mui/material";
 import { Typography, CardContent, CardActions } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import { formatIndianCurrency } from "../../utils/utils";
 
 export default function CardItem({ item, columns, actions,handleEditClick, handleDeleteClick,disabled }) {
   columns = columns.filter(
@@ -37,7 +38,7 @@ export default function CardItem({ item, columns, actions,handleEditClick, handl
             component="div"
             sx={{ fontWeight: "bold", fontSize: "16px" }}
           >
-            {"Charge Name"}
+            {item.chargeName || ""}
           </Typography>
           <Box
             sx={{
@@ -64,10 +65,10 @@ export default function CardItem({ item, columns, actions,handleEditClick, handl
           {[
             { label: "Job No.", value: item.jobNo },
             { label: "Unit Type", value: item.unitType },
-            { label: "Unit Rate", value: item.unitRate },
+            { label: "Unit Rate", value: formatIndianCurrency(item.unitRate) },
             { label: "No of Units", value: item.noOfUnit },
-            { label: "Amount", value: item.amount },
-            { label: "VAT Amount", value: item.vatAmount },
+            { label: "Amount", value: formatIndianCurrency(item.amount) },
+            { label: "VAT Amount", value: formatIndianCurrency(item.vatAmount) },
           ].map((field, index) => (
             <Box
               key={index}
@@ -99,7 +100,7 @@ export default function CardItem({ item, columns, actions,handleEditClick, handl
             <Box component="span" fontWeight="fontWeightBold">
               Total:
             </Box>{" "}
-            {item.totalAmount || " "}{" "}
+            {formatIndianCurrency(item.totalAmount) || " "}{" "}
           </Typography>
         </CardActions>
       </Card>

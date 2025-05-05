@@ -11,6 +11,7 @@ import {
   TextField,
   InputLabel,
   FormControl,
+  FormHelperText,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import InputBox from "../../../components/common/InputBox";
@@ -18,6 +19,7 @@ import { ThemeButton } from "../../../components/common/Button";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 import SelectBox from "../../../components/common/SelectBox";
 import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
+import { formatIndianCurrency } from "../../../components/utils/utils";
 
 const modalStyle = {
   position: "absolute",
@@ -45,6 +47,8 @@ export default function AddPayableEntryModal({
     chargeName: Yup.string().required("Charge Name is required"),
     unitType: Yup.string().required("Unit Type is required"),
     unitRate: Yup.string().required("Unit Rate is required"),
+    vatApplicable: Yup.string().required("VAT Applicable is required"),
+    withHoldingTax: Yup.string().required("With Holding Tax is required"),
   });
 
   const { data: optionsSettingsData } =
@@ -286,8 +290,13 @@ export default function AddPayableEntryModal({
             <InputBox
               label="Unit Rate"
               id="unitRate"
-              value={payableEntry.unitRate}
-              onChange={(e) => handleChange("unitRate", e.target.value)}
+              value={formatIndianCurrency(payableEntry.unitRate)}
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/,/g, "");
+                if (!isNaN(rawValue)) {
+                  handleChange("unitRate", rawValue);
+                }
+              }}
               fullWidth
               error={errors.unitRate}
             />
@@ -297,9 +306,20 @@ export default function AddPayableEntryModal({
             <InputBox
               label="Amount"
               id="amount"
-              value={payableEntry.amount}
+              value={formatIndianCurrency(payableEntry.amount)}
               disabled
               fullWidth
+              size="small"
+              error={!!errors.unitRate}
+              helperText={errors.unitRate}
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                  fontSize: "14px",
+                  height: "43px",
+                },
+              }}
             />
           </Grid>
           {/* VAT Applicable */}
@@ -310,6 +330,7 @@ export default function AddPayableEntryModal({
               options={optionsSettingsData?.body?.vatRate}
               value={payableEntry.vatApplicable}
               // error={formik.errors.vatApplicable}
+              error= {errors.vatApplicable}
               onChange={(e) => handleChange("vatApplicable", e.target.value)}
             />
           </Grid>
@@ -317,7 +338,7 @@ export default function AddPayableEntryModal({
             <InputBox
               label="VAT Amount"
               id="vatAmount"
-              value={payableEntry.vatAmount}
+              value={formatIndianCurrency(payableEntry.vatAmount)}
               disabled
               fullWidth
             />
@@ -329,6 +350,7 @@ export default function AddPayableEntryModal({
               options={payableSettingData?.body?.holdingTax}
               value={payableEntry.withHoldingTax}
               // error={formik.errors.withHoldingTax}
+              error= {errors.withHoldingTax}
               onChange={(e) => handleChange("withHoldingTax", e.target.value)}
             />
           </Grid>
@@ -336,7 +358,7 @@ export default function AddPayableEntryModal({
             <InputBox
               label="With Holding Amount"
               id="withHoldingAmount"
-              value={payableEntry.withHoldingAmount}
+              value={formatIndianCurrency(payableEntry.withHoldingAmount)}
               disabled
               fullWidth
             />
@@ -346,7 +368,7 @@ export default function AddPayableEntryModal({
             <InputBox
               label="Total Amount"
               id="totalAmount"
-              value={payableEntry.totalAmount}
+              value={formatIndianCurrency(payableEntry.totalAmount)}
               disabled
               fullWidth
             />
