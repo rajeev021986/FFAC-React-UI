@@ -460,6 +460,7 @@ export default function PayableListScreen({ page }) {
         </Drawer>
       )}
       <AddRejectedRemarks
+        label ={"Reject Reason"}
         rowId={modal?.data?.id}
         handleOpen={modal.open && modal.type === "reject"}
         handleClose={handleClose}
