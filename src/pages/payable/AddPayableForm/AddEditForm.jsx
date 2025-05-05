@@ -83,6 +83,7 @@ export default function AddEditForm({
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
   const [updatePaybleEntry, { isUpdateLoading }] =
     useUpdatePaybleEntryMutation();
+  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   const actionsSelector = useSelector((s) => s?.payableAction);
   const [loaderApprove, setLoaderApprove] = useState({
@@ -93,8 +94,6 @@ export default function AddEditForm({
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [SourceType, setSourceType] = useState("");
 
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
@@ -111,7 +110,6 @@ export default function AddEditForm({
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
-  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     if (viewPage === "view" || formik?.values?.statusCode === -3) {
@@ -219,21 +217,26 @@ export default function AddEditForm({
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
-  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
+  const { data: payableSettingData } =
+    useGetOptionsSettingsQuery("payble_settings");
 
   useEffect(() => {
     if (
       optionsSettingsData?.body ||
       customerSettingsData?.body ||
-      jobSettingData?.body
+      jobSettingData?.body ||
+      payableSettingData?.body
     ) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
         ...jobSettingData?.body,
+        ...payableSettingData?.body,
       });
     }
-  }, [optionsSettingsData, customerSettingsData]);
+  }, [optionsSettingsData, customerSettingsData, payableSettingData]);
+
+  console.log(dropdownData, 3456789);
 
   const handleApproveRequest = async () => {
     setRejectError(false);
@@ -267,10 +270,7 @@ export default function AddEditForm({
       approve: false,
     }));
   };
-  const handleOpen = (type) => {
-    setSourceType(type);
-    setOpen(true);
-  };
+
   const handleRejectRequest = async () => {
     if (!formik.values.rejectRemarks) {
       setRejectError(true);
@@ -364,16 +364,6 @@ export default function AddEditForm({
     },
   ];
 
-  const invoiceTypeData = [
-    {
-      label: "Tax",
-      value: "Tax",
-    },
-    {
-      label: "Performa",
-      value: "Performa",
-    },
-  ];
   //
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
@@ -671,7 +661,7 @@ export default function AddEditForm({
                     <SelectBox
                       label="Invoice Type*"
                       id="invoiceType"
-                      options={invoiceTypeData}
+                      options={dropdownData?.invoiceType}
                       value={formik.values.invoiceType}
                       error={formik.errors.invoiceType}
                       onChange={formik.handleChange}

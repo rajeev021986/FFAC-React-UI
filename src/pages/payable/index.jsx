@@ -46,11 +46,12 @@ import CustomToast from "../../components/common/Toast/CustomToast";
 import FilterForm from "./Actions/FilterForm";
 
 import { menuConfigUrl } from "../../store/menuConfigUrl";
-import { downloadExcel } from "../../utils/downloadExcel";
+import { downloadBase64PDF, downloadExcel } from "../../utils/downloadExcel";
 
 import {
   useFetchPaybleEntryDatasQuery,
   useDeletePaybleEntryMutation,
+  usePrintPayableEntryMutation,
 } from "../../store/api/payableApi";
 import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
 import CancelModalApprove from "../JobEntry/CancelModalApprove";
@@ -138,6 +139,7 @@ export default function PayableListScreen({ page }) {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
   };
+
   PAYABLE_COLUMNS[PAYABLE_COLUMNS.length - 1].renderCell = GridActions({
     actions:
       page == "payable_list"
@@ -175,6 +177,8 @@ export default function PayableListScreen({ page }) {
   };
 
   const [deletePaybleEntry] = useDeletePaybleEntryMutation();
+  const [printPayableEntry] = usePrintPayableEntryMutation();
+
   const handleApprove = async () => {
     const jobStatus = modal?.data?.label;
     if (jobStatus === "Cancelled Successfully") {
@@ -203,6 +207,7 @@ export default function PayableListScreen({ page }) {
       });
     }
   };
+
   const handleCancel = async () => {
     const jobStatus = modal?.data?.label;
     if (jobStatus === "Approved Successfully") {
@@ -231,6 +236,7 @@ export default function PayableListScreen({ page }) {
       });
     }
   };
+
   const handleClose = () => {
     setModal({
       open: false,
@@ -263,6 +269,33 @@ export default function PayableListScreen({ page }) {
       );
     }
   };
+
+  const handlePrintPDF = async () => {
+    try {
+      const resp = await printPayableEntry(modal?.data?.id).unwrap();
+      downloadBase64PDF(resp?.body, modal?.data?.id);
+      toast.custom(
+        <CustomToast message="Download PDF successfully!" toast="success" />,
+        {
+          closeButton: false,
+        }
+      );
+      handleClose();
+    } catch (error) {
+      toast.custom(
+        <CustomToast message="Failed to download PDF!" toast="error" />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (modal?.type === "print") {
+      handlePrintPDF();
+    }
+  }, [modal]);
 
   useEffect(() => {
     refetch();

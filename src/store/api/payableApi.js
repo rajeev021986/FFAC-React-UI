@@ -21,6 +21,7 @@ export const payableCodeAPI = createApi({
       },
       invalidatesTags: ["Code"],
     }),
+
     updatePaybleEntry: builder.mutation({
       query: (params) => {
         const headers = {
@@ -36,6 +37,7 @@ export const payableCodeAPI = createApi({
       },
       invalidatesTags: ["Code"],
     }),
+
     deletePaybleEntry: builder.mutation({
       query: (id) => {
         return {
@@ -46,6 +48,7 @@ export const payableCodeAPI = createApi({
       },
       invalidatesTags: ["Code"],
     }),
+
     uploadPaybleEntryFile: builder.mutation({
       query: (params) => {
         const formData = new FormData();
@@ -67,6 +70,7 @@ export const payableCodeAPI = createApi({
         };
       },
     }),
+
     fetchPaybleEntryDatas: builder.query({
       query: ({ params, payload, page }) => {
         const queryString = new URLSearchParams(params).toString();
@@ -82,6 +86,17 @@ export const payableCodeAPI = createApi({
       },
       providesTags: ["Code"],
     }),
+
+    printPayableEntry: builder.mutation({
+      query: (id) => {
+        return {
+          url: `${menuConfigUrl.document}/payble/entry/print/${id}`,
+          method: "GET",
+          headers: getAppHeaders(),
+        };
+      },
+      invalidatesTags: ["Code"],
+    }),
   }),
 });
 
@@ -91,4 +106,5 @@ export const {
   useDeletePaybleEntryMutation,
   useUploadPaybleEntryFileMutation,
   useFetchPaybleEntryDatasQuery,
+  usePrintPayableEntryMutation,
 } = payableCodeAPI;
