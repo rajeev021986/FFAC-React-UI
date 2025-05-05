@@ -53,7 +53,7 @@ export default function SelectBox({
         // }}
       >
         <MenuItem 
-          disabled={getPage == "editJobEntry"}
+          disabled={getPage == "editJobEntry" || id === "currency"}
         
         sx={{ fontSize: "14px" }}>
           <em>None</em>
