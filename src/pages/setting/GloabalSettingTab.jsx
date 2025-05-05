@@ -25,6 +25,7 @@ const GlobalSetting = () => {
   const [vatRate, setVatRate] = useState([]);
   const [costCenter, setCostCenter] = useState([]);
   const [isLoadingsave, setIsLoading] = useState(false);
+  const [currencyType, setCurrencyType] = useState([]);
   const [invoicePatternData, setInvoicePatternData] = useState([
     {
       id: 1,
@@ -42,6 +43,7 @@ const GlobalSetting = () => {
       data.body.shipmentType && setShipmentType(data.body.shipmentType);
       data.body.vatRate && setVatRate(data.body.vatRate);
       data.body.costCenter && setCostCenter(data.body.costCenter);
+      data.body.currencyType && setCurrencyType(data.body.currencyType);
       data.body.invoicePatternData &&
         setInvoicePatternData(data.body.invoicePatternData);
     }
@@ -59,6 +61,7 @@ const GlobalSetting = () => {
       ),
       vatRate: vatRate.filter((item) => !item.value.includes("Type the")),
       costCenter: costCenter.filter((item) => !item.value.includes("Type the")),
+      currencyType: currencyType.filter((item) => !item.value.includes("Type the")),
       invoicePatternData: invoicePatternData,
     };
     await addOptons({
@@ -126,7 +129,11 @@ const GlobalSetting = () => {
             setvalue={setCostCenter}
             title="Cost Center"
           />
-
+          <GlobalDrrpdownSetting
+            value={currencyType}
+            setvalue={setCurrencyType}
+            title="Currency Type"
+          /> 
           <GlovalInvoicePattern
             value={invoicePatternData}
             setvalue={setInvoicePatternData}

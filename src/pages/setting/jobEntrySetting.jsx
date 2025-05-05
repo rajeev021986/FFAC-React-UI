@@ -63,7 +63,7 @@ const JobEntrySetting = () => {
     setunitTypes(data?.body.unitTypes || []);
     setJobDocumentType(data?.body.jobDocumentType || []);
     setReportingPlace(data?.body.reportingPlace || []);
-    setPackageType(data?.body.packageType || []);
+
     const sorted = [...(data?.body.jobPatternData || [])].sort(
       (a, b) => a.id - b.id
     );
@@ -78,9 +78,7 @@ const JobEntrySetting = () => {
     const filteredData = {
       approvalRequest,
       moveType: moveType.filter((item) => !item.value.includes("Type the")),
-      packageType: packageType.filter(
-        (item) => !item.value.includes("Type the")
-      ),
+     
       cargoType: cargoType.filter((item) => !item.value.includes("Type the")),
       typesOfCargo: typesOfCargo.filter(
         (item) => !item.value.includes("Type the")

@@ -40,8 +40,14 @@ export default function AddRateModal({
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
+    const { data: optionsSettingsData } =
+      useGetOptionsSettingsQuery("common_settings");
+
+
+          
   const OnChange = (params, e, name) => {
     const valuePath = name.split(".");
     let data = formik.values;
@@ -159,7 +165,7 @@ export default function AddRateModal({
                   marginTop: "0px",
                   marginBottom: "0px",
                 }}
-                options={jobSettingData?.body?.currency}
+                options={optionsSettingsData?.body?.currencyType}
                 value={params.value}
                 disabled={params.row.chargeHead ? false : true}
                 onChange={(e) => OnChange(params, e, "rate.rateDetails")}

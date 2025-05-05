@@ -213,6 +213,7 @@ export default function AddEditForm({
   });
 
   const getFormData = formik?.values;
+
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -236,7 +237,7 @@ export default function AddEditForm({
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
 
-  console.log(dropdownData, 3456789);
+  console.log(optionsSettingsData?.body, 3456789);
 
   const handleApproveRequest = async () => {
     setRejectError(false);
@@ -811,7 +812,7 @@ export default function AddEditForm({
                     <SelectBox
                       label="Currency"
                       id="currency"
-                      options={CurrencyData}
+                      options={optionsSettingsData?.body?.currencyType}
                       value={formik.values.currency}
                       error={formik.errors.currency}
                       onChange={formik.handleChange}
