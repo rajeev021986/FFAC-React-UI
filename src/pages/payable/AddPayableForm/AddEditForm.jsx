@@ -1,12 +1,15 @@
 import {
+  Button,
   CircularProgress,
   Grid,
   IconButton,
+  Modal,
   TextField,
   Typography,
 } from "@mui/material";
 import { Stack } from "@mui/material";
 import { useFormik } from "formik";
+import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../components/common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
@@ -19,7 +22,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import AddIcon from "@mui/icons-material/Add";
-
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   useAddPaybleEntryMutation,
   useUpdatePaybleEntryMutation,
@@ -59,7 +62,24 @@ import UploadFile from "../../../components/UploadFile";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
-export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
+export default function AddEditForm({
+  initialValues,
+  page,
+  viewPage,
+  type = "notcopy",
+}) {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 1200,
+    bgcolor: "background.paper",
+    borderRadius: 2,
+    boxShadow: 24,
+    p: 4,
+  };
+
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
   const [updatePaybleEntry, { isUpdateLoading }] =
     useUpdatePaybleEntryMutation();
@@ -73,6 +93,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [SourceType, setSourceType] = useState("");
 
   const nav = useNavigate();
   const [value, setValue] = React.useState("1");
@@ -89,6 +111,15 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
+  const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    if (viewPage === "view" || formik?.values?.statusCode === -3) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [viewPage]);
 
   const formik = useFormik({
     initialValues,
@@ -236,7 +267,10 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       approve: false,
     }));
   };
-
+  const handleOpen = (type) => {
+    setSourceType(type);
+    setOpen(true);
+  };
   const handleRejectRequest = async () => {
     if (!formik.values.rejectRemarks) {
       setRejectError(true);
@@ -279,15 +313,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       reject: false,
     }));
   };
-
-  // const handleActionClick = async (actionName) => {
-  //   if (actionName === "New Entry") {
-  //     nav("addpayable", {
-  //       replace: true,
-  //       state: { formAction: "add" },
-  //     });
-  //   }
-  // };
 
   useEffect(() => {
     getFirstError(formik.errors);
@@ -354,7 +379,8 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
 
-  const disabled = formik?.values?.statusCode === -3;
+  const disabled =
+    formik?.values?.statusCode === -3 || viewPage === "view" ? true : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -412,22 +438,27 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       headerAlign: "center",
       align: "center",
       editable: false,
-      renderCell: (params) => {
-        const createdBy = params.row?.new
-          ? localStorage.getItem("userId") || "Unknown User"
-          : params.row?.createdBy || "";
+      // renderCell: (params) => {
+      //   const createdBy = params.row?.new
+      //     ? localStorage.getItem("userId") || "Unknown User"
+      //     : params.row?.createdBy || "";
 
-        return <span>{createdBy}</span>;
-      },
+      //   return <span>{createdBy}</span>;
+      // },
     },
 
     {
-      flex: 1,
+      flex: 1.5,
       field: "chargeName",
       headerName: "Charge Name",
       headerAlign: "center",
       align: "center",
       editable: false,
+      renderCell: (params) => (
+        <div className="word-wrap-cell">
+          {params.value?.trim() || ""} {/* Show "N/A" if empty */}
+        </div>
+      ),
     },
     {
       flex: 1,
@@ -509,7 +540,11 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
       sortable: false,
       headerAlign: "center",
       renderHeader: () => (
-        <IconButton color="white" onClick={handleTogglePayEntry}>
+        <IconButton
+          disabled={isDisabled}
+          color="white"
+          onClick={handleTogglePayEntry}
+        >
           <AddCircleIcon />
         </IconButton>
       ),
@@ -530,7 +565,6 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
               opacity: disabled ? 0.5 : 1,
             }}
             onClick={() => {
-              console.log("heello")
               if (!disabled) handleEditClick(params.row);
             }}
           />
@@ -607,7 +641,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   icon={<DocumentIcon />}
                   iconPosition="start"
                   sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                  disabled={isDisabled}
+                  disabled={formik.values.statusCode === -3}
                 />
                 <Tab
                   label="Audit Logs"
@@ -615,7 +649,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   icon={<AuditIcon />}
                   iconPosition="start"
                   sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                  disabled={isDisabled}
+                  disabled={formik.values.statusCode === -3}
                 />
               </TabList>
             )}
@@ -641,6 +675,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       value={formik.values.invoiceType}
                       error={formik.errors.invoiceType}
                       onChange={formik.handleChange}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -664,6 +699,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       error={formik.errors.jobNo}
                       onChange={formik.handleChange}
                       suggestionName="job_no"
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -688,6 +724,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       value={formik.values.vendorName}
                       error={formik.errors.vendorName}
                       onChange={formik.handleChange}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -699,9 +736,74 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       error={formik.errors.vendorInvoiceNo}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
+                      disabled={isDisabled}
                     />
                   </Grid>
+                  {/* <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      "&:hover": {
+                        borderColor: "#000",
+                      },
+                      "&:focus-within": {
+                        borderColor: " #166de0",
+                        borderWidth: "2px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none", // hides MUI default border
+                        borderRight: "1px solid #ccc",
+                      },
 
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#041238", // border color on hover
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        backgroundColor: "#fff",
+                        paddingRight: "5px",
+                        maxWidth: "calc(100% - 57px)",
+                      },
+                      "& .css-1uf3ruz-MuiFormControl-root-MuiTextField-root .MuiInputBase-root":
+                        {
+                          borderRadius: "0",
+                          height: "39px",
+                        },
+                    }}
+                  >
+                     <InputBox
+                      label="Vendor Invoice No."
+                      id="vendorInvoiceNo"
+                      value={formik.values.vendorInvoiceNo}
+                      error={formik.errors.vendorInvoiceNo}
+                      onChange={formik.handleChange}
+                      inputRef={payableRef}
+                      disabled={isDisabled}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload"
+                      onClick={() =>
+                        formik.values.vendorInvoiceNo && handleOpen("Vendor Invoice Doc")
+                      }
+                      style={{
+                        cursor: formik.values.vendorInvoiceNo
+                          ? "pointer"
+                          : "not-allowed",
+                        color: formik.values.vendorInvoiceNo ? "#1976d2" : "#999",
+                        textDecoration: formik.values.vendorInvoiceNo
+                          ? "underline"
+                          : "none",
+                        pointerEvents: formik.values.vendorInvoiceNo ? "auto" : "none",
+                      }}
+                    >
+                      <CloudUploadIcon />
+                    </IconButton>
+                  </Box>
+                </Grid> */}
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <DateTimeField
                       name="vendorInvoiceDate"
@@ -723,6 +825,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                       value={formik.values.currency}
                       error={formik.errors.currency}
                       onChange={formik.handleChange}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -730,11 +833,17 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                     <InputBox
                       label="Ex. Rate"
                       id="exchangeRate"
-                      value={formik.values.exchangeRate}
+                      value={
+                        getFormData?.currency === "TZS"
+                          ? 1
+                          : formik.values.exchangeRate
+                      }
                       error={formik.errors.exchangeRate}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
-                      disabled={getFormData?.currency === "TZS"}
+                      disabled={
+                        getFormData?.currency === "TZS" || viewPage === "view"
+                      }
                     />
                   </Grid>
 
@@ -979,8 +1088,12 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
             <Stack direction="row" justifyContent="right" padding="5px 15px">
               <Box>
                 {actionsSelector?.view === "card" && (
-                  <IconButton onClick={handleTogglePayEntry}>
-                    <AddIcon color="primary" />
+                  <IconButton
+                    color="primary"
+                    onClick={handleTogglePayEntry}
+                    disabled={isDisabled}
+                  >
+                    <AddIcon />
                   </IconButton>
                 )}
 
@@ -1022,6 +1135,7 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   page=""
                   handleEditClick={handleEditClick}
                   handleDeleteClick={handleDeleteNote}
+                  disabled={isDisabled}
                 />
               </Box>
             ) : (
@@ -1036,63 +1150,114 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                   <PayableEntryList
                     formik={formik}
                     dropdownData={dropdownData}
-                    //
+                    disabled={isDisabled}
                     chargesData={chargesData}
                     PAYABLE_COLUMNS={PAYABLE_COLUMNS}
                   />
                 </Box>
               </Box>
             )}
-
             <Box sx={{ gap: "10px", padding: "15px" }}>
               {formik?.values?.status?.toLowerCase() === "rejected" ||
-                (page == "payableApprove" && (
-                  <Grid item xs={12} paddingTop={1}>
-                    <TextField
-                      label="Reject Remarks"
-                      name="rejectRemarks"
-                      value={formik.values.rejectRemarks}
-                      error={rejectError}
-                      helperText={
-                        rejectError
-                          ? "Reject remarks are required when rejecting a customer*."
-                          : formik.errors.rejectRemarks
-                      }
-                      onChange={formik.handleChange}
-                      disabled={page === "job-entry" ? true : false}
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                      fullWidth
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "10px",
-                        },
-                      }}
-                    />
-                  </Grid>
-                ))}
+              page == "payableApprove" ? (
+                <Grid item xs={12} paddingLeft={1} paddingTop={1}>
+                  <TextField
+                    label="Reject Remarks"
+                    name="rejectRemarks"
+                    value={formik.values.rejectRemarks}
+                    error={rejectError}
+                    helperText={
+                      rejectError
+                        ? "Reject remarks are required when rejecting a customer*."
+                        : formik.errors.rejectRemarks
+                    }
+                    onChange={formik.handleChange}
+                    disabled={page === "payable" ? true : false}
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    fullWidth
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "10px",
+                      },
+                    }}
+                  />
+                </Grid>
+              ) : (
+                <></>
+              )}
             </Box>
 
-            {page == "payable" ? (
-              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
-                <Grid item xs={12}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Stack direction="row" spacing={2}>
-                      <OutlinedButton
-                        sx={{ fontWeight: "500" }}
-                        onClick={() => nav("/app/documentation/paybleEntry")}
-                      >
-                        Close
-                      </OutlinedButton>
+            {viewPage !== "view" &&
+              (page == "payable" ? (
+                <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                  <Grid item xs={12}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          sx={{ fontWeight: "500" }}
+                          onClick={() => nav(-1)}
+                        >
+                          Close
+                        </OutlinedButton>
 
-                      {!initialValues?.id ? (
+                        {!initialValues?.id ? (
+                          <ThemeButton
+                            onClick={formik.handleSubmit}
+                            sx={{
+                              fontWeight: "500",
+                              color: "white !important",
+                            }}
+                          >
+                            {isLoading && (
+                              <CircularProgress size={20} color="white" />
+                            )}
+                            Submit
+                          </ThemeButton>
+                        ) : (
+                          <ThemeButton
+                            onClick={formik.handleSubmit}
+                            sx={{
+                              fontWeight: "500",
+                              color: "white !important",
+                            }}
+                            disabled={isDisabled}
+                          >
+                            {isUpdateLoading && (
+                              <CircularProgress size={20} color="white" />
+                            )}
+                            Update
+                          </ThemeButton>
+                        )}
+                      </Stack>
+                    </Stack>
+                  </Grid>
+                </Box>
+              ) : (
+                <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                  <Grid item xs={12} sx={{ margin: 1 }}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          sx={{ fontWeight: "500" }}
+                          onClick={() => nav(-1)}
+                        >
+                          Close
+                        </OutlinedButton>
+
                         <ThemeButton
                           onClick={formik.handleSubmit}
                           sx={{
@@ -1103,85 +1268,36 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
                           {isLoading && (
                             <CircularProgress size={20} color="white" />
                           )}
-                          Submit
-                        </ThemeButton>
-                      ) : (
-                        <ThemeButton
-                          onClick={formik.handleSubmit}
-                          sx={{
-                            fontWeight: "500",
-                            color: "white !important",
-                          }}
-                          disabled={isDisabled}
-                        >
-                          {isUpdateLoading && (
-                            <CircularProgress size={20} color="white" />
-                          )}
                           Update
                         </ThemeButton>
-                      )}
-                    </Stack>
-                  </Stack>
-                </Grid>
-              </Box>
-            ) : (
-              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
-                <Grid item xs={12} sx={{ margin: 1 }}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Stack direction="row" spacing={2}>
-                      <OutlinedButton
-                        sx={{ fontWeight: "500" }}
-                        onClick={() => nav("/app/documentation/paybleEntry")}
-                      >
-                        Close
-                      </OutlinedButton>
 
-                      <ThemeButton
-                        onClick={formik.handleSubmit}
-                        sx={{
-                          fontWeight: "500",
-                          color: "white !important",
-                        }}
-                      >
-                        {isLoading && (
-                          <CircularProgress size={20} color="white" />
-                        )}
-                        Update
-                      </ThemeButton>
-
-                      <ThemeButton
-                        sx={{
-                          fontWeight: "500",
-                          backgroundColor: "red",
-                          color: "white !important",
-                        }}
-                        onClick={() => handleRejectRequest()}
-                      >
-                        {loaderApprove.reject && (
-                          <CircularProgress size={20} color="white" />
-                        )}
-                        Reject
-                      </ThemeButton>
-                      <ThemeButton
-                        sx={{ fontWeight: "500", color: "white !important" }}
-                        onClick={() => handleApproveRequest()}
-                      >
-                        {loaderApprove.approve && (
-                          <CircularProgress size={20} color="white" />
-                        )}
-                        Approve
-                      </ThemeButton>
+                        <ThemeButton
+                          sx={{
+                            fontWeight: "500",
+                            backgroundColor: "red",
+                            color: "white !important",
+                          }}
+                          onClick={() => handleRejectRequest()}
+                        >
+                          {loaderApprove.reject && (
+                            <CircularProgress size={20} color="white" />
+                          )}
+                          Reject
+                        </ThemeButton>
+                        <ThemeButton
+                          sx={{ fontWeight: "500", color: "white !important" }}
+                          onClick={() => handleApproveRequest()}
+                        >
+                          {loaderApprove.approve && (
+                            <CircularProgress size={20} color="white" />
+                          )}
+                          Approve
+                        </ThemeButton>
+                      </Stack>
                     </Stack>
-                  </Stack>
-                </Grid>
-              </Box>
-            )}
+                  </Grid>
+                </Box>
+              ))}
           </TabPanel>
           <TabPanel value="2" sx={{ padding: "0px" }}>
             <UploadFile
@@ -1201,7 +1317,28 @@ export default function AddEditForm({ initialValues, page, type = "notcopy" }) {
           </TabPanel>
         </TabContext>
       </Box>
-
+      {/* <Modal open={open} onClose={handleClose}>
+          <Box sx={style}>
+            <Button
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                top: 10,
+                right: 8,
+                color: "red",
+                backgroundColor: "transparent",
+              }}
+            >
+              <CloseIcon color="red" />
+            </Button>
+            <UploadFile
+              customer_id={initialValues.id}
+              isNotShowType={true}
+              sourceType={"JOB_DETAIL"}
+              type={SourceType}
+            />
+          </Box>
+        </Modal> */}
       <AddPayableEntryModal
         togglePayEntry={togglePayEntry}
         handleTogglePayEntry={handleTogglePayEntry}

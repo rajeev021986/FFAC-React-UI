@@ -15,7 +15,8 @@ export default function PayableCardView({
   seletectBox,
   page,
   handleEditClick, 
-  handleDeleteClick
+  handleDeleteClick,
+  disabled,
 }) {
   const handleCardPagination = (event, page) => {
     handlePage({
@@ -77,12 +78,32 @@ export default function PayableCardView({
                 page={page}
                 handleEditClick={handleEditClick} 
                 handleDeleteClick={handleDeleteClick}
+                disabled= {disabled}
               />
+              
             </Grid>
+            
           ))}
+          
         </Grid>
+        
       </Box>
-
+      {gridData?.length > 0 && (
+        <Box sx={styles.pagination}>
+          <TablePagination
+            component="div"
+            count={count || 0}
+            page={paginationModel.page}
+            onPageChange={handleCardPagination}
+            onRowsPerPageChange={handleChangeRowPerPage}
+            rowsPerPage={paginationModel.pageSize}
+            rowsPerPageOptions={[10, 20, 50, 100]}
+            color="primary"
+            size="small"
+            sx={{ margin: "auto", backgroundColor: "white.main" }}
+          />
+        </Box>
+      )}
       {gridData?.length === 0 && (
         <Box
           display="flex"
@@ -105,25 +126,11 @@ export default function PayableCardView({
           }}
         >
           <CircularProgress color="primary" />
+          
         </Box>
       )}
 
-      {gridData?.length > 0 && (
-        <Box sx={styles.pagination}>
-          <TablePagination
-            component="div"
-            count={count || 0}
-            page={paginationModel.page}
-            onPageChange={handleCardPagination}
-            onRowsPerPageChange={handleChangeRowPerPage}
-            rowsPerPage={paginationModel.pageSize}
-            rowsPerPageOptions={[10, 20, 50, 100]}
-            color="primary"
-            size="small"
-            sx={{ mergin: "auto", backgroundColor: "white.main" }}
-          />
-        </Box>
-      )}
+  
     </>
   );
 }

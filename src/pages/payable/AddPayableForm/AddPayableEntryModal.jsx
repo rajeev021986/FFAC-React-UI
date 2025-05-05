@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as Yup from "yup";
 import {
   Typography,
   Modal,
@@ -8,6 +9,8 @@ import {
   Select,
   MenuItem,
   TextField,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import InputBox from "../../../components/common/InputBox";
@@ -35,9 +38,16 @@ export default function AddPayableEntryModal({
   selectedPayEntry,
   setSelectedPayEntry,
 }) {
+  const modalValidationSchema = Yup.object().shape({
+    jobNo: Yup.string().required("Job No. is required"),
+    chargeName: Yup.string().required("Charge Name is required"),
+    unitType: Yup.string().required("Unit Type is required"),
+    unitRate: Yup.string().required("Unit Rate is required"),
+  });
+
   const [payableEntry, setPayableEntry] = useState({
     id: null,
-    jobNo:  formik.values.jobNo,
+    jobNo: formik.values.jobNo,
     chargeName: "",
     unitType: "",
     noOfUnit: "",
@@ -50,6 +60,7 @@ export default function AddPayableEntryModal({
     totalAmount: "",
     new: true,
   });
+  const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
     if (field === "unitType") {
@@ -88,41 +99,54 @@ export default function AddPayableEntryModal({
     });
   };
 
-  const handleSubmit = () => {
-    if (!payableEntry.jobNo || !payableEntry.chargeName) {
-      alert("Please fill in required fields.");
-      return;
-    }
-    const updatedEntry = selectedPayEntry
-      ? payableEntry
-      : { ...payableEntry, id: Date.now(), new: true };
+  const handleSubmit = async () => {
+    try {
+      await modalValidationSchema.validate(payableEntry, { abortEarly: false });
+      setErrors({}); // Clear errors on successful validation
 
-    const updatedList = selectedPayEntry
-      ? formik.values.paybleDetails.map((n) =>
-          n.id === updatedEntry.id ? updatedEntry : n
-        )
-      : [...(formik.values.paybleDetails || []), updatedEntry];
-    formik.setFieldValue("paybleDetails", updatedList);
-    if (onAddPayEntry) {
-      onAddPayEntry(updatedEntry);
-      setSelectedPayEntry(updatedEntry);
+      const updatedEntry = selectedPayEntry
+        ? payableEntry
+        : { ...payableEntry, id: Date.now(), new: true };
+
+      const updatedList = selectedPayEntry
+        ? formik.values.paybleDetails.map((n) =>
+            n.id === updatedEntry.id ? updatedEntry : n
+          )
+        : [...(formik.values.paybleDetails || []), updatedEntry];
+
+      formik.setFieldValue("paybleDetails", updatedList);
+      if (onAddPayEntry) {
+        onAddPayEntry(updatedEntry);
+        setSelectedPayEntry(updatedEntry);
+      }
+
+      // Reset after add
+      setPayableEntry({
+        id: Date.now(),
+        jobNo: "",
+        chargeName: "",
+        unitType: "",
+        noOfUnit: "",
+        unitRate: "",
+        amount: "",
+        vatApplicable: "",
+        vatAmount: "",
+        withHoldingTax: "",
+        withHoldingAmount: "",
+        totalAmount: "",
+        new: true,
+      });
+
+      handleTogglePayEntry();
+    } catch (validationError) {
+      if (validationError.inner) {
+        const fieldErrors = {};
+        validationError.inner.forEach((err) => {
+          fieldErrors[err.path] = err.message;
+        });
+        setErrors(fieldErrors);
+      }
     }
-    setPayableEntry({
-      id: Date.now(),
-      jobNo: "",
-      chargeName: "",
-      unitType: "",
-      noOfUnit: "",
-      unitRate: "",
-      amount: "",
-      vatApplicable: "",
-      vatAmount: "",
-      withHoldingTax: "",
-      withHoldingAmount: "",
-      totalAmount: "",
-      new: true,
-    });
-    handleTogglePayEntry();
   };
 
   const handleClose = () => {
@@ -143,19 +167,14 @@ export default function AddPayableEntryModal({
     });
     handleTogglePayEntry();
   };
-useEffect(() => {
-  console.log("gjyj");
-  
-if(togglePayEntry){
-  console.log("uhui");
-  
-  setPayableEntry((prevEntry) => ({
-    ...prevEntry,
-    jobNo: formik.values.jobNo,
-  }));
-}
-  },[togglePayEntry]);
-
+  useEffect(() => {
+    if (togglePayEntry) {
+      setPayableEntry((prevEntry) => ({
+        ...prevEntry,
+        jobNo: formik.values.jobNo,
+      }));
+    }
+  }, [togglePayEntry]);
 
   useEffect(() => {
     if (selectedPayEntry) {
@@ -178,7 +197,6 @@ if(togglePayEntry){
       });
     }
   }, [selectedPayEntry]);
-
   return (
     <Modal
       keepMounted
@@ -206,6 +224,7 @@ if(togglePayEntry){
               value={payableEntry.jobNo}
               onChange={(e) => handleChange("jobNo", e.target.value)}
               suggestionName="job_no"
+              error={errors.jobNo}
             />
           </Grid>
           <Grid item xs={12} lg={4}>
@@ -215,6 +234,7 @@ if(togglePayEntry){
               value={payableEntry.chargeName}
               onChange={(e) => handleChange("chargeName", e.target.value)}
               suggestionName="charge_name"
+              error={errors.chargeName}
             />
           </Grid>
           <Grid item xs={12} lg={4}></Grid>
@@ -228,6 +248,7 @@ if(togglePayEntry){
                 handleChange("noOfUnit", e.target.count || "");
               }}
               suggestionName="size_type"
+              error={errors.unitType}
             />
           </Grid>
           <Grid item xs={12} lg={4}>
@@ -257,6 +278,7 @@ if(togglePayEntry){
               value={payableEntry.unitRate}
               onChange={(e) => handleChange("unitRate", e.target.value)}
               fullWidth
+              error={errors.unitRate}
             />
           </Grid>
           {/* Amount */}
@@ -271,24 +293,27 @@ if(togglePayEntry){
           </Grid>
           {/* VAT Applicable */}
           <Grid item xs={12} lg={4}>
-            <Select
-              fullWidth
-              id="vatApplicable"
-              value={payableEntry.vatApplicable}
-              onChange={(e) => handleChange("vatApplicable", e.target.value)}
-              disabled={disabled}
-              sx={{
-                ...styles.root,
-                height: "44px",
-                "& .MuiSelect-select span::before": {
-                  content: "'VAT Applicable'",
-                  color: "#9090A5",
-                },
-              }}
-            >
-              <MenuItem value="No">No</MenuItem>
-              <MenuItem value="18%">18%</MenuItem>
-            </Select>
+            <FormControl fullWidth>
+              <InputLabel>VAT Applicable</InputLabel>
+              <Select
+                fullWidth
+                id="vatApplicable"
+                value={payableEntry.vatApplicable}
+                onChange={(e) => handleChange("vatApplicable", e.target.value)}
+                disabled={disabled}
+                sx={{
+                  ...styles.root,
+                  height: "44px",
+                  "& .MuiSelect-select span::before": {
+                    content: "'VAT Applicable'",
+                    color: "#9090A5",
+                  },
+                }}
+              >
+                <MenuItem value="No">No</MenuItem>
+                <MenuItem value="18%">18%</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
@@ -300,26 +325,29 @@ if(togglePayEntry){
             />
           </Grid>
           <Grid item xs={12} lg={4}>
-            <Select
-              fullWidth
-              id="withHoldingTax"
-              value={payableEntry.withHoldingTax}
-              onChange={(e) => handleChange("withHoldingTax", e.target.value)}
-              disabled={disabled}
-              sx={{
-                ...styles.root,
-                height: "44px",
-                "& .MuiSelect-select span::before": {
-                  content: "'With Holding Tax'",
-                  color: "#9090A5",
-                },
-              }}
-            >
-              <MenuItem value={0}>No</MenuItem>
-              <MenuItem value={5}>5%</MenuItem>
-              <MenuItem value={10}>10%</MenuItem>
-              <MenuItem value={15}>15%</MenuItem>
-            </Select>
+            <FormControl fullWidth>
+              <InputLabel>With Holding Tax</InputLabel>
+              <Select
+                fullWidth
+                id="withHoldingTax"
+                value={payableEntry.withHoldingTax}
+                onChange={(e) => handleChange("withHoldingTax", e.target.value)}
+                disabled={disabled}
+                sx={{
+                  ...styles.root,
+                  height: "44px",
+                  "& .MuiSelect-select span::before": {
+                    content: "'With Holding Tax'",
+                    color: "#9090A5",
+                  },
+                }}
+              >
+                <MenuItem value={0}>No</MenuItem>
+                <MenuItem value={5}>5%</MenuItem>
+                <MenuItem value={10}>10%</MenuItem>
+                <MenuItem value={15}>15%</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox

@@ -1,18 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import {
-  Alert,
-  Button,
-  Grid,
-  Snackbar,
-  TextField,
-  Typography,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Cancel";
-import AddIcon from "@mui/icons-material/Add";
+import { Grid, Typography } from "@mui/material";
 import { OutlinedButton } from "../../components/common/Button";
 import {
   useAddOptonsMutation,
@@ -22,7 +9,7 @@ import Loader from "../../components/common/Loader/Loader";
 import toast from "react-hot-toast";
 import GlobalDrrpdownSetting from "./GlobalDrrpdownSetting";
 import CustomToast from "../../components/common/Toast/CustomToast";
-import DeleteDialog from "../../components/common/DeleteDialog";
+import GlovalInvoicePattern from "./GlobalInvoicePattern";
 
 const GlobalSetting = () => {
   const [addOptons, { isloading }] = useAddOptonsMutation();
@@ -35,21 +22,30 @@ const GlobalSetting = () => {
   const [status, setStatus] = useState([]);
   const [account_type, setAccountType] = useState([]);
   const [shipmentType, setShipmentType] = useState([]);
+  const [vatRate, setVatRate] = useState([]);
+  const [costCenter, setCostCenter] = useState([]);
   const [isLoadingsave, setIsLoading] = useState(false);
+  const [invoicePatternData, setInvoicePatternData] = useState([
+    {
+      id: 1,
+      invoiceType: "",
+      invoicePattern: "",
+      resetNumber: "",
+      sampleInvoiceNumber: "",
+    },
+  ]);
 
   useEffect(() => {
     if (data) {
       data.body.status && setStatus(data.body.status);
       data.body.account_type && setAccountType(data.body.account_type);
       data.body.shipmentType && setShipmentType(data.body.shipmentType);
+      data.body.vatRate && setVatRate(data.body.vatRate);
+      data.body.costCenter && setCostCenter(data.body.costCenter);
+      data.body.invoicePatternData &&
+        setInvoicePatternData(data.body.invoicePatternData);
     }
   }, [data, geterror]);
-
-    const [modal, setModal] = useState({
-      open: false,
-      type: "",
-      data: {},
-    });
 
   const Postdata = async () => {
     setIsLoading(true);
@@ -61,6 +57,9 @@ const GlobalSetting = () => {
       shipmentType: shipmentType.filter(
         (item) => !item.value.includes("Type the")
       ),
+      vatRate: vatRate.filter((item) => !item.value.includes("Type the")),
+      costCenter: costCenter.filter((item) => !item.value.includes("Type the")),
+      invoicePatternData: invoicePatternData,
     };
     await addOptons({
       body: { common_settings: filteredData },
@@ -87,15 +86,8 @@ const GlobalSetting = () => {
         }
       })
       .catch(() => console.log("filteredData"));
-      refetch();
+    refetch();
     setIsLoading(false);
-  };
-  const handleClose = () => {
-    setModal({
-      open: false,
-      type: "",
-      data: {},
-    });
   };
 
   return (
@@ -106,12 +98,7 @@ const GlobalSetting = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Grid 
-          xs={12}
-          md={8}
-          lg={12}
-        
-        container spacing={1} flexWrap={"wrap"}>
+        <Grid xs={12} md={8} lg={12} container spacing={1} flexWrap={"wrap"}>
           <GlobalDrrpdownSetting
             value={status}
             setvalue={setStatus}
@@ -126,6 +113,24 @@ const GlobalSetting = () => {
             value={shipmentType}
             setvalue={setShipmentType}
             title="Shipment Type"
+          />
+
+          <GlobalDrrpdownSetting
+            value={vatRate}
+            setvalue={setVatRate}
+            title="Vat Rate"
+          />
+
+          <GlobalDrrpdownSetting
+            value={costCenter}
+            setvalue={setCostCenter}
+            title="Cost Center"
+          />
+
+          <GlovalInvoicePattern
+            value={invoicePatternData}
+            setvalue={setInvoicePatternData}
+            title="Payable Number"
           />
         </Grid>
       )}
@@ -142,13 +147,6 @@ const GlobalSetting = () => {
           {isLoadingsave ? "Saving..." : "Save"}
         </OutlinedButton>
       </Grid>
-      {/* <DeleteDialog
-        source="job-entry"
-        sourceName={modal?.data?.deleteName}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-        handleOpen={modal.open && modal.type === "delete"}
-      /> */}
     </div>
   );
 };

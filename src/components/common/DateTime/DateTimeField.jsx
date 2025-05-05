@@ -7,13 +7,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 export default function DateTimeField({
   sx,
   value,
-  disabled = false,
   onChange,
   inputRef,
   label,
   id,
   error,
-  isDisabled,
+  disabled,
   disablePast,
   ...props
 }) {
@@ -34,6 +33,7 @@ export default function DateTimeField({
   onChange={handleDateChange}
   error={error ? true : false}
   // minDateTime={now}
+  disabled={disabled}
   disablePast ={disablePast}
   helperText={error}
   inputRef={inputRef}
