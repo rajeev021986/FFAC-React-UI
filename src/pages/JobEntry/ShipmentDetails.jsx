@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef , useState} from "react";
 import { Grid, TextField, Tooltip } from "@mui/material";
 import Box from "@mui/material/Box";
 
@@ -11,11 +11,14 @@ import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import SelectBox from "../../components/common/SelectBox";
 import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 import FormAutoCompleteWithTable from "../../components/common/AutoComplete/FormAutoCompletewithTable";
+import ApiManager from "../../services/ApiManager";
 
 export default function ShipmentDetails({ formik }) {
   let disabled = formik?.values?.statusCode === -3;
-
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
+  const { data: optionsSettingsData } = useGetOptionsSettingsQuery("common_settings");
+  
 
   const FieldRef = useRef(null);
   useEffect(() => {
@@ -23,7 +26,36 @@ export default function ShipmentDetails({ formik }) {
       FieldRef.current.focus();
     }
   }, []);
-
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData("", "COMPANY_CODE");
+        const backendData = await response.body;
+  
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set((backendData || []).map(item => item.currency).filter(Boolean))
+        ).map(curr => ({ id: curr, value: curr }));
+  
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+  
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            setting => !backendCurrencies.some(item => item.value === setting.value)
+          )
+        ];
+  
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
   return (
     <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
@@ -126,6 +158,7 @@ export default function ShipmentDetails({ formik }) {
             item
             xs={12}
             sm={6}
+
             md={4}
             lg={3}
             xl={2}
@@ -237,7 +270,7 @@ export default function ShipmentDetails({ formik }) {
             <SelectBox
               label="Currency"
               id="currency"
-              options={jobSettingData?.body.currency}
+              options={mergedCurrencyOptions}
               value={formik.values.currency}
               error={formik.errors.currency}
               onChange={formik.handleChange}

@@ -40,8 +40,10 @@ export default function AddRateModalApprove({
   handleClose,
 }) {
   const [loading, setLoading] = useState(false);
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
   const formik = useFormik({
     initialValues: {
       id: 0,
@@ -91,6 +93,43 @@ export default function AddRateModalApprove({
       }
     },
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
+        const backendData = await response.body;
+
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
+        ];
+
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
 
   useEffect(() => {
     const fetchAddRateDetails = async () => {
@@ -204,7 +243,7 @@ export default function AddRateModalApprove({
         <SelectBox
           placeholder
           size="small"
-          options={jobSettingData?.body?.currency}
+          options={mergedCurrencyOptions}
           value={params.value}
           disabled={params.row.chargeHead ? false : true}
           onChange={(e) =>

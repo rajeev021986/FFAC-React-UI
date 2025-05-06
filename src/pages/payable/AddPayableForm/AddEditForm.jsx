@@ -62,6 +62,7 @@ import UploadFile from "../../../components/UploadFile";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import { formatIndianCurrency } from "../../../components/utils/utils";
+import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAutoCompleteDataWithLoader";
 
 export default function AddEditForm({
   initialValues,
@@ -82,12 +83,12 @@ export default function AddEditForm({
   };
   const payableRef = useRef(null);
   const invoiceTypeRef = useRef(null);
-
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
+  const [options, setOptions] = useState([]);
   const [updatePaybleEntry, { isUpdateLoading }] =
     useUpdatePaybleEntryMutation();
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
   const actionsSelector = useSelector((s) => s?.payableAction);
   const [loaderApprove, setLoaderApprove] = useState({
     approve: false,
@@ -250,6 +251,42 @@ export default function AddEditForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
+        const backendData = await response.body;
+
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
+        ];
+
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
   const handleApproveRequest = async () => {
     setRejectError(false);
     const { vendorInvoiceNo, isDoc } = formik.values;
@@ -629,7 +666,6 @@ export default function AddEditForm({
     };
   };
   const getAmountData = getPaybleDetailsTotals(chargesData);
-  console.log("formik.values.statusCode", formik.values.statusCode);
 
   return (
     <>
@@ -848,7 +884,7 @@ export default function AddEditForm({
                     <SelectBox
                       label="Currency"
                       id="currency"
-                      options={CurrencyData}
+                      options={mergedCurrencyOptions}
                       value={formik.values.currency}
                       error={formik.errors.currency}
                       onChange={formik.handleChange}
