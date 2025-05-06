@@ -27,7 +27,7 @@ const style = {
   p: 4,
 };
 
-export default function AddRejectedRemarks({ handleOpen, handleClose, rowId ,type }) {
+export default function AddRejectedRemarks({ handleOpen, handleClose, rowId ,type,label }) {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
@@ -87,7 +87,7 @@ export default function AddRejectedRemarks({ handleOpen, handleClose, rowId ,typ
           <Grid item xs={12}>
             <InputBox
               fullWidth
-              label="Remarks"
+              label= {label || "Remarks"}
               id="remarks"
               name="remarks"
               value={formik.values.remarks}

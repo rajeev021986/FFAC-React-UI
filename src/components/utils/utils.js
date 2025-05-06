@@ -61,3 +61,13 @@ export const optionFormatter = (options, type = String, valueKey, labelKey) => {
 export const formatNumberWithCommas = (number) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+export const formatIndianCurrency = (num) => {
+  const x = num.toString().split(".");
+  const lastThree = x[0].substring(x[0].length - 3);
+  const otherNumbers = x[0].substring(0, x[0].length - 3);
+  const formatted =
+    otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + (otherNumbers ? "," : "") + lastThree;
+  return x.length > 1 ? formatted + "." + x[1] : formatted;
+};
+
+

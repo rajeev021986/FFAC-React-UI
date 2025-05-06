@@ -11,11 +11,15 @@ import {
   TextField,
   InputLabel,
   FormControl,
+  FormHelperText,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import InputBox from "../../../components/common/InputBox";
 import { ThemeButton } from "../../../components/common/Button";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
+import SelectBox from "../../../components/common/SelectBox";
+import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
+import { formatIndianCurrency } from "../../../components/utils/utils";
 
 const modalStyle = {
   position: "absolute",
@@ -43,7 +47,14 @@ export default function AddPayableEntryModal({
     chargeName: Yup.string().required("Charge Name is required"),
     unitType: Yup.string().required("Unit Type is required"),
     unitRate: Yup.string().required("Unit Rate is required"),
+    vatApplicable: Yup.string().required("VAT Applicable is required"),
+    withHoldingTax: Yup.string().required("With Holding Tax is required"),
   });
+
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
+  const { data: payableSettingData } =
+    useGetOptionsSettingsQuery("payble_settings");
 
   const [payableEntry, setPayableEntry] = useState({
     id: null,
@@ -60,6 +71,8 @@ export default function AddPayableEntryModal({
     totalAmount: "",
     new: true,
   });
+
+  console.log(payableEntry, "payableEntry");
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
@@ -84,12 +97,16 @@ export default function AddPayableEntryModal({
       } else {
         updatedEntry.vatAmount = 0;
       }
-      const withHoldingTax = Number(updatedEntry.withHoldingTax || 0);
+      let withHoldingTax = Number(
+        (updatedEntry.withHoldingTax || "0").replace("%", "")
+      );
+      if (isNaN(withHoldingTax)) {
+        withHoldingTax = 0;
+      }
       updatedEntry.withHoldingAmount = (
         (updatedEntry.amount * withHoldingTax) /
         100
       ).toFixed(2);
-
       updatedEntry.totalAmount = (
         updatedEntry.amount +
         Number(updatedEntry.vatAmount) -
@@ -167,6 +184,7 @@ export default function AddPayableEntryModal({
     });
     handleTogglePayEntry();
   };
+
   useEffect(() => {
     if (togglePayEntry) {
       setPayableEntry((prevEntry) => ({
@@ -197,6 +215,7 @@ export default function AddPayableEntryModal({
       });
     }
   }, [selectedPayEntry]);
+
   return (
     <Modal
       keepMounted
@@ -227,7 +246,7 @@ export default function AddPayableEntryModal({
               error={errors.jobNo}
             />
           </Grid>
-          <Grid item xs={12} lg={4}>
+          <Grid item xs={12} lg={8}>
             <FormAutoCompleteWithLoader
               label="Charge Name"
               id="chargeName"
@@ -237,7 +256,6 @@ export default function AddPayableEntryModal({
               error={errors.chargeName}
             />
           </Grid>
-          <Grid item xs={12} lg={4}></Grid>
           <Grid item xs={12} lg={4}>
             <FormAutoCompleteWithLoader
               label="Unit Type"
@@ -275,8 +293,13 @@ export default function AddPayableEntryModal({
             <InputBox
               label="Unit Rate"
               id="unitRate"
-              value={payableEntry.unitRate}
-              onChange={(e) => handleChange("unitRate", e.target.value)}
+              value={formatIndianCurrency(payableEntry.unitRate)}
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/,/g, "");
+                if (!isNaN(rawValue)) {
+                  handleChange("unitRate", rawValue);
+                }
+              }}
               fullWidth
               error={errors.unitRate}
             />
@@ -286,74 +309,59 @@ export default function AddPayableEntryModal({
             <InputBox
               label="Amount"
               id="amount"
-              value={payableEntry.amount}
+              value={formatIndianCurrency(payableEntry.amount)}
               disabled
               fullWidth
+              size="small"
+              error={!!errors.unitRate}
+              helperText={errors.unitRate}
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                  fontSize: "14px",
+                  height: "43px",
+                },
+              }}
             />
           </Grid>
           {/* VAT Applicable */}
           <Grid item xs={12} lg={4}>
-            <FormControl fullWidth>
-              <InputLabel>VAT Applicable</InputLabel>
-              <Select
-                fullWidth
-                id="vatApplicable"
-                value={payableEntry.vatApplicable}
-                onChange={(e) => handleChange("vatApplicable", e.target.value)}
-                disabled={disabled}
-                sx={{
-                  ...styles.root,
-                  height: "44px",
-                  "& .MuiSelect-select span::before": {
-                    content: "'VAT Applicable'",
-                    color: "#9090A5",
-                  },
-                }}
-              >
-                <MenuItem value="No">No</MenuItem>
-                <MenuItem value="18%">18%</MenuItem>
-              </Select>
-            </FormControl>
+            <SelectBox
+              label="VAT Applicable*"
+              id="vatApplicable"
+              options={optionsSettingsData?.body?.vatRate}
+              value={payableEntry.vatApplicable}
+              // error={formik.errors.vatApplicable}
+              error={errors.vatApplicable}
+              onChange={(e) => handleChange("vatApplicable", e.target.value)}
+            />
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
               label="VAT Amount"
               id="vatAmount"
-              value={payableEntry.vatAmount}
+              value={formatIndianCurrency(payableEntry.vatAmount)}
               disabled
               fullWidth
             />
           </Grid>
           <Grid item xs={12} lg={4}>
-            <FormControl fullWidth>
-              <InputLabel>With Holding Tax</InputLabel>
-              <Select
-                fullWidth
-                id="withHoldingTax"
-                value={payableEntry.withHoldingTax}
-                onChange={(e) => handleChange("withHoldingTax", e.target.value)}
-                disabled={disabled}
-                sx={{
-                  ...styles.root,
-                  height: "44px",
-                  "& .MuiSelect-select span::before": {
-                    content: "'With Holding Tax'",
-                    color: "#9090A5",
-                  },
-                }}
-              >
-                <MenuItem value={0}>No</MenuItem>
-                <MenuItem value={5}>5%</MenuItem>
-                <MenuItem value={10}>10%</MenuItem>
-                <MenuItem value={15}>15%</MenuItem>
-              </Select>
-            </FormControl>
+            <SelectBox
+              label="With Holding Tax*"
+              id="withHoldingTax"
+              options={payableSettingData?.body?.holdingTax}
+              value={payableEntry.withHoldingTax}
+              // error={formik.errors.withHoldingTax}
+              error={errors.withHoldingTax}
+              onChange={(e) => handleChange("withHoldingTax", e.target.value)}
+            />
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
               label="With Holding Amount"
               id="withHoldingAmount"
-              value={payableEntry.withHoldingAmount}
+              value={formatIndianCurrency(payableEntry.withHoldingAmount)}
               disabled
               fullWidth
             />
@@ -363,7 +371,7 @@ export default function AddPayableEntryModal({
             <InputBox
               label="Total Amount"
               id="totalAmount"
-              value={payableEntry.totalAmount}
+              value={formatIndianCurrency(payableEntry.totalAmount)}
               disabled
               fullWidth
             />

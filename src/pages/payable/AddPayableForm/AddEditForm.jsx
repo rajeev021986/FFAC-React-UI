@@ -61,6 +61,7 @@ import { payableValidationSchema } from "../Actions/ValidationSchema";
 import UploadFile from "../../../components/UploadFile";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
+import { formatIndianCurrency } from "../../../components/utils/utils";
 
 export default function AddEditForm({
   initialValues,
@@ -79,6 +80,8 @@ export default function AddEditForm({
     boxShadow: 24,
     p: 4,
   };
+  const payableRef = useRef(null);
+  const invoiceTypeRef = useRef(null);
 
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
   const [updatePaybleEntry, { isUpdateLoading }] =
@@ -90,6 +93,8 @@ export default function AddEditForm({
     approve: false,
     reject: false,
   });
+  console.log("initialValues", initialValues);
+  
   const dispatch = useDispatch();
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
@@ -112,13 +117,19 @@ export default function AddEditForm({
   });
 
   useEffect(() => {
-    if (viewPage === "view" || formik?.values?.statusCode === -3) {
+    if (viewPage === "view" || formik?.values?.statusCode === -3 || formik?.values?.statusCode === 1) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
     }
   }, [viewPage]);
-
+  
+  useEffect(() => {
+    if (invoiceTypeRef.current) {
+      invoiceTypeRef.current.focus();
+    }
+  }, []);
+  
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -236,22 +247,38 @@ export default function AddEditForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
-
-  console.log(optionsSettingsData?.body, 3456789);
-
   const handleApproveRequest = async () => {
     setRejectError(false);
+    const { vendorInvoiceNo, isDoc } = formik.values;
+  
+    // Validation logic
+    if (vendorInvoiceNo && !isDoc) {
+      toast.custom(
+        <CustomToast
+          message="Please submit document as invoice type"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+      return; // Prevent approval
+    }
+  
     try {
       setLoaderApprove((prevState) => ({
         ...prevState,
         approve: true,
       }));
+  
       const response = await ApiManager.payableApproveHandler(
         initialValues.id,
         "PAYBLE_ENTRY"
       );
+  
       const message = response.message;
       nav("/app/documentation/approvePayable");
+  
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
       });
@@ -266,11 +293,13 @@ export default function AddEditForm({
         }
       );
     }
+  
     setLoaderApprove((prevState) => ({
       ...prevState,
       approve: false,
     }));
   };
+  
 
   const handleRejectRequest = async () => {
     if (!formik.values.rejectRemarks) {
@@ -318,10 +347,9 @@ export default function AddEditForm({
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
-  const payableRef = useRef(null);
 
   useEffect(() => {
-    if (payableRef.current) {
+    if (payableRef?.current) {
       payableRef.current.focus();
     }
   }, []);
@@ -371,7 +399,7 @@ export default function AddEditForm({
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
 
   const disabled =
-    formik?.values?.statusCode === -3 || viewPage === "view" ? true : false;
+  formik?.values?.statusCode === 1 || formik?.values?.statusCode === -3 || viewPage === "view" ? true : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -595,6 +623,7 @@ export default function AddEditForm({
     };
   };
   const getAmountData = getPaybleDetailsTotals(chargesData);
+console.log("formik.values.statusCode", formik.values.statusCode);
 
   return (
     <>
@@ -632,7 +661,7 @@ export default function AddEditForm({
                   icon={<DocumentIcon />}
                   iconPosition="start"
                   sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                  disabled={formik.values.statusCode === -3}
+                  // disabled={formik.values.statusCode === -3}
                 />
                 <Tab
                   label="Audit Logs"
@@ -640,7 +669,7 @@ export default function AddEditForm({
                   icon={<AuditIcon />}
                   iconPosition="start"
                   sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                  disabled={formik.values.statusCode === -3}
+                  // disabled={formik.values.statusCode === -3}
                 />
               </TabList>
             )}
@@ -667,6 +696,7 @@ export default function AddEditForm({
                       error={formik.errors.invoiceType}
                       onChange={formik.handleChange}
                       disabled={isDisabled}
+                      inputRef={invoiceTypeRef}
                     />
                   </Grid>
 
@@ -702,7 +732,7 @@ export default function AddEditForm({
                       value={formik.values.invoiceDate}
                       error={formik.errors.invoiceDate}
                       onChange={formik.setFieldValue}
-                      inputRef={FieldRef}
+                      inputRef={payableRef}
                       disabled={isDisabled}
                     />
                   </Grid>
@@ -803,7 +833,7 @@ export default function AddEditForm({
                       value={formik.values.vendorInvoiceDate}
                       error={formik.errors.vendorInvoiceDate}
                       onChange={formik.setFieldValue}
-                      inputRef={FieldRef}
+                      inputRef={payableRef}
                       disabled={isDisabled}
                     />
                   </Grid>
@@ -827,13 +857,13 @@ export default function AddEditForm({
                       value={
                         getFormData?.currency === "TZS"
                           ? 1
-                          : formik.values.exchangeRate
+                          : formatIndianCurrency(formik.values.exchangeRate)
                       }
                       error={formik.errors.exchangeRate}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
                       disabled={
-                        getFormData?.currency === "TZS" || viewPage === "view"
+                        getFormData?.currency === "TZS" || viewPage === "view" || isDisabled
                       }
                     />
                   </Grid>
@@ -897,7 +927,7 @@ export default function AddEditForm({
                         id="amount"
                         name="amount"
                         variant="outlined"
-                        value={getAmountData?.amount}
+                        value={formatIndianCurrency(getAmountData?.amount)}
                         fullWidth
                         size="small"
                         sx={{
@@ -917,9 +947,9 @@ export default function AddEditForm({
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
                           getFormData?.currency === "TZS"
-                            ? getAmountData?.amount * 1
-                            : getAmountData?.amount *
-                                Number(getFormData?.exchangeRate) || 0
+                            ? formatIndianCurrency(getAmountData?.amount * 1)
+                            : formatIndianCurrency(getAmountData?.amount *
+                                Number(getFormData?.exchangeRate)) || 0
                         }
                         disabled
                       />
@@ -935,7 +965,7 @@ export default function AddEditForm({
                         id="vatAmount"
                         name="vatAmount"
                         variant="outlined"
-                        value={getAmountData?.vatAmount}
+                        value={formatIndianCurrency(getAmountData?.vatAmount)}
                         fullWidth
                         size="small"
                         sx={{
@@ -955,9 +985,9 @@ export default function AddEditForm({
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
                           getFormData?.currency === "TZS"
-                            ? getAmountData?.vatAmount * 1
-                            : getAmountData?.vatAmount *
-                                getFormData?.exchangeRate || 0
+                            ? formatIndianCurrency(getAmountData?.vatAmount * 1)
+                            : formatIndianCurrency(getAmountData?.vatAmount *
+                                getFormData?.exchangeRate) || 0
                         }
                         disabled
                       />
@@ -973,7 +1003,7 @@ export default function AddEditForm({
                         id="withHoldingAmount"
                         name="withHoldingAmount"
                         variant="outlined"
-                        value={getAmountData?.withHoldingAmount}
+                        value={formatIndianCurrency(getAmountData?.withHoldingAmount)}
                         fullWidth
                         size="small"
                         sx={{
@@ -993,9 +1023,9 @@ export default function AddEditForm({
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
                           getFormData?.currency === "TZS"
-                            ? getAmountData?.withHoldingAmount * 1
-                            : getAmountData?.withHoldingAmount *
-                                getFormData?.exchangeRate || 0
+                            ? formatIndianCurrency(getAmountData?.withHoldingAmount * 1)
+                            : formatIndianCurrency(getAmountData?.withHoldingAmount *
+                                getFormData?.exchangeRate || 0)
                         }
                         disabled
                       />
@@ -1010,7 +1040,7 @@ export default function AddEditForm({
                         hiddenLabel
                         id="totalAmount"
                         name="totalAmount"
-                        value={getAmountData?.totalAmount}
+                        value={formatIndianCurrency(getAmountData?.totalAmount)}
                         variant="outlined"
                         fullWidth
                         size="small"
@@ -1031,9 +1061,9 @@ export default function AddEditForm({
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
                           getFormData?.currency === "TZS"
-                            ? getAmountData?.totalAmount * 1
-                            : getAmountData?.totalAmount *
-                                getFormData?.exchangeRate || 0
+                            ? formatIndianCurrency(getAmountData?.totalAmount * 1)
+                            : formatIndianCurrency(getAmountData?.totalAmount *
+                                getFormData?.exchangeRate || 0)
                         }
                         disabled
                       />

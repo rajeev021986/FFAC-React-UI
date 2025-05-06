@@ -134,15 +134,14 @@ export default function AddRateModal({
 
           renderCell: (params) => (
             <FormAutoCompleteChargeHead
-            id="chargeName" // this will map to "CHARGE"
-            suggestionName="chargeName"
-            dataLabel="charge_name"  // <-- this tells what to show in dropdown
-            value={params.value}
-            onChange={(e) => OnChange(params, e, "rate.rateDetails")}
-            disabled={false}
-          />
+              id="chargeName" // this will map to "CHARGE"
+              suggestionName="chargeName"
+              dataLabel="charge_name" // <-- this tells what to show in dropdown
+              value={params.value}
+              onChange={(e) => OnChange(params, e, "rate.rateDetails")}
+              disabled={false}
+            />
           ),
-
         },
         {
           field: "currency",
