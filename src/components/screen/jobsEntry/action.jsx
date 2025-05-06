@@ -59,7 +59,7 @@ export const getJobEntryListGridActions = (nav, setModal) => {
           type: "print",
           data: {
             who: "Print PDF",
-            id: params.row.id,
+            data: params.row,
           },
         });
       },

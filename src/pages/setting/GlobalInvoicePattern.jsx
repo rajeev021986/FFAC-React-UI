@@ -112,15 +112,15 @@ export default function GlovalInvoicePattern({ value, setvalue, title }) {
           disableRowSelectionOnClick
           autoHeight={false}
           hideFooter
-          slots={{
-            toolbar: () => (
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", p: 1 }}
-              >
-                <GridToolbarColumnsButton />
-              </Box>
-            ),
-          }}
+          // slots={{
+          //   toolbar: () => (
+          //     <Box
+          //       sx={{ display: "flex", justifyContent: "space-between", p: 1 }}
+          //     >
+          //       <GridToolbarColumnsButton />
+          //     </Box>
+          //   ),
+          // }}
         />
       </div>
     </Grid>
