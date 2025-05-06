@@ -99,8 +99,8 @@ export default function UploadFilesDialog({
                   onChange={handleInputChange}
                   InputLabelProps={{ shrink: true }}
                   inputProps={{
-        min: dayjs().format("YYYY-MM-DD"), // Restrict to today's date or future dates
-      }}
+                    max: dayjs().format("YYYY-MM-DD"),
+                  }}
       
                 />
               </Grid>
@@ -128,6 +128,10 @@ export default function UploadFilesDialog({
                   value={formData.expiryDate}
                   onChange={handleInputChange}
                   InputLabelProps={{ shrink: true }}
+                  inputProps={{
+                    min: dayjs().format("YYYY-MM-DD"),
+                  }}
+               
                 />
               </Grid>
             )}
