@@ -33,13 +33,15 @@ export const GetAutoCompleteDataWithLoader = async (
   dataKey,
   inputId,
   dataLabel,
-  searchText
+  searchText,
+  other 
 ) => {
   inputId = suggestionName[inputId];
   try {
     const response = await ApiManager.fetchAutoCompleteData(
       searchText,
-      inputId
+      inputId,
+      other || "",
     );
     const data = await response.body;
 

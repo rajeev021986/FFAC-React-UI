@@ -209,11 +209,12 @@ class ApiManager {
     return ApiMethods.get(url);
   };
 
-  static fetchAutoCompleteData = (inputValue, id) => {
+  static fetchAutoCompleteData = (inputValue, id, other) => {
     const url = ENDPOINTS.FETCH_AUTOCOMPLETE_DATA(
       inputValue,
       id,
-      menuConfigUrl.admin
+      menuConfigUrl.admin,
+      other || ""
     );
     return ApiMethods.get(url);
   };

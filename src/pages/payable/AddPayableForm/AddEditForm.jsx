@@ -94,8 +94,6 @@ export default function AddEditForm({
     approve: false,
     reject: false,
   });
-  console.log("initialValues", initialValues);
-
   const dispatch = useDispatch();
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
@@ -287,6 +285,7 @@ export default function AddEditForm({
 
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
+  
   const handleApproveRequest = async () => {
     setRejectError(false);
     const { vendorInvoiceNo, isDoc } = formik.values;
