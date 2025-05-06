@@ -84,17 +84,17 @@ export default function AddEditForm({
   const payableRef = useRef(null);
   const invoiceTypeRef = useRef(null);
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
-  const [options, setOptions] = useState([]);
   const [updatePaybleEntry, { isUpdateLoading }] =
     useUpdatePaybleEntryMutation();
+
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
   const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
+  const [showDefaultCurrency, setshowDefaultCurrency] = useState("");
   const actionsSelector = useSelector((s) => s?.payableAction);
   const [loaderApprove, setLoaderApprove] = useState({
     approve: false,
     reject: false,
   });
-  console.log("initialValues", initialValues);
 
   const dispatch = useDispatch();
   const [dropdownData, setDropdownData] = useState({});
@@ -251,6 +251,7 @@ export default function AddEditForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -259,8 +260,7 @@ export default function AddEditForm({
           "COMPANY_CODE"
         );
         const backendData = await response.body;
-
-        // Extract backend currencies safely
+        setshowDefaultCurrency(backendData?.[0]);
         const backendCurrencies = Array.from(
           new Set(
             (backendData || []).map((item) => item.currency).filter(Boolean)
@@ -287,6 +287,7 @@ export default function AddEditForm({
 
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
+
   const handleApproveRequest = async () => {
     setRejectError(false);
     const { vendorInvoiceNo, isDoc } = formik.values;
@@ -802,6 +803,7 @@ export default function AddEditForm({
                       disabled={isDisabled}
                     />
                   </Grid>
+
                   {/* <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                   <Box
                     display="flex"
@@ -867,6 +869,7 @@ export default function AddEditForm({
                     </IconButton>
                   </Box>
                 </Grid> */}
+
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <DateTimeField
                       name="vendorInvoiceDate"
@@ -893,12 +896,14 @@ export default function AddEditForm({
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    {getFormData?.currency === "TZS" ? (
+                    {getFormData?.currency === "TZS" ||
+                    getFormData?.currency === "INR" ? (
                       <InputBox
                         label="Ex. Rate"
                         id="exchangeRate"
                         value={
-                          getFormData?.currency === "TZS"
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
                             ? 1
                             : formatIndianCurrency(formik.values.exchangeRate)
                         }
@@ -907,6 +912,7 @@ export default function AddEditForm({
                         inputRef={payableRef}
                         disabled={
                           getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR" ||
                           viewPage === "view" ||
                           isDisabled
                         }
@@ -970,7 +976,7 @@ export default function AddEditForm({
                       <Typography>{`Invoice Currency (${getFormData?.currency})`}</Typography>
                     </Grid>
                     <Grid item xs={12} lg={4}>
-                      <Typography>{"TZS"}</Typography>
+                      <Typography>{showDefaultCurrency?.currency}</Typography>
                     </Grid>
 
                     <Grid item xs={12} lg={4}>
@@ -1002,7 +1008,8 @@ export default function AddEditForm({
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
-                          getFormData?.currency === "TZS"
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
                             ? formatIndianCurrency(getAmountData?.amount * 1)
                             : formatIndianCurrency(
                                 getAmountData?.amount *
@@ -1042,7 +1049,8 @@ export default function AddEditForm({
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
-                          getFormData?.currency === "TZS"
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
                             ? formatIndianCurrency(getAmountData?.vatAmount * 1)
                             : formatIndianCurrency(
                                 getAmountData?.vatAmount *
@@ -1084,7 +1092,8 @@ export default function AddEditForm({
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
-                          getFormData?.currency === "TZS"
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
                             ? formatIndianCurrency(
                                 getAmountData?.withHoldingAmount * 1
                               )
@@ -1126,7 +1135,8 @@ export default function AddEditForm({
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
-                          getFormData?.currency === "TZS"
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
                             ? formatIndianCurrency(
                                 getAmountData?.totalAmount * 1
                               )
