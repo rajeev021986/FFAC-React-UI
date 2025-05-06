@@ -66,7 +66,6 @@ export default function JobEntryScreen({ page }) {
     data: {},
   });
 
-  console.log(modal, "modal");
   const [open, setOpen] = useState(false);
   const actions = seletectBox
     ? [

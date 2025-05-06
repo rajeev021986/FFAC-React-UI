@@ -94,8 +94,6 @@ export default function AddEditForm({
     approve: false,
     reject: false,
   });
-  console.log("initialValues", initialValues);
-  
   const dispatch = useDispatch();
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
@@ -118,19 +116,23 @@ export default function AddEditForm({
   });
 
   useEffect(() => {
-    if (viewPage === "view" || formik?.values?.statusCode === -3 || formik?.values?.statusCode === 1) {
+    if (
+      viewPage === "view" ||
+      formik?.values?.statusCode === -3 ||
+      formik?.values?.statusCode === 1
+    ) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
     }
   }, [viewPage]);
-  
+
   useEffect(() => {
     if (invoiceTypeRef.current) {
       invoiceTypeRef.current.focus();
     }
   }, []);
-  
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -223,9 +225,7 @@ export default function AddEditForm({
       }
     },
   });
- 
-  
-  
+
   const getFormData = formik?.values;
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -252,42 +252,43 @@ export default function AddEditForm({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await ApiManager.fetchAutoCompleteData("", "COMPANY_CODE");
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
         const backendData = await response.body;
-  
+
         // Extract backend currencies safely
         const backendCurrencies = Array.from(
-          new Set((backendData || []).map(item => item.currency).filter(Boolean))
-        ).map(curr => ({ id: curr, value: curr }));
-  
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
         // Get setting currencies safely
         const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
-  
+
         // Merge both arrays avoiding duplicates (based on `value`)
         const mergedCurrencies = [
           ...backendCurrencies,
           ...settingCurrencies.filter(
-            setting => !backendCurrencies.some(item => item.value === setting.value)
-          )
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
         ];
-  
+
         setMergedCurrencyOptions(mergedCurrencies);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
-  
-  console.log("options", options);
-  console.log(mergedCurrencyOptions,"mergedCurrencies")
-console.log("optionsSettingsData?.body?.currencyType",optionsSettingsData?.body?.currencyType);
-
   const handleApproveRequest = async () => {
     setRejectError(false);
     const { vendorInvoiceNo, isDoc } = formik.values;
-  
+
     // Validation logic
     if (vendorInvoiceNo && !isDoc) {
       toast.custom(
@@ -301,21 +302,21 @@ console.log("optionsSettingsData?.body?.currencyType",optionsSettingsData?.body?
       );
       return; // Prevent approval
     }
-  
+
     try {
       setLoaderApprove((prevState) => ({
         ...prevState,
         approve: true,
       }));
-  
+
       const response = await ApiManager.payableApproveHandler(
         initialValues.id,
         "PAYBLE_ENTRY"
       );
-  
+
       const message = response.message;
       nav("/app/documentation/approvePayable");
-  
+
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
       });
@@ -330,13 +331,12 @@ console.log("optionsSettingsData?.body?.currencyType",optionsSettingsData?.body?
         }
       );
     }
-  
+
     setLoaderApprove((prevState) => ({
       ...prevState,
       approve: false,
     }));
   };
-  
 
   const handleRejectRequest = async () => {
     if (!formik.values.rejectRemarks) {
@@ -436,7 +436,11 @@ console.log("optionsSettingsData?.body?.currencyType",optionsSettingsData?.body?
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
 
   const disabled =
-  formik?.values?.statusCode === 1 || formik?.values?.statusCode === -3 || viewPage === "view" ? true : false;
+    formik?.values?.statusCode === 1 ||
+    formik?.values?.statusCode === -3 ||
+    viewPage === "view"
+      ? true
+      : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -660,7 +664,6 @@ console.log("optionsSettingsData?.body?.currencyType",optionsSettingsData?.body?
     };
   };
   const getAmountData = getPaybleDetailsTotals(chargesData);
-console.log("formik.values.statusCode", formik.values.statusCode);
 
   return (
     <>
@@ -900,7 +903,9 @@ console.log("formik.values.statusCode", formik.values.statusCode);
                       onChange={formik.handleChange}
                       inputRef={payableRef}
                       disabled={
-                        getFormData?.currency === "TZS" || viewPage === "view" || isDisabled
+                        getFormData?.currency === "TZS" ||
+                        viewPage === "view" ||
+                        isDisabled
                       }
                     />
                   </Grid>
@@ -985,8 +990,10 @@ console.log("formik.values.statusCode", formik.values.statusCode);
                         value={
                           getFormData?.currency === "TZS"
                             ? formatIndianCurrency(getAmountData?.amount * 1)
-                            : formatIndianCurrency(getAmountData?.amount *
-                                Number(getFormData?.exchangeRate)) || 0
+                            : formatIndianCurrency(
+                                getAmountData?.amount *
+                                  Number(getFormData?.exchangeRate)
+                              ) || 0
                         }
                         disabled
                       />
@@ -1023,8 +1030,10 @@ console.log("formik.values.statusCode", formik.values.statusCode);
                         value={
                           getFormData?.currency === "TZS"
                             ? formatIndianCurrency(getAmountData?.vatAmount * 1)
-                            : formatIndianCurrency(getAmountData?.vatAmount *
-                                getFormData?.exchangeRate) || 0
+                            : formatIndianCurrency(
+                                getAmountData?.vatAmount *
+                                  getFormData?.exchangeRate
+                              ) || 0
                         }
                         disabled
                       />
@@ -1040,7 +1049,9 @@ console.log("formik.values.statusCode", formik.values.statusCode);
                         id="withHoldingAmount"
                         name="withHoldingAmount"
                         variant="outlined"
-                        value={formatIndianCurrency(getAmountData?.withHoldingAmount)}
+                        value={formatIndianCurrency(
+                          getAmountData?.withHoldingAmount
+                        )}
                         fullWidth
                         size="small"
                         sx={{
@@ -1060,9 +1071,13 @@ console.log("formik.values.statusCode", formik.values.statusCode);
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
                           getFormData?.currency === "TZS"
-                            ? formatIndianCurrency(getAmountData?.withHoldingAmount * 1)
-                            : formatIndianCurrency(getAmountData?.withHoldingAmount *
-                                getFormData?.exchangeRate || 0)
+                            ? formatIndianCurrency(
+                                getAmountData?.withHoldingAmount * 1
+                              )
+                            : formatIndianCurrency(
+                                getAmountData?.withHoldingAmount *
+                                  getFormData?.exchangeRate || 0
+                              )
                         }
                         disabled
                       />
@@ -1098,9 +1113,13 @@ console.log("formik.values.statusCode", formik.values.statusCode);
                         sx={{ ...muiTextFieldStyles.root }}
                         value={
                           getFormData?.currency === "TZS"
-                            ? formatIndianCurrency(getAmountData?.totalAmount * 1)
-                            : formatIndianCurrency(getAmountData?.totalAmount *
-                                getFormData?.exchangeRate || 0)
+                            ? formatIndianCurrency(
+                                getAmountData?.totalAmount * 1
+                              )
+                            : formatIndianCurrency(
+                                getAmountData?.totalAmount *
+                                  getFormData?.exchangeRate || 0
+                              )
                         }
                         disabled
                       />
