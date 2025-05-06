@@ -19,6 +19,7 @@ function FormAutoCompleteWithLoader(props) {
     error,
     onChange,
     disabled,
+    other, 
   } = props;
 
   const [options, setOptions] = useState([]);
@@ -36,7 +37,8 @@ function FormAutoCompleteWithLoader(props) {
           suggestionName,
           id,
           dataLabel || suggestionName,
-          debounceValue
+          debounceValue,
+          other || ""
         );
         const validData = data.filter((item) => item.label?.trim() !== "");
         setOptions(validData);

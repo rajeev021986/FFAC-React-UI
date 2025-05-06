@@ -72,7 +72,6 @@ export default function AddPayableEntryModal({
     new: true,
   });
 
-  console.log(payableEntry, "payableEntry");
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
@@ -267,6 +266,7 @@ export default function AddPayableEntryModal({
               }}
               suggestionName="size_type"
               error={errors.unitType}
+              other={payableEntry.jobNo} // <-- Pass jobNo here
             />
           </Grid>
           <Grid item xs={12} lg={4}>
@@ -352,7 +352,6 @@ export default function AddPayableEntryModal({
               id="withHoldingTax"
               options={payableSettingData?.body?.holdingTax}
               value={payableEntry.withHoldingTax}
-              // error={formik.errors.withHoldingTax}
               error={errors.withHoldingTax}
               onChange={(e) => handleChange("withHoldingTax", e.target.value)}
             />
