@@ -66,7 +66,6 @@ export default function JobEntryScreen({ page }) {
     data: {},
   });
 
-  console.log(modal, "modal");
   const [open, setOpen] = useState(false);
   const actions = seletectBox
     ? [
@@ -266,8 +265,8 @@ export default function JobEntryScreen({ page }) {
 
   const handlePrintPDF = async () => {
     try {
-      const resp = await printJobEntry(modal?.data?.id).unwrap();
-      downloadBase64PDF(resp?.body, modal?.data?.id);
+      const resp = await printJobEntry(modal?.data?.data?.id).unwrap();
+      downloadBase64PDF(resp?.body, modal?.data?.data?.jobNo);
       toast.custom(
         <CustomToast message="Download PDF successfully!" toast="success" />,
         {

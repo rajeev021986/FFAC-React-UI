@@ -16,6 +16,7 @@ import { StyledDataGrid } from "../../components/common/Grid/styles";
 import SelectBox from "../../components/common/SelectBox";
 import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 import FormAutoCompleteChargeHead from "../../components/common/AutoComplete/FormAutoCompleteChargeHead";
+import ApiManager from "../../services/ApiManager";
 
 const style = {
   position: "absolute",
@@ -37,17 +38,14 @@ export default function AddRateModal({
 }) {
   const [value, setValue] = React.useState(0);
   const [openTable, setopenTable] = React.useState(true);
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = React.useState([]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-
-    const { data: optionsSettingsData } =
-      useGetOptionsSettingsQuery("common_settings");
-
-
-          
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
   const OnChange = (params, e, name) => {
     const valuePath = name.split(".");
     let data = formik.values;
@@ -76,7 +74,36 @@ export default function AddRateModal({
       },
     });
   };
-
+React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData("", "COMPANY_CODE");
+        const backendData = await response.body;
+  
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set((backendData || []).map(item => item.currency).filter(Boolean))
+        ).map(curr => ({ id: curr, value: curr }));
+  
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+  
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            setting => !backendCurrencies.some(item => item.value === setting.value)
+          )
+        ];
+  
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
   const TabsHosts = [
     {
       tabLable: "Rate Details",
@@ -164,7 +191,7 @@ export default function AddRateModal({
                   marginTop: "0px",
                   marginBottom: "0px",
                 }}
-                options={optionsSettingsData?.body?.currencyType}
+                options={mergedCurrencyOptions}
                 value={params.value}
                 disabled={params.row.chargeHead ? false : true}
                 onChange={(e) => OnChange(params, e, "rate.rateDetails")}

@@ -19,6 +19,7 @@ function FormAutoCompleteWithLoader(props) {
     error,
     onChange,
     disabled,
+    other, 
   } = props;
 
   const [options, setOptions] = useState([]);
@@ -36,9 +37,10 @@ function FormAutoCompleteWithLoader(props) {
           suggestionName,
           id,
           dataLabel || suggestionName,
-          debounceValue
+          debounceValue,
+          other || ""
         );
-      const validData = data.filter((item) => item.label?.trim() !== "");
+        const validData = data.filter((item) => item.label?.trim() !== "");
         setOptions(validData);
         setFilteredOptions(validData);
       } catch (error) {
@@ -55,13 +57,13 @@ function FormAutoCompleteWithLoader(props) {
     setInputValue(newValue);
   };
 
- const  handleSelectionChange = (event, newValue) => {
+  const handleSelectionChange = (event, newValue) => {
     if (newValue) {
       onChange({
         target: {
           name: id,
           value: newValue.value,
-          count: newValue?.fullData?.count || 0, 
+          count: newValue?.fullData?.count || 0,
         },
       });
     } else {
@@ -70,7 +72,6 @@ function FormAutoCompleteWithLoader(props) {
       });
     }
   };
-  
 
   return (
     <Box sx={{ width: "100%" }}>

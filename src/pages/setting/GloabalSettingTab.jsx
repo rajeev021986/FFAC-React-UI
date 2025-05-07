@@ -133,7 +133,7 @@ const GlobalSetting = () => {
             value={currencyType}
             setvalue={setCurrencyType}
             title="Currency Type"
-          /> 
+          />
           <GlovalInvoicePattern
             value={invoicePatternData}
             setvalue={setInvoicePatternData}

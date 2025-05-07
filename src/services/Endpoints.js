@@ -57,9 +57,8 @@ const ENDPOINTS = {
   FETCH_VESSEL_SUGGESTIONS: (inputValue, id, BasePageUrl) =>
     `/${BasePageUrl}/data?pattern=${inputValue}&type=${id}`,
   GET_EDIT_VOYAGE: (id, BasePageUrl) => `/${BasePageUrl}/vessel/voyage/${id}`,
-  FETCH_AUTOCOMPLETE_DATA: (inputValue, id, BasePageUrl) =>
-    `/${BasePageUrl}/data?pattern=${inputValue}&type=${id}`,
-
+  FETCH_AUTOCOMPLETE_DATA: (inputValue, id, BasePageUrl, other) =>
+    `/${BasePageUrl}/data?pattern=${inputValue}&type=${id}${other ? `&other=${other}` : ""}`,
   FILE_DOWNLOAD_INTEGATER: (id, BasePageUrl) =>
     `/${BasePageUrl}/file/audit/${id}`,
   GET_AUDIT_DATA: (id, page, service) => `/${service}/${page}/audit/${id}`,
