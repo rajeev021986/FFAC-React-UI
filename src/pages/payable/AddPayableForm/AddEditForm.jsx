@@ -261,6 +261,7 @@ export default function AddEditForm({
         );
         const backendData = await response.body;
         setshowDefaultCurrency(backendData?.[0]);
+        formik.setFieldValue("currency", backendData?.[0].currency);
         const backendCurrencies = Array.from(
           new Set(
             (backendData || []).map((item) => item.currency).filter(Boolean)

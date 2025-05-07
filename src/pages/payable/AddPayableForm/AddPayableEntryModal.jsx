@@ -243,7 +243,14 @@ export default function AddPayableEntryModal({
               label="Job No."
               id="jobNo"
               value={payableEntry.jobNo}
-              onChange={(e) => handleChange("jobNo", e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                handleChange("jobNo", value);
+                if (!value) {
+                  handleChange("unitType", "");
+                  handleChange("noOfUnit", "");
+                }
+              }}
               suggestionName="job_no"
               error={errors.jobNo}
             />
@@ -267,6 +274,7 @@ export default function AddPayableEntryModal({
                 handleChange("unitType", e.target.value);
                 handleChange("noOfUnit", e.target.count || "");
               }}
+              disabled = {payableEntry.jobNo ? false : true}
               suggestionName="size_type"
               error={errors.unitType}
               other={payableEntry.jobNo} // <-- Pass jobNo here
@@ -316,8 +324,6 @@ export default function AddPayableEntryModal({
               disabled
               fullWidth
               size="small"
-              error={!!errors.unitRate}
-              helperText={errors.unitRate}
               variant="outlined"
               sx={{
                 "& .MuiOutlinedInput-root": {

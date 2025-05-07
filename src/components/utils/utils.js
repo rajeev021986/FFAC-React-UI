@@ -28,7 +28,36 @@ export function generatePattern({
 
   return `${code}-${voucherToken}${datePart ? `-${datePart}` : ""}`;
 }
+export function generatePatternPayable({
+  invoiceType = "PAY",
+  resetNumber = "Never", // "Never", "Yearly", "Month", "Daily"
+  voucherDigits = 4,     // 4 to 8
+}) {
+  const voucherToken = `#${voucherDigits}`;
+  let datePart = "";
 
+  switch (resetNumber) {
+    case "Yearly":
+      datePart = "$Y";
+      break;
+    case "Monthly":
+      datePart = "$M-$Y";
+      break;
+    case "Daily":
+      datePart = "$D-$M-$Y";
+      break;
+    case "Never":
+    default:
+      datePart = "";
+  }
+
+  const code = invoiceType
+    .replace(/[^a-zA-Z]/g, "")
+    .substring(0, 3)
+    .toUpperCase();
+
+  return `${code}-${voucherToken}${datePart ? `-${datePart}` : ""}`;
+}
 
 export const reindexRows = (rows) => {
   return rows.map((row, index) => ({
