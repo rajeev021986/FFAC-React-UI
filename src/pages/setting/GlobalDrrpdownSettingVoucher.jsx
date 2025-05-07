@@ -187,11 +187,12 @@ export default function GlobalDrrpdownSettingVoucher({
       );
       const isValid =
         resetValue === "Never"
-          ? !hasInvalidStandaloneSpecials &&
-            !hasInvalidSpecialChar &&
-            hasOnlyAllowedTokens &&
-            !hasInvalidToken &&
-            hasOneVoucher // only these 2 checks apply
+          ? pattern.trim() === "" ||
+            (!hasInvalidStandaloneSpecials &&
+              !hasInvalidSpecialChar &&
+              hasOnlyAllowedTokens &&
+              !hasInvalidToken &&
+              hasOneVoucher)
           : !hasInvalidToken &&
             !hasDisallowed &&
             !hasDuplicateTokens &&
@@ -421,6 +422,9 @@ $Y : Year (Current Year)
         }}
       >
         <h3>{title}</h3>
+        <OutlinedButton color="primary" size="small" onClick={handleAddRow}>
+          Add
+        </OutlinedButton>
       </div>
 
       <div style={{ height: 400, width: "100%" }}>
@@ -455,22 +459,22 @@ $Y : Year (Current Year)
           disableRowSelectionOnClick
           autoHeight={false}
           hideFooter
-          slots={{
-            toolbar: () => (
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", p: 1 }}
-              >
-                <GridToolbarColumnsButton />
-                <OutlinedButton
-                  color="primary"
-                  size="small"
-                  onClick={handleAddRow}
-                >
-                  Add
-                </OutlinedButton>
-              </Box>
-            ),
-          }}
+          // slots={{
+          //   toolbar: () => (
+          //     <Box
+          //       sx={{ display: "flex", justifyContent: "space-between", p: 1 }}
+          //     >
+          //       {/* <GridToolbarColumnsButton /> */}
+          //       <OutlinedButton
+          //         color="primary"
+          //         size="small"
+          //         onClick={handleAddRow}
+          //       >
+          //         Add
+          //       </OutlinedButton>
+          //     </Box>
+          //   ),
+          // }}
         />
       </div>
     </Grid>

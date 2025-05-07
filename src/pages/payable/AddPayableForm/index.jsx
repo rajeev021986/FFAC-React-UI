@@ -27,7 +27,7 @@ export default function AddPayableEntry({ page }) {
     vendorName: "",
     vendorInvoiceNo: "",
     vendorInvoiceDate: "",
-    currency: "TZS",
+    currency: "",
     exchangeRate: 1,
     invoiceCurrencyAmount: "",
     invoiceCurrencyVat: "",
