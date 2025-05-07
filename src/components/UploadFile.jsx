@@ -228,16 +228,32 @@ const UploadFile = ({
     // if (!validateForm()) {
     //   return;
     // }
-    // Validate Issue Date
-    const today = new Date();
-    const issueDate = new Date(formData.issueDate);
-    if (issueDate < today) {
-      // Show error toast if the Issue Date is a past date
-      toast.custom(
-        <CustomToast message="Issue Date cannot be a past date." />
-      );
-      return; // Stop further execution if the date is invalid
-    }
+  // Validate Issue Date and Expiry Date
+const today = new Date();
+today.setHours(0, 0, 0, 0); // Normalize time to midnight
+
+const issueDate = new Date(formData.issueDate);
+issueDate.setHours(0, 0, 0, 0); // Normalize issue date
+
+const expiryDate = new Date(formData.expiryDate);
+expiryDate.setHours(0, 0, 0, 0); // Normalize expiry date
+
+if (issueDate > today) {
+  // Show error toast if Issue Date is in the future
+  toast.custom(
+    <CustomToast message="Issue Date cannot be a future date." />
+  );
+  return;
+}
+
+if (expiryDate < today) {
+  // Show error toast if Expiry Date is in the past
+  toast.custom(
+    <CustomToast message="Expiry Date cannot be a past date." />
+  );
+  return;
+}
+
     const resolvedDocumentType =
       formData.documentType === "Other"
         ? formData.other
