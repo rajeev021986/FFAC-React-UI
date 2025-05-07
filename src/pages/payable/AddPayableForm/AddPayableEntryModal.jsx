@@ -91,11 +91,14 @@ export default function AddPayableEntryModal({
         : 0;
 
       updatedEntry.amount = noOfUnit * unitRate;
-      if (updatedEntry.vatApplicable === "18%") {
-        updatedEntry.vatAmount = (updatedEntry.amount * 0.18).toFixed(2);
+      let vatValue = updatedEntry.vatApplicable.replace("%", "");
+      if (vatValue && vatValue.toLowerCase() !== "no") {
+        const vatRate = parseFloat(vatValue) / 100;
+        updatedEntry.vatAmount = (updatedEntry.amount * vatRate).toFixed(2);
       } else {
-        updatedEntry.vatAmount = 0;
+        updatedEntry.vatAmount = "0.00";
       }
+
       let withHoldingTax = Number(
         (updatedEntry.withHoldingTax || "0").replace("%", "")
       );
