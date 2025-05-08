@@ -23,11 +23,9 @@ import GridActions from "../../../components/common/Grid/GridActions";
 import { ACCOUNTS_PENDING_PAYABLE } from "../../../data/columns/accounts";
 import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 
-import { getPayableListGridActions } from "../../payable/Actions/action";
-import { getPayableListGridActionApprove } from "../../payable/Actions/appproveAction";
+import { getPendingPaymentApprovalGridActions } from "./action";
 import FilterForm from "./FilterForm";
 
-import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import { useFetchPendingPaymentDatasQuery } from "../../../store/api/accountPendingApproval";
 
 export default function AccountsPendingPayableList({ page }) {
@@ -99,7 +97,7 @@ export default function AccountsPendingPayableList({ page }) {
     GridActions({
       actions:
         page == "pending_payments"
-          ? getPayableListGridActions(nav, setModal)
+          ? getPendingPaymentApprovalGridActions(nav, setModal)
           : "",
     });
 
@@ -181,8 +179,8 @@ export default function AccountsPendingPayableList({ page }) {
             loading={isLoading || isFetching}
             actions={
               page == "pending_payments"
-                ? getPayableListGridActions(nav, setModal)
-                : getPayableListGridActionApprove(nav, setModal)
+                ? getPendingPaymentApprovalGridActions(nav, setModal)
+                : ""
             }
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
