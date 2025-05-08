@@ -22,6 +22,7 @@ import { otmBolDataApi } from "./api/otmBolDataApi";
 import { jobEntry } from "./api/jobEntryApi";
 import { containerAPI } from "./api/containerApi";
 import { payableCodeAPI } from "./api/payableApi";
+import { pendingPaymentCodeAPI } from "./api/accountPendingApproval";
 
 import userManagementReducer from "./freatures/userManagementSlice";
 import authReducer from "./freatures/authSlice";
@@ -54,6 +55,7 @@ import containerReducer from "./freatures/containersSlice";
 import vehicleReducer from "./freatures/vehicleSlice";
 import looseCargoReducer from "./freatures/LoseCargoSlice";
 import payableReducer from "./freatures/payableEntrySlice";
+import pendingPaymentReducer from "./freatures/paymentApprovalSlice";
 
 const store = configureStore({
   reducer: {
@@ -81,6 +83,7 @@ const store = configureStore({
     [jobEntry.reducerPath]: jobEntry.reducer,
     [containerAPI.reducerPath]: containerAPI.reducer,
     [payableCodeAPI.reducerPath]: payableCodeAPI.reducer,
+    [pendingPaymentCodeAPI.reducerPath]: pendingPaymentCodeAPI.reducer,
 
     // slice
     userManagement: userManagementReducer,
@@ -115,6 +118,7 @@ const store = configureStore({
     vehicle: vehicleReducer,
     looseCargo: looseCargoReducer,
     payableAction: payableReducer,
+    accountsPendingPayments: pendingPaymentReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -141,7 +145,8 @@ const store = configureStore({
       exchangeRateDataApi.middleware,
       jobEntry.middleware,
       containerAPI.middleware,
-      payableCodeAPI.middleware
+      payableCodeAPI.middleware,
+      pendingPaymentCodeAPI.middleware
     ),
 });
 
