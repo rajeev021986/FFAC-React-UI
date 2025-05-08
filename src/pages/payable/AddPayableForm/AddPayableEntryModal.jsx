@@ -91,11 +91,14 @@ export default function AddPayableEntryModal({
         : 0;
 
       updatedEntry.amount = noOfUnit * unitRate;
-      if (updatedEntry.vatApplicable === "18%") {
-        updatedEntry.vatAmount = (updatedEntry.amount * 0.18).toFixed(2);
+      let vatValue = updatedEntry.vatApplicable.replace("%", "");
+      if (vatValue && vatValue.toLowerCase() !== "no") {
+        const vatRate = parseFloat(vatValue) / 100;
+        updatedEntry.vatAmount = (updatedEntry.amount * vatRate).toFixed(2);
       } else {
-        updatedEntry.vatAmount = 0;
+        updatedEntry.vatAmount = "0.00";
       }
+
       let withHoldingTax = Number(
         (updatedEntry.withHoldingTax || "0").replace("%", "")
       );
@@ -240,7 +243,14 @@ export default function AddPayableEntryModal({
               label="Job No."
               id="jobNo"
               value={payableEntry.jobNo}
-              onChange={(e) => handleChange("jobNo", e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                handleChange("jobNo", value);
+                if (!value) {
+                  handleChange("unitType", "");
+                  handleChange("noOfUnit", "");
+                }
+              }}
               suggestionName="job_no"
               error={errors.jobNo}
             />
@@ -264,6 +274,7 @@ export default function AddPayableEntryModal({
                 handleChange("unitType", e.target.value);
                 handleChange("noOfUnit", e.target.count || "");
               }}
+              disabled = {payableEntry.jobNo ? false : true}
               suggestionName="size_type"
               error={errors.unitType}
               other={payableEntry.jobNo} // <-- Pass jobNo here
@@ -313,8 +324,6 @@ export default function AddPayableEntryModal({
               disabled
               fullWidth
               size="small"
-              error={!!errors.unitRate}
-              helperText={errors.unitRate}
               variant="outlined"
               sx={{
                 "& .MuiOutlinedInput-root": {

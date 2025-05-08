@@ -25,20 +25,17 @@ const PayableSettings = () => {
     refetch,
   } = useGetOptionsSettingsQuery("payble_settings");
   const [invoiceType, setInvoiceType] = useState([]);
- 
   const [holdingTax, setHoldingTax] = useState([]);
   const [isLoadingsave, setIsLoading] = useState(false);
 
   useEffect(() => {
     setInvoiceType(data?.body.invoiceType || []);
-   
     setHoldingTax(data?.body.holdingTax || []);
   }, [data, geterror]);
 
   const Postdata = async () => {
     const filteredData = {
       invoiceType: invoiceType.filter((it) => !it.value.includes("Type the")),
-    
       holdingTax: holdingTax.filter((it) => !it.value.includes("Type the")),
     };
     setIsLoading(true);
@@ -86,8 +83,6 @@ const PayableSettings = () => {
             setvalue={setInvoiceType}
             title="Invoice Type"
           />
-
-          
 
           <GlobalDrrpdownSetting
             value={holdingTax}
