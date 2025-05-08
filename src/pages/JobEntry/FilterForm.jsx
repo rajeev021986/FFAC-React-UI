@@ -10,6 +10,8 @@ import SelectBox from "../../components/common/SelectBox";
 export default function FilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state?.codeJobEntryrSelector?.formData);
+  console.log("inputs",inputs);
+  
   const formik = useFormik({
     initialValues: inputs || {
       customerName: inputs?.customerName || "",
@@ -65,6 +67,7 @@ export default function FilterForm({ setFilterOpen }) {
     { value: -2, label: "InActive" },
     { value: 0, label: "New & Pen Doc" },
     { value: -1, label: "Rejected" },
+    { value: -3, label: "Cancel" },
   ];
 
   const documentOptions = [
@@ -72,6 +75,7 @@ export default function FilterForm({ setFilterOpen }) {
     { value: true, label: "Available" },
   ];
 
+console.log("formik.values.statusCode",formik.values.statusCode);
 
   return (
     <div>

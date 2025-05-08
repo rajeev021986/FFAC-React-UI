@@ -803,30 +803,35 @@ export default function JobEntryForm({
                 />
               </Grid>
 
-              {initialValues.statusCode == -2 ||
-              initialValues.statusCode == 1 ? (
-                <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
-                  <SelectBox
-                    label="Status"
-                    id="status"
-                    options={optionsSettingsData?.body.status}
-                    value={formik.values.status}
-                    error={formik.errors.status}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
-              ) : (
-                <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
-                  <InputBox
-                    label="Status"
-                    id="status"
-                    disabled={true}
-                    value={formik.values.status}
-                    error={formik.errors.status}
-                    onChange={formik.handleChange}
-                  />
-                </Grid>
-              )}
+              {initialValues.statusCode === -2 ||
+initialValues.statusCode === 1 ||
+initialValues.statusCode === -3 ? (
+  <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
+    <SelectBox
+      label="Status"
+      id="status"
+      options={
+        initialValues.statusCode === -3
+          ? [...(optionsSettingsData?.body.status || []), { label: "Cancel", value: "cancel" }]
+          : optionsSettingsData?.body.status
+      }
+      value={formik.values.status}
+      error={formik.errors.status}
+      onChange={formik.handleChange}
+    />
+  </Grid>
+) : (
+  <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
+    <InputBox
+      label="Status"
+      id="status"
+      disabled={true}
+      value={formik.values.status}
+      error={formik.errors.status}
+      onChange={formik.handleChange}
+    />
+  </Grid>
+)}
 
 
               <Grid item xs={12}>
