@@ -12,6 +12,8 @@ import {
   InputLabel,
   FormControl,
   FormHelperText,
+  CircularProgress,
+  Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import InputBox from "../../../components/common/InputBox";
@@ -20,6 +22,8 @@ import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/
 import SelectBox from "../../../components/common/SelectBox";
 import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 import { formatIndianCurrency } from "../../../components/utils/utils";
+import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAutoCompleteDataWithLoader";
+import useDebounce from "../../../hooks/useDebounce";
 
 const modalStyle = {
   position: "absolute",
@@ -50,7 +54,12 @@ export default function AddPayableEntryModal({
     vatApplicable: Yup.string().required("VAT Applicable is required"),
     withHoldingTax: Yup.string().required("With Holding Tax is required"),
   });
-
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const debounceValue = useDebounce(inputValue, 800); // Custom Hook
+  const selectedValue = formik.values.unitType;
+  const [filteredOptions, setFilteredOptions] = useState([]);
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: payableSettingData } =
@@ -217,6 +226,56 @@ export default function AddPayableEntryModal({
       });
     }
   }, [selectedPayEntry]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!payableEntry.jobNo) return;
+      setLoading(true);
+      try {
+        const data = await GetAutoCompleteDataWithLoader(
+          "size_type",
+          "unitType",
+          "size_type",
+          debounceValue,
+          payableEntry.jobNo
+        );
+        const validData = data.filter((item) => item.label?.trim() !== "");
+        setOptions(validData);
+        setFilteredOptions(validData);
+      } catch (err) {
+        console.error("Error fetching unit types:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [debounceValue, payableEntry.jobNo,]);
+
+  const handleInputChange = (event, newInputValue) => {
+    setInputValue(newInputValue);
+  };
+
+  const handleChangeUnitType = (event, newValue) => {
+    if (newValue) {
+      formik.setFieldValue("unitType", newValue.value);
+      formik.setFieldValue("noOfUnit", newValue.fullData?.count || "");
+
+      setPayableEntry((prev) => ({
+        ...prev,
+        unitType: newValue.value,
+        noOfUnit: newValue.fullData?.count || "",
+      }));
+    } else {
+      formik.setFieldValue("unitType", "");
+      formik.setFieldValue("noOfUnit", "");
+
+      setPayableEntry((prev) => ({
+        ...prev,
+        unitType: "",
+        noOfUnit: "",
+      }));
+    }
+  };
 
   return (
     <Modal
@@ -247,8 +306,13 @@ export default function AddPayableEntryModal({
                 const value = e.target.value;
                 handleChange("jobNo", value);
                 if (!value) {
-                  handleChange("unitType", "");
-                  handleChange("noOfUnit", "");
+                  setPayableEntry((prev) => ({
+                    ...prev,
+                    unitType: "",
+                    noOfUnit: "",
+                  }));
+                  formik.setFieldValue("unitType", "");
+                  formik.setFieldValue("noOfUnit", "");
                 }
               }}
               suggestionName="job_no"
@@ -266,19 +330,58 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={4}>
-            <FormAutoCompleteWithLoader
-              label="Unit Type"
-              id="unitType"
-              value={payableEntry.unitType}
-              onChange={(e) => {
-                handleChange("unitType", e.target.value);
-                handleChange("noOfUnit", e.target.count || "");
-              }}
-              disabled = {payableEntry.jobNo ? false : true}
-              suggestionName="size_type"
-              error={errors.unitType}
-              other={payableEntry.jobNo} // <-- Pass jobNo here
-            />
+            <Box sx={{ width: "100%" }}>
+              <Autocomplete
+                id="unitType"
+                size="small"
+                disabled={!payableEntry.jobNo}
+                value={
+                  options.find((opt) => opt.value === payableEntry.unitType) || null
+                }
+                onInputChange={handleInputChange}
+                onChange={handleChangeUnitType}
+                options={filteredOptions}
+                getOptionLabel={(option) => option.label || ""}
+                loading={loading}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Unit Type"
+                    placeholder="Type to search"
+                    variant="outlined"
+                    error={Boolean(errors.unitType)}
+                    helperText={errors.unitType}
+                    fullWidth
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "10px",
+                        fontSize: "14px",
+                        height: "43px",
+                      },
+                    }}
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {loading ? (
+                            <CircularProgress color="inherit" size={15} />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+                renderOption={(props, option) => (
+                  <MenuItem {...props} key={option.value}>
+                    {option.label}
+                  </MenuItem>
+                )}
+                noOptionsText={
+                  inputValue ? "No results found" : "Type to search..."
+                }
+              />
+            </Box>
           </Grid>
           <Grid item xs={12} lg={4}>
             <TextField
