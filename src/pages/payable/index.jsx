@@ -272,7 +272,7 @@ export default function PayableListScreen({ page }) {
 
   const handlePrintPDF = async () => {
     try {
-      const resp = await printPayableEntry(modal?.data?.id).unwrap();
+      const resp = await printPayableEntry(modal?.data?.data?.id).unwrap();
       downloadBase64PDF(resp?.body, modal?.data?.data?.payableRefNo);
       toast.custom(
         <CustomToast message="Download PDF successfully!" toast="success" />,
