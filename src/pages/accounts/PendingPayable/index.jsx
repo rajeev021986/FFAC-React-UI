@@ -23,49 +23,27 @@ import GridActions from "../../../components/common/Grid/GridActions";
 import { ACCOUNTS_PENDING_PAYABLE } from "../../../data/columns/accounts";
 import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 
-import Backdrop from "@mui/material/Backdrop";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-
 import { getPayableListGridActions } from "../../payable/Actions/action";
 import { getPayableListGridActionApprove } from "../../payable/Actions/appproveAction";
-
-import toast, { LoaderIcon } from "react-hot-toast";
-import CustomToast from "../../../components/common/Toast/CustomToast";
-import FilterForm from "../../JobEntry/FilterForm";
+import FilterForm from "./FilterForm";
 
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
-import { downloadExcel } from "../../../utils/downloadExcel";
 import { useFetchPendingPaymentDatasQuery } from "../../../store/api/accountPendingApproval";
 
 export default function AccountsPendingPayableList({ page }) {
+  //
   const paymentSelector = useSelector((s) => s?.accountsPendingPayments);
+  const dispatch = useDispatch();
   const location = useLocation();
   const nav = useNavigate();
-  const dispatch = useDispatch();
 
-  const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
-
-  const [open, setOpen] = React.useState(false);
-  const actions = seletectBox
-    ? [
-        { name: "New Entry" },
-        { name: "Copy" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
-      ]
-    : page === "payable_approve"
-    ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
-    : [
-        { name: "New Entry" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
-      ];
+  console.log(modal, 3456);
 
   const query = {
     page: paymentSelector?.pagination?.page + 1,
@@ -125,35 +103,6 @@ export default function AccountsPendingPayableList({ page }) {
           : "",
     });
 
-  const handleActionClick = async (actionName) => {
-    if (actionName === "New Entry") {
-      nav("addpayable", {
-        replace: true,
-        state: { formAction: "add" },
-      });
-    }
-    if (actionName === "Export") {
-      setExportLoader(true);
-      try {
-        await downloadExcel({
-          query: query,
-          payload: payload,
-          service: `${menuConfigUrl.entity}`,
-          page: "pending_payments",
-          filename: "pending_payments-data.xlsx",
-        });
-      } catch (error) {
-        toast.custom(
-          <CustomToast message="Something went wrong" toast="error" />,
-          {
-            closeButton: false,
-          }
-        );
-      }
-      setExportLoader(false);
-    }
-  };
-
   useEffect(() => {
     refetch();
   }, [location.pathname]);
@@ -166,55 +115,7 @@ export default function AccountsPendingPayableList({ page }) {
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
-      <ScreenToolbar
-        leftComps={<ThemedBreadcrumb />}
-        rightComps={
-          <>
-            <Backdrop open={open} />
-            {(page == "pending_payments" || page == "payable_approve") && (
-              <SpeedDial
-                ariaLabel="Text-only  SpeedDial"
-                sx={{
-                  "& .MuiFab-root": {
-                    width: 50,
-                    height: 50,
-                    minHeight: 50,
-                  },
-                }}
-                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
-                direction="left"
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    tooltipTitle=""
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 2,
-                      borderRadius: 1,
-                      boxShadow: 3,
-                      borderRadius: "20px 19px 19px 20px",
-                      width: 72,
-                      minWidth: 92,
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 16,
-                      },
-                    }}
-                    icon={
-                      <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                        {action.name}
-                      </span>
-                    }
-                    onClick={() => handleActionClick(action.name)}
-                  ></SpeedDialAction>
-                ))}
-              </SpeedDial>
-            )}
-          </>
-        }
-      />
+      <ScreenToolbar leftComps={<ThemedBreadcrumb />} rightComps={<> </>} />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
           sx={{ padding: "8px" }}
