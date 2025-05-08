@@ -56,7 +56,6 @@ export const jobEntry = createApi({
         const headers = {
           Authorization: getAppHeaders()["Authorization"],
         };
-        console.log(payload, 3456789);
         return {
           url: `/${menuConfigUrl.document}/${page}?${queryString}`,
           method: "POST",
