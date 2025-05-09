@@ -3,13 +3,13 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 export const getPendingPaymentApprovalGridActions = (nav, setModal) => {
   return [
-    {
-      label: "Audit",
-      onClick: (params) => {
-        setModal({ open: true, type: "audit", data: params.row });
-      },
-      icon: <AuditIconDropdown />,
-    },
+    // {
+    //   label: "Audit",
+    //   onClick: (params) => {
+    //     setModal({ open: true, type: "audit", data: params.row });
+    //   },
+    //   icon: <AuditIconDropdown />,
+    // },
     {
       label: "Pay",
       onClick: (params) => {
