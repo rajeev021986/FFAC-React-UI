@@ -9,6 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import GetPayDetails from "./getPayDetail";
 
 const PayCalModal = ({ open, onClose, data }) => {
+  console.log("data",data);
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = React.useState({
     id: "",
@@ -23,8 +24,8 @@ const PayCalModal = ({ open, onClose, data }) => {
     vendorName: "",
     vendorInvoiceNo: "",
     vendorInvoiceDate: "",
-    currency: "TZS",
-    exchangeRate: 1,
+    currency: "",
+    exchangeRate: 0,
     invoiceCurrencyAmount: "",
     invoiceCurrencyVat: "",
     invoiceCurrencyWithHoldingTax: "",
@@ -108,7 +109,7 @@ const PayCalModal = ({ open, onClose, data }) => {
           maxWidth="auto"
         >
           <DialogTitle>
-            View Payment Details for RefNo: {"00329-2025-PUR-DIR-BER"}
+            View Payment Details for RefNo: {data.payableRefNo || ""}
             <IconButton
               onClick={onClose}
               sx={{ position: "absolute", top: 8, right: 8, color: "grey.600" }}

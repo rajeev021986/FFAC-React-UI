@@ -22,6 +22,8 @@ const GridSearchInput = ({
   selectedIds, // Receive selected IDs
   handleApproveAllRequest, // Receive function
   setSelectedIds,
+  selectedPayableIds,
+  handlePayChange,
   page,
   width = "500px",
   height = "auto",
@@ -127,7 +129,7 @@ const GridSearchInput = ({
             padding: "6px 16px",
             boxShadow: 3,
             borderRadius: "20px 19px 19px 20px",
-            textTransform: "none", 
+            textTransform: "none",
           }}
         >
           Approve
@@ -161,6 +163,24 @@ const GridSearchInput = ({
           </Grid>
         </DialogActions>
       </Dialog>
+
+      {/*Pay Button */}
+      {selectedPayableIds?.length !== 0 && page === "pending_payments" && (
+        <Button
+          // onClick={handlePayChange}
+          disabled={selectedPayableIds?.length === 0}
+          variant="contained"
+          size="small"
+          sx={{
+            padding: "6px 16px",
+            boxShadow: 3,
+            borderRadius: "20px 19px 19px 20px",
+            textTransform: "none",
+          }}
+        >
+          Pay
+        </Button>
+      )}
     </>
   );
 };

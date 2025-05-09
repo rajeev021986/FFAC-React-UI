@@ -4,7 +4,14 @@ import {
   GridOnOutlined,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Card, CardHeader, IconButton, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardHeader,
+  IconButton,
+  Stack,
+} from "@mui/material";
 import React, { useState } from "react";
 import CardsView from "../../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../../components/common/ScreenToolbar";
@@ -28,6 +35,9 @@ import FilterForm from "./FilterForm";
 
 import { useFetchPendingPaymentDatasQuery } from "../../../store/api/accountPendingApproval";
 import PayCalModal from "./PayCalModal";
+import toast from "react-hot-toast";
+import CustomToast from "../../../components/common/Toast/CustomToast";
+import ApiManager from "../../../services/ApiManager";
 
 export default function AccountsPendingPayableList({ page }) {
   //
@@ -35,15 +45,13 @@ export default function AccountsPendingPayableList({ page }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const nav = useNavigate();
-
+  const [selectedPayableIds, setSelectedPayableIds] = useState([]);
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
   });
-  console.log(modal, 3456);
-
   const query = {
     page: paymentSelector?.pagination?.page + 1,
     size: paymentSelector?.pagination?.pageSize,
@@ -101,17 +109,69 @@ export default function AccountsPendingPayableList({ page }) {
           ? getPendingPaymentApprovalGridActions(nav, setModal)
           : "",
     });
+  const handleCheckboxChange = (id) => {
+    setSelectedPayableIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+  console.log("slecte", selectedPayableIds);
 
   useEffect(() => {
     refetch();
   }, [location.pathname]);
-
+  const PayablePendingColumns = [
+    ...(page === "pending_payments"
+      ? [
+          {
+            field: "Select",
+            headerName: "Select",
+            width: 80,
+            headerAlign: "center",
+            align: "center",
+            renderCell: (params) => (
+              <input
+                type="checkbox"
+                style={{ cursor: "pointer" }}
+                checked={selectedPayableIds.includes(params.row.id)}
+                onChange={() => handleCheckboxChange(params.row.id)}
+              />
+            ),
+          },
+          ...ACCOUNTS_PENDING_PAYABLE, // Use the new columns when on "job-entry" page
+        ]
+      : []), // Use the default columns otherwise
+  ];
   useEffect(() => {
     if (!paymentSelector.view) {
       dispatch(paymentApprovalView("card"));
     }
   }, [paymentSelector.view, dispatch]);
-
+  const handlePayChange = async () => {
+    if (selectedPayableIds.length === 0) {
+      toast.custom(
+        <CustomToast message="No job entries selected!" toast="error" />
+      );
+      return;
+    }
+    console.log("selectedPayableIds", selectedPayableIds);
+      try {
+      const response = await ApiManager.paySelectedIdsHandler(
+        {paybleIds : selectedPayableIds}
+      );
+      refetch();
+      toast.custom(<CustomToast message={response.message} toast="success" />);
+      setSelectedPayableIds([]);
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while paying"
+          toast="error"
+        />
+      );
+    } finally {
+      setSelectedPayableIds([]);
+    }
+  };
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar leftComps={<ThemedBreadcrumb />} rightComps={<> </>} />
@@ -125,6 +185,10 @@ export default function AccountsPendingPayableList({ page }) {
                   filters={paymentSelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
+                  handlePayChange={handlePayChange}
+                  page={page}
+                  selectedPayableIds={selectedPayableIds} // Pass selected IDs
+                  setSelectedPayableIds={setSelectedPayableIds}
                 >
                   <FilterForm />
                 </GridSearchInput>
@@ -156,7 +220,7 @@ export default function AccountsPendingPayableList({ page }) {
         {paymentSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={ACCOUNTS_PENDING_PAYABLE}
+            columns={PayablePendingColumns}
             count={pendingPaymentsListData?.body?.totalElements || 0}
             handlePage={handlePage}
             data={pendingPaymentsListData?.body?.data}

@@ -26,20 +26,20 @@ export const getPayableListGridActions = (nav, setModal) => {
     {
       label: "Delete",
       onClick: (params) => {
-        if (params.row.statusCode == -2 || params.row.statusCode == -1) {
+        if (params.row.statusCode == -3 || params.row.statusCode == -1) {
           setModal({
             open: true,
             type: "delete",
             data: {
               who: "Payable",
-              deleteName: params.row.customerName,
+              deleteName: params.row,
               id: params.row.id,
             },
           });
         } else {
           toast.custom(
             <CustomToast
-              message="Only for Inactive and Rejected Payable"
+              message="Only for Cancelled and Rejected Payable"
               toast="error"
             />,
             {

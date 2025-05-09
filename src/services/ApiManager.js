@@ -353,6 +353,12 @@ class ApiManager {
     );
     return ApiMethods.put(url, payload);
   };
+    static paySelectedIdsHandler = async (payload) => {
+    const url = ENDPOINTS.PAY_SELECTEDIDS_REQUEST(
+      menuConfigUrl.document
+    );
+    return ApiMethods.post(url, payload);
+  };
 }
 
 export default ApiManager;

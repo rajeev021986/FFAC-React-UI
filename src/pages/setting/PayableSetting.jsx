@@ -26,17 +26,20 @@ const PayableSettings = () => {
   } = useGetOptionsSettingsQuery("payble_settings");
   const [invoiceType, setInvoiceType] = useState([]);
   const [holdingTax, setHoldingTax] = useState([]);
+  const [paymentType, setPaymentType] = useState([]);
   const [isLoadingsave, setIsLoading] = useState(false);
 
   useEffect(() => {
     setInvoiceType(data?.body.invoiceType || []);
     setHoldingTax(data?.body.holdingTax || []);
+    setPaymentType(data?.body.paymentType || []);
   }, [data, geterror]);
 
   const Postdata = async () => {
     const filteredData = {
       invoiceType: invoiceType.filter((it) => !it.value.includes("Type the")),
       holdingTax: holdingTax.filter((it) => !it.value.includes("Type the")),
+      paymentType: paymentType.filter((it) => !it.value.includes("Type the")),
     };
     setIsLoading(true);
     await addOptons({
@@ -88,6 +91,11 @@ const PayableSettings = () => {
             value={holdingTax}
             setvalue={setHoldingTax}
             title="Holding Tax"
+          />
+           <GlobalDrrpdownSetting
+            value={paymentType}
+            setvalue={setPaymentType}
+            title="Payment Type"
           />
         </Grid>
       )}
