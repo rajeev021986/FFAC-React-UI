@@ -50,7 +50,7 @@ export default function DeleteDialog({
           pb: 2,
         }}
       >
-        {headerContent || `Are you sure you want to delete the ${source}?`}
+        {headerContent || `Are you sure you want to delete  ${source}?`}
       </DialogTitle>
       <DialogContent
         sx={{

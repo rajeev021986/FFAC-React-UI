@@ -96,6 +96,7 @@ const Chips = {
       { value: -2, label: "In Active" },
       { value: 0, label: "Pending" },
       { value: -3, label: "Cancel" },
+      { value: -1, label: "Rejected" },
     ],
   },
 };
@@ -196,7 +197,7 @@ const styles = {
     display: "flex",
     flex: "1",
     alignItems: "center",
-    gap: "5px"
+    gap: "5px",
   },
   startIcon: {
     display: "flex",

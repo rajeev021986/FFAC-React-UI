@@ -331,6 +331,7 @@ export default function JobEntryScreen({ page }) {
   //     setSelectedIds([]);
   //   }
   // };
+  console.log("modal?.data?", modal?.data);
 
   const jobEntryColumns = [
     ...(page === "jobApprove"
@@ -520,6 +521,7 @@ export default function JobEntryScreen({ page }) {
       />
 
       <AddRejectedRemarks
+        label="Reject Reason"
         rowId={modal?.data?.id}
         type="JOB_DETAIL"
         handleOpen={modal.open && modal.type === "reject"}
@@ -528,14 +530,14 @@ export default function JobEntryScreen({ page }) {
 
       <CancelModalApprove
         rowId={modal?.data?.id}
-        sourceName={modal?.data?.customerName}
+        sourceName={modal?.data?.jobNo}
         handleOpen={modal.open && modal.type === "cancel"}
         handleClose={handleClose}
         handleCancel={handleCancel}
       />
 
       <DeleteDialog
-        source="job-entry"
+        source={modal?.data?.data?.jobNo}
         sourceName={modal?.data?.deleteName}
         handleClose={handleClose}
         handleDelete={handleDelete}

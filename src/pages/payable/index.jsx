@@ -494,8 +494,8 @@ export default function PayableListScreen({ page }) {
         handleApprove={handleApprove}
       />
       <DeleteDialog
-        source="payable_list"
-        sourceName={modal?.data?.deleteName}
+        source= {modal?.data?.deleteName?.payableRefNo}
+        // sourceName={modal?.data?.deleteName}
         handleClose={handleClose}
         handleDelete={handleDelete}
         handleOpen={modal.open && modal.type === "delete"}

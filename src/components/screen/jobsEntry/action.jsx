@@ -26,19 +26,20 @@ export const getJobEntryListGridActions = (nav, setModal) => {
     {
       label: "Delete",
       onClick: (params) => {
-        if (params.row.statusCode == -1 || params.row.statusCode == -2) {
+        if (params.row.statusCode == -3 || params.row.statusCode == -2) {
           setModal({
             open: true,
             type: "delete",
             data: {
               who: "Job Entry",
               id: params.row.id,
+              data :params.row
             },
           });
         } else {
           toast.custom(
             <CustomToast
-              message="Only for Inactive and Rejected Job Entry"
+              message="Only for Cancelled and Rejected Job Entry"
               toast="error"
             />,
             {
