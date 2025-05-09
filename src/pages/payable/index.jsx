@@ -180,6 +180,19 @@ export default function PayableListScreen({ page }) {
   const [printPayableEntry] = usePrintPayableEntryMutation();
 
   const handleApprove = async () => {
+      // Validation logic
+      if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
+        toast.custom(
+          <CustomToast
+            message="Please submit document as invoice type"
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
+        return; // Prevent approval
+      }
     const jobStatus = modal?.data?.label;
     if (jobStatus === "Cancelled Successfully") {
       toast.custom(
@@ -272,7 +285,7 @@ export default function PayableListScreen({ page }) {
 
   const handlePrintPDF = async () => {
     try {
-      const resp = await printPayableEntry(modal?.data?.id).unwrap();
+      const resp = await printPayableEntry(modal?.data?.data?.id).unwrap();
       downloadBase64PDF(resp?.body, modal?.data?.data?.payableRefNo);
       toast.custom(
         <CustomToast message="Download PDF successfully!" toast="success" />,
@@ -468,14 +481,14 @@ export default function PayableListScreen({ page }) {
       />
       <CancelModalApprove
         rowId={modal?.data?.id}
-        sourceName={modal?.data?.vendorName}
+        sourceName={modal?.data?.payableRefNo}
         handleOpen={modal.open && modal.type === "cancel"}
         handleClose={handleClose}
         handleCancel={handleCancel}
       />
       <ApprovePayableModal
         rowId={modal?.data?.id}
-        sourceName={modal?.data?.vendorName}
+        sourceName={modal?.data?.payableRefNo}
         handleOpen={modal.open && modal.type === "approve"}
         handleClose={handleClose}
         handleApprove={handleApprove}

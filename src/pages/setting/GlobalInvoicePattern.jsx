@@ -33,99 +33,155 @@ export default function GlovalInvoicePattern({ value, setvalue, title }) {
   };
 
   const handleProcessRowUpdate = (newRow, oldRow) => {
-    const tokenRegex = /[#\$][A-Z0-9]/g;
-    const tokensInPattern = newRow.invoicePattern.match(tokenRegex) || [];
-  
-    const allowedTokens = ["#4", "#5", "#6", "#7", "#8", "$Z", "$N", "$M", "$D", "$Y"];
-    const voucherTokens = ["#4", "#5", "#6", "#7", "#8"];
-    const monthTokens = ["$Z", "$N", "$M"];
-  
-    const hasInvalidToken = tokensInPattern.some(t => !allowedTokens.includes(t));
-    const hasDuplicateTokens = new Set(tokensInPattern).size !== tokensInPattern.length;
-    const voucherTokensUsed = tokensInPattern.filter(t => voucherTokens.includes(t));
-    const hasOneVoucher = voucherTokensUsed.length === 1;
-    const hasMultipleDistinctVouchers = new Set(voucherTokensUsed).size > 1;
-  
-    const hasYear = tokensInPattern.includes("$Y");
-    const hasDay = tokensInPattern.includes("$D");
-    const monthTokensUsed = tokensInPattern.filter(t => monthTokens.includes(t));
-    const hasMonthToken = monthTokensUsed.length > 0;
-    const hasMultipleDistinctMonthTokens = new Set(monthTokensUsed).size > 1;
-  
-    const trimmedPattern = newRow.invoicePattern.trim();
-    const startsOrEndsWithDash = trimmedPattern.startsWith("-") || trimmedPattern.endsWith("-");
-    const disallowedSpecialCharRegex = /[^a-zA-Z0-9#$\-\s]/;
-    const hasInvalidSpecialChar = disallowedSpecialCharRegex.test(newRow.invoicePattern);
-  
-    const fragments = trimmedPattern.split(/[\s\-]/);
-    const hasInvalidStandaloneSpecial = fragments.some(frag =>
-      !allowedTokens.includes(frag) && !/^[a-zA-Z0-9]+$/.test(frag)
-    );
-  
-    const hasInvalidCopyPattern = tokensInPattern.some((t, i, arr) => t === arr[i + 1]);
-  
-    const standaloneSpecialsRegex = /(^|[^#$])([#$])($|[^0-9A-Z])/g;
-    const hasInvalidStandaloneSpecials = standaloneSpecialsRegex.test(newRow.invoicePattern);
-  
-    let meetsRequired = true;
-    let hasDisallowed = false;
-  
-    switch (newRow.resetNumber) {
-      case "Yearly":
-        meetsRequired = hasYear && hasOneVoucher;
-        hasDisallowed = tokensInPattern.some(t => ["$M", "$N", "$Z", "$D"].includes(t));
-        break;
-      case "Monthly":
-        meetsRequired = hasYear && hasMonthToken && hasOneVoucher;
-        hasDisallowed = tokensInPattern.includes("$D");
-        break;
-      case "Daily":
-        meetsRequired = hasYear && hasDay && hasMonthToken && hasOneVoucher;
-        break;
-      case "Never":
-        meetsRequired = trimmedPattern === "" || hasOneVoucher;
-        break;
-      default:
-        break;
+    let updatedRow = { ...newRow };
+
+    // If only resetNumber changed
+    if (newRow.resetNumber !== oldRow.resetNumber) {
+      const invoiceCode = (newRow.invoiceType || "PAY")
+        .replace(/[^a-zA-Z]/g, "")
+        .substring(0, 3)
+        .toUpperCase();
+
+      const newPattern = generatePatternPayable({
+        shipmentType: invoiceCode,
+        resetNumber: newRow.resetNumber || "Month",
+        voucherDigits: 4,
+      });
+
+      updatedRow.invoicePattern = newPattern;
+      updatedRow.sampleInvoiceNumber = replaceVoucherCodes(newPattern);
     }
-  
-    const isValid =
-      newRow.resetNumber === "Never"
-        ? trimmedPattern === "" ||
-          (!hasInvalidStandaloneSpecials &&
+
+    // Perform validation only if invoicePattern changed
+    if (newRow.invoicePattern !== oldRow.invoicePattern) {
+      const tokenRegex = /[#\$][A-Z0-9]/g;
+      const tokensInPattern = newRow.invoicePattern.match(tokenRegex) || [];
+
+      const allowedTokens = [
+        "#4",
+        "#5",
+        "#6",
+        "#7",
+        "#8",
+        "$Z",
+        "$N",
+        "$M",
+        "$D",
+        "$Y",
+      ];
+      const voucherTokens = ["#4", "#5", "#6", "#7", "#8"];
+      const monthTokens = ["$Z", "$N", "$M"];
+
+      const hasInvalidToken = tokensInPattern.some(
+        (t) => !allowedTokens.includes(t)
+      );
+      const hasDuplicateTokens =
+        new Set(tokensInPattern).size !== tokensInPattern.length;
+      const voucherTokensUsed = tokensInPattern.filter((t) =>
+        voucherTokens.includes(t)
+      );
+      const hasOneVoucher = voucherTokensUsed.length === 1;
+      const hasMultipleVouchers = voucherTokensUsed.length > 1;
+      const hasMultipleDistinctVouchers = new Set(voucherTokensUsed).size > 1;
+
+      const hasYear = tokensInPattern.includes("$Y");
+      const hasDay = tokensInPattern.includes("$D");
+      const monthTokensUsed = tokensInPattern.filter((t) =>
+        monthTokens.includes(t)
+      );
+      const hasMonthToken = monthTokensUsed.length > 0;
+      const hasMultipleDistinctMonthTokens = new Set(monthTokensUsed).size > 1;
+
+      const trimmedPattern = newRow.invoicePattern.trim();
+      const startsOrEndsWithDash =
+        trimmedPattern.startsWith("-") || trimmedPattern.endsWith("-");
+      const disallowedSpecialCharRegex = /[^a-zA-Z0-9#$\-\s]/;
+      const hasInvalidSpecialChar = disallowedSpecialCharRegex.test(
+        newRow.invoicePattern
+      );
+
+      const fragments = trimmedPattern.split(/[\s\-]/);
+      const hasInvalidStandaloneSpecial = fragments.some(
+        (frag) => !allowedTokens.includes(frag) && !/^[a-zA-Z0-9]+$/.test(frag)
+      );
+
+      const standaloneSpecialsRegex = /(^|[^#$])([#$])($|[^0-9A-Z])/g;
+      const hasInvalidStandaloneSpecials = standaloneSpecialsRegex.test(
+        newRow.invoicePattern
+      );
+      // Detect copy paste patterns like $Y-$Y or $Z-$Z etc.
+      const hasInvalidCopyPattern = tokensInPattern.some(
+        (token, i, arr) => token === arr[i + 1]
+      );
+      let meetsRequired = true;
+      let hasDisallowed = false;
+
+      switch (newRow.resetNumber) {
+        case "Yearly":
+          meetsRequired = hasYear && hasOneVoucher;
+          hasDisallowed = tokensInPattern.some((t) =>
+            ["$M", "$N", "$Z", "$D"].includes(t)
+          );
+          break;
+        case "Monthly":
+          meetsRequired = hasYear && hasMonthToken && hasOneVoucher;
+          hasDisallowed = tokensInPattern.includes("$D");
+          break;
+        case "Daily":
+          meetsRequired = hasYear && hasDay && hasMonthToken && hasOneVoucher;
+          break;
+        case "Never":
+          meetsRequired = trimmedPattern === "" || hasOneVoucher;
+          break;
+        default:
+          break;
+      }
+      const hasOnlyAllowedTokens = tokensInPattern.every((t) =>
+        allowedTokens.includes(t)
+      );
+      const isValid =
+        newRow.resetNumber === "Never"
+          ? trimmedPattern === "" ||
+            (!hasInvalidStandaloneSpecials &&
+              !hasInvalidSpecialChar &&
+              !hasInvalidToken &&
+              !hasOnlyAllowedTokens &&
+              hasOneVoucher)
+          : !hasInvalidToken &&
+            !hasDisallowed &&
+            !hasDuplicateTokens &&
+            !hasMultipleDistinctVouchers &&
+            !hasMultipleDistinctMonthTokens &&
+            !startsOrEndsWithDash &&
+            !hasInvalidCopyPattern &&
+            !hasMultipleVouchers &&
+            !hasOnlyAllowedTokens &&
             !hasInvalidSpecialChar &&
-            !hasInvalidToken &&
-            hasOneVoucher)
-        : !hasInvalidToken &&
-          !hasDisallowed &&
-          !hasDuplicateTokens &&
-          !hasMultipleDistinctVouchers &&
-          !hasMultipleDistinctMonthTokens &&
-          !startsOrEndsWithDash &&
-          !hasInvalidSpecialChar &&
-          !hasInvalidStandaloneSpecial &&
-          meetsRequired;
-  
-    if (!isValid) {
-      toast.custom((t) => (
-        <CustomToast t={t} message="Invalid invoice pattern" type="error" />
-      ));
-      return oldRow;
+            !hasInvalidStandaloneSpecial &&
+            meetsRequired;
+
+      if (!isValid) {
+        toast.custom((t) => (
+          <CustomToast t={t} message="Invalid invoice pattern" type="error" />
+        ));
+        return oldRow;
+      }
+
+      // Update sample invoice after validation
+      updatedRow.sampleInvoiceNumber = replaceVoucherCodes(
+        newRow.invoicePattern
+      );
     }
-  
-    const sampleInvoiceNumber = replaceVoucherCodes(newRow.invoicePattern);
-    const updatedRow = { ...newRow, sampleInvoiceNumber };
-  
-    // ✅ Update value state with the new row
+
+    // ✅ Finally update the state
     const updatedRows = value.map((row) =>
       row.id === updatedRow.id ? updatedRow : row
     );
     setvalue(updatedRows);
-  
+
     return updatedRow;
-    
   };
-  
+
   const columns = [
     {
       field: "id",
@@ -203,7 +259,6 @@ export default function GlovalInvoicePattern({ value, setvalue, title }) {
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           apiRef={apiRef}
-          
           rows={value}
           editMode="cell"
           columns={columns}
@@ -230,9 +285,9 @@ export default function GlovalInvoicePattern({ value, setvalue, title }) {
               fill: "#fff",
             },
           }}
-           onProcessRowUpdateError={(error) => {
-    console.error("Row update error:", error);
-  }}
+          onProcessRowUpdateError={(error) => {
+            console.error("Row update error:", error);
+          }}
           disableRowSelectionOnClick
           autoHeight={false}
           hideFooter

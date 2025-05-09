@@ -194,7 +194,7 @@ function App() {
 
             <Route
               path="accounts/operations/pendingPayble"
-              element={<AccountsPendingPayableList page="jobApprove" />}
+              element={<AccountsPendingPayableList page="pending_payments" />}
             />
 
             <Route path="admin/settings" element={<SettingsPage />} />

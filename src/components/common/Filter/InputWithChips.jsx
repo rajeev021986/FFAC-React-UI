@@ -17,6 +17,7 @@ const Chips = {
       { value: 0, label: "New & Pen Doc" },
       { value: -1, label: "Rejected" },
       
+      { value: -3, label: "Cancel" },
     ],
   },
   customerName: {

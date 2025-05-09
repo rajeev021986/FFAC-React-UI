@@ -81,8 +81,8 @@ export default function AddEditForm({
     boxShadow: 24,
     p: 4,
   };
-  const payableRef = useRef(null);
   const invoiceTypeRef = useRef(null);
+  const payableRef = useRef(null);
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
   const [updatePaybleEntry, { isUpdateLoading }] =
     useUpdatePaybleEntryMutation();
@@ -128,12 +128,6 @@ export default function AddEditForm({
       setIsDisabled(false);
     }
   }, [viewPage]);
-
-  useEffect(() => {
-    if (invoiceTypeRef.current) {
-      invoiceTypeRef.current.focus();
-    }
-  }, []);
 
   const formik = useFormik({
     initialValues,
@@ -397,6 +391,12 @@ export default function AddEditForm({
   }, []);
 
   useEffect(() => {
+    if (invoiceTypeRef.current) {
+      invoiceTypeRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
     if (!actionsSelector.view) {
       dispatch(formView("card"));
     }
@@ -417,12 +417,12 @@ export default function AddEditForm({
     },
   };
 
-  const FieldRef = useRef(null);
-  useEffect(() => {
-    if (FieldRef.current) {
-      FieldRef.current.focus();
-    }
-  }, []);
+  // const FieldRef = useRef(null);
+  // useEffect(() => {
+  //   if (FieldRef.current) {
+  //     FieldRef.current.focus();
+  //   }
+  // }, []);
 
   const CurrencyData = [
     {
@@ -814,7 +814,7 @@ export default function AddEditForm({
                       value={formik.values.vendorInvoiceDate}
                       error={formik.errors.vendorInvoiceDate}
                       onChange={formik.setFieldValue}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                       disabled={isDisabled}
                     />
                   </Grid>
