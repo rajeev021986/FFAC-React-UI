@@ -180,19 +180,19 @@ export default function PayableListScreen({ page }) {
   const [printPayableEntry] = usePrintPayableEntryMutation();
 
   const handleApprove = async () => {
-      // Validation logic
-      if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
-        toast.custom(
-          <CustomToast
-            message="Please submit document as invoice type"
-            toast="error"
-          />,
-          {
-            closeButton: false,
-          }
-        );
-        return; // Prevent approval
-      }
+    // Validation logic
+    if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
+      toast.custom(
+        <CustomToast
+          message="Please submit document as invoice type"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+      return; // Prevent approval
+    }
     const jobStatus = modal?.data?.label;
     if (jobStatus === "Cancelled Successfully") {
       toast.custom(

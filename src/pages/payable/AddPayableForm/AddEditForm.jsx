@@ -62,7 +62,6 @@ import UploadFile from "../../../components/UploadFile";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import { formatIndianCurrency } from "../../../components/utils/utils";
-import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAutoCompleteDataWithLoader";
 
 export default function AddEditForm({
   initialValues,

@@ -27,6 +27,7 @@ import { getPendingPaymentApprovalGridActions } from "./action";
 import FilterForm from "./FilterForm";
 
 import { useFetchPendingPaymentDatasQuery } from "../../../store/api/accountPendingApproval";
+import PayCalModal from "./PayCalModal";
 
 export default function AccountsPendingPayableList({ page }) {
   //
@@ -187,6 +188,12 @@ export default function AccountsPendingPayableList({ page }) {
           />
         )}
       </Card>
+
+      <PayCalModal
+        open={modal.open}
+        data={modal.data}
+        onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+      />
     </Box>
   );
 }
