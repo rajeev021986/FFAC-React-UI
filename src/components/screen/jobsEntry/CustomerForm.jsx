@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import WarningIcon from "@mui/icons-material/Warning";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
@@ -154,8 +155,8 @@ export default function CustomerForm({
             delete values.creditAmount;
             delete values.creditDays;
           }
-          values.tinNo = values.tinNo.trim() || null;
-          values.vatNo = values.vatNo.trim() || null;
+          values.tinNo = values.tinNo?.trim() || null;
+          values.vatNo = values.vatNo?.trim() || null;
 
           let emails = values.customerEntityEmailsIds.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
@@ -632,7 +633,7 @@ export default function CustomerForm({
                       marginTop={2}
                     >
                       <InputBox
-                        label="Email Id "
+                        label="Email Id"
                         id="emailId"
                         value={formik.values.emailId}
                         error={formik.errors.emailId}
