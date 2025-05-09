@@ -23,22 +23,25 @@ export const CustomerValidationSchema = () =>
       /^[A-Za-z\s]+$/,
       "Contact Person must only contain letters"
     ),
-    emailId: Yup.string().test(
-      "valid-email",
-      "Invalid email format",
-      (value) => {
-        if (!value) return true;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(value);
-      }
+    emailId: Yup.string()
+    .required("Email is required")
+    .email("Invalid email format")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@(?!gmail\d)(gmail|yahoo|outlook)\.[a-zA-Z]{2,}$/,
+      "Invalid email format"
     ),
-    telephone: Yup.number()
-      .typeError("Telephone must be a valid number")
-      .positive("Telephone must be positive"),
-    // fax: Yup.string().required("Fax is required"),
-    bankName: Yup.string().matches(
-      /^[A-Za-z\s]+$/,
-      "Bank name must only contain letters"
+    telephone: Yup.string()
+    .required("Telephone is required")
+    .matches(/^\d+$/, "Telephone must be a valid number")
+    .test(
+      "len",
+      "Telephone must be between 10 and 15 digits",
+      (val) => val && val.length >= 10 && val.length <= 15
+    )
+    .test(
+      "positive",
+      "Telephone must be a positive number",
+      (val) => val && !val.startsWith("-")
     ),
     accountNo: Yup.number()
       .typeError("Account number must be a valid number")

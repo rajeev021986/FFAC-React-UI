@@ -63,10 +63,22 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       "valid-email",
       "Invalid email format",
       (value) => {
-        if (!value) return true;
-        const emailRegex =/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(value)) return false;
-        if (value.includes("..")) return false; // consecutive dots not allowed
+        if (!value) return true; // Skip validation if email is empty
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value)) return false; // Check for basic email structure
+        if (value.includes("..")) return false; // Consecutive dots are not allowed
+  
+        // Check if there are numbers in the local part (before '@')
+        const localPart = value.split('@')[0];
+        if (/\d+/.test(localPart)) {
+          return false; // Numbers in the local part are not allowed
+        }
+  
+        // Check if there are numbers immediately after '@' symbol in the domain part
+        const domainPart = value.split('@')[1];
+        if (domainPart && /\d+/.test(domainPart.split('.')[0])) {
+          return false; // Numbers in the domain part before the first dot are not allowed
+        }
         return true;
     
       }
@@ -75,27 +87,25 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       /^[A-Za-z\s]+$/,
       "Contact Person must only contain letters"
     ),
-    tel_No: Yup.number()
-      .typeError("That doesn't look like a phone number")
-      .positive("A phone number can't start with a minus")
-      .integer("A phone number can't include a decimal point")
-      .min(8),
+    // tel_No: Yup.number()
+    //   .typeError("That doesn't look like a phone number")
+    //   .positive("A phone number can't start with a minus")
+    //   .integer("A phone number can't include a decimal point")
+    //   .min(8),
     extn_No: Yup.number().typeError("Extn number must be number"),
     fax_No: Yup.number().typeError("Fax number must be number"),
     contactName: Yup.string().matches(
       /^[A-Za-z\s]+$/,
       "Contact Person must only contain letters"
     ),
-    tel_No: Yup.number()
-      .typeError("phone number must be number")
-      .positive("A phone number can't start with a minus")
-      .integer("A phone number can't include a decimal point")
-      .max(8),
-    mobile: Yup.number()
-      .typeError("Mobile number must be number")
-      .positive("A Mobile number can't start with a minus")
-      .integer("A Mobile number can't include a decimal point")
-      .max(10),
+    tel_No: Yup.string()
+    .required("Telephone number is required")
+    .matches(/^\d+$/, "Telephone must be a valid number")
+    .matches(/^\d{7,15}$/, "Telephone must be between 8 and 15 digits"),
+      mobile: Yup.string()
+    .required("Mobile number is required")
+    .matches(/^\d+$/, "Telephone must be a valid number")
+    .matches(/^\d{10,15}$/, "Mobile must be between 10 and 15 digits"),
   });
 
   const handleChange = (event, newValue) => {

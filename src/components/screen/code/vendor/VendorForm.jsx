@@ -59,17 +59,33 @@ export default function VendorForm({ page = "vendor" }) {
     type: Yup.string().required("Type is required"),
     add1: Yup.string().required("Address is required"),
     alias: Yup.string(),
-    telephone1: Yup.number(),
+    telephone1: Yup.string()
+    .required("Telephone 1 is required")
+    .matches(/^\d+$/, "Telephone must be a valid number")
+    .matches(/^\d{10,15}$/, "Telephone 1 must be between 10 and 15 digits"),
+
+  telephone2: Yup.string()
+    .required("Telephone 2 is required")
+    .matches(/^\d+$/, "Telephone must be a valid number")                                                            
+    .matches(/^\d{10,15}$/, "Telephone 2 must be between 10 and 15 digits"),
     fax: Yup.string(),
-    emailId: Yup.string().test(
-      "valid-email",
-      "Invalid email format",
-      (value) => {
-        if (!value) return true;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(value);
-      }
-    ),
+    emailId: Yup.string()
+      // .required("Email is required")
+      .email("Invalid email format")
+      .test("valid-email", "Invalid email format", (value) => {
+        if (!value) return true; // Skip validation if email is empty
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value)) return false; // Basic email structure check
+        if (value.includes("..")) return false; // Consecutive dots not allowed
+  
+        // Check if there are numbers in the domain part before the first dot
+        const domainPart = value.split('@')[1];
+        if (domainPart && /\d+/.test(domainPart.split('.')[0])) {
+          return false; // Numbers in the domain part before the first dot
+        }
+  
+        return true;
+      }),
     city: Yup.string().matches(
       /^[A-Za-z\s]+$/,
       "City must only contain letters"
@@ -94,7 +110,22 @@ export default function VendorForm({ page = "vendor" }) {
     ),
     vendorEntityEmails: Yup.array().of(
       Yup.object().shape({
-        emailId: Yup.string().email(),
+        emailId: Yup.string()
+        .email("Invalid email format")
+        .test("valid-email", "Invalid email format", (value) => {
+          if (!value) return true; // Skip validation if email is empty
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (!emailRegex.test(value)) return false; // Basic email structure check
+          if (value.includes("..")) return false; // Consecutive dots not allowed
+
+          // Check if there are numbers in the domain part before the first dot
+          const domainPart = value.split('@')[1];
+          if (domainPart && /\d+/.test(domainPart.split('.')[0])) {
+            return false; // Numbers in the domain part before the first dot
+          }
+
+          return true;
+        }),
       })
     ),
     // vendorEntityDemurageTariffs: Yup.array(
