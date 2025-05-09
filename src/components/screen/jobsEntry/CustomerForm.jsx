@@ -29,7 +29,7 @@ import {
 import ThemeTabs from "../../../common/Tab/ThemeTab";
 import AddMapping from "./AddMapping";
 import FileScreen from "./filesGrid";
-import { CustomerValidationSctionhema } from "./validationSchema";
+import { CustomerValidationSchema } from "./validationSchema";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
