@@ -144,18 +144,17 @@ export default function GlovalInvoicePattern({ value, setvalue, title }) {
           ? trimmedPattern === "" ||
             (!hasInvalidStandaloneSpecials &&
               !hasInvalidSpecialChar &&
+              hasOnlyAllowedTokens &&
               !hasInvalidToken &&
-              !hasOnlyAllowedTokens &&
               hasOneVoucher)
           : !hasInvalidToken &&
             !hasDisallowed &&
             !hasDuplicateTokens &&
+            !hasMultipleVouchers &&
+            !hasInvalidCopyPattern &&
             !hasMultipleDistinctVouchers &&
             !hasMultipleDistinctMonthTokens &&
             !startsOrEndsWithDash &&
-            !hasInvalidCopyPattern &&
-            !hasMultipleVouchers &&
-            !hasOnlyAllowedTokens &&
             !hasInvalidSpecialChar &&
             !hasInvalidStandaloneSpecial &&
             meetsRequired;
