@@ -2,7 +2,11 @@ import * as Yup from "yup";
 
 export const CustomerValidationSchema = () =>
   Yup.object({
-    customerName: Yup.string().required("Name is required"),
+    customerName: Yup.string()
+  .matches(/^[A-Za-z\s]+$/, "Customer name is not valid")
+  .required("Name is required"),
+
+
     tinNo: Yup.number().nullable(),
     vatNo: Yup.number().nullable(),
     // status: Yup.string().required("Status is required"),
@@ -19,10 +23,10 @@ export const CustomerValidationSchema = () =>
       /^[A-Za-z\s]+$/,
       "Province must only contain letters"
     ),
-    contactPerson: Yup.string().matches(
-      /^[A-Za-z\s]+$/,
-      "Contact Person must only contain letters"
-    ),
+    contactPerson: Yup.string()
+  .matches(/^[A-Za-z\s]+$/, "Contact Person is not valid")
+  .required("Contact Person is required"),
+   
     emailId: Yup.string()
     .required("Email is required")
     .email("Invalid email format")

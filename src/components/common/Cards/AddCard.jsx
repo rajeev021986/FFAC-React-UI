@@ -43,8 +43,14 @@ import EditIconForHeader from "../commonIcons/EditIcons/EditIconForHeader";
 import AuditIcon from "../commonIcons/AuditIcon/AuditIcon";
 
 const validationSchema = Yup.object({
-  firstName: Yup.string().required("First Name is required"),
-  lastName: Yup.string().required("Last Name is required"),
+ firstName: Yup.string()
+  .matches(/^[A-Za-z\s]+$/, "First Name is not valid")
+  .required("First Name is required"),
+
+lastName: Yup.string()
+  .matches(/^[A-Za-z\s]+$/, "Last Name is not valid")
+  .required("Last Name is required"),
+
   email: Yup.string()
   .required("Email is required")
   .test("valid-email", "Invalid email format", (value) => {

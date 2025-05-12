@@ -53,7 +53,10 @@ export default function VendorForm({ page = "vendor" }) {
   const [getVendor, { isLoading }] = useLazyGetVendorQuery();
 
   const validationSchema = Yup.object({
-    vendorName: Yup.string().required("Vendor Name is required"),
+   vendorName: Yup.string()
+  .matches(/^[A-Za-z\s]+$/, "Vendor Name is not valid")
+  .required("Vendor Name is required"),
+
     tinNo: Yup.number().nullable(),
     vrnNo: Yup.number().nullable(),
     type: Yup.string().required("Type is required"),

@@ -52,7 +52,9 @@ export default function ShipperForm({ initialValues, page, type, id }) {
   const nav = useNavigate();
   const [value, setValue] = React.useState(1);
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
+    name: Yup.string()
+    .matches(/^[A-Za-z\s]+$/, "Name is not valid")
+    .required("Name is required"),
     address1: Yup.string().required("Address1 is required"),
     city: Yup.string().matches(
       /^[A-Za-z\s]+$/,
