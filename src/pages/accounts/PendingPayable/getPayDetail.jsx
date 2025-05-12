@@ -290,7 +290,7 @@ export default function GetPayDetails({
                     <InputBox
                       label="Amount TZS"
                       id="localAmount"
-                      value={formatIndianCurrency(formik.values.usdAmount * formik.values.exchangeRate)}
+                      value={formatIndianCurrency(formik.values.localAmount * formik.values.exchangeRate)}
                       error={formik.errors.localAmount}
                       onChange={formik.handleChange}
                       disabled={true}
