@@ -131,7 +131,7 @@ export default function GlovalInvoicePattern({ value, setvalue, title }) {
           meetsRequired = hasYear && hasDay && hasMonthToken && hasOneVoucher;
           break;
         case "Never":
-          meetsRequired = trimmedPattern === "" || hasOneVoucher;
+          meetsRequired = hasOneVoucher;
           break;
         default:
           break;
@@ -141,7 +141,7 @@ export default function GlovalInvoicePattern({ value, setvalue, title }) {
       );
       const isValid =
         newRow.resetNumber === "Never"
-          ? trimmedPattern === "" ||
+          ? 
             (!hasInvalidStandaloneSpecials &&
               !hasInvalidSpecialChar &&
               hasOnlyAllowedTokens &&
