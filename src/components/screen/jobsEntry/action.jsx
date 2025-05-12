@@ -26,7 +26,7 @@ export const getJobEntryListGridActions = (nav, setModal) => {
     {
       label: "Delete",
       onClick: (params) => {
-        if (params.row.statusCode == -3 || params.row.statusCode == -2) {
+        if (params.row.statusCode == -3 || params.row.statusCode == -1) {
           setModal({
             open: true,
             type: "delete",
