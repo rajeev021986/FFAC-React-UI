@@ -167,7 +167,7 @@ const GridSearchInput = ({
       {/*Pay Button */}
       {selectedPayableIds?.length !== 0 && page === "pending_payments" && (
         <Button
-          // onClick={handlePayChange}
+          onClick={handlePayChange}
           disabled={selectedPayableIds?.length === 0}
           variant="contained"
           size="small"

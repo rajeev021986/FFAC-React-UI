@@ -23,16 +23,19 @@ import EditIconForHeader from "../../../components/common/commonIcons/EditIcons/
 import { formView } from "../../../store/freatures/payableEntrySlice";
 import { useDispatch, useSelector } from "react-redux";
 import DateTimeField from "../../../components/common/DateTime/DateTimeField";
-import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
+import FormAutoComplete from "../../../components/common/AutoComplete/FormAutoComplete";
 import SelectBox from "../../../components/common/SelectBox";
 
 import { payableValidationSchema } from "../../payable/Actions/ValidationSchema";
+import ApiManager from "../../../services/ApiManager";
+import { formatIndianCurrency } from "../../../components/utils/utils";
 
 export default function GetPayDetails({
   initialValues,
   page,
   viewPage,
   type = "notcopy",
+  onClose
 }) {
   //
   const invoiceTypeRef = useRef(null);
@@ -82,91 +85,36 @@ export default function GetPayDetails({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: payableValidationSchema(),
+    validationSchema: false,
     onSubmit: async (values) => {
-      if (!values.id || type == "copy") {
-        try {
-          values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
-          values.status = "";
-          let paybleDetailsData = values.paybleDetails.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
-          let response = await addPaybleEntry({
-            ...values,
-            paybleDetails: paybleDetailsData,
-          }).unwrap();
-
-          const message = response.message;
-          if (response.code == "SUCCESS") {
-            toast.custom(<CustomToast message={message} toast="warn" />, {
-              closeButton: false,
-            });
-            nav("/app/documentation/paybleEntry");
-          } else {
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          }
-        } catch (error) {
-          if (error.status === 409) {
-            const message = error.data.message;
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          } else {
-            toast.custom(
-              <CustomToast
-                message="An error occurred while submitting the form."
-                toast="error"
-              />,
-              {
-                closeButton: false,
-              }
-            );
-          }
+      try {
+        const payload = {
+          id: values?.id || "",
+          vendorName: values?.vendorName || "",
+          usdAmount: values?.usdAmount || 0,
+          localAmount: values?.localAmount || 0,
+          paymentType: values?.paymentType || "",
+          paymentDate: values?.paymentDate || new Date().toISOString(),
+          currency: values?.currency || "",
+          bankName: values?.bankName || "",
+          chequeNo: values?.chequeNo || "",
+          chequeDate: values?.chequeDate || "",
+          usdAmountToBePaid: values?.usdAmountToBePaid || 0,
+          localAmountToBePaid: values?.localAmountToBePaid || 0,
+          bankCharges: values?.bankCharges || "",
+        };
+        const res = await ApiManager.paySingle(values.id, payload);
+        if (res.success) {
+          const message = res.message;
+          toast.custom(<CustomToast message={message} toast="success" />);
+          onClose(); // Close modal after successful update
+        } else {
+          console.error("Failed to pay", res);
         }
-      } else {
-        try {
-          setRejectError(false);
-          let paybleDetailsData = values.paybleDetails.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
-          Boolean(values.status == "Active") && (values.statusCode = 1);
-          Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          let response = await updatePaybleEntry({
-            ...values,
-            paybleDetails: paybleDetailsData,
-          }).unwrap();
-
-          const message = response.message;
-          if (response.code == "SUCCESS") {
-            toast.custom(<CustomToast message={message} toast="success" />, {
-              closeButton: false,
-            });
-            nav(-1);
-          } else {
-            toast.custom(<CustomToast message={message} toast="warn" />, {
-              closeButton: false,
-            });
-          }
-        } catch (error) {
-          if (error.status === 409) {
-            const message = error.data.message;
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          } else {
-            toast.custom(
-              <CustomToast
-                message="An error occurred while submitting the form."
-                toast="error"
-              />,
-              {
-                closeButton: false,
-              }
-            );
-          }
-        }
+      } catch (error) {
+        toast.custom(
+          <CustomToast message={"Something went wrong!"} toast="error" />
+        );
       }
     },
   });
@@ -175,20 +123,60 @@ export default function GetPayDetails({
     useGetOptionsSettingsQuery("customer_settings");
   const { data: payableSettingData } =
     useGetOptionsSettingsQuery("payble_settings");
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
 
   useEffect(() => {
     if (
       customerSettingsData?.body ||
       jobSettingData?.body ||
-      payableSettingData?.body
+      payableSettingData?.body ||
+      optionsSettingsData?.body
     ) {
       setDropdownData({
         ...customerSettingsData?.body,
         ...jobSettingData?.body,
         ...payableSettingData?.body,
+        ...optionsSettingsData?.body,
       });
     }
-  }, [customerSettingsData, payableSettingData]);
+  }, [customerSettingsData, payableSettingData, optionsSettingsData]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
+        const backendData = await response.body;
+
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
+        ];
+
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
 
   useEffect(() => {
     getFirstError(formik.errors);
@@ -227,7 +215,8 @@ export default function GetPayDetails({
   useEffect(() => {
     handleFetchPayable();
   }, [formik?.values?.chargesData]);
-
+  console.log("intia", initialValues);
+  console.log("fff", formik.values);
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -257,23 +246,22 @@ export default function GetPayDetails({
               <Box sx={{ width: "100%", paddingRight: 2 }}>
                 <Grid container sx={{ padding: 0, margin: 0 }}>
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <SelectBox
-                      label="Voucher No."
-                      id="voucherNo"
-                      options={dropdownData?.voucherNo}
-                      value={formik.values.voucherNo}
-                      error={formik.errors.voucherNo}
+                   <InputBox
+                      label="Voucher No"
+                      id="paybleRefNum"
+                      value={formik.values.paybleRefNum}
+                      error={formik.errors.paybleRefNum}
                       onChange={formik.handleChange}
-                      inputRef={invoiceTypeRef}
+                      inputRef={payableRef}
                     />
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
                       label="Line Agent Name"
-                      id="lineAgentName"
-                      value={formik.values.lineAgentName}
-                      error={formik.errors.lineAgentName}
+                      id="vendorName"
+                      value={formik.values.vendorName}
+                      error={formik.errors.vendorName}
                       onChange={formik.handleChange}
                       inputRef={payableRef}
                     />
@@ -283,9 +271,17 @@ export default function GetPayDetails({
                     <InputBox
                       label="Amount USD"
                       id="usdAmount"
-                      value={formik.values.usdAmount}
+                      value={formatIndianCurrency( formik.values.usdAmount)}
                       error={formik.errors.usdAmount}
                       onChange={formik.handleChange}
+                      disabled={true}
+                      // onChange={(e) => {
+                      //   const value = e.target.value;
+                      //   formik.setFieldValue(
+                      //     "usdAmount",
+                      //     value === "" ? "" : parseFloat(value)
+                      //   );
+                      // }}
                       inputRef={payableRef}
                     />
                   </Grid>
@@ -293,10 +289,18 @@ export default function GetPayDetails({
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
                       label="Amount TZS"
-                      id="usdAmount"
-                      value={formik.values.usdAmount}
-                      error={formik.errors.usdAmount}
+                      id="localAmount"
+                      value={formatIndianCurrency(formik.values.usdAmount * formik.values.exchangeRate)}
+                      error={formik.errors.localAmount}
                       onChange={formik.handleChange}
+                      disabled={true}
+                      //  onChange={(e) => {
+                      //     const value = e.target.value;
+                      //     formik.setFieldValue(
+                      //       "localAmount",
+                      //       value === "" ? "" : parseFloat(value)
+                      //     );
+                      //   }}
                       inputRef={payableRef}
                     />
                   </Grid>
@@ -327,7 +331,7 @@ export default function GetPayDetails({
                     <SelectBox
                       label="Payment Type"
                       id="paymentType"
-                      options={mergedCurrencyOptions}
+                      options={payableSettingData?.body?.paymentType}
                       value={formik.values.paymentType}
                       error={formik.errors.paymentType}
                       onChange={formik.handleChange}
@@ -335,56 +339,87 @@ export default function GetPayDetails({
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <SelectBox
+                    <FormAutoComplete
                       label="Bank Name"
-                      id="currency"
-                      options={mergedCurrencyOptions}
-                      value={formik.values.currency}
-                      error={formik.errors.currency}
+                      id="bankName"
+                      suggestionName="bank_name"
+                      value={formik.values.bankName}
+                      error={formik.errors.bankName}
                       onChange={formik.handleChange}
-                    />
+                      disabled ={formik.values.paymentType === "Cash" ? true :false}
+                    ></FormAutoComplete>
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <SelectBox
+                    <InputBox
                       label="Cheque No."
                       id="chequeNo"
-                      options={mergedCurrencyOptions}
                       value={formik.values.chequeNo}
                       error={formik.errors.chequeNo}
                       onChange={formik.handleChange}
+                      disabled ={formik.values.paymentType === "Cash" ? true :false}
+                      inputRef={payableRef}
                     />
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <SelectBox
+                    <DateTimeField
                       label="Cheque Date"
+                      name="chequeDate"
                       id="chequeDate"
-                      options={mergedCurrencyOptions}
+                      disabled ={formik.values.paymentType === "Cash" ? true :false}
                       value={formik.values.chequeDate}
                       error={formik.errors.chequeDate}
-                      onChange={formik.handleChange}
+                      onChange={formik.setFieldValue}
                     />
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount to be paid(USD)"
-                      id="amountPaidToUSD"
-                      value={formik.values.amountPaidToUSD}
-                      error={formik.errors.amountPaidToUSD}
-                      onChange={formik.handleChange}
+                      label="Amount to be paid (USD)"
+                      id="usdAmountToBePaid"
+                      value={formatIndianCurrency(
+                        formik.values.usdAmountToBePaid
+                      )}
+                      error={formik.errors.usdAmountToBePaid}
+                      onChange={(e) => {
+                        const usd = parseFloat(e.target.value) || 0;
+
+                        if (usd > formik.values.usdAmount) {
+                          toast.error(
+                            "USD amount to be paid cannot exceed the total USD amount."
+                          );
+                          return;
+                        }
+
+                        const tzs = usd * (formik.values.exchangeRate || 1);
+
+                        formik.setFieldValue("usdAmountToBePaid", usd);
+                        formik.setFieldValue(
+                          "localAmountToBePaid",
+                          parseFloat(tzs)
+                        );
+                      }}
                       inputRef={payableRef}
                     />
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount to be paid(TZS)"
-                      id="amountPaidToTZS"
-                      value={formik.values.amountPaidToTZS}
-                      error={formik.errors.amountPaidToTZS}
-                      onChange={formik.handleChange}
+                      label="Amount to be paid (TZS)"
+                      id="localAmountToBePaid"
+                      value={formik.values.localAmountToBePaid}
+                      error={formik.errors.localAmountToBePaid}
+                      onChange={(e) => {
+                        const tzs = parseFloat(e.target.value) || 0;
+                        const usd = tzs / (formik.values.exchangeRate || 1);
+
+                        formik.setFieldValue("localAmountToBePaid", tzs);
+                        formik.setFieldValue(
+                          "usdAmountToBePaid",
+                          parseFloat(usd)
+                        );
+                      }}
                       inputRef={payableRef}
                     />
                   </Grid>

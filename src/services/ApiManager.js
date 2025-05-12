@@ -353,10 +353,12 @@ class ApiManager {
     );
     return ApiMethods.put(url, payload);
   };
-    static paySelectedIdsHandler = async (payload) => {
-    const url = ENDPOINTS.PAY_SELECTEDIDS_REQUEST(
-      menuConfigUrl.document
-    );
+  static paySelectedIdsHandler = async (payload) => {
+    const url = ENDPOINTS.PAY_SELECTEDIDS_REQUEST(menuConfigUrl.document);
+    return ApiMethods.post(url, payload);
+  };
+  static paySingle = async (id,payload) => {
+    const url = ENDPOINTS.PAYABLE_PAY_REQUEST(id,menuConfigUrl.account);
     return ApiMethods.post(url, payload);
   };
 }

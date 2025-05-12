@@ -3,4 +3,5 @@ export const menuConfigUrl = {
   admin: "admin-service/v1",
   master: "master-service/v1",
   document: "documentation-service/v1",
+  account: "accounts/operations-service/v1"
 };

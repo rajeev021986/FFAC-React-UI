@@ -14,7 +14,7 @@ export const pendingPaymentCodeAPI = createApi({
           Authorization: getAppHeaders()["Authorization"],
         };
         return {
-          url: `/${menuConfigUrl.document}/${page}?${queryString}`,
+          url: `/${menuConfigUrl.account}/${page}?${queryString}`,
           method: "POST",
           body: payload,
           headers,

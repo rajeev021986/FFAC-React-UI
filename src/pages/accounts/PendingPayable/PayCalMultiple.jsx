@@ -8,10 +8,32 @@ import Loader from "../../../components/common/Loader/Loader";
 import CloseIcon from "@mui/icons-material/Close";
 import GetPayDetails from "./getPayDetail";
 
-const PayCalModal = ({ open, onClose, data }) => {
+const PayCalMultiple = ({ open, onClose, data }) => {
   console.log("data",data);
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = React.useState({
+    paybleIds: []
+    payment:{
+      id: "",
+    paybleCreatedDate: "",
+    paybleRefNum: "",
+    totalAmount: 0,
+    vendorInvDate: "",
+    vendorInvNo: "",
+    vendorName: "",
+    localAmountToBePaid: 0,
+    paymentType: "Cheque",
+    usdAmountToBePaid: 0,
+    paymentDate: new Date().toISOString(),
+    localAmount:0,
+    usdAmount:0,
+    multiple:"",
+    bankCharges:"",
+    chequeDate:"",
+    chequeNo:"",
+    bankName:"",
+    exchangeRate: 1,
+    },
     createdDate: "",
     currency: "",
     customerName: "",
@@ -92,7 +114,7 @@ const PayCalModal = ({ open, onClose, data }) => {
           </DialogTitle>
 
           <DialogContent>
-            <GetPayDetails viewPage="view" initialValues={initialValues} onClose={onClose}/>
+            <GetPayDetails viewPage="view" initialValues={initialValues} />
           </DialogContent>
         </Dialog>
       )}
@@ -100,4 +122,4 @@ const PayCalModal = ({ open, onClose, data }) => {
   );
 };
 
-export default PayCalModal;
+export default PayCalMultiple;

@@ -25,6 +25,7 @@ const suggestionName = {
   region: "PORT_REGION",
   jobNo: "JOB_ENTRY",
   vendorName: "VENDOR",
+  bankName: "BANK"
 };
 
 export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {

@@ -36,6 +36,12 @@ export default function SelectBox({
         label={label}
         onChange={onChange}
         size="small"
+        renderValue={(selected) => {
+          const selectedOption = options?.find(
+            (opt) => opt.value === selected
+          );
+          return selectedOption ? selectedOption.label || selectedOption.value : selected;
+        }}
         sx={{
           ...styles.root,
           ...sx,
@@ -48,28 +54,31 @@ export default function SelectBox({
         }}
         {...props}
         inputRef={inputRef}
-        // MenuProps={{
-        //   disablePortal: true,
-        // }}
       >
-        <MenuItem 
-          disabled={getPage == "editJobEntry" || id === "currency" || id === "vatApplicable" || id === "withHoldingTax"}
-        
-        sx={{ fontSize: "14px" }}>
+        <MenuItem
+          disabled={
+            getPage === "editJobEntry" ||
+            id === "currency" ||
+            id === "vatApplicable" ||
+            id === "withHoldingTax" || 
+            id === "paymentType"
+          }
+          sx={{ fontSize: "14px" }}
+          value=""
+        >
           <em>None</em>
         </MenuItem>
-        {options?.map((option, idx) => {
-          return (
-            <MenuItem
-            disabled ={getPage == "editJobEntry"}
-            key={idx} value={option?.value  }>
-              {option?.label || option?.value  }
-            </MenuItem>
-          );
-        })}
+        {options?.map((option, idx) => (
+          <MenuItem
+            disabled={getPage === "editJobEntry"}
+            key={idx}
+            value={option?.value}
+          >
+            {option?.label || option?.value}
+          </MenuItem>
+        ))}
       </Select>
       {error && <FormHelperText>{error}</FormHelperText>}
-      
     </FormControl>
   );
 }

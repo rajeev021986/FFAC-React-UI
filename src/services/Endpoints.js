@@ -95,6 +95,8 @@ const ENDPOINTS = {
     `/${BasePageUrl}/approval/rejected/${type}/${id}`,
     PAY_SELECTEDIDS_REQUEST: (BasePageUrl) =>
     `/${BasePageUrl}/pending/payable/pay`,
+     PAYABLE_PAY_REQUEST: (id, BasePageUrl) =>
+    `/${BasePageUrl}/pending/payble/pay/${id}`,
 };
 
 export default ENDPOINTS;

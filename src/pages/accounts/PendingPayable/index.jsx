@@ -94,7 +94,7 @@ export default function AccountsPendingPayableList({ page }) {
   } = useFetchPendingPaymentDatasQuery({
     params: query,
     payload,
-    page: page == "pending_payments" ? "payble/entry/filter" : "",
+    page: page == "pending_payments" ? "pending/payble/filter" : "",
   });
 
   const handlePage = (params) => {
@@ -146,31 +146,16 @@ export default function AccountsPendingPayableList({ page }) {
       dispatch(paymentApprovalView("card"));
     }
   }, [paymentSelector.view, dispatch]);
+  
   const handlePayChange = async () => {
     if (selectedPayableIds.length === 0) {
       toast.custom(
-        <CustomToast message="No job entries selected!" toast="error" />
+        <CustomToast message="No payable entries selected!" toast="error" />
       );
       return;
     }
     console.log("selectedPayableIds", selectedPayableIds);
-      try {
-      const response = await ApiManager.paySelectedIdsHandler(
-        {paybleIds : selectedPayableIds}
-      );
-      refetch();
-      toast.custom(<CustomToast message={response.message} toast="success" />);
-      setSelectedPayableIds([]);
-    } catch (error) {
-      toast.custom(
-        <CustomToast
-          message="Error occurred while paying"
-          toast="error"
-        />
-      );
-    } finally {
-      setSelectedPayableIds([]);
-    }
+ 
   };
   return (
     <Box sx={{ backgroundColor: "white.main" }}>

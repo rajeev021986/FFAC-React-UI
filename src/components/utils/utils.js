@@ -98,5 +98,11 @@ export const formatIndianCurrency = (num) => {
     otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + (otherNumbers ? "," : "") + lastThree;
   return x.length > 1 ? formatted + "." + x[1] : formatted;
 };
+export const ExtractDate = (date) => {
+    if (!date) {
+      return "";
+    }
 
+    return date.split("T")[0];
+  };
 
