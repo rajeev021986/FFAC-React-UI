@@ -214,6 +214,7 @@ export default function PayableListScreen({ page }) {
         closeButton: false,
       });
       handleClose();
+      refetch();
     } catch (error) {
       toast.custom(<CustomToast message="Failed to approve." toast="error" />, {
         closeButton: false,

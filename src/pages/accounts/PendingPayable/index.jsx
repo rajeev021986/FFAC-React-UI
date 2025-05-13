@@ -38,6 +38,7 @@ import PayCalModal from "./PayCalModal";
 import toast from "react-hot-toast";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import ApiManager from "../../../services/ApiManager";
+import PayCalMultiple from "./PayCalMultiple";
 
 export default function AccountsPendingPayableList({ page }) {
   //
@@ -114,8 +115,6 @@ export default function AccountsPendingPayableList({ page }) {
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
-  console.log("slecte", selectedPayableIds);
-
   useEffect(() => {
     refetch();
   }, [location.pathname]);
@@ -128,15 +127,30 @@ export default function AccountsPendingPayableList({ page }) {
             width: 80,
             headerAlign: "center",
             align: "center",
-            renderCell: (params) => (
-              <input
-                type="checkbox"
-                style={{ cursor: "pointer" }}
-                checked={selectedPayableIds.includes(params.row.id)}
-                onChange={() => handleCheckboxChange(params.row.id)}
-              />
-            ),
+            renderCell: (params) => {
+              const isChecked = selectedPayableIds.includes(params.row.id);
+              const firstSelectedRow =
+                pendingPaymentsListData?.body?.data?.find((row) =>
+                  selectedPayableIds.includes(row.id)
+                );
+              const sameVendor =
+                !firstSelectedRow ||
+                firstSelectedRow.vendorName === params.row.vendorName;
+
+              return (
+                <input
+                  type="checkbox"
+                  style={{ cursor: sameVendor ? "pointer" : "not-allowed" }}
+                  checked={isChecked}
+                  disabled={!sameVendor}
+                  onChange={() =>
+                    sameVendor ? handleCheckboxChange(params.row.id) : null
+                  }
+                />
+              );
+            },
           },
+
           ...ACCOUNTS_PENDING_PAYABLE, // Use the new columns when on "job-entry" page
         ]
       : []), // Use the default columns otherwise
@@ -146,7 +160,7 @@ export default function AccountsPendingPayableList({ page }) {
       dispatch(paymentApprovalView("card"));
     }
   }, [paymentSelector.view, dispatch]);
-  
+
   const handlePayChange = async () => {
     if (selectedPayableIds.length === 0) {
       toast.custom(
@@ -154,9 +168,17 @@ export default function AccountsPendingPayableList({ page }) {
       );
       return;
     }
-    console.log("selectedPayableIds", selectedPayableIds);
- 
+    const selectedData = pendingPaymentsListData?.body?.data?.filter((item) =>
+      selectedPayableIds.includes(item.id)
+    );
+
+    setModal({
+      open: true,
+      type: "bulk",
+      data: selectedData,
+    });
   };
+
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar leftComps={<ThemedBreadcrumb />} rightComps={<> </>} />
@@ -238,11 +260,22 @@ export default function AccountsPendingPayableList({ page }) {
         )}
       </Card>
 
-      <PayCalModal
-        open={modal.open}
-        data={modal.data}
-        onClose={() => setModal((prev) => ({ ...prev, open: false }))}
-      />
+      {modal.type === "bulk" ? (
+        <PayCalMultiple
+          open={modal.open}
+          data={modal.data}
+          onClose={() => {
+            setModal((prev) => ({ ...prev, open: false }));
+            setSelectedPayableIds([]);
+          }}
+        />
+      ) : (
+        <PayCalModal
+          open={modal.open}
+          data={modal.data}
+          onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+        />
+      )}
     </Box>
   );
 }

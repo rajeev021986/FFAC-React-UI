@@ -9,31 +9,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import GetPayDetails from "./getPayDetail";
 
 const PayCalMultiple = ({ open, onClose, data }) => {
-  console.log("data",data);
-  const [loading, setLoading] = useState(true);
+  const vendorName = data[0]?.vendorName;
+  const payableRefNums = data?.map((item) => item.paybleRefNum).join(", ");
+
+  const usdAmount = data?.reduce((acc, curr) => acc + curr.totalAmount, 0);
+  // Get exchange rate from the last item
+  const lastExchangeRate = data[data.length - 1]?.exchangeRate || 1;
+  // localAmount = usdAmount * exchangeRate of last item
+  const localAmount = usdAmount * lastExchangeRate;
+  // Same values for "to be paid" as well
+  const usdAmountToBePaid = usdAmount;
+  const localAmountToBePaid = usdAmount * lastExchangeRate;
+  const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = React.useState({
-    paybleIds: []
-    payment:{
-      id: "",
-    paybleCreatedDate: "",
-    paybleRefNum: "",
-    totalAmount: 0,
-    vendorInvDate: "",
-    vendorInvNo: "",
-    vendorName: "",
-    localAmountToBePaid: 0,
-    paymentType: "Cheque",
-    usdAmountToBePaid: 0,
-    paymentDate: new Date().toISOString(),
-    localAmount:0,
-    usdAmount:0,
-    multiple:"",
-    bankCharges:"",
-    chequeDate:"",
-    chequeNo:"",
-    bankName:"",
-    exchangeRate: 1,
-    },
+    paybleIds: [],
     createdDate: "",
     currency: "",
     customerName: "",
@@ -53,44 +42,45 @@ const PayCalMultiple = ({ open, onClose, data }) => {
     paymentType: "Cheque",
     usdAmountToBePaid: 0,
     paymentDate: new Date().toISOString(),
-    localAmount:0,
-    usdAmount:0,
-    multiple:"",
-    bankCharges:"",
-    chequeDate:"",
-    chequeNo:"",
-    bankName:""
+    localAmount: 0,
+    usdAmount: 0,
+    multiple: "",
+    bankCharges: "",
+    chequeDate: "",
+    chequeNo: "",
+    bankName: "",
+    multipleSelected: false,
   });
 
- useEffect(() => {
+  useEffect(() => {
     if (data) {
-     setInitialValues({
-        createdDate: data?.createdDate,
-        currency: data?.currency || "INR",
-        customerName: data?.customerName || "",
-        exchangeRate: data?.exchangeRate || 1,
-        id: data?.id || "",
-        invoiceType: data?.invoiceType || "",
-        jobCreatedDate: data?.jobCreatedDate || "",
-        jobNo: data?.jobNo || "",
-        modifiedDate: data?.modifiedDate,
-        paybleCreatedDate: data?.paybleCreatedDate || "",
-        paybleRefNum: data?.paybleRefNum || "",
-        totalAmount: data?.totalAmount || 0,
-        vendorInvDate: data?.vendorInvDate || null,
-        vendorInvNo: data?.vendorInvNo || "",
-        vendorName: data?.vendorName || "",
-        usdAmountToBePaid: data?.totalAmount || 0,
-        usdAmount: data?.totalAmount || 0,
-        localAmount: data?.totalAmount || 0,
-        localAmountToBePaid: data?.totalAmount || 0,
-        bankCharges: data?.bankCharges || "",
-        paymentType: data?.paymentType || "Cheque"
+      const paybleIds = data?.map((item) => item.id); // Extract all ids
+      setInitialValues({
+        multipleSelected: true,
+        paybleIds: paybleIds,
+        currency: data[0]?.currency || "INR",
+        customerName: data[0]?.customerName || "",
+        exchangeRate: data[0]?.exchangeRate || 1,
+        id: data[0]?.id || "",
+        invoiceType: data[0]?.invoiceType || "",
+        jobCreatedDate: data[0]?.jobCreatedDate || "",
+        paybleCreatedDate: data[0]?.paybleCreatedDate || "",
+        paybleRefNum: payableRefNums || "",
+        totalAmount: data[0]?.totalAmount || 0,
+        vendorInvDate: data[0]?.vendorInvDate || null,
+        vendorInvNo: data[0]?.vendorInvNo || "",
+        vendorName: vendorName || "",
+        usdAmountToBePaid: usdAmountToBePaid || 0,
+        usdAmount: usdAmount || 0,
+        paymentDate: new Date().toISOString() || null,
+        localAmount: localAmount || 0,
+        localAmountToBePaid: localAmountToBePaid || 0,
+        bankCharges: data[0]?.bankCharges || "",
+        paymentType: data[0]?.paymentType || "Cheque",
       });
     }
     setLoading(false);
   }, [data]);
-
 
   return (
     <>
@@ -104,7 +94,7 @@ const PayCalMultiple = ({ open, onClose, data }) => {
           maxWidth="auto"
         >
           <DialogTitle>
-            View Payment Details for RefNo: {data.paybleRefNum || ""}
+            View Payment Details for RefNo: {payableRefNums || ""}
             <IconButton
               onClick={onClose}
               sx={{ position: "absolute", top: 8, right: 8, color: "grey.600" }}
@@ -114,7 +104,11 @@ const PayCalMultiple = ({ open, onClose, data }) => {
           </DialogTitle>
 
           <DialogContent>
-            <GetPayDetails viewPage="view" initialValues={initialValues} />
+            <GetPayDetails
+              viewPage="view"
+              initialValues={initialValues}
+              onClose={onClose}
+            />
           </DialogContent>
         </Dialog>
       )}

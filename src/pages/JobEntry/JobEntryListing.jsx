@@ -331,8 +331,6 @@ export default function JobEntryScreen({ page }) {
   //     setSelectedIds([]);
   //   }
   // };
-  console.log("modal?.data?", modal?.data);
-
   const jobEntryColumns = [
     ...(page === "jobApprove"
       ? [

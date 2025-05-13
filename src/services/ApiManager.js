@@ -354,7 +354,7 @@ class ApiManager {
     return ApiMethods.put(url, payload);
   };
   static paySelectedIdsHandler = async (payload) => {
-    const url = ENDPOINTS.PAY_SELECTEDIDS_REQUEST(menuConfigUrl.document);
+    const url = ENDPOINTS.PAY_SELECTEDIDS_REQUEST(menuConfigUrl.account);
     return ApiMethods.post(url, payload);
   };
   static paySingle = async (id,payload) => {

@@ -35,7 +35,7 @@ export default function GetPayDetails({
   page,
   viewPage,
   type = "notcopy",
-  onClose
+  onClose,
 }) {
   //
   const invoiceTypeRef = useRef(null);
@@ -103,13 +103,29 @@ export default function GetPayDetails({
           localAmountToBePaid: values?.localAmountToBePaid || 0,
           bankCharges: values?.bankCharges || "",
         };
-        const res = await ApiManager.paySingle(values.id, payload);
-        if (res.success) {
-          const message = res.message;
-          toast.custom(<CustomToast message={message} toast="success" />);
-          onClose(); // Close modal after successful update
-        } else {
-          console.error("Failed to pay", res);
+        const multiplePayload = {
+         paybleIds: values?.paybleIds || [],
+         payment: payload
+        }
+        if (initialValues?.multipleSelected === true) { 
+          const res = await ApiManager.paySelectedIdsHandler(multiplePayload);
+          if (res.success) {  
+            const message = res.message;
+            toast.custom(<CustomToast message={message} toast="success" />);
+            onClose(); // Close modal after successful update
+          } else {
+            console.error("Failed to pay", res);
+          }
+        }
+         else {
+          const res = await ApiManager.paySingle(values.id, payload);
+          if (res.success) {
+            const message = res.message;
+            toast.custom(<CustomToast message={message} toast="success" />);
+            onClose(); // Close modal after successful update
+          } else {
+            console.error("Failed to pay", res);
+          }
         }
       } catch (error) {
         toast.custom(
@@ -215,8 +231,6 @@ export default function GetPayDetails({
   useEffect(() => {
     handleFetchPayable();
   }, [formik?.values?.chargesData]);
-  console.log("intia", initialValues);
-  console.log("fff", formik.values);
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -246,7 +260,7 @@ export default function GetPayDetails({
               <Box sx={{ width: "100%", paddingRight: 2 }}>
                 <Grid container sx={{ padding: 0, margin: 0 }}>
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                   <InputBox
+                    <InputBox
                       label="Voucher No"
                       id="paybleRefNum"
                       value={formik.values.paybleRefNum}
@@ -271,7 +285,7 @@ export default function GetPayDetails({
                     <InputBox
                       label="Amount USD"
                       id="usdAmount"
-                      value={formatIndianCurrency( formik.values.usdAmount)}
+                      value={formatIndianCurrency(formik.values.usdAmount)}
                       error={formik.errors.usdAmount}
                       onChange={formik.handleChange}
                       disabled={true}
@@ -290,7 +304,7 @@ export default function GetPayDetails({
                     <InputBox
                       label="Amount TZS"
                       id="localAmount"
-                      value={formatIndianCurrency(formik.values.localAmount * formik.values.exchangeRate)}
+                      value={formatIndianCurrency(formik.values.localAmount)}
                       error={formik.errors.localAmount}
                       onChange={formik.handleChange}
                       disabled={true}
@@ -346,7 +360,9 @@ export default function GetPayDetails({
                       value={formik.values.bankName}
                       error={formik.errors.bankName}
                       onChange={formik.handleChange}
-                      disabled ={formik.values.paymentType === "Cash" ? true :false}
+                      disabled={
+                        formik.values.paymentType === "Cash" ? true : false
+                      }
                     ></FormAutoComplete>
                   </Grid>
 
@@ -357,7 +373,9 @@ export default function GetPayDetails({
                       value={formik.values.chequeNo}
                       error={formik.errors.chequeNo}
                       onChange={formik.handleChange}
-                      disabled ={formik.values.paymentType === "Cash" ? true :false}
+                      disabled={
+                        formik.values.paymentType === "Cash" ? true : false
+                      }
                       inputRef={payableRef}
                     />
                   </Grid>
@@ -367,7 +385,9 @@ export default function GetPayDetails({
                       label="Cheque Date"
                       name="chequeDate"
                       id="chequeDate"
-                      disabled ={formik.values.paymentType === "Cash" ? true :false}
+                      disabled={
+                        formik.values.paymentType === "Cash" ? true : false
+                      }
                       value={formik.values.chequeDate}
                       error={formik.errors.chequeDate}
                       onChange={formik.setFieldValue}
@@ -378,20 +398,16 @@ export default function GetPayDetails({
                     <InputBox
                       label="Amount to be paid (USD)"
                       id="usdAmountToBePaid"
-                      value={formatIndianCurrency(
-                        formik.values.usdAmountToBePaid
-                      )}
+                      value={formik.values.usdAmountToBePaid}
                       error={formik.errors.usdAmountToBePaid}
                       onChange={(e) => {
                         const usd = parseFloat(e.target.value) || 0;
-
                         if (usd > formik.values.usdAmount) {
                           toast.error(
                             "USD amount to be paid cannot exceed the total USD amount."
                           );
                           return;
                         }
-
                         const tzs = usd * (formik.values.exchangeRate || 1);
 
                         formik.setFieldValue("usdAmountToBePaid", usd);
@@ -413,7 +429,12 @@ export default function GetPayDetails({
                       onChange={(e) => {
                         const tzs = parseFloat(e.target.value) || 0;
                         const usd = tzs / (formik.values.exchangeRate || 1);
-
+                        if (tzs > formik.values.localAmount) {
+                          toast.error(
+                            "TZS amount to be paid cannot exceed the total TZS amount."
+                          );
+                          return;
+                        }
                         formik.setFieldValue("localAmountToBePaid", tzs);
                         formik.setFieldValue(
                           "usdAmountToBePaid",

@@ -5,5 +5,5 @@ export const VehicleValidationSchema = () =>
   Yup.object({
   clerkTelNo: Yup.string()
     .matches(phoneRegExp, "Clerk Telephone must be between 7 to 15 digits")
-    .required("Clerk Telephone number is required"),
+    // .required("Clerk Telephone number is required"),
   });

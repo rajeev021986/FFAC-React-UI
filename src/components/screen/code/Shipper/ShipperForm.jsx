@@ -99,11 +99,11 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       "Contact Person must only contain letters"
     ),
     tel_No: Yup.string()
-    .required("Telephone number is required")
+    // .required("Telephone number is required")
     .matches(/^\d+$/, "Telephone must be a valid number")
     .matches(/^\d{7,15}$/, "Telephone must be between 8 and 15 digits"),
       mobile: Yup.string()
-    .required("Mobile number is required")
+    // .required("Mobile number is required")
     .matches(/^\d+$/, "Telephone must be a valid number")
     .matches(/^\d{10,15}$/, "Mobile must be between 10 and 15 digits"),
   });

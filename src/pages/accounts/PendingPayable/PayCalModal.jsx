@@ -9,9 +9,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import GetPayDetails from "./getPayDetail";
 
 const PayCalModal = ({ open, onClose, data }) => {
-  console.log("data",data);
   const [loading, setLoading] = useState(true);
-  const [initialValues, setInitialValues] = React.useState({
+  const [initialValues, setInitialValues] = useState({
+    paybleIds: [],
     createdDate: "",
     currency: "",
     customerName: "",
@@ -31,18 +31,21 @@ const PayCalModal = ({ open, onClose, data }) => {
     paymentType: "Cheque",
     usdAmountToBePaid: 0,
     paymentDate: new Date().toISOString(),
-    localAmount:0,
-    usdAmount:0,
-    multiple:"",
-    bankCharges:"",
-    chequeDate:"",
-    chequeNo:"",
-    bankName:""
+    localAmount: 0,
+    usdAmount: 0,
+    multiple: "",
+    bankCharges: "",
+    chequeDate: "",
+    chequeNo: "",
+    bankName: "",
+    multipleSelected: false,
   });
 
- useEffect(() => {
+  useEffect(() => {
     if (data) {
-     setInitialValues({
+      setInitialValues({
+        multipleSelected: false,
+        paymentDate: new Date().toISOString() || null,
         createdDate: data?.createdDate,
         currency: data?.currency || "INR",
         customerName: data?.customerName || "",
@@ -60,15 +63,14 @@ const PayCalModal = ({ open, onClose, data }) => {
         vendorName: data?.vendorName || "",
         usdAmountToBePaid: data?.totalAmount || 0,
         usdAmount: data?.totalAmount || 0,
-        localAmount: data?.totalAmount || 0,
-        localAmountToBePaid: data?.totalAmount || 0,
+        localAmount: data?.totalAmount * (data?.exchangeRate || 1) || 0,
+        localAmountToBePaid: data?.totalAmount * (data?.exchangeRate || 1) || 0,
         bankCharges: data?.bankCharges || "",
-        paymentType: data?.paymentType || "Cheque"
+        paymentType: data?.paymentType || "Cheque",
       });
     }
     setLoading(false);
   }, [data]);
-
 
   return (
     <>
@@ -92,7 +94,11 @@ const PayCalModal = ({ open, onClose, data }) => {
           </DialogTitle>
 
           <DialogContent>
-            <GetPayDetails viewPage="view" initialValues={initialValues} onClose={onClose}/>
+            <GetPayDetails
+              viewPage="view"
+              initialValues={initialValues}
+              onClose={onClose}
+            />
           </DialogContent>
         </Dialog>
       )}
