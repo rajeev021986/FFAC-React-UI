@@ -416,6 +416,7 @@ export default function GetPayDetails({
                           parseFloat(tzs)
                         );
                       }}
+                      disabled={initialValues?.multipleSelected === true ? true : false}
                       inputRef={payableRef}
                     />
                   </Grid>
@@ -441,6 +442,7 @@ export default function GetPayDetails({
                           parseFloat(usd)
                         );
                       }}
+                      disabled={initialValues?.multipleSelected === true ? true : false}
                       inputRef={payableRef}
                     />
                   </Grid>

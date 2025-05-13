@@ -134,7 +134,43 @@ export default function AddEditForm({
     validateOnChange: false,
     validationSchema: payableValidationSchema(),
     onSubmit: async (values) => {
-      if (!values.id || type == "copy") {
+      const invoiceCurrencyAmount = getAmountData?.amount || 0;
+      const invoiceCurrencyVat = getAmountData?.vatAmount || 0;
+      const invoiceCurrencyWithHoldingTax =
+        getAmountData?.withHoldingAmount || 0;
+      const invoiceCurrencyNetAmountPayable = getAmountData?.totalAmount || 0;
+
+      const exchangeRate = Number(getFormData?.exchangeRate) || 1;
+
+      const localCurrencyAmount =
+        getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+          ? invoiceCurrencyAmount
+          : invoiceCurrencyAmount * exchangeRate;
+
+      const localCurrencyVat =
+        getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+          ? invoiceCurrencyVat
+          : invoiceCurrencyVat * exchangeRate;
+
+      const localCurrencyWithHoldingTax =
+        getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+          ? invoiceCurrencyWithHoldingTax
+          : invoiceCurrencyWithHoldingTax * exchangeRate;
+
+      const localCurrencyNetAmountPayable =
+        getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+          ? invoiceCurrencyNetAmountPayable
+          : invoiceCurrencyNetAmountPayable * exchangeRate;
+      values.invoiceCurrencyAmount = invoiceCurrencyAmount;
+      values.invoiceCurrencyVat = invoiceCurrencyVat;
+      values.invoiceCurrencyWithHoldingTax = invoiceCurrencyWithHoldingTax;
+      values.invoiceCurrencyNetAmountPayable = invoiceCurrencyNetAmountPayable;
+
+      values.localCurrencyAmount = localCurrencyAmount;
+      values.localCurrencyVat = localCurrencyVat;
+      values.localCurrencyWithHoldingTax = localCurrencyWithHoldingTax;
+      values.localCurrencyNetAmountPayable = localCurrencyNetAmountPayable;
+      if (!values.id || type === "copy") {
         try {
           values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
@@ -176,6 +212,7 @@ export default function AddEditForm({
           }
         }
       } else {
+        // If there is an id, proceed with the update action
         try {
           setRejectError(false);
           let paybleDetailsData = values.paybleDetails.map((item) =>

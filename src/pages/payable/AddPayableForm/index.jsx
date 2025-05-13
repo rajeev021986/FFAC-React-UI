@@ -64,7 +64,7 @@ export default function AddPayableEntry({ page }) {
         vendorName: res.body?.vendorName,
         vendorInvoiceNo: res.body?.vendorInvoiceNo,
         vendorInvoiceDate: res.body?.vendorInvoiceDate,
-        currency: res.body?.currency || "TZS",
+        currency: res.body?.currency || "INR",
         exchangeRate: res.body?.exchangeRate || 1,
         invoiceCurrencyAmount: res.body?.invoiceCurrencyAmount,
         invoiceCurrencyVat: res.body?.invoiceCurrencyVat,
