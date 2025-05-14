@@ -24,14 +24,14 @@ export const CustomerValidationSchema = () =>
       "Contact Person must only contain letters"
     ),
     emailId: Yup.string()
-    .required("Email is required")
+    // .required("Email is required")
     .email("Invalid email format")
     .matches(
       /^[a-zA-Z0-9._%+-]+@(?!gmail\d)(gmail|yahoo|outlook)\.[a-zA-Z]{2,}$/,
       "Invalid email format"
     ),
     telephone: Yup.string()
-    .required("Telephone is required")
+    // .required("Telephone is required")
     .matches(/^\d+$/, "Telephone must be a valid number")
     .test(
       "len",

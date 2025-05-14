@@ -264,6 +264,7 @@ export default function AccountsPendingPayableList({ page }) {
         <PayCalMultiple
           open={modal.open}
           data={modal.data}
+          refetch={refetch}
           onClose={() => {
             setModal((prev) => ({ ...prev, open: false }));
             setSelectedPayableIds([]);
@@ -273,6 +274,7 @@ export default function AccountsPendingPayableList({ page }) {
         <PayCalModal
           open={modal.open}
           data={modal.data}
+          refetch={refetch}
           onClose={() => setModal((prev) => ({ ...prev, open: false }))}
         />
       )}

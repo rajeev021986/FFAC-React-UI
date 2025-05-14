@@ -36,6 +36,7 @@ export default function GetPayDetails({
   viewPage,
   type = "notcopy",
   onClose,
+  refetch
 }) {
   //
   const invoiceTypeRef = useRef(null);
@@ -113,6 +114,7 @@ export default function GetPayDetails({
             const message = res.message;
             toast.custom(<CustomToast message={message} toast="success" />);
             onClose(); // Close modal after successful update
+            refetch();
           } else {
             console.error("Failed to pay", res);
           }
@@ -123,6 +125,7 @@ export default function GetPayDetails({
             const message = res.message;
             toast.custom(<CustomToast message={message} toast="success" />);
             onClose(); // Close modal after successful update
+            refetch();
           } else {
             console.error("Failed to pay", res);
           }
@@ -277,7 +280,7 @@ export default function GetPayDetails({
                       value={formik.values.vendorName}
                       error={formik.errors.vendorName}
                       onChange={formik.handleChange}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -296,7 +299,7 @@ export default function GetPayDetails({
                       //     value === "" ? "" : parseFloat(value)
                       //   );
                       // }}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -315,7 +318,7 @@ export default function GetPayDetails({
                       //       value === "" ? "" : parseFloat(value)
                       //     );
                       //   }}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -376,7 +379,7 @@ export default function GetPayDetails({
                       disabled={
                         formik.values.paymentType === "Cash" ? true : false
                       }
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -417,7 +420,7 @@ export default function GetPayDetails({
                         );
                       }}
                       disabled={initialValues?.multipleSelected === true ? true : false}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -443,7 +446,7 @@ export default function GetPayDetails({
                         );
                       }}
                       disabled={initialValues?.multipleSelected === true ? true : false}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -454,7 +457,7 @@ export default function GetPayDetails({
                       value={formik.values.bankCharges}
                       error={formik.errors.bankCharges}
                       onChange={formik.handleChange}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                     />
                   </Grid>
                 </Grid>

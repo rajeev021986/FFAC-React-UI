@@ -2,6 +2,15 @@ import { Tooltip } from "@mui/material";
 import { ExtractDate } from "../../components/utils/utils";
 
 export const ACCOUNTS_PENDING_PAYABLE = [
+    {
+    flex: 1,
+    field: "status",
+    headerName: "Status",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
   {
     flex: 1,
     field: "invoiceType",

@@ -8,7 +8,7 @@ import Loader from "../../../components/common/Loader/Loader";
 import CloseIcon from "@mui/icons-material/Close";
 import GetPayDetails from "./getPayDetail";
 
-const PayCalModal = ({ open, onClose, data }) => {
+const PayCalModal = ({ open, onClose, data,refetch }) => {
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = useState({
     paybleIds: [],
@@ -98,6 +98,7 @@ const PayCalModal = ({ open, onClose, data }) => {
               viewPage="view"
               initialValues={initialValues}
               onClose={onClose}
+              refetch={refetch}
             />
           </DialogContent>
         </Dialog>
