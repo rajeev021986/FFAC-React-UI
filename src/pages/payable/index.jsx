@@ -1,25 +1,17 @@
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Box,
-  Card,
-  CardHeader,
-  Drawer,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
-import React, { useState } from "react";
+import { Box, Card, CardHeader, Typography } from "@mui/material";
+import { Drawer, IconButton, Stack } from "@mui/material";
+
 import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-
 import {
   payableDashboardView,
   updateInput,
@@ -320,6 +312,7 @@ export default function PayableListScreen({ page }) {
       dispatch(payableDashboardView("card"));
     }
   }, [payableActionSelector.view, dispatch]);
+
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -495,7 +488,7 @@ export default function PayableListScreen({ page }) {
         handleApprove={handleApprove}
       />
       <DeleteDialog
-        source= {modal?.data?.deleteName?.payableRefNo}
+        source={modal?.data?.deleteName?.payableRefNo}
         // sourceName={modal?.data?.deleteName}
         handleClose={handleClose}
         handleDelete={handleDelete}

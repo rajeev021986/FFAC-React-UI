@@ -39,6 +39,7 @@ import toast from "react-hot-toast";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import ApiManager from "../../../services/ApiManager";
 import PayCalMultiple from "./PayCalMultiple";
+import CancelModalApprove from "../../JobEntry/CancelModalApprove";
 
 export default function AccountsPendingPayableList({ page }) {
   //
@@ -179,6 +180,44 @@ export default function AccountsPendingPayableList({ page }) {
     });
   };
 
+  const handleCancel = async () => {
+    const jobStatus = modal?.data?.label;
+    if (jobStatus === "Approved Successfully") {
+      toast.custom(
+        <CustomToast
+          message="Cannot cancel an approved payable."
+          toast="error"
+        />
+      );
+      return;
+    }
+
+    try {
+      const response = await ApiManager.canceljobEntryApprove(
+        modal?.data?.id,
+        "PAYBLE_ENTRY"
+      );
+      const message = response.message;
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+      handleClose();
+    } catch (error) {
+      toast.custom(<CustomToast message="Failed to cancel." toast="error" />, {
+        closeButton: false,
+      });
+    }
+  };
+
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+
+  console.log(modal?.data, 34567890);
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar leftComps={<ThemedBreadcrumb />} rightComps={<> </>} />
@@ -268,6 +307,14 @@ export default function AccountsPendingPayableList({ page }) {
             setModal((prev) => ({ ...prev, open: false }));
             setSelectedPayableIds([]);
           }}
+        />
+      ) : modal.type === "cancel" ? (
+        <CancelModalApprove
+          rowId={modal?.data?.id}
+          sourceName={modal?.data?.paybleRefNum}
+          handleOpen={modal.open && modal.type === "cancel"}
+          handleClose={handleClose}
+          handleCancel={handleCancel}
         />
       ) : (
         <PayCalModal
