@@ -272,7 +272,7 @@ export default function GetPayDetails({
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Line Agent Name"
+                      label="Line/Agent Name"
                       id="vendorName"
                       value={formik.values.vendorName}
                       error={formik.errors.vendorName}
@@ -302,7 +302,7 @@ export default function GetPayDetails({
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount TZS"
+                      label="Amount INR"
                       id="localAmount"
                       value={formatIndianCurrency(formik.values.localAmount)}
                       error={formik.errors.localAmount}
@@ -423,7 +423,7 @@ export default function GetPayDetails({
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount to be paid (TZS)"
+                      label="Amount to be paid (INR)"
                       id="localAmountToBePaid"
                       value={formik.values.localAmountToBePaid}
                       error={formik.errors.localAmountToBePaid}
@@ -432,7 +432,7 @@ export default function GetPayDetails({
                         const usd = tzs / (formik.values.exchangeRate || 1);
                         if (tzs > formik.values.localAmount) {
                           toast.error(
-                            "TZS amount to be paid cannot exceed the total TZS amount."
+                            "INR amount to be paid cannot exceed the total INR amount."
                           );
                           return;
                         }

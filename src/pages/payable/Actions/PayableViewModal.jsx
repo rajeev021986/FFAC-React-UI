@@ -30,7 +30,7 @@ const PayableViewModal = ({ open, onClose, data }) => {
     vendorName: "",
     vendorInvoiceNo: "",
     vendorInvoiceDate: "",
-    currency: "TZS",
+    currency: "",
     exchangeRate: 1,
     invoiceCurrencyAmount: "",
     invoiceCurrencyVat: "",
@@ -54,6 +54,8 @@ const PayableViewModal = ({ open, onClose, data }) => {
           res.body?.status.charAt(0).toUpperCase() +
           res.body?.status.slice(1).toLowerCase();
       }
+      console.log(" res.body?.currency", res.body?.currency);
+      
       setInitialValues({
         id: res.body?.id || "",
         status: res.body?.status,
@@ -67,7 +69,7 @@ const PayableViewModal = ({ open, onClose, data }) => {
         vendorName: res.body?.vendorName,
         vendorInvoiceNo: res.body?.vendorInvoiceNo,
         vendorInvoiceDate: res.body?.vendorInvoiceDate,
-        currency: res.body?.currency || "INR",
+        currency: res.body?.currency || "",
         exchangeRate: res.body?.exchangeRate || 1,
         invoiceCurrencyAmount: res.body?.invoiceCurrencyAmount,
         invoiceCurrencyVat: res.body?.invoiceCurrencyVat,

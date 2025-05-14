@@ -69,7 +69,7 @@ function FormAutoCompleteBond(props) {
         }}
         size="small"
         id={id}
-        value={options.find((option) => option.value === value) || null}
+        value={options.find((option) => option.value == value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
