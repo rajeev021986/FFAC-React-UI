@@ -73,6 +73,15 @@ export default function CardsView({
       vendorInvoiceDate: obj.vendorInvoiceDate
         ? handleDate(obj.vendorInvoiceDate)
         : obj.vendorInvoiceDate,
+        vendorInvDate : obj.vendorInvDate
+        ? handleDate(obj.vendorInvDate)
+        : obj.vendorInvDate,
+        jobCreatedDate: obj.jobCreatedDate
+        ? handleDate(obj.jobCreatedDate)
+        : obj.jobCreatedDate,
+        paybleCreatedDate: obj.paybleCreatedDate
+        ? handleDate(obj.paybleCreatedDate)
+        : obj.paybleCreatedDate,
     };
   });
   return (

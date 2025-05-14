@@ -69,6 +69,8 @@ export default function AddEditForm({
   viewPage,
   type = "notcopy",
 }) {
+  console.log(initialValues,"initialValues");
+  
   const style = {
     position: "absolute",
     top: "50%",
@@ -257,6 +259,7 @@ export default function AddEditForm({
       }
     },
   });
+console.log("formik.values.exhangeRate",formik.values.exchangeRate);
 
   const getFormData = formik?.values;
   const { data: optionsSettingsData } =
@@ -291,16 +294,14 @@ export default function AddEditForm({
         );
         const backendData = await response.body;
         setshowDefaultCurrency(backendData?.[0]);
-        formik.setFieldValue("currency", backendData?.[0].currency);
+        formik.setFieldValue("currency", initialValues.currency ? initialValues.currency : backendData?.[0].currency);
         const backendCurrencies = Array.from(
           new Set(
             (backendData || []).map((item) => item.currency).filter(Boolean)
           )
         ).map((curr) => ({ id: curr, value: curr }));
-
         // Get setting currencies safely
         const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
-
         // Merge both arrays avoiding duplicates (based on `value`)
         const mergedCurrencies = [
           ...backendCurrencies,
@@ -871,12 +872,10 @@ export default function AddEditForm({
                     getFormData?.currency === "INR" ? (
                       <InputBox
                         label="Ex. Rate"
-                        id="exchangeRate"
+                        id="exchangRate"
                         value={
-                          getFormData?.currency === "TZS" ||
-                          getFormData?.currency === "INR"
-                            ? 1
-                            : formatIndianCurrency(formik.values.exchangeRate)
+                       1
+                          
                         }
                         error={formik.errors.exchangeRate}
                         onChange={formik.handleChange}
