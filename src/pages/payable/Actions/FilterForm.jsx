@@ -105,12 +105,6 @@ export default function FilterForm({ setFilterOpen }) {
             onChange={formik.handleChange}
           />
           <InputBox
-            label="Currency"
-            id="exchangeRate"
-            value={formik.values.exchangeRate}
-            onChange={formik.handleChange}
-          />
-          <InputBox
             label="Payable Ref. No."
             id="payableRefNo"
             value={formik.values.payableRefNo}

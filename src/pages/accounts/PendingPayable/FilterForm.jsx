@@ -17,7 +17,7 @@ export default function FilterForm({ setFilterOpen }) {
       jobNo: inputs.jobNo || "",
       customerName: inputs.customerName || "",
       vendorInvNo: inputs.vendorInvNo || "",
-      totalAmount: inputs.totalAmount || "",
+      // totalAmount: inputs.totalAmount || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -39,7 +39,7 @@ export default function FilterForm({ setFilterOpen }) {
         jobNo: "",
         customerName: "",
         vendorInvNo: "",
-        totalAmount: "",
+        // totalAmount: "",
         currency: "",
       })
     );
@@ -50,7 +50,7 @@ export default function FilterForm({ setFilterOpen }) {
       jobNo: "",
       customerName: "",
       vendorInvNo: "",
-      totalAmount: "",
+      // totalAmount: "",
       currency: "",
     });
   };
@@ -102,17 +102,11 @@ export default function FilterForm({ setFilterOpen }) {
 
         <Stack direction="row" spacing={2}>
           <InputBox
-            label="Total Amount"
-            id="totalAmount"
-            value={formik.values.totalAmount}
-            onChange={formik.handleChange}
-          />
-
-          <InputBox
             label="Currency"
             id="currency"
             value={formik.values.currency}
             onChange={formik.handleChange}
+            sx={{ width: "31%" }}
           />
         </Stack>
 
