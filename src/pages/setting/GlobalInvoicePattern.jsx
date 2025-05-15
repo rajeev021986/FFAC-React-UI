@@ -132,6 +132,7 @@ export default function GlovalInvoicePattern({ value, setvalue, title }) {
           break;
         case "Never":
           meetsRequired = hasOneVoucher;
+          hasDisallowed = false;
           break;
         default:
           break;
@@ -141,12 +142,13 @@ export default function GlovalInvoicePattern({ value, setvalue, title }) {
       );
       const isValid =
         newRow.resetNumber === "Never"
-          ? 
-            (!hasInvalidStandaloneSpecials &&
-              !hasInvalidSpecialChar &&
-              hasOnlyAllowedTokens &&
-              !hasInvalidToken &&
-              hasOneVoucher)
+          ? meetsRequired &&
+            !hasInvalidToken &&
+            !hasDuplicateTokens &&
+            !hasInvalidCopyPattern &&
+            !hasInvalidSpecialChar &&
+            !hasInvalidStandaloneSpecial &&
+            !startsOrEndsWithDash
           : !hasInvalidToken &&
             !hasDisallowed &&
             !hasDuplicateTokens &&

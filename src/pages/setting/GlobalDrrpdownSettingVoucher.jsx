@@ -185,14 +185,20 @@ export default function GlobalDrrpdownSettingVoucher({
       const hasOnlyAllowedTokens = tokensInPattern.every((t) =>
         allowedTokens.includes(t)
       );
+      if (resetValue === "Never") {
+        meetsRequired = hasOneVoucher;
+        hasDisallowed = false; // No disallowed tokens — allow $Y, $M, etc.
+      }
       const isValid =
         resetValue === "Never"
           ? pattern.trim() === "" ||
-            (!hasInvalidStandaloneSpecials &&
-              !hasInvalidSpecialChar &&
-              hasOnlyAllowedTokens &&
+            (meetsRequired &&
               !hasInvalidToken &&
-              hasOneVoucher)
+              !hasDuplicateTokens &&
+              !hasInvalidCopyPattern &&
+              !hasInvalidSpecialChar &&
+              !hasInvalidStandaloneSpecial &&
+              !startsOrEndsWithDash)
           : !hasInvalidToken &&
             !hasDisallowed &&
             !hasDuplicateTokens &&
