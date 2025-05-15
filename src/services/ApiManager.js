@@ -357,9 +357,16 @@ class ApiManager {
     const url = ENDPOINTS.PAY_SELECTEDIDS_REQUEST(menuConfigUrl.account);
     return ApiMethods.post(url, payload);
   };
-  static paySingle = async (id,payload) => {
-    const url = ENDPOINTS.PAYABLE_PAY_REQUEST(id,menuConfigUrl.account);
+  static paySingle = async (id, payload) => {
+    const url = ENDPOINTS.PAYABLE_PAY_REQUEST(id, menuConfigUrl.account);
     return ApiMethods.post(url, payload);
+  };
+  static cancelPendingPayable = async (id) => {
+    const url = ENDPOINTS.PENDING_PAYABLE_CANCEL_REQUEST(
+      id,
+      menuConfigUrl.account
+    );
+    return ApiMethods.post(url);
   };
 }
 

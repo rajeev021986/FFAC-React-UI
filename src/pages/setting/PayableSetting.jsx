@@ -92,7 +92,7 @@ const PayableSettings = () => {
             setvalue={setHoldingTax}
             title="Holding Tax"
           />
-           <GlobalDrrpdownSetting
+          <GlobalDrrpdownSetting
             value={paymentType}
             setvalue={setPaymentType}
             title="Payment Type"
