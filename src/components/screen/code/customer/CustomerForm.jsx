@@ -113,8 +113,38 @@ export default function CustomerForm({
           }
           values.tinNo = values?.tinNo?.trim() || null;
           values.vatNo = values?.vatNo?.trim() || null;
-          let response = await addCustomer({
+     
+          console.log(values,"values")
+          const updatedPayload = {
             ...values,
+            // Rename country to countryId if country exists
+            ...(values.country && { countryId: values.country }),
+            // Remove the old country key
+            country: undefined,
+
+            // Rename chargeName to chargeId inside the array
+            customerEntityTariffs:
+              values.customerEntityTariffs?.map((tariff) => {
+                const { chargeName, ...rest } = tariff;
+                return {
+                  ...rest,
+                  chargeId: chargeName,
+                };
+              }) || [],
+          };
+
+          // Clean up any undefined keys (like the old 'country')
+          Object.keys(updatedPayload).forEach(
+            (key) =>
+              updatedPayload[key] === undefined && delete updatedPayload[key]
+          );
+
+          // Now use updatedPayload
+
+          console.log(updatedPayload, "updatedPayload");
+          let response = await addCustomer({
+            updatedPayload,
+            // countryId:countryId,
             customerEntityEmailsIds: emails,
             customerEntityTariffs: tariffs,
             bankDetails: bank,
@@ -171,8 +201,34 @@ export default function CustomerForm({
           );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          let response = await updateCustomer({
+          const updatedPayload = {
             ...values,
+            // Rename country to countryId if country exists
+            ...(values.country && { countryId: values.country }),
+            // Remove the old country key
+            country: undefined,
+
+            // Rename chargeName to chargeId inside the array
+            customerEntityTariffs:
+              values.customerEntityTariffs?.map((tariff) => {
+                const { chargeName, ...rest } = tariff;
+                return {
+                  ...rest,
+                  chargeId: chargeName,
+                };
+              }) || [],
+          };
+
+          // Clean up any undefined keys (like the old 'country')
+          Object.keys(updatedPayload).forEach(
+            (key) =>
+              updatedPayload[key] === undefined && delete updatedPayload[key]
+          );
+       
+       
+          let response = await updateCustomer({
+            // ...values,
+            updatedPayload,
             customerEntityEmailsIds: emails,
             customerEntityTariffs: tariffs,
             bankDetails: bank,
@@ -861,7 +917,7 @@ export default function CustomerForm({
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
-                        Add
+                        Adds
                       </ThemeButton>
                     </Stack>
                   </Grid>
@@ -1428,7 +1484,7 @@ export default function CustomerForm({
                       </ThemeTabs>
                     </Box>
                   </Grid>
-                
+
                   {formik.values.statusCode === -1 ||
                   page == "customerApprove" ? (
                     <Grid item xs={12} paddingLeft={1} paddingTop={1}>

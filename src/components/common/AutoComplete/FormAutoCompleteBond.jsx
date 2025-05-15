@@ -49,12 +49,18 @@ function FormAutoCompleteBond(props) {
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
       onChange({
-        target: { name: id, value: newValue.value },
+        target: { 
+           name: id,
+          //  value: newValue.value
+           value: newValue.fullData?.id ,
+           id: newValue.fullData?.id,
+          
+          },
         fullData: newValue.fullData, // Pass the entire bond data
       });
     } else {
       onChange({
-        target: { name: id, value: null },
+        target: { name: id, value: null,id:"" },
         fullData: null,
       });
     }
@@ -69,7 +75,7 @@ function FormAutoCompleteBond(props) {
         }}
         size="small"
         id={id}
-        value={options.find((option) => option.value === value) || null}
+        value={options.find((option) => option.fullData?.id === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}

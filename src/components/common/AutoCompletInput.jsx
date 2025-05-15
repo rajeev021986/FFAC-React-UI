@@ -21,6 +21,7 @@ function AutoCompleteInput({
   ...props
 }) {
   const [options, setOptions] = useState([]);
+  console.log(options,"options")
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
   const tooltipMessage = value ? value : "This field is empty";
@@ -56,8 +57,9 @@ function AutoCompleteInput({
   };
 
   const handleSelectionChange = (event, newValue) => {
+    console.log(newValue,"newValue")
     if (newValue) {
-      onChange(newValue.value);
+      onChange(newValue.fullData?.id);
     } else {
       onChange(null);
     }
@@ -77,7 +79,7 @@ function AutoCompleteInput({
     >
       <Autocomplete
         id={id}
-        value={options.find((option) => option.value === value) || null}
+        value={options.find((option) => option?.fullData?.id === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}

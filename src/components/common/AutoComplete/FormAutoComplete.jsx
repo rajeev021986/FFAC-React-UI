@@ -21,6 +21,7 @@ function FormAutoComplete(props) {
   } = props;
 
   const [options, setOptions] = useState([]);
+  console.log(value, "id");
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
 
@@ -66,10 +67,19 @@ function FormAutoComplete(props) {
         ? `${selectedAddress}, ${selectedCity}, ${selectedCountry}`
         : "";
       onChange({
-        target: { name: id, value: newValue.value, formattedAddress },
+        target: {
+          name: id,
+          // value: newValue.value,
+          value: newValue?.fullData?.id,
+
+          formattedAddress,
+          id: newValue.fullData?.id,
+        },
       });
     } else {
-      onChange({ target: { name: id, value: null, formattedAddress: "" } });
+      onChange({
+        target: { name: id, value: null, formattedAddress: "", id: "" },
+      });
     }
   };
 
@@ -82,7 +92,8 @@ function FormAutoComplete(props) {
         size="small"
         id={id}
         noOptionsText="Type to Search"
-        value={options.find((option) => option.value === value) || null}
+        // value={options.find((option) => option.value === value) || null}
+        value={options.find((option) => option.fullData?.id === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}

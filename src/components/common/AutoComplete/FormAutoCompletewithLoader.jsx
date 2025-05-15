@@ -17,11 +17,13 @@ function FormAutoCompleteWithLoader(props) {
     dataLabel,
     value,
     error,
+    customerId,
+    setCustomerId,
     onChange,
     disabled,
-    other, 
+    other,
   } = props;
-
+  
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -58,17 +60,21 @@ function FormAutoCompleteWithLoader(props) {
   };
 
   const handleSelectionChange = (event, newValue) => {
+    // setCustomerId(newValue?.fullData?.id);
+
     if (newValue) {
       onChange({
         target: {
           name: id,
-          value: newValue.value,
+          // value: newValue.value,
+          value: newValue?.fullData?.id,
           count: newValue?.fullData?.count || 0,
+          id: newValue?.fullData?.id || "",
         },
       });
     } else {
       onChange({
-        target: { name: id, value: null, count: 0 },
+        target: { name: id, value: null, count: 0, id: "" },
       });
     }
   };
@@ -82,7 +88,8 @@ function FormAutoCompleteWithLoader(props) {
         size="small"
         id={id}
         disabled={disabled}
-        value={options.find((option) => option.value === value) || null}
+        value={options.find((option) => option.fullData?.id === value) || null}
+        // value={options.find((option) => option.value === value) || ''}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}

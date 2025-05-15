@@ -57,9 +57,16 @@ function FormAutoCompleteChargeHead(props) {
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      onChange({ target: { name: id, value: newValue.value } });
+      onChange({ target: {
+         name: id,
+        //  value: newValue.value,
+         value: newValue.fullData?.id,
+         id: newValue.fullData?.id,
+
+
+         } });
     } else {
-      onChange({ target: { name: id, value: null } });
+      onChange({ target: { name: id, value: null ,id:""} });
     }
   };
 
@@ -72,7 +79,7 @@ function FormAutoCompleteChargeHead(props) {
         size="small"
         id={id}
         disabled={disabled}
-        value={options.find((option) => option.value === value) || null}
+        value={options.find((option) => option.fullData?.id === value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
