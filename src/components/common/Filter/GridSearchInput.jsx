@@ -172,10 +172,17 @@ const GridSearchInput = ({
           variant="contained"
           size="small"
           sx={{
-            padding: "6px 16px",
+            padding: "2px 1px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             boxShadow: 3,
-            borderRadius: "20px 19px 19px 20px",
+            borderRadius: "20px",
             textTransform: "none",
+            height: 36,
+            fontSize: "12px",
+            fontWeight: "bold",
+            whiteSpace: "nowrap",
           }}
         >
           Pay

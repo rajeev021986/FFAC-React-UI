@@ -325,12 +325,21 @@ export default function PayableListScreen({ page }) {
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
                   "& .MuiFab-root": {
-                    width: 50,
-                    height: 50,
-                    minHeight: 50,
+                    width: 40,
+                    height: 40,
+                    minHeight: 40,
                   },
                 }}
-                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
+                icon={
+                  <SpeedDialIcon
+                    sx={{
+                      fontSize: 20,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  />
+                }
                 direction="left"
               >
                 {actions.map((action) => (
@@ -341,15 +350,17 @@ export default function PayableListScreen({ page }) {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      padding: 2,
-                      borderRadius: 1,
-                      boxShadow: 3,
-                      borderRadius: "20px 19px 19px 20px",
-                      width: 72,
+                      px: 2,
+                      py: 1,
+                      borderRadius: "20px",
                       minWidth: 92,
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 16,
-                      },
+                      width: "auto",
+                      height: 36,
+                      boxShadow: 3,
+                      textTransform: "none",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
                     }}
                     icon={
                       <span style={{ fontSize: "12px", fontWeight: "bold" }}>
