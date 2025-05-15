@@ -1,8 +1,9 @@
 import { Tooltip } from "@mui/material";
 import { ExtractDate } from "../../components/utils/utils";
+import dayjs from "dayjs";
 
 export const ACCOUNTS_PENDING_PAYABLE = [
-    {
+  {
     flex: 1,
     field: "status",
     headerName: "Status",
@@ -39,8 +40,8 @@ export const ACCOUNTS_PENDING_PAYABLE = [
     editable: false,
     renderCell: (params) => {
       return (
-        <Tooltip title={`${ExtractDate(params.value)}`} arrow>
-          <div>{ExtractDate(params.value)}</div>
+        <Tooltip title={`${dayjs(params?.value)?.format("DD/MM/YYYY")}`} arrow>
+          <div>{dayjs(params?.value)?.format("DD/MM/YYYY")}</div>
         </Tooltip>
       );
     },
@@ -53,10 +54,10 @@ export const ACCOUNTS_PENDING_PAYABLE = [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
+    renderCell: (params) => {
       return (
-        <Tooltip title={`${ExtractDate(params.value)}`} arrow>
-          <div>{ExtractDate(params.value)}</div>
+        <Tooltip title={`${dayjs(params?.value)?.format("DD/MM/YYYY")}`} arrow>
+          <div>{dayjs(params?.value)?.format("DD/MM/YYYY")}</div>
         </Tooltip>
       );
     },
@@ -87,10 +88,10 @@ export const ACCOUNTS_PENDING_PAYABLE = [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
+    renderCell: (params) => {
       return (
-        <Tooltip title={`${ExtractDate(params.value)}`} arrow>
-          <div>{ExtractDate(params.value)}</div>
+        <Tooltip title={`${dayjs(params?.value)?.format("DD/MM/YYYY")}`} arrow>
+          <div>{dayjs(params?.value)?.format("DD/MM/YYYY")}</div>
         </Tooltip>
       );
     },

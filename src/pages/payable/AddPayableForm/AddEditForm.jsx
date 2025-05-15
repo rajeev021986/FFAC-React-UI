@@ -259,7 +259,6 @@ export default function AddEditForm({
       }
     },
   });
-console.log("formik.values.exhangeRate",formik.values.exchangeRate);
 
   const getFormData = formik?.values;
   const { data: optionsSettingsData } =
@@ -862,7 +861,14 @@ console.log("formik.values.exhangeRate",formik.values.exchangeRate);
                       options={mergedCurrencyOptions}
                       value={formik.values.currency}
                       error={formik.errors.currency}
-                      onChange={formik.handleChange}
+                        onChange={(e) => {
+                        const value = e.target.value;
+                        formik.setFieldValue("currency", value);
+                        if (value !== "USD") {
+                          // Clear currency-related fields when changing from USD to something else
+                          formik.setFieldValue("exchangeRate", 1);
+                        }
+                      }}
                       disabled={isDisabled}
                     />
                   </Grid>
@@ -873,10 +879,13 @@ console.log("formik.values.exhangeRate",formik.values.exchangeRate);
                       <InputBox
                         label="Ex. Rate"
                         id="exchangRate"
-                        value={
-                       1
-                          
-                        }
+                    //  value={
+                    //       getFormData?.currency === "TZS" ||
+                    //       getFormData?.currency === "INR"
+                    //         ? 1
+                    //         : formatIndianCurrency(formik.values.exchangeRate)
+                    //     }
+                        value={formik.values.exchangeRate}
                         error={formik.errors.exchangeRate}
                         onChange={formik.handleChange}
                         inputRef={payableRef}

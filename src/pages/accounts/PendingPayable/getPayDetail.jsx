@@ -1,6 +1,8 @@
 import { CircularProgress, Grid } from "@mui/material";
 import { Stack } from "@mui/material";
 import { useFormik } from "formik";
+import Tooltip from "@mui/material/Tooltip";
+import * as Yup from "yup";
 import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../components/common/InputBox";
 import { ThemeButton } from "../../../components/common/Button";
@@ -14,7 +16,6 @@ import {
   useAddPaybleEntryMutation,
   useUpdatePaybleEntryMutation,
 } from "../../../store/api/payableApi";
-
 import { useNavigate } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 import CustomToast from "../../../components/common/Toast/CustomToast";
@@ -25,8 +26,6 @@ import { useDispatch, useSelector } from "react-redux";
 import DateTimeField from "../../../components/common/DateTime/DateTimeField";
 import FormAutoComplete from "../../../components/common/AutoComplete/FormAutoComplete";
 import SelectBox from "../../../components/common/SelectBox";
-
-import { payableValidationSchema } from "../../payable/Actions/ValidationSchema";
 import ApiManager from "../../../services/ApiManager";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 
@@ -36,7 +35,7 @@ export default function GetPayDetails({
   viewPage,
   type = "notcopy",
   onClose,
-  refetch
+  refetch,
 }) {
   //
   const invoiceTypeRef = useRef(null);
@@ -81,12 +80,43 @@ export default function GetPayDetails({
       setIsDisabled(false);
     }
   }, [viewPage]);
+  const validationSchema = Yup.object({
+    currency: Yup.string().required("Currency is required!"),
+    paymentType: Yup.string().required("Payment Type is required!"),
+    paymentDate: Yup.string().required("Payment Date is required!"),
+    bankName: Yup.string().when("paymentType", {
+      is: (val) => val === "Cheque",
+      then: () =>
+        Yup.string().required(
+          "Bank Name is required when payment type is Cheque"
+        ),
+      otherwise: () => Yup.string().nullable(),
+    }),
+
+    chequeNo: Yup.string().when("paymentType", {
+      is: (val) => val === "Cheque",
+      then: () =>
+        Yup.string().required(
+          "Cheque No is required when payment type is Cheque"
+        ),
+      otherwise: () => Yup.string().nullable(),
+    }),
+
+    chequeDate: Yup.string().when("paymentType", {
+      is: (val) => val === "Cheque",
+      then: () =>
+        Yup.string().required(
+          "Cheque Date is required when payment type is Cheque"
+        ),
+      otherwise: () => Yup.string().nullable(),
+    }),
+  });
 
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: false,
+    validationSchema,
     onSubmit: async (values) => {
       try {
         const payload = {
@@ -105,12 +135,12 @@ export default function GetPayDetails({
           bankCharges: values?.bankCharges || "",
         };
         const multiplePayload = {
-         paybleIds: values?.paybleIds || [],
-         payment: payload
-        }
-        if (initialValues?.multipleSelected === true) { 
+          paybleIds: values?.paybleIds || [],
+          payment: payload,
+        };
+        if (initialValues?.multipleSelected === true) {
           const res = await ApiManager.paySelectedIdsHandler(multiplePayload);
-          if (res.success) {  
+          if (res.success) {
             const message = res.message;
             toast.custom(<CustomToast message={message} toast="success" />);
             onClose(); // Close modal after successful update
@@ -118,8 +148,7 @@ export default function GetPayDetails({
           } else {
             console.error("Failed to pay", res);
           }
-        }
-         else {
+        } else {
           const res = await ApiManager.paySingle(values.id, payload);
           if (res.success) {
             const message = res.message;
@@ -263,14 +292,22 @@ export default function GetPayDetails({
               <Box sx={{ width: "100%", paddingRight: 2 }}>
                 <Grid container sx={{ padding: 0, margin: 0 }}>
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <InputBox
-                      label="Voucher No"
-                      id="paybleRefNum"
-                      value={formik.values.paybleRefNum}
-                      error={formik.errors.paybleRefNum}
-                      onChange={formik.handleChange}
-                      inputRef={payableRef}
-                    />
+                    <Tooltip
+                      title={formik.values.paybleRefNum || ""}
+                      arrow
+                      placement="top"
+                    >
+                      <div>
+                        <InputBox
+                          label="Voucher No"
+                          id="paybleRefNum"
+                          value={formik.values.paybleRefNum}
+                          error={formik.errors.paybleRefNum}
+                          onChange={formik.handleChange}
+                          disabled={true}
+                        />
+                      </div>
+                    </Tooltip>
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
@@ -280,6 +317,7 @@ export default function GetPayDetails({
                       value={formik.values.vendorName}
                       error={formik.errors.vendorName}
                       onChange={formik.handleChange}
+                      disabled={true}
                       // inputRef={payableRef}
                     />
                   </Grid>
@@ -330,6 +368,7 @@ export default function GetPayDetails({
                       value={formik.values.paymentDate}
                       error={formik.errors.paymentDate}
                       onChange={formik.setFieldValue}
+                      inputRef={payableRef}
                     />
                   </Grid>
 
@@ -351,7 +390,17 @@ export default function GetPayDetails({
                       options={payableSettingData?.body?.paymentType}
                       value={formik.values.paymentType}
                       error={formik.errors.paymentType}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        formik.setFieldValue("paymentType", value);
+
+                        if (value !== "Cheque") {
+                          // Clear cheque-related fields when changing from Cheque to something else
+                          formik.setFieldValue("bankName", "");
+                          formik.setFieldValue("chequeNo", "");
+                          formik.setFieldValue("chequeDate", "");
+                        }
+                      }}
                     />
                   </Grid>
 
@@ -364,7 +413,7 @@ export default function GetPayDetails({
                       error={formik.errors.bankName}
                       onChange={formik.handleChange}
                       disabled={
-                        formik.values.paymentType === "Cash" ? true : false
+                        formik.values.paymentType === "Cheque" ? false : true
                       }
                     ></FormAutoComplete>
                   </Grid>
@@ -377,7 +426,7 @@ export default function GetPayDetails({
                       error={formik.errors.chequeNo}
                       onChange={formik.handleChange}
                       disabled={
-                        formik.values.paymentType === "Cash" ? true : false
+                        formik.values.paymentType === "Cheque" ? false : true
                       }
                       // inputRef={payableRef}
                     />
@@ -389,7 +438,7 @@ export default function GetPayDetails({
                       name="chequeDate"
                       id="chequeDate"
                       disabled={
-                        formik.values.paymentType === "Cash" ? true : false
+                        formik.values.paymentType === "Cheque" ? false : true
                       }
                       value={formik.values.chequeDate}
                       error={formik.errors.chequeDate}
@@ -419,7 +468,12 @@ export default function GetPayDetails({
                           parseFloat(tzs)
                         );
                       }}
-                      disabled={initialValues?.multipleSelected === true ? true : false}
+                      disabled={
+                        initialValues?.multipleSelected === true &&
+                        initialValues?.paybleIds.length > 1
+                          ? true
+                          : false
+                      }
                       // inputRef={payableRef}
                     />
                   </Grid>
@@ -445,7 +499,12 @@ export default function GetPayDetails({
                           parseFloat(usd)
                         );
                       }}
-                      disabled={initialValues?.multipleSelected === true ? true : false}
+                      disabled={
+                        initialValues?.multipleSelected === true &&
+                        initialValues?.paybleIds.length > 1
+                          ? true
+                          : false
+                      }
                       // inputRef={payableRef}
                     />
                   </Grid>

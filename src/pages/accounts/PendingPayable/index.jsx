@@ -141,11 +141,11 @@ export default function AccountsPendingPayableList({ page }) {
               return (
                 <input
                   type="checkbox"
-                  style={{ cursor: sameVendor ? "pointer" : "not-allowed" }}
+                  style={{ cursor: sameVendor && params.row.statusCode !== 100 ? "pointer" : "not-allowed" }}
                   checked={isChecked}
-                  disabled={!sameVendor}
+                  disabled={!sameVendor && params.row.statusCode !== 100}
                   onChange={() =>
-                    sameVendor ? handleCheckboxChange(params.row.id) : null
+                    sameVendor && params.row.statusCode !== 100 ? handleCheckboxChange(params.row.id) : null
                   }
                 />
               );
