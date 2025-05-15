@@ -114,7 +114,6 @@ export default function VatAndHoldingTaxSettings({ page }) {
                     color: "white !important",
                     height: "44px",
                     padding: "5px 20px",
-                    te,
                   }}
                 >
                   Add Setting

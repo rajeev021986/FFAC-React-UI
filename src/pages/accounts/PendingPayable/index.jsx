@@ -111,14 +111,17 @@ export default function AccountsPendingPayableList({ page }) {
           ? getPendingPaymentApprovalGridActions(nav, setModal)
           : "",
     });
+
   const handleCheckboxChange = (id) => {
     setSelectedPayableIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
+
   useEffect(() => {
     refetch();
   }, [location.pathname]);
+
   const PayablePendingColumns = [
     ...(page === "pending_payments"
       ? [
@@ -156,6 +159,7 @@ export default function AccountsPendingPayableList({ page }) {
         ]
       : []), // Use the default columns otherwise
   ];
+
   useEffect(() => {
     if (!paymentSelector.view) {
       dispatch(paymentApprovalView("card"));
@@ -180,6 +184,14 @@ export default function AccountsPendingPayableList({ page }) {
     });
   };
 
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+
   const handleCancel = async () => {
     const jobStatus = modal?.data?.label;
     if (jobStatus === "Approved Successfully") {
@@ -191,17 +203,14 @@ export default function AccountsPendingPayableList({ page }) {
       );
       return;
     }
-
     try {
-      const response = await ApiManager.canceljobEntryApprove(
-        modal?.data?.id,
-        "PAYBLE_ENTRY"
-      );
+      const response = await ApiManager.cancelPendingPayable(modal?.data?.id);
       const message = response.message;
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
       });
       handleClose();
+      refetch();
     } catch (error) {
       toast.custom(<CustomToast message="Failed to cancel." toast="error" />, {
         closeButton: false,
@@ -209,15 +218,6 @@ export default function AccountsPendingPayableList({ page }) {
     }
   };
 
-  const handleClose = () => {
-    setModal({
-      open: false,
-      type: "",
-      data: {},
-    });
-  };
-
-  console.log(modal?.data, 34567890);
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar leftComps={<ThemedBreadcrumb />} rightComps={<> </>} />
