@@ -70,16 +70,12 @@ export default function GetPayDetails({
   });
 
   useEffect(() => {
-    if (
-      viewPage === "view" ||
-      formik?.values?.statusCode === -3 ||
-      formik?.values?.statusCode === 1
-    ) {
+    if (initialValues?.statusCode === 100) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
     }
-  }, [viewPage]);
+  }, [initialValues]);
   const validationSchema = Yup.object({
     currency: Yup.string().required("Currency is required!"),
     paymentType: Yup.string().required("Payment Type is required!"),
@@ -119,6 +115,12 @@ export default function GetPayDetails({
     validationSchema,
     onSubmit: async (values) => {
       try {
+        if(values?.vendorName === ""){
+          toast.custom(
+            <CustomToast message={"Line/Agent name is required!"} toast="error" />
+          );
+          return;
+        }
         const payload = {
           id: values?.id || "",
           vendorName: values?.vendorName || "",
@@ -369,6 +371,7 @@ export default function GetPayDetails({
                       error={formik.errors.paymentDate}
                       onChange={formik.setFieldValue}
                       inputRef={payableRef}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -380,6 +383,7 @@ export default function GetPayDetails({
                       value={formik.values.currency}
                       error={formik.errors.currency}
                       onChange={formik.handleChange}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -390,6 +394,7 @@ export default function GetPayDetails({
                       options={payableSettingData?.body?.paymentType}
                       value={formik.values.paymentType}
                       error={formik.errors.paymentType}
+                      disabled={isDisabled}
                       onChange={(e) => {
                         const value = e.target.value;
                         formik.setFieldValue("paymentType", value);
@@ -413,7 +418,9 @@ export default function GetPayDetails({
                       error={formik.errors.bankName}
                       onChange={formik.handleChange}
                       disabled={
-                        formik.values.paymentType === "Cheque" ? false : true
+                        formik.values.paymentType === "Cheque" && !isDisabled
+                          ? false
+                          : true
                       }
                     ></FormAutoComplete>
                   </Grid>
@@ -426,7 +433,9 @@ export default function GetPayDetails({
                       error={formik.errors.chequeNo}
                       onChange={formik.handleChange}
                       disabled={
-                        formik.values.paymentType === "Cheque" ? false : true
+                        formik.values.paymentType === "Cheque" && !isDisabled
+                          ? false
+                          : true
                       }
                       // inputRef={payableRef}
                     />
@@ -438,7 +447,9 @@ export default function GetPayDetails({
                       name="chequeDate"
                       id="chequeDate"
                       disabled={
-                        formik.values.paymentType === "Cheque" ? false : true
+                        formik.values.paymentType === "Cheque" && !isDisabled
+                          ? false
+                          : true
                       }
                       value={formik.values.chequeDate}
                       error={formik.errors.chequeDate}
@@ -469,10 +480,9 @@ export default function GetPayDetails({
                         );
                       }}
                       disabled={
-                        initialValues?.multipleSelected === true &&
-                        initialValues?.paybleIds.length > 1
-                          ? true
-                          : false
+                        isDisabled ||
+                        (initialValues?.multipleSelected === true &&
+                          initialValues?.paybleIds?.length > 1)
                       }
                       // inputRef={payableRef}
                     />
@@ -500,10 +510,9 @@ export default function GetPayDetails({
                         );
                       }}
                       disabled={
-                        initialValues?.multipleSelected === true &&
-                        initialValues?.paybleIds.length > 1
-                          ? true
-                          : false
+                        isDisabled ||
+                        (initialValues?.multipleSelected === true &&
+                          initialValues?.paybleIds?.length > 1)
                       }
                       // inputRef={payableRef}
                     />
@@ -517,6 +526,7 @@ export default function GetPayDetails({
                       error={formik.errors.bankCharges}
                       onChange={formik.handleChange}
                       // inputRef={payableRef}
+                      disabled={isDisabled}
                     />
                   </Grid>
                 </Grid>

@@ -38,6 +38,7 @@ const PayCalModal = ({ open, onClose, data,refetch }) => {
     chequeDate: "",
     chequeNo: "",
     bankName: "",
+    statusCode: 101,
     multipleSelected: false,
   });
 
@@ -45,6 +46,7 @@ const PayCalModal = ({ open, onClose, data,refetch }) => {
     if (data) {
       setInitialValues({
         multipleSelected: false,
+        statusCode: data?.statusCode ,
         paymentDate: new Date().toISOString() || null,
         createdDate: data?.createdDate,
         currency: data?.currency || "INR",

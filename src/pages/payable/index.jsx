@@ -215,11 +215,11 @@ export default function PayableListScreen({ page }) {
   };
 
   const handleCancel = async () => {
-    const jobStatus = modal?.data?.label;
-    if (jobStatus === "Approved Successfully") {
+    const statusCode = modal?.data?.statusCode;
+    if (statusCode === 100) {
       toast.custom(
         <CustomToast
-          message="Cannot cancel an approved payable."
+          message="Cannot cancel paid payable entry."
           toast="error"
         />
       );

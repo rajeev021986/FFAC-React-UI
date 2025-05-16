@@ -204,6 +204,11 @@ export default function AddPayableEntryModal({
       }));
     }
   }, [togglePayEntry]);
+  useEffect(() => {
+    if (payableEntry.unitRate) {
+      handleChange("noOfUnit", payableEntry.noOfUnit);
+    }
+  }, [payableEntry.unitType, payableEntry.noOfUnit]);
 
   useEffect(() => {
     if (selectedPayEntry) {
@@ -249,7 +254,7 @@ export default function AddPayableEntryModal({
     };
 
     fetchData();
-  }, [debounceValue, payableEntry.jobNo,]);
+  }, [debounceValue, payableEntry.jobNo]);
 
   const handleInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
@@ -336,7 +341,8 @@ export default function AddPayableEntryModal({
                 size="small"
                 disabled={!payableEntry.jobNo}
                 value={
-                  options.find((opt) => opt.value === payableEntry.unitType) || null
+                  options.find((opt) => opt.value === payableEntry.unitType) ||
+                  null
                 }
                 onInputChange={handleInputChange}
                 onChange={handleChangeUnitType}

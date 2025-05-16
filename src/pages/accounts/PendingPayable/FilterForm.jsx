@@ -5,9 +5,14 @@ import InputBox from "../../../components/common/InputBox";
 import { updateInput } from "../../../store/freatures/paymentApprovalSlice";
 import { OutlinedButton } from "../../../components/common/Button";
 import { useFormik } from "formik";
+import SelectBox from "../../../components/common/SelectBox";
 
 export default function FilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
+  const statusOptions = [
+    { value: 100, label: "Paid" },
+    { value: 101, label: "Unpaid" },
+  ];
   const inputs = useSelector((state) => state.accountsPendingPayments.formData);
   const formik = useFormik({
     initialValues: inputs || {
@@ -99,17 +104,25 @@ export default function FilterForm({ setFilterOpen }) {
             onChange={formik.handleChange}
           />
         </Stack>
-
         <Stack direction="row" spacing={2}>
           <InputBox
             label="Currency"
             id="currency"
             value={formik.values.currency}
             onChange={formik.handleChange}
-            sx={{ width: "31%" }}
+          />
+          <SelectBox
+            sx={{ marginLeft: "8px !important" }}
+            label="Status"
+            id="paymentStatus"
+            options={statusOptions}
+            value={formik.values.statusCode}
+            onChange={formik.handleChange}
+            MenuProps={{
+              disablePortal: true,
+            }}
           />
         </Stack>
-
         <Stack direction="row" spacing={3} justifyContent={"end"}>
           <Button
             color="primary"

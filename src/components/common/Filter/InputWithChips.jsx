@@ -17,8 +17,6 @@ const Chips = {
       { value: 0, label: "New & Pen Doc" },
       { value: -1, label: "Rejected" },
       { value: -3, label: "Cancel" },
-      { value: 101, label: "Unpaid" },
-      { value: 100, label: "Paid" },
     ],
   },
   customerName: {
@@ -99,6 +97,11 @@ const Chips = {
       { value: 0, label: "Pending" },
       { value: -3, label: "Cancel" },
       { value: -1, label: "Rejected" },
+    ],
+  },
+  paymentStatus: {
+    chipLabel: "Payment Status",
+    chipvalues: [
       { value: 101, label: "Unpaid" },
       { value: 100, label: "Paid" },
     ],

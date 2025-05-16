@@ -47,6 +47,7 @@ export default function AccountsPendingPayableList({ page }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const nav = useNavigate();
+  const [firstSelectedRow, setFirstSelectedRow] = useState(null);
   const [selectedPayableIds, setSelectedPayableIds] = useState([]);
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
@@ -112,10 +113,35 @@ export default function AccountsPendingPayableList({ page }) {
           : "",
     });
 
-  const handleCheckboxChange = (id) => {
-    setSelectedPayableIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+  const handleCheckboxChange = (row) => {
+    setSelectedPayableIds((prevSelected) => {
+      const isAlreadySelected = prevSelected.includes(row.id);
+
+      // If unchecking
+      if (isAlreadySelected) {
+        if (firstSelectedRow?.id === row.id) {
+          // If it's the first selected row, clear all
+          setFirstSelectedRow(null);
+          return [];
+        }
+        return prevSelected.filter((id) => id !== row.id);
+      }
+
+      // If trying to check but not allowed (vendor mismatch or statusCode === 100)
+      if (
+        (firstSelectedRow && firstSelectedRow.vendorName !== row.vendorName) ||
+        row.statusCode === 100
+      ) {
+        return prevSelected;
+      }
+
+      // If first selection
+      if (!firstSelectedRow) {
+        setFirstSelectedRow({ id: row.id, vendorName: row.vendorName });
+      }
+
+      return [...prevSelected, row.id];
+    });
   };
 
   useEffect(() => {
@@ -133,22 +159,19 @@ export default function AccountsPendingPayableList({ page }) {
             align: "center",
             renderCell: (params) => {
               const isChecked = selectedPayableIds.includes(params.row.id);
-              const firstSelectedRow =
-                pendingPaymentsListData?.body?.data?.find((row) =>
-                  selectedPayableIds.includes(row.id)
-                );
               const sameVendor =
                 !firstSelectedRow ||
                 firstSelectedRow.vendorName === params.row.vendorName;
+              const isSelectable = sameVendor && params.row.statusCode !== 100 && params.row.vendorName !== "";
 
               return (
                 <input
                   type="checkbox"
-                  style={{ cursor: sameVendor && params.row.statusCode !== 100 ? "pointer" : "not-allowed" }}
                   checked={isChecked}
-                  disabled={!sameVendor && params.row.statusCode !== 100}
+                  disabled={!isSelectable}
+                  style={{ cursor: isSelectable ? "pointer" : "not-allowed" }}
                   onChange={() =>
-                    sameVendor && params.row.statusCode !== 100 ? handleCheckboxChange(params.row.id) : null
+                    isSelectable && handleCheckboxChange(params.row)
                   }
                 />
               );
@@ -193,13 +216,12 @@ export default function AccountsPendingPayableList({ page }) {
   };
 
   const handleCancel = async () => {
-    const jobStatus = modal?.data?.label;
-    if (jobStatus === "Approved Successfully") {
+    const jobStatus = modal?.data?.statusCode;
+    console.log("jobStatus", jobStatus);
+
+    if (jobStatus === 100) {
       toast.custom(
-        <CustomToast
-          message="Cannot cancel an approved payable."
-          toast="error"
-        />
+        <CustomToast message="Cannot cancel a paid payable." toast="error" />
       );
       return;
     }
@@ -322,7 +344,10 @@ export default function AccountsPendingPayableList({ page }) {
           open={modal.open}
           data={modal.data}
           refetch={refetch}
-          onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+          onClose={() => {
+            setModal((prev) => ({ ...prev, open: false }));
+            setSelectedPayableIds([]);
+          }}
         />
       )}
     </Box>
