@@ -69,8 +69,8 @@ export default function AddEditForm({
   viewPage,
   type = "notcopy",
 }) {
-  console.log(initialValues,"initialValues");
-  
+  console.log(initialValues, "initialValues");
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -259,7 +259,6 @@ export default function AddEditForm({
       }
     },
   });
-console.log("formik.values.exhangeRate",formik.values.exchangeRate);
 
   const getFormData = formik?.values;
   const { data: optionsSettingsData } =
@@ -294,7 +293,12 @@ console.log("formik.values.exhangeRate",formik.values.exchangeRate);
         );
         const backendData = await response.body;
         setshowDefaultCurrency(backendData?.[0]);
-        formik.setFieldValue("currency", initialValues.currency ? initialValues.currency : backendData?.[0].currency);
+        formik.setFieldValue(
+          "currency",
+          initialValues.currency
+            ? initialValues.currency
+            : backendData?.[0].currency
+        );
         const backendCurrencies = Array.from(
           new Set(
             (backendData || []).map((item) => item.currency).filter(Boolean)
@@ -873,10 +877,7 @@ console.log("formik.values.exhangeRate",formik.values.exchangeRate);
                       <InputBox
                         label="Ex. Rate"
                         id="exchangRate"
-                        value={
-                       1
-                          
-                        }
+                        value={1}
                         error={formik.errors.exchangeRate}
                         onChange={formik.handleChange}
                         inputRef={payableRef}

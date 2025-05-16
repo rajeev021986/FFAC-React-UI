@@ -46,6 +46,7 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
       }
     );
   };
+
   const handleProcessRowUpdate = (newRow, oldRow) => {
     const updatedRows = value.map((row) =>
       row.id === newRow.id ? { ...row, ...newRow } : row
