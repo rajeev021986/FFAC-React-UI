@@ -55,10 +55,10 @@ const settingTabs = [
     label: "Payable Entry",
     value: "10",
   },
-  // {
-  //   label: "Vat and Holding Tax",
-  //   value: "11",
-  // },
+  {
+    label: "Vat and Holding Tax",
+    value: "11",
+  },
 ];
 
 export default function SettingsPage() {
@@ -114,7 +114,7 @@ export default function SettingsPage() {
             {activeTab === "8" && <ConsigneeSetting />}
             {activeTab === "9" && <JobEntrySetting />}
             {activeTab === "10" && <PayableSettings />}
-            {/* {activeTab === "11" && <VatAndHoldingTaxSettings />} */}
+            {activeTab === "11" && <VatAndHoldingTaxSettings />}
           </Box>
         </Box>
       </Grid>
