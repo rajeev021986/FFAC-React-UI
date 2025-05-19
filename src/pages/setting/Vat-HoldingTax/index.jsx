@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Grid } from "@mui/material";
+import { Box, Drawer, Grid, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { paymentApprovalView } from "../../../store/freatures/paymentApprovalSlice";
 import GridActions from "../../../components/common/Grid/GridActions";
@@ -9,6 +9,7 @@ import GridActions from "../../../components/common/Grid/GridActions";
 import { TAX_COLUMNS } from "./Columns";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
+import BiotechIcon from "@mui/icons-material/Biotech";
 
 import { getPendingPaymentApprovalGridActions } from "../../accounts/PendingPayable/action";
 import { OutlinedButton } from "../../../components/common/Button";
@@ -20,6 +21,8 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import toast from "react-hot-toast";
 import CustomToast from "../../../components/common/Toast/CustomToast";
+import { menuConfigUrl } from "../../../store/menuConfigUrl";
+import AuditTimeLine from "../../../components/AuditTimeLine";
 
 export default function VatAndHoldingTaxSettings({ page }) {
   const nav = useNavigate();
@@ -34,6 +37,8 @@ export default function VatAndHoldingTaxSettings({ page }) {
     type: "",
     data: {},
   });
+
+  console.log(modal, 23456789);
 
   const query = {
     page: vatAndHoldingTaxSelector?.pagination?.page + 1,
@@ -97,8 +102,6 @@ export default function VatAndHoldingTaxSettings({ page }) {
   };
 
   const handleDeleteRow = async (data) => {
-    console.log(data, 23456789);
-
     try {
       await deleteVatAndHoldingTax(data).unwrap();
       toast.custom(
@@ -112,11 +115,17 @@ export default function VatAndHoldingTaxSettings({ page }) {
     }
   };
 
-  const handleProcessRowUpdate = (newRow, oldRow) => {};
+  const handleAudit = (data) => {
+    setModal({
+      open: true,
+      type: "audit",
+      data,
+    });
+  };
 
   const columns = [
     {
-      field: "Id",
+      field: "id",
       headerName: "ID",
       flex: 1.5,
       align: "center",
@@ -128,7 +137,7 @@ export default function VatAndHoldingTaxSettings({ page }) {
       align: "center",
       headerAlign: "center",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       field: "actions",
@@ -160,6 +169,10 @@ export default function VatAndHoldingTaxSettings({ page }) {
                   type: params.row?.type || "VAT",
                 })
               }
+            />
+            <BiotechIcon
+              sx={{ width: "20px", cursor: "pointer", color: "#166de0" }}
+              onClick={() => handleAudit(params?.row)}
             />
           </div>
         );
@@ -193,7 +206,6 @@ export default function VatAndHoldingTaxSettings({ page }) {
               <DataGrid
                 rows={vatAndHoldingTaxSettingData?.body?.vatSettings}
                 columns={columns}
-                processRowUpdate={handleProcessRowUpdate}
                 experimentalFeatures={{ newEditingApi: true }}
                 disableRowSelectionOnClick
                 autoHeight={false}
@@ -246,7 +258,6 @@ export default function VatAndHoldingTaxSettings({ page }) {
               <DataGrid
                 rows={vatAndHoldingTaxSettingData?.body?.withHoldingTaxSettings}
                 columns={columns}
-                processRowUpdate={handleProcessRowUpdate}
                 experimentalFeatures={{ newEditingApi: true }}
                 disableRowSelectionOnClick
                 autoHeight={false}
@@ -277,13 +288,38 @@ export default function VatAndHoldingTaxSettings({ page }) {
             </div>
           </Grid>
         </Grid>
+      </Box>
 
+      {modal.type === "audit" ? (
+        <Drawer
+          anchor="right"
+          open={modal?.open}
+          onClose={() => setModal({ open: false, type: "", data: {} })}
+          sx={{
+            width: "50vw",
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 1301,
+          }}
+        >
+          <Box>
+            <Typography variant="h6" component="div" margin="8px">
+              Settings Audit Logs
+            </Typography>
+            <AuditTimeLine
+              id={modal.data.id}
+              page="settings/api"
+              service={menuConfigUrl.admin}
+            />
+          </Box>
+        </Drawer>
+      ) : (
         <AddEditFormModal
           modal={modal}
           toggleModal={toggleModal}
           closeModal={closeModal}
         />
-      </Box>
+      )}
     </div>
   );
 }
