@@ -57,7 +57,7 @@ export const settingAuditAPI = createApi({
           Authorization: getAppHeaders()["Authorization"],
         };
         return {
-          url: `${menuConfigUrl.admin}/settings/api/type?=${params?.setting_type}`,
+          url: `${menuConfigUrl.admin}/settings/api?type=${params?.setting_type}`,
           method: "PUT",
           body: params,
           headers: headers,
