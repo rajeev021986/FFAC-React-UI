@@ -549,6 +549,7 @@ export default function GetPayDetails({
                         fontWeight: "500",
                         color: "white !important",
                       }}
+                      disabled={isDisabled}
                     >
                       {isLoading && (
                         <CircularProgress size={20} color="white" />

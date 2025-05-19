@@ -69,8 +69,6 @@ export default function AddEditForm({
   viewPage,
   type = "notcopy",
 }) {
-  console.log(initialValues,"initialValues");
-  
   const style = {
     position: "absolute",
     top: "50%",
@@ -259,7 +257,6 @@ export default function AddEditForm({
       }
     },
   });
-
   const getFormData = formik?.values;
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -293,7 +290,12 @@ export default function AddEditForm({
         );
         const backendData = await response.body;
         setshowDefaultCurrency(backendData?.[0]);
-        formik.setFieldValue("currency", initialValues.currency ? initialValues.currency : backendData?.[0].currency);
+        formik.setFieldValue(
+          "currency",
+          initialValues.currency
+            ? initialValues.currency
+            : backendData?.[0].currency
+        );
         const backendCurrencies = Array.from(
           new Set(
             (backendData || []).map((item) => item.currency).filter(Boolean)
@@ -441,7 +443,6 @@ export default function AddEditForm({
     let { page, pageSize } = params;
     dispatch(dashboardSetPagination({ page, pageSize }));
   };
-
   const muiTextFieldStyles = {
     root: {
       "& .MuiInputBase-root": {
@@ -451,6 +452,13 @@ export default function AddEditForm({
       },
     },
   };
+useEffect(() => {
+ if(formik?.values?.currency !== "USD"){
+  console.log("hello");
+  
+  formik.setFieldValue("exchangeRate", 1);
+  }
+}, [formik?.values?.currency])
 
   // const FieldRef = useRef(null);
   // useEffect(() => {
@@ -861,12 +869,12 @@ export default function AddEditForm({
                       options={mergedCurrencyOptions}
                       value={formik.values.currency}
                       error={formik.errors.currency}
-                        onChange={(e) => {
+                      onChange={(e) => {
                         const value = e.target.value;
                         formik.setFieldValue("currency", value);
-                        if (value !== "USD") {
+                        if (value === "USD") {
                           // Clear currency-related fields when changing from USD to something else
-                          formik.setFieldValue("exchangeRate", 1);
+                          formik.setFieldValue("exchangeRate", null);
                         }
                       }}
                       disabled={isDisabled}
@@ -879,13 +887,13 @@ export default function AddEditForm({
                       <InputBox
                         label="Ex. Rate"
                         id="exchangRate"
-                    //  value={
-                    //       getFormData?.currency === "TZS" ||
-                    //       getFormData?.currency === "INR"
-                    //         ? 1
-                    //         : formatIndianCurrency(formik.values.exchangeRate)
-                    //     }
-                        value={formik.values.exchangeRate}
+                        value={
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
+                            ? 1
+                            : formatIndianCurrency(formik.values.exchangeRate)
+                        }
+                        // value={formik.values.exchangeRate}
                         error={formik.errors.exchangeRate}
                         onChange={formik.handleChange}
                         inputRef={payableRef}

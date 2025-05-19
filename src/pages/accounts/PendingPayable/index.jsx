@@ -113,31 +113,39 @@ export default function AccountsPendingPayableList({ page }) {
           : "",
     });
 
+  // handleCheckboxChange with enhanced validation
   const handleCheckboxChange = (row) => {
     setSelectedPayableIds((prevSelected) => {
       const isAlreadySelected = prevSelected.includes(row.id);
 
-      // If unchecking
       if (isAlreadySelected) {
         if (firstSelectedRow?.id === row.id) {
-          // If it's the first selected row, clear all
           setFirstSelectedRow(null);
           return [];
         }
         return prevSelected.filter((id) => id !== row.id);
       }
 
-      // If trying to check but not allowed (vendor mismatch or statusCode === 100)
+      const sameVendor =
+        !firstSelectedRow || firstSelectedRow.vendorName === row.vendorName;
+      const sameCurrency =
+        !firstSelectedRow || firstSelectedRow.currency === row.currency;
+
       if (
-        (firstSelectedRow && firstSelectedRow.vendorName !== row.vendorName) ||
-        row.statusCode === 100
+        !sameVendor ||
+        !sameCurrency ||
+        row.statusCode === 100 ||
+        !row.vendorName
       ) {
         return prevSelected;
       }
 
-      // If first selection
       if (!firstSelectedRow) {
-        setFirstSelectedRow({ id: row.id, vendorName: row.vendorName });
+        setFirstSelectedRow({
+          id: row.id,
+          vendorName: row.vendorName,
+          currency: row.currency,
+        });
       }
 
       return [...prevSelected, row.id];
@@ -162,8 +170,17 @@ export default function AccountsPendingPayableList({ page }) {
               const sameVendor =
                 !firstSelectedRow ||
                 firstSelectedRow.vendorName === params.row.vendorName;
-              const isSelectable = sameVendor && params.row.statusCode !== 100 && params.row.vendorName !== "";
+              const sameCurrency =
+                !firstSelectedRow ||
+                firstSelectedRow.currency === params.row.currency;
+              console.log("sameCurrency ", sameCurrency);
+              console.log("sameVendor ", sameVendor);
 
+              const isSelectable =
+                sameVendor &&
+                sameCurrency &&
+                params.row.statusCode !== 100 &&
+                params.row.vendorName !== "";
               return (
                 <input
                   type="checkbox"
@@ -217,8 +234,6 @@ export default function AccountsPendingPayableList({ page }) {
 
   const handleCancel = async () => {
     const jobStatus = modal?.data?.statusCode;
-    console.log("jobStatus", jobStatus);
-
     if (jobStatus === 100) {
       toast.custom(
         <CustomToast message="Cannot cancel a paid payable." toast="error" />
