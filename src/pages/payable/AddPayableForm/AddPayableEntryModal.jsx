@@ -24,6 +24,7 @@ import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
+import { useFetchVatAndHoldingQuery } from "../../../store/api/settingAuditAPI";
 
 const modalStyle = {
   position: "absolute",
@@ -60,10 +61,21 @@ export default function AddPayableEntryModal({
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
   const selectedValue = formik.values.unitType;
   const [filteredOptions, setFilteredOptions] = useState([]);
+
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: payableSettingData } =
     useGetOptionsSettingsQuery("payble_settings");
+
+  const { data: vatAndHoldingTaxSettingData, refetch } =
+    useFetchVatAndHoldingQuery({
+      params: { type: "VAT" },
+      page: "settings/api",
+    });
+
+  console.log(vatAndHoldingTaxSettingData, "vatAndHoldingTaxSettingData");
+
+  console.log(optionsSettingsData?.body?.vatRate, 2345678);
 
   const [payableEntry, setPayableEntry] = useState({
     id: null,
@@ -249,7 +261,7 @@ export default function AddPayableEntryModal({
     };
 
     fetchData();
-  }, [debounceValue, payableEntry.jobNo,]);
+  }, [debounceValue, payableEntry.jobNo]);
 
   const handleInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
@@ -336,7 +348,8 @@ export default function AddPayableEntryModal({
                 size="small"
                 disabled={!payableEntry.jobNo}
                 value={
-                  options.find((opt) => opt.value === payableEntry.unitType) || null
+                  options.find((opt) => opt.value === payableEntry.unitType) ||
+                  null
                 }
                 onInputChange={handleInputChange}
                 onChange={handleChangeUnitType}
