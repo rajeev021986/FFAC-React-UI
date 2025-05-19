@@ -38,8 +38,6 @@ export default function VatAndHoldingTaxSettings({ page }) {
     data: {},
   });
 
-  console.log(modal, 23456789);
-
   const query = {
     page: vatAndHoldingTaxSelector?.pagination?.page + 1,
     size: vatAndHoldingTaxSelector?.pagination?.pageSize,
@@ -123,6 +121,7 @@ export default function VatAndHoldingTaxSettings({ page }) {
     });
   };
 
+  console.log(modal, 345678);
   const columns = [
     {
       field: "id",
@@ -170,10 +169,6 @@ export default function VatAndHoldingTaxSettings({ page }) {
                 })
               }
             />
-            <BiotechIcon
-              sx={{ width: "20px", cursor: "pointer", color: "#166de0" }}
-              onClick={() => handleAudit(params?.row)}
-            />
           </div>
         );
       },
@@ -200,6 +195,14 @@ export default function VatAndHoldingTaxSettings({ page }) {
                 onClick={() => toggleModal()}
               >
                 Add
+              </OutlinedButton>
+
+              <OutlinedButton
+                color="primary"
+                size="small"
+                onClick={() => handleAudit("VAT")}
+              >
+                Audit
               </OutlinedButton>
             </div>
             <div style={{ height: 400, width: "100%" }}>
@@ -245,13 +248,20 @@ export default function VatAndHoldingTaxSettings({ page }) {
                 height: "50px",
               }}
             >
-              <h3>{"With Holding Tax"}</h3>
+              <h3>{"Holding Tax"}</h3>
               <OutlinedButton
                 color="primary"
                 size="small"
                 onClick={() => toggleModal()}
               >
                 Add
+              </OutlinedButton>
+              <OutlinedButton
+                color="primary"
+                size="small"
+                onClick={() => handleAudit("HOLDING_TAX")}
+              >
+                Audit
               </OutlinedButton>
             </div>
             <div style={{ height: 400, width: "100%" }}>
@@ -307,7 +317,7 @@ export default function VatAndHoldingTaxSettings({ page }) {
               Settings Audit Logs
             </Typography>
             <AuditTimeLine
-              id={modal.data.type}
+              id={modal.data}
               page="settings/api"
               service={menuConfigUrl.admin}
             />
