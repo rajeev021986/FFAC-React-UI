@@ -74,34 +74,40 @@ export default function AddRateModal({
       },
     });
   };
-React.useEffect(() => {
+  React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await ApiManager.fetchAutoCompleteData("", "COMPANY_CODE");
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
         const backendData = await response.body;
-  
+
         // Extract backend currencies safely
         const backendCurrencies = Array.from(
-          new Set((backendData || []).map(item => item.currency).filter(Boolean))
-        ).map(curr => ({ id: curr, value: curr }));
-  
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
         // Get setting currencies safely
         const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
-  
+
         // Merge both arrays avoiding duplicates (based on `value`)
         const mergedCurrencies = [
           ...backendCurrencies,
           ...settingCurrencies.filter(
-            setting => !backendCurrencies.some(item => item.value === setting.value)
-          )
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
         ];
-  
+
         setMergedCurrencyOptions(mergedCurrencies);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
   const TabsHosts = [

@@ -503,6 +503,7 @@ export default function JobEntryScreen({ page }) {
           </Box>
         </Drawer>
       )}
+
       <DocumentDialog
         // source="jobApprove"
         sourceId={modal?.data?.id}

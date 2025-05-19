@@ -23,6 +23,7 @@ import { jobEntry } from "./api/jobEntryApi";
 import { containerAPI } from "./api/containerApi";
 import { payableCodeAPI } from "./api/payableApi";
 import { pendingPaymentCodeAPI } from "./api/accountPendingApproval";
+import { settingAuditAPI } from "./api/settingAuditAPI";
 
 import userManagementReducer from "./freatures/userManagementSlice";
 import authReducer from "./freatures/authSlice";
@@ -56,6 +57,7 @@ import vehicleReducer from "./freatures/vehicleSlice";
 import looseCargoReducer from "./freatures/LoseCargoSlice";
 import payableReducer from "./freatures/payableEntrySlice";
 import pendingPaymentReducer from "./freatures/paymentApprovalSlice";
+import vatAndHoldingReducer from "./freatures/vatAndHoldingSlice";
 
 const store = configureStore({
   reducer: {
@@ -84,6 +86,7 @@ const store = configureStore({
     [containerAPI.reducerPath]: containerAPI.reducer,
     [payableCodeAPI.reducerPath]: payableCodeAPI.reducer,
     [pendingPaymentCodeAPI.reducerPath]: pendingPaymentCodeAPI.reducer,
+    [settingAuditAPI.reducerPath]: settingAuditAPI.reducer,
 
     // slice
     userManagement: userManagementReducer,
@@ -119,6 +122,7 @@ const store = configureStore({
     looseCargo: looseCargoReducer,
     payableAction: payableReducer,
     accountsPendingPayments: pendingPaymentReducer,
+    vatAndHolding: vatAndHoldingReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -146,7 +150,8 @@ const store = configureStore({
       jobEntry.middleware,
       containerAPI.middleware,
       payableCodeAPI.middleware,
-      pendingPaymentCodeAPI.middleware
+      pendingPaymentCodeAPI.middleware,
+      settingAuditAPI.middleware
     ),
 });
 
