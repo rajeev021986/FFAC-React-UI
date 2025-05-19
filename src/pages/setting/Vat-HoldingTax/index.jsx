@@ -121,7 +121,6 @@ export default function VatAndHoldingTaxSettings({ page }) {
     });
   };
 
-  console.log(modal, 345678);
   const columns = [
     {
       field: "id",
@@ -179,7 +178,7 @@ export default function VatAndHoldingTaxSettings({ page }) {
     <div style={{ padding: "1rem" }}>
       <Box sx={{ backgroundColor: "white.main" }}>
         <Grid container spacing={2} flexWrap={"wrap"}>
-          <Grid item xs={12} md={4} sm={6}>
+          <Grid item xs={12} md={6} sm={6}>
             <div
               style={{
                 display: "flex",
@@ -188,23 +187,26 @@ export default function VatAndHoldingTaxSettings({ page }) {
                 height: "50px",
               }}
             >
-              <h3>{"VAT Rate"}</h3>
-              <OutlinedButton
-                color="primary"
-                size="small"
-                onClick={() => toggleModal()}
-              >
-                Add
-              </OutlinedButton>
+              <h3 style={{ margin: 0 }}>VAT Rate</h3>
 
-              <OutlinedButton
-                color="primary"
-                size="small"
-                onClick={() => handleAudit("VAT")}
-              >
-                Audit
-              </OutlinedButton>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <OutlinedButton
+                  color="primary"
+                  size="small"
+                  onClick={() => toggleModal()}
+                >
+                  Add
+                </OutlinedButton>
+                <OutlinedButton
+                  color="primary"
+                  size="small"
+                  onClick={() => handleAudit("VAT")}
+                >
+                  Audit
+                </OutlinedButton>
+              </div>
             </div>
+
             <div style={{ height: 400, width: "100%" }}>
               <DataGrid
                 rows={vatAndHoldingTaxSettingData?.body?.vatSettings}
@@ -239,7 +241,7 @@ export default function VatAndHoldingTaxSettings({ page }) {
             </div>
           </Grid>
 
-          <Grid item xs={12} md={4} sm={6}>
+          <Grid item xs={12} md={6} sm={6}>
             <div
               style={{
                 display: "flex",
@@ -248,22 +250,26 @@ export default function VatAndHoldingTaxSettings({ page }) {
                 height: "50px",
               }}
             >
-              <h3>{"Holding Tax"}</h3>
-              <OutlinedButton
-                color="primary"
-                size="small"
-                onClick={() => toggleModal()}
-              >
-                Add
-              </OutlinedButton>
-              <OutlinedButton
-                color="primary"
-                size="small"
-                onClick={() => handleAudit("HOLDING_TAX")}
-              >
-                Audit
-              </OutlinedButton>
+              <h3 style={{ margin: 0 }}>Holding Tax</h3>
+
+              <div style={{ display: "flex", gap: "8px" }}>
+                <OutlinedButton
+                  color="primary"
+                  size="small"
+                  onClick={() => toggleModal()}
+                >
+                  Add
+                </OutlinedButton>
+                <OutlinedButton
+                  color="primary"
+                  size="small"
+                  onClick={() => handleAudit("HOLDING_TAX")}
+                >
+                  Audit
+                </OutlinedButton>
+              </div>
             </div>
+
             <div style={{ height: 400, width: "100%" }}>
               <DataGrid
                 rows={vatAndHoldingTaxSettingData?.body?.withHoldingTaxSettings}
