@@ -280,7 +280,11 @@ export default function AddEditForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
-
+useEffect(() => {
+  if(formik.values?.currency !== "USD"){
+    formik.setFieldValue("exchangeRate", 1);
+  }
+},[formik.values?.currency]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -802,7 +806,7 @@ useEffect(() => {
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <FormAutoCompleteWithLoader
-                      label="Job No."
+                      label="Job No.*"
                       id="jobNo"
                       value={formik.values.jobNo}
                       error={formik.errors.jobNo}
@@ -815,7 +819,7 @@ useEffect(() => {
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <DateTimeField
                       name="invoiceDate"
-                      label="Invoice Date"
+                      label="Invoice Date*"
                       id="invoiceDate"
                       value={formik.values.invoiceDate}
                       error={formik.errors.invoiceDate}
@@ -827,7 +831,7 @@ useEffect(() => {
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <FormAutoCompleteWithLoader
-                      label="Vendor Name"
+                      label="Vendor Name*"
                       id="vendorName"
                       suggestionName="vendor_name"
                       value={formik.values.vendorName}

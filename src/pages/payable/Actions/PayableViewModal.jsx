@@ -54,8 +54,6 @@ const PayableViewModal = ({ open, onClose, data }) => {
           res.body?.status.charAt(0).toUpperCase() +
           res.body?.status.slice(1).toLowerCase();
       }
-      console.log(" res.body?.currency", res.body?.currency);
-      
       setInitialValues({
         id: res.body?.id || "",
         status: res.body?.status,

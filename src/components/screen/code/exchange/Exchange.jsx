@@ -104,38 +104,48 @@ export default function Exchange() {
       }
     }
   };
-  const handleFetchExchangeRate = async () => {
-    try {
-      const response = await getExahangeRate({ id });
-      if (response?.data) {
-        if (type === "copy" || type === "new") {
-          formik.setValues({
-            ...response.data.body,
-            status: "New",
-          });
-        } else {
-          formik.setValues(response.data.body);
-        }
+ const handleFetchExchangeRate = async () => {
+  try {
+    const response = await getExahangeRate({ id });
+    if (response?.data) {
+      const data = response.data.body;
+
+      // Convert UTC strings to local dayjs objects (or JS Date objects)
+      const fromDateLocal = data.fromDate ? dayjs.utc(data.fromDate).local().toDate() : "";
+      const toDateLocal = data.toDate ? dayjs.utc(data.toDate).local().toDate() : "";
+
+      const formValues = {
+        ...data,
+        fromDate: fromDateLocal,
+        toDate: toDateLocal,
+      };
+
+      if (type === "copy" || type === "new") {
+        formik.setValues({
+          ...formValues,
+          status: "New",
+        });
       } else {
-        toast.custom(
-          <CustomToast message="Failed to fetch Charge data" toast="error" />,
-          {
-            closeButton: false,
-          }
-        );
+        formik.setValues(formValues);
       }
-    } catch (error) {
+    } else {
       toast.custom(
-        <CustomToast
-          message="Error fetching ExchangeRate data"
-          toast="error"
-        />,
+        <CustomToast message="Failed to fetch Exchange data" toast="error" />,
         {
           closeButton: false,
         }
       );
     }
-  };
+  } catch (error) {
+    toast.custom(
+      <CustomToast message="Error fetching ExchangeRate data" toast="error" />,
+      {
+        closeButton: false,
+      }
+    );
+  }
+};
+
   useEffect(() => {
     if (id && ExchageSettingsData) {
       handleFetchExchangeRate();

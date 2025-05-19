@@ -59,30 +59,26 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       "City must only contain letters"
     ),
     country: Yup.string(),
-    email: Yup.string().test(
-      "valid-email",
-      "Invalid email format",
-      (value) => {
+    email: Yup.string()
+      // .required("Email is required")
+      .email("Invalid email format")
+      .test("valid-email", "Invalid email format", (value) => {
         if (!value) return true; // Skip validation if email is empty
+
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(value)) return false; // Check for basic email structure
-        if (value.includes("..")) return false; // Consecutive dots are not allowed
-  
-        // Check if there are numbers in the local part (before '@')
-        const localPart = value.split('@')[0];
-        if (/\d+/.test(localPart)) {
-          return false; // Numbers in the local part are not allowed
+        if (!emailRegex.test(value)) return false; // Basic email structure check
+
+        if (value.includes("..")) return false; // Consecutive dots not allowed
+
+        const domainPart = value.split("@")[1];
+        const domainBeforeDot = domainPart?.split(".")[0];
+
+        if (/\d/.test(domainBeforeDot)) {
+          return false; // Disallow numbers in the domain before the first dot
         }
-  
-        // Check if there are numbers immediately after '@' symbol in the domain part
-        const domainPart = value.split('@')[1];
-        if (domainPart && /\d+/.test(domainPart.split('.')[0])) {
-          return false; // Numbers in the domain part before the first dot are not allowed
-        }
+
         return true;
-    
-      }
-    ),
+      }),
     contactPerson: Yup.string().matches(
       /^[A-Za-z\s]+$/,
       "Contact Person must only contain letters"
@@ -99,13 +95,13 @@ export default function ShipperForm({ initialValues, page, type, id }) {
       "Contact Person must only contain letters"
     ),
     tel_No: Yup.string()
-    // .required("Telephone number is required")
-    .matches(/^\d+$/, "Telephone must be a valid number")
-    .matches(/^\d{7,15}$/, "Telephone must be between 8 and 15 digits"),
-      mobile: Yup.string()
-    // .required("Mobile number is required")
-    .matches(/^\d+$/, "Telephone must be a valid number")
-    .matches(/^\d{10,15}$/, "Mobile must be between 10 and 15 digits"),
+      // .required("Telephone number is required")
+      .matches(/^\d+$/, "Telephone must be a valid number")
+      .matches(/^\d{7,15}$/, "Telephone must be between 7 and 15 digits"),
+    mobile: Yup.string()
+      // .required("Mobile number is required")
+      .matches(/^\d+$/, "Telephone must be a valid number")
+      .matches(/^\d{10,15}$/, "Mobile must be between 10 and 15 digits"),
   });
 
   const handleChange = (event, newValue) => {

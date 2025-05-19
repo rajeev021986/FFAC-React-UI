@@ -10,7 +10,9 @@ import {
   Card,
   CardHeader,
   IconButton,
+  Link,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
 import CardsView from "../../../components/common/Cards/CardsView";
@@ -40,6 +42,7 @@ import CustomToast from "../../../components/common/Toast/CustomToast";
 import ApiManager from "../../../services/ApiManager";
 import PayCalMultiple from "./PayCalMultiple";
 import CancelModalApprove from "../../JobEntry/CancelModalApprove";
+import PayableViewModal from "../../payable/Actions/PayableViewModal";
 
 export default function AccountsPendingPayableList({ page }) {
   //
@@ -55,6 +58,13 @@ export default function AccountsPendingPayableList({ page }) {
     type: "",
     data: {},
   });
+  // const handleView = (rowData) => {
+  //   setModal({
+  //     open: true,
+  //     type: "view",
+  //     data: rowData,
+  //   });
+  // };
   const query = {
     page: paymentSelector?.pagination?.page + 1,
     size: paymentSelector?.pagination?.pageSize,
@@ -191,6 +201,38 @@ export default function AccountsPendingPayableList({ page }) {
                     isSelectable && handleCheckboxChange(params.row)
                   }
                 />
+              );
+            },
+          },
+          {
+            flex: 1,
+            field: "paybleRefNum",
+            headerName: "Payable Ref No.",
+            width: 350,
+            headerAlign: "center",
+            align: "center",
+            editable: false,
+            renderCell: (params) => {
+              return (
+                <Tooltip title={`${params?.value}`} arrow>
+                  <div className="word-wrap-cell">
+                    <Link
+                      href="#"
+                      underline="always"
+                      style={{ color: "black" }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setModal({
+                          open: true,
+                          type: "view",
+                          data: params.row,
+                        });
+                      }}
+                    >
+                      {params.value}
+                    </Link>
+                  </div>
+                </Tooltip>
               );
             },
           },
@@ -353,6 +395,12 @@ export default function AccountsPendingPayableList({ page }) {
           handleOpen={modal.open && modal.type === "cancel"}
           handleClose={handleClose}
           handleCancel={handleCancel}
+        />
+      ) : modal.type === "view" ? (
+        <PayableViewModal
+          open={modal.open}
+          onClose={handleClose}
+          data={modal.data}
         />
       ) : (
         <PayCalModal

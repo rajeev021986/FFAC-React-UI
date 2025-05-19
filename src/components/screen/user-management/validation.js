@@ -2,7 +2,12 @@ import * as Yup from 'yup';
 
 export const UserValidationSchema = (formAction) => Yup.object({
     userid: Yup.string().required("User ID is required"),
-    emailid: Yup.string().email("Invalid email address").required("Email ID is required"),
+    emailid: Yup.string()
+      .email("Invalid email format")
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "Invalid email format"
+      ),
     firstname: Yup.string().required("First Name is required"),
     password: formAction === 'edit' || formAction === 'verify' ? Yup.string() : Yup.string().required("Password is required"),
     confirm_password: formAction === 'edit' || formAction === 'verify'  ? 
