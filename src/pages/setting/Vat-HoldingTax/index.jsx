@@ -97,8 +97,10 @@ export default function VatAndHoldingTaxSettings({ page }) {
   };
 
   const handleDeleteRow = async (data) => {
+    console.log(data, 23456789);
+
     try {
-      await deleteVatAndHoldingTax(data).unwrap();
+      // await deleteVatAndHoldingTax(data).unwrap();
       toast.custom(
         <CustomToast
           message="Setting data deleted successfully!"

@@ -11,7 +11,10 @@ import { useUpdateJobEntryMutation } from "../../../store/api/jobEntryApi";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import SelectBox from "../../../components/common/SelectBox";
-import { useAddVatAndHoldingTaxMutation } from "../../../store/api/settingAuditAPI";
+import {
+  useAddVatAndHoldingTaxMutation,
+  useVatAndHoldingTaxMutation,
+} from "../../../store/api/settingAuditAPI";
 
 const modalStyle = {
   position: "absolute",
@@ -29,8 +32,7 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
   const navigate = useNavigate();
 
   const [addVatAndHoldingTax, { isLoading }] = useAddVatAndHoldingTaxMutation();
-  const [updateJobEntry, { isLoading: loadingUpdate }] =
-    useUpdateJobEntryMutation();
+  const [vatAndHoldingTax, { loadingUpdate }] = useVatAndHoldingTaxMutation();
 
   const isEditMode = modal?.type === "edit";
   const initialValues = {
@@ -52,7 +54,7 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
     }),
     onSubmit: async (values) => {
       const payload = { ...values };
-      if (!payload.id) {
+      if (!isEditMode) {
         try {
           const response = await addVatAndHoldingTax(payload).unwrap();
           toast.custom(
@@ -77,7 +79,7 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
         }
       } else {
         try {
-          const response = await updateJobEntry(payload).unwrap();
+          const response = await vatAndHoldingTax(payload).unwrap();
           toast.custom(
             <CustomToast
               message={response.message}
