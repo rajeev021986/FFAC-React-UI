@@ -65,9 +65,7 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
             { closeButton: false, duration: 2000 }
           );
           formik.resetForm();
-          setTimeout(() => {
-            closeModal();
-          }, 500);
+          closeModal();
         } catch (error) {
           const message =
             error?.data?.message ||
@@ -88,7 +86,7 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
             { closeButton: false }
           );
           if (response.code === "SUCCESS") {
-            navigate(-1);
+            closeModal();
           }
         } catch (error) {
           const message =
