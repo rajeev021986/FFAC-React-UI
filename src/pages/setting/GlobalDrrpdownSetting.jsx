@@ -33,7 +33,6 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
 
   const handleDeleteRow = (id) => {
     const updated = value.filter((item) => item.id !== id);
-    // Re-index to keep ids as index + 1
     const reIndexed = updated.map((item, index) => ({
       ...item,
       id: index + 1,
@@ -133,13 +132,6 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
               fill: "#fff",
             },
           }}
-          // slots={{
-          //   toolbar: () => (
-          //     <Box sx={{ display: "flex", justifyContent: "flex-start", p: 1 }}>
-          //       <GridToolbarColumnsButton />
-          //     </Box>
-          //   ),
-          // }}
         />
       </div>
     </Grid>

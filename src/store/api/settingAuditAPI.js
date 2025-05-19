@@ -39,7 +39,18 @@ export const settingAuditAPI = createApi({
       providesTags: ["Code"],
     }),
 
-    updateJobDetailsEntry: builder.mutation({
+    deleteVatAndHoldingTax: builder.mutation({
+      query: (params) => {
+        return {
+          url: `${menuConfigUrl.admin}/settings/api/${params?.id}?type=${params?.row?.type}`,
+          method: "DELETE",
+          headers: getAppHeaders(),
+        };
+      },
+      invalidatesTags: ["Code"],
+    }),
+
+    vatAndHoldingTax: builder.mutation({
       query: (params) => {
         const headers = {
           Authorization: getAppHeaders()["Authorization"],
@@ -53,40 +64,12 @@ export const settingAuditAPI = createApi({
       },
       invalidatesTags: ["Code"],
     }),
-
-    updateJobEntry: builder.mutation({
-      query: (params) => {
-        const headers = {
-          Authorization: getAppHeaders()["Authorization"],
-        };
-        return {
-          url: `${menuConfigUrl.document}/job-detail`,
-          method: "PUT",
-          body: params,
-          headers: headers,
-        };
-      },
-      invalidatesTags: ["Code"],
-    }),
-
-    deleteJobEntry: builder.mutation({
-      query: (id) => {
-        return {
-          url: `${menuConfigUrl.document}/job-detail/${id}`,
-          method: "DELETE",
-          headers: getAppHeaders(),
-        };
-      },
-      invalidatesTags: ["Code"],
-    }),
   }),
 });
 
 export const {
   useAddVatAndHoldingTaxMutation,
   useFetchVatAndHoldingQuery,
-
-  useDeleteJobEntryMutation,
-  useUpdateJobEntryMutation,
-  useUpdateJobDetailsEntryMutation,
+  useDeleteVatAndHoldingTaxMutation,
+  useVatAndHoldingTaxMutation,
 } = settingAuditAPI;

@@ -1,33 +1,34 @@
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Card, CardHeader, Grid, Stack } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  paymentApprovalView,
-  setPagination,
-  paymnetApprovalSetSortModel,
-} from "../../../store/freatures/paymentApprovalSlice";
+import { paymentApprovalView } from "../../../store/freatures/paymentApprovalSlice";
 import GridActions from "../../../components/common/Grid/GridActions";
 
 import { TAX_COLUMNS } from "./Columns";
-import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
-
 import { Delete as DeleteIcon } from "@mui/icons-material";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { getPendingPaymentApprovalGridActions } from "../../accounts/PendingPayable/action";
-import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
+import { OutlinedButton } from "../../../components/common/Button";
 import AddEditFormModal from "./AddEditFormModal";
-import { useFetchVatAndHoldingQuery } from "../../../store/api/settingAuditAPI";
+import {
+  useDeleteVatAndHoldingTaxMutation,
+  useFetchVatAndHoldingQuery,
+} from "../../../store/api/settingAuditAPI";
 import { DataGrid } from "@mui/x-data-grid";
 import toast from "react-hot-toast";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 
 export default function VatAndHoldingTaxSettings({ page }) {
-  const vatAndHoldingTaxSelector = useSelector((s) => s?.vatAndHolding);
+  const nav = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const nav = useNavigate();
+
+  const vatAndHoldingTaxSelector = useSelector((s) => s?.vatAndHolding);
+  const [deleteVatAndHoldingTax] = useDeleteVatAndHoldingTaxMutation();
+
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -55,33 +56,12 @@ export default function VatAndHoldingTaxSettings({ page }) {
   ) {
     query.sortBy = "customerName";
   }
-  const payload = Object.entries(vatAndHoldingTaxSelector?.formData)
-    .filter(([key, value]) => value !== "")
-    .map(([key, value]) => {
-      let fieldname = key;
-      Boolean(key == "cname") && (fieldname = "customerName");
-      return {
-        fieldName: fieldname,
-        operator: "=",
-        value: value,
-        logicalOperator: "and",
-      };
+
+  const { data: vatAndHoldingTaxSettingData, refetch } =
+    useFetchVatAndHoldingQuery({
+      params: { type: "VAT" },
+      page: "settings/api",
     });
-
-  const {
-    data: vatAndHoldingTaxSettingData,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useFetchVatAndHoldingQuery({
-    params: { type: "VAT" },
-    page: "settings/api",
-  });
-
-  const handlePage = (params) => {
-    let { page, pageSize } = params;
-    dispatch(setPagination({ page, pageSize }));
-  };
 
   TAX_COLUMNS[TAX_COLUMNS.length - 1].renderCell = GridActions({
     actions:
@@ -116,20 +96,25 @@ export default function VatAndHoldingTaxSettings({ page }) {
     });
   };
 
-  const handleDeleteRow = (id) => {
-    toast.custom(
-      <CustomToast message="Click Save to confirm deletion" toast="info" />,
-      {
-        closeButton: false,
-      }
-    );
+  const handleDeleteRow = async (data) => {
+    try {
+      await deleteVatAndHoldingTax(data).unwrap();
+      toast.custom(
+        <CustomToast
+          message="Setting data deleted successfully!"
+          toast="success"
+        />
+      );
+    } catch (error) {
+      toast.custom(<CustomToast message="Failed to delete." toast="error" />);
+    }
   };
 
   const handleProcessRowUpdate = (newRow, oldRow) => {};
 
   const columns = [
     {
-      field: "id",
+      field: "Id",
       headerName: "ID",
       flex: 1.5,
       align: "center",
@@ -148,17 +133,38 @@ export default function VatAndHoldingTaxSettings({ page }) {
       headerName: "Actions",
       align: "center",
       headerAlign: "center",
-      width: 100,
-      renderCell: (params) => (
-        <DeleteIcon
-          style={{ cursor: "pointer", color: "red" }}
-          onClick={() => handleDeleteRow(params.id)}
-        />
-      ),
+      width: 120,
+      renderCell: (params) => {
+        return (
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "10px",
+            }}
+          >
+            <DeleteIcon
+              style={{ cursor: "pointer", color: "red" }}
+              onClick={() => handleDeleteRow(params.row)}
+            />
+            <EditIcon
+              style={{ cursor: "pointer" }}
+              onClick={() =>
+                toggleModal("edit", {
+                  id: params.row?.id,
+                  value: params.row?.value,
+                  type: params.row?.type || "VAT",
+                })
+              }
+            />
+          </div>
+        );
+      },
     },
   ];
 
-  console.log(vatAndHoldingTaxSettingData, "vatAndHoldingTaxSettingData");
   return (
     <div style={{ padding: "1rem" }}>
       <Box sx={{ backgroundColor: "white.main" }}>
@@ -271,7 +277,7 @@ export default function VatAndHoldingTaxSettings({ page }) {
         </Grid>
 
         <AddEditFormModal
-          modal={modal?.open}
+          modal={modal}
           toggleModal={toggleModal}
           closeModal={closeModal}
         />

@@ -33,7 +33,11 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
     useUpdateJobEntryMutation();
 
   const isEditMode = modal?.type === "edit";
-  const initialValues = modal?.initialValues || { id: "", value: "" };
+  const initialValues = {
+    id: modal?.data?.id || "",
+    value: modal?.data?.value || "",
+    setting_type: modal?.data?.type || "",
+  };
 
   const SettingType = [
     { label: "VAT", value: "VAT" },
@@ -58,7 +62,10 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
             />,
             { closeButton: false, duration: 2000 }
           );
-          closeModal();
+          formik.resetForm();
+          setTimeout(() => {
+            closeModal();
+          }, 500);
         } catch (error) {
           const message =
             error?.data?.message ||
@@ -96,7 +103,7 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
   return (
     <Modal
       keepMounted
-      open={modal}
+      open={modal?.open}
       onClose={toggleModal}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
@@ -115,7 +122,7 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
         </IconButton>
 
         <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
-          {isEditMode ? "Edit Entry" : "Add New Entry"}
+          {isEditMode ? "Edit Settings" : "Add Settings"}
         </Typography>
 
         <form onSubmit={formik.handleSubmit}>
