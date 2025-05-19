@@ -6,10 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 
-import { useUpdateJobEntryMutation } from "../../../store/api/jobEntryApi";
-
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import SelectBox from "../../../components/common/SelectBox";
 import {
   useAddVatAndHoldingTaxMutation,
@@ -29,8 +26,6 @@ const modalStyle = {
 };
 
 const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
-  const navigate = useNavigate();
-
   const [addVatAndHoldingTax, { isLoading }] = useAddVatAndHoldingTaxMutation();
   const [vatAndHoldingTax, { loadingUpdate }] = useVatAndHoldingTaxMutation();
 

@@ -43,7 +43,7 @@ export const settingAuditAPI = createApi({
       query: (params) => {
         console.log(params, 345678);
         return {
-          url: `${menuConfigUrl.admin}/settings/api/${params?.id}?type=${params?.row?.type}`,
+          url: `${menuConfigUrl.admin}/settings/api/${params?.id}?type=${params?.type}`,
           method: "DELETE",
           headers: getAppHeaders(),
         };
