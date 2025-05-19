@@ -307,7 +307,7 @@ export default function VatAndHoldingTaxSettings({ page }) {
               Settings Audit Logs
             </Typography>
             <AuditTimeLine
-              id={modal.data.id}
+              id={modal.data.type}
               page="settings/api"
               service={menuConfigUrl.admin}
             />
