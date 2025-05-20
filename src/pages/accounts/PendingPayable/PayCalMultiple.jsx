@@ -8,7 +8,7 @@ import Loader from "../../../components/common/Loader/Loader";
 import CloseIcon from "@mui/icons-material/Close";
 import GetPayDetails from "./getPayDetail";
 
-const PayCalMultiple = ({ open, onClose, data,refetch }) => {
+const PayCalMultiple = ({ open, onClose, data, refetch }) => {
   const vendorName = data[0]?.vendorName;
   const payableRefNums = data?.map((item) => item.paybleRefNum).join(", ");
 
@@ -16,10 +16,16 @@ const PayCalMultiple = ({ open, onClose, data,refetch }) => {
   // Get exchange rate from the last item
   const lastExchangeRate = data[data.length - 1]?.exchangeRate || 1;
   // localAmount = usdAmount * exchangeRate of last item
-const localAmount = data?.reduce((acc, curr) => acc + (curr.totalAmount * curr.exchangeRate), 0);
+  const localAmount = data?.reduce(
+    (acc, curr) => acc + curr.totalAmount * curr.exchangeRate,
+    0
+  );
   // Same values for "to be paid" as well
   const usdAmountToBePaid = usdAmount;
-  const localAmountToBePaid = data?.reduce((acc, curr) => acc + (curr.totalAmount * curr.exchangeRate), 0);
+  const localAmountToBePaid = data?.reduce(
+    (acc, curr) => acc + curr.totalAmount * curr.exchangeRate,
+    0
+  );
   const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = React.useState({
     paybleIds: [],

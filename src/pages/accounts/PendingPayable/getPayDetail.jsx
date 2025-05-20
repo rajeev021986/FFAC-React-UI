@@ -115,9 +115,12 @@ export default function GetPayDetails({
     validationSchema,
     onSubmit: async (values) => {
       try {
-        if(values?.vendorName === ""){
+        if (values?.vendorName === "") {
           toast.custom(
-            <CustomToast message={"Line/Agent name is required!"} toast="error" />
+            <CustomToast
+              message={"Line/Agent name is required!"}
+              toast="error"
+            />
           );
           return;
         }
@@ -326,7 +329,7 @@ export default function GetPayDetails({
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount USD"
+                      label={`Amount ${formik.values.currency}`}
                       id="usdAmount"
                       value={formatIndianCurrency(formik.values.usdAmount)}
                       error={formik.errors.usdAmount}
@@ -383,7 +386,7 @@ export default function GetPayDetails({
                       value={formik.values.currency}
                       error={formik.errors.currency}
                       onChange={formik.handleChange}
-                      disabled={isDisabled}
+                      disabled
                     />
                   </Grid>
 
@@ -459,7 +462,7 @@ export default function GetPayDetails({
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount to be paid (USD)"
+                      label={`Amount to be paid (${formik.values.currency})`}
                       id="usdAmountToBePaid"
                       value={formik.values.usdAmountToBePaid}
                       error={formik.errors.usdAmountToBePaid}

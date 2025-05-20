@@ -137,8 +137,8 @@ const AddEditFormModal = ({ modal, toggleModal, closeModal }) => {
               <InputBox
                 label={`${
                   formik?.values?.setting_type === "VAT"
-                    ? "VAT"
-                    : "With Holding Tax"
+                    ? "VAT Rate"
+                    : "Holding Tax"
                 }`}
                 id="value"
                 name="value"

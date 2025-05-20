@@ -93,7 +93,6 @@ export default function AddPayableEntry({ page }) {
     }
   };
 
-
   useEffect(() => {
     if (state?.initialValues?.id) {
       fetchPayableData();
