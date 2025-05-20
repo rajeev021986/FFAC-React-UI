@@ -75,8 +75,6 @@ export default function AddPayableEntryModal({
 
   console.log(vatAndHoldingTaxSettingData, "vatAndHoldingTaxSettingData");
 
-  console.log(optionsSettingsData?.body?.vatRate, 2345678);
-
   const [payableEntry, setPayableEntry] = useState({
     id: null,
     jobNo: formik.values.jobNo,
@@ -423,7 +421,7 @@ export default function AddPayableEntryModal({
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
-              label="Unit Rate"
+              label={`Unit Rate (${formik?.values?.currency})`}
               id="unitRate"
               value={formatIndianCurrency(payableEntry.unitRate)}
               onChange={(e) => {
@@ -460,7 +458,7 @@ export default function AddPayableEntryModal({
             <SelectBox
               label="VAT Applicable*"
               id="vatApplicable"
-              options={optionsSettingsData?.body?.vatRate}
+              options={vatAndHoldingTaxSettingData?.body?.vatSettings}
               value={payableEntry.vatApplicable}
               // error={formik.errors.vatApplicable}
               error={errors.vatApplicable}
@@ -480,7 +478,9 @@ export default function AddPayableEntryModal({
             <SelectBox
               label="With Holding Tax*"
               id="withHoldingTax"
-              options={payableSettingData?.body?.holdingTax}
+              options={
+                vatAndHoldingTaxSettingData?.body?.withHoldingTaxSettings
+              }
               value={payableEntry.withHoldingTax}
               error={errors.withHoldingTax}
               onChange={(e) => handleChange("withHoldingTax", e.target.value)}

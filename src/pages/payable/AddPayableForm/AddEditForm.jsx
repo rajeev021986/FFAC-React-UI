@@ -1,15 +1,6 @@
-import {
-  Button,
-  CircularProgress,
-  Grid,
-  IconButton,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Stack } from "@mui/material";
 import { useFormik } from "formik";
-import CloseIcon from "@mui/icons-material/Close";
+import { CircularProgress, Grid, Stack } from "@mui/material";
+import { IconButton, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../components/common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
@@ -22,7 +13,6 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import AddIcon from "@mui/icons-material/Add";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   useAddPaybleEntryMutation,
   useUpdatePaybleEntryMutation,
@@ -280,11 +270,11 @@ export default function AddEditForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
-useEffect(() => {
-  if(formik.values?.currency !== "USD"){
-    formik.setFieldValue("exchangeRate", 1);
-  }
-},[formik.values?.currency]);
+  useEffect(() => {
+    if (formik.values?.currency !== "USD") {
+      formik.setFieldValue("exchangeRate", 1);
+    }
+  }, [formik.values?.currency]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -456,13 +446,13 @@ useEffect(() => {
       },
     },
   };
-useEffect(() => {
- if(formik?.values?.currency !== "USD"){
-  console.log("hello");
-  
-  formik.setFieldValue("exchangeRate", 1);
-  }
-}, [formik?.values?.currency])
+  useEffect(() => {
+    if (formik?.values?.currency !== "USD") {
+      console.log("hello");
+
+      formik.setFieldValue("exchangeRate", 1);
+    }
+  }, [formik?.values?.currency]);
 
   // const FieldRef = useRef(null);
   // useEffect(() => {
@@ -1409,28 +1399,6 @@ useEffect(() => {
           </TabPanel>
         </TabContext>
       </Box>
-      {/* <Modal open={open} onClose={handleClose}>
-          <Box sx={style}>
-            <Button
-              onClick={handleClose}
-              sx={{
-                position: "absolute",
-                top: 10,
-                right: 8,
-                color: "red",
-                backgroundColor: "transparent",
-              }}
-            >
-              <CloseIcon color="red" />
-            </Button>
-            <UploadFile
-              customer_id={initialValues.id}
-              isNotShowType={true}
-              sourceType={"JOB_DETAIL"}
-              type={SourceType}
-            />
-          </Box>
-        </Modal> */}
       <AddPayableEntryModal
         togglePayEntry={togglePayEntry}
         handleTogglePayEntry={handleTogglePayEntry}

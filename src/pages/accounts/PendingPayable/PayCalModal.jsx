@@ -8,7 +8,7 @@ import Loader from "../../../components/common/Loader/Loader";
 import CloseIcon from "@mui/icons-material/Close";
 import GetPayDetails from "./getPayDetail";
 
-const PayCalModal = ({ open, onClose, data,refetch }) => {
+const PayCalModal = ({ open, onClose, data, refetch }) => {
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = useState({
     paybleIds: [],
@@ -46,7 +46,7 @@ const PayCalModal = ({ open, onClose, data,refetch }) => {
     if (data) {
       setInitialValues({
         multipleSelected: false,
-        statusCode: data?.statusCode ,
+        statusCode: data?.statusCode,
         paymentDate: new Date().toISOString() || null,
         createdDate: data?.createdDate,
         currency: data?.currency || "INR",
