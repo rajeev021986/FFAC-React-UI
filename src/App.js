@@ -177,10 +177,6 @@ function App() {
               path="documentation/paybleEntry/editpayable"
               element={<AddPayableEntry page="payable" />}
             />
-            <Route
-              path="documentation/paybleEntry/editpayable"
-              element={<AddPayableEntry page="payable" />}
-            />
 
             <Route
               path="documentation/approvePayable"

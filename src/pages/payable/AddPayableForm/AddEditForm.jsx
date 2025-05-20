@@ -1285,7 +1285,11 @@ export default function AddEditForm({
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
                           sx={{ fontWeight: "500" }}
-                          onClick={() => nav(-1)}
+                          onClick={() =>
+                            page === "payable"
+                              ? nav("/app/documentation/paybleEntry")
+                              : nav("/app/documentation/approvePayable")
+                          }
                         >
                           Close
                         </OutlinedButton>
@@ -1333,9 +1337,14 @@ export default function AddEditForm({
                       alignItems="center"
                     >
                       <Stack direction="row" spacing={2}>
+                        {/*  */}
                         <OutlinedButton
                           sx={{ fontWeight: "500" }}
-                          onClick={() => nav(-1)}
+                          onClick={() =>
+                            page === "payable"
+                              ? nav("/app/documentation/paybleEntry")
+                              : nav("/app/documentation/approvePayable")
+                          }
                         >
                           Close
                         </OutlinedButton>
