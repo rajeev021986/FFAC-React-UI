@@ -59,7 +59,6 @@ export default function GlobalDrrpdownSetting({ value, setvalue, title }) {
       field: "id",
       headerName: "ID",
       flex: 1.5,
-
       align: "center",
       headerAlign: "center",
     },

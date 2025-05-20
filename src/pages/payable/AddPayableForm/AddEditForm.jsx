@@ -328,7 +328,6 @@ useEffect(() => {
   const handleApproveRequest = async () => {
     setRejectError(false);
     const { vendorInvoiceNo, isDoc } = formik.values;
-
     // Validation logic
     if (vendorInvoiceNo && !isDoc) {
       toast.custom(
@@ -342,7 +341,21 @@ useEffect(() => {
       );
       return; // Prevent approval
     }
+    if(formik.values?.paybleDetails?.length === 0) {
+      console.log("no chaolrge");
+      
+      toast.custom(
+        <CustomToast
+          message="Please add payable details before approving"
+          toast="error"
+        />,
+        {
+          closeButton: false,
 
+        }
+      );
+      return; // Prevent approval 
+    }
     try {
       setLoaderApprove((prevState) => ({
         ...prevState,
@@ -458,8 +471,6 @@ useEffect(() => {
   };
 useEffect(() => {
  if(formik?.values?.currency !== "USD"){
-  console.log("hello");
-  
   formik.setFieldValue("exchangeRate", 1);
   }
 }, [formik?.values?.currency])

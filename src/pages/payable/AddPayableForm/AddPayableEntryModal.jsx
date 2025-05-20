@@ -73,10 +73,6 @@ export default function AddPayableEntryModal({
       page: "settings/api",
     });
 
-  console.log(vatAndHoldingTaxSettingData, "vatAndHoldingTaxSettingData");
-
-  console.log(optionsSettingsData?.body?.vatRate, 2345678);
-
   const [payableEntry, setPayableEntry] = useState({
     id: null,
     jobNo: formik.values.jobNo,

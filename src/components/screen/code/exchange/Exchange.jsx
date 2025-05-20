@@ -51,7 +51,6 @@ export default function Exchange() {
     useUpdateExahangeRateMutation();
 
   const onSubmit = async (values) => {
-    console.log("values", values);
     const utcFormattedValues = {
     ...values,
     fromDate: values.fromDate ? dayjs(values.fromDate).utc().format("YYYY-MM-DDTHH:mm:ss[Z]") : "",

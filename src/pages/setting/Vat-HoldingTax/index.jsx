@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Drawer, Grid, Typography } from "@mui/material";
+import { Box, Dialog, Drawer, Grid, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { paymentApprovalView } from "../../../store/freatures/paymentApprovalSlice";
 import GridActions from "../../../components/common/Grid/GridActions";
@@ -23,11 +23,16 @@ import toast from "react-hot-toast";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import AuditTimeLine from "../../../components/AuditTimeLine";
+import DeleteDialog from "../../../components/common/DeleteDialog";
 
 export default function VatAndHoldingTaxSettings({ page }) {
   const nav = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const [deleteDialog, setDeleteDialog] = React.useState({
+    open: false,
+    data: null,
+  });
 
   const vatAndHoldingTaxSelector = useSelector((s) => s?.vatAndHolding);
   const [deleteVatAndHoldingTax] = useDeleteVatAndHoldingTaxMutation();
@@ -99,15 +104,17 @@ export default function VatAndHoldingTaxSettings({ page }) {
     });
   };
 
-  const handleDeleteRow = async (data) => {
+  const confirmDelete = async () => {
     try {
-      await deleteVatAndHoldingTax(data).unwrap();
+      await deleteVatAndHoldingTax(deleteDialog.data).unwrap();
       toast.custom(
         <CustomToast
           message="Setting data deleted successfully!"
           toast="success"
         />
       );
+      setDeleteDialog({ open: false, data: null });
+      refetch(); // Optionally refresh the grid
     } catch (error) {
       toast.custom(<CustomToast message="Failed to delete." toast="error" />);
     }
@@ -123,12 +130,20 @@ export default function VatAndHoldingTaxSettings({ page }) {
 
   const columns = [
     {
-      field: "id",
+      field: "serial",
       headerName: "ID",
       flex: 1.5,
       align: "center",
       headerAlign: "center",
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => {
+        const allRowIds = params.api?.getAllRowIds?.() || [];
+        const index = allRowIds.indexOf(params.id);
+        return index >= 0 ? index + 1 : "";
+      },
     },
+
     {
       field: "value",
       headerName: "Value",
@@ -156,8 +171,14 @@ export default function VatAndHoldingTaxSettings({ page }) {
           >
             <DeleteIcon
               style={{ cursor: "pointer", color: "red" }}
-              onClick={() => handleDeleteRow(params.row)}
+              onClick={() =>
+                setDeleteDialog({
+                  open: true,
+                  data: params.row,
+                })
+              }
             />
+
             <EditIcon
               style={{ cursor: "pointer" }}
               onClick={() =>
@@ -305,6 +326,13 @@ export default function VatAndHoldingTaxSettings({ page }) {
           </Grid>
         </Grid>
       </Box>
+      <DeleteDialog
+        source="this entry"
+        sourceName={deleteDialog.data?.value}
+        handleOpen={deleteDialog.open}
+        handleClose={() => setDeleteDialog({ open: false, data: null })}
+        handleDelete={confirmDelete}
+      />
 
       {modal.type === "audit" ? (
         <Drawer

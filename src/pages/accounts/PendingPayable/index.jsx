@@ -183,9 +183,6 @@ export default function AccountsPendingPayableList({ page }) {
               const sameCurrency =
                 !firstSelectedRow ||
                 firstSelectedRow.currency === params.row.currency;
-              console.log("sameCurrency ", sameCurrency);
-              console.log("sameVendor ", sameVendor);
-
               const isSelectable =
                 sameVendor &&
                 sameCurrency &&

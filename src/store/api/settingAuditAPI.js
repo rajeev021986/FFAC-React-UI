@@ -10,7 +10,6 @@ export const settingAuditAPI = createApi({
   endpoints: (builder) => ({
     addVatAndHoldingTax: builder.mutation({
       query: (params) => {
-        console.log(params, 34562323);
         const headers = {
           Authorization: getAppHeaders()["Authorization"],
         };
@@ -41,7 +40,6 @@ export const settingAuditAPI = createApi({
 
     deleteVatAndHoldingTax: builder.mutation({
       query: (params) => {
-        console.log(params, 345678);
         return {
           url: `${menuConfigUrl.admin}/settings/api/${params?.id}?type=${params?.type}`,
           method: "DELETE",
