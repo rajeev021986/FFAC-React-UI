@@ -107,7 +107,6 @@ export default function GetPayDetails({
       otherwise: () => Yup.string().nullable(),
     }),
   });
-
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,

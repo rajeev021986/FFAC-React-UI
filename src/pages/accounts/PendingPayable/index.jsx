@@ -43,6 +43,7 @@ import ApiManager from "../../../services/ApiManager";
 import PayCalMultiple from "./PayCalMultiple";
 import CancelModalApprove from "../../JobEntry/CancelModalApprove";
 import PayableViewModal from "../../payable/Actions/PayableViewModal";
+import AddRejectedRemarks from "../../JobEntry/RejectedRemarks";
 
 export default function AccountsPendingPayableList({ page }) {
   //
@@ -52,6 +53,7 @@ export default function AccountsPendingPayableList({ page }) {
   const nav = useNavigate();
   const [firstSelectedRow, setFirstSelectedRow] = useState(null);
   const [selectedPayableIds, setSelectedPayableIds] = useState([]);
+  const { pathname } = useLocation();
   const [seletectBox, setSelectedBox] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
@@ -221,7 +223,7 @@ export default function AccountsPendingPayableList({ page }) {
                         e.preventDefault();
                         setModal({
                           open: true,
-                          type: "view",
+                          type: "AccountsView",
                           data: params.row,
                         });
                       }}
@@ -280,7 +282,10 @@ export default function AccountsPendingPayableList({ page }) {
       return;
     }
     try {
-      const response = await ApiManager.cancelPendingPayable(modal?.data?.id);
+      const response = await ApiManager.cancelPendingPayable(
+        modal?.data?.id,
+        "PAYBLE_ENTRY"
+      );
       const message = response.message;
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
@@ -383,6 +388,7 @@ export default function AccountsPendingPayableList({ page }) {
           onClose={() => {
             setModal((prev) => ({ ...prev, open: false }));
             setSelectedPayableIds([]);
+            setFirstSelectedRow(null);
           }}
         />
       ) : modal.type === "cancel" ? (
@@ -393,11 +399,20 @@ export default function AccountsPendingPayableList({ page }) {
           handleClose={handleClose}
           handleCancel={handleCancel}
         />
-      ) : modal.type === "view" ? (
+      ) : modal.type === "AccountsView" ? (
         <PayableViewModal
           open={modal.open}
           onClose={handleClose}
           data={modal.data}
+          viewType={pathname}
+        />
+      ) : modal.type === "reject" ? (
+        <AddRejectedRemarks
+          handleOpen={modal.open && modal.type === "reject"}
+          handleClose={handleClose}
+          rowId={modal?.data?.id}
+          type="accounts_payable"
+          label="Reject Reason"
         />
       ) : (
         <PayCalModal
@@ -407,6 +422,7 @@ export default function AccountsPendingPayableList({ page }) {
           onClose={() => {
             setModal((prev) => ({ ...prev, open: false }));
             setSelectedPayableIds([]);
+            setFirstSelectedRow(null);
           }}
         />
       )}

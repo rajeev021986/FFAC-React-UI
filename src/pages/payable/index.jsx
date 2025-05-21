@@ -45,11 +45,11 @@ import {
   useDeletePaybleEntryMutation,
   usePrintPayableEntryMutation,
 } from "../../store/api/payableApi";
-import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
 import CancelModalApprove from "../JobEntry/CancelModalApprove";
 import ApiManager from "../../services/ApiManager";
 import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
 import PayableViewModal from "./Actions/PayableViewModal";
+import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
 
 export default function PayableListScreen({ page }) {
   const payableActionSelector = useSelector((state) => state.payableAction);
@@ -172,7 +172,6 @@ export default function PayableListScreen({ page }) {
   const [printPayableEntry] = usePrintPayableEntryMutation();
 
   const handleApprove = async () => {
-    console.log("modal?.data?",modal?.data)
     // Validation logic
     if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
       toast.custom(
@@ -186,9 +185,7 @@ export default function PayableListScreen({ page }) {
       );
       return; // Prevent approval
     }
-    if(modal?.data?.paybleDetails?.length === 0) {
-      console.log("no charge");
-      
+    if (modal?.data?.noOfCharges === 0) {
       toast.custom(
         <CustomToast
           message="Please add payable details before approving"
@@ -196,10 +193,9 @@ export default function PayableListScreen({ page }) {
         />,
         {
           closeButton: false,
-
         }
       );
-      return; // Prevent approval 
+      return; // Prevent approval
     }
 
     const jobStatus = modal?.data?.label;
@@ -494,13 +490,7 @@ export default function PayableListScreen({ page }) {
           </Box>
         </Drawer>
       )}
-      <AddRejectedRemarks
-        label={"Reject Reason"}
-        rowId={modal?.data?.id}
-        handleOpen={modal.open && modal.type === "reject"}
-        handleClose={handleClose}
-        type="PAYBLE_ENTRY"
-      />
+
       <CancelModalApprove
         rowId={modal?.data?.id}
         sourceName={modal?.data?.payableRefNo}
@@ -527,6 +517,7 @@ export default function PayableListScreen({ page }) {
           open={modal.open}
           data={modal.data}
           onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+          viewType={"view"}
         />
       )}
     </Box>

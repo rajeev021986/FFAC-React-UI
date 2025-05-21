@@ -99,10 +99,11 @@ const ENDPOINTS = {
     `/${BasePageUrl}/pending/payble/pay`,
   PAYABLE_PAY_REQUEST: (id, BasePageUrl) =>
     `/${BasePageUrl}/pending/payble/pay/${id}`,
-  PENDING_PAYABLE_CANCEL_REQUEST: (id, BasePageUrl) =>
-    `/${BasePageUrl}/pending/payble/cancel/${id}`,
-    GET_PAY_DETAILS: (id, BasePageUrl) =>
-    `/${BasePageUrl}/pending/payble/${id}`,
+  PENDING_PAYABLE_CANCEL_REQUEST: (id, type, BasePageUrl) =>
+    `/${BasePageUrl}/approval/cancel/${type}/${id}`,
+  GET_PAY_DETAILS: (id, BasePageUrl) => `/${BasePageUrl}/pending/payble/${id}`,
+  PENDING_PAYABLE_REJECT_REQUEST: (id, type, BasePageUrl) =>
+    `/${BasePageUrl}/approval/rejected/${type}/${id}`,
 };
 
 export default ENDPOINTS;

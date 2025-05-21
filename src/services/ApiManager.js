@@ -366,12 +366,22 @@ class ApiManager {
     return ApiMethods.get(url, id);
   };
   // GET_PAY_DETAILS
-  static cancelPendingPayable = async (id) => {
+  static cancelPendingPayable = async (id, type) => {
     const url = ENDPOINTS.PENDING_PAYABLE_CANCEL_REQUEST(
       id,
+      type,
       menuConfigUrl.account
     );
-    return ApiMethods.post(url);
+    return ApiMethods.put(url);
+  };
+  static rejectAccountsPayableId = async (id, type, remarkMessage) => {
+    let payload = { remarks: remarkMessage };
+    const url = ENDPOINTS.PENDING_PAYABLE_REJECT_REQUEST(
+      id,
+      type,
+      menuConfigUrl.account
+    );
+    return ApiMethods.put(url, payload);
   };
 }
 

@@ -40,6 +40,7 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
     bankName: "",
     statusCode: 101,
     multipleSelected: false,
+    statusCode: null,
   });
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
         setInitialValues((prev) => ({
           ...prev,
           id: payment?.id ?? prev.id,
+          statusCode: payment?.statusCode ?? prev.statusCode,
           vendorName: payment?.vendorName ?? prev.vendorName,
           usdAmount: payment?.usdAmount ?? prev.usdAmount,
           localAmount: payment?.localAmount ?? prev.localAmount,
