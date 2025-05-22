@@ -335,10 +335,10 @@ export default function AddEditForm({
       );
       return; // Prevent approval
     }
-    if (formik.values?.paybleDetails?.length === 0) {
+    if (initialValues?.paybleDetails?.length === 0) {
       toast.custom(
         <CustomToast
-          message="Please add payable details before approving"
+          message="Please add charge details before approving"
           toast="error"
         />,
         {
