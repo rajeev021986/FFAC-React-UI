@@ -39,7 +39,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { payableValidationSchema } from "../../payable/Actions/ValidationSchema";
 import { formatIndianCurrency } from "../../../components/utils/utils";
-import CostDetails from "./costDetails"
+import CostDetails from "./CostDetails";
 
 // Sections Components
 import JobProfitAndLoss from "./JobProfitAndLoss";
@@ -664,7 +664,7 @@ export default function SubSections({
 
           <TabPanel value="1" sx={{ padding: 0 }}>
             <hr style={{ margin: "10px 0" }} />
-{/* 
+            {/* 
             <Stack direction="row" justifyContent="right" padding="5px 15px">
               <Box>
                 {actionsSelector?.view === "card" && (
@@ -703,11 +703,11 @@ export default function SubSections({
                   margin: "8px",
                 }}
               >
-               <CostDetails
-                            customer_id={initialValues.id}
-                            bondDetails={formik}
-                            page={"containerNo"}
-                          />
+                <CostDetails
+                  customer_id={initialValues.id}
+                  bondDetails={formik}
+                  page={"containerNo"}
+                />
                 {/* <PayableEntryList
                   formik={formik}
                   dropdownData={dropdownData}

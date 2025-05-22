@@ -25,16 +25,20 @@ import ClearIcon from "@mui/icons-material/Clear";
 //   containerSetSortModel,
 //   // updateInput,
 // } from "../../../../store/freatures/containersSlice";
-import { setPagination, containerView, containerSetSortModel } from "../../../store/freatures/containersSlice";
+import {
+  setPagination,
+  containerView,
+  containerSetSortModel,
+} from "../../../store/freatures/containersSlice";
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 // Components
-import CardsView from "../../../components/common/Cards/CardsView"
+import CardsView from "../../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../../components/common/ScreenToolbar";
-import GridAction from "../../../components/common/Grid/GridActions"
+import GridAction from "../../../components/common/Grid/GridActions";
 import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 import { useFetchContainerQuery } from "../../../store/api/containerApi";
 
@@ -42,12 +46,8 @@ import { useFetchContainerQuery } from "../../../store/api/containerApi";
 import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
 // import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
-import useDebounce from "../../../hooks/useDebounce"
-export default function CostDetails({
-  page,
-  customer_id,
-  bondDetails,
-}) {
+import useDebounce from "../../../hooks/useDebounce";
+export default function CostDetails({ page, customer_id, bondDetails }) {
   const containerSelector = useSelector((state) => state?.containers);
   const location = useLocation();
   const nav = useNavigate();
@@ -72,7 +72,53 @@ export default function CostDetails({
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ]
     : "";
+  const datas = [
+    {
+      id: 1,
+      code: "CHG001",
+      chargeName: "Freight Charges",
+      voucherNo: "V1234235",
+      voucherDate: "2025-05-15",
+      debit: 1500.0,
+      credit: 500.0,
+      diff: 1000.0,
+      purchaseVNo: "PV001",
+    },
+     {
+      id: 2,
+      code: "CHG001",
+      chargeName: "TESTT Charges",
+      voucherNo: "V123425",
+      voucherDate: "2025-05-15",
+      debit: 1500.0,
+      credit: 500.0,
+      diff: 1000.0,
+      purchaseVNo: "PV001",
+    },
+     {
+      id: 3,
+      code: "CHG001",
+      chargeName: "Testing Charges",
+      voucherNo: "V1234775",
+      voucherDate: "2025-05-15",
+      debit: 1500.0,
+      credit: 500.0,
+      diff: 1000.0,
+      purchaseVNo: "PV001",
+    },
+     {
+      id: 4,
+      code: "CHG001",
+      chargeName: "Test Charges",
+      voucherNo: "V123745",
+      voucherDate: "2025-05-15",
+      debit: 1500.0,
+      credit: 500.0,
+      diff: 1000.0,
+      purchaseVNo: "PV001",
+    },
 
+  ];
   const query = {
     page: containerSelector?.pagination?.page + 1,
     size: containerSelector?.pagination?.pageSize,
@@ -117,50 +163,126 @@ export default function CostDetails({
   });
   const costDetailsColumns = [
     {
-      field: "containerNo",
-      headerName: "Container No",
+      field: "code",
+      headerName: "Code",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "chargeName",
+      headerName: "Charge Name",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "voucherNo",
+      headerName: "Voucher No",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "voucherDate",
+      headerName: "Voucher Date",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "debit",
+      headerName: "Debit",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "voucherNo",
+      headerName: "Voucher No",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "voucherDate",
+      headerName: "Voucher Date",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "credit",
+      headerName: "Credit",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "diff",
+      headerName: "Diff",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "taxinvoice",
+      headerName: "Tax Invoice",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => (
-        <span>{params.value || "No Value"}</span>
+        <input
+          type="checkbox"
+          style={{ cursor: "pointer" }}
+
+        />
       ),
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "oldValue",
-      headerName: "Old Value",
+      field: "debitNote",
+      headerName: "Debit Note",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => (
-        <span>{params.value || "No Value"}</span>
+       renderCell: (params) => (
+        <input
+          type="checkbox"
+          style={{ cursor: "pointer" }}
+          
+        />
       ),
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "newValue",
-      headerName: "New Value",
+      field: "purchaseVNo",
+      headerName: "Purchase VNo",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => (
-        <span>{params.value || "No Value"}</span>
-      ),
+      renderCell: (params) => <span>{params.value || ""}</span>,
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "modifiedBy",
-      headerName: "Modified By",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => (
-        <span>{params.value || "No Value"}</span>
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
-  ]
+  ];
   const {
     data: containerListData,
     isLoading,
@@ -213,14 +335,14 @@ export default function CostDetails({
   useEffect(() => {
     if (debounceValue.trim()) {
       const lowerSearch = debounceValue.toLowerCase();
-      const filtered = containerListData?.body?.data?.filter((item) =>
+      const filtered = datas?.filter((item) =>
         Object.values(item).some((val) =>
           String(val).toLowerCase().includes(lowerSearch)
         )
       );
       setFilteredData(filtered);
     } else {
-      setFilteredData(containerListData?.body?.data);
+      setFilteredData(datas);
     }
   }, [debounceValue, containerListData]);
   return (
@@ -284,7 +406,7 @@ export default function CostDetails({
                   hiddenLabel
                   id="search"
                   name="search"
-                  label="Search container"
+                  label="Search"
                   variant="outlined"
                   fullWidth
                   size="small"
@@ -306,95 +428,25 @@ export default function CostDetails({
                   }}
                 />
               </Box>
-              {/* <Box>
-                <IconButton onClick={() => dispatch(containerView("card"))}>
-                  <FormatListBulletedOutlined
-                    color={
-                      containerSelector.view === "card"
-                        ? "primary"
-                        : "secondary"
-                    }
-                  />
-                </IconButton>
-                <IconButton onClick={() => dispatch(containerView("grid"))}>
-                  <GridOnOutlined
-                    color={
-                      containerSelector.view === "grid"
-                        ? "primary"
-                        : "secondary"
-                    }
-                  />
-                </IconButton>
-              </Box> */}
             </Stack>
           }
         />
-        {containerSelector.view === "grid" ? (
-          <ThemedGrid
-            uniqueId="id"
-            columns={containerColumns}
-            count={containerListData?.body?.totalElements || 0}
-            handlePage={handlePage}
-            data={filteredData}
-            columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
-            paginationModel={containerSelector.pagination}
-            loading={isLoading || isFetching}
-            sortModel={containerSelector.sortModel}
-            onSortModelChange={(sortModel) =>
-              dispatch(containerSetSortModel(sortModel))
-            }
-          />
-        ) : (
-          <CardsView
-            uniqueId="id"
-            columns={containerColumns}
-            count={containerListData?.body?.totalElements || 0}
-            handlePage={handlePage}
-            data={filteredData}
-            paginationModel={containerSelector?.pagination}
-            loading={isLoading || isFetching}
-            // actions={
-            //   containerSelector.view === "card"
-            //     ? getContaienrListGridActions(setModal).filter(
-            //         (action) => action.type !== "hyperlink"
-            //       )
-            //     : getContaienrListGridActions(setModal)
-            // }
-            setSelectedBox={setSelectedBox}
-            seletectBox={seletectBox}
-          />
-        )}
+        <ThemedGrid
+          uniqueId="id"
+          columns={costDetailsColumns}
+          count={containerListData?.body?.totalElements || 0}
+          handlePage={handlePage}
+          data={filteredData}
+          columnVisibility={{}}
+          columnVisibilityHandler={() => {}}
+          paginationModel={containerSelector.pagination}
+          loading={isLoading || isFetching}
+          sortModel={containerSelector.sortModel}
+          onSortModelChange={(sortModel) =>
+            dispatch(containerSetSortModel(sortModel))
+          }
+        />
       </Card>
-      {/* <Dialog
-        open={modal.open}
-        onClose={() => setModal({ open: false, type: "", data: {} })}
-        maxWidth="md"
-        fullWidth
-        fullScreen
-        PaperProps={{
-          sx: {
-            m: 4,
-            borderRadius: 2,
-          },
-        }}
-      >
-        <DialogContent>
-          {modal.open && modal.type === "edit" && (
-            <ContainerNumberForm
-              containerId={modal.data?.id}
-              bondDetails={bondDetails}
-              type={modal.type}
-              page={page}
-              onCancel={() => setModal({ open: false, type: "", data: {} })}
-              onSubmit={() => {
-                setModal({ open: false, type: "", data: {} });
-                refetch();
-              }}
-            />
-          )}
-        </DialogContent>
-      </Dialog> */}
     </Box>
   );
 }
