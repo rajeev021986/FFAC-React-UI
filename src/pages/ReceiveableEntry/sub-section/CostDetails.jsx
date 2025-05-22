@@ -75,7 +75,6 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
   const datas = [
     {
       id: 1,
-      code: "CHG001",
       chargeName: "Freight Charges",
       voucherNo: "V1234235",
       voucherDate: "2025-05-15",
@@ -87,7 +86,6 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
     },
     {
       id: 2,
-      code: "CHG001",
       chargeName: "TESTT Charges",
       voucherNo: "V123425",
       voucherDate: "2025-05-15",
@@ -99,7 +97,6 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
     },
     {
       id: 3,
-      code: "CHG001",
       chargeName: "Testing Charges",
       voucherNo: "V1234775",
       voucherDate: "2025-05-15",
@@ -111,7 +108,6 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
     },
     {
       id: 4,
-      code: "CHG001",
       chargeName: "Test Charges",
       voucherNo: "V123745",
       voucherDate: "2025-05-15",
@@ -165,15 +161,6 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
     });
   });
   const costDetailsColumns = [
-    {
-      field: "code",
-      headerName: "Code",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
     {
       field: "chargeName",
       headerName: "Charge Name",

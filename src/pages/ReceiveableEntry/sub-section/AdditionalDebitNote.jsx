@@ -240,18 +240,8 @@ export default function AdditionalDebitNote({
       },
       columns: [
         {
-          field: "code",
-          headerName: "Code",
-          flex: 1,
-          editable: true,
-          renderCell: (params) => (
-            <InputBoxForGrid {...params} value={params.value || ""} />
-          ),
-          renderEditCell: (params) => <InputBoxForGrid {...params} />,
-        },
-        {
           field: "chargeName",
-          headerName: "Code",
+          headerName: "Charge Name",
           flex: 1,
           editable: true,
           renderCell: (params) => (
