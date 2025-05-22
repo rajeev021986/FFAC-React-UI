@@ -1,10 +1,10 @@
 import React from "react";
 
-const JobProfirAndLoss = () => {
+const JobProfitAndLoss = () => {
   return <React.Fragment></React.Fragment>;
 };
 
-export default JobProfirAndLoss;
+export default JobProfitAndLoss;
 
 //  <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>
 //         <Toolbar
