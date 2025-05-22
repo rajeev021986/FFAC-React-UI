@@ -30,7 +30,6 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
-import { dashboardSetPagination } from "../../../store/freatures/dashboardSlice";
 import DateTimeField from "../../../components/common/DateTime/DateTimeField";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 import SelectBox from "../../../components/common/SelectBox";
@@ -168,7 +167,6 @@ export default function SubSections({
           }
         }
       } else {
-        // If there is an id, proceed with the update action
         try {
           setRejectError(false);
           let paybleDetailsData = values.paybleDetails.map((item) =>
@@ -412,10 +410,6 @@ export default function SubSections({
     }
   }, [actionsSelector.view, dispatch]);
 
-  const handlePage = (params) => {
-    let { page, pageSize } = params;
-    dispatch(dashboardSetPagination({ page, pageSize }));
-  };
   const muiTextFieldStyles = {
     root: {
       "& .MuiInputBase-root": {
@@ -425,41 +419,18 @@ export default function SubSections({
       },
     },
   };
+
   useEffect(() => {
     if (formik?.values?.currency !== "USD") {
       formik.setFieldValue("exchangeRate", 1);
     }
   }, [formik?.values?.currency]);
 
-  // const FieldRef = useRef(null);
-  // useEffect(() => {
-  //   if (FieldRef.current) {
-  //     FieldRef.current.focus();
-  //   }
-  // }, []);
-
-  const CurrencyData = [
-    {
-      label: "TZS",
-      value: "TZS",
-    },
-    {
-      label: "USD",
-      value: "USD",
-    },
-  ];
-
-  //
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
 
   const disabled = false;
-  //   formik?.values?.statusCode === 1 ||
-  //   formik?.values?.statusCode === -3 ||
-  //   viewPage === "view"
-  //     ? true
-  //     : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -491,7 +462,6 @@ export default function SubSections({
     const updatedNotes = chargesData.filter((note) => note.id !== id);
     setChargesData(updatedNotes);
     formik.setFieldValue("paybleDetails", updatedNotes);
-    // localStorage.setItem("chargesData", JSON.stringify(updatedNotes));
   };
 
   const handleFetchPayable = () => {
@@ -675,6 +645,7 @@ export default function SubSections({
       totalAmount: totals.totalAmount.toFixed(2),
     };
   };
+
   const getAmountData = getPaybleDetailsTotals(chargesData);
 
   return (
