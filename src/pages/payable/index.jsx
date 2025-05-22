@@ -186,9 +186,8 @@ export default function PayableListScreen({ page }) {
       );
       return; // Prevent approval
     }
-    if (modal?.data?.paybleDetails?.length === 0) {
+    if (modal?.data?.noOfCharges === 0) {
       console.log("no charge");
-
       toast.custom(
         <CustomToast
           message="Please add payable details before approving"
