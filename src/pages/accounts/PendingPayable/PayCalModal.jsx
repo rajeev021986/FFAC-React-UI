@@ -47,7 +47,7 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
     if (data?.statusCode === 100) {
       fetchPayableData();
     } else {
-      if (data) {
+      if (data?.statusCode === 101) {
         setInitialValues({
           multipleSelected: false,
           statusCode: data?.statusCode,
