@@ -1354,8 +1354,8 @@ export default function AddEditForm({
                         <OutlinedButton
                           sx={{
                             fontWeight: "500",
-                            visibility:
-                              viewPage === "editForm" ? "hidden" : "visible",
+                            display:
+                              viewPage === "editForm" ? "none" : "block",
                           }}
                           onClick={() =>
                             page === "payable"
