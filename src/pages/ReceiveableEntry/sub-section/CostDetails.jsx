@@ -83,8 +83,9 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
       credit: 500.0,
       diff: 1000.0,
       purchaseVNo: "PV001",
+      exchangeRate: 1.2,
     },
-     {
+    {
       id: 2,
       code: "CHG001",
       chargeName: "TESTT Charges",
@@ -93,9 +94,10 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
       debit: 1500.0,
       credit: 500.0,
       diff: 1000.0,
-      purchaseVNo: "PV001",
+      purchaseVNo: "",
+      exchangeRate: 1.22,
     },
-     {
+    {
       id: 3,
       code: "CHG001",
       chargeName: "Testing Charges",
@@ -104,9 +106,10 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
       debit: 1500.0,
       credit: 500.0,
       diff: 1000.0,
-      purchaseVNo: "PV001",
+      purchaseVNo: "",
+      exchangeRate: 1.23,
     },
-     {
+    {
       id: 4,
       code: "CHG001",
       chargeName: "Test Charges",
@@ -115,9 +118,9 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
       debit: 1500.0,
       credit: 500.0,
       diff: 1000.0,
-      purchaseVNo: "PV001",
+      purchaseVNo: "",
+      exchangeRate: 1.24,
     },
-
   ];
   const query = {
     page: containerSelector?.pagination?.page + 1,
@@ -249,11 +252,7 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
       flex: 1,
       minWidth: 200,
       renderCell: (params) => (
-        <input
-          type="checkbox"
-          style={{ cursor: "pointer" }}
-
-        />
+        <input type="checkbox" style={{ cursor: "pointer" }} />
       ),
       headerAlign: "center",
       align: "center",
@@ -263,12 +262,8 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
       headerName: "Debit Note",
       flex: 1,
       minWidth: 200,
-       renderCell: (params) => (
-        <input
-          type="checkbox"
-          style={{ cursor: "pointer" }}
-          
-        />
+      renderCell: (params) => (
+        <input type="checkbox" style={{ cursor: "pointer" }} />
       ),
       headerAlign: "center",
       align: "center",
@@ -276,6 +271,15 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
     {
       field: "purchaseVNo",
       headerName: "Purchase VNo",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+      {
+      field: "exchangeRate",
+      headerName: "Exchange Rate",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => <span>{params.value || ""}</span>,
