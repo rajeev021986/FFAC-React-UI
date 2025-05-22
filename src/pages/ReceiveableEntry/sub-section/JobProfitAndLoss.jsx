@@ -3,7 +3,6 @@ import { AppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
 // Components
 import InputBox from "../../../components/common/InputBox";
-import SelectBox from "../../../components/common/SelectBox";
 
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
