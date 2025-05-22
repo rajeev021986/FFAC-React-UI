@@ -1,26 +1,131 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { AppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
-const JobProfitAndLoss = () => {
-  return <React.Fragment></React.Fragment>;
+// Components
+import InputBox from "../../../components/common/InputBox";
+import SelectBox from "../../../components/common/SelectBox";
+
+const JobProfitAndLoss = ({ formik }) => {
+  const payableRef = useRef(null);
+  useEffect(() => {
+    if (payableRef?.current) {
+      payableRef.current.focus();
+    }
+  }, []);
+
+  return (
+    <React.Fragment>
+      <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>
+        <Toolbar
+          sx={{
+            minHeight: "40px !important",
+            px: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            borderRadius: "8px !important",
+          }}
+        >
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Typography variant="body1">
+              <strong>Job Profit And Loss </strong>
+            </Typography>
+            <Typography variant="body1"></Typography>
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+          padding: 1,
+          margin: 0,
+        }}
+      >
+        <Box sx={{ width: "100%", paddingRight: 2 }}>
+          <Grid container sx={{ padding: 0, margin: 0 }}>
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="Job No"
+                id="jobNo"
+                value={formik.values.jobNo}
+                error={formik.errors.jobNo}
+                onChange={formik.handleChange}
+                inputRef={payableRef}
+              />
+            </Grid>
+
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="Customer Name"
+                id="customerName"
+                value={formik.values.customerName}
+                error={formik.errors.customerName}
+                onChange={formik.handleChange}
+                inputRef={payableRef}
+              />
+            </Grid>
+
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <SelectBox
+                label="Consignee Name"
+                id="consigneeName"
+                // options={dropdownData?.consigneeName}
+                value={formik.values.consigneeName}
+                error={formik.errors.consigneeName}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="20 FT"
+                id="twentryFTContainer"
+                value={formik.values.twentryFTContainer}
+                error={formik.errors.twentryFTContainer}
+                onChange={formik.handleChange}
+                inputRef={payableRef}
+              />
+            </Grid>
+
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="40 FT"
+                id="fourtyFTContainer"
+                value={formik.values.fourtyFTContainer}
+                error={formik.errors.fourtyFTContainer}
+                onChange={formik.handleChange}
+                inputRef={payableRef}
+              />
+            </Grid>
+
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="Debit (Cost)"
+                id="debitCost"
+                value={formik.values.debitCost}
+                error={formik.errors.debitCost}
+                onChange={formik.handleChange}
+                inputRef={payableRef}
+              />
+            </Grid>
+
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="Credit (Cost)"
+                id="debitCost"
+                value={formik.values.debitCost}
+                error={formik.errors.debitCost}
+                onChange={formik.handleChange}
+                inputRef={payableRef}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </React.Fragment>
+  );
 };
 
 export default JobProfitAndLoss;
-
-//  <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>
-//         <Toolbar
-//           sx={{
-//             minHeight: "40px !important",
-//             px: 2,
-//             display: "flex",
-//             justifyContent: "space-between",
-//             borderRadius: "8px !important",
-//           }}
-//         >
-//           <Box sx={{ display: "flex", gap: 2 }}>
-//             <Typography variant="body1">
-//               <strong>Job Profit And Loss </strong>
-//             </Typography>
-//             <Typography variant="body1"></Typography>
-//           </Box>
-//         </Toolbar>
-//       </AppBar>
