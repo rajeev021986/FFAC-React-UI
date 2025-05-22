@@ -456,8 +456,9 @@ export default function AdditionalDebitNote({
           </Box>
         ))}
       </Card>
-      <hr />
-      <Grid item xs={12} paddingLeft={1} paddingTop={1}>
+
+      <hr style={{ margin: "16px 0", border: "1px solid #ccc" }} />
+      <Grid item xs={12}>
         <TextField
           label="Remark"
           name="rejectRemarks"

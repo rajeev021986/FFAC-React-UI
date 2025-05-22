@@ -39,7 +39,7 @@ const JobProfitAndLoss = ({ formik }) => {
           display: "flex",
           justifyContent: "space-between",
           width: "100%",
-          padding: 1,
+          padding: "8px 0",
           margin: 0,
         }}
       >

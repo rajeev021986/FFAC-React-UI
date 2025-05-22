@@ -136,13 +136,11 @@ export default function SubSections({
           </Box>
 
           <TabPanel value="1" sx={{ padding: 0 }}>
-            <hr style={{ margin: "10px 0" }} />
             <Box sx={{ width: "100%" }}>
               <Box
                 sx={{
-                  border: "1px solid #ccc",
-                  borderRadius: "10px",
                   margin: "8px",
+                  padding: 1,
                 }}
               >
                 <CostDetails
