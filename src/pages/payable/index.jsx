@@ -193,7 +193,7 @@ export default function PayableListScreen({ page }) {
       console.log("no charge");
       toast.custom(
         <CustomToast
-          message="Please add payable details before approving"
+          message="Please add charge details before approving"
           toast="error"
         />,
         {

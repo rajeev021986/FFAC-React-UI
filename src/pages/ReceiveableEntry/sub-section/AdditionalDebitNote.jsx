@@ -3,6 +3,7 @@ import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ContainerNumberForm } from "../../UpdateJob/ContainerShipmentTables/ShipmentContainer/ContainerForm";
 import {
   Box,
@@ -51,7 +52,12 @@ import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import useDebounce from "../../../hooks/useDebounce";
 import InputBox from "../../../components/common/InputBox";
 import { StyledDataGrid } from "../../../components/common/Grid/styles";
-export default function AdditionalDebitNote({ page, customer_id, bondDetails }) {
+import DateTimeField from "../../../components/common/DateTime/DateTimeField";
+export default function AdditionalDebitNote({
+  page,
+  customer_id,
+  bondDetails,
+}) {
   const containerSelector = useSelector((state) => state?.containers);
   const location = useLocation();
   const nav = useNavigate();
@@ -69,6 +75,7 @@ export default function AdditionalDebitNote({ page, customer_id, bondDetails }) 
     data: {},
   });
   const [open, setOpen] = React.useState(false);
+  const [datas, setDatas] = useState([]);
   const actions = seletectBox
     ? [
         { name: "New Customer" },
@@ -76,56 +83,26 @@ export default function AdditionalDebitNote({ page, customer_id, bondDetails }) 
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ]
     : "";
-  const datas = [
-    {
-      id: 1,
-      code: "CHG001",
-      chargeName: "Freight Charges",
-      voucherNo: "V1234235",
-      voucherDate: "2025-05-15",
-      debit: 1500.0,
-      credit: 500.0,
-      diff: 1000.0,
-      purchaseVNo: "PV001",
-      exchangeRate: 1.2,
-    },
-    {
-      id: 2,
-      code: "CHG001",
-      chargeName: "TESTT Charges",
-      voucherNo: "V123425",
-      voucherDate: "2025-05-15",
-      debit: 1500.0,
-      credit: 500.0,
-      diff: 1000.0,
-      purchaseVNo: "",
-      exchangeRate: 1.22,
-    },
-    {
-      id: 3,
-      code: "CHG001",
-      chargeName: "Testing Charges",
-      voucherNo: "V1234775",
-      voucherDate: "2025-05-15",
-      debit: 1500.0,
-      credit: 500.0,
-      diff: 1000.0,
-      purchaseVNo: "",
-      exchangeRate: 1.23,
-    },
-    {
-      id: 4,
-      code: "CHG001",
-      chargeName: "Test Charges",
-      voucherNo: "V123745",
-      voucherDate: "2025-05-15",
-      debit: 1500.0,
-      credit: 500.0,
-      diff: 1000.0,
-      purchaseVNo: "",
-      exchangeRate: 1.24,
-    },
-  ];
+  useEffect(() => {
+    setDatas([
+      {
+        id: 1,
+        code: "CHG001",
+        chargeName: "Freight Charges",
+        debit: 1500.0,
+        credit: 500.0,
+        vat: 1.2,
+      },
+      {
+        id: 2,
+        code: "CHG001",
+        chargeName: "TESTT Charges",
+        debit: 1500.0,
+        credit: 500.0,
+        vat: 1.22,
+      },
+    ]);
+  }, []);
   const query = {
     page: containerSelector?.pagination?.page + 1,
     size: containerSelector?.pagination?.pageSize,
@@ -168,129 +145,7 @@ export default function AdditionalDebitNote({ page, customer_id, bondDetails }) 
       data: rowData,
     });
   });
-  const costDetailsColumns = [
-    {
-      field: "code",
-      headerName: "Code",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "chargeName",
-      headerName: "Charge Name",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "voucherNo",
-      headerName: "Voucher No",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "voucherDate",
-      headerName: "Voucher Date",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "debit",
-      headerName: "Debit",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "voucherNo",
-      headerName: "Voucher No",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "voucherDate",
-      headerName: "Voucher Date",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "credit",
-      headerName: "Credit",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "diff",
-      headerName: "Diff",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "taxinvoice",
-      headerName: "Tax Invoice",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => (
-        <input type="checkbox" style={{ cursor: "pointer" }} />
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "debitNote",
-      headerName: "Debit Note",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => (
-        <input type="checkbox" style={{ cursor: "pointer" }} />
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "purchaseVNo",
-      headerName: "Purchase VNo",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-      {
-      field: "exchangeRate",
-      headerName: "Exchange Rate",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-  ];
+
   const {
     data: containerListData,
     isLoading,
@@ -339,7 +194,83 @@ export default function AdditionalDebitNote({ page, customer_id, bondDetails }) 
       dispatch(containerView("card"));
     }
   }, [containerSelector.view, dispatch]);
-
+  const TabsHosts = [
+    {
+      tabLable: "Bond Details",
+      value: datas || [],
+      addNewRow: () => {
+        const newRow = {
+          id: Date.now(),
+          code: "",
+          chargeName: "",
+          debit: 0,
+          credit: 0,
+          vat: 0,
+          new: true,
+        };
+        // setFocus();
+        setDatas((prevRows) => [...prevRows, newRow]);
+      },
+      handleProcessRowUpdate: (newRow, oldRow) => {},
+      columns: [
+        {
+          field: "code",
+          headerName: "Code",
+          flex: 1,
+          minWidth: 200,
+          renderCell: (params) => <span>{params.value || ""}</span>,
+          headerAlign: "center",
+          align: "center",
+        },
+        {
+          field: "chargeName",
+          headerName: "Charge Name",
+          flex: 1,
+          minWidth: 200,
+          renderCell: (params) => <span>{params.value || ""}</span>,
+          headerAlign: "center",
+          align: "center",
+        },
+        {
+          field: "debit",
+          headerName: "Debit",
+          flex: 1,
+          minWidth: 200,
+          renderCell: (params) => <span>{params.value || ""}</span>,
+          headerAlign: "center",
+          align: "center",
+        },
+        {
+          field: "credit",
+          headerName: "Credit",
+          flex: 1,
+          minWidth: 200,
+          renderCell: (params) => <span>{params.value || ""}</span>,
+          headerAlign: "center",
+          align: "center",
+        },
+        {
+          field: "vat",
+          headerName: "VAT",
+          flex: 1,
+          minWidth: 200,
+          renderCell: (params) => <span>{params.value || ""}</span>,
+          headerAlign: "center",
+          align: "center",
+        },
+        {
+          field: "actions",
+          sortable: false,
+          flex: 0,
+          renderHeader: () => (
+            <IconButton color="white" onClick={TabsHosts[0].addNewRow}>
+              <AddCircleIcon />
+            </IconButton>
+          ),
+        },
+      ],
+    },
+  ];
   useEffect(() => {
     if (debounceValue.trim()) {
       const lowerSearch = debounceValue.toLowerCase();
@@ -355,164 +286,187 @@ export default function AdditionalDebitNote({ page, customer_id, bondDetails }) 
   }, [debounceValue, containerListData]);
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
-      <ScreenToolbar
-        rightComps={
-          <>
-            <Backdrop open={open} />
-            {(page === "customer" || page === "customerApprove") && (
-              <SpeedDial
-                ariaLabel="Text-only  SpeedDial"
-                sx={{
-                  "& .MuiFab-root": {
-                    width: 50,
-                    height: 50,
-                    minHeight: 50,
-                  },
-                }}
-                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
-                direction="left"
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    tooltipTitle=""
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 2,
-                      // borderRadius: 1,
-                      boxShadow: 3,
-                      borderRadius: "20px 19px 19px 20px",
-                      width: 72,
-                      minWidth: 92,
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 16,
-                      },
-                    }}
-                    icon={
-                      <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                        {action.name}
-                      </span>
-                    }
-                    onClick={() => handleActionClick(action.name)}
-                  ></SpeedDialAction>
-                ))}
-              </SpeedDial>
-            )}
-          </>
-        }
-      />
-
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
           sx={{ padding: "8px" }}
           title={
             <Stack direction="row" justifyContent="space-between">
-           <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
-           <Grid container>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <Tooltip
-                        title={
-                          ""
-                        }
-                        arrow
-                      >
-                        <InputBox
-                          label="Customer Name*"
-                          id="customerName"
+              <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
+                <Grid container>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <Tooltip title={""} arrow>
+                      <InputBox
+                        label="Customer Name*"
+                        id="customerName"
                         //   value={formik.values.customerName}
                         //   disabled={disabled}
                         //   error={formik.errors.customerName}
                         //   onChange={formik.handleChange}
                         //   inputRef={customerNameRef}
-                        />
-                      </Tooltip>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="TIN No."
-                        id="tinNo"
-                        // value={formik.values.tinNo}
-                        // error={formik.errors.tinNo}
-                        // onChange={formik.handleChange}
-                        // disabled={disabled}
                       />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      xl={2}
-                      paddingLeft={1}
-                      marginTop={2}
-                    >
-                      <InputBox
-                        label="VAT No."
-                        id="vatNo"
-                        // value={formik.values.vatNo}
-                        // error={formik.errors.vatNo}
-                        // onChange={formik.handleChange}
-                        // disabled={disabled}
-                      />
-                    </Grid>
-                      <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        md={4}
-                        lg={3}
-                        xl={2}
-                        paddingLeft={1}
-                        marginTop={2}
-                      >
-                        <InputBox
-                          label="Status"
-                          id="status"
-                          disabled={true}
-                        //   value={formik.values.status}
-                        //   error={formik.errors.status}
-                        //   onChange={formik.handleChange}
-                        />
-                      </Grid>
+                    </Tooltip>
                   </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Exchange Rate"
+                      id="tinNo"
+                      // value={formik.values.tinNo}
+                      // error={formik.errors.tinNo}
+                      // onChange={formik.handleChange}
+                      // disabled={disabled}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Amount"
+                      id="vatNo"
+                      // value={formik.values.vatNo}
+                      // error={formik.errors.vatNo}
+                      // onChange={formik.handleChange}
+                      // disabled={disabled}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Vat"
+                      id="status"
+                      //   value={formik.values.status}
+                      //   error={formik.errors.status}
+                      //   onChange={formik.handleChange}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="Rec/Pay Amount"
+                      id="vatNo"
+                      // value={formik.values.vatNo}
+                      // error={formik.errors.vatNo}
+                      // onChange={formik.handleChange}
+                      // disabled={disabled}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <InputBox
+                      label="WIP JV"
+                      id="vatNo"
+                      // value={formik.values.vatNo}
+                      // error={formik.errors.vatNo}
+                      // onChange={formik.handleChange}
+                      // disabled={disabled}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    paddingLeft={1}
+                    marginTop={2}
+                  >
+                    <DateTimeField
+                      name="date"
+                      label="Date"
+                      id="date"
+                      //  value={formik.values.date}
+                      //  error={formik.errors.date}
+                      //  onChange={formik.setFieldValue}
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
             </Stack>
           }
         />
-     <StyledDataGrid
-                          rows={filteredData}
-                          columns={costDetailsColumns}
-                          disableSelectionOnClick
-                        //   processRowUpdate={ob.handleProcessRowUpdate}
-                          experimentalFeatures={{ newEditingApi: true }}
-                          getRowId={(row) => row.id}
-                          disableColumnMenu
-                          disablePagination
-                          paginationMode="client" // Ensures manual pagination is off
-                          hideFooterPagination
-                        />
+        {TabsHosts?.map((ob, index) => (
+          <Box sx={{ width: "100%" }}>
+            <Box>
+              <StyledDataGrid
+                rows={ob.value}
+                columns={ob?.columns?.map((column) => ({
+                  ...column,
+                  headerAlign: "center",
+                  align: "center",
+                }))}
+                disableSelectionOnClick
+                processRowUpdate={ob.handleProcessRowUpdate}
+                experimentalFeatures={{ newEditingApi: true }}
+                getRowId={(row) => row.id}
+                disableColumnMenu
+                disablePagination
+                paginationMode="client" // Ensures manual pagination is off
+                hideFooterPagination
+              />
+            </Box>
+          </Box>
+        ))}
       </Card>
+      <hr />
+      <Grid item xs={12} paddingLeft={1} paddingTop={1}>
+        <TextField
+          label="Remark"
+          name="rejectRemarks"
+          multiline
+          rows={4}
+          variant="outlined"
+          fullWidth
+        />
+      </Grid>
     </Box>
   );
 }
