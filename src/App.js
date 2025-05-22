@@ -196,7 +196,7 @@ function App() {
 
             <Route
               path="accounts/operations/receivableEntry"
-              element={<AccountsPendingPayableList page="receivableEntry" />}
+              element={<PayableList page="receivableEntry" />}
             />
 
             <Route

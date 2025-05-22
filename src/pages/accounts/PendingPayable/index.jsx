@@ -104,10 +104,7 @@ export default function AccountsPendingPayableList({ page }) {
   } = useFetchPendingPaymentDatasQuery({
     params: query,
     payload,
-    page:
-      page == "pending_payments"
-        ? "pending/payble/filter"
-        : "pending/payble/filter",
+    page: page == "pending_payments" ? "pending/payble/filter" : "",
   });
 
   const handlePage = (params) => {

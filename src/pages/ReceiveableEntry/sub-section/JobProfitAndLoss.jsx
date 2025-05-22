@@ -121,6 +121,39 @@ const JobProfitAndLoss = ({ formik }) => {
                 inputRef={payableRef}
               />
             </Grid>
+
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="Net (Cost)"
+                id="netCost"
+                value={formik.values.netCost}
+                error={formik.errors.netCost}
+                onChange={formik.handleChange}
+                inputRef={payableRef}
+              />
+            </Grid>
+
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="Total Revenue"
+                id="totalRevenue"
+                value={formik.values.totalRevenue}
+                error={formik.errors.totalRevenue}
+                onChange={formik.handleChange}
+                inputRef={payableRef}
+              />
+            </Grid>
+
+            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="Profit/Loss"
+                id="profitLoss"
+                value={formik.values.profitLoss}
+                error={formik.errors.profitLoss}
+                onChange={formik.handleChange}
+                inputRef={payableRef}
+              />
+            </Grid>
           </Grid>
         </Box>
       </Box>
