@@ -199,10 +199,10 @@ function App() {
               element={<AccountsPendingPayableList page="receivableEntry" />}
             />
 
-            {/* <Route
+            <Route
               path="accounts/operations/receivableEntry/EditreceiveableEntry"
               element={<ReceiveableEntryDetails page="receivableEntry" />}
-            /> */}
+            />
 
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />

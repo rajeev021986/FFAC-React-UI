@@ -48,7 +48,6 @@ export default function SubSections({
   type = "notcopy",
 }) {
   //
-
   const nav = useNavigate();
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
@@ -242,6 +241,7 @@ export default function SubSections({
       formik.setFieldValue("exchangeRate", 1);
     }
   }, [formik.values?.currency]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -517,13 +517,6 @@ export default function SubSections({
       headerAlign: "center",
       align: "center",
       editable: false,
-      // renderCell: (params) => {
-      //   const createdBy = params.row?.new
-      //     ? localStorage.getItem("userId") || "Unknown User"
-      //     : params.row?.createdBy || "";
-
-      //   return <span>{createdBy}</span>;
-      // },
     },
 
     {
