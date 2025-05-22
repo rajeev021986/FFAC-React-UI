@@ -45,7 +45,7 @@ const JobProfitAndLoss = ({ formik }) => {
       >
         <Box sx={{ width: "100%", paddingRight: 2 }}>
           <Grid container sx={{ padding: 0, margin: 0 }}>
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Job No"
                 id="jobNo"
@@ -57,7 +57,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Customer Name"
                 id="customerName"
@@ -69,7 +69,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Consignee Name"
                 id="consigneeName"
@@ -81,7 +81,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="20 FT"
                 id="twentryFTContainer"
@@ -93,7 +93,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="40 FT"
                 id="fourtyFTContainer"
@@ -105,7 +105,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Debit (Cost)"
                 id="debitCost"
@@ -117,7 +117,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Credit (Cost)"
                 id="creditCost"
@@ -129,7 +129,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Net (Cost)"
                 id="netCost"
@@ -141,7 +141,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Total Revenue"
                 id="totalRevenue"
@@ -153,7 +153,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Profit/Loss"
                 id="profitLoss"
