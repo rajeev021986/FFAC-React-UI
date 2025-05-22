@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
 import { LoaderIcon } from "react-hot-toast";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -53,6 +54,7 @@ import useDebounce from "../../../hooks/useDebounce";
 import InputBox from "../../../components/common/InputBox";
 import { StyledDataGrid } from "../../../components/common/Grid/styles";
 import DateTimeField from "../../../components/common/DateTime/DateTimeField";
+import InputBoxForGrid from "../../../components/common/InputBoxForGrid";
 export default function AdditionalDebitNote({
   page,
   customer_id,
@@ -74,6 +76,15 @@ export default function AdditionalDebitNote({
     type: "",
     data: {},
   });
+  const newRowRef = useRef(null);
+  const setFocus = () => {
+    setTimeout(() => {
+      if (newRowRef.current) {
+        newRowRef.current.focus();
+      }
+    }, 1000);
+  };
+
   const [open, setOpen] = React.useState(false);
   const [datas, setDatas] = useState([]);
   const actions = seletectBox
@@ -210,53 +221,73 @@ export default function AdditionalDebitNote({
         };
         // setFocus();
         setDatas((prevRows) => [...prevRows, newRow]);
+        setFocus();
       },
-      handleProcessRowUpdate: (newRow, oldRow) => {},
+      deleteRow: (id) => {
+        const updatedRows = TabsHosts[0]?.value.filter((row) => row.id !== id);
+        // formik.setFieldValue("bondDetails", updatedRows);
+        setDatas(updatedRows);
+      },
+      handleProcessRowUpdate: (newRow, oldRow) => {
+        const updatedRows = TabsHosts[0]?.value.map((row) => {
+          if (row.id === newRow.id) {
+            return { ...row, ...newRow };
+          }
+          return row;
+        });
+        setDatas(updatedRows);
+        return newRow;
+      },
       columns: [
         {
           field: "code",
           headerName: "Code",
           flex: 1,
-          minWidth: 200,
-          renderCell: (params) => <span>{params.value || ""}</span>,
-          headerAlign: "center",
-          align: "center",
+          editable: true,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} value={params.value || ""} />
+          ),
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "chargeName",
-          headerName: "Charge Name",
+          headerName: "Code",
           flex: 1,
-          minWidth: 200,
-          renderCell: (params) => <span>{params.value || ""}</span>,
-          headerAlign: "center",
-          align: "center",
+          editable: true,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} value={params.value || ""} />
+          ),
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "debit",
           headerName: "Debit",
           flex: 1,
-          minWidth: 200,
-          renderCell: (params) => <span>{params.value || ""}</span>,
-          headerAlign: "center",
-          align: "center",
+          editable: true,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} value={params.value || ""} />
+          ),
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "credit",
           headerName: "Credit",
           flex: 1,
-          minWidth: 200,
-          renderCell: (params) => <span>{params.value || ""}</span>,
-          headerAlign: "center",
-          align: "center",
+          editable: true,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} value={params.value || ""} />
+          ),
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "vat",
           headerName: "VAT",
           flex: 1,
-          minWidth: 200,
-          renderCell: (params) => <span>{params.value || ""}</span>,
-          headerAlign: "center",
-          align: "center",
+          editable: true,
+          renderCell: (params) => (
+            <InputBoxForGrid {...params} value={params.value || ""} />
+          ),
+          renderEditCell: (params) => <InputBoxForGrid {...params} />,
         },
         {
           field: "actions",
@@ -265,6 +296,14 @@ export default function AdditionalDebitNote({
           renderHeader: () => (
             <IconButton color="white" onClick={TabsHosts[0].addNewRow}>
               <AddCircleIcon />
+            </IconButton>
+          ),
+          renderCell: (params) => (
+            <IconButton
+              color="error"
+              onClick={() => TabsHosts[0].deleteRow(params.row.id)}
+            >
+              <DeleteIcon />
             </IconButton>
           ),
         },
@@ -449,7 +488,7 @@ export default function AdditionalDebitNote({
                 getRowId={(row) => row.id}
                 disableColumnMenu
                 disablePagination
-                paginationMode="client" // Ensures manual pagination is off
+                paginationMode="client"
                 hideFooterPagination
               />
             </Box>
