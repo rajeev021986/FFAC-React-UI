@@ -49,6 +49,7 @@ import UpdateJobListingScreen from "./pages/JobEntry/UpdateJob/updateJobListing"
 import PayableList from "./pages/payable";
 import AddPayableEntry from "./pages/payable/AddPayableForm";
 import AccountsPendingPayableList from "./pages/accounts/PendingPayable";
+import ReceiveableEntryDetails from "./pages/ReceiveableEntry";
 
 function App() {
   const theme = getTheme(
@@ -191,6 +192,16 @@ function App() {
             <Route
               path="accounts/operations/pendingPayble"
               element={<AccountsPendingPayableList page="pending_payments" />}
+            />
+
+            <Route
+              path="accounts/operations/receivableEntry"
+              element={<AccountsPendingPayableList page="receivableEntry" />}
+            />
+
+            <Route
+              path="accounts/operations/receivableEntry/EditreceiveableEntry"
+              element={<ReceiveableEntryDetails page="receivableEntry" />}
             />
 
             <Route path="admin/settings" element={<SettingsPage />} />

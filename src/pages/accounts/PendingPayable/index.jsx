@@ -43,6 +43,7 @@ import ApiManager from "../../../services/ApiManager";
 import PayCalMultiple from "./PayCalMultiple";
 import CancelModalApprove from "../../JobEntry/CancelModalApprove";
 import PayableViewModal from "../../payable/Actions/PayableViewModal";
+import { getReceiveableEntryGridActionApprove } from "./actionCopy";
 
 export default function AccountsPendingPayableList({ page }) {
   //
@@ -58,13 +59,7 @@ export default function AccountsPendingPayableList({ page }) {
     type: "",
     data: {},
   });
-  // const handleView = (rowData) => {
-  //   setModal({
-  //     open: true,
-  //     type: "view",
-  //     data: rowData,
-  //   });
-  // };
+
   const query = {
     page: paymentSelector?.pagination?.page + 1,
     size: paymentSelector?.pagination?.pageSize,
@@ -107,7 +102,10 @@ export default function AccountsPendingPayableList({ page }) {
   } = useFetchPendingPaymentDatasQuery({
     params: query,
     payload,
-    page: page == "pending_payments" ? "pending/payble/filter" : "",
+    page:
+      page == "pending_payments"
+        ? "pending/payble/filter"
+        : "pending/payble/filter",
   });
 
   const handlePage = (params) => {
@@ -118,9 +116,9 @@ export default function AccountsPendingPayableList({ page }) {
   ACCOUNTS_PENDING_PAYABLE[ACCOUNTS_PENDING_PAYABLE.length - 1].renderCell =
     GridActions({
       actions:
-        page == "pending_payments"
+        page === "pending_payments"
           ? getPendingPaymentApprovalGridActions(nav, setModal)
-          : "",
+          : getReceiveableEntryGridActionApprove(nav, setModal),
     });
 
   // handleCheckboxChange with enhanced validation
@@ -167,7 +165,7 @@ export default function AccountsPendingPayableList({ page }) {
   }, [location.pathname]);
 
   const PayablePendingColumns = [
-    ...(page === "pending_payments"
+    ...(page === "pending_payments" || page === "receivableEntry"
       ? [
           {
             field: "Select",
@@ -367,7 +365,7 @@ export default function AccountsPendingPayableList({ page }) {
             actions={
               page == "pending_payments"
                 ? getPendingPaymentApprovalGridActions(nav, setModal)
-                : ""
+                : getReceiveableEntryGridActionApprove(nav, setModal)
             }
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}

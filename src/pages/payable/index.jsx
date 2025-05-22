@@ -172,7 +172,7 @@ export default function PayableListScreen({ page }) {
   const [printPayableEntry] = usePrintPayableEntryMutation();
 
   const handleApprove = async () => {
-    console.log("modal?.data?",modal?.data)
+    console.log("modal?.data?", modal?.data);
     // Validation logic
     if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
       toast.custom(
@@ -186,9 +186,9 @@ export default function PayableListScreen({ page }) {
       );
       return; // Prevent approval
     }
-    if(modal?.data?.paybleDetails?.length === 0) {
+    if (modal?.data?.paybleDetails?.length === 0) {
       console.log("no charge");
-      
+
       toast.custom(
         <CustomToast
           message="Please add payable details before approving"
@@ -196,10 +196,9 @@ export default function PayableListScreen({ page }) {
         />,
         {
           closeButton: false,
-
         }
       );
-      return; // Prevent approval 
+      return; // Prevent approval
     }
 
     const jobStatus = modal?.data?.label;
