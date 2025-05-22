@@ -45,11 +45,11 @@ import {
   useDeletePaybleEntryMutation,
   usePrintPayableEntryMutation,
 } from "../../store/api/payableApi";
-import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
 import CancelModalApprove from "../JobEntry/CancelModalApprove";
 import ApiManager from "../../services/ApiManager";
 import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
 import PayableViewModal from "./Actions/PayableViewModal";
+import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
 
 export default function PayableListScreen({ page }) {
   const payableActionSelector = useSelector((state) => state.payableAction);
@@ -493,13 +493,7 @@ export default function PayableListScreen({ page }) {
           </Box>
         </Drawer>
       )}
-      <AddRejectedRemarks
-        label={"Reject Reason"}
-        rowId={modal?.data?.id}
-        handleOpen={modal.open && modal.type === "reject"}
-        handleClose={handleClose}
-        type="PAYBLE_ENTRY"
-      />
+
       <CancelModalApprove
         rowId={modal?.data?.id}
         sourceName={modal?.data?.payableRefNo}
@@ -526,6 +520,7 @@ export default function PayableListScreen({ page }) {
           open={modal.open}
           data={modal.data}
           onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+          viewType={"view"}
         />
       )}
     </Box>

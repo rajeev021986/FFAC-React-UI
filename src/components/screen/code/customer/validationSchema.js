@@ -36,8 +36,8 @@ export const CustomerValidationSchema = () =>
       .matches(/^\d+$/, "Telephone must be a valid number")
       .test(
         "len",
-        "Telephone must be between 10 and 15 digits",
-        (val) => val && val.length >= 10 && val.length <= 15
+        "Telephone must be between 7 and 15 digits",
+        (val) => val && val.length >= 7 && val.length <= 15
       )
       .test(
         "positive",

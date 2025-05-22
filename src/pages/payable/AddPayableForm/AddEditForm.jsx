@@ -58,6 +58,7 @@ export default function AddEditForm({
   page,
   viewPage,
   type = "notcopy",
+  onClose,
 }) {
   const style = {
     position: "absolute",
@@ -107,6 +108,9 @@ export default function AddEditForm({
   });
 
   useEffect(() => {
+    if (viewPage === "editForm") {
+      return setIsDisabled(false);
+    }
     if (
       viewPage === "view" ||
       formik?.values?.statusCode === -3 ||
@@ -331,9 +335,7 @@ export default function AddEditForm({
       );
       return; // Prevent approval
     }
-    if(formik.values?.paybleDetails?.length === 0) {
-      console.log("no chaolrge");
-      
+    if (formik.values?.paybleDetails?.length === 0) {
       toast.custom(
         <CustomToast
           message="Please add payable details before approving"
@@ -341,10 +343,9 @@ export default function AddEditForm({
         />,
         {
           closeButton: false,
-
         }
       );
-      return; // Prevent approval 
+      return; // Prevent approval
     }
     try {
       setLoaderApprove((prevState) => ({
@@ -459,11 +460,11 @@ export default function AddEditForm({
       },
     },
   };
-useEffect(() => {
- if(formik?.values?.currency !== "USD"){
-  formik.setFieldValue("exchangeRate", 1);
-  }
-}, [formik?.values?.currency])
+  useEffect(() => {
+    if (formik?.values?.currency !== "USD") {
+      formik.setFieldValue("exchangeRate", 1);
+    }
+  }, [formik?.values?.currency]);
 
   // const FieldRef = useRef(null);
   // useEffect(() => {
@@ -673,22 +674,22 @@ useEffect(() => {
         >
           <EditIcon
             style={{
-              cursor: disabled ? "not-allowed" : "pointer",
-              color: disabled ? "#ccc" : "#166ee0",
-              opacity: disabled ? 0.5 : 1,
+              cursor: isDisabled ? "not-allowed" : "pointer",
+              color: isDisabled ? "#ccc" : "#166ee0",
+              opacity: isDisabled ? 0.5 : 1,
             }}
             onClick={() => {
-              if (!disabled) handleEditClick(params.row);
+              if (!isDisabled) handleEditClick(params.row);
             }}
           />
           <Delete
             style={{
-              cursor: disabled ? "not-allowed" : "pointer",
-              color: disabled ? "#ccc" : "red",
-              opacity: disabled ? 0.5 : 1,
+              cursor: isDisabled ? "not-allowed" : "pointer",
+              color: isDisabled ? "#ccc" : "red",
+              opacity: isDisabled ? 0.5 : 1,
             }}
             onClick={() => {
-              if (!disabled) handleDeleteNote(params.row.id);
+              if (!isDisabled) handleDeleteNote(params.row.id);
             }}
           />
         </div>
@@ -717,7 +718,6 @@ useEffect(() => {
     };
   };
   const getAmountData = getPaybleDetailsTotals(chargesData);
-
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -1295,7 +1295,9 @@ useEffect(() => {
                     >
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
-                          sx={{ fontWeight: "500" }}
+                          sx={{
+                            fontWeight: "500",
+                          }}
                           onClick={() =>
                             page === "payable"
                               ? nav("/app/documentation/paybleEntry")
@@ -1350,7 +1352,11 @@ useEffect(() => {
                       <Stack direction="row" spacing={2}>
                         {/*  */}
                         <OutlinedButton
-                          sx={{ fontWeight: "500" }}
+                          sx={{
+                            fontWeight: "500",
+                            display:
+                              viewPage === "editForm" ? "none" : "block",
+                          }}
                           onClick={() =>
                             page === "payable"
                               ? nav("/app/documentation/paybleEntry")
@@ -1378,6 +1384,8 @@ useEffect(() => {
                             fontWeight: "500",
                             backgroundColor: "red",
                             color: "white !important",
+                            visibility:
+                              viewPage === "editForm" ? "hidden" : "visible",
                           }}
                           onClick={() => handleRejectRequest()}
                         >
@@ -1386,8 +1394,14 @@ useEffect(() => {
                           )}
                           Reject
                         </ThemeButton>
+
                         <ThemeButton
-                          sx={{ fontWeight: "500", color: "white !important" }}
+                          sx={{
+                            fontWeight: "500",
+                            color: "white !important",
+                            visibility:
+                              viewPage === "editForm" ? "hidden" : "visible",
+                          }}
                           onClick={() => handleApproveRequest()}
                         >
                           {loaderApprove.approve && (
