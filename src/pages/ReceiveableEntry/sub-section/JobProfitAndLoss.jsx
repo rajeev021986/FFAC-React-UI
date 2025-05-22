@@ -53,6 +53,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.jobNo}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
+                disabled
               />
             </Grid>
 
@@ -64,17 +65,19 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.customerName}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
+                disabled
               />
             </Grid>
 
             <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
-              <SelectBox
+              <InputBox
                 label="Consignee Name"
                 id="consigneeName"
-                // options={dropdownData?.consigneeName}
                 value={formik.values.consigneeName}
                 error={formik.errors.consigneeName}
                 onChange={formik.handleChange}
+                inputRef={payableRef}
+                disabled
               />
             </Grid>
 
@@ -86,6 +89,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.twentryFTContainer}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
+                disabled
               />
             </Grid>
 
@@ -97,6 +101,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.fourtyFTContainer}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
+                disabled
               />
             </Grid>
 
@@ -108,17 +113,19 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.debitCost}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
+                disabled
               />
             </Grid>
 
             <Grid item xs={12} lg={4} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Credit (Cost)"
-                id="debitCost"
-                value={formik.values.debitCost}
-                error={formik.errors.debitCost}
+                id="creditCost"
+                value={formik.values.creditCost}
+                error={formik.errors.creditCost}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
+                disabled
               />
             </Grid>
 
@@ -130,6 +137,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.netCost}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
+                disabled
               />
             </Grid>
 
@@ -141,6 +149,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.totalRevenue}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
+                disabled
               />
             </Grid>
 
@@ -152,6 +161,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.profitLoss}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
+                disabled
               />
             </Grid>
           </Grid>

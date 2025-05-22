@@ -104,6 +104,8 @@ const ENDPOINTS = {
   GET_PAY_DETAILS: (id, BasePageUrl) => `/${BasePageUrl}/pending/payble/${id}`,
   PENDING_PAYABLE_REJECT_REQUEST: (id, type, BasePageUrl) =>
     `/${BasePageUrl}/approval/rejected/${type}/${id}`,
+  GET_RECEIVABLENTRY_DETAILS: (id, BasePageUrl) =>
+    `/${BasePageUrl}/receivable/${id}`,
 };
 
 export default ENDPOINTS;

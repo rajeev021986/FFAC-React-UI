@@ -383,6 +383,11 @@ class ApiManager {
     );
     return ApiMethods.put(url, payload);
   };
+
+  static getReceivableEntryDeatils = async (id) => {
+    const url = ENDPOINTS.GET_RECEIVABLENTRY_DETAILS(id, menuConfigUrl.account);
+    return ApiMethods.get(url);
+  };
 }
 
 export default ApiManager;

@@ -1,20 +1,14 @@
 import { useFormik } from "formik";
 import { CircularProgress, Grid, Stack } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import InputBox from "../../../components/common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
 import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import {
-  useAddPaybleEntryMutation,
-  useUpdatePaybleEntryMutation,
-} from "../../../store/api/payableApi";
+import { useAddPaybleEntryMutation } from "../../../store/api/payableApi";
 
 import { useNavigate } from "react-router-dom";
-import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import getFirstError from "../../../components/common/FieldToastError";
 import { formView } from "../../../store/freatures/payableEntrySlice";
@@ -34,18 +28,11 @@ export default function SubSections({
 }) {
   //
   const nav = useNavigate();
-  const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
-  const [updatePaybleEntry, { isUpdateLoading }] =
-    useUpdatePaybleEntryMutation();
-
-  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-  const actionsSelector = useSelector((s) => s?.payableAction);
-  const [loaderApprove, setLoaderApprove] = useState({
-    approve: false,
-    reject: false,
-  });
-
   const dispatch = useDispatch();
+
+  const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
+  const actionsSelector = useSelector((s) => s?.payableAction);
+
   const [dropdownData, setDropdownData] = useState({});
   const [isDisabled, setIsDisabled] = useState(false);
   const [value, setValue] = React.useState("1");
@@ -114,6 +101,7 @@ export default function SubSections({
       }
     },
   });
+
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -162,7 +150,10 @@ export default function SubSections({
                   bondDetails={formik}
                   page={"containerNo"}
                 />
-                <hr class="hr-text" data-content="Tax Invoice/Debit Note Details"/>
+                <hr
+                  class="hr-text"
+                  data-content="Tax Invoice/Debit Note Details"
+                />
                 <AdditionalDebitNote
                   customer_id={initialValues.id}
                   bondDetails={formik}

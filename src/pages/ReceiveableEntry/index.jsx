@@ -15,36 +15,28 @@ export default function ReceiveableEntryDetails({ page }) {
   const { state } = useLocation();
 
   const [initialValues, setInitialValues] = React.useState({
-    id: "",
-    status: "",
-    statusCode: "",
-    rejectRemarks: "",
-    isDoc: "",
-    invoiceType: "",
-    payableRefNo: "",
-    jobNo: "",
-    invoiceDate: "",
-    vendorName: "",
-    vendorInvoiceNo: "",
-    vendorInvoiceDate: "",
+    consigneeName: "",
+    creditCost: "",
     currency: "",
-    exchangeRate: null,
-    invoiceCurrencyAmount: "",
-    invoiceCurrencyVat: "",
-    invoiceCurrencyWithHoldingTax: "",
-    invoiceCurrencyNetAmountPayable: "",
-    invoiceCurrencyCostCentre: "",
-    shillingAmount: "",
-    shillingVat: "",
-    shillingWithHoldingTax: "",
-    shillingNetAmountPayable: "",
-    shillingCostCentre: "",
+    customerName: "",
+    debitCost: "",
+    exRate: "",
+    id: 289,
+    jobId: 498,
+    jobNo: "",
+    netCost: "",
+    paybleRefNo: "",
+    profitLoss: "",
+    totalRevenue: "",
+    containerTypeDTO: [],
     paybleDetails: [],
   });
 
   const fetchPayableData = async () => {
     try {
-      const res = await ApiManager.getPayableDeatils(state?.initialValues?.id);
+      const res = await ApiManager.getReceivableEntryDeatils(
+        state?.initialValues?.id
+      );
       let status = "";
       if (res.body?.status) {
         status =
@@ -53,30 +45,19 @@ export default function ReceiveableEntryDetails({ page }) {
       }
       setInitialValues({
         id: res.body?.id || "",
-        status: res.body?.status,
-        statusCode: res.body?.statusCode,
-        rejectRemarks: res.body?.rejectRemarks,
-        isDoc: res.body?.isDoc,
-        invoiceType: res.body?.invoiceType,
-        payableRefNo: res.body?.payableRefNo,
-        jobNo: res.body?.jobNo,
-        invoiceDate: res.body?.invoiceDate,
-        vendorName: res.body?.vendorName,
-        vendorInvoiceNo: res.body?.vendorInvoiceNo,
-        vendorInvoiceDate: res.body?.vendorInvoiceDate,
-        currency: res.body?.currency || "INR",
-        exchangeRate: res.body?.exchangeRate || null,
-        invoiceCurrencyAmount: res.body?.invoiceCurrencyAmount,
-        invoiceCurrencyVat: res.body?.invoiceCurrencyVat,
-        invoiceCurrencyWithHoldingTax: res.body?.invoiceCurrencyWithHoldingTax,
-        invoiceCurrencyNetAmountPayable:
-          res.body?.invoiceCurrencyNetAmountPayable,
-        invoiceCurrencyCostCentre: res.body?.invoiceCurrencyCostCentre,
-        shillingAmount: res.body?.shillingAmount,
-        shillingVat: res.body?.shillingVat,
-        shillingWithHoldingTax: res.body?.shillingWithHoldingTax,
-        shillingNetAmountPayable: res.body?.shillingNetAmountPayable,
-        shillingCostCentre: res.body?.shillingCostCentre,
+        jobId: res.body?.jobId || "",
+        consigneeName: res.body?.consigneeName || "",
+        creditCost: res.body?.creditCost || "",
+        currency: res.body?.currency || "",
+        customerName: res.body?.customerName || "",
+        debitCost: res.body?.debitCost || "",
+        exRate: res.body?.exRate || "",
+        jobNo: res.body?.jobNo || "",
+        netCost: res.body?.netCost || "",
+        paybleRefNo: res.body?.paybleRefNo || "",
+        profitLoss: res.body?.profitLoss || "",
+        totalRevenue: res.body?.totalRevenue || "",
+        containerTypeDTO: res?.body?.containerTypeDTO || [],
         paybleDetails: res?.body?.paybleDetails || [],
       });
       setLoading(false);
