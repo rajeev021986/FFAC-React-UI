@@ -148,15 +148,7 @@ export default function SubSections({
                   formik={formik}
                   page={"containerNo"}
                 />
-                <hr
-                  class="hr-text"
-                  data-content="Tax Invoice/Debit Note Details"
-                />
-                <AdditionalDebitNote
-                  customer_id={initialValues.id}
-                  bondDetails={formik}
-                  page={"containerNo"}
-                />
+              
               </Box>
             </Box>
             <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>

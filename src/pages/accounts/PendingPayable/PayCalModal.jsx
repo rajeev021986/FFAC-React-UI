@@ -42,12 +42,15 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
     multipleSelected: false,
     statusCode: null,
   });
+console.log("data?.statusCode",data?.statusCode);
 
   useEffect(() => {
     if (data?.statusCode === 100) {
+      console.log("hello paid");
       fetchPayableData();
     } else {
       if (data?.statusCode === 101) {
+        console.log("hhello, unpaid")
         setInitialValues({
           multipleSelected: false,
           statusCode: data?.statusCode,
@@ -83,7 +86,6 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
     try {
       const res = await ApiManager.getPayDetails(data?.id);
       const { paybleInfo, payment } = res.body;
-      if (payment) {
         setInitialValues((prev) => ({
           ...prev,
           id: payment?.id ?? prev.id,
@@ -104,11 +106,11 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
           bankCharges: payment?.bankCharges ?? prev.bankCharges,
           multiple: payment?.multiple ?? prev.multiple,
         }));
-      }
 
       if (paybleInfo && Array.isArray(paybleInfo)) {
         setInitialValues((prev) => ({
           ...prev,
+          paybleRefNum:paybleInfo.map((item) => item.refNo).join(", "),
           paybleIds: paybleInfo.map((item) => item.id),
         }));
       }

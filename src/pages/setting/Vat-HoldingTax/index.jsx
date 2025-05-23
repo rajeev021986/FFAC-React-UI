@@ -159,6 +159,10 @@ export default function VatAndHoldingTaxSettings({ page }) {
       headerAlign: "center",
       width: 120,
       renderCell: (params) => {
+        const { value, type } = params.row;
+        const isDisabled =
+          value === "No" && (type === "VAT" || type === "HOLDING_TAX");
+
         return (
           <div
             style={{
@@ -170,24 +174,36 @@ export default function VatAndHoldingTaxSettings({ page }) {
             }}
           >
             <DeleteIcon
-              style={{ cursor: "pointer", color: "red" }}
-              onClick={() =>
-                setDeleteDialog({
-                  open: true,
-                  data: params.row,
-                })
-              }
+              style={{
+                cursor: isDisabled ? "not-allowed" : "pointer",
+                color: isDisabled ? "gray" : "red",
+                opacity: isDisabled ? 0.5 : 1,
+              }}
+              onClick={() => {
+                if (!isDisabled) {
+                  setDeleteDialog({
+                    open: true,
+                    data: params.row,
+                  });
+                }
+              }}
             />
 
             <EditIcon
-              style={{ cursor: "pointer" }}
-              onClick={() =>
-                toggleModal("edit", {
-                  id: params.row?.id,
-                  value: params.row?.value,
-                  type: params.row?.type || "VAT",
-                })
-              }
+              style={{
+                cursor: isDisabled ? "not-allowed" : "pointer",
+                color: isDisabled ? "gray" : "inherit",
+                opacity: isDisabled ? 0.5 : 1,
+              }}
+              onClick={() => {
+                if (!isDisabled) {
+                  toggleModal("edit", {
+                    id: params.row?.id,
+                    value: params.row?.value,
+                    type: params.row?.type || "VAT",
+                  });
+                }
+              }}
             />
           </div>
         );

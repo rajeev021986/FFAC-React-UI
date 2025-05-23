@@ -408,6 +408,7 @@ export default function AccountsPendingPayableList({ page }) {
           rowId={modal?.data?.id}
           type="accounts_payable"
           label="Reject Reason"
+          refetch={refetch}
         />
       ) : (
         <PayCalModal

@@ -109,9 +109,12 @@ export default function AddEditForm({
 
   useEffect(() => {
     if (viewPage === "editForm") {
-      return setIsDisabled(false);
-    }
-    if (
+      if (initialValues?.paidStatus) {
+        setIsDisabled(true); // Disable if paidStatus is true
+      } else {
+        setIsDisabled(false); // Enable if paidStatus is false or null
+      }
+    } else if (
       viewPage === "view" ||
       formik?.values?.statusCode === -3 ||
       formik?.values?.statusCode === 1
@@ -120,7 +123,7 @@ export default function AddEditForm({
     } else {
       setIsDisabled(false);
     }
-  }, [viewPage]);
+  }, [viewPage, initialValues?.paidStatus]);
 
   const formik = useFormik({
     initialValues,
@@ -1354,8 +1357,7 @@ export default function AddEditForm({
                         <OutlinedButton
                           sx={{
                             fontWeight: "500",
-                            display:
-                              viewPage === "editForm" ? "none" : "block",
+                            display: viewPage === "editForm" ? "none" : "block",
                           }}
                           onClick={() =>
                             page === "payable"
@@ -1371,6 +1373,11 @@ export default function AddEditForm({
                           sx={{
                             fontWeight: "500",
                             color: "white !important",
+                            display:
+                              viewPage === "editForm" &&
+                              initialValues?.paidStatus
+                                ? "none"
+                                : "block",
                           }}
                         >
                           {isLoading && (

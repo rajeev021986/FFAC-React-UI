@@ -34,14 +34,11 @@ import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import useDebounce from "../../../hooks/useDebounce";
 import dayjs from "dayjs";
+import AdditionalDebitNote from "./AdditionalDebitNote";
 export default function CostDetails({ page, customer_id, formik }) {
-  console.log("formik", formik.values.paybleDetails);
-
   const receivableEntrySelector = useSelector(
     (state) => state?.receivableEntry
   );
-console.log("receivableEntrySelector", receivableEntrySelector);
-
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -210,7 +207,7 @@ console.log("receivableEntrySelector", receivableEntrySelector);
       headerAlign: "center",
       align: "center",
     },
-     {
+    {
       field: "creditCost",
       headerName: "Credit",
       flex: 1,
@@ -332,107 +329,115 @@ console.log("receivableEntrySelector", receivableEntrySelector);
     }
   }, [debounceValue, formik?.values?.paybleDetails]);
   return (
-    <Box sx={{ backgroundColor: "white.main" }}>
-      <ScreenToolbar
-        rightComps={
-          <>
-            <Backdrop open={open} />
-            {(page === "customer" || page === "customerApprove") && (
-              <SpeedDial
-                ariaLabel="Text-only  SpeedDial"
-                sx={{
-                  "& .MuiFab-root": {
-                    width: 50,
-                    height: 50,
-                    minHeight: 50,
-                  },
-                }}
-                icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
-                direction="left"
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    tooltipTitle=""
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 2,
-                      // borderRadius: 1,
-                      boxShadow: 3,
-                      borderRadius: "20px 19px 19px 20px",
-                      width: 72,
-                      minWidth: 92,
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 16,
-                      },
-                    }}
-                    icon={
-                      <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                        {action.name}
-                      </span>
-                    }
-                    onClick={() => handleActionClick(action.name)}
-                  ></SpeedDialAction>
-                ))}
-              </SpeedDial>
-            )}
-          </>
-        }
-      />
-
-      <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-        <CardHeader
-          sx={{ padding: "8px" }}
-          title={
-            <Stack direction="row" justifyContent="space-between">
-              <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
-                <TextField
-                  hiddenLabel
-                  id="search"
-                  name="search"
-                  label="Search"
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  value={searchValue}
-                  onChange={handleSearchBar}
-                  sx={{ ...muiTextFieldStyles.root }}
-                  InputProps={{
-                    endAdornment: searchValue && (
-                      <InputAdornment position="end">
-                        <IconButton
-                          size="small"
-                          onClick={() => setsearchValue("")}
-                          edge="end"
-                        >
-                          <ClearIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
+    <>
+      <Box sx={{ backgroundColor: "white.main" }}>
+        <ScreenToolbar
+          rightComps={
+            <>
+              <Backdrop open={open} />
+              {(page === "customer" || page === "customerApprove") && (
+                <SpeedDial
+                  ariaLabel="Text-only  SpeedDial"
+                  sx={{
+                    "& .MuiFab-root": {
+                      width: 50,
+                      height: 50,
+                      minHeight: 50,
+                    },
                   }}
-                />
-              </Box>
-            </Stack>
+                  icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
+                  direction="left"
+                >
+                  {actions.map((action) => (
+                    <SpeedDialAction
+                      key={action.name}
+                      tooltipTitle=""
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: 2,
+                        // borderRadius: 1,
+                        boxShadow: 3,
+                        borderRadius: "20px 19px 19px 20px",
+                        width: 72,
+                        minWidth: 92,
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 16,
+                        },
+                      }}
+                      icon={
+                        <span style={{ fontSize: "12px", fontWeight: "bold" }}>
+                          {action.name}
+                        </span>
+                      }
+                      onClick={() => handleActionClick(action.name)}
+                    ></SpeedDialAction>
+                  ))}
+                </SpeedDial>
+              )}
+            </>
           }
         />
-        <ThemedGrid
-          uniqueId="id"
-          columns={costDetailsColumns}
-          count={filteredData?.length || 0}
-          handlePage={handlePage}
-          data={filteredData}
-          columnVisibility={{}}
-          columnVisibilityHandler={() => {}}
-          paginationModel={receivableEntrySelector.pagination}
-          loading={isLoading || isFetching}
-          sortModel={receivableEntrySelector.sortModel}
-          onSortModelChange={(sortModel) =>
-            dispatch(receivableEntrySetSortModel(sortModel))
-          }
-        />
-      </Card>
-    </Box>
+
+        <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+          <CardHeader
+            sx={{ padding: "8px" }}
+            title={
+              <Stack direction="row" justifyContent="space-between">
+                <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
+                  <TextField
+                    hiddenLabel
+                    id="search"
+                    name="search"
+                    label="Search"
+                    variant="outlined"
+                    fullWidth
+                    size="small"
+                    value={searchValue}
+                    onChange={handleSearchBar}
+                    sx={{ ...muiTextFieldStyles.root }}
+                    InputProps={{
+                      endAdornment: searchValue && (
+                        <InputAdornment position="end">
+                          <IconButton
+                            size="small"
+                            onClick={() => setsearchValue("")}
+                            edge="end"
+                          >
+                            <ClearIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Box>
+              </Stack>
+            }
+          />
+          <ThemedGrid
+            uniqueId="id"
+            columns={costDetailsColumns}
+            count={filteredData?.length || 0}
+            handlePage={handlePage}
+            data={filteredData}
+            columnVisibility={{}}
+            columnVisibilityHandler={() => {}}
+            paginationModel={receivableEntrySelector.pagination}
+            loading={isLoading || isFetching}
+            sortModel={receivableEntrySelector.sortModel}
+            onSortModelChange={(sortModel) =>
+              dispatch(receivableEntrySetSortModel(sortModel))
+            }
+          />
+        </Card>
+      </Box>
+      <hr class="hr-text" data-content="Tax Invoice/Debit Note Details" />
+      <AdditionalDebitNote
+        customer_id={""}
+        bondDetails={formik}
+        page={"AdditionalDebitNote"}
+      />
+    </>
   );
 }

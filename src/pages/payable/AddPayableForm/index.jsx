@@ -129,6 +129,7 @@ export default function AddPayableEntry({ page }) {
               initialValues={initialValues}
               type={state?.formAction}
               page={page}
+              refetchPayableData={fetchPayableData}
             />
           </CardContent>
         </Card>

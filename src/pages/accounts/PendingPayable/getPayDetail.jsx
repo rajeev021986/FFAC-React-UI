@@ -38,6 +38,8 @@ export default function GetPayDetails({
   refetch,
 }) {
   //
+
+  
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
@@ -170,6 +172,8 @@ export default function GetPayDetails({
       }
     },
   });
+  console.log("initialValues", initialValues);
+console.log("formik.values", formik.values.chequeNo);
 
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");

@@ -33,6 +33,7 @@ export default function AddRejectedRemarks({
   rowId,
   type,
   label,
+  refetch,
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -61,6 +62,7 @@ export default function AddRejectedRemarks({
           if (res.success) {
             toast.custom(<CustomToast message={res.message} toast="success" />);
             handleClose();
+            refetch();
           } else {
             console.error("Failed to reject:", res);
             toast.custom(

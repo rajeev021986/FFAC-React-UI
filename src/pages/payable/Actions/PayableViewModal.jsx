@@ -43,6 +43,7 @@ const PayableViewModal = ({ viewType, open, onClose, data }) => {
     shillingNetAmountPayable: "",
     shillingCostCentre: "",
     paybleDetails: [],
+    paidstatus :null,
   });
 
   const fetchPayableData = async () => {
@@ -81,6 +82,7 @@ const PayableViewModal = ({ viewType, open, onClose, data }) => {
         shillingNetAmountPayable: res.body?.shillingNetAmountPayable,
         shillingCostCentre: res.body?.shillingCostCentre,
         paybleDetails: res?.body?.paybleDetails || [],
+        paidStatus: res?.body?.paidStatus ||  null,
       });
       setLoading(false);
     } catch (error) {

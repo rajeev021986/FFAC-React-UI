@@ -22,13 +22,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
 import { LoaderIcon } from "react-hot-toast";
 import ClearIcon from "@mui/icons-material/Clear";
-
-// import {
-//   setPagination,
-//   containerView,
-//   containerSetSortModel,
-//   // updateInput,
-// } from "../../../../store/freatures/containersSlice";
 import {
   setPagination,
   containerView,
@@ -94,26 +87,6 @@ export default function AdditionalDebitNote({
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ]
     : "";
-  useEffect(() => {
-    setDatas([
-      {
-        id: 1,
-        code: "CHG001",
-        chargeName: "Freight Charges",
-        debit: 1500.0,
-        credit: 500.0,
-        vat: 1.2,
-      },
-      {
-        id: 2,
-        code: "CHG001",
-        chargeName: "TESTT Charges",
-        debit: 1500.0,
-        credit: 500.0,
-        vat: 1.22,
-      },
-    ]);
-  }, []);
   const query = {
     page: containerSelector?.pagination?.page + 1,
     size: containerSelector?.pagination?.pageSize,
