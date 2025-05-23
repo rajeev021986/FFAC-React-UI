@@ -33,12 +33,14 @@ import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
 // import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import useDebounce from "../../../hooks/useDebounce";
+import dayjs from "dayjs";
 export default function CostDetails({ page, customer_id, formik }) {
   console.log("formik", formik.values.paybleDetails);
 
   const receivableEntrySelector = useSelector(
     (state) => state?.receivableEntry
   );
+console.log("receivableEntrySelector", receivableEntrySelector);
 
   const location = useLocation();
   const nav = useNavigate();
@@ -162,6 +164,35 @@ export default function CostDetails({ page, customer_id, formik }) {
       align: "center",
     },
     {
+      field: "paybleRefNo",
+      headerName: "Voucher No",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "date",
+      headerName: "Voucher Date",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => {
+        return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+      },
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "debitCost",
+      headerName: "Debit",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
       field: "voucherNo",
       headerName: "Voucher No",
       flex: 1,
@@ -179,84 +210,57 @@ export default function CostDetails({ page, customer_id, formik }) {
       headerAlign: "center",
       align: "center",
     },
-    // {
-    //   field: "debit",
-    //   headerName: "Debit",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   renderCell: (params) => <span>{params.value || ""}</span>,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "voucherNo",
-    //   headerName: "Voucher No",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   renderCell: (params) => <span>{params.value || ""}</span>,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "voucherDate",
-    //   headerName: "Voucher Date",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   renderCell: (params) => <span>{params.value || ""}</span>,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "credit",
-    //   headerName: "Credit",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   renderCell: (params) => <span>{params.value || ""}</span>,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "diff",
-    //   headerName: "Diff",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   renderCell: (params) => <span>{params.value || ""}</span>,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "taxinvoice",
-    //   headerName: "Tax Invoice",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   renderCell: (params) => (
-    //     <input type="checkbox" style={{ cursor: "pointer" }} />
-    //   ),
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "debitNote",
-    //   headerName: "Debit Note",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   renderCell: (params) => (
-    //     <input type="checkbox" style={{ cursor: "pointer" }} />
-    //   ),
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "purchaseVNo",
-    //   headerName: "Purchase VNo",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   renderCell: (params) => <span>{params.value || ""}</span>,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
+     {
+      field: "creditCost",
+      headerName: "Credit",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
     {
-      field: "exchangeRate",
+      field: "diff",
+      headerName: "Diff",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "taxinvoice",
+      headerName: "Tax Invoice",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => (
+        <input type="checkbox" style={{ cursor: "pointer" }} />
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "debitNote",
+      headerName: "Debit Note",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => (
+        <input type="checkbox" style={{ cursor: "pointer" }} />
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "purchaseVNo",
+      headerName: "Purchase VNo",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => <span>{params.value || ""}</span>,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "exRate",
       headerName: "Exchange Rate",
       flex: 1,
       minWidth: 200,
