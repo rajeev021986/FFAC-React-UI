@@ -18,18 +18,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LoaderIcon } from "react-hot-toast";
 import ClearIcon from "@mui/icons-material/Clear";
-
-// import {
-//   setPagination,
-//   containerView,
-//   containerSetSortModel,
-//   // updateInput,
-// } from "../../../../store/freatures/containersSlice";
 import {
   setPagination,
-  containerView,
-  containerSetSortModel,
-} from "../../../store/freatures/containersSlice";
+  receivableEntryView,
+  receivableEntrySetSortModel,
+} from "../../../store/freatures/ReceivableEntrySlice"
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -47,8 +40,10 @@ import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
 // import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import useDebounce from "../../../hooks/useDebounce";
-export default function CostDetails({ page, customer_id, bondDetails }) {
-  const containerSelector = useSelector((state) => state?.containers);
+export default function CostDetails({ page, customer_id, formik }) {
+  console.log("formik", formik.values.paybleDetails);
+
+  const receivableEntrySelector = useSelector((state) => state?.receivableEntry);
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -119,33 +114,33 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
     },
   ];
   const query = {
-    page: containerSelector?.pagination?.page + 1,
-    size: containerSelector?.pagination?.pageSize,
+    page: receivableEntrySelector?.pagination?.page + 1,
+    size: receivableEntrySelector?.pagination?.pageSize,
     // id: customer_id,
     sortBy:
-      containerSelector.sortModel.length > 0
-        ? containerSelector.sortModel[0].field
-        : containerSelector?.sortBy?.split("*")[0],
+      receivableEntrySelector.sortModel.length > 0
+        ? receivableEntrySelector.sortModel[0].field
+        : receivableEntrySelector?.sortBy?.split("*")[0],
     sortOrder:
-      containerSelector.sortModel.length > 0
-        ? containerSelector?.sortModel[0]?.sort
-        : containerSelector?.sortBy?.split("*")[1] || "",
+      receivableEntrySelector.sortModel.length > 0
+        ? receivableEntrySelector?.sortModel[0]?.sort
+        : receivableEntrySelector?.sortBy?.split("*")[1] || "",
   };
   if (
     Boolean(
-      containerSelector.sortModel.length > 0
-        ? containerSelector.sortModel[0].field === "cname"
-        : containerSelector?.sortBy?.split("*")[0] === "cname"
+      receivableEntrySelector.sortModel.length > 0
+        ? receivableEntrySelector.sortModel[0].field === "cname"
+        : receivableEntrySelector?.sortBy?.split("*")[0] === "cname"
     )
   ) {
-    query.sortBy = "containerNo";
+    query.sortBy = "chargeName";
   }
 
-  const payload = Object.entries(containerSelector?.formData)
+  const payload = Object.entries(receivableEntrySelector?.formData)
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
-      Boolean(key === "cname") && (fieldname = "containerNo");
+      Boolean(key === "cname") && (fieldname = "chargeName");
       return {
         fieldName: fieldname,
         operator: "=",
@@ -188,82 +183,82 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "debit",
-      headerName: "Debit",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "voucherNo",
-      headerName: "Voucher No",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "voucherDate",
-      headerName: "Voucher Date",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "credit",
-      headerName: "Credit",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "diff",
-      headerName: "Diff",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "taxinvoice",
-      headerName: "Tax Invoice",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => (
-        <input type="checkbox" style={{ cursor: "pointer" }} />
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "debitNote",
-      headerName: "Debit Note",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => (
-        <input type="checkbox" style={{ cursor: "pointer" }} />
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "purchaseVNo",
-      headerName: "Purchase VNo",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "debit",
+    //   headerName: "Debit",
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: (params) => <span>{params.value || ""}</span>,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "voucherNo",
+    //   headerName: "Voucher No",
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: (params) => <span>{params.value || ""}</span>,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "voucherDate",
+    //   headerName: "Voucher Date",
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: (params) => <span>{params.value || ""}</span>,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "credit",
+    //   headerName: "Credit",
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: (params) => <span>{params.value || ""}</span>,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "diff",
+    //   headerName: "Diff",
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: (params) => <span>{params.value || ""}</span>,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "taxinvoice",
+    //   headerName: "Tax Invoice",
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: (params) => (
+    //     <input type="checkbox" style={{ cursor: "pointer" }} />
+    //   ),
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "debitNote",
+    //   headerName: "Debit Note",
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: (params) => (
+    //     <input type="checkbox" style={{ cursor: "pointer" }} />
+    //   ),
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "purchaseVNo",
+    //   headerName: "Purchase VNo",
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: (params) => <span>{params.value || ""}</span>,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
       {
       field: "exchangeRate",
       headerName: "Exchange Rate",
@@ -318,24 +313,24 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
   // });
 
   useEffect(() => {
-    if (!containerSelector.view) {
-      dispatch(containerView("card"));
+    if (!receivableEntrySelector.view) {
+      dispatch(receivableEntryView("card"));
     }
-  }, [containerSelector.view, dispatch]);
+  }, [receivableEntrySelector.view, dispatch]);
 
   useEffect(() => {
     if (debounceValue.trim()) {
       const lowerSearch = debounceValue.toLowerCase();
-      const filtered = datas?.filter((item) =>
+      const filtered = formik?.values?.paybleDetails?.filter((item) =>
         Object.values(item).some((val) =>
           String(val).toLowerCase().includes(lowerSearch)
         )
       );
       setFilteredData(filtered);
     } else {
-      setFilteredData(datas);
+      setFilteredData(formik?.values?.paybleDetails);
     }
-  }, [debounceValue, containerListData]);
+  }, [debounceValue, formik?.values?.paybleDetails]);
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -425,16 +420,16 @@ export default function CostDetails({ page, customer_id, bondDetails }) {
         <ThemedGrid
           uniqueId="id"
           columns={costDetailsColumns}
-          count={containerListData?.body?.totalElements || 0}
+          count={filteredData?.length || 0}
           handlePage={handlePage}
           data={filteredData}
           columnVisibility={{}}
           columnVisibilityHandler={() => {}}
-          paginationModel={containerSelector.pagination}
+          paginationModel={receivableEntrySelector.pagination}
           loading={isLoading || isFetching}
-          sortModel={containerSelector.sortModel}
+          sortModel= {receivableEntrySelector.sortModel}
           onSortModelChange={(sortModel) =>
-            dispatch(containerSetSortModel(sortModel))
+            dispatch(receivableEntrySetSortModel(sortModel))
           }
         />
       </Card>

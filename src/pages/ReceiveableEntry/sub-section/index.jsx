@@ -145,7 +145,7 @@ export default function SubSections({
               >
                 <CostDetails
                   customer_id={initialValues.id}
-                  bondDetails={formik}
+                  formik={formik}
                   page={"containerNo"}
                 />
                 <hr
