@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
-  FormatListBulletedOutlined,
-  GridOnOutlined,
-} from "@mui/icons-material";
-import { ContainerNumberForm } from "../../UpdateJob/ContainerShipmentTables/ShipmentContainer/ContainerForm";
-import {
   Box,
   IconButton,
   Stack,
-  Dialog,
-  DialogContent,
   TextField,
   InputAdornment,
 } from "@mui/material";
@@ -22,7 +15,7 @@ import {
   setPagination,
   receivableEntryView,
   receivableEntrySetSortModel,
-} from "../../../store/freatures/ReceivableEntrySlice"
+} from "../../../store/freatures/ReceivableEntrySlice";
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -43,7 +36,10 @@ import useDebounce from "../../../hooks/useDebounce";
 export default function CostDetails({ page, customer_id, formik }) {
   console.log("formik", formik.values.paybleDetails);
 
-  const receivableEntrySelector = useSelector((state) => state?.receivableEntry);
+  const receivableEntrySelector = useSelector(
+    (state) => state?.receivableEntry
+  );
+
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -259,7 +255,7 @@ export default function CostDetails({ page, customer_id, formik }) {
     //   headerAlign: "center",
     //   align: "center",
     // },
-      {
+    {
       field: "exchangeRate",
       headerName: "Exchange Rate",
       flex: 1,
@@ -427,7 +423,7 @@ export default function CostDetails({ page, customer_id, formik }) {
           columnVisibilityHandler={() => {}}
           paginationModel={receivableEntrySelector.pagination}
           loading={isLoading || isFetching}
-          sortModel= {receivableEntrySelector.sortModel}
+          sortModel={receivableEntrySelector.sortModel}
           onSortModelChange={(sortModel) =>
             dispatch(receivableEntrySetSortModel(sortModel))
           }

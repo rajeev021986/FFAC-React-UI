@@ -58,6 +58,7 @@ import looseCargoReducer from "./freatures/LoseCargoSlice";
 import payableReducer from "./freatures/payableEntrySlice";
 import pendingPaymentReducer from "./freatures/paymentApprovalSlice";
 import vatAndHoldingReducer from "./freatures/vatAndHoldingSlice";
+import receivableEntryReducer from "./freatures/ReceivableEntrySlice";
 
 const store = configureStore({
   reducer: {
@@ -123,6 +124,7 @@ const store = configureStore({
     payableAction: payableReducer,
     accountsPendingPayments: pendingPaymentReducer,
     vatAndHolding: vatAndHoldingReducer,
+    receivableEntry: receivableEntryReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
