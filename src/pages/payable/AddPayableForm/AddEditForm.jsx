@@ -227,7 +227,7 @@ export default function AddEditForm({
             toast.custom(<CustomToast message={message} toast="success" />, {
               closeButton: false,
             });
-            nav(-1);
+            viewPage === "editForm" ? onClose() : nav(-1);
           } else {
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
