@@ -58,19 +58,8 @@ export default function AddEditForm({
   page,
   viewPage,
   type = "notcopy",
-  onClose,
 }) {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 1200,
-    bgcolor: "background.paper",
-    borderRadius: 2,
-    boxShadow: 24,
-    p: 4,
-  };
+  //
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
@@ -251,6 +240,7 @@ export default function AddEditForm({
       }
     },
   });
+
   const getFormData = formik?.values;
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -274,11 +264,13 @@ export default function AddEditForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
+
   useEffect(() => {
     if (formik.values?.currency !== "USD") {
       formik.setFieldValue("exchangeRate", 1);
     }
   }, [formik.values?.currency]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -451,6 +443,7 @@ export default function AddEditForm({
     let { page, pageSize } = params;
     dispatch(dashboardSetPagination({ page, pageSize }));
   };
+
   const muiTextFieldStyles = {
     root: {
       "& .MuiInputBase-root": {
@@ -460,6 +453,7 @@ export default function AddEditForm({
       },
     },
   };
+
   useEffect(() => {
     if (formik?.values?.currency !== "USD") {
       formik.setFieldValue("exchangeRate", 1);
@@ -473,28 +467,9 @@ export default function AddEditForm({
   //   }
   // }, []);
 
-  const CurrencyData = [
-    {
-      label: "TZS",
-      value: "TZS",
-    },
-    {
-      label: "USD",
-      value: "USD",
-    },
-  ];
-
-  //
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
-
-  const disabled =
-    formik?.values?.statusCode === 1 ||
-    formik?.values?.statusCode === -3 ||
-    viewPage === "view"
-      ? true
-      : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -552,13 +527,6 @@ export default function AddEditForm({
       headerAlign: "center",
       align: "center",
       editable: false,
-      // renderCell: (params) => {
-      //   const createdBy = params.row?.new
-      //     ? localStorage.getItem("userId") || "Unknown User"
-      //     : params.row?.createdBy || "";
-
-      //   return <span>{createdBy}</span>;
-      // },
     },
 
     {
