@@ -60,7 +60,7 @@ export function VesselForm({ initialValues, type }) {
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: VesselValidation(),
+     validationSchema: VesselValidation(),
     onSubmit: async (values) => {
       if (type == "copy" || type == "add") {
         let line = values.vesselLineEntities.map((item) =>
@@ -226,9 +226,9 @@ export function VesselForm({ initialValues, type }) {
                     >
                       <FormAutoComplete
                         label="Line Name*"
-                        id="lineName"
-                        value={formik.values.lineName}
-                        error={formik.errors.lineName}
+                        id="lineId"
+                        value={formik.values.lineId}
+                        error={formik.errors.lineId}
                         onChange={formik.handleChange}
                         suggestionName="vendor_name"
                       ></FormAutoComplete>
@@ -401,9 +401,9 @@ export function VesselForm({ initialValues, type }) {
                     >
                       <FormAutoComplete
                         label="Line Name*"
-                        id="lineName"
-                        value={formik.values.lineName}
-                        error={formik.errors.lineName}
+                        id="lineId"
+                        value={formik.values.lineId}
+                        error={formik.errors.lineId}
                         onChange={formik.handleChange}
                         suggestionName="vendor_name"
                       ></FormAutoComplete>

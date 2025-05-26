@@ -301,9 +301,12 @@ export default function AddPayableEntryModal({
             <FormAutoCompleteWithLoader
               label="Job No."
               id="jobNo"
+              show ={false}
+
               value={payableEntry.jobNo}
               onChange={(e) => {
                 const value = e.target.value;
+                console.log(value,"targetValue")
                 handleChange("jobNo", value);
                 if (!value) {
                   setPayableEntry((prev) => ({
@@ -322,7 +325,7 @@ export default function AddPayableEntryModal({
           <Grid item xs={12} lg={8}>
             <FormAutoCompleteWithLoader
               label="Charge Name"
-              id="chargeName"
+              id="chargeId"
               value={payableEntry.chargeName}
               onChange={(e) => handleChange("chargeName", e.target.value)}
               suggestionName="charge_name"

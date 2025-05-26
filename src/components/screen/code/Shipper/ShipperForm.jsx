@@ -115,7 +115,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
   const formik = useFormik({
     initialValues,
     validateOnChange: false,
-    validationSchema,
+     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
@@ -381,10 +381,10 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                     >
                       <FormAutoComplete
                         label="Country"
-                        id="country"
+                        id="countryId"
                         suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
+                        value={formik.values.countryId}
+                        error={formik.errors.countryId}
                         onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
@@ -746,10 +746,10 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                   >
                     <FormAutoComplete
                       label="Country"
-                      id="country"
+                      id="countryId"
                       suggestionName="country"
-                      value={formik.values.country}
-                      error={formik.errors.country}
+                      value={formik.values.countryId}
+                      error={formik.errors.countryId}
                       onChange={formik.handleChange}
                     ></FormAutoComplete>
                   </Grid>

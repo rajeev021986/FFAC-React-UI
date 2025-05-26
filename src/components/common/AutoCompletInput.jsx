@@ -21,11 +21,9 @@ function AutoCompleteInput({
   ...props
 }) {
   const [options, setOptions] = useState([]);
-  console.log(options,"options")
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
   const tooltipMessage = value ? value : "This field is empty";
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -49,17 +47,19 @@ function AutoCompleteInput({
 
   const handleInputChange = async (event, newValue) => {
     setLoading(false);
-    const filtered = options.filter((option) =>
-      option.label.toLowerCase().includes(newValue.toLowerCase())
+    const filtered = options?.filter((option) =>
+      option?.label?.toLowerCase().includes(newValue?.toLowerCase())
     );
 
     setFilteredOptions(filtered);
   };
 
   const handleSelectionChange = (event, newValue) => {
-    console.log(newValue,"newValue")
+    console.log(newValue, "ram");
     if (newValue) {
-      onChange(newValue.fullData?.id);
+      // onChange(newValue.value);
+
+      onChange(newValue.fullData?.id ? newValue.fullData?.id : newValue?.value);
     } else {
       onChange(null);
     }
@@ -79,7 +79,13 @@ function AutoCompleteInput({
     >
       <Autocomplete
         id={id}
-        value={options.find((option) => option?.fullData?.id === value) || null}
+        value={
+          id == "currency"
+            ? options.find((option) => option.value === value) || null
+            : options.find((option) => option?.fullData?.id == value) || null
+        }
+      
+        // value={options.find((option) => option?.fullData?.id == value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}

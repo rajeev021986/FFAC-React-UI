@@ -350,10 +350,10 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                     >
                       <FormAutoComplete
                         label="Country"
-                        id="country"
+                        id="countryId"
                         suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
+                        value={formik.values.countryId}
+                        error={formik.errors.countryId}
                         onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
@@ -637,10 +637,10 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                   >
                     <FormAutoComplete
                       label="Country"
-                      id="country"
+                      id="countryId"
                       suggestionName="country"
-                      value={formik.values.country}
-                      error={formik.errors.country}
+                      value={formik.values.countryId}
+                      error={formik.errors.countryId}
                       onChange={formik.handleChange}
                     ></FormAutoComplete>
                   </Grid>

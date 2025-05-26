@@ -62,6 +62,7 @@ import UploadFile from "../../../components/UploadFile";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import { formatIndianCurrency } from "../../../components/utils/utils";
+import FormAutoCompleteForJobNo from "../../../components/common/AutoComplete/FormAutoCompleteForJobNo";
 
 export default function AddEditForm({
   initialValues,
@@ -133,93 +134,130 @@ export default function AddEditForm({
     enableReinitialize: true,
     validateOnChange: false,
     validationSchema: payableValidationSchema(),
-    onSubmit: async (values) => {
-      if (!values.id || type == "copy") {
-        try {
-          values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
-          values.status = "";
-          let paybleDetailsData = values.paybleDetails.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
-          let response = await addPaybleEntry({
-            ...values,
-            paybleDetails: paybleDetailsData,
-          }).unwrap();
+   onSubmit: async (values) => {
+    const invoiceCurrencyAmount = getAmountData?.amount || 0;
+    const invoiceCurrencyVat = getAmountData?.vatAmount || 0;
+    const invoiceCurrencyWithHoldingTax =
+      getAmountData?.withHoldingAmount || 0;
+    const invoiceCurrencyNetAmountPayable = getAmountData?.totalAmount || 0;
 
-          const message = response.message;
-          if (response.code == "SUCCESS") {
-            toast.custom(<CustomToast message={message} toast="warn" />, {
-              closeButton: false,
-            });
-            nav("/app/documentation/paybleEntry");
-          } else {
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          }
-        } catch (error) {
-          if (error.status === 409) {
-            const message = error.data.message;
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          } else {
-            toast.custom(
-              <CustomToast
-                message="An error occurred while submitting the form."
-                toast="error"
-              />,
-              {
-                closeButton: false,
-              }
-            );
-          }
+    const exchangeRate = Number(getFormData?.exchangeRate) || 1;
+
+    const localCurrencyAmount =
+      getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+        ? invoiceCurrencyAmount
+        : invoiceCurrencyAmount * exchangeRate;
+
+    const localCurrencyVat =
+      getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+        ? invoiceCurrencyVat
+        : invoiceCurrencyVat * exchangeRate;
+
+    const localCurrencyWithHoldingTax =
+      getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+        ? invoiceCurrencyWithHoldingTax
+        : invoiceCurrencyWithHoldingTax * exchangeRate;
+
+    const localCurrencyNetAmountPayable =
+      getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+        ? invoiceCurrencyNetAmountPayable
+        : invoiceCurrencyNetAmountPayable * exchangeRate;
+    values.invoiceCurrencyAmount = invoiceCurrencyAmount;
+    values.invoiceCurrencyVat = invoiceCurrencyVat;
+    values.invoiceCurrencyWithHoldingTax = invoiceCurrencyWithHoldingTax;
+    values.invoiceCurrencyNetAmountPayable = invoiceCurrencyNetAmountPayable;
+
+    values.localCurrencyAmount = localCurrencyAmount;
+    values.localCurrencyVat = localCurrencyVat;
+    values.localCurrencyWithHoldingTax = localCurrencyWithHoldingTax;
+    values.localCurrencyNetAmountPayable = localCurrencyNetAmountPayable;
+    if (!values.id || type === "copy") {
+      try {
+        values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
+        values.status = "";
+        let paybleDetailsData = values.paybleDetails.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
+        let response = await addPaybleEntry({
+          ...values,
+          paybleDetails: paybleDetailsData,
+        }).unwrap();
+
+        const message = response.message;
+        if (response.code == "SUCCESS") {
+          toast.custom(<CustomToast message={message} toast="warn" />, {
+            closeButton: false,
+          });
+          nav("/app/documentation/paybleEntry");
+        } else {
+          toast.custom(<CustomToast message={message} toast="error" />, {
+            closeButton: false,
+          });
         }
-      } else {
-        try {
-          setRejectError(false);
-          let paybleDetailsData = values.paybleDetails.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
+      } catch (error) {
+        if (error.status === 409) {
+          const message = error.data.message;
+          toast.custom(<CustomToast message={message} toast="error" />, {
+            closeButton: false,
+          });
+        } else {
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
           );
-          Boolean(values.status == "Active") && (values.statusCode = 1);
-          Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          let response = await updatePaybleEntry({
-            ...values,
-            paybleDetails: paybleDetailsData,
-          }).unwrap();
-
-          const message = response.message;
-          if (response.code == "SUCCESS") {
-            toast.custom(<CustomToast message={message} toast="success" />, {
-              closeButton: false,
-            });
-            nav(-1);
-          } else {
-            toast.custom(<CustomToast message={message} toast="warn" />, {
-              closeButton: false,
-            });
-          }
-        } catch (error) {
-          if (error.status === 409) {
-            const message = error.data.message;
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          } else {
-            toast.custom(
-              <CustomToast
-                message="An error occurred while submitting the form."
-                toast="error"
-              />,
-              {
-                closeButton: false,
-              }
-            );
-          }
         }
       }
-    },
-  });
+    } else {
+      // If there is an id, proceed with the update action
+      try {
+        setRejectError(false);
+        let paybleDetailsData = values.paybleDetails.map((item) =>
+          item?.new ? { ...item, id: null, new: false } : item
+        );
+        Boolean(values.status == "Active") && (values.statusCode = 1);
+        Boolean(values.status == "Inactive") && (values.statusCode = -2);
+        let response = await updatePaybleEntry({
+          ...values,
+          paybleDetails: paybleDetailsData,
+        }).unwrap();
+
+        const message = response.message;
+        if (response.code == "SUCCESS") {
+          toast.custom(<CustomToast message={message} toast="success" />, {
+            closeButton: false,
+          });
+          nav(-1);
+        } else {
+          toast.custom(<CustomToast message={message} toast="warn" />, {
+            closeButton: false,
+          });
+        }
+      } catch (error) {
+        if (error.status === 409) {
+          const message = error.data.message;
+          toast.custom(<CustomToast message={message} toast="error" />, {
+            closeButton: false,
+          });
+        } else {
+          toast.custom(
+            <CustomToast
+              message="An error occurred while submitting the form."
+              toast="error"
+            />,
+            {
+              closeButton: false,
+            }
+          );
+        }
+      }
+    }
+  },
+});
 
   const getFormData = formik?.values;
   const { data: optionsSettingsData } =
@@ -667,7 +705,6 @@ export default function AddEditForm({
     };
   };
   const getAmountData = getPaybleDetailsTotals(chargesData);
-
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -756,14 +793,25 @@ export default function AddEditForm({
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <FormAutoCompleteWithLoader
+                    {/* <FormAutoCompleteWithLoader
                       label="Job No."
                       id="jobNo"
                       value={formik.values.jobNo}
                       error={formik.errors.jobNo}
+                      name ={true}
                       onChange={formik.handleChange}
                       suggestionName="job_no"
                       disabled={isDisabled}
+                    /> */}
+                    <FormAutoCompleteForJobNo
+                    label="Job No."
+                    id="jobNo"
+                    value={formik.values.jobNo}
+                    error={formik.errors.jobNo}
+                    name ={true}
+                    onChange={formik.handleChange}
+                    suggestionName="job_no"
+                    disabled={isDisabled}
                     />
                   </Grid>
 
@@ -783,10 +831,10 @@ export default function AddEditForm({
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <FormAutoCompleteWithLoader
                       label="Vendor Name"
-                      id="vendorName"
+                      id="vendorId"
                       suggestionName="vendor_name"
-                      value={formik.values.vendorName}
-                      error={formik.errors.vendorName}
+                      value={formik.values.vendorId}
+                      error={formik.errors.vendorId}
                       onChange={formik.handleChange}
                       disabled={isDisabled}
                     />

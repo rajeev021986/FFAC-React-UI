@@ -9,7 +9,7 @@ import {
 import { GetAutoCompleteDataWithLoader } from "../../utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
 
-function FormAutoCompleteWithLoader(props) {
+function FormAutoCompleteForJobNo(props) {
   const {
     label,
     id,
@@ -18,11 +18,10 @@ function FormAutoCompleteWithLoader(props) {
     value,
     error,
     onChange,
-    show,
-    name,
     disabled,
-    other,
+    other, 
   } = props;
+
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -63,30 +62,17 @@ function FormAutoCompleteWithLoader(props) {
       onChange({
         target: {
           name: id,
-          value: name == true ? newValue.value : newValue.fullData?.id,
-          label: newValue.label,
+          value: newValue.value,
           count: newValue?.fullData?.count || 0,
-          fullData: newValue.fullData,
         },
       });
     } else {
       onChange({
-        target: {
-          name: id,
-          value: null,
-          label: "",
-          fullData: null,
-          count: 0,
-        },
+        target: { name: id, value: null, count: 0 },
       });
     }
   };
-  const selectedOption = options.find(
-    (option) =>
-      option?.value == value ||
-      option?.fullData?.id == value ||
-      option?.label == value
-  ) || null;
+
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
@@ -96,8 +82,7 @@ function FormAutoCompleteWithLoader(props) {
         size="small"
         id={id}
         disabled={disabled}
-        value={selectedOption}
-        //  value={options.find((option) => option?.fullData?.id == value || null) }
+        value={options.find((option) => option.value == value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
@@ -146,4 +131,4 @@ function FormAutoCompleteWithLoader(props) {
   );
 }
 
-export default FormAutoCompleteWithLoader
+export default FormAutoCompleteForJobNo;

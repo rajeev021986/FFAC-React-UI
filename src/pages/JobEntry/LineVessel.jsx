@@ -200,10 +200,10 @@ export default function LineVessel({ formik }) {
           >
             <FormAutoComplete
               label="Vessel/Local Agent"
-              id="vesselAgent"
+              id="vesselAgentId"
               suggestionName="type"
-              value={formik.values.vesselAgent}
-              error={formik.errors.vesselAgent}
+              value={formik.values.vesselAgentId}
+              error={formik.errors.vesselAgentId}
               onChange={formik.handleChange}
               inputRef={FieldRef}
               disabled={disabled}

@@ -1,4 +1,4 @@
-import { useEffect, useRef , useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import { Grid, TextField, Tooltip } from "@mui/material";
 import Box from "@mui/material/Box";
 
@@ -12,13 +12,15 @@ import SelectBox from "../../components/common/SelectBox";
 import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 import FormAutoCompleteWithTable from "../../components/common/AutoComplete/FormAutoCompletewithTable";
 import ApiManager from "../../services/ApiManager";
+import FormAutoCompleteWithCountryTable from "../../components/common/AutoComplete/FormAutoCompleteWithCountryTable";
+// import FormAutoCompleteWithCountryTable from "../../components/common/AutoComplete/FormAutoCompleteWithCountryTable";
 
 export default function ShipmentDetails({ formik }) {
   let disabled = formik?.values?.statusCode === -3;
   const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-  const { data: optionsSettingsData } = useGetOptionsSettingsQuery("common_settings");
-  
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
 
   const FieldRef = useRef(null);
   useEffect(() => {
@@ -29,31 +31,37 @@ export default function ShipmentDetails({ formik }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await ApiManager.fetchAutoCompleteData("", "COMPANY_CODE");
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
         const backendData = await response.body;
-  
+
         // Extract backend currencies safely
         const backendCurrencies = Array.from(
-          new Set((backendData || []).map(item => item.currency).filter(Boolean))
-        ).map(curr => ({ id: curr, value: curr }));
-  
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
         // Get setting currencies safely
         const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
-  
+
         // Merge both arrays avoiding duplicates (based on `value`)
         const mergedCurrencies = [
           ...backendCurrencies,
           ...settingCurrencies.filter(
-            setting => !backendCurrencies.some(item => item.value === setting.value)
-          )
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
         ];
-  
+
         setMergedCurrencyOptions(mergedCurrencies);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
   return (
@@ -61,38 +69,49 @@ export default function ShipmentDetails({ formik }) {
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
         <Grid paddingLeft={1} marginTop={0} container spacing={1}>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-          <FormAutoCompleteWithTable
+            {/* <FormAutoCompleteWithTable
             label="Origin Country"
-            id="originCountry"
+            id="originPortId"
             suggestionName="originCountry"
-            value={formik.values.originCountry}
+            value={formik.values.originPortId}
             formik={formik}
             setFieldValue={formik.setFieldValue}
-            error={formik.errors.originCountry}
+            error={formik.errors.originPortId}
             disabled={false}
-          />
+          /> */}
+
+            <FormAutoCompleteWithCountryTable
+              label="Origin Country"
+              id="originPortId"
+              suggestionName="originCountry"
+              value={formik.values.originPortId}
+              formik={formik}
+              setFieldValue={formik.setFieldValue}
+              error={formik.errors.originPortId}
+              disabled={false}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-          <FormAutoCompleteWithTable
-            label="Port of Loading"
-            id="portOfLoading"
-            suggestionName="portOfLoading"
-            value={formik.values.portOfLoading}
-            formik={formik}
-            setFieldValue={formik.setFieldValue}
-            error={formik.errors.portOfLoading}
-            disabled={false}
-          />
+            <FormAutoCompleteWithTable
+              label="Port of Loading"
+              id="portOfLoading"
+              suggestionName="portOfLoading"
+              value={formik.values.portOfLoading}
+              formik={formik}
+              setFieldValue={formik.setFieldValue}
+              error={formik.errors.portOfLoading}
+              disabled={false}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Port Of Discharge"
-              id="portOfDischarge"
+              id="portOfDischargeId"
               suggestionName="port_name"
-              value={formik.values.portOfDischarge}
-              error={formik.errors.portOfDischarge}
+              value={formik.values.portOfDischargeId}
+              error={formik.errors.portOfDischargeId}
               onChange={formik.handleChange}
               inputRef={FieldRef}
               disabled={disabled}
@@ -102,10 +121,10 @@ export default function ShipmentDetails({ formik }) {
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Place Of Delivery"
-              id="placeOfDelivery"
+              id="placeOfDeliveryId"
               suggestionName="port_name"
-              value={formik.values.placeOfDelivery}
-              error={formik.errors.placeOfDelivery}
+              value={formik.values.placeOfDeliveryId}
+              error={formik.errors.placeOfDeliveryId}
               onChange={formik.handleChange}
               inputRef={FieldRef}
               disabled={disabled}
@@ -158,7 +177,6 @@ export default function ShipmentDetails({ formik }) {
             item
             xs={12}
             sm={6}
-
             md={4}
             lg={3}
             xl={2}

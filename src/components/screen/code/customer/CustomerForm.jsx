@@ -90,7 +90,7 @@ export default function CustomerForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: CustomerValidationSchema(),
+     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
         let emails = values.customerEntityEmailsIds.map((item) =>
@@ -113,38 +113,9 @@ export default function CustomerForm({
           }
           values.tinNo = values?.tinNo?.trim() || null;
           values.vatNo = values?.vatNo?.trim() || null;
-     
-          console.log(values,"values")
-          const updatedPayload = {
-            ...values,
-            // Rename country to countryId if country exists
-            ...(values.country && { countryId: values.country }),
-            // Remove the old country key
-            country: undefined,
-
-            // Rename chargeName to chargeId inside the array
-            customerEntityTariffs:
-              values.customerEntityTariffs?.map((tariff) => {
-                const { chargeName, ...rest } = tariff;
-                return {
-                  ...rest,
-                  chargeId: chargeName,
-                };
-              }) || [],
-          };
-
-          // Clean up any undefined keys (like the old 'country')
-          Object.keys(updatedPayload).forEach(
-            (key) =>
-              updatedPayload[key] === undefined && delete updatedPayload[key]
-          );
-
-          // Now use updatedPayload
-
-          console.log(updatedPayload, "updatedPayload");
+          console.log(values, "mnnnnishh");
           let response = await addCustomer({
-            updatedPayload,
-            // countryId:countryId,
+            ...values,
             customerEntityEmailsIds: emails,
             customerEntityTariffs: tariffs,
             bankDetails: bank,
@@ -201,34 +172,8 @@ export default function CustomerForm({
           );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          const updatedPayload = {
-            ...values,
-            // Rename country to countryId if country exists
-            ...(values.country && { countryId: values.country }),
-            // Remove the old country key
-            country: undefined,
-
-            // Rename chargeName to chargeId inside the array
-            customerEntityTariffs:
-              values.customerEntityTariffs?.map((tariff) => {
-                const { chargeName, ...rest } = tariff;
-                return {
-                  ...rest,
-                  chargeId: chargeName,
-                };
-              }) || [],
-          };
-
-          // Clean up any undefined keys (like the old 'country')
-          Object.keys(updatedPayload).forEach(
-            (key) =>
-              updatedPayload[key] === undefined && delete updatedPayload[key]
-          );
-       
-       
           let response = await updateCustomer({
-            // ...values,
-            updatedPayload,
+            ...values,
             customerEntityEmailsIds: emails,
             customerEntityTariffs: tariffs,
             bankDetails: bank,
@@ -291,7 +236,7 @@ export default function CustomerForm({
   let shouldShowTabs = Object.values(formik.values?.customerName).some(
     (value) => value !== ""
   );
-
+  console.log(formik.values, "formik");
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -395,7 +340,7 @@ export default function CustomerForm({
       customerNameRef.current.focus();
     }
   }, []);
-
+  console.log(formik.values?.countryId, "formik");
   return (
     <>
       {type == "add" ? (
@@ -655,10 +600,10 @@ export default function CustomerForm({
                     >
                       <FormAutoComplete
                         label="Country"
-                        id="country"
+                        id="countryId"
                         suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
+                        value={formik.values?.countryId}
+                        error={formik.errors.countryId}
                         onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
@@ -1255,10 +1200,10 @@ export default function CustomerForm({
                     >
                       <FormAutoComplete
                         label="Country"
-                        id="country"
+                        id="countryId"
                         suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
+                        value={formik.values.countryId}
+                        error={formik.errors.countryId}
                         onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>

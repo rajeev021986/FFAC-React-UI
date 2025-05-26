@@ -14,14 +14,14 @@ function FormAutoComplete(props) {
     id,
     suggestionName,
     dataLabel,
-    value,
+    value ,
     error,
     onChange,
     disabled,
   } = props;
 
   const [options, setOptions] = useState([]);
-  console.log(value, "id");
+  
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
 
@@ -93,7 +93,7 @@ function FormAutoComplete(props) {
         id={id}
         noOptionsText="Type to Search"
         // value={options.find((option) => option.value === value) || null}
-        value={options.find((option) => option.fullData?.id === value) || null}
+        value={options.find((option) => option.fullData?.id == value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}

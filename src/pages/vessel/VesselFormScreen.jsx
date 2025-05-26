@@ -20,7 +20,7 @@ export function VesselFormScreen() {
     vesselMaster: "",
     mode: "",
     vesselName: "",
-    lineName: "",
+    lineId: "",
     vesselOwner: "",
     vesselLineEntities: [],
   });
@@ -44,7 +44,7 @@ export function VesselFormScreen() {
           vesselMaster: response?.body?.vesselMaster || "",
           mode: response?.body?.mode || "",
           vesselName: response?.body?.vesselName || "",
-          lineName: response?.body?.lineName || "",
+          lineId: response?.body?.lineId || "",
           vesselOwner: response?.body?.vesselOwner || "",
           vesselLineEntities: response?.body?.vesselLineEntities || [],
         });
