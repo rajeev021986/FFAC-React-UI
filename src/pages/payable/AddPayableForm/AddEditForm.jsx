@@ -821,7 +821,7 @@ export default function AddEditForm({
                       disabled={isDisabled}
                     /> */}
                     <FormAutoCompleteForJobNo
-                    label="Job No."
+                    label="Job No*."
                     id="jobNo"
                     value={formik.values.jobNo}
                     error={formik.errors.jobNo}
