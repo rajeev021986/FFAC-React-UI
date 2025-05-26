@@ -39,7 +39,6 @@ export default function GetPayDetails({
 }) {
   //
 
-  
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
@@ -172,8 +171,6 @@ export default function GetPayDetails({
       }
     },
   });
-  console.log("initialValues", initialValues);
-console.log("formik.values", formik.values.chequeNo);
 
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
@@ -433,9 +430,9 @@ console.log("formik.values", formik.values.chequeNo);
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Cheque No."
+                      label="Cheque No"
                       id="chequeNo"
-                      value={formik.values.chequeNo}
+                      value={formik.values.chequeNo || ""}
                       error={formik.errors.chequeNo}
                       onChange={formik.handleChange}
                       disabled={
@@ -443,7 +440,6 @@ console.log("formik.values", formik.values.chequeNo);
                           ? false
                           : true
                       }
-                      // inputRef={payableRef}
                     />
                   </Grid>
 

@@ -52,6 +52,7 @@ const UploadFile = ({
   sourceType = null,
   isNotShowType,
   type,
+  refetchPayableData,
 }) => {
   const [viewloader, setViewloader] = useState(false);
   const [viewloaderId, setViewLoaderId] = useState();
@@ -71,12 +72,12 @@ const UploadFile = ({
     type == null
       ? reloadDataHandler(sourceType, customer_id, setListData, setLoading)
       : reloadDocumentDataHandler(
-        sourceType,
-        customer_id,
-        type,
-        setListData,
-        setLoading
-      );
+          sourceType,
+          customer_id,
+          type,
+          setListData,
+          setLoading
+        );
   }, []);
 
   const downloadIntgater = async () => {
@@ -158,12 +159,14 @@ const UploadFile = ({
       type == null
         ? reloadDataHandler(sourceType, customer_id, setListData, setLoading)
         : reloadDocumentDataHandler(
-          sourceType,
-          customer_id,
-          type,
-          setListData,
-          setLoading
-        );
+            sourceType,
+            customer_id,
+            type,
+            setListData,
+            setLoading
+          );
+
+      refetchPayableData();
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -233,23 +236,21 @@ const UploadFile = ({
     const issueDate = new Date(formData.issueDate);
     if (issueDate < today) {
       // Show error toast if the Issue Date is a past date
-      toast.custom(
-        <CustomToast message="Issue Date cannot be a past date." />
-      );
+      toast.custom(<CustomToast message="Issue Date cannot be a past date." />);
       return; // Stop further execution if the date is invalid
     }
     const resolvedDocumentType =
       formData.documentType === "Other"
         ? formData.other
         : type == null
-          ? formData.documentType
-          : type;
+        ? formData.documentType
+        : type;
     const isDuplicate = listData?.some(
       (item) =>
         item.fileName?.trim().toLowerCase() ===
-        uploadedFile?.name?.trim().toLowerCase() &&
+          uploadedFile?.name?.trim().toLowerCase() &&
         item.documentType?.trim().toLowerCase() ===
-        resolvedDocumentType?.trim().toLowerCase()
+          resolvedDocumentType?.trim().toLowerCase()
     );
     if (isDuplicate) {
       toast.custom(
@@ -285,7 +286,7 @@ const UploadFile = ({
       } else {
         reloadDataHandler(sourceType, customer_id, setListData, setLoading);
       }
-
+      refetchPayableData();
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -437,7 +438,7 @@ const UploadFile = ({
             />
           )}
           <Delete
-             sx={{
+            sx={{
               cursor: "pointer",
               color: "red",
             }}
@@ -575,20 +576,21 @@ const UploadFile = ({
               }
             />
           )}
-       {!disabled && (
-        <Delete
-            style={{ cursor: "pointer", color: "red" }}
-            onClick={() => {
-              setDeleteData({
-                id: params.row.id,
-                source: params.row.source,
-                sourceId: params.row.sourceId,
-                fileName: params.row.fileName,
-              });
-              setOpenConfirmation(true);
-            }}
-            disabled={disabled}
-          />)}
+          {!disabled && (
+            <Delete
+              style={{ cursor: "pointer", color: "red" }}
+              onClick={() => {
+                setDeleteData({
+                  id: params.row.id,
+                  source: params.row.source,
+                  sourceId: params.row.sourceId,
+                  fileName: params.row.fileName,
+                });
+                setOpenConfirmation(true);
+              }}
+              disabled={disabled}
+            />
+          )}
         </div>
       ),
     },
@@ -607,61 +609,78 @@ const UploadFile = ({
           <Loader />
         </Grid>
       ) : (
-        <Grid container >
-     { !disabled && (<>
-        <Grid item xs={12}>
-            <Typography
-              variant="h5"
-              sx={{ padding: "10px 15px 5px 15px" }}
-            >
-              Select Files
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Box
-              sx={{ display: "flex", padding: "15px", height: "100%", width: "100%" }}>
-              <DropZone
-                onClick={() => document.getElementById("file-input").click()}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  handleFileDrop(e);
-                }}
-              >
-                <img
-                  src={Uploadimg}
-                  alt="Upload"
-                  style={{ margin: "0 auto" }}
-                />
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  sx={{ mt: 2 }}
-                >
-                  Drop file here or click to{" "}
-                  <span
-                    style={{ textDecoration: "underline", color: "#1976d2" }}
-                  >
-                    browse
-                  </span>{" "}
-                  through your machine
+        <Grid container>
+          {!disabled && (
+            <>
+              <Grid item xs={12}>
+                <Typography variant="h5" sx={{ padding: "10px 15px 5px 15px" }}>
+                  Select Files
                 </Typography>
-                <input
-                  id="file-input"
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => {
-                    handleFileDrop(e);
-                    e.target.value = "";
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    padding: "15px",
+                    height: "100%",
+                    width: "100%",
                   }}
-                  disabled={disabled}
-                />
-              </DropZone>
-            </Box>
-          </Grid>
-        </>)}
+                >
+                  <DropZone
+                    onClick={() =>
+                      document.getElementById("file-input").click()
+                    }
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      handleFileDrop(e);
+                    }}
+                  >
+                    <img
+                      src={Uploadimg}
+                      alt="Upload"
+                      style={{ margin: "0 auto" }}
+                    />
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{ mt: 2 }}
+                    >
+                      Drop file here or click to{" "}
+                      <span
+                        style={{
+                          textDecoration: "underline",
+                          color: "#1976d2",
+                        }}
+                      >
+                        browse
+                      </span>{" "}
+                      through your machine
+                    </Typography>
+                    <input
+                      id="file-input"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        handleFileDrop(e);
+                        e.target.value = "";
+                      }}
+                      disabled={disabled}
+                    />
+                  </DropZone>
+                </Box>
+              </Grid>
+            </>
+          )}
           <Grid item xs={12} md={disabled ? 12 : 8}>
-            <Box style={{ height: 400, width: "100%", padding: "15px", overflow: "auto" }}>
+            <Box
+              style={{
+                height: 400,
+                width: "100%",
+                padding: "15px",
+                overflow: "auto",
+              }}
+            >
               <StyledDataGrid
                 rows={listData}
                 columns={(sourceType === "CUSTOMER" ? cusColumns : columns).map(

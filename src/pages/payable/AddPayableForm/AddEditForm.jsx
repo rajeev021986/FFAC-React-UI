@@ -59,6 +59,7 @@ export default function AddEditForm({
   viewPage,
   type = "notcopy",
   onClose,
+  refetchPayableData,
 }) {
   const style = {
     position: "absolute",
@@ -1428,6 +1429,7 @@ export default function AddEditForm({
               disabled={isDisabled}
               dropdownData={dropdownData.jobDocumentType}
               sourceType="PAYBLE_ENTRY"
+              refetchPayableData={refetchPayableData}
             />
           </TabPanel>
 
