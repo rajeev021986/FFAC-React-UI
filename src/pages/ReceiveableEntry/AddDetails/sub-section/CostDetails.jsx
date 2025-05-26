@@ -15,30 +15,35 @@ import {
   setPagination,
   receivableEntryView,
   receivableEntrySetSortModel,
-} from "../../../store/freatures/ReceivableEntrySlice";
+} from "../../../../store/freatures/ReceivableEntrySlice";
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 // Components
-import CardsView from "../../../components/common/Cards/CardsView";
-import ScreenToolbar from "../../../components/common/ScreenToolbar";
-import GridAction from "../../../components/common/Grid/GridActions";
-import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
-import { useFetchContainerQuery } from "../../../store/api/containerApi";
+import CardsView from "../../../../components/common/Cards/CardsView";
+import ScreenToolbar from "../../../../components/common/ScreenToolbar";
+import GridAction from "../../../../components/common/Grid/GridActions";
+import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
+import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 
 // import { getContaienrListGridActions } from "./containerAction";
-import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
+import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 // import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
-import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
-import useDebounce from "../../../hooks/useDebounce";
+import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
+import useDebounce from "../../../../hooks/useDebounce";
 import dayjs from "dayjs";
 import AdditionalDebitNote from "./AdditionalDebitNote";
 export default function CostDetails({ page, customer_id, formik }) {
   const receivableEntrySelector = useSelector(
     (state) => state?.receivableEntry
   );
+<<<<<<< HEAD:src/pages/ReceiveableEntry12/sub-section/CostDetails.jsx
+=======
+  console.log("receivableEntrySelector", receivableEntrySelector);
+
+>>>>>>> 8b10aa2b41851e844720210754b594bd25a642c5:src/pages/ReceiveableEntry/AddDetails/sub-section/CostDetails.jsx
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();

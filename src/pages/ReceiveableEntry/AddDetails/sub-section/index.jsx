@@ -1,40 +1,35 @@
 import { useFormik } from "formik";
 import { CircularProgress, Grid, Stack } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
+import {
+  OutlinedButton,
+  ThemeButton,
+} from "../../../../components/common/Button";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
-import { useAddPaybleEntryMutation } from "../../../store/api/payableApi";
+import { useAddPaybleEntryMutation } from "../../../../store/api/payableApi";
 
 import { useNavigate } from "react-router-dom";
-import CustomToast from "../../../components/common/Toast/CustomToast";
-import getFirstError from "../../../components/common/FieldToastError";
-import { formView } from "../../../store/freatures/payableEntrySlice";
+import CustomToast from "../../../../components/common/Toast/CustomToast";
+import getFirstError from "../../../../components/common/FieldToastError";
+import { formView } from "../../../../store/freatures/payableEntrySlice";
 import { useDispatch, useSelector } from "react-redux";
-import { payableValidationSchema } from "../../payable/Actions/ValidationSchema";
+import { payableValidationSchema } from "../../../payable/Actions/ValidationSchema";
 import CostDetails from "./CostDetails";
 
 // Sections Components
 import JobProfitAndLoss from "./JobProfitAndLoss";
-import AdditionalDebitNote from "./AdditionalDebitNote";
 
-export default function SubSections({
-  initialValues,
-  page,
-  viewPage,
-  type = "notcopy",
-}) {
+export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
   const nav = useNavigate();
   const dispatch = useDispatch();
 
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
-  const actionsSelector = useSelector((s) => s?.payableAction);
 
   const [dropdownData, setDropdownData] = useState({});
-  const [isDisabled, setIsDisabled] = useState(false);
   const [value, setValue] = React.useState("1");
   const [chargesData, setChargesData] = useState([]);
   const handleChange = (event, newValue) => {
@@ -106,12 +101,6 @@ export default function SubSections({
     getFirstError(formik.errors);
   }, [formik.errors]);
 
-  useEffect(() => {
-    if (!actionsSelector.view) {
-      dispatch(formView("card"));
-    }
-  }, [actionsSelector.view, dispatch]);
-
   const handleFetchPayable = () => {
     const apiPayableData = formik?.values?.paybleDetails || [];
     const appendData = [...apiPayableData].reduce((acc, pay) => {
@@ -148,7 +137,14 @@ export default function SubSections({
                   formik={formik}
                   page={"containerNo"}
                 />
+<<<<<<< HEAD:src/pages/ReceiveableEntry12/sub-section/index.jsx
               
+=======
+                {/* <hr
+                  class="hr-text"
+                  data-content="Tax Invoice/Debit Note Details"
+                /> */}
+>>>>>>> 8b10aa2b41851e844720210754b594bd25a642c5:src/pages/ReceiveableEntry/AddDetails/sub-section/index.jsx
               </Box>
             </Box>
             <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>

@@ -69,7 +69,7 @@ const ThemedGrid = (props) => {
         "customerRefNo",
         "consigneeName",
         "portOfLoading",
-      "placeOfDelivery",
+        "placeOfDelivery",
       ];
       return {
         ...a,
@@ -114,7 +114,6 @@ const ThemedGrid = (props) => {
         onPaginationModelChange={paginationModel ? handlePage : undefined}
         getRowId={(row) => row[uniqueId]}
         disableColumnFilter
-        
         slots={{
           toolbar: () => (
             <Box sx={{ display: "flex", justifyContent: "flex-start", p: 0 }}>

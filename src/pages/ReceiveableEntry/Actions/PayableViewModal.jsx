@@ -8,7 +8,7 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import AddEditForm from "../AddPayableForm/AddEditForm";
+// import AddEditForm from "../AddReceievevaleForm/AddEditForm";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import toast from "react-hot-toast";
 import ApiManager from "../../../services/ApiManager";
@@ -118,11 +118,19 @@ const PayableViewModal = ({ viewType, open, onClose, data }) => {
             </IconButton>
           </DialogTitle>
           <DialogContent>
-            {viewType === "view" ? (
-              <AddEditForm viewPage="view" initialValues={initialValues} onClose ={onClose}/>
+            {/* {viewType === "view" ? (
+              <AddEditForm
+                viewPage="view"
+                initialValues={initialValues}
+                onClose={onClose}
+              />
             ) : (
-              <AddEditForm viewPage="editForm" initialValues={initialValues} onClose ={onClose}/>
-            )}
+              <AddEditForm
+                viewPage="editForm"
+                initialValues={initialValues}
+                onClose={onClose}
+              />
+            )} */}
           </DialogContent>
         </Dialog>
       )}

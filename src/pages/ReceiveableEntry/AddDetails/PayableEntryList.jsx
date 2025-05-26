@@ -1,7 +1,7 @@
 import React from "react";
 import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 
-const PayableEntryList = ({ chargesData, PAYABLE_COLUMNS, disabled }) => {
+const DebitNoteListData = ({ chargesData, PAYABLE_COLUMNS, disabled }) => {
   return (
     <React.Fragment>
       <ThemedGrid
@@ -15,4 +15,4 @@ const PayableEntryList = ({ chargesData, PAYABLE_COLUMNS, disabled }) => {
   );
 };
 
-export default PayableEntryList;
+export default DebitNoteListData;
