@@ -50,6 +50,7 @@ import PayableList from "./pages/payable";
 import AddPayableEntry from "./pages/payable/AddPayableForm";
 import AccountsPendingPayableList from "./pages/accounts/PendingPayable";
 import ReceiveableEntryDetails from "./pages/ReceiveableEntry";
+import ReceivableEntryList from "./pages/ReceiveableEntry";
 
 function App() {
   const theme = getTheme(
@@ -196,7 +197,7 @@ function App() {
 
             <Route
               path="accounts/operations/receivableEntry"
-              element={<PayableList page="receivableEntry" />}
+              element={<ReceivableEntryList page="receivableEntry" />}
             />
 
             <Route
