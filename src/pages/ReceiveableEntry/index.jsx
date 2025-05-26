@@ -14,7 +14,7 @@ import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 
 import GridActions from "../../components/common/Grid/GridActions";
-import { PAYABLE_COLUMNS } from "../../data/columns/paybleColumn";
+import { RECIVEABLE_COLUMNS } from "../../data/columns/recieveableColumn";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 
 import Backdrop from "@mui/material/Backdrop";
@@ -40,7 +40,7 @@ import {
 } from "../../store/api/payableApi";
 import CancelModalApprove from "../JobEntry/CancelModalApprove";
 import ApiManager from "../../services/ApiManager";
-import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
+// import ApprovePayableModal from "./AddReceievevaleForm/ApprovePayableModal";
 import PayableViewModal from "./Actions/PayableViewModal";
 import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
 import { getReceiveableEntryGridActionApprove } from "../accounts/PendingPayable/actionCopy";
@@ -131,11 +131,11 @@ export default function ReceivableEntryList({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  PAYABLE_COLUMNS[PAYABLE_COLUMNS.length - 1].renderCell = GridActions({
+  RECIVEABLE_COLUMNS[RECIVEABLE_COLUMNS.length - 1].renderCell = GridActions({
     actions:
       page == "receivableEntry"
         ? getReceiveableEntryGridActionApprove(nav, setModal)
-        : getPayableListGridActionApprove(nav, setModal),
+        : "",
   });
 
   const handleActionClick = async (actionName) => {
@@ -434,7 +434,7 @@ export default function ReceivableEntryList({ page }) {
         {receivableEntrySelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={PAYABLE_COLUMNS}
+            columns={RECIVEABLE_COLUMNS}
             count={receiveableLisData?.body?.totalElements || 0}
             handlePage={handlePage}
             data={receiveableLisData?.body?.data}
@@ -450,7 +450,7 @@ export default function ReceivableEntryList({ page }) {
         ) : (
           <CardsView
             uniqueId="id"
-            columns={PAYABLE_COLUMNS}
+            columns={RECIVEABLE_COLUMNS}
             count={receiveableLisData?.body?.totalElements || 0}
             handlePage={handlePage}
             data={receiveableLisData?.body?.data}
@@ -458,10 +458,8 @@ export default function ReceivableEntryList({ page }) {
             loading={isLoading || isFetching}
             actions={
               page == "receivableEntry"
-                ? getPayableListGridActions(nav, setModal)
-                : page == "receivableEntry"
                 ? getReceiveableEntryGridActionApprove(nav, setModal)
-                : getPayableListGridActionApprove(nav, setModal)
+                : ""
             }
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}

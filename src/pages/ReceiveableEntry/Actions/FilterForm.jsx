@@ -15,12 +15,12 @@ export default function FilterForm({ setFilterOpen }) {
     initialValues: inputs || {
       jobNo: inputs.jobNo || "",
       currency: inputs.currency || "",
-      invoiceType: inputs.invoiceType || "",
-      vendorName: inputs.vendorName || "",
+      customerName: inputs.customerName || "",
+      companyCode: inputs.companyCode || "",
       exchangeRate: inputs.exchangeRate || "",
-      payableRefNo: inputs.payableRefNo || "",
-      vendorInvoiceNo: inputs.vendorInvoiceNo || "",
-      statusCode: inputs.statusCode || "",
+      consigneeName: inputs.consigneeName || "",
+      receivableRefNo: inputs.receivableRefNo || "",
+      status: inputs.status || "",
       isDoc: inputs.isDoc || "",
     },
     onSubmit: (values) => {
@@ -39,38 +39,32 @@ export default function FilterForm({ setFilterOpen }) {
       updateInput({
         jobNo: "",
         currency: "",
-        invoiceType: "",
-        vendorName: "",
+        customerName: "",
+        companyCode: "",
         exchangeRate: "",
-        payableRefNo: "",
-        vendorInvoiceNo: "",
-        statusCode: "",
+        consigneeName: "",
+        receivableRefNo: "",
+        status: "",
         isDoc: "",
       })
     );
     formik.setValues({
       jobNo: "",
       currency: "",
-      invoiceType: "",
-      vendorName: "",
+      customerName: "",
+      companyCode: "",
       exchangeRate: "",
-      payableRefNo: "",
-      vendorInvoiceNo: "",
-      statusCode: "",
+      consigneeName: "",
+      receivableRefNo: "",
+      status: "",
       isDoc: "",
     });
   };
 
   const statusOptions = [
-    { value: 1, label: "Active" },
-    { value: -2, label: "InActive" },
-    { value: 0, label: "New & Pen Doc" },
+    { value: 1, label: "Pending" },
+    { value: -2, label: "Approve" },
     { value: -1, label: "Rejected" },
-    { value: -3, label: "Cancel" },
-  ];
-  const documentOptions = [
-    { value: false, label: "Pending" },
-    { value: true, label: "Available" },
   ];
 
   return (
@@ -90,70 +84,47 @@ export default function FilterForm({ setFilterOpen }) {
             onChange={formik.handleChange}
           />
           <InputBox
-            label="Invoice Type"
-            id="invoiceType"
-            value={formik.values.invoiceType}
+            label="Customer Name"
+            id="customerName"
+            value={formik.values.customerName}
             onChange={formik.handleChange}
           />
         </Stack>
 
         <Stack direction="row" spacing={2}>
           <InputBox
-            label="Vendor Name"
-            id="vendorName"
-            value={formik.values.vendorName}
+            label="Company Code"
+            id="companyCode"
+            value={formik.values.companyCode}
             onChange={formik.handleChange}
           />
           <InputBox
-            label="Payable Ref. No."
-            id="payableRefNo"
-            value={formik.values.payableRefNo}
+            label="Consignee Name"
+            id="consigneeName"
+            value={formik.values.consigneeName}
             onChange={formik.handleChange}
           />
         </Stack>
 
         <Stack direction="row" spacing={2}>
           <InputBox
-            label="Vendor Invoice No."
-            id="vendorInvoiceNo"
-            value={formik.values.vendorInvoiceNo}
+            label="Receivable RefNo"
+            id="receivableRefNo"
+            value={formik.values.receivableRefNo}
             onChange={formik.handleChange}
           />
           <SelectBox
             sx={{ marginLeft: "8px !important" }}
-              label="Status"
-              id="statusCode"
-              options={statusOptions}
-              value={formik.values.statusCode}
-              onChange={formik.handleChange}
-              MenuProps={{
-                disablePortal: true,
-              }}
-            />
+            label="Status"
+            id="status"
+            options={statusOptions}
+            value={formik.values.status}
+            onChange={formik.handleChange}
+            MenuProps={{
+              disablePortal: true,
+            }}
+          />
         </Stack>
-
-        {/* <Stack
-          direction="row"
-          spacing={2}
-          sx={{
-            width: "65.7%",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ width: "48%", marginLeft: "0px" }}>
-            <SelectBox
-              label="Status"
-              id="statusCode"
-              options={statusOptions}
-              value={formik.values.statusCode}
-              onChange={formik.handleChange}
-              sx={{ marginLeft: "0px !important" }}
-              MenuProps={{
-                disablePortal: true,
-              }}
-            />
-          </div>
-        </Stack> */}
 
         <Stack direction="row" spacing={3} justifyContent={"end"}>
           <Button

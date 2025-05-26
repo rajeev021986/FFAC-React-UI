@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { AppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
 // Components
-import InputBox from "../../../components/common/InputBox";
+import InputBox from "../../../../components/common/InputBox";
 
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);

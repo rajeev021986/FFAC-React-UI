@@ -15,24 +15,24 @@ import {
   setPagination,
   receivableEntryView,
   receivableEntrySetSortModel,
-} from "../../../store/freatures/ReceivableEntrySlice";
+} from "../../../../store/freatures/ReceivableEntrySlice";
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 // Components
-import CardsView from "../../../components/common/Cards/CardsView";
-import ScreenToolbar from "../../../components/common/ScreenToolbar";
-import GridAction from "../../../components/common/Grid/GridActions";
-import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
-import { useFetchContainerQuery } from "../../../store/api/containerApi";
+import CardsView from "../../../../components/common/Cards/CardsView";
+import ScreenToolbar from "../../../../components/common/ScreenToolbar";
+import GridAction from "../../../../components/common/Grid/GridActions";
+import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
+import { useFetchContainerQuery } from "../../../../store/api/containerApi";
 
 // import { getContaienrListGridActions } from "./containerAction";
-import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
+import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 // import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
-import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
-import useDebounce from "../../../hooks/useDebounce";
+import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
+import useDebounce from "../../../../hooks/useDebounce";
 import dayjs from "dayjs";
 export default function CostDetails({ page, customer_id, formik }) {
   console.log("formik", formik.values.paybleDetails);
@@ -40,7 +40,7 @@ export default function CostDetails({ page, customer_id, formik }) {
   const receivableEntrySelector = useSelector(
     (state) => state?.receivableEntry
   );
-console.log("receivableEntrySelector", receivableEntrySelector);
+  console.log("receivableEntrySelector", receivableEntrySelector);
 
   const location = useLocation();
   const nav = useNavigate();
@@ -210,7 +210,7 @@ console.log("receivableEntrySelector", receivableEntrySelector);
       headerAlign: "center",
       align: "center",
     },
-     {
+    {
       field: "creditCost",
       headerName: "Credit",
       flex: 1,

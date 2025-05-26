@@ -101,20 +101,20 @@ export function StatusChip(status, field) {
             style={{
               ...styles.chip,
               backgroundColor: "#c0392b",
-              borderColor:"#c0392b",
+              borderColor: "#c0392b",
               color: "#ffffff",
             }}
           >
             UNPAID
           </div>
         );
-           case "paid":
+      case "paid":
         return (
           <div
             style={{
               ...styles.chip,
-              backgroundColor:"#27ae60",
-              borderColor:"#27ae60",
+              backgroundColor: "#27ae60",
+              borderColor: "#27ae60",
               color: "#ffffff",
             }}
           >
@@ -132,6 +132,32 @@ export function StatusChip(status, field) {
             }}
           >
             CANCEL
+          </div>
+        );
+      case "pending":
+        return (
+          <div
+            style={{
+              ...styles.chip,
+              backgroundColor: "#e67e22",
+              borderColor: "#e67e22",
+              color: "#ffffff",
+            }}
+          >
+            PENDING
+          </div>
+        );
+      case "approved":
+        return (
+          <div
+            style={{
+              ...styles.chip,
+              backgroundColor: "#27ae60",
+              borderColor: "#27ae60",
+              color: "#ffffff",
+            }}
+          >
+            APPROVED
           </div>
         );
       default:
