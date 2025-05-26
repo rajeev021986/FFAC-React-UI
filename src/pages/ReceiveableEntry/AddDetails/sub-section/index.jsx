@@ -137,14 +137,10 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
                   formik={formik}
                   page={"containerNo"}
                 />
-<<<<<<< HEAD:src/pages/ReceiveableEntry12/sub-section/index.jsx
-              
-=======
                 {/* <hr
                   class="hr-text"
                   data-content="Tax Invoice/Debit Note Details"
                 /> */}
->>>>>>> 8b10aa2b41851e844720210754b594bd25a642c5:src/pages/ReceiveableEntry/AddDetails/sub-section/index.jsx
               </Box>
             </Box>
             <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>

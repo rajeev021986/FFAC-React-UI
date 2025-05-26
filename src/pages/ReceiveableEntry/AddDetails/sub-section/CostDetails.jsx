@@ -34,16 +34,12 @@ import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
 import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
 import useDebounce from "../../../../hooks/useDebounce";
 import dayjs from "dayjs";
-import AdditionalDebitNote from "./AdditionalDebitNote";
 export default function CostDetails({ page, customer_id, formik }) {
   const receivableEntrySelector = useSelector(
     (state) => state?.receivableEntry
   );
-<<<<<<< HEAD:src/pages/ReceiveableEntry12/sub-section/CostDetails.jsx
-=======
   console.log("receivableEntrySelector", receivableEntrySelector);
 
->>>>>>> 8b10aa2b41851e844720210754b594bd25a642c5:src/pages/ReceiveableEntry/AddDetails/sub-section/CostDetails.jsx
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -438,11 +434,7 @@ export default function CostDetails({ page, customer_id, formik }) {
         </Card>
       </Box>
       <hr class="hr-text" data-content="Tax Invoice/Debit Note Details" />
-      <AdditionalDebitNote
-        customer_id={""}
-        bondDetails={formik}
-        page={"AdditionalDebitNote"}
-      />
+
     </>
   );
 }

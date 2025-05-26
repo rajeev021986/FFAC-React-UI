@@ -51,6 +51,7 @@ import {
   receivableEntrySetSortModel,
   setPagination,
 } from "../../store/freatures/ReceivableEntrySlice";
+import AddNewReceivableModal from "./AddNewReceivableModal";
 
 export default function ReceivableEntryList({ page }) {
   const location = useLocation();
@@ -139,10 +140,11 @@ export default function ReceivableEntryList({ page }) {
   });
 
   const handleActionClick = async (actionName) => {
-    if (actionName === "New Entry") {
-      nav("addpayable", {
-        replace: true,
-        state: { formAction: "add" },
+    if (actionName === "Add Entry") {
+      setModal({
+        open: true,
+        type: "add-entry",
+        data: {},
       });
     }
     if (actionName === "Export") {
@@ -521,6 +523,13 @@ export default function ReceivableEntryList({ page }) {
           viewType={"view"}
         />
       )} */}
+      {modal.open && modal.type === "add-entry" && (
+        <AddNewReceivableModal
+          open={modal.open}
+          onClose={handleClose}
+          data={modal.data}
+        />
+      )}
     </Box>
   );
 }
