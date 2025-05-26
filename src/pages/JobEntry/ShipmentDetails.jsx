@@ -103,7 +103,7 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.portOfLoading}
               disabled={false}
             />
-            <FormAutoCompleteWithTable
+            {/* <FormAutoCompleteWithTable
               label="Port of Loading"
               id="portOfLoading"
               suggestionName="portOfLoading"
@@ -112,7 +112,7 @@ export default function ShipmentDetails({ formik }) {
               setFieldValue={formik.setFieldValue}
               error={formik.errors.portOfLoading}
               disabled={false}
-            />
+            /> */}
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
