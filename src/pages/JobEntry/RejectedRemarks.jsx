@@ -27,7 +27,14 @@ const style = {
   p: 4,
 };
 
-export default function AddRejectedRemarks({ handleOpen, handleClose, rowId ,type,label }) {
+export default function AddRejectedRemarks({
+  handleOpen,
+  handleClose,
+  rowId,
+  type,
+  label,
+  refetch,
+}) {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
@@ -45,30 +52,59 @@ export default function AddRejectedRemarks({ handleOpen, handleClose, rowId ,typ
     },
     onSubmit: async (values) => {
       setLoading(true);
-      try {
-        const res = await ApiManager.rejectjobEntryApprove(
-          rowId,
-          type,
-          values.remarks
-        );
-        if (res.success) {
-          toast.custom(<CustomToast message={res.message} toast="success" />);
-          handleClose();
-        } else {
-          console.error("Failed to reject:", res);
-          toast.custom(
-            <CustomToast
-              message={res.message || "Failed to reject"}
-              toast="error"
-            />
+      if (type === "accounts_payable") {
+        try {
+          const res = await ApiManager.rejectAccountsPayableId(
+            rowId,
+            "PAYBLE_ENTRY",
+            values.remarks
           );
+          if (res.success) {
+            toast.custom(<CustomToast message={res.message} toast="success" />);
+            handleClose();
+            refetch();
+          } else {
+            console.error("Failed to reject:", res);
+            toast.custom(
+              <CustomToast
+                message={res.message || "Failed to reject"}
+                toast="error"
+              />
+            );
+          }
+        } catch (error) {
+          toast.custom(
+            <CustomToast message={"Something went wrong!"} toast="error" />
+          );
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        toast.custom(
-          <CustomToast message={"Something went wrong!"} toast="error" />
-        );
-      } finally {
-        setLoading(false);
+      } else {
+        try {
+          const res = await ApiManager.rejectjobEntryApprove(
+            rowId,
+            type,
+            values.remarks
+          );
+          if (res.success) {
+            toast.custom(<CustomToast message={res.message} toast="success" />);
+            handleClose();
+          } else {
+            console.error("Failed to reject:", res);
+            toast.custom(
+              <CustomToast
+                message={res.message || "Failed to reject"}
+                toast="error"
+              />
+            );
+          }
+        } catch (error) {
+          toast.custom(
+            <CustomToast message={"Something went wrong!"} toast="error" />
+          );
+        } finally {
+          setLoading(false);
+        }
       }
     },
   });
@@ -87,7 +123,7 @@ export default function AddRejectedRemarks({ handleOpen, handleClose, rowId ,typ
           <Grid item xs={12}>
             <InputBox
               fullWidth
-              label= {label || "Remarks"}
+              label={label || "Remarks"}
               id="remarks"
               name="remarks"
               value={formik.values.remarks}

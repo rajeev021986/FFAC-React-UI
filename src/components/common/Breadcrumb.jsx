@@ -81,6 +81,7 @@ const Routes = {
   approvePayableRequest: { label: "Approve Payable Request", disabled: false },
   accounts: { label: "Accounts (Operations)", disabled: true },
   pendingPayble: { label: "Pending Payable", disabled: true },
+  receivableEntry: { label: "Receivable Entry", disabled: true },
 };
 
 const ThemedBreadcrumb = () => {

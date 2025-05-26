@@ -58,7 +58,9 @@ const ENDPOINTS = {
     `/${BasePageUrl}/data?pattern=${inputValue}&type=${id}`,
   GET_EDIT_VOYAGE: (id, BasePageUrl) => `/${BasePageUrl}/vessel/voyage/${id}`,
   FETCH_AUTOCOMPLETE_DATA: (inputValue, id, BasePageUrl, other) =>
-    `/${BasePageUrl}/data?pattern=${inputValue}&type=${id}${other ? `&other=${other}` : ""}`,
+    `/${BasePageUrl}/data?pattern=${inputValue}&type=${id}${
+      other ? `&other=${other}` : ""
+    }`,
   FILE_DOWNLOAD_INTEGATER: (id, BasePageUrl) =>
     `/${BasePageUrl}/file/audit/${id}`,
   GET_AUDIT_DATA: (id, page, service) => `/${service}/${page}/audit/${id}`,
@@ -93,10 +95,17 @@ const ENDPOINTS = {
     `/${BasePageUrl}/approval/approved/${type}/${id}`,
   PAYABLE_REJECT_REQUEST: (id, type, BasePageUrl) =>
     `/${BasePageUrl}/approval/rejected/${type}/${id}`,
-    PAY_SELECTEDIDS_REQUEST: (BasePageUrl) =>
-    `/${BasePageUrl}/pending/payable/pay`,
-     PAYABLE_PAY_REQUEST: (id, BasePageUrl) =>
+  PAY_SELECTEDIDS_REQUEST: (BasePageUrl) =>
+    `/${BasePageUrl}/pending/payble/pay`,
+  PAYABLE_PAY_REQUEST: (id, BasePageUrl) =>
     `/${BasePageUrl}/pending/payble/pay/${id}`,
+  PENDING_PAYABLE_CANCEL_REQUEST: (id, type, BasePageUrl) =>
+    `/${BasePageUrl}/approval/cancel/${type}/${id}`,
+  GET_PAY_DETAILS: (id, BasePageUrl) => `/${BasePageUrl}/pending/payble/${id}`,
+  PENDING_PAYABLE_REJECT_REQUEST: (id, type, BasePageUrl) =>
+    `/${BasePageUrl}/approval/rejected/${type}/${id}`,
+  GET_RECEIVABLENTRY_DETAILS: (id, BasePageUrl) =>
+    `/${BasePageUrl}/receivable/${id}`,
 };
 
 export default ENDPOINTS;

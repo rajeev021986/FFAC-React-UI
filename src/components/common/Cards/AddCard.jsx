@@ -46,15 +46,14 @@ const validationSchema = Yup.object({
   firstName: Yup.string().required("First Name is required"),
   lastName: Yup.string().required("Last Name is required"),
   email: Yup.string()
-  .required("Email is required")
-  .test("valid-email", "Invalid email format", (value) => {
-    if (!value) return false;
-    const emailRegex =
-      /^[a-zA-Z0-9._%+-]+@([a-zA-Z]+\.)+[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(value)) return false;
-    if (value.includes("..")) return false; // Disallow consecutive dots
-    return true;
-  }),
+    .required("Email is required")
+    .test("valid-email", "Invalid email format", (value) => {
+      if (!value) return false;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@([a-zA-Z]+\.)+[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(value)) return false;
+      if (value.includes("..")) return false; // Disallow consecutive dots
+      return true;
+    }),
 
   phone: Yup.string()
     .required("Phone is required")

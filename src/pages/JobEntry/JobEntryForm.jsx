@@ -37,7 +37,6 @@ import UploadFile from "../../components/UploadFile";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import ApiManager from "../../services/ApiManager";
-import SelectShipment from "../../components/common/SelectShipment";
 
 export default function JobEntryForm({
   initialValues,
@@ -564,7 +563,7 @@ export default function JobEntryForm({
           <TabPanel value="1">
             <Grid container rowSpacing={2} columnSpacing={3}>
               <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
-                <SelectShipment
+                <SelectBox
                   label="Shipment Type*"
                   id="shipmentType"
                   options={optionsSettingsData?.body?.shipmentType}
@@ -576,6 +575,7 @@ export default function JobEntryForm({
                   inputRef={shipmentTypeRef}
                 />
               </Grid>
+
               <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
                 <SelectBox
                   label="Move Type*"

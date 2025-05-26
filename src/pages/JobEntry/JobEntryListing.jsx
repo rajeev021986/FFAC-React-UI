@@ -331,8 +331,6 @@ export default function JobEntryScreen({ page }) {
   //     setSelectedIds([]);
   //   }
   // };
-  console.log("modal?.data?", modal?.data);
-
   const jobEntryColumns = [
     ...(page === "jobApprove"
       ? [
@@ -505,6 +503,7 @@ export default function JobEntryScreen({ page }) {
           </Box>
         </Drawer>
       )}
+
       <DocumentDialog
         // source="jobApprove"
         sourceId={modal?.data?.id}

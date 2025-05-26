@@ -87,12 +87,13 @@ const PayableSettings = () => {
             title="Invoice Type"
           />
 
-          <GlobalDrrpdownSetting
+          {/* <GlobalDrrpdownSetting
             value={holdingTax}
             setvalue={setHoldingTax}
             title="Holding Tax"
-          />
-           <GlobalDrrpdownSetting
+          /> */}
+
+          <GlobalDrrpdownSetting
             value={paymentType}
             setvalue={setPaymentType}
             title="Payment Type"

@@ -1,6 +1,8 @@
 import { CircularProgress, Grid } from "@mui/material";
 import { Stack } from "@mui/material";
 import { useFormik } from "formik";
+import Tooltip from "@mui/material/Tooltip";
+import * as Yup from "yup";
 import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../components/common/InputBox";
 import { ThemeButton } from "../../../components/common/Button";
@@ -14,7 +16,6 @@ import {
   useAddPaybleEntryMutation,
   useUpdatePaybleEntryMutation,
 } from "../../../store/api/payableApi";
-
 import { useNavigate } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 import CustomToast from "../../../components/common/Toast/CustomToast";
@@ -25,8 +26,6 @@ import { useDispatch, useSelector } from "react-redux";
 import DateTimeField from "../../../components/common/DateTime/DateTimeField";
 import FormAutoComplete from "../../../components/common/AutoComplete/FormAutoComplete";
 import SelectBox from "../../../components/common/SelectBox";
-
-import { payableValidationSchema } from "../../payable/Actions/ValidationSchema";
 import ApiManager from "../../../services/ApiManager";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 
@@ -35,9 +34,12 @@ export default function GetPayDetails({
   page,
   viewPage,
   type = "notcopy",
-  onClose
+  onClose,
+  refetch,
 }) {
   //
+
+  
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
@@ -70,24 +72,59 @@ export default function GetPayDetails({
   });
 
   useEffect(() => {
-    if (
-      viewPage === "view" ||
-      formik?.values?.statusCode === -3 ||
-      formik?.values?.statusCode === 1
-    ) {
+    if (initialValues?.statusCode === 100) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
     }
-  }, [viewPage]);
+  }, [initialValues]);
+  const validationSchema = Yup.object({
+    currency: Yup.string().required("Currency is required!"),
+    paymentType: Yup.string().required("Payment Type is required!"),
+    paymentDate: Yup.string().required("Payment Date is required!"),
+    bankName: Yup.string().when("paymentType", {
+      is: (val) => val === "Cheque",
+      then: () =>
+        Yup.string().required(
+          "Bank Name is required when payment type is Cheque"
+        ),
+      otherwise: () => Yup.string().nullable(),
+    }),
 
+    chequeNo: Yup.string().when("paymentType", {
+      is: (val) => val === "Cheque",
+      then: () =>
+        Yup.string().required(
+          "Cheque No is required when payment type is Cheque"
+        ),
+      otherwise: () => Yup.string().nullable(),
+    }),
+
+    chequeDate: Yup.string().when("paymentType", {
+      is: (val) => val === "Cheque",
+      then: () =>
+        Yup.string().required(
+          "Cheque Date is required when payment type is Cheque"
+        ),
+      otherwise: () => Yup.string().nullable(),
+    }),
+  });
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: false,
+    validationSchema,
     onSubmit: async (values) => {
       try {
+        if (values?.vendorName === "") {
+          toast.custom(
+            <CustomToast
+              message={"Line/Agent name is required!"}
+              toast="error"
+            />
+          );
+          return;
+        }
         const payload = {
           id: values?.id || "",
           vendorName: values?.vendorName || "",
@@ -103,13 +140,30 @@ export default function GetPayDetails({
           localAmountToBePaid: values?.localAmountToBePaid || 0,
           bankCharges: values?.bankCharges || "",
         };
-        const res = await ApiManager.paySingle(values.id, payload);
-        if (res.success) {
-          const message = res.message;
-          toast.custom(<CustomToast message={message} toast="success" />);
-          onClose(); // Close modal after successful update
+        const multiplePayload = {
+          paybleIds: values?.paybleIds || [],
+          payment: payload,
+        };
+        if (initialValues?.multipleSelected === true) {
+          const res = await ApiManager.paySelectedIdsHandler(multiplePayload);
+          if (res.success) {
+            const message = res.message;
+            toast.custom(<CustomToast message={message} toast="success" />);
+            onClose(); // Close modal after successful update
+            refetch();
+          } else {
+            console.error("Failed to pay", res);
+          }
         } else {
-          console.error("Failed to pay", res);
+          const res = await ApiManager.paySingle(values.id, payload);
+          if (res.success) {
+            const message = res.message;
+            toast.custom(<CustomToast message={message} toast="success" />);
+            onClose(); // Close modal after successful update
+            refetch();
+          } else {
+            console.error("Failed to pay", res);
+          }
         }
       } catch (error) {
         toast.custom(
@@ -118,6 +172,8 @@ export default function GetPayDetails({
       }
     },
   });
+  console.log("initialValues", initialValues);
+console.log("formik.values", formik.values.chequeNo);
 
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
@@ -215,8 +271,6 @@ export default function GetPayDetails({
   useEffect(() => {
     handleFetchPayable();
   }, [formik?.values?.chargesData]);
-  console.log("intia", initialValues);
-  console.log("fff", formik.values);
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -246,32 +300,41 @@ export default function GetPayDetails({
               <Box sx={{ width: "100%", paddingRight: 2 }}>
                 <Grid container sx={{ padding: 0, margin: 0 }}>
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                   <InputBox
-                      label="Voucher No"
-                      id="paybleRefNum"
-                      value={formik.values.paybleRefNum}
-                      error={formik.errors.paybleRefNum}
-                      onChange={formik.handleChange}
-                      inputRef={payableRef}
-                    />
+                    <Tooltip
+                      title={formik.values.paybleRefNum || ""}
+                      arrow
+                      placement="top"
+                    >
+                      <div>
+                        <InputBox
+                          label="Voucher No"
+                          id="paybleRefNum"
+                          value={formik.values.paybleRefNum}
+                          error={formik.errors.paybleRefNum}
+                          onChange={formik.handleChange}
+                          disabled={true}
+                        />
+                      </div>
+                    </Tooltip>
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Line Agent Name"
+                      label="Line/Agent Name"
                       id="vendorName"
                       value={formik.values.vendorName}
                       error={formik.errors.vendorName}
                       onChange={formik.handleChange}
-                      inputRef={payableRef}
+                      disabled={true}
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount USD"
+                      label={`Amount ${formik.values.currency}`}
                       id="usdAmount"
-                      value={formatIndianCurrency( formik.values.usdAmount)}
+                      value={formatIndianCurrency(formik.values.usdAmount)}
                       error={formik.errors.usdAmount}
                       onChange={formik.handleChange}
                       disabled={true}
@@ -282,15 +345,15 @@ export default function GetPayDetails({
                       //     value === "" ? "" : parseFloat(value)
                       //   );
                       // }}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount TZS"
+                      label="Amount INR"
                       id="localAmount"
-                      value={formatIndianCurrency(formik.values.usdAmount * formik.values.exchangeRate)}
+                      value={formatIndianCurrency(formik.values.localAmount)}
                       error={formik.errors.localAmount}
                       onChange={formik.handleChange}
                       disabled={true}
@@ -301,7 +364,7 @@ export default function GetPayDetails({
                       //       value === "" ? "" : parseFloat(value)
                       //     );
                       //   }}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -313,6 +376,8 @@ export default function GetPayDetails({
                       value={formik.values.paymentDate}
                       error={formik.errors.paymentDate}
                       onChange={formik.setFieldValue}
+                      inputRef={payableRef}
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -324,6 +389,7 @@ export default function GetPayDetails({
                       value={formik.values.currency}
                       error={formik.errors.currency}
                       onChange={formik.handleChange}
+                      disabled
                     />
                   </Grid>
 
@@ -334,7 +400,18 @@ export default function GetPayDetails({
                       options={payableSettingData?.body?.paymentType}
                       value={formik.values.paymentType}
                       error={formik.errors.paymentType}
-                      onChange={formik.handleChange}
+                      disabled={isDisabled}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        formik.setFieldValue("paymentType", value);
+
+                        if (value !== "Cheque") {
+                          // Clear cheque-related fields when changing from Cheque to something else
+                          formik.setFieldValue("bankName", "");
+                          formik.setFieldValue("chequeNo", "");
+                          formik.setFieldValue("chequeDate", "");
+                        }
+                      }}
                     />
                   </Grid>
 
@@ -346,7 +423,11 @@ export default function GetPayDetails({
                       value={formik.values.bankId}
                       error={formik.errors.bankId}
                       onChange={formik.handleChange}
-                      disabled ={formik.values.paymentType === "Cash" ? true :false}
+                      disabled={
+                        formik.values.paymentType === "Cheque" && !isDisabled
+                          ? false
+                          : true
+                      }
                     ></FormAutoComplete>
                   </Grid>
 
@@ -357,8 +438,12 @@ export default function GetPayDetails({
                       value={formik.values.chequeNo}
                       error={formik.errors.chequeNo}
                       onChange={formik.handleChange}
-                      disabled ={formik.values.paymentType === "Cash" ? true :false}
-                      inputRef={payableRef}
+                      disabled={
+                        formik.values.paymentType === "Cheque" && !isDisabled
+                          ? false
+                          : true
+                      }
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -367,7 +452,11 @@ export default function GetPayDetails({
                       label="Cheque Date"
                       name="chequeDate"
                       id="chequeDate"
-                      disabled ={formik.values.paymentType === "Cash" ? true :false}
+                      disabled={
+                        formik.values.paymentType === "Cheque" && !isDisabled
+                          ? false
+                          : true
+                      }
                       value={formik.values.chequeDate}
                       error={formik.errors.chequeDate}
                       onChange={formik.setFieldValue}
@@ -376,22 +465,18 @@ export default function GetPayDetails({
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount to be paid (USD)"
+                      label={`Amount to be paid (${formik.values.currency})`}
                       id="usdAmountToBePaid"
-                      value={formatIndianCurrency(
-                        formik.values.usdAmountToBePaid
-                      )}
+                      value={formik.values.usdAmountToBePaid}
                       error={formik.errors.usdAmountToBePaid}
                       onChange={(e) => {
                         const usd = parseFloat(e.target.value) || 0;
-
                         if (usd > formik.values.usdAmount) {
                           toast.error(
                             "USD amount to be paid cannot exceed the total USD amount."
                           );
                           return;
                         }
-
                         const tzs = usd * (formik.values.exchangeRate || 1);
 
                         formik.setFieldValue("usdAmountToBePaid", usd);
@@ -400,27 +485,42 @@ export default function GetPayDetails({
                           parseFloat(tzs)
                         );
                       }}
-                      inputRef={payableRef}
+                      disabled={
+                        isDisabled ||
+                        (initialValues?.multipleSelected === true &&
+                          initialValues?.paybleIds?.length > 1)
+                      }
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Amount to be paid (TZS)"
+                      label="Amount to be paid (INR)"
                       id="localAmountToBePaid"
                       value={formik.values.localAmountToBePaid}
                       error={formik.errors.localAmountToBePaid}
                       onChange={(e) => {
                         const tzs = parseFloat(e.target.value) || 0;
                         const usd = tzs / (formik.values.exchangeRate || 1);
-
+                        if (tzs > formik.values.localAmount) {
+                          toast.error(
+                            "INR amount to be paid cannot exceed the total INR amount."
+                          );
+                          return;
+                        }
                         formik.setFieldValue("localAmountToBePaid", tzs);
                         formik.setFieldValue(
                           "usdAmountToBePaid",
                           parseFloat(usd)
                         );
                       }}
-                      inputRef={payableRef}
+                      disabled={
+                        isDisabled ||
+                        (initialValues?.multipleSelected === true &&
+                          initialValues?.paybleIds?.length > 1)
+                      }
+                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -431,7 +531,8 @@ export default function GetPayDetails({
                       value={formik.values.bankCharges}
                       error={formik.errors.bankCharges}
                       onChange={formik.handleChange}
-                      inputRef={payableRef}
+                      // inputRef={payableRef}
+                      disabled={isDisabled}
                     />
                   </Grid>
                 </Grid>
@@ -454,6 +555,7 @@ export default function GetPayDetails({
                         fontWeight: "500",
                         color: "white !important",
                       }}
+                      disabled={isDisabled}
                     >
                       {isLoading && (
                         <CircularProgress size={20} color="white" />

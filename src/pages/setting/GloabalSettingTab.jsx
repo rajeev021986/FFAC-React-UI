@@ -61,7 +61,9 @@ const GlobalSetting = () => {
       ),
       vatRate: vatRate.filter((item) => !item.value.includes("Type the")),
       costCenter: costCenter.filter((item) => !item.value.includes("Type the")),
-      currencyType: currencyType.filter((item) => !item.value.includes("Type the")),
+      currencyType: currencyType.filter(
+        (item) => !item.value.includes("Type the")
+      ),
       invoicePatternData: invoicePatternData,
     };
     await addOptons({
@@ -118,11 +120,11 @@ const GlobalSetting = () => {
             title="Shipment Type"
           />
 
-          <GlobalDrrpdownSetting
+          {/* <GlobalDrrpdownSetting
             value={vatRate}
             setvalue={setVatRate}
             title="Vat Rate"
-          />
+          /> */}
 
           <GlobalDrrpdownSetting
             value={costCenter}

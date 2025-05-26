@@ -24,6 +24,7 @@ import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
+import { useFetchVatAndHoldingQuery } from "../../../store/api/settingAuditAPI";
 
 const modalStyle = {
   position: "absolute",
@@ -60,10 +61,17 @@ export default function AddPayableEntryModal({
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
   const selectedValue = formik.values.unitType;
   const [filteredOptions, setFilteredOptions] = useState([]);
+
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: payableSettingData } =
     useGetOptionsSettingsQuery("payble_settings");
+
+  const { data: vatAndHoldingTaxSettingData, refetch } =
+    useFetchVatAndHoldingQuery({
+      params: { type: "VAT" },
+      page: "settings/api",
+    });
 
   const [payableEntry, setPayableEntry] = useState({
     id: null,
@@ -204,6 +212,11 @@ export default function AddPayableEntryModal({
       }));
     }
   }, [togglePayEntry]);
+  useEffect(() => {
+    if (payableEntry.unitRate) {
+      handleChange("noOfUnit", payableEntry.noOfUnit);
+    }
+  }, [payableEntry.unitType, payableEntry.noOfUnit]);
 
   useEffect(() => {
     if (selectedPayEntry) {
@@ -249,7 +262,7 @@ export default function AddPayableEntryModal({
     };
 
     fetchData();
-  }, [debounceValue, payableEntry.jobNo,]);
+  }, [debounceValue, payableEntry.jobNo]);
 
   const handleInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
@@ -339,7 +352,8 @@ export default function AddPayableEntryModal({
                 size="small"
                 disabled={!payableEntry.jobNo}
                 value={
-                  options.find((opt) => opt.value === payableEntry.unitType) || null
+                  options.find((opt) => opt.value === payableEntry.unitType) ||
+                  null
                 }
                 onInputChange={handleInputChange}
                 onChange={handleChangeUnitType}
@@ -408,7 +422,7 @@ export default function AddPayableEntryModal({
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
-              label="Unit Rate"
+              label={`Unit Rate (${formik?.values?.currency})`}
               id="unitRate"
               value={formatIndianCurrency(payableEntry.unitRate)}
               onChange={(e) => {
@@ -445,7 +459,7 @@ export default function AddPayableEntryModal({
             <SelectBox
               label="VAT Applicable*"
               id="vatApplicable"
-              options={optionsSettingsData?.body?.vatRate}
+              options={vatAndHoldingTaxSettingData?.body?.vatSettings}
               value={payableEntry.vatApplicable}
               // error={formik.errors.vatApplicable}
               error={errors.vatApplicable}
@@ -465,7 +479,9 @@ export default function AddPayableEntryModal({
             <SelectBox
               label="With Holding Tax*"
               id="withHoldingTax"
-              options={payableSettingData?.body?.holdingTax}
+              options={
+                vatAndHoldingTaxSettingData?.body?.withHoldingTaxSettings
+              }
               value={payableEntry.withHoldingTax}
               error={errors.withHoldingTax}
               onChange={(e) => handleChange("withHoldingTax", e.target.value)}

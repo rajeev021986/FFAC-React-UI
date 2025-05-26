@@ -1,15 +1,6 @@
-import {
-  Button,
-  CircularProgress,
-  Grid,
-  IconButton,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Stack } from "@mui/material";
 import { useFormik } from "formik";
-import CloseIcon from "@mui/icons-material/Close";
+import { CircularProgress, Grid, Stack } from "@mui/material";
+import { IconButton, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../components/common/InputBox";
 import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
@@ -22,7 +13,6 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import AddIcon from "@mui/icons-material/Add";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   useAddPaybleEntryMutation,
   useUpdatePaybleEntryMutation,
@@ -69,6 +59,7 @@ export default function AddEditForm({
   page,
   viewPage,
   type = "notcopy",
+  onClose,
 }) {
   const style = {
     position: "absolute",
@@ -118,7 +109,13 @@ export default function AddEditForm({
   });
 
   useEffect(() => {
-    if (
+    if (viewPage === "editForm") {
+      if (initialValues?.paidStatus) {
+        setIsDisabled(true); // Disable if paidStatus is true
+      } else {
+        setIsDisabled(false); // Enable if paidStatus is false or null
+      }
+    } else if (
       viewPage === "view" ||
       formik?.values?.statusCode === -3 ||
       formik?.values?.statusCode === 1
@@ -127,138 +124,137 @@ export default function AddEditForm({
     } else {
       setIsDisabled(false);
     }
-  }, [viewPage]);
+  }, [viewPage, initialValues?.paidStatus]);
 
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
     validationSchema: payableValidationSchema(),
-   onSubmit: async (values) => {
-    const invoiceCurrencyAmount = getAmountData?.amount || 0;
-    const invoiceCurrencyVat = getAmountData?.vatAmount || 0;
-    const invoiceCurrencyWithHoldingTax =
-      getAmountData?.withHoldingAmount || 0;
-    const invoiceCurrencyNetAmountPayable = getAmountData?.totalAmount || 0;
+    onSubmit: async (values) => {
+      const invoiceCurrencyAmount = getAmountData?.amount || 0;
+      const invoiceCurrencyVat = getAmountData?.vatAmount || 0;
+      const invoiceCurrencyWithHoldingTax =
+        getAmountData?.withHoldingAmount || 0;
+      const invoiceCurrencyNetAmountPayable = getAmountData?.totalAmount || 0;
 
-    const exchangeRate = Number(getFormData?.exchangeRate) || 1;
+      const exchangeRate = Number(getFormData?.exchangeRate) || 1;
 
-    const localCurrencyAmount =
-      getFormData?.currency === "TZS" || getFormData?.currency === "INR"
-        ? invoiceCurrencyAmount
-        : invoiceCurrencyAmount * exchangeRate;
+      const localCurrencyAmount =
+        getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+          ? invoiceCurrencyAmount
+          : invoiceCurrencyAmount * exchangeRate;
 
-    const localCurrencyVat =
-      getFormData?.currency === "TZS" || getFormData?.currency === "INR"
-        ? invoiceCurrencyVat
-        : invoiceCurrencyVat * exchangeRate;
+      const localCurrencyVat =
+        getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+          ? invoiceCurrencyVat
+          : invoiceCurrencyVat * exchangeRate;
 
-    const localCurrencyWithHoldingTax =
-      getFormData?.currency === "TZS" || getFormData?.currency === "INR"
-        ? invoiceCurrencyWithHoldingTax
-        : invoiceCurrencyWithHoldingTax * exchangeRate;
+      const localCurrencyWithHoldingTax =
+        getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+          ? invoiceCurrencyWithHoldingTax
+          : invoiceCurrencyWithHoldingTax * exchangeRate;
 
-    const localCurrencyNetAmountPayable =
-      getFormData?.currency === "TZS" || getFormData?.currency === "INR"
-        ? invoiceCurrencyNetAmountPayable
-        : invoiceCurrencyNetAmountPayable * exchangeRate;
-    values.invoiceCurrencyAmount = invoiceCurrencyAmount;
-    values.invoiceCurrencyVat = invoiceCurrencyVat;
-    values.invoiceCurrencyWithHoldingTax = invoiceCurrencyWithHoldingTax;
-    values.invoiceCurrencyNetAmountPayable = invoiceCurrencyNetAmountPayable;
+      const localCurrencyNetAmountPayable =
+        getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+          ? invoiceCurrencyNetAmountPayable
+          : invoiceCurrencyNetAmountPayable * exchangeRate;
+      values.invoiceCurrencyAmount = invoiceCurrencyAmount;
+      values.invoiceCurrencyVat = invoiceCurrencyVat;
+      values.invoiceCurrencyWithHoldingTax = invoiceCurrencyWithHoldingTax;
+      values.invoiceCurrencyNetAmountPayable = invoiceCurrencyNetAmountPayable;
 
-    values.localCurrencyAmount = localCurrencyAmount;
-    values.localCurrencyVat = localCurrencyVat;
-    values.localCurrencyWithHoldingTax = localCurrencyWithHoldingTax;
-    values.localCurrencyNetAmountPayable = localCurrencyNetAmountPayable;
-    if (!values.id || type === "copy") {
-      try {
-        values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
-        values.status = "";
-        let paybleDetailsData = values.paybleDetails.map((item) =>
-          item?.new ? { ...item, id: null, new: false } : item
-        );
-        let response = await addPaybleEntry({
-          ...values,
-          paybleDetails: paybleDetailsData,
-        }).unwrap();
-
-        const message = response.message;
-        if (response.code == "SUCCESS") {
-          toast.custom(<CustomToast message={message} toast="warn" />, {
-            closeButton: false,
-          });
-          nav("/app/documentation/paybleEntry");
-        } else {
-          toast.custom(<CustomToast message={message} toast="error" />, {
-            closeButton: false,
-          });
-        }
-      } catch (error) {
-        if (error.status === 409) {
-          const message = error.data.message;
-          toast.custom(<CustomToast message={message} toast="error" />, {
-            closeButton: false,
-          });
-        } else {
-          toast.custom(
-            <CustomToast
-              message="An error occurred while submitting the form."
-              toast="error"
-            />,
-            {
-              closeButton: false,
-            }
+      values.localCurrencyAmount = localCurrencyAmount;
+      values.localCurrencyVat = localCurrencyVat;
+      values.localCurrencyWithHoldingTax = localCurrencyWithHoldingTax;
+      values.localCurrencyNetAmountPayable = localCurrencyNetAmountPayable;
+      if (!values.id || type === "copy") {
+        try {
+          values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
+          values.status = "";
+          let paybleDetailsData = values.paybleDetails.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
           );
+          let response = await addPaybleEntry({
+            ...values,
+            paybleDetails: paybleDetailsData,
+          }).unwrap();
+
+          const message = response.message;
+          if (response.code == "SUCCESS") {
+            toast.custom(<CustomToast message={message} toast="warn" />, {
+              closeButton: false,
+            });
+            nav("/app/documentation/paybleEntry");
+          } else {
+            toast.custom(<CustomToast message={message} toast="error" />, {
+              closeButton: false,
+            });
+          }
+        } catch (error) {
+          if (error.status === 409) {
+            const message = error.data.message;
+            toast.custom(<CustomToast message={message} toast="error" />, {
+              closeButton: false,
+            });
+          } else {
+            toast.custom(
+              <CustomToast
+                message="An error occurred while submitting the form."
+                toast="error"
+              />,
+              {
+                closeButton: false,
+              }
+            );
+          }
+        }
+      } else {
+        // If there is an id, proceed with the update action
+        try {
+          setRejectError(false);
+          let paybleDetailsData = values.paybleDetails.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
+          Boolean(values.status == "Active") && (values.statusCode = 1);
+          Boolean(values.status == "Inactive") && (values.statusCode = -2);
+          let response = await updatePaybleEntry({
+            ...values,
+            paybleDetails: paybleDetailsData,
+          }).unwrap();
+
+          const message = response.message;
+          if (response.code == "SUCCESS") {
+            toast.custom(<CustomToast message={message} toast="success" />, {
+              closeButton: false,
+            });
+            viewPage === "editForm" ? onClose() : nav(-1);
+          } else {
+            toast.custom(<CustomToast message={message} toast="warn" />, {
+              closeButton: false,
+            });
+          }
+        } catch (error) {
+          if (error.status === 409) {
+            const message = error.data.message;
+            toast.custom(<CustomToast message={message} toast="error" />, {
+              closeButton: false,
+            });
+          } else {
+            toast.custom(
+              <CustomToast
+                message="An error occurred while submitting the form."
+                toast="error"
+              />,
+              {
+                closeButton: false,
+              }
+            );
+          }
         }
       }
-    } else {
-      // If there is an id, proceed with the update action
-      try {
-        setRejectError(false);
-        let paybleDetailsData = values.paybleDetails.map((item) =>
-          item?.new ? { ...item, id: null, new: false } : item
-        );
-        Boolean(values.status == "Active") && (values.statusCode = 1);
-        Boolean(values.status == "Inactive") && (values.statusCode = -2);
-        let response = await updatePaybleEntry({
-          ...values,
-          paybleDetails: paybleDetailsData,
-        }).unwrap();
-
-        const message = response.message;
-        if (response.code == "SUCCESS") {
-          toast.custom(<CustomToast message={message} toast="success" />, {
-            closeButton: false,
-          });
-          nav(-1);
-        } else {
-          toast.custom(<CustomToast message={message} toast="warn" />, {
-            closeButton: false,
-          });
-        }
-      } catch (error) {
-        if (error.status === 409) {
-          const message = error.data.message;
-          toast.custom(<CustomToast message={message} toast="error" />, {
-            closeButton: false,
-          });
-        } else {
-          toast.custom(
-            <CustomToast
-              message="An error occurred while submitting the form."
-              toast="error"
-            />,
-            {
-              closeButton: false,
-            }
-          );
-        }
-      }
-    }
-  },
-});
-
+    },
+  });
   const getFormData = formik?.values;
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -282,7 +278,11 @@ export default function AddEditForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
-
+  useEffect(() => {
+    if (formik.values?.currency !== "USD") {
+      formik.setFieldValue("exchangeRate", 1);
+    }
+  }, [formik.values?.currency]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -292,16 +292,19 @@ export default function AddEditForm({
         );
         const backendData = await response.body;
         setshowDefaultCurrency(backendData?.[0]);
-        formik.setFieldValue("currency", backendData?.[0].currency);
+        formik.setFieldValue(
+          "currency",
+          initialValues.currency
+            ? initialValues.currency
+            : backendData?.[0].currency
+        );
         const backendCurrencies = Array.from(
           new Set(
             (backendData || []).map((item) => item.currency).filter(Boolean)
           )
         ).map((curr) => ({ id: curr, value: curr }));
-
         // Get setting currencies safely
         const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
-
         // Merge both arrays avoiding duplicates (based on `value`)
         const mergedCurrencies = [
           ...backendCurrencies,
@@ -323,7 +326,6 @@ export default function AddEditForm({
   const handleApproveRequest = async () => {
     setRejectError(false);
     const { vendorInvoiceNo, isDoc } = formik.values;
-
     // Validation logic
     if (vendorInvoiceNo && !isDoc) {
       toast.custom(
@@ -337,7 +339,18 @@ export default function AddEditForm({
       );
       return; // Prevent approval
     }
-
+    if (initialValues?.paybleDetails?.length === 0) {
+      toast.custom(
+        <CustomToast
+          message="Please add charge details before approving"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+      return; // Prevent approval
+    }
     try {
       setLoaderApprove((prevState) => ({
         ...prevState,
@@ -442,7 +455,6 @@ export default function AddEditForm({
     let { page, pageSize } = params;
     dispatch(dashboardSetPagination({ page, pageSize }));
   };
-
   const muiTextFieldStyles = {
     root: {
       "& .MuiInputBase-root": {
@@ -452,6 +464,11 @@ export default function AddEditForm({
       },
     },
   };
+  useEffect(() => {
+    if (formik?.values?.currency !== "USD") {
+      formik.setFieldValue("exchangeRate", 1);
+    }
+  }, [formik?.values?.currency]);
 
   // const FieldRef = useRef(null);
   // useEffect(() => {
@@ -661,22 +678,22 @@ export default function AddEditForm({
         >
           <EditIcon
             style={{
-              cursor: disabled ? "not-allowed" : "pointer",
-              color: disabled ? "#ccc" : "#166ee0",
-              opacity: disabled ? 0.5 : 1,
+              cursor: isDisabled ? "not-allowed" : "pointer",
+              color: isDisabled ? "#ccc" : "#166ee0",
+              opacity: isDisabled ? 0.5 : 1,
             }}
             onClick={() => {
-              if (!disabled) handleEditClick(params.row);
+              if (!isDisabled) handleEditClick(params.row);
             }}
           />
           <Delete
             style={{
-              cursor: disabled ? "not-allowed" : "pointer",
-              color: disabled ? "#ccc" : "red",
-              opacity: disabled ? 0.5 : 1,
+              cursor: isDisabled ? "not-allowed" : "pointer",
+              color: isDisabled ? "#ccc" : "red",
+              opacity: isDisabled ? 0.5 : 1,
             }}
             onClick={() => {
-              if (!disabled) handleDeleteNote(params.row.id);
+              if (!isDisabled) handleDeleteNote(params.row.id);
             }}
           />
         </div>
@@ -818,7 +835,7 @@ export default function AddEditForm({
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <DateTimeField
                       name="invoiceDate"
-                      label="Invoice Date"
+                      label="Invoice Date*"
                       id="invoiceDate"
                       value={formik.values.invoiceDate}
                       error={formik.errors.invoiceDate}
@@ -872,7 +889,14 @@ export default function AddEditForm({
                       options={mergedCurrencyOptions}
                       value={formik.values.currency}
                       error={formik.errors.currency}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        formik.setFieldValue("currency", value);
+                        if (value === "USD") {
+                          // Clear currency-related fields when changing from USD to something else
+                          formik.setFieldValue("exchangeRate", null);
+                        }
+                      }}
                       disabled={isDisabled}
                     />
                   </Grid>
@@ -882,13 +906,14 @@ export default function AddEditForm({
                     getFormData?.currency === "INR" ? (
                       <InputBox
                         label="Ex. Rate"
-                        id="exchangeRate"
+                        id="exchangRate"
                         value={
                           getFormData?.currency === "TZS" ||
                           getFormData?.currency === "INR"
                             ? 1
                             : formatIndianCurrency(formik.values.exchangeRate)
                         }
+                        // value={formik.values.exchangeRate}
                         error={formik.errors.exchangeRate}
                         onChange={formik.handleChange}
                         inputRef={payableRef}
@@ -1285,8 +1310,14 @@ export default function AddEditForm({
                     >
                       <Stack direction="row" spacing={2}>
                         <OutlinedButton
-                          sx={{ fontWeight: "500" }}
-                          onClick={() => nav(-1)}
+                          sx={{
+                            fontWeight: "500",
+                          }}
+                          onClick={() =>
+                            page === "payable"
+                              ? nav("/app/documentation/paybleEntry")
+                              : nav("/app/documentation/approvePayable")
+                          }
                         >
                           Close
                         </OutlinedButton>
@@ -1334,9 +1365,17 @@ export default function AddEditForm({
                       alignItems="center"
                     >
                       <Stack direction="row" spacing={2}>
+                        {/*  */}
                         <OutlinedButton
-                          sx={{ fontWeight: "500" }}
-                          onClick={() => nav(-1)}
+                          sx={{
+                            fontWeight: "500",
+                            display: viewPage === "editForm" ? "none" : "block",
+                          }}
+                          onClick={() =>
+                            page === "payable"
+                              ? nav("/app/documentation/paybleEntry")
+                              : nav("/app/documentation/approvePayable")
+                          }
                         >
                           Close
                         </OutlinedButton>
@@ -1346,6 +1385,11 @@ export default function AddEditForm({
                           sx={{
                             fontWeight: "500",
                             color: "white !important",
+                            display:
+                              viewPage === "editForm" &&
+                              initialValues?.paidStatus
+                                ? "none"
+                                : "block",
                           }}
                         >
                           {isLoading && (
@@ -1359,6 +1403,8 @@ export default function AddEditForm({
                             fontWeight: "500",
                             backgroundColor: "red",
                             color: "white !important",
+                            visibility:
+                              viewPage === "editForm" ? "hidden" : "visible",
                           }}
                           onClick={() => handleRejectRequest()}
                         >
@@ -1367,8 +1413,14 @@ export default function AddEditForm({
                           )}
                           Reject
                         </ThemeButton>
+
                         <ThemeButton
-                          sx={{ fontWeight: "500", color: "white !important" }}
+                          sx={{
+                            fontWeight: "500",
+                            color: "white !important",
+                            visibility:
+                              viewPage === "editForm" ? "hidden" : "visible",
+                          }}
                           onClick={() => handleApproveRequest()}
                         >
                           {loaderApprove.approve && (
@@ -1400,28 +1452,6 @@ export default function AddEditForm({
           </TabPanel>
         </TabContext>
       </Box>
-      {/* <Modal open={open} onClose={handleClose}>
-          <Box sx={style}>
-            <Button
-              onClick={handleClose}
-              sx={{
-                position: "absolute",
-                top: 10,
-                right: 8,
-                color: "red",
-                backgroundColor: "transparent",
-              }}
-            >
-              <CloseIcon color="red" />
-            </Button>
-            <UploadFile
-              customer_id={initialValues.id}
-              isNotShowType={true}
-              sourceType={"JOB_DETAIL"}
-              type={SourceType}
-            />
-          </Box>
-        </Modal> */}
       <AddPayableEntryModal
         togglePayEntry={togglePayEntry}
         handleTogglePayEntry={handleTogglePayEntry}

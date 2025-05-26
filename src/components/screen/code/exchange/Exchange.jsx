@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import {
   useAddExahangeRateMutation,
@@ -21,6 +23,7 @@ import CustomToast from "../../../common/Toast/CustomToast";
 import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
 import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
+dayjs.extend(utc);
 
 export default function Exchange() {
   const location = useLocation();
@@ -48,17 +51,22 @@ export default function Exchange() {
     useUpdateExahangeRateMutation();
 
   const onSubmit = async (values) => {
+    const utcFormattedValues = {
+    ...values,
+    fromDate: values.fromDate ? dayjs(values.fromDate).utc().format("YYYY-MM-DDTHH:mm:ss[Z]") : "",
+    toDate: values.toDate ? dayjs(values.toDate).utc().format("YYYY-MM-DDTHH:mm:ss[Z]") : "",
+  };
     if (type == "copy" || type == "new") {
       delete values.id;
       try {
         values.status = "";
         values.statusCode = 1;
-        let res = await addExahangeRate(values).unwrap();
+        let res = await addExahangeRate(utcFormattedValues).unwrap();
         if (res.success) {
           toast.custom(<CustomToast message={res.message} toast="success" />, {
             closeButton: false,
           });
-          nav(-1);
+            nav("/app/admin/exchangeRate");
         }
       } catch (error) {
         toast.custom(
@@ -71,7 +79,7 @@ export default function Exchange() {
     } else {
       try {
         let res = await updateExahangeRate({
-          ...values,
+          ...utcFormattedValues,
           statusCode:
             values.status === "Active"
               ? 1
@@ -83,7 +91,7 @@ export default function Exchange() {
           toast.custom(<CustomToast message={res.message} toast="success" />, {
             closeButton: false,
           });
-          nav(-1);
+          nav("/app/admin/exchangeRate");
         }
       } catch (error) {
         toast.custom(
@@ -95,38 +103,48 @@ export default function Exchange() {
       }
     }
   };
-  const handleFetchExchangeRate = async () => {
-    try {
-      const response = await getExahangeRate({ id });
-      if (response?.data) {
-        if (type === "copy" || type === "new") {
-          formik.setValues({
-            ...response.data.body,
-            status: "New",
-          });
-        } else {
-          formik.setValues(response.data.body);
-        }
+ const handleFetchExchangeRate = async () => {
+  try {
+    const response = await getExahangeRate({ id });
+    if (response?.data) {
+      const data = response.data.body;
+
+      // Convert UTC strings to local dayjs objects (or JS Date objects)
+      const fromDateLocal = data.fromDate ? dayjs.utc(data.fromDate).local().toDate() : "";
+      const toDateLocal = data.toDate ? dayjs.utc(data.toDate).local().toDate() : "";
+
+      const formValues = {
+        ...data,
+        fromDate: fromDateLocal,
+        toDate: toDateLocal,
+      };
+
+      if (type === "copy" || type === "new") {
+        formik.setValues({
+          ...formValues,
+          status: "New",
+        });
       } else {
-        toast.custom(
-          <CustomToast message="Failed to fetch Charge data" toast="error" />,
-          {
-            closeButton: false,
-          }
-        );
+        formik.setValues(formValues);
       }
-    } catch (error) {
+    } else {
       toast.custom(
-        <CustomToast
-          message="Error fetching ExchangeRate data"
-          toast="error"
-        />,
+        <CustomToast message="Failed to fetch Exchange data" toast="error" />,
         {
           closeButton: false,
         }
       );
     }
-  };
+  } catch (error) {
+    toast.custom(
+      <CustomToast message="Error fetching ExchangeRate data" toast="error" />,
+      {
+        closeButton: false,
+      }
+    );
+  }
+};
+
   useEffect(() => {
     if (id && ExchageSettingsData) {
       handleFetchExchangeRate();

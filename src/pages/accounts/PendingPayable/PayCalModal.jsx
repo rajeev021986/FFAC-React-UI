@@ -8,10 +8,10 @@ import Loader from "../../../components/common/Loader/Loader";
 import CloseIcon from "@mui/icons-material/Close";
 import GetPayDetails from "./getPayDetail";
 
-const PayCalModal = ({ open, onClose, data }) => {
-  console.log("data",data);
+const PayCalModal = ({ open, onClose, data, refetch }) => {
   const [loading, setLoading] = useState(true);
-  const [initialValues, setInitialValues] = React.useState({
+  const [initialValues, setInitialValues] = useState({
+    paybleIds: [],
     createdDate: "",
     currency: "",
     customerName: "",
@@ -31,45 +31,103 @@ const PayCalModal = ({ open, onClose, data }) => {
     paymentType: "Cheque",
     usdAmountToBePaid: 0,
     paymentDate: new Date().toISOString(),
-    localAmount:0,
-    usdAmount:0,
-    multiple:"",
-    bankCharges:"",
-    chequeDate:"",
-    chequeNo:"",
-    bankName:""
+    localAmount: 0,
+    usdAmount: 0,
+    multiple: "",
+    bankCharges: "",
+    chequeDate: "",
+    chequeNo: "",
+    bankName: "",
+    statusCode: 101,
+    multipleSelected: false,
+    statusCode: null,
   });
+console.log("data?.statusCode",data?.statusCode);
 
- useEffect(() => {
-    if (data) {
-     setInitialValues({
-        createdDate: data?.createdDate,
-        currency: data?.currency || "INR",
-        customerName: data?.customerName || "",
-        exchangeRate: data?.exchangeRate || 1,
-        id: data?.id || "",
-        invoiceType: data?.invoiceType || "",
-        jobCreatedDate: data?.jobCreatedDate || "",
-        jobNo: data?.jobNo || "",
-        modifiedDate: data?.modifiedDate,
-        paybleCreatedDate: data?.paybleCreatedDate || "",
-        paybleRefNum: data?.paybleRefNum || "",
-        totalAmount: data?.totalAmount || 0,
-        vendorInvDate: data?.vendorInvDate || null,
-        vendorInvNo: data?.vendorInvNo || "",
-        vendorName: data?.vendorName || "",
-        usdAmountToBePaid: data?.totalAmount || 0,
-        usdAmount: data?.totalAmount || 0,
-        localAmount: data?.totalAmount || 0,
-        localAmountToBePaid: data?.totalAmount || 0,
-        bankCharges: data?.bankCharges || "",
-        paymentType: data?.paymentType || "Cheque"
-      });
+  useEffect(() => {
+    if (data?.statusCode === 100) {
+      console.log("hello paid");
+      fetchPayableData();
+    } else {
+      if (data?.statusCode === 101) {
+        console.log("hhello, unpaid")
+        setInitialValues({
+          multipleSelected: false,
+          statusCode: data?.statusCode,
+          paymentDate: new Date().toISOString() || null,
+          createdDate: data?.createdDate,
+          currency: data?.currency || "INR",
+          customerName: data?.customerName || "",
+          exchangeRate: data?.exchangeRate || 1,
+          id: data?.id || "",
+          invoiceType: data?.invoiceType || "",
+          jobCreatedDate: data?.jobCreatedDate || "",
+          jobNo: data?.jobNo || "",
+          modifiedDate: data?.modifiedDate,
+          paybleCreatedDate: data?.paybleCreatedDate || "",
+          paybleRefNum: data?.paybleRefNum || "",
+          totalAmount: data?.totalAmount || 0,
+          vendorInvDate: data?.vendorInvDate || null,
+          vendorInvNo: data?.vendorInvNo || "",
+          vendorName: data?.vendorName || "",
+          usdAmountToBePaid: data?.totalAmount || 0,
+          usdAmount: data?.totalAmount || 0,
+          localAmount: data?.totalAmount * (data?.exchangeRate || 1) || 0,
+          localAmountToBePaid:
+            data?.totalAmount * (data?.exchangeRate || 1) || 0,
+          bankCharges: data?.bankCharges || "",
+          paymentType: data?.paymentType || "Cheque",
+        });
+      }
     }
     setLoading(false);
   }, [data]);
+  const fetchPayableData = async () => {
+    try {
+      const res = await ApiManager.getPayDetails(data?.id);
+      const { paybleInfo, payment } = res.body;
+        setInitialValues((prev) => ({
+          ...prev,
+          id: payment?.id ?? prev.id,
+          statusCode: payment?.statusCode ?? prev.statusCode,
+          vendorName: payment?.vendorName ?? prev.vendorName,
+          usdAmount: payment?.usdAmount ?? prev.usdAmount,
+          localAmount: payment?.localAmount ?? prev.localAmount,
+          paymentDate: payment?.paymentDate ?? prev.paymentDate,
+          currency: payment?.currency ?? prev.currency,
+          paymentType: payment?.paymentType ?? prev.paymentType,
+          bankName: payment?.bankName ?? prev.bankName,
+          chequeNo: payment?.chequeNo ?? prev.chequeNo,
+          chequeDate: payment?.chequeDate ?? prev.chequeDate,
+          usdAmountToBePaid:
+            payment?.usdAmountToBePaid ?? prev.usdAmountToBePaid,
+          localAmountToBePaid:
+            payment?.localAmountToBePaid ?? prev.localAmountToBePaid,
+          bankCharges: payment?.bankCharges ?? prev.bankCharges,
+          multiple: payment?.multiple ?? prev.multiple,
+        }));
 
+      if (paybleInfo && Array.isArray(paybleInfo)) {
+        setInitialValues((prev) => ({
+          ...prev,
+          paybleRefNum:paybleInfo.map((item) => item.refNo).join(", "),
+          paybleIds: paybleInfo.map((item) => item.id),
+        }));
+      }
 
+      setLoading(false);
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while loading form"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+  };
   return (
     <>
       {loading ? (
@@ -92,7 +150,12 @@ const PayCalModal = ({ open, onClose, data }) => {
           </DialogTitle>
 
           <DialogContent>
-            <GetPayDetails viewPage="view" initialValues={initialValues} onClose={onClose}/>
+            <GetPayDetails
+              viewPage="view"
+              initialValues={initialValues}
+              onClose={onClose}
+              refetch={refetch}
+            />
           </DialogContent>
         </Dialog>
       )}

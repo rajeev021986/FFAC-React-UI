@@ -16,7 +16,8 @@ export default function PortValueForm({
   loading,
 }) {
   const nav = useNavigate();
-    const { data: portSettingsData } = useGetOptionsSettingsQuery("port_settings");
+  const { data: portSettingsData } =
+    useGetOptionsSettingsQuery("port_settings");
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -224,7 +225,6 @@ export default function PortValueForm({
             error={formik.errors.regionId}
             onChange={formik.handleChange}
             inputRef={FieldRef}
-
           ></FormAutoComplete>
         </Grid>
       </Grid>
@@ -251,7 +251,7 @@ export default function PortValueForm({
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <Stack direction="row" spacing={2}>
             <OutlinedButton sx={{ fontWeight: "500" }} onClick={() => nav(-1)}>
-            Close
+              Close
             </OutlinedButton>
             <ThemeButton
               onClick={formik.handleSubmit}

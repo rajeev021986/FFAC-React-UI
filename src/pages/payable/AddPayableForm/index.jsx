@@ -28,7 +28,7 @@ export default function AddPayableEntry({ page }) {
     vendorInvoiceNo: "",
     vendorInvoiceDate: "",
     currency: "",
-    exchangeRate: 1,
+    exchangeRate: null,
     invoiceCurrencyAmount: "",
     invoiceCurrencyVat: "",
     invoiceCurrencyWithHoldingTax: "",
@@ -64,8 +64,8 @@ export default function AddPayableEntry({ page }) {
         vendorId: res.body?.vendorId,
         vendorInvoiceNo: res.body?.vendorInvoiceNo,
         vendorInvoiceDate: res.body?.vendorInvoiceDate,
-        currency: res.body?.currency || "TZS",
-        exchangeRate: res.body?.exchangeRate || 1,
+        currency: res.body?.currency || "INR",
+        exchangeRate: res.body?.exchangeRate || null,
         invoiceCurrencyAmount: res.body?.invoiceCurrencyAmount,
         invoiceCurrencyVat: res.body?.invoiceCurrencyVat,
         invoiceCurrencyWithHoldingTax: res.body?.invoiceCurrencyWithHoldingTax,
@@ -129,6 +129,7 @@ export default function AddPayableEntry({ page }) {
               initialValues={initialValues}
               type={state?.formAction}
               page={page}
+              refetchPayableData={fetchPayableData}
             />
           </CardContent>
         </Card>

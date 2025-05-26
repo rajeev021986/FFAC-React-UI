@@ -1,25 +1,17 @@
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Box,
-  Card,
-  CardHeader,
-  Drawer,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
-import React, { useState } from "react";
+import { Box, Card, CardHeader, Typography } from "@mui/material";
+import { Drawer, IconButton, Stack } from "@mui/material";
+
 import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-
 import {
   payableDashboardView,
   updateInput,
@@ -53,11 +45,12 @@ import {
   useDeletePaybleEntryMutation,
   usePrintPayableEntryMutation,
 } from "../../store/api/payableApi";
-import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
 import CancelModalApprove from "../JobEntry/CancelModalApprove";
 import ApiManager from "../../services/ApiManager";
 import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
 import PayableViewModal from "./Actions/PayableViewModal";
+import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
+import { getReceiveableEntryGridActionApprove } from "../accounts/PendingPayable/actionCopy";
 
 export default function PayableListScreen({ page }) {
   const payableActionSelector = useSelector((state) => state.payableAction);
@@ -144,6 +137,8 @@ export default function PayableListScreen({ page }) {
     actions:
       page == "payable_list"
         ? getPayableListGridActions(nav, setModal)
+        : page == "receivableEntry"
+        ? getReceiveableEntryGridActionApprove(nav, setModal)
         : getPayableListGridActionApprove(nav, setModal),
   });
 
@@ -180,6 +175,7 @@ export default function PayableListScreen({ page }) {
   const [printPayableEntry] = usePrintPayableEntryMutation();
 
   const handleApprove = async () => {
+    console.log("modal?.data?", modal?.data);
     // Validation logic
     if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
       toast.custom(
@@ -193,6 +189,20 @@ export default function PayableListScreen({ page }) {
       );
       return; // Prevent approval
     }
+    if (modal?.data?.noOfCharges === 0) {
+      console.log("no charge");
+      toast.custom(
+        <CustomToast
+          message="Please add charge details before approving"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+      return; // Prevent approval
+    }
+
     const jobStatus = modal?.data?.label;
     if (jobStatus === "Cancelled Successfully") {
       toast.custom(
@@ -214,6 +224,7 @@ export default function PayableListScreen({ page }) {
         closeButton: false,
       });
       handleClose();
+      refetch();
     } catch (error) {
       toast.custom(<CustomToast message="Failed to approve." toast="error" />, {
         closeButton: false,
@@ -222,11 +233,11 @@ export default function PayableListScreen({ page }) {
   };
 
   const handleCancel = async () => {
-    const jobStatus = modal?.data?.label;
-    if (jobStatus === "Approved Successfully") {
+    const statusCode = modal?.data?.statusCode;
+    if (statusCode === 100) {
       toast.custom(
         <CustomToast
-          message="Cannot cancel an approved payable."
+          message="Cannot cancel paid payable entry."
           toast="error"
         />
       );
@@ -319,6 +330,7 @@ export default function PayableListScreen({ page }) {
       dispatch(payableDashboardView("card"));
     }
   }, [payableActionSelector.view, dispatch]);
+
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -336,12 +348,16 @@ export default function PayableListScreen({ page }) {
                     minHeight: 40,
                   },
                 }}
-                icon={<SpeedDialIcon       sx={{
-                  fontSize: 20,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }} />}
+                icon={
+                  <SpeedDialIcon
+                    sx={{
+                      fontSize: 20,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  />
+                }
                 direction="left"
               >
                 {actions.map((action) => (
@@ -446,6 +462,8 @@ export default function PayableListScreen({ page }) {
             actions={
               page == "payable_list"
                 ? getPayableListGridActions(nav, setModal)
+                : page == "receivableEntry"
+                ? getReceiveableEntryGridActionApprove(nav, setModal)
                 : getPayableListGridActionApprove(nav, setModal)
             }
             setSelectedBox={setSelectedBox}
@@ -479,13 +497,7 @@ export default function PayableListScreen({ page }) {
           </Box>
         </Drawer>
       )}
-      <AddRejectedRemarks
-        label={"Reject Reason"}
-        rowId={modal?.data?.id}
-        handleOpen={modal.open && modal.type === "reject"}
-        handleClose={handleClose}
-        type="PAYBLE_ENTRY"
-      />
+
       <CancelModalApprove
         rowId={modal?.data?.id}
         sourceName={modal?.data?.payableRefNo}
@@ -501,7 +513,7 @@ export default function PayableListScreen({ page }) {
         handleApprove={handleApprove}
       />
       <DeleteDialog
-        source= {modal?.data?.deleteName?.payableRefNo}
+        source={modal?.data?.deleteName?.payableRefNo}
         // sourceName={modal?.data?.deleteName}
         handleClose={handleClose}
         handleDelete={handleDelete}
@@ -512,6 +524,7 @@ export default function PayableListScreen({ page }) {
           open={modal.open}
           data={modal.data}
           onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+          viewType={"view"}
         />
       )}
     </Box>

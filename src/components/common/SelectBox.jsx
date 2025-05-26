@@ -37,10 +37,10 @@ export default function SelectBox({
         onChange={onChange}
         size="small"
         renderValue={(selected) => {
-          const selectedOption = options?.find(
-            (opt) => opt.value === selected
-          );
-          return selectedOption ? selectedOption.label || selectedOption.value : selected;
+          const selectedOption = options?.find((opt) => opt.value === selected);
+          return selectedOption
+            ? selectedOption.label || selectedOption.value
+            : selected;
         }}
         sx={{
           ...styles.root,
@@ -60,7 +60,7 @@ export default function SelectBox({
             getPage === "editJobEntry" ||
             id === "currency" ||
             id === "vatApplicable" ||
-            id === "withHoldingTax" || 
+            id === "withHoldingTax" ||
             id === "paymentType"
           }
           sx={{ fontSize: "14px" }}

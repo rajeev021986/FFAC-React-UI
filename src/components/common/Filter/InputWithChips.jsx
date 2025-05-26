@@ -69,7 +69,7 @@ const Chips = {
     chipLabel: "Vessel Name",
   },
   currency: {
-    chipLabel: "Vessel Name",
+    chipLabel: "Currency",
   },
   usdExchange: {
     chipLabel: "USD Exchange",
@@ -97,6 +97,13 @@ const Chips = {
       { value: 0, label: "Pending" },
       { value: -3, label: "Cancel" },
       { value: -1, label: "Rejected" },
+    ],
+  },
+  paymentStatus: {
+    chipLabel: "Payment Status",
+    chipvalues: [
+      { value: 101, label: "Unpaid" },
+      { value: 100, label: "Paid" },
     ],
   },
 };

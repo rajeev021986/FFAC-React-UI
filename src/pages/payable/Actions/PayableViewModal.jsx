@@ -15,7 +15,7 @@ import ApiManager from "../../../services/ApiManager";
 import Loader from "../../../components/common/Loader/Loader";
 import CloseIcon from "@mui/icons-material/Close";
 
-const PayableViewModal = ({ open, onClose, data }) => {
+const PayableViewModal = ({ viewType, open, onClose, data }) => {
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = React.useState({
     id: "",
@@ -30,8 +30,8 @@ const PayableViewModal = ({ open, onClose, data }) => {
     vendorName: "",
     vendorInvoiceNo: "",
     vendorInvoiceDate: "",
-    currency: "TZS",
-    exchangeRate: 1,
+    currency: "",
+    exchangeRate: null,
     invoiceCurrencyAmount: "",
     invoiceCurrencyVat: "",
     invoiceCurrencyWithHoldingTax: "",
@@ -43,6 +43,7 @@ const PayableViewModal = ({ open, onClose, data }) => {
     shillingNetAmountPayable: "",
     shillingCostCentre: "",
     paybleDetails: [],
+    paidstatus :null,
   });
 
   const fetchPayableData = async () => {
@@ -67,8 +68,8 @@ const PayableViewModal = ({ open, onClose, data }) => {
         vendorName: res.body?.vendorName,
         vendorInvoiceNo: res.body?.vendorInvoiceNo,
         vendorInvoiceDate: res.body?.vendorInvoiceDate,
-        currency: res.body?.currency || "TZS",
-        exchangeRate: res.body?.exchangeRate || 1,
+        currency: res.body?.currency || "",
+        exchangeRate: res.body?.exchangeRate || null,
         invoiceCurrencyAmount: res.body?.invoiceCurrencyAmount,
         invoiceCurrencyVat: res.body?.invoiceCurrencyVat,
         invoiceCurrencyWithHoldingTax: res.body?.invoiceCurrencyWithHoldingTax,
@@ -81,6 +82,7 @@ const PayableViewModal = ({ open, onClose, data }) => {
         shillingNetAmountPayable: res.body?.shillingNetAmountPayable,
         shillingCostCentre: res.body?.shillingCostCentre,
         paybleDetails: res?.body?.paybleDetails || [],
+        paidStatus: res?.body?.paidStatus ||  null,
       });
       setLoading(false);
     } catch (error) {
@@ -118,7 +120,11 @@ const PayableViewModal = ({ open, onClose, data }) => {
             </IconButton>
           </DialogTitle>
           <DialogContent>
-            <AddEditForm viewPage="view" initialValues={initialValues} />
+            {viewType === "view" ? (
+              <AddEditForm viewPage="view" initialValues={initialValues} onClose ={onClose}/>
+            ) : (
+              <AddEditForm viewPage="editForm" initialValues={initialValues} onClose ={onClose}/>
+            )}
           </DialogContent>
         </Dialog>
       )}

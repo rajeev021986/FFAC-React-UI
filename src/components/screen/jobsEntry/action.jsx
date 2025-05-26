@@ -33,7 +33,7 @@ export const getJobEntryListGridActions = (nav, setModal) => {
             data: {
               who: "Job Entry",
               id: params.row.id,
-              data :params.row
+              data: params.row,
             },
           });
         } else {

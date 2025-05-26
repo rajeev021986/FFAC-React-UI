@@ -354,12 +354,39 @@ class ApiManager {
     return ApiMethods.put(url, payload);
   };
   static paySelectedIdsHandler = async (payload) => {
-    const url = ENDPOINTS.PAY_SELECTEDIDS_REQUEST(menuConfigUrl.document);
+    const url = ENDPOINTS.PAY_SELECTEDIDS_REQUEST(menuConfigUrl.account);
     return ApiMethods.post(url, payload);
   };
-  static paySingle = async (id,payload) => {
-    const url = ENDPOINTS.PAYABLE_PAY_REQUEST(id,menuConfigUrl.account);
+  static paySingle = async (id, payload) => {
+    const url = ENDPOINTS.PAYABLE_PAY_REQUEST(id, menuConfigUrl.account);
     return ApiMethods.post(url, payload);
+  };
+  static getPayDetails = async (id) => {
+    const url = ENDPOINTS.GET_PAY_DETAILS(id, menuConfigUrl.account);
+    return ApiMethods.get(url, id);
+  };
+  // GET_PAY_DETAILS
+  static cancelPendingPayable = async (id, type) => {
+    const url = ENDPOINTS.PENDING_PAYABLE_CANCEL_REQUEST(
+      id,
+      type,
+      menuConfigUrl.account
+    );
+    return ApiMethods.put(url);
+  };
+  static rejectAccountsPayableId = async (id, type, remarkMessage) => {
+    let payload = { remarks: remarkMessage };
+    const url = ENDPOINTS.PENDING_PAYABLE_REJECT_REQUEST(
+      id,
+      type,
+      menuConfigUrl.account
+    );
+    return ApiMethods.put(url, payload);
+  };
+
+  static getReceivableEntryDeatils = async (id) => {
+    const url = ENDPOINTS.GET_RECEIVABLENTRY_DETAILS(id, menuConfigUrl.account);
+    return ApiMethods.get(url);
   };
 }
 

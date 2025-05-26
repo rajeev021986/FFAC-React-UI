@@ -105,12 +105,6 @@ export default function FilterForm({ setFilterOpen }) {
             onChange={formik.handleChange}
           />
           <InputBox
-            label="Currency"
-            id="exchangeRate"
-            value={formik.values.exchangeRate}
-            onChange={formik.handleChange}
-          />
-          <InputBox
             label="Payable Ref. No."
             id="payableRefNo"
             value={formik.values.payableRefNo}
@@ -125,9 +119,20 @@ export default function FilterForm({ setFilterOpen }) {
             value={formik.values.vendorInvoiceNo}
             onChange={formik.handleChange}
           />
+          <SelectBox
+            sx={{ marginLeft: "8px !important" }}
+              label="Status"
+              id="statusCode"
+              options={statusOptions}
+              value={formik.values.statusCode}
+              onChange={formik.handleChange}
+              MenuProps={{
+                disablePortal: true,
+              }}
+            />
         </Stack>
 
-        <Stack
+        {/* <Stack
           direction="row"
           spacing={2}
           sx={{
@@ -148,7 +153,7 @@ export default function FilterForm({ setFilterOpen }) {
               }}
             />
           </div>
-        </Stack>
+        </Stack> */}
 
         <Stack direction="row" spacing={3} justifyContent={"end"}>
           <Button
