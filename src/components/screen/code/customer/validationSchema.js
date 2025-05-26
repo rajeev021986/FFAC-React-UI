@@ -31,19 +31,19 @@ export const CustomerValidationSchema = () =>
       ),
     // .required("Email is required");
 
-    telephone: Yup.string()
-      // .required("Telephone is required")
-      .matches(/^\d+$/, "Telephone must be a valid number")
-      .test(
-        "len",
-        "Telephone must be between 7 and 15 digits",
-        (val) => val && val.length >= 7 && val.length <= 15
-      )
-      .test(
-        "positive",
-        "Telephone must be a positive number",
-        (val) => val && !val.startsWith("-")
-      ),
+    // telephone: Yup.string()
+    //   // .required("Telephone is required")
+    //   .matches(/^\d+$/, "Telephone must be a valid number")
+    //   .test(
+    //     "len",
+    //     "Telephone must be between 7 and 15 digits",
+    //     (val) => val && val.length >= 7 && val.length <= 15
+    //   )
+    //   .test(
+    //     "positive",
+    //     "Telephone must be a positive number",
+    //     (val) => val && !val.startsWith("-")
+    //   ),
     accountNo: Yup.number()
       .typeError("Account number must be a valid number")
       .positive("Account number must be positive"),

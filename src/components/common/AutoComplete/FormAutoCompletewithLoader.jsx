@@ -52,7 +52,7 @@ function FormAutoCompleteWithLoader(props) {
     };
 
     fetchData();
-  }, [debounceValue, suggestionName, id, dataLabel]);
+  }, [debounceValue, suggestionName, id, dataLabel,value]);
 
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);
@@ -81,12 +81,13 @@ function FormAutoCompleteWithLoader(props) {
       });
     }
   };
-  const selectedOption = options.find(
-    (option) =>
-      option?.value == value ||
-      option?.fullData?.id == value ||
-      option?.label == value
-  ) || null;
+  const selectedOption =
+    options.find(
+      (option) =>
+        option?.value == value ||
+        option?.fullData?.id == value ||
+        option?.label == value
+    ) || null;
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
@@ -96,8 +97,12 @@ function FormAutoCompleteWithLoader(props) {
         size="small"
         id={id}
         disabled={disabled}
-        value={selectedOption}
-        //  value={options.find((option) => option?.fullData?.id == value || null) }
+        value={
+          id == "exchangeRate"
+            ? options.find((option) => option.value == value) || null
+            : selectedOption
+        }
+        // value={selectedOption}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
@@ -146,4 +151,4 @@ function FormAutoCompleteWithLoader(props) {
   );
 }
 
-export default FormAutoCompleteWithLoader
+export default FormAutoCompleteWithLoader;

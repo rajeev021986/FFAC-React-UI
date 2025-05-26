@@ -130,7 +130,7 @@ export default function AddEditForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: payableValidationSchema(),
+  validationSchema: payableValidationSchema(),
     onSubmit: async (values) => {
       const invoiceCurrencyAmount = getAmountData?.amount || 0;
       const invoiceCurrencyVat = getAmountData?.vatAmount || 0;
@@ -320,7 +320,7 @@ export default function AddEditForm({
       }
     };
 
-    fetchData();
+     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
 
   const handleApproveRequest = async () => {
@@ -933,6 +933,8 @@ export default function AddEditForm({
                         onChange={formik.handleChange}
                         suggestionName="usd_exchange"
                         disabled={isDisabled}
+                        name = {true}
+                        other ={formik.values.currency}
                       />
                     )}
                   </Grid>
