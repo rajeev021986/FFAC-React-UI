@@ -1,12 +1,24 @@
-import React, { useEffect, useRef } from "react";
-import { AppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  AppBar,
+  Box,
+  Grid,
+  MenuItem,
+  Select,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 
 // Components
 import InputBox from "../../../components/common/InputBox";
 import SelectBox from "../../../components/common/SelectBox";
+import CostDetails from "./CostDetails";
 
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
+  const [selectedInvoiceType, setSelectedInvoiceType] = useState(
+    formik.values.invoiceType || "debit_note"
+  );
   useEffect(() => {
     if (payableRef?.current) {
       payableRef.current.focus();
@@ -16,7 +28,7 @@ const JobProfitAndLoss = ({ formik }) => {
   const OPTION_TYPE = [
     {
       label: "Tax Invoice",
-      value: "tax_invoce",
+      value: "tax_invoice",
     },
     {
       label: "Debit Note",
@@ -177,16 +189,27 @@ const JobProfitAndLoss = ({ formik }) => {
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <SelectBox
                 label="Invoice Type"
-                id="Invoice Type"
+                id="invoiceType"
+                name="invoiceType"
                 options={OPTION_TYPE}
                 value={formik.values.invoiceType}
                 error={formik.errors.invoiceType}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSelectedInvoiceType(value);
+                  formik.setFieldValue("invoiceType", value);
+                }}
               />
             </Grid>
           </Grid>
         </Box>
       </Box>
+      <CostDetails
+        // customer_id={initialValues.id}
+        formik={formik}
+        selectedInvoiceType={formik.values.invoiceType}
+        page={"jobProfitAndLoss"}
+      />
     </React.Fragment>
   );
 };

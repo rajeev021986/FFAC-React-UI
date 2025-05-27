@@ -31,12 +31,20 @@ import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import useDebounce from "../../../hooks/useDebounce";
 import dayjs from "dayjs";
 
-export default function CostDetails({ page, customer_id, formik }) {
+export default function CostDetails({
+  page,
+  customer_id,
+  formik,
+  selectedInvoiceType,
+}) {
   const receivableEntrySelector = useSelector(
     (state) => state?.receivableEntry
   );
-  console.log("receivableEntrySelector", receivableEntrySelector);
-
+  const getButtonText = () => {
+    if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
+    if (selectedInvoiceType === "debit_note") return "Add Debit";
+    return "Add";
+  };
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -103,8 +111,72 @@ export default function CostDetails({ page, customer_id, formik }) {
       data: rowData,
     });
   });
+  const columnsData = [
+    {
+      id: 1,
+      chargeName: "Freight Charges",
+      paybleRefNo: "VCH12345",
+      date: "2025-05-20",
+      debitCost: 1500,
+      voucherNo: "VN98765",
+      voucherDate: "2025-05-22",
+      creditCost: 1200,
+      diff: 300,
+      purchaseVNo: "PV56789",
+      exRate: 83.5,
+    },
+    {
+      id: 2,
+      chargeName: "Handling Fee",
+      paybleRefNo: "VCH12346",
+      date: "2025-05-21",
+      debitCost: 800,
+      voucherNo: "VN98766",
+      voucherDate: "2025-05-23",
+      creditCost: 800,
+      diff: 0,
+      purchaseVNo: "PV56790",
+      exRate: 83.2,
+    },
+    {
+      id: 3,
+      chargeName: "Documentation",
+      paybleRefNo: "VCH12347",
+      date: "2025-05-22",
+      debitCost: 600,
+      voucherNo: "VN98767",
+      voucherDate: "2025-05-24",
+      creditCost: 550,
+      diff: 50,
+      purchaseVNo: "PV56791",
+      exRate: 83.0,
+    },
+  ];
 
   const costDetailsColumns = [
+    {
+      field: "add",
+      headerName: "Add Entry",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <button
+        disabled = {selectedInvoiceType === "Add" ? true : false}
+          // onClick={() => handleAdd(params.row)}
+          style={{
+            padding: "6px 12px",
+            cursor: "pointer",
+            backgroundColor: "#1976d2",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+          }}
+        >
+          {getButtonText()}
+        </button>
+      ),
+    },
     {
       field: "chargeName",
       headerName: "Charge Name",
@@ -350,9 +422,9 @@ export default function CostDetails({ page, customer_id, formik }) {
           <ThemedGrid
             uniqueId="id"
             columns={costDetailsColumns}
-            count={filteredData?.length || 0}
+            count={columnsData?.length || 0}
             handlePage={handlePage}
-            data={filteredData}
+            data={columnsData}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={receivableEntrySelector.pagination}
