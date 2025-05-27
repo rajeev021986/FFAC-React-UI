@@ -60,6 +60,7 @@ export default function ReceiveableEntryDetails({ page }) {
         totalRevenue: res.body?.totalRevenue || "",
         containerTypeDTO: res?.body?.containerTypeDTO || [],
         paybleDetails: res?.body?.paybleDetails || [],
+        invoiceType: res.body?.invoiceType || "debit_note",
       });
       setLoading(false);
     } catch (error) {

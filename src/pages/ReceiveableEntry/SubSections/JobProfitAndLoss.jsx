@@ -16,9 +16,6 @@ import CostDetails from "./CostDetails";
 
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
-  const [selectedInvoiceType, setSelectedInvoiceType] = useState(
-    formik.values.invoiceType || "debit_note"
-  );
   useEffect(() => {
     if (payableRef?.current) {
       payableRef.current.focus();
@@ -196,7 +193,6 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.invoiceType}
                 onChange={(e) => {
                   const value = e.target.value;
-                  setSelectedInvoiceType(value);
                   formik.setFieldValue("invoiceType", value);
                 }}
               />

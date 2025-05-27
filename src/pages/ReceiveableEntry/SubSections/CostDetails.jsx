@@ -162,8 +162,7 @@ export default function CostDetails({
       headerAlign: "center",
       renderCell: (params) => (
         <button
-        disabled = {selectedInvoiceType === "Add" ? true : false}
-          // onClick={() => handleAdd(params.row)}
+          // onClick={() => handleAddFromCostDetails(params.row)}
           style={{
             padding: "6px 12px",
             cursor: "pointer",
@@ -254,15 +253,6 @@ export default function CostDetails({
     {
       field: "purchaseVNo",
       headerName: "Purchase VNo",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "exRate",
-      headerName: "Exchange Rate",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => <span>{params.value || ""}</span>,

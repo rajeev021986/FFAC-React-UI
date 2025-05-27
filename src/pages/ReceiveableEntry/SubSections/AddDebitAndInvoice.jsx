@@ -30,7 +30,7 @@ import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 import { payableValidationSchema } from "../Actions/ValidationSchema";
 import DebitNoteListData from "../AddDetails/DebitNoteList";
 
-export default function AddDebitAndInvoce({
+export default function AddDebitAndInvoice({
   initialValues,
   viewPage,
   type = "notcopy",
