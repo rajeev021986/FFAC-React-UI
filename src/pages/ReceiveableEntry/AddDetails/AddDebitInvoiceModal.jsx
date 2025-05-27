@@ -247,9 +247,7 @@ export default function AddPayableEntryModal({
         </IconButton>
 
         <Typography variant="h6" gutterBottom>
-          {selectedPayEntry
-            ? "Edit Debit Note" || "Edit Debit Note"
-            : "Add Debit Note" || "Add Tax Invoice"}
+          {selectedPayEntry ? "Edit Debit Note" : "Add Debit Note"}
         </Typography>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -275,7 +273,7 @@ export default function AddPayableEntryModal({
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
-              label="Receivable Amount"
+              label="Amount"
               id="receivableAmount"
               value={invoiceEntry?.receivableAmount || ""}
               error={errors.receivableAmount}

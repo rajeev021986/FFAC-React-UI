@@ -346,7 +346,7 @@ export default function AddDebitAndInvoice({
     },
     {
       flex: 1,
-      field: "Credit",
+      field: "receivableAmount",
       headerName: "Credit",
       headerAlign: "center",
       align: "center",
@@ -354,8 +354,8 @@ export default function AddDebitAndInvoice({
     },
     {
       flex: 1,
-      field: "VAT",
-      headerName: "vatRate",
+      field: "vatApplicable",
+      headerName: "Vat Rate",
       headerAlign: "center",
       align: "center",
       editable: false,
