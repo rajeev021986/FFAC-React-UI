@@ -47,9 +47,9 @@ export default function AddPayableEntryModal({
   onAddPayEntry,
   selectedPayEntry,
   setSelectedPayEntry,
-  type
+  type,
 }) {
-   console.log("type", type);
+  console.log("type", type);
   const modalValidationSchema = Yup.object().shape({
     chargeName: Yup.string().required("Charge Name is required"),
   });
@@ -64,6 +64,7 @@ export default function AddPayableEntryModal({
     useGetOptionsSettingsQuery("common_settings");
   const { data: payableSettingData } =
     useGetOptionsSettingsQuery("payble_settings");
+  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
 
   const { data: vatAndHoldingTaxSettingData, refetch } =
     useFetchVatAndHoldingQuery({
@@ -142,12 +143,12 @@ export default function AddPayableEntryModal({
         : { ...invoiceEntry, id: Date.now(), new: true };
 
       const updatedList = selectedPayEntry
-        ? formik.values.paybleDetails.map((n) =>
+        ? formik.values.costDetails.map((n) =>
             n.id === updatedEntry.id ? updatedEntry : n
           )
-        : [...(formik.values.paybleDetails || []), updatedEntry];
+        : [...(formik.values.costDetails || []), updatedEntry];
 
-      formik.setFieldValue("paybleDetails", updatedList);
+      formik.setFieldValue("costDetails", updatedList);
       if (onAddPayEntry) {
         onAddPayEntry(updatedEntry);
         setSelectedPayEntry(updatedEntry);
@@ -316,7 +317,7 @@ export default function AddPayableEntryModal({
             <SelectBox
               label="Unit Type"
               id="unitType"
-              options={payableSettingData?.body?.unitType || []}
+              options={jobSettingData?.body?.unitTypes}
               value={invoiceEntry?.unitType || ""}
               error={errors.unitType}
               onChange={(e) => handleChange("unitType", e.target.value)}
