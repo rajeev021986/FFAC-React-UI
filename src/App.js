@@ -50,7 +50,7 @@ import PayableList from "./pages/payable";
 import AddPayableEntry from "./pages/payable/AddPayableForm";
 import AccountsPendingPayableList from "./pages/accounts/PendingPayable";
 import ReceiveableEntryDetails from "./pages/ReceiveableEntry/AddDetails";
-import ReceivableEntryList from "./pages/ReceiveableEntry";
+import ReceivableEntryList from "./pages/ReceiveableEntry/ReceivableEntryList";
 
 function App() {
   const theme = getTheme(

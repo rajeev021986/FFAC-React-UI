@@ -1,26 +1,23 @@
 import { useFormik } from "formik";
 import { CircularProgress, Grid, Stack } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import {
-  OutlinedButton,
-  ThemeButton,
-} from "../../../../components/common/Button";
+import React, { useEffect, useState } from "react";
+import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
-import { useAddPaybleEntryMutation } from "../../../../store/api/payableApi";
+import { useAddPaybleEntryMutation } from "../../../store/api/payableApi";
 
 import { useNavigate } from "react-router-dom";
-import CustomToast from "../../../../components/common/Toast/CustomToast";
-import getFirstError from "../../../../components/common/FieldToastError";
-import { formView } from "../../../../store/freatures/payableEntrySlice";
-import { useDispatch, useSelector } from "react-redux";
-import { payableValidationSchema } from "../../../payable/Actions/ValidationSchema";
+import CustomToast from "../../../components/common/Toast/CustomToast";
+import getFirstError from "../../../components/common/FieldToastError";
+import { useDispatch } from "react-redux";
+import { payableValidationSchema } from "../../payable/Actions/ValidationSchema";
 import CostDetails from "./CostDetails";
 
 // Sections Components
 import JobProfitAndLoss from "./JobProfitAndLoss";
+import AddDebitAndInvoce from "./AddDebitAndInvoice";
 
 export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
@@ -137,10 +134,13 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
                   formik={formik}
                   page={"containerNo"}
                 />
-                {/* <hr
-                  class="hr-text"
-                  data-content="Tax Invoice/Debit Note Details"
-                /> */}
+
+                <AddDebitAndInvoce
+                  initialValues={initialValues}
+                  page="as"
+                  viewPage="hsdgh"
+                  type="notcopy"
+                />
               </Box>
             </Box>
             <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>

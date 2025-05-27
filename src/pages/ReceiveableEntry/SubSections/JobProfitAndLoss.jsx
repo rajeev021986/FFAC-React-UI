@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { AppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
 // Components
-import InputBox from "../../../../components/common/InputBox";
+import InputBox from "../../../components/common/InputBox";
+import SelectBox from "../../../components/common/SelectBox";
 
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
@@ -12,6 +13,16 @@ const JobProfitAndLoss = ({ formik }) => {
     }
   }, []);
 
+  const OPTION_TYPE = [
+    {
+      label: "Tax Invoice",
+      value: "tax_invoce",
+    },
+    {
+      label: "Debit Note",
+      value: "debit_note",
+    },
+  ];
   return (
     <React.Fragment>
       <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>
@@ -161,6 +172,16 @@ const JobProfitAndLoss = ({ formik }) => {
                 onChange={formik.handleChange}
                 inputRef={payableRef}
                 disabled
+              />
+            </Grid>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+              <SelectBox
+                label="Invoice Type"
+                id="Invoice Type"
+                options={OPTION_TYPE}
+                value={formik.values.invoiceType}
+                error={formik.errors.invoiceType}
+                onChange={formik.handleChange}
               />
             </Grid>
           </Grid>

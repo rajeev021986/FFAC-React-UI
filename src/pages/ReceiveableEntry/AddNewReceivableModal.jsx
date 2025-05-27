@@ -126,7 +126,7 @@ export default function AddNewReceivableModal({ open, onClose, data }) {
   };
   const handlePage = (params) => {
     let { page, pageSize } = params;
-      setSelectedRows([]); // Clear selection on page change
+    setSelectedRows([]); // Clear selection on page change
     dispatch(setPagination({ page, pageSize }));
   };
 

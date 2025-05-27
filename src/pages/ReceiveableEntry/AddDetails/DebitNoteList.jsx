@@ -1,12 +1,16 @@
 import React from "react";
 import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 
-const DebitNoteListData = ({ chargesData, PAYABLE_COLUMNS, disabled }) => {
+const DebitNoteListData = ({
+  chargesData,
+  DEBIT_INVOICE_COLUMNS,
+  disabled,
+}) => {
   return (
     <React.Fragment>
       <ThemedGrid
         uniqueId="id"
-        columns={PAYABLE_COLUMNS}
+        columns={DEBIT_INVOICE_COLUMNS}
         count={chargesData.length}
         data={chargesData}
         disabled={disabled}

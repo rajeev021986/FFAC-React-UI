@@ -12,28 +12,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { LoaderIcon } from "react-hot-toast";
 import ClearIcon from "@mui/icons-material/Clear";
 import {
+  receivableEntrySetSortModel,
   setPagination,
   receivableEntryView,
-  receivableEntrySetSortModel,
-} from "../../../../store/freatures/ReceivableEntrySlice";
+} from "../../../store/freatures/ReceivableEntrySlice";
+
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 // Components
-import CardsView from "../../../../components/common/Cards/CardsView";
-import ScreenToolbar from "../../../../components/common/ScreenToolbar";
-import GridAction from "../../../../components/common/Grid/GridActions";
-import ThemedGrid from "../../../../components/common/Grid/ThemedGrid";
-import { useFetchContainerQuery } from "../../../../store/api/containerApi";
-
-// import { getContaienrListGridActions } from "./containerAction";
-import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
-// import { CONTAINER_COLUMNS } from "../../../../data/columns/jobEntry";
-import muiTextFieldStyles from "../../../../components/muiTextFieldStyles";
-import useDebounce from "../../../../hooks/useDebounce";
+import ScreenToolbar from "../../../components/common/ScreenToolbar";
+import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
+import { useFetchContainerQuery } from "../../../store/api/containerApi";
+import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
+import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
+import useDebounce from "../../../hooks/useDebounce";
 import dayjs from "dayjs";
+
 export default function CostDetails({ page, customer_id, formik }) {
   const receivableEntrySelector = useSelector(
     (state) => state?.receivableEntry
@@ -63,52 +60,7 @@ export default function CostDetails({ page, customer_id, formik }) {
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ]
     : "";
-  const datas = [
-    {
-      id: 1,
-      chargeName: "Freight Charges",
-      voucherNo: "V1234235",
-      voucherDate: "2025-05-15",
-      debit: 1500.0,
-      credit: 500.0,
-      diff: 1000.0,
-      purchaseVNo: "PV001",
-      exchangeRate: 1.2,
-    },
-    {
-      id: 2,
-      chargeName: "TESTT Charges",
-      voucherNo: "V123425",
-      voucherDate: "2025-05-15",
-      debit: 1500.0,
-      credit: 500.0,
-      diff: 1000.0,
-      purchaseVNo: "",
-      exchangeRate: 1.22,
-    },
-    {
-      id: 3,
-      chargeName: "Testing Charges",
-      voucherNo: "V1234775",
-      voucherDate: "2025-05-15",
-      debit: 1500.0,
-      credit: 500.0,
-      diff: 1000.0,
-      purchaseVNo: "",
-      exchangeRate: 1.23,
-    },
-    {
-      id: 4,
-      chargeName: "Test Charges",
-      voucherNo: "V123745",
-      voucherDate: "2025-05-15",
-      debit: 1500.0,
-      credit: 500.0,
-      diff: 1000.0,
-      purchaseVNo: "",
-      exchangeRate: 1.24,
-    },
-  ];
+
   const query = {
     page: receivableEntrySelector?.pagination?.page + 1,
     size: receivableEntrySelector?.pagination?.pageSize,
@@ -151,6 +103,7 @@ export default function CostDetails({ page, customer_id, formik }) {
       data: rowData,
     });
   });
+
   const costDetailsColumns = [
     {
       field: "chargeName",
@@ -223,28 +176,6 @@ export default function CostDetails({ page, customer_id, formik }) {
       flex: 1,
       minWidth: 200,
       renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "taxinvoice",
-      headerName: "Tax Invoice",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => (
-        <input type="checkbox" style={{ cursor: "pointer" }} />
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "debitNote",
-      headerName: "Debit Note",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => (
-        <input type="checkbox" style={{ cursor: "pointer" }} />
-      ),
       headerAlign: "center",
       align: "center",
     },
@@ -433,8 +364,6 @@ export default function CostDetails({ page, customer_id, formik }) {
           />
         </Card>
       </Box>
-      <hr class="hr-text" data-content="Tax Invoice/Debit Note Details" />
-
     </>
   );
 }

@@ -306,7 +306,9 @@ export default function AddPayableEntryModal({
         </IconButton>
 
         <Typography variant="h6" gutterBottom>
-          {selectedPayEntry ? "Edit Charges" : "Add New Charges"}
+          {selectedPayEntry
+            ? "Edit Debit Note" || "Edit Debit Note"
+            : "Add Debit Note" || "Add Tax Invoice"}
         </Typography>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>

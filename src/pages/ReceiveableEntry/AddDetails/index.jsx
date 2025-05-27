@@ -8,7 +8,7 @@ import ThemedBreadcrumb from "../../../components/common/Breadcrumb";
 import ApiManager from "../../../services/ApiManager";
 import Loader from "../../../components/common/Loader/Loader";
 import CustomToast from "../../../components/common/Toast/CustomToast";
-import SubSections from "./sub-section";
+import SubSections from "../SubSections/SubSection";
 
 export default function ReceiveableEntryDetails({ page }) {
   const [loading, setLoading] = useState(true);
