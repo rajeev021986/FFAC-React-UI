@@ -369,7 +369,7 @@ export default function ReceivableEntryList({ page }) {
 
             <AuditTimeLine
               id={modal.data.id}
-              page="receivable/audit"
+              page="receivable"
               service={menuConfigUrl.account}
             />
           </Box>
