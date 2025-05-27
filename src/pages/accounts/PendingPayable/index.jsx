@@ -43,7 +43,6 @@ import ApiManager from "../../../services/ApiManager";
 import PayCalMultiple from "./PayCalMultiple";
 import CancelModalApprove from "../../JobEntry/CancelModalApprove";
 import PayableViewModal from "../../payable/Actions/PayableViewModal";
-import { getReceiveableEntryGridActionApprove } from "./actionCopy";
 import AddRejectedRemarks from "../../JobEntry/RejectedRemarks";
 
 export default function AccountsPendingPayableList({ page }) {
@@ -117,7 +116,7 @@ export default function AccountsPendingPayableList({ page }) {
       actions:
         page === "pending_payments"
           ? getPendingPaymentApprovalGridActions(nav, setModal)
-          : getReceiveableEntryGridActionApprove(nav, setModal),
+          : "",
     });
 
   // handleCheckboxChange with enhanced validation
@@ -367,7 +366,7 @@ export default function AccountsPendingPayableList({ page }) {
             actions={
               page == "pending_payments"
                 ? getPendingPaymentApprovalGridActions(nav, setModal)
-                : getReceiveableEntryGridActionApprove(nav, setModal)
+                : ""
             }
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}

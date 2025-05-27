@@ -13,7 +13,7 @@ export const receivableCodeAPI = createApi({
           Authorization: getAppHeaders()["Authorization"],
         };
         return {
-          url: `${menuConfigUrl.account}/payble/entry`,
+          url: `${menuConfigUrl.account}/receivable`,
           method: "POST",
           body: params,
           headers: headers,
@@ -29,7 +29,7 @@ export const receivableCodeAPI = createApi({
         };
 
         return {
-          url: `${menuConfigUrl.account}/payble/entry`,
+          url: `${menuConfigUrl.account}/receivable`,
           method: "PUT",
           body: params,
           headers: headers,
@@ -41,34 +41,12 @@ export const receivableCodeAPI = createApi({
     deleteReceivable: builder.mutation({
       query: (id) => {
         return {
-          url: `${menuConfigUrl.account}/payble/entry/${id}`,
+          url: `${menuConfigUrl.account}/receivable/${id}`,
           method: "DELETE",
           headers: getAppHeaders(),
         };
       },
       invalidatesTags: ["Code"],
-    }),
-
-    uploadReceivableFile: builder.mutation({
-      query: (params) => {
-        const formData = new FormData();
-        formData.append("file", params.file);
-        const entityFileBlob = new Blob([JSON.stringify(params.entityFile)], {
-          type: "application/json",
-        });
-        formData.append("entityFile", entityFileBlob);
-
-        const headers = {
-          Authorization: getAppHeaders()["Authorization"],
-        };
-
-        return {
-          url: `/${menuConfigUrl.account}/file`,
-          method: "POST",
-          body: formData,
-          headers: headers,
-        };
-      },
     }),
 
     fetchReceivableDatas: builder.query({
@@ -93,6 +71,5 @@ export const {
   useAddReceivableMutation,
   useUpdateReceivableMutation,
   useDeleteReceivableMutation,
-  useUploadReceivableFileMutation,
   useFetchReceivableDatasQuery,
 } = receivableCodeAPI;

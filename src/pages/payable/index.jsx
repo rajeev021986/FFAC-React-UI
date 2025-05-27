@@ -49,8 +49,6 @@ import CancelModalApprove from "../JobEntry/CancelModalApprove";
 import ApiManager from "../../services/ApiManager";
 import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
 import PayableViewModal from "./Actions/PayableViewModal";
-import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
-import { getReceiveableEntryGridActionApprove } from "../accounts/PendingPayable/actionCopy";
 
 export default function PayableListScreen({ page }) {
   const payableActionSelector = useSelector((state) => state.payableAction);
@@ -137,8 +135,6 @@ export default function PayableListScreen({ page }) {
     actions:
       page == "payable_list"
         ? getPayableListGridActions(nav, setModal)
-        : page == "receivableEntry"
-        ? getReceiveableEntryGridActionApprove(nav, setModal)
         : getPayableListGridActionApprove(nav, setModal),
   });
 
@@ -462,8 +458,6 @@ export default function PayableListScreen({ page }) {
             actions={
               page == "payable_list"
                 ? getPayableListGridActions(nav, setModal)
-                : page == "receivableEntry"
-                ? getReceiveableEntryGridActionApprove(nav, setModal)
                 : getPayableListGridActionApprove(nav, setModal)
             }
             setSelectedBox={setSelectedBox}

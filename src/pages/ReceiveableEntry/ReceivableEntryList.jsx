@@ -34,17 +34,14 @@ import FilterForm from "./Actions/FilterForm";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
 import { downloadBase64PDF, downloadExcel } from "../../utils/downloadExcel";
 
-import {
-  useDeletePaybleEntryMutation,
-  usePrintPayableEntryMutation,
-} from "../../store/api/payableApi";
-import CancelModalApprove from "../JobEntry/CancelModalApprove";
+import { usePrintPayableEntryMutation } from "../../store/api/payableApi";
 import ApiManager from "../../services/ApiManager";
-// import ApprovePayableModal from "./AddReceievevaleForm/ApprovePayableModal";
-import PayableViewModal from "./Actions/PayableViewModal";
-import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
-import { getReceiveableEntryGridActionApprove } from "../accounts/PendingPayable/actionCopy";
-import { useFetchReceivableDatasQuery } from "../../store/api/receivableApi";
+
+import { getReceiveableEntryGridActionApprove } from "./Actions/action";
+import {
+  useDeleteReceivableMutation,
+  useFetchReceivableDatasQuery,
+} from "../../store/api/receivableApi";
 import {
   receivableEntryView,
   updateInput,
@@ -116,6 +113,7 @@ export default function ReceivableEntryList({ page }) {
       };
     });
 
+  const [deleteReceivable] = useDeleteReceivableMutation();
   const {
     data: receiveableLisData,
     isLoading,
@@ -169,96 +167,6 @@ export default function ReceivableEntryList({ page }) {
     }
   };
 
-  const [deletePaybleEntry] = useDeletePaybleEntryMutation();
-  const [printPayableEntry] = usePrintPayableEntryMutation();
-
-  const handleApprove = async () => {
-    console.log("modal?.data?", modal?.data);
-    // Validation logic
-    if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
-      toast.custom(
-        <CustomToast
-          message="Please submit document as invoice type"
-          toast="error"
-        />,
-        {
-          closeButton: false,
-        }
-      );
-      return; // Prevent approval
-    }
-    if (modal?.data?.noOfCharges === 0) {
-      console.log("no charge");
-      toast.custom(
-        <CustomToast
-          message="Please add charge details before approving"
-          toast="error"
-        />,
-        {
-          closeButton: false,
-        }
-      );
-      return; // Prevent approval
-    }
-
-    const jobStatus = modal?.data?.label;
-    if (jobStatus === "Cancelled Successfully") {
-      toast.custom(
-        <CustomToast
-          message="Cannot approve a cancelled payable entry."
-          toast="error"
-        />
-      );
-      return;
-    }
-
-    try {
-      const response = await ApiManager.approveJobEntryRequest(
-        modal?.data?.id,
-        "PAYBLE_ENTRY"
-      );
-      const message = response.message;
-      toast.custom(<CustomToast message={message} toast="success" />, {
-        closeButton: false,
-      });
-      handleClose();
-      refetch();
-    } catch (error) {
-      toast.custom(<CustomToast message="Failed to approve." toast="error" />, {
-        closeButton: false,
-      });
-    }
-  };
-
-  const handleCancel = async () => {
-    const statusCode = modal?.data?.statusCode;
-    if (statusCode === 100) {
-      toast.custom(
-        <CustomToast
-          message="Cannot cancel paid payable entry."
-          toast="error"
-        />
-      );
-      return;
-    }
-
-    try {
-      const response = await ApiManager.canceljobEntryApprove(
-        modal?.data?.id,
-        "PAYBLE_ENTRY"
-      );
-      const message = response.message;
-      toast.custom(<CustomToast message={message} toast="success" />, {
-        closeButton: false,
-      });
-      handleClose();
-    } catch (error) {
-      toast.custom(<CustomToast message="Failed to cancel." toast="error" />, {
-        closeButton: false,
-      });
-    }
-  };
-
   const handleClose = () => {
     setModal({
       open: false,
@@ -269,12 +177,12 @@ export default function ReceivableEntryList({ page }) {
 
   const handleDelete = async () => {
     try {
-      await deletePaybleEntry(modal.data.id)
+      await deleteReceivable(modal.data.id)
         .unwrap()
         .then(() => refetch());
       toast.custom(
         <CustomToast
-          message="Customer deleted successfully!"
+          message="Receivable deleted successfully!"
           toast="success"
         />,
         {
@@ -284,40 +192,13 @@ export default function ReceivableEntryList({ page }) {
       handleClose();
     } catch (error) {
       toast.custom(
-        <CustomToast message="Failed to delete customer." toast="error" />,
+        <CustomToast message="Failed to delete Receivable." toast="error" />,
         {
           closeButton: false,
         }
       );
     }
   };
-
-  const handlePrintPDF = async () => {
-    try {
-      const resp = await printPayableEntry(modal?.data?.data?.id).unwrap();
-      downloadBase64PDF(resp?.body, modal?.data?.data?.payableRefNo);
-      toast.custom(
-        <CustomToast message="Download PDF successfully!" toast="success" />,
-        {
-          closeButton: false,
-        }
-      );
-      handleClose();
-    } catch (error) {
-      toast.custom(
-        <CustomToast message="Failed to download PDF!" toast="error" />,
-        {
-          closeButton: false,
-        }
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (modal?.type === "print") {
-      handlePrintPDF();
-    }
-  }, [modal]);
 
   useEffect(() => {
     refetch();
@@ -469,7 +350,7 @@ export default function ReceivableEntryList({ page }) {
         )}
       </Card>
 
-      {/* {modal.type === "audit" && (
+      {modal.type === "audit" && (
         <Drawer
           anchor="right"
           open={modal?.open}
@@ -483,17 +364,17 @@ export default function ReceivableEntryList({ page }) {
         >
           <Box>
             <Typography variant="h6" component="div" margin="8px">
-              Payable Audit Logs
+              Receivable Entry Audit Logs
             </Typography>
 
             <AuditTimeLine
               id={modal.data.id}
-              page="payble/entry"
-              service={menuConfigUrl.document}
+              page="receivable/audit"
+              service={menuConfigUrl.account}
             />
           </Box>
         </Drawer>
-      )} */}
+      )}
 
       {/* <CancelModalApprove
         rowId={modal?.data?.id}
@@ -509,12 +390,7 @@ export default function ReceivableEntryList({ page }) {
         handleClose={handleClose}
         handleApprove={handleApprove}
       />
-      <DeleteDialog
-        source={modal?.data?.deleteName?.payableRefNo}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-        handleOpen={modal.open && modal.type === "delete"}
-      />
+    
       {modal.open && modal.type === "document" && (
         <PayableViewModal
           open={modal.open}
@@ -523,6 +399,14 @@ export default function ReceivableEntryList({ page }) {
           viewType={"view"}
         />
       )} */}
+
+      <DeleteDialog
+        source={modal?.data?.deleteName?.receivableRefNo}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
+
       {modal.open && modal.type === "add-entry" && (
         <AddNewReceivableModal
           open={modal.open}
