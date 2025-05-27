@@ -32,51 +32,51 @@ export default function ReceiveableEntryDetails({ page }) {
     paybleDetails: [],
   });
 
-  // const fetchPayableData = async () => {
-  //   try {
-  //     const res = await ApiManager.getReceivableEntryDeatils(
-  //       state?.initialValues?.id
-  //     );
-  //     let status = "";
-  //     if (res.body?.status) {
-  //       status =
-  //         res.body?.status.charAt(0).toUpperCase() +
-  //         res.body?.status.slice(1).toLowerCase();
-  //     }
-  //     setInitialValues({
-  //       id: res.body?.id || "",
-  //       jobId: res.body?.jobId || "",
-  //       consigneeName: res.body?.consigneeName || "",
-  //       creditCost: res.body?.creditCost || "",
-  //       currency: res.body?.currency || "",
-  //       customerName: res.body?.customerName || "",
-  //       debitCost: res.body?.debitCost || "",
-  //       exRate: res.body?.exRate || "",
-  //       jobNo: res.body?.jobNo || "",
-  //       netCost: res.body?.netCost || "",
-  //       paybleRefNo: res.body?.paybleRefNo || "",
-  //       profitLoss: res.body?.profitLoss || "",
-  //       totalRevenue: res.body?.totalRevenue || "",
-  //       containerTypeDTO: res?.body?.containerTypeDTO || [],
-  //       paybleDetails: res?.body?.paybleDetails || [],
-  //     });
-  //     setLoading(false);
-  //   } catch (error) {
-  //     toast.custom(
-  //       <CustomToast
-  //         message="Error occurred while loading form"
-  //         toast="error"
-  //       />,
-  //       {
-  //         closeButton: false,
-  //       }
-  //     );
-  //   }
-  // };
+  const fetchPayableData = async () => {
+    try {
+      const res = await ApiManager.getReceivableEntryDeatils(
+        state?.initialValues?.id
+      );
+      let status = "";
+      if (res.body?.status) {
+        status =
+          res.body?.status.charAt(0).toUpperCase() +
+          res.body?.status.slice(1).toLowerCase();
+      }
+      setInitialValues({
+        id: res.body?.id || "",
+        jobId: res.body?.jobId || "",
+        consigneeName: res.body?.consigneeName || "",
+        creditCost: res.body?.creditCost || "",
+        currency: res.body?.currency || "",
+        customerName: res.body?.customerName || "",
+        debitCost: res.body?.debitCost || "",
+        exRate: res.body?.exRate || "",
+        jobNo: res.body?.jobNo || "",
+        netCost: res.body?.netCost || "",
+        paybleRefNo: res.body?.paybleRefNo || "",
+        profitLoss: res.body?.profitLoss || "",
+        totalRevenue: res.body?.totalRevenue || "",
+        containerTypeDTO: res?.body?.containerTypeDTO || [],
+        paybleDetails: res?.body?.paybleDetails || [],
+      });
+      setLoading(false);
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while loading form"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+  };
 
   useEffect(() => {
     if (state?.initialValues?.id) {
-      // fetchPayableData();
+      fetchPayableData();
     } else {
       setLoading(false);
     }
@@ -95,7 +95,7 @@ export default function ReceiveableEntryDetails({ page }) {
         />
       </Stack>
 
-      {!loading ? (
+      {loading ? (
         <Loader />
       ) : (
         <Card
