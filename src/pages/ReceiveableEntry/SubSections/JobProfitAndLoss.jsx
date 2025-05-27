@@ -15,6 +15,8 @@ import SelectBox from "../../../components/common/SelectBox";
 import CostDetails from "./CostDetails";
 
 const JobProfitAndLoss = ({ formik }) => {
+  console.log("formik in job and profit",formik.values);
+  
   const payableRef = useRef(null);
   const [selectedInvoiceType, setSelectedInvoiceType] = useState(
     formik.values.type || "debit_note"

@@ -445,15 +445,6 @@ export default function AddDebitAndInvoice({
               </Box>
             </Box>
           </TabPanel>
-
-          {/* <TabPanel value="2" sx={{ padding: "0px" }}>
-            <UploadFile
-              customer_id={initialValues.id}
-              disabled={isDisabled}
-              dropdownData={dropdownData.jobDocumentType}
-              sourceType="PAYBLE_ENTRY"
-            />
-          </TabPanel> */}
         </TabContext>
       </Box>
 

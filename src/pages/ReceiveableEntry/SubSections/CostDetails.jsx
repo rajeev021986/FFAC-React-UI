@@ -30,6 +30,7 @@ import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import useDebounce from "../../../hooks/useDebounce";
 import dayjs from "dayjs";
+import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 
 export default function CostDetails({
   page,
@@ -59,6 +60,7 @@ export default function CostDetails({
     open: false,
     type: "",
     data: {},
+    readOnly: false,
   });
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
@@ -111,47 +113,16 @@ export default function CostDetails({
       data: rowData,
     });
   });
-  const columnsData = [
-    {
-      id: 1,
-      chargeName: "Freight Charges",
-      paybleRefNo: "VCH12345",
-      date: "2025-05-20",
-      debitCost: 1500,
-      voucherNo: "VN98765",
-      voucherDate: "2025-05-22",
-      creditCost: 1200,
-      diff: 300,
-      purchaseVNo: "PV56789",
-      exRate: 83.5,
-    },
-    {
-      id: 2,
-      chargeName: "Handling Fee",
-      paybleRefNo: "VCH12346",
-      date: "2025-05-21",
-      debitCost: 800,
-      voucherNo: "VN98766",
-      voucherDate: "2025-05-23",
-      creditCost: 800,
-      diff: 0,
-      purchaseVNo: "PV56790",
-      exRate: 83.2,
-    },
-    {
-      id: 3,
-      chargeName: "Documentation",
-      paybleRefNo: "VCH12347",
-      date: "2025-05-22",
-      debitCost: 600,
-      voucherNo: "VN98767",
-      voucherDate: "2025-05-24",
-      creditCost: 550,
-      diff: 50,
-      purchaseVNo: "PV56791",
-      exRate: 83.0,
-    },
-  ];
+  const handleAdd = (params) => {
+    const rowData = params?.row;
+
+    setModal({
+      open: true,
+      type: "cost_details",
+      data: rowData,
+      readOnly: false,
+    });
+  };
 
   const costDetailsColumns = [
     {
@@ -163,7 +134,7 @@ export default function CostDetails({
       renderCell: (params) => (
         <button
           disabled={selectedInvoiceType === "Add" ? true : false}
-          // onClick={() => handleAdd(params.row)}
+          onClick={() => handleAdd(params)}
           style={{
             padding: "6px 12px",
             cursor: "pointer",
@@ -196,7 +167,7 @@ export default function CostDetails({
       align: "center",
     },
     {
-      field: "date",
+      field: "paybleCreatedDate",
       headerName: "Voucher Date",
       flex: 1,
       minWidth: 200,
@@ -207,7 +178,7 @@ export default function CostDetails({
       align: "center",
     },
     {
-      field: "debitCost",
+      field: "paybleAmount",
       headerName: "Debit",
       flex: 1,
       minWidth: 200,
@@ -216,7 +187,7 @@ export default function CostDetails({
       align: "center",
     },
     {
-      field: "voucherNo",
+      field: "receivableRefNo",
       headerName: "Voucher No",
       flex: 1,
       minWidth: 200,
@@ -225,7 +196,7 @@ export default function CostDetails({
       align: "center",
     },
     {
-      field: "voucherDate",
+      field: "receivableCreatedDate",
       headerName: "Voucher Date",
       flex: 1,
       minWidth: 200,
@@ -234,7 +205,7 @@ export default function CostDetails({
       align: "center",
     },
     {
-      field: "creditCost",
+      field: "receivableAmount",
       headerName: "Credit",
       flex: 1,
       minWidth: 200,
@@ -251,15 +222,15 @@ export default function CostDetails({
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "purchaseVNo",
-      headerName: "Purchase VNo",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "purchaseVNo",
+    //   headerName: "Purchase VNo",
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: (params) => <span>{params.value || ""}</span>,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
   ];
   const {
     data: containerListData,
@@ -413,9 +384,9 @@ export default function CostDetails({
           <ThemedGrid
             uniqueId="id"
             columns={costDetailsColumns}
-            count={columnsData?.length || 0}
+            count={formik.values.costDetails?.length || 0}
             handlePage={handlePage}
-            data={columnsData}
+            data={formik.values.costDetails || []}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={receivableEntrySelector.pagination}
@@ -427,6 +398,23 @@ export default function CostDetails({
           />
         </Card>
       </Box>
+      <AddPayableEntryModal
+        togglePayEntry={modal.open}
+        handleTogglePayEntry={() =>
+          setModal((prev) => ({ ...prev, open: false }))
+        }
+        selectedPayEntry={modal.data}
+        setSelectedPayEntry={(entry) =>
+          setModal((prev) => ({ ...prev, data: entry }))
+        }
+        formik={formik}
+        onAddPayEntry={(entry) => {
+          const updatedList = [...(formik.values.paybleDetails || []), entry];
+          formik.setFieldValue("paybleDetails", updatedList);
+        }}
+        type={modal.type} 
+        disabled={false}
+      />
     </>
   );
 }
