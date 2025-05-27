@@ -30,6 +30,7 @@ export default function ReceiveableEntryDetails({ page }) {
     totalRevenue: "",
     containerTypeDTO: [],
     paybleDetails: [],
+    invoiceType: "debit_note",
   });
 
   const fetchPayableData = async () => {

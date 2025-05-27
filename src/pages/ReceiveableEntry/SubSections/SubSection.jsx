@@ -129,11 +129,7 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
                   padding: 1,
                 }}
               >
-                <CostDetails
-                  customer_id={initialValues.id}
-                  formik={formik}
-                  page={"containerNo"}
-                />
+                
 
                 <AddDebitAndInvoce
                   initialValues={initialValues}
