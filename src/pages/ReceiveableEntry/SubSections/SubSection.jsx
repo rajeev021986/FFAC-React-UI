@@ -6,23 +6,21 @@ import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
-import { useAddPaybleEntryMutation } from "../../../store/api/payableApi";
 
 import { useNavigate } from "react-router-dom";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import getFirstError from "../../../components/common/FieldToastError";
-import { useDispatch } from "react-redux";
 import { payableValidationSchema } from "../../payable/Actions/ValidationSchema";
-import CostDetails from "./CostDetails";
 
 // Sections Components
 import JobProfitAndLoss from "./JobProfitAndLoss";
 import AddDebitAndInvoce from "./AddDebitAndInvoice";
+import { useAddReceivableMutation } from "../../../store/api/receivableApi";
 
 export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
   const nav = useNavigate();
-  const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
+  const [addReceivable, { isLoading }] = useAddReceivableMutation();
 
   const [dropdownData, setDropdownData] = useState({});
   const [value, setValue] = React.useState("1");
@@ -54,7 +52,7 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
           let paybleDetailsData = values.paybleDetails.map((item) =>
             item?.new ? { ...item, id: null, new: false } : item
           );
-          let response = await addPaybleEntry({
+          let response = await addReceivable({
             ...values,
             paybleDetails: paybleDetailsData,
           }).unwrap();
