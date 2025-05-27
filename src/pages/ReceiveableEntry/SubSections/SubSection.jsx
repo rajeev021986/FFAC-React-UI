@@ -10,12 +10,13 @@ import TabPanel from "@mui/lab/TabPanel";
 import { useNavigate } from "react-router-dom";
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import getFirstError from "../../../components/common/FieldToastError";
-import { payableValidationSchema } from "../../payable/Actions/ValidationSchema";
+
 
 // Sections Components
 import JobProfitAndLoss from "./JobProfitAndLoss";
 import AddDebitAndInvoce from "./AddDebitAndInvoice";
 import { useAddReceivableMutation } from "../../../store/api/receivableApi";
+import { payableValidationSchema } from "../Actions/ValidationSchema";
 
 export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
