@@ -260,15 +260,6 @@ export default function CostDetails({
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "exRate",
-      headerName: "Exchange Rate",
-      flex: 1,
-      minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
-      headerAlign: "center",
-      align: "center",
-    },
   ];
   const {
     data: containerListData,
