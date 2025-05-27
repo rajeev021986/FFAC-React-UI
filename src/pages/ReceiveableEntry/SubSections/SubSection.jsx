@@ -43,19 +43,16 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: payableValidationSchema(),
+    // validationSchema: payableValidationSchema(),
     onSubmit: async (values) => {
       //
+      console.log(values, 234567890);
       if (!values.id || type === "copy") {
         try {
           values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
-          let paybleDetailsData = values.paybleDetails.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
           let response = await addReceivable({
             ...values,
-            paybleDetails: paybleDetailsData,
           }).unwrap();
 
           const message = response.message;
