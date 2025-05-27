@@ -20,23 +20,27 @@ import {
   updateInput,
 } from "../../store/freatures/JobEntrySlice";
 import ClearIcon from "@mui/icons-material/Clear";
-import { OutlinedButton, ThemeButton } from "../../components/common/Button";
-import FilterForm from "./Actions/FilterForm";
-import GridSearchInput from "../../components/common/Filter/GridSearchInput";
+import { ThemeButton } from "../../components/common/Button";
 import { useState } from "react";
 import muiTextFieldStyles from "../../components/muiTextFieldStyles";
+import { useNavigate } from "react-router-dom";
 
 export default function AddNewReceivableModal({ open, onClose, data }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const codeJobEntryrSelector = useSelector((s) => s?.jobEntries);
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchValue, setsearchValue] = useState("");
-  const handleSubmit = () => {
+
+  const handleNext = () => {
     if (selectedRows.length === 0) {
       alert("Please select a row.");
       return;
     }
-    console.log("Selected row:", selectedRows[0]);
+    navigate(
+      `/app/accounts/operations/receivableEntry/addReceiveableEntry?job_number=${selectedRows?.[0]?.jobNo}`
+    );
   };
   const ReceivableEntryColumns = [
     {
@@ -134,12 +138,12 @@ export default function AddNewReceivableModal({ open, onClose, data }) {
     data: jobEntriesData,
     isLoading,
     isFetching,
-    refetch,
   } = useFetchJobEntriesQuery({
     params: query,
     payload,
     page: "job-update/filter",
   });
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>
@@ -216,7 +220,7 @@ export default function AddNewReceivableModal({ open, onClose, data }) {
       </DialogContent>
       <DialogActions>
         <ThemeButton
-          onClick={handleSubmit}
+          onClick={handleNext}
           disabled={selectedRows.length === 0 ? true : false}
           sx={{ fontWeight: "500", color: "white !important" }}
         >

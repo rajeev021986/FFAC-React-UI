@@ -388,6 +388,14 @@ class ApiManager {
     const url = ENDPOINTS.GET_RECEIVABLENTRY_DETAILS(id, menuConfigUrl.account);
     return ApiMethods.get(url);
   };
+
+  static getReceivableData = async (data) => {
+    const url = ENDPOINTS.GET_RECEIVABLENTRY_DATA(
+      data?.job_number,
+      menuConfigUrl.account
+    );
+    return ApiMethods.get(url);
+  };
 }
 
 export default ApiManager;

@@ -205,6 +205,11 @@ function App() {
               element={<ReceiveableEntryDetails page="receivableEntry" />}
             />
 
+            <Route
+              path="accounts/operations/receivableEntry/addReceiveableEntry"
+              element={<ReceiveableEntryDetails page="receivableEntry" />}
+            />
+
             <Route path="admin/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="admin/users" element={<UserManagementScreen />} />

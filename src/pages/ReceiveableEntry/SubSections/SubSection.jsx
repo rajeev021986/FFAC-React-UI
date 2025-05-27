@@ -22,8 +22,6 @@ import AddDebitAndInvoce from "./AddDebitAndInvoice";
 export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
   const nav = useNavigate();
-  const dispatch = useDispatch();
-
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
 
   const [dropdownData, setDropdownData] = useState({});
@@ -129,8 +127,6 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
                   padding: 1,
                 }}
               >
-                
-
                 <AddDebitAndInvoce
                   initialValues={initialValues}
                   page="as"

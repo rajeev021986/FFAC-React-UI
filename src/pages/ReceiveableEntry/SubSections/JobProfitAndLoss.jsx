@@ -17,7 +17,7 @@ import CostDetails from "./CostDetails";
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
   const [selectedInvoiceType, setSelectedInvoiceType] = useState(
-    formik.values.invoiceType || "debit_note"
+    formik.values.type || "debit_note"
   );
   useEffect(() => {
     if (payableRef?.current) {
@@ -189,25 +189,26 @@ const JobProfitAndLoss = ({ formik }) => {
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <SelectBox
                 label="Invoice Type"
-                id="invoiceType"
-                name="invoiceType"
+                id="type"
+                name="type"
                 options={OPTION_TYPE}
-                value={formik.values.invoiceType}
-                error={formik.errors.invoiceType}
+                value={formik.values.type}
+                error={formik.errors.type}
                 onChange={(e) => {
                   const value = e.target.value;
                   setSelectedInvoiceType(value);
-                  formik.setFieldValue("invoiceType", value);
+                  formik.setFieldValue("type", value);
                 }}
               />
             </Grid>
           </Grid>
         </Box>
       </Box>
+
       <CostDetails
         // customer_id={initialValues.id}
         formik={formik}
-        selectedInvoiceType={formik.values.invoiceType}
+        selectedInvoiceType={formik.values.type}
         page={"jobProfitAndLoss"}
       />
     </React.Fragment>

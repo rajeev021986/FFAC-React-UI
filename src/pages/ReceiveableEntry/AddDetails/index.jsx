@@ -11,18 +11,20 @@ import CustomToast from "../../../components/common/Toast/CustomToast";
 import SubSections from "../SubSections/SubSection";
 
 export default function ReceiveableEntryDetails({ page }) {
-  const [loading, setLoading] = useState(true);
   const { state } = useLocation();
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const job_number = queryParams.get("job_number");
+  const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = React.useState({
     consigneeName: "",
     creditCost: "",
     currency: "",
     customerName: "",
+    customerId: "",
     debitCost: "",
     exRate: "",
-    id: 289,
-    jobId: 498,
+    jobId: "",
     jobNo: "",
     netCost: "",
     paybleRefNo: "",
@@ -30,58 +32,57 @@ export default function ReceiveableEntryDetails({ page }) {
     totalRevenue: "",
     containerTypeDTO: [],
     paybleDetails: [],
-    invoiceType: "debit_note",
+    costDetails: [],
+    type: "debit_note",
   });
 
-  const fetchPayableData = async () => {
-    try {
-      const res = await ApiManager.getReceivableEntryDeatils(
-        state?.initialValues?.id
-      );
-      let status = "";
-      if (res.body?.status) {
-        status =
-          res.body?.status.charAt(0).toUpperCase() +
-          res.body?.status.slice(1).toLowerCase();
-      }
-      setInitialValues({
-        id: res.body?.id || "",
-        jobId: res.body?.jobId || "",
-        consigneeName: res.body?.consigneeName || "",
-        creditCost: res.body?.creditCost || "",
-        currency: res.body?.currency || "",
-        customerName: res.body?.customerName || "",
-        debitCost: res.body?.debitCost || "",
-        exRate: res.body?.exRate || "",
-        jobNo: res.body?.jobNo || "",
-        netCost: res.body?.netCost || "",
-        paybleRefNo: res.body?.paybleRefNo || "",
-        profitLoss: res.body?.profitLoss || "",
-        totalRevenue: res.body?.totalRevenue || "",
-        containerTypeDTO: res?.body?.containerTypeDTO || [],
-        paybleDetails: res?.body?.paybleDetails || [],
-      });
-      setLoading(false);
-    } catch (error) {
-      toast.custom(
-        <CustomToast
-          message="Error occurred while loading form"
-          toast="error"
-        />,
-        {
-          closeButton: false,
-        }
-      );
-    }
-  };
-
   useEffect(() => {
-    if (state?.initialValues?.id) {
-      fetchPayableData();
-    } else {
-      setLoading(false);
-    }
-  }, [state?.initialValues?.id]);
+    const mapResponseToInitialValues = (data = {}) => ({
+      id: data.id || "",
+      jobId: data.jobId || "",
+      consigneeName: data.consigneeName || "",
+      creditCost: data.creditCost || "",
+      currency: data.currency || "",
+      customerName: data.customerName || "",
+      debitCost: data.debitCost || "",
+      exRate: data.exRate || "",
+      jobNo: data.jobNo || "",
+      netCost: data.netCost || "",
+      paybleRefNo: data.paybleRefNo || "",
+      profitLoss: data.profitLoss || "",
+      totalRevenue: data.totalRevenue || "",
+      type: data.type || "debit_note",
+      containerTypeDTO: data.containerTypeDTO || [],
+      paybleDetails: data.paybleDetails || [],
+    });
+    const init = async () => {
+      try {
+        let response;
+        if (job_number) {
+          response = await ApiManager.getReceivableData({ job_number });
+        } else if (state?.initialValues?.id) {
+          response = await ApiManager.getReceivableEntryDeatils(
+            state.initialValues.id
+          );
+        }
+        if (response?.body) {
+          setInitialValues(mapResponseToInitialValues(response.body));
+        }
+      } catch (error) {
+        console.error("Error loading receivable entry:", error);
+        toast.custom(
+          <CustomToast
+            message="Error occurred while loading form"
+            toast="error"
+          />,
+          { closeButton: false }
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    init();
+  }, [job_number, state?.initialValues?.id]);
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
