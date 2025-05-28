@@ -196,6 +196,9 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.type}
                 onChange={(e) => {
                   const value = e.target.value;
+                  if (formik.values.type !== value) {
+                    formik.setFieldValue("details", []); 
+                  }
                   setSelectedInvoiceType(value);
                   formik.setFieldValue("type", value);
                 }}
@@ -206,7 +209,6 @@ const JobProfitAndLoss = ({ formik }) => {
       </Box>
 
       <CostDetails
-        // customer_id={initialValues.id}
         formik={formik}
         selectedInvoiceType={formik.values.type}
         page={"jobProfitAndLoss"}

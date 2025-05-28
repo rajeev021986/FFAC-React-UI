@@ -321,7 +321,7 @@ export default function AddDebitAndInvoice({
   useEffect(() => {
     handleFetchPayable();
   }, [formik?.values?.details]);
-
+console.log("ff",formik.values)
   const DEBIT_INVOICE_COLUMNS = [
     {
       flex: 1.5,
@@ -338,7 +338,7 @@ export default function AddDebitAndInvoice({
     },
     {
       flex: 1,
-      field: "debitAmount",
+      field: "paybleAmount",
       headerName: "Debit",
       headerAlign: "center",
       align: "center",
@@ -346,7 +346,7 @@ export default function AddDebitAndInvoice({
     },
     {
       flex: 1,
-      field: "Credit",
+      field: "receivableAmount",
       headerName: "Credit",
       headerAlign: "center",
       align: "center",
@@ -354,7 +354,7 @@ export default function AddDebitAndInvoice({
     },
     {
       flex: 1,
-      field: "VAT",
+      field: "vat",
       headerName: "vatRate",
       headerAlign: "center",
       align: "center",

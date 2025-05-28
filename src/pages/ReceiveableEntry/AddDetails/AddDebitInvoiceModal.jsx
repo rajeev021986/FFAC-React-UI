@@ -77,10 +77,10 @@ export default function AddPayableEntryModal({
     customerName: "",
     currency: "",
     chargeName: "",
-    receivableRefNo: "",
+    // receivableRefNo: "",
     receivableAmount: 0,
     exRate: 0,
-    vatApplicable: true,
+    vatApplicable: "",
     vat: 0,
     unitType: "",
     numOfUnits: 0,
@@ -160,10 +160,10 @@ export default function AddPayableEntryModal({
         customerName: "",
         currency: "",
         chargeName: "",
-        receivableRefNo: "",
+        // receivableRefNo: "",
         receivableAmount: 0,
         exRate: 0,
-        vatApplicable: true,
+        vatApplicable: "",
         vat: 0,
         unitType: "",
         numOfUnits: 0,
@@ -189,10 +189,10 @@ export default function AddPayableEntryModal({
       customerName: "",
       currency: "",
       chargeName: "",
-      receivableRefNo: "",
+      // receivableRefNo: "",
       receivableAmount: 0,
       exRate: 0,
-      vatApplicable: true,
+      vatApplicable: "",
       vat: 0,
       unitType: "",
       numOfUnits: 0,
@@ -212,10 +212,10 @@ export default function AddPayableEntryModal({
         customerName: "",
         currency: "",
         chargeName: "",
-        receivableRefNo: "",
+        // receivableRefNo: "",
         receivableAmount: 0,
         exRate: 0,
-        vatApplicable: true,
+        vatApplicable: "",
         vat: 0,
         unitType: "",
         numOfUnits: 0,
@@ -280,7 +280,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} lg={4}>
+          {/* <Grid item xs={12} lg={4}>
             <InputBox
               label="Receivable Ref No."
               id="receivableRefNo"
@@ -289,7 +289,7 @@ export default function AddPayableEntryModal({
               onChange={(e) => handleChange("receivableRefNo", e.target.value)}
               fullWidth
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={4}>
             <SelectBox
               label="Currency"
@@ -359,6 +359,9 @@ export default function AddPayableEntryModal({
               onChange={(e) => handleChange("unitRate", e.target.value)}
               fullWidth
             />
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            
           </Grid>
           {/* Button */}
           <Grid item xs={4}>
