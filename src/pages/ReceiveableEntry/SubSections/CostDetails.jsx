@@ -7,29 +7,19 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { LoaderIcon } from "react-hot-toast";
+import dayjs from "dayjs";
 import ClearIcon from "@mui/icons-material/Clear";
 import {
   receivableEntrySetSortModel,
-  setPagination,
   receivableEntryView,
 } from "../../../store/freatures/ReceivableEntrySlice";
 
-import Backdrop from "@mui/material/Backdrop";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-
 // Components
-import ScreenToolbar from "../../../components/common/ScreenToolbar";
 import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 import { useFetchContainerQuery } from "../../../store/api/containerApi";
-import { CONTAINER_COLUMNS } from "../../../data/columns/jobEntry";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
-import useDebounce from "../../../hooks/useDebounce";
-import dayjs from "dayjs";
 import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 
 export default function CostDetails({
@@ -47,29 +37,19 @@ export default function CostDetails({
     return "Add";
   };
   const location = useLocation();
-  const nav = useNavigate();
   const dispatch = useDispatch();
-  const [exportLoader, setExportLoader] = useState(false);
-  const [seletectBox, setSelectedBox] = useState("");
+  const [localPagination, setLocalPagination] = useState({
+    page: 0,
+    pageSize: 10,
+  });
 
   const [searchValue, setsearchValue] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
-  const debounceValue = useDebounce(searchValue, 500);
-
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
     data: {},
     readOnly: false,
   });
-  const [open, setOpen] = React.useState(false);
-  const actions = seletectBox
-    ? [
-        { name: "New Customer" },
-        { name: "Copy" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
-      ]
-    : "";
 
   const query = {
     page: receivableEntrySelector?.pagination?.page + 1,
@@ -106,13 +86,6 @@ export default function CostDetails({
         logicalOperator: "and",
       };
     });
-  const containerColumns = CONTAINER_COLUMNS((rowData) => {
-    setModal({
-      open: true,
-      type: "edit", // or "view" or whatever your types are
-      data: rowData,
-    });
-  });
   const handleAdd = (params) => {
     const rowData = params?.row;
 
@@ -247,107 +220,28 @@ export default function CostDetails({
         ? `job-update/container/filter/${customer_id}`
         : "",
   });
-
-  const handleActionClick = async (actionName) => {
-    if (actionName === "New Customer") {
-      nav("newcustomer", {
-        replace: true,
-        state: { formAction: "add" },
-      });
-    }
-    if (actionName === "Export") {
-      setExportLoader(false);
-    }
-  };
+  const paginatedCostDetails = React.useMemo(() => {
+    const start = localPagination.page * localPagination.pageSize;
+    const end = start + localPagination.pageSize;
+    return formik.values.costDetails?.slice(start, end) || [];
+  }, [formik.values.costDetails, localPagination]);
 
   useEffect(() => {
     refetch();
   }, [location.pathname]);
 
-  const handlePage = (params) => {
-    let { page, pageSize } = params;
-    dispatch(setPagination({ page, pageSize }));
-  };
-
   const handleSearchBar = (e) => {
     setsearchValue(e.target.value);
   };
-
-  // CONTAINER_COLUMNS[CONTAINER_COLUMNS.length - 1].renderCell = GridActions({
-  //   actions: getContaienrListGridActions(setModal),
-  // });
-
   useEffect(() => {
     if (!receivableEntrySelector.view) {
       dispatch(receivableEntryView("card"));
     }
   }, [receivableEntrySelector.view, dispatch]);
 
-  useEffect(() => {
-    if (debounceValue.trim()) {
-      const lowerSearch = debounceValue.toLowerCase();
-      const filtered = formik?.values?.paybleDetails?.filter((item) =>
-        Object.values(item).some((val) =>
-          String(val).toLowerCase().includes(lowerSearch)
-        )
-      );
-      setFilteredData(filtered);
-    } else {
-      setFilteredData(formik?.values?.paybleDetails);
-    }
-  }, [debounceValue, formik?.values?.paybleDetails]);
   return (
     <>
       <Box sx={{ backgroundColor: "white.main" }}>
-        <ScreenToolbar
-          rightComps={
-            <>
-              <Backdrop open={open} />
-              {(page === "customer" || page === "customerApprove") && (
-                <SpeedDial
-                  ariaLabel="Text-only  SpeedDial"
-                  sx={{
-                    "& .MuiFab-root": {
-                      width: 50,
-                      height: 50,
-                      minHeight: 50,
-                    },
-                  }}
-                  icon={<SpeedDialIcon sx={{ fontSize: 20 }} />}
-                  direction="left"
-                >
-                  {actions.map((action) => (
-                    <SpeedDialAction
-                      key={action.name}
-                      tooltipTitle=""
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 2,
-                        // borderRadius: 1,
-                        boxShadow: 3,
-                        borderRadius: "20px 19px 19px 20px",
-                        width: 72,
-                        minWidth: 92,
-                        "& .MuiSvgIcon-root": {
-                          fontSize: 16,
-                        },
-                      }}
-                      icon={
-                        <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                          {action.name}
-                        </span>
-                      }
-                      onClick={() => handleActionClick(action.name)}
-                    ></SpeedDialAction>
-                  ))}
-                </SpeedDial>
-              )}
-            </>
-          }
-        />
-
         <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
           <CardHeader
             sx={{ padding: "8px" }}
@@ -387,11 +281,16 @@ export default function CostDetails({
             uniqueId="id"
             columns={costDetailsColumns}
             count={formik.values.costDetails?.length || 0}
-            handlePage={handlePage}
-            data={formik.values.costDetails || []}
+            handlePage={(model) =>
+              setLocalPagination({
+                page: model.page,
+                pageSize: model.pageSize,
+              })
+            }
+            data={paginatedCostDetails || []}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
-            paginationModel={receivableEntrySelector.pagination}
+            paginationModel={localPagination}
             loading={isLoading || isFetching}
             sortModel={receivableEntrySelector.sortModel}
             onSortModelChange={(sortModel) =>

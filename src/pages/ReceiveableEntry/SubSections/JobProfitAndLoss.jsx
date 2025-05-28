@@ -1,13 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  AppBar,
-  Box,
-  Grid,
-  MenuItem,
-  Select,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import { AppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
 // Components
 import InputBox from "../../../components/common/InputBox";
@@ -16,9 +8,6 @@ import CostDetails from "./CostDetails";
 
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
-  const [selectedInvoiceType, setSelectedInvoiceType] = useState(
-    formik.values.type || "debit_note"
-  );
   useEffect(() => {
     if (payableRef?.current) {
       payableRef.current.focus();
@@ -199,7 +188,6 @@ const JobProfitAndLoss = ({ formik }) => {
                   if (formik.values.type !== value) {
                     formik.setFieldValue("details", []);
                   }
-                  setSelectedInvoiceType(value);
                   formik.setFieldValue("type", value);
                 }}
               />
