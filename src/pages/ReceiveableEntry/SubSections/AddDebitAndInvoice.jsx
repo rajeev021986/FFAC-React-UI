@@ -37,7 +37,6 @@ export default function AddDebitAndInvoice({
 }) {
   //
   // const chargesData = formik.values.receivableDetails || [];
-console.log("formik table",formik.values);
 
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
@@ -60,7 +59,7 @@ console.log("formik table",formik.values);
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [chargesData, setChargesData] = useState( formik.values.receivableDetails || []);
+  const [chargesData, setChargesData] = useState( formik.values.details || []);
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
   const [value, setValue] = React.useState("1");
@@ -309,7 +308,7 @@ console.log("formik table",formik.values);
 
 
   const handleFetchPayable = () => {
-    const apiPayableData = formik?.values?.receivableDetails || [];
+    const apiPayableData = formik?.values?.details || [];
     const appendData = [...apiPayableData].reduce((acc, pay) => {
       if (!acc.some((n) => n.id === pay.id)) {
         acc.push(pay);
@@ -321,7 +320,7 @@ console.log("formik table",formik.values);
 
   useEffect(() => {
     handleFetchPayable();
-  }, [formik?.values?.receivableDetails]);
+  }, [formik?.values?.details]);
 
   const DEBIT_INVOICE_COLUMNS = [
     {
@@ -410,8 +409,6 @@ console.log("formik table",formik.values);
       ),
     },
   ];
-console.log("charges",chargesData);
-
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
