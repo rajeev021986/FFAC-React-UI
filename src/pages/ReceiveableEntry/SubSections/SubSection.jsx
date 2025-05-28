@@ -15,7 +15,6 @@ import getFirstError from "../../../components/common/FieldToastError";
 import JobProfitAndLoss from "./JobProfitAndLoss";
 import AddDebitAndInvoice from "./AddDebitAndInvoice";
 import { useAddReceivableMutation } from "../../../store/api/receivableApi";
-import { payableValidationSchema } from "../Actions/ValidationSchema";
 
 export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
@@ -25,9 +24,6 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
   const [dropdownData, setDropdownData] = useState({});
   const [value, setValue] = React.useState("1");
   const [chargesData, setChargesData] = useState([]);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   const [alertConfig, setAlertConfig] = useState({
     open: false,
