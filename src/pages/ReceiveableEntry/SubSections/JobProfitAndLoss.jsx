@@ -197,7 +197,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 onChange={(e) => {
                   const value = e.target.value;
                   if (formik.values.type !== value) {
-                    formik.setFieldValue("details", []); 
+                    formik.setFieldValue("details", []);
                   }
                   setSelectedInvoiceType(value);
                   formik.setFieldValue("type", value);

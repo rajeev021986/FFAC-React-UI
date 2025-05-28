@@ -43,33 +43,33 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
     enableReinitialize: true,
     validateOnChange: false,
     // validationSchema: payableValidationSchema(),
-   onSubmit: async (values) => {
-       // Create a payload excluding 'type' and 'costDetails'
-    const { costDetails, ...payload } = values;
-  try {
-    values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
-    values.status = "";
-    const response = await addReceivable(payload).unwrap();
+    onSubmit: async (values) => {
+      // Create a payload excluding 'type' and 'costDetails'
+      const { costDetails, ...payload } = values;
+      try {
+        values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
+        values.status = "";
+        const response = await addReceivable(payload).unwrap();
 
-    const message = response.message;
-    if (response.code === "SUCCESS") {
-      toast.custom(<CustomToast message={message} toast="warn" />, {
-        closeButton: false,
-      });
-      nav("/app/accounts/operations/receivableEntry");
-    } else {
-      toast.custom(<CustomToast message={message} toast="error" />, {
-        closeButton: false,
-      });
-    }
-  } catch (error) {
-    const message = error?.data?.message || "An error occurred while submitting.";
-    toast.custom(<CustomToast message={message} toast="error" />, {
-      closeButton: false,
-    });
-  }
-}
-
+        const message = response.message;
+        if (response.code === "SUCCESS") {
+          toast.custom(<CustomToast message={message} toast="warn" />, {
+            closeButton: false,
+          });
+          nav("/app/accounts/operations/receivableEntry");
+        } else {
+          toast.custom(<CustomToast message={message} toast="error" />, {
+            closeButton: false,
+          });
+        }
+      } catch (error) {
+        const message =
+          error?.data?.message || "An error occurred while submitting.";
+        toast.custom(<CustomToast message={message} toast="error" />, {
+          closeButton: false,
+        });
+      }
+    },
   });
 
   useEffect(() => {
