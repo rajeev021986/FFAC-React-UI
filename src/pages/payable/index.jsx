@@ -171,7 +171,6 @@ export default function PayableListScreen({ page }) {
   const [printPayableEntry] = usePrintPayableEntryMutation();
 
   const handleApprove = async () => {
-    console.log("modal?.data?", modal?.data);
     // Validation logic
     if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
       toast.custom(
@@ -186,7 +185,6 @@ export default function PayableListScreen({ page }) {
       return; // Prevent approval
     }
     if (modal?.data?.noOfCharges === 0) {
-      console.log("no charge");
       toast.custom(
         <CustomToast
           message="Please add charge details before approving"

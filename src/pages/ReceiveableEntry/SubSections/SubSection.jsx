@@ -44,7 +44,6 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
     validateOnChange: false,
     // validationSchema: payableValidationSchema(),
    onSubmit: async (values) => {
-    console.log("vlsues", values);
        // Create a payload excluding 'type' and 'costDetails'
     const { costDetails, ...payload } = values;
   try {

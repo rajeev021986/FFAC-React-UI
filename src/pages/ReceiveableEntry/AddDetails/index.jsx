@@ -54,7 +54,7 @@ export default function ReceiveableEntryDetails({ page }) {
       type: data.type || "debit_note",
       containerTypeDTO: data.containerTypeDTO || [],
       costDetails: data.costDetails || [],
-      receivableDetails: data?.receivableDetails || []
+      details: data?.receivableDetails || []
     });
     const init = async () => {
       try {

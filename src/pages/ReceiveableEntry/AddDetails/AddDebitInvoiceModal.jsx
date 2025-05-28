@@ -49,7 +49,6 @@ export default function AddPayableEntryModal({
   setSelectedPayEntry,
   type,
 }) {
-  console.log("type", type);
   const modalValidationSchema = Yup.object().shape({
     chargeName: Yup.string().required("Charge Name is required"),
   });
@@ -183,8 +182,6 @@ export default function AddPayableEntryModal({
       }
     }
   };
-  console.log("details", formik.values.details);
-
   const handleClose = () => {
     setInvoiceEntry({
       id: Date.now(),
@@ -231,7 +228,6 @@ export default function AddPayableEntryModal({
   const handleInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
   };
-  console.log("invoiceEntry", invoiceEntry);
   return (
     <Modal
       keepMounted
