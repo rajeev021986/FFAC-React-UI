@@ -382,7 +382,7 @@ export default function PayableListScreen({ page }) {
                     }}
                     icon={
                       <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                        {action.name}
+                       {action.name}
                       </span>
                     }
                     onClick={() => handleActionClick(action.name)}

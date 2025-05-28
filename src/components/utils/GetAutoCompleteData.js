@@ -1,34 +1,48 @@
 import ApiManager from "../../services/ApiManager";
 
 const suggestionName = {
-  country: "PORT_COUNTRY",
-  chargeName: "CHARGE",
+  countryId: "PORT_COUNTRY",
+  country:"PORT_COUNTRY",
+  chargeId: "CHARGE",
   currency: "CURRENCY",
-  vesselName: "VESSEL",
+  vesselId : "VESSEL",
   vessel: "VESSEL",
-  lineName: "VENDOR",
+  lineName :"VENDOR",
+  lineId: "VENDOR",
   shippingLine: "SHIPPER",
   companyCode: "COMPANY",
   customerName: "CUSTOMER",
   supplierName: "SHIPPER",
+  supplierId:"SHIPPER",
   consigneeName: "CONSIGNEE",
+  consigneeId:"CONSIGNEE",
   shippingLine: "VENDOR_TYPE",
   loadingVoyage: "VESSEL_VOYAGE",
   dischargeVoyage: "VESSEL_VOYAGE",
   vesselAgent: "VENDOR_TYPE",
+  vesselAgentId: "VENDOR_TYPE",
+
   originCountry: "PORT_COUNTRY",
   portOfLoading: "PORT",
   portOfDischarge: "PORT",
+  portOfDischargeId:"PORT",
   placeOfDelivery: "PORT",
+  placeOfDeliveryId:"PORT",
   clerkName: "USER",
+  clerkId: "USER",
+
   transporter: "VENDOR_TYPE",
-  region: "PORT_REGION",
+  transporterId:"VENDOR",
+  regionId: "PORT_REGION",
   jobNo: "JOB_ENTRY",
   vendorName: "VENDOR",
-  bankName: "BANK"
+  bankName: "BANK",
+  bankId:"BANK"
 };
 
 export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {
+  console.log(inputId,"inputId")
+
   inputId = suggestionName[inputId];
   try {
     const response = await ApiManager.fetchAutoCompleteData("", inputId);

@@ -164,6 +164,10 @@ export default function Exchange() {
 
   const validationSchema = Yup.object({
     currency: Yup.string().required("Currency is required"),
+    fromDate:Yup.date().required("From Date is required"),
+    toDate:Yup.date().required("To Date is required"),
+    usdExchange:Yup.string().required("Exchange rate is required"),
+    ugxExchange: Yup.string().required("Inr Exchange is required"),
   });
 
   const formik = useFormik({

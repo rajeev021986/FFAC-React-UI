@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -288,10 +289,10 @@ export default function VehicleNumberForm({
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <FormAutoComplete
                     label="Clerk Name"
-                    id="clerkName"
+                    id="clerkId"
                     suggestionName="first_name"
-                    value={formik.values.clerkName}
-                    error={formik.errors.clerkName}
+                    value={formik.values.clerkId}
+                    error={formik.errors.clerkId}
                     onChange={formik.handleChange}
                   />
                 </Grid>

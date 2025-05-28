@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 export const VesselValidation = () => Yup.object({
     vesselName: Yup.string().required('Vessel Name is required'),
-    lineName: Yup.string().required('Line Name is required'),
+    lineId: Yup.string().required('Line Name is required'),
     // status: Yup.string().required('Status is required'),
     // vesselOwner: Yup.string().required('Vessel Owner is required'),
     // vesselLineEntities: Yup.array().of(

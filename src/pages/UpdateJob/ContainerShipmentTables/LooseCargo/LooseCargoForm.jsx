@@ -73,7 +73,7 @@ export default function LooseCargoForm({
   };
 
   const [initialValues, setInitialValues] = React.useState({
-    transporter: "",
+    transporterId: "",
     truckTrailerNo: "",
     truckNo: "",
     driver: "",
@@ -81,7 +81,7 @@ export default function LooseCargoForm({
     telNo: "",
     passportNo: "",
     licenceNo: "",
-    clerkName: "",
+    clerkId: "",
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
@@ -114,14 +114,14 @@ export default function LooseCargoForm({
         id: res.body?.id || "",
         status: status,
         truckNo: res.body?.truckNo,
-        transporter: res.body?.transporter,
+        transporterId: res.body?.transporterId,
         truckTrailerNo: res.body?.truckTrailerNo,
         driver: res.body?.driver,
         agreedRate: res.body?.agreedRate,
         telNo: res.body?.telNo,
         passportNo: res.body?.passportNo,
         licenceNo: res.body?.licenceNo,
-        clerkName: res.body?.clerkName,
+        clerkId: res.body?.clerkId,
         clerkTelNo: res.body?.clerkTelNo,
         reportingPlace: res.body?.reportingPlace,
         reportingDate: res.body?.reportingDate,
@@ -308,8 +308,8 @@ export default function LooseCargoForm({
                     label="Transporter"
                     id="transporter"
                     suggestionName="vendor_name"
-                    value={formik.values.transporter}
-                    error={formik.errors.transporter}
+                    value={formik.values.transporterId}
+                    error={formik.errors.transporterId}
                     onChange={formik.handleChange}
                   ></FormAutoComplete>
                 </Grid>
@@ -374,10 +374,10 @@ export default function LooseCargoForm({
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <FormAutoComplete
                     label="Clerk Name"
-                    id="clerkName"
+                    id="clerkId"
                     suggestionName="first_name"
-                    value={formik.values.clerkName}
-                    error={formik.errors.clerkName}
+                    value={formik.values.clerkId}
+                    error={formik.errors.clerkId}
                     onChange={formik.handleChange}
                   />
                 </Grid>

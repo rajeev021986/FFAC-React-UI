@@ -26,6 +26,7 @@ export default function InputBox({
   minRows,
   multiline = false,
   error,
+  type,
   ...props
 }) {
   return (
@@ -33,6 +34,7 @@ export default function InputBox({
       id={id}
       name={id}
       label={label}
+      type={type}
       variant="outlined"
       fullWidth
       disabled={disabled}

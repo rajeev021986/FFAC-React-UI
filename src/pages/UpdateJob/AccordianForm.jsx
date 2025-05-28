@@ -167,10 +167,10 @@ const AccordianForm = ({ formik, index }) => {
           >
             <FormAutoComplete
               label="Clerk Name"
-              id="clerkName"
+              id="clerkId"
               suggestionName="first_name"
-              value={formik.values.clerkName}
-              error={formik.errors.clerkName}
+              value={formik.values.clerkId}
+              error={formik.errors.clerkId}
               onChange={formik.handleChange}
             />
           </Grid>

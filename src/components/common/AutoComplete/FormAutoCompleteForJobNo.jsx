@@ -8,9 +8,8 @@ import {
 } from "@mui/material";
 import { GetAutoCompleteDataWithLoader } from "../../utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
-import { GetAutoCompleteDataChargeHead } from "../../utils/GetAutoCompleteDataChargeHead";
 
-function FormAutoCompleteChargeHead(props) {
+function FormAutoCompleteForJobNo(props) {
   const {
     label,
     id,
@@ -20,6 +19,7 @@ function FormAutoCompleteChargeHead(props) {
     error,
     onChange,
     disabled,
+    other, 
   } = props;
 
   const [options, setOptions] = useState([]);
@@ -33,14 +33,16 @@ function FormAutoCompleteChargeHead(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await GetAutoCompleteDataChargeHead(
+        const data = await GetAutoCompleteDataWithLoader(
           suggestionName,
           id,
           dataLabel || suggestionName,
-          debounceValue
+          debounceValue,
+          other || ""
         );
-        setOptions(data);
-        setFilteredOptions(data);
+        const validData = data.filter((item) => item.label?.trim() !== "");
+        setOptions(validData);
+        setFilteredOptions(validData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -57,16 +59,17 @@ function FormAutoCompleteChargeHead(props) {
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      onChange({ target: {
-         name: id,
-        //  value: newValue.value,
-         value: newValue.fullData?.id,
-         id: newValue.fullData?.id,
-
-
-         } });
+      onChange({
+        target: {
+          name: id,
+          value: newValue.value,
+          count: newValue?.fullData?.count || 0,
+        },
+      });
     } else {
-      onChange({ target: { name: id, value: null ,id:""} });
+      onChange({
+        target: { name: id, value: null, count: 0 },
+      });
     }
   };
 
@@ -79,7 +82,7 @@ function FormAutoCompleteChargeHead(props) {
         size="small"
         id={id}
         disabled={disabled}
-        value={options.find((option) => option.fullData?.id === value) || null}
+        value={options.find((option) => option.value == value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
@@ -98,7 +101,6 @@ function FormAutoCompleteChargeHead(props) {
                 borderRadius: "10px",
                 fontSize: "14px",
                 height: "43px", // Increase height here
-
               },
             }}
             InputProps={{
@@ -129,4 +131,4 @@ function FormAutoCompleteChargeHead(props) {
   );
 }
 
-export default FormAutoCompleteChargeHead;
+export default FormAutoCompleteForJobNo;

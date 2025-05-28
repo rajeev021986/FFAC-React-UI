@@ -90,7 +90,7 @@ export default function VendorEditGrid({
         }
         const newRow = {
           id: Date.now(),
-          chargeName: "",
+          chargeId: "",
           type: "",
           finalDestination: "",
           unitType: "",
@@ -117,22 +117,22 @@ export default function VendorEditGrid({
       },
       columns: [
         {
-          field: "chargeName",
+          field: "chargeId",
           headerName: "Charge Name",
           flex: 1,
           renderCell: (params) => {
             return (
               <AutoCompleteInput
-                id="chargeName"
+                id="chargeId"
                 suggestionName="charge_name"
-                value={params.value}
+                value={params.row?.chargeId}
                 error={
                   formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeName
+                    ?.chargeId
                 }
                 onChange={(newValue) => {
                   const rowIndex = formik.values.vendorEntityTariffs.findIndex(
-                    (entity) => entity.id === params.id
+                    (entity) => entity.id == params.id
                   );
                   // setTimeout(() => {
                   formik.setValues({
@@ -140,7 +140,7 @@ export default function VendorEditGrid({
                     vendorEntityTariffs: formik.values.vendorEntityTariffs.map(
                       (entity, index) =>
                         index === rowIndex
-                          ? { ...entity, chargeName: newValue }
+                          ? { ...entity, chargeId: newValue }
                           : entity
                     ),
                   });
@@ -228,7 +228,7 @@ export default function VendorEditGrid({
           ),
         },
         {
-          field: "currency",
+          field: "currencyId",
           headerName: "Currency",
           flex: 1,
           renderCell: (params) => {
@@ -236,14 +236,16 @@ export default function VendorEditGrid({
               <AutoCompleteInput
                 id="currency"
                 suggestionName="currency"
-                value={params.value}
+                value={params.row.currency}
+
                 error={
                   formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeName
+                    ?.chargeId
                 }
                 onChange={(newValue) => {
+                  console.log(newValue,"rohit")
                   const rowIndex = formik.values.vendorEntityTariffs.findIndex(
-                    (entity) => entity.id === params.id
+                    (entity) => entity.id == params.id
                   );
                   // setTimeout(() => {
                   formik.setValues({
@@ -296,7 +298,7 @@ export default function VendorEditGrid({
       value: formik.values.vendorEntityDemurageTariffs || [
         {
           id: 0,
-          country: "",
+          countryId: "",
           containerType: "",
           firstSlab: "",
           secondSlab: "",
@@ -324,7 +326,7 @@ export default function VendorEditGrid({
         }
         const newRow = {
           id: Date.now(),
-          country: "",
+          countryId: "",
           containerType: "",
           firstSlab: "",
           secondSlab: "",
@@ -474,7 +476,7 @@ export default function VendorEditGrid({
         }
         const newRow = {
           id: Date.now(),
-          country: "",
+          countryId: "",
           noOfFreeDays: 0,
           new: true,
         };
@@ -497,22 +499,22 @@ export default function VendorEditGrid({
       },
       columns: [
         {
-          field: "country",
+          field: "countryId",
           headerName: "Country",
           flex: 1,
           renderCell: (params) => {
             return (
               <AutoCompleteInput
-                id="country"
+                id="countryId"
                 suggestionName="country"
                 value={params.value}
                 error={
                   formik.errors.vendorEntityFreeDays?.[params.rowIndex]
-                    ?.chargeName
+                    ?.countryId
                 }
                 onChange={(newValue) => {
                   const rowIndex = formik.values.vendorEntityFreeDays.findIndex(
-                    (entity) => entity.id === params.id
+                    (entity) => entity.id == params.id
                   );
                   // setTimeout(() => {
                   formik.setValues({
@@ -520,7 +522,7 @@ export default function VendorEditGrid({
                     vendorEntityFreeDays:
                       formik.values.vendorEntityFreeDays.map((entity, index) =>
                         index === rowIndex
-                          ? { ...entity, country: newValue }
+                          ? { ...entity, countryId: newValue }
                           : entity
                       ),
                   });

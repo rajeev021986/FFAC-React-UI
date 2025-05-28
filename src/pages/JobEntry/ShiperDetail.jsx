@@ -28,12 +28,12 @@ export default function ShipperDetails({ formik }) {
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Supplier Name"
-              id="supplierName"
+              id="supplierId"
               suggestionName="name"
-              value={formik.values.supplierName}
-              error={formik.errors.supplierName}
+              value={formik.values.supplierId}
+              error={formik.errors.supplierId}
               onChange={(event) => {
-                formik.setFieldValue("supplierName", event.target.value);
+                formik.setFieldValue("supplierId", event.target.value);
                 formik.setFieldValue(
                   "supplierAddress",
                   event.target.formattedAddress || ""
@@ -58,12 +58,12 @@ export default function ShipperDetails({ formik }) {
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Consignee Name"
-              id="consigneeName"
+              id="consigneeId"
               suggestionName="consignee_name"
-              value={formik.values.consigneeName}
-              error={formik.errors.consigneeName}
+              value={formik.values.consigneeId}
+              error={formik.errors.consigneeId}
               onChange={(event) => {
-                formik.setFieldValue("consigneeName", event.target.value);
+                formik.setFieldValue("consigneeId", event.target.value);
                 formik.setFieldValue(
                   "consigneeAddress",
                   event.target.formattedAddress || ""

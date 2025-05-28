@@ -55,6 +55,8 @@ export default function JobEntryForm({
   const [isSelectedShipmentTypeValid, setIsSelectedShipmentTypeValid] =
     useState(false);
   const nav = useNavigate();
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  console.log(selectedCustomer, "selectedCustomer");
   const shipmentTypeRef = useRef(null);
   const toastRef = useRef(null);
   const [value, setValue] = React.useState("1");
@@ -62,6 +64,7 @@ export default function JobEntryForm({
     approve: false,
     reject: false,
   });
+  const [customerIds, setCustomerIds] = useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,8 +83,9 @@ export default function JobEntryForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: JobEntryValidationSchema(),
+    // validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
+      console.log(values, "mmmmmmm");
       if (isLoading) {
         return;
       }
@@ -147,11 +151,13 @@ export default function JobEntryForm({
             item?.new ? { ...item, id: null, new: false } : item
           ),
         };
-
+      
+       
         try {
           delete values.id;
           values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
+          console.log("values", values);
           let response = await addJobEntry({
             ...values,
             containerShipments: containerShipment,
@@ -247,10 +253,13 @@ export default function JobEntryForm({
               item?.new ? { ...item, id: null, new: false } : item
             ),
           };
+         
+
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
           let response = await updateJobEntry({
             ...values,
+
             containerShipments: containerShipment,
             vehicleShipments: vehicleShipment,
             looseCargoShipments: looseCargo,
@@ -482,7 +491,6 @@ export default function JobEntryForm({
     //   }
     // }
   }, [formik.values.shipmentType, jobSettingData]);
-
   return (
     <>
       <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
@@ -633,14 +641,26 @@ export default function JobEntryForm({
                 >
                   <FormAutoCompleteWithLoader
                     label="Customer Name*"
-                    id="customerName"
-                    value={formik.values.customerName}
-                    error={formik.errors.customerName}
+                    id="customerId"
+                    value={formik.values.customerId}
+                    error={formik.errors.customerId}
+               
                     onChange={formik.handleChange}
                     inputRef={FieldRef}
                     suggestionName="customer_name"
                     disabled={isDisabled}
                   />
+
+                  {/* <FormAutoCompleteWithLoader
+                    label="Customer Name*"
+                    id="customerId" // <- Updated
+                    value={formik.values.customerId} // <- Updated
+                    error={formik.errors.customerId}
+                    onChange={formik.handleChange}
+                    inputRef={FieldRef}
+                    suggestionName="customer_name"
+                    disabled={isDisabled}
+                  /> */}
                 </Tooltip>
               </Grid>
 

@@ -133,7 +133,7 @@ export default function GetPayDetails({
           paymentType: values?.paymentType || "",
           paymentDate: values?.paymentDate || new Date().toISOString(),
           currency: values?.currency || "",
-          bankName: values?.bankName || "",
+          bankId: values?.bankId || "",
           chequeNo: values?.chequeNo || "",
           chequeDate: values?.chequeDate || "",
           usdAmountToBePaid: values?.usdAmountToBePaid || 0,
@@ -418,10 +418,10 @@ console.log("formik.values", formik.values.chequeNo);
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <FormAutoComplete
                       label="Bank Name"
-                      id="bankName"
+                      id="bankId"
                       suggestionName="bank_name"
-                      value={formik.values.bankName}
-                      error={formik.errors.bankName}
+                      value={formik.values.bankId}
+                      error={formik.errors.bankId}
                       onChange={formik.handleChange}
                       disabled={
                         formik.values.paymentType === "Cheque" && !isDisabled

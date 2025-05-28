@@ -227,7 +227,7 @@ export default function VendorForm({ page = "vendor" }) {
     tinNo: null,
     vrnNo: null,
     city: "",
-    country: "",
+    countryId: "",
     creditDays: 0,
     province: "",
     poNo: "",
@@ -243,7 +243,7 @@ export default function VendorForm({ page = "vendor" }) {
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+     validationSchema,
     validateOnChange: false,
     onSubmit: async (values) => {
       let updatedValue = {

@@ -2,6 +2,9 @@ import ApiManager from "../../services/ApiManager";
 
 const suggestionName = {
   originCountry: "PORT_LOADING",
+  originCountryId: "PORT_LOADING",
+  originPortId: "PORT_LOADING",
+
   portOfLoading: "PORT",
 };
 

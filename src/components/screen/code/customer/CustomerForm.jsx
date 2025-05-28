@@ -90,7 +90,7 @@ export default function CustomerForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: CustomerValidationSchema(),
+     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
         let emails = values.customerEntityEmailsIds.map((item) =>
@@ -113,6 +113,7 @@ export default function CustomerForm({
           }
           values.tinNo = values?.tinNo?.trim() || null;
           values.vatNo = values?.vatNo?.trim() || null;
+          console.log(values, "mnnnnishh");
           let response = await addCustomer({
             ...values,
             customerEntityEmailsIds: emails,
@@ -235,7 +236,7 @@ export default function CustomerForm({
   let shouldShowTabs = Object.values(formik.values?.customerName).some(
     (value) => value !== ""
   );
-
+  console.log(formik.values, "formik");
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -339,7 +340,7 @@ export default function CustomerForm({
       customerNameRef.current.focus();
     }
   }, []);
-
+  console.log(formik.values?.countryId, "formik");
   return (
     <>
       {type == "add" ? (
@@ -545,6 +546,7 @@ export default function CustomerForm({
                         error={formik.errors.poNo}
                         onChange={formik.handleChange}
                         disabled={disabled}
+                        type= "number"
                       />
                     </Grid>
                   </Grid>
@@ -599,10 +601,10 @@ export default function CustomerForm({
                     >
                       <FormAutoComplete
                         label="Country"
-                        id="country"
+                        id="countryId"
                         suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
+                        value={formik.values?.countryId}
+                        error={formik.errors.countryId}
                         onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
@@ -861,7 +863,7 @@ export default function CustomerForm({
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
-                        Add
+                        Adds
                       </ThemeButton>
                     </Stack>
                   </Grid>
@@ -1199,10 +1201,10 @@ export default function CustomerForm({
                     >
                       <FormAutoComplete
                         label="Country"
-                        id="country"
+                        id="countryId"
                         suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
+                        value={formik.values.countryId}
+                        error={formik.errors.countryId}
                         onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
@@ -1428,7 +1430,7 @@ export default function CustomerForm({
                       </ThemeTabs>
                     </Box>
                   </Grid>
-                
+
                   {formik.values.statusCode === -1 ||
                   page == "customerApprove" ? (
                     <Grid item xs={12} paddingLeft={1} paddingTop={1}>
