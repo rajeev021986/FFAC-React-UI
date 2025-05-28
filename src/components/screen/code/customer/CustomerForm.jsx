@@ -546,6 +546,7 @@ export default function CustomerForm({
                         error={formik.errors.poNo}
                         onChange={formik.handleChange}
                         disabled={disabled}
+                        type= "number"
                       />
                     </Grid>
                   </Grid>
