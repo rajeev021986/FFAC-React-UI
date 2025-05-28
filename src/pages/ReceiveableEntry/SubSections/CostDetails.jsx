@@ -409,8 +409,8 @@ export default function CostDetails({
         }
         formik={formik}
         onAddPayEntry={(entry) => {
-          const updatedList = [...(formik.values.paybleDetails || []), entry];
-          formik.setFieldValue("paybleDetails", updatedList);
+          const updatedList = [...(formik.values.details || []), entry];
+          formik.setFieldValue("details", updatedList);
         }}
         type={modal.type} 
         disabled={false}
