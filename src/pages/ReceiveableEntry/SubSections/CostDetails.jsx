@@ -21,6 +21,7 @@ import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 import { useFetchContainerQuery } from "../../../store/api/containerApi";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
+import useDebounce from "../../../hooks/useDebounce";
 
 export default function CostDetails({
   page,
@@ -42,7 +43,7 @@ export default function CostDetails({
     page: 0,
     pageSize: 10,
   });
-
+  const [filteredData, setFilteredData] = useState([]);
   const [searchValue, setsearchValue] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
@@ -50,42 +51,8 @@ export default function CostDetails({
     data: {},
     readOnly: false,
   });
+  const debounceValue = useDebounce(searchValue, 500);
 
-  const query = {
-    page: receivableEntrySelector?.pagination?.page + 1,
-    size: receivableEntrySelector?.pagination?.pageSize,
-    // id: customer_id,
-    sortBy:
-      receivableEntrySelector.sortModel.length > 0
-        ? receivableEntrySelector.sortModel[0].field
-        : receivableEntrySelector?.sortBy?.split("*")[0],
-    sortOrder:
-      receivableEntrySelector.sortModel.length > 0
-        ? receivableEntrySelector?.sortModel[0]?.sort
-        : receivableEntrySelector?.sortBy?.split("*")[1] || "",
-  };
-  if (
-    Boolean(
-      receivableEntrySelector.sortModel.length > 0
-        ? receivableEntrySelector.sortModel[0].field === "cname"
-        : receivableEntrySelector?.sortBy?.split("*")[0] === "cname"
-    )
-  ) {
-    query.sortBy = "chargeName";
-  }
-
-  const payload = Object.entries(receivableEntrySelector?.formData)
-    .filter(([key, value]) => value !== "")
-    .map(([key, value]) => {
-      let fieldname = key;
-      Boolean(key === "cname") && (fieldname = "chargeName");
-      return {
-        fieldName: fieldname,
-        operator: "=",
-        value: value,
-        logicalOperator: "and",
-      };
-    });
   const handleAdd = (params) => {
     const rowData = params?.row;
 
@@ -207,28 +174,24 @@ export default function CostDetails({
     //   align: "center",
     // },
   ];
-  const {
-    data: containerListData,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useFetchContainerQuery({
-    params: query,
-    payload,
-    page:
-      page === "containerNo"
-        ? `job-update/container/filter/${customer_id}`
-        : "",
-  });
+  useEffect(() => {
+    if (debounceValue.trim()) {
+      const lowerSearch = debounceValue.toLowerCase();
+      const filtered = formik.values.costDetails?.filter((item) =>
+        Object.values(item).some((val) =>
+          String(val).toLowerCase().includes(lowerSearch)
+        )
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(formik.values.costDetails);
+    }
+  }, [debounceValue, formik.values.costDetails]);
   const paginatedCostDetails = React.useMemo(() => {
     const start = localPagination.page * localPagination.pageSize;
     const end = start + localPagination.pageSize;
-    return formik.values.costDetails?.slice(start, end) || [];
-  }, [formik.values.costDetails, localPagination]);
-
-  useEffect(() => {
-    refetch();
-  }, [location.pathname]);
+    return filteredData.slice(start, end) || [];
+  }, [filteredData, localPagination]);
 
   const handleSearchBar = (e) => {
     setsearchValue(e.target.value);
@@ -280,22 +243,17 @@ export default function CostDetails({
           <ThemedGrid
             uniqueId="id"
             columns={costDetailsColumns}
-            count={formik.values.costDetails?.length || 0}
+            count={filteredData.length || 0}
             handlePage={(model) =>
               setLocalPagination({
                 page: model.page,
                 pageSize: model.pageSize,
               })
             }
-            data={paginatedCostDetails || []}
+            data={paginatedCostDetails  || []}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={localPagination}
-            loading={isLoading || isFetching}
-            sortModel={receivableEntrySelector.sortModel}
-            onSortModelChange={(sortModel) =>
-              dispatch(receivableEntrySetSortModel(sortModel))
-            }
           />
         </Card>
       </Box>
