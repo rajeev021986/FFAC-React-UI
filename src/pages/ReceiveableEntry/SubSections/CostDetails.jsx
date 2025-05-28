@@ -25,13 +25,9 @@ import useDebounce from "../../../hooks/useDebounce";
 
 export default function CostDetails({
   page,
-  customer_id,
   formik,
   selectedInvoiceType,
 }) {
-  const receivableEntrySelector = useSelector(
-    (state) => state?.receivableEntry
-  );
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
@@ -99,7 +95,7 @@ export default function CostDetails({
     },
     {
       field: "paybleRefNo",
-      headerName: "Voucher No",
+      headerName: "Ref No",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => <span>{params.value || ""}</span>,
@@ -108,7 +104,7 @@ export default function CostDetails({
     },
     {
       field: "paybleCreatedDate",
-      headerName: "Voucher Date",
+      headerName: "Date",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => {
@@ -128,7 +124,7 @@ export default function CostDetails({
     },
     {
       field: "receivableRefNo",
-      headerName: "Voucher No",
+      headerName: "Ref No",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => <span>{params.value || ""}</span>,
@@ -137,7 +133,7 @@ export default function CostDetails({
     },
     {
       field: "receivableCreatedDate",
-      headerName: "Voucher Date",
+      headerName: "Date",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => {
@@ -196,11 +192,6 @@ export default function CostDetails({
   const handleSearchBar = (e) => {
     setsearchValue(e.target.value);
   };
-  useEffect(() => {
-    if (!receivableEntrySelector.view) {
-      dispatch(receivableEntryView("card"));
-    }
-  }, [receivableEntrySelector.view, dispatch]);
 
   return (
     <>
