@@ -148,7 +148,7 @@ export default function AddPayableEntryModal({
           )
         : [...(formik.values.costDetails || []), updatedEntry];
 
-      formik.setFieldValue("costDetails", updatedList);
+      formik.setFieldValue("details", updatedList);
       if (onAddPayEntry) {
         onAddPayEntry(updatedEntry);
         setSelectedPayEntry(updatedEntry);
@@ -183,6 +183,7 @@ export default function AddPayableEntryModal({
       }
     }
   };
+  console.log("details", formik.values.details);
 
   const handleClose = () => {
     setInvoiceEntry({
