@@ -62,7 +62,7 @@ export default function SelectBox({
             id === "vatApplicable" ||
             id === "withHoldingTax" ||
             id === "paymentType" || 
-            id === "invoiceType"
+            id === "type"
           }
           sx={{ fontSize: "14px" }}
           value=""

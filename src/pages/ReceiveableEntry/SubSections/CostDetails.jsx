@@ -200,7 +200,9 @@ export default function CostDetails({
       headerName: "Voucher Date",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
+      renderCell: (params) => {
+        return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+      },
       headerAlign: "center",
       align: "center",
     },
@@ -409,10 +411,10 @@ export default function CostDetails({
         }
         formik={formik}
         onAddPayEntry={(entry) => {
-          const updatedList = [...(formik.values.paybleDetails || []), entry];
-          formik.setFieldValue("paybleDetails", updatedList);
+          const updatedList = [...(formik.values.details || []), entry];
+          formik.setFieldValue("details", updatedList);
         }}
-        type={modal.type} 
+        type={modal.type}
         disabled={false}
       />
     </>

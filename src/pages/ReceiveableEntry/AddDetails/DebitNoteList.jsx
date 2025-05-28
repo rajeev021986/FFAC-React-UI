@@ -6,6 +6,7 @@ const DebitNoteListData = ({
   DEBIT_INVOICE_COLUMNS,
   disabled,
 }) => {
+  //  const chargesData = formik.values.details || [];
   return (
     <React.Fragment>
       <ThemedGrid

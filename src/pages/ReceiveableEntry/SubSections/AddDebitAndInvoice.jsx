@@ -1,4 +1,4 @@
-import { useFormik } from "formik";
+// import { useFormik } from "formik";
 import { Stack, IconButton } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import ApiManager from "../../../services/ApiManager";
@@ -31,11 +31,13 @@ import { payableValidationSchema } from "../Actions/ValidationSchema";
 import DebitNoteListData from "../AddDetails/DebitNoteList";
 
 export default function AddDebitAndInvoice({
-  initialValues,
+  formik,
   viewPage,
   type = "notcopy",
 }) {
   //
+  // const chargesData = formik.values.receivableDetails || [];
+
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const nav = useNavigate();
@@ -57,7 +59,7 @@ export default function AddDebitAndInvoice({
   const [dropdownData, setDropdownData] = useState({});
   const [rejectError, setRejectError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [chargesData, setChargesData] = useState([]);
+  const [chargesData, setChargesData] = useState(formik.values.details || []);
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
   const [value, setValue] = React.useState("1");
@@ -74,114 +76,114 @@ export default function AddDebitAndInvoice({
     setValue(newValue);
   };
 
-  useEffect(() => {
-    if (viewPage === "editForm") {
-      return setIsDisabled(false);
-    }
-    if (
-      viewPage === "view" ||
-      formik?.values?.statusCode === -3 ||
-      formik?.values?.statusCode === 1
-    ) {
-      setIsDisabled(true);
-    } else {
-      setIsDisabled(false);
-    }
-  }, [viewPage]);
+  // useEffect(() => {
+  //   if (viewPage === "editForm") {
+  //     return setIsDisabled(false);
+  //   }
+  //   if (
+  //     viewPage === "view" ||
+  //     formik?.values?.statusCode === -3 ||
+  //     formik?.values?.statusCode === 1
+  //   ) {
+  //     setIsDisabled(true);
+  //   } else {
+  //     setIsDisabled(false);
+  //   }
+  // }, [viewPage]);
 
-  const formik = useFormik({
-    initialValues,
-    enableReinitialize: true,
-    validateOnChange: false,
-    validationSchema: payableValidationSchema(),
-    onSubmit: async (values) => {
-      if (!values.id || type === "copy") {
-        try {
-          values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
-          values.status = "";
-          let paybleDetailsData = values.paybleDetails.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
-          let response = await addPaybleEntry({
-            ...values,
-            paybleDetails: paybleDetailsData,
-          }).unwrap();
+  // const formik = useFormik({
+  //   initialValues,
+  //   enableReinitialize: true,
+  //   validateOnChange: false,
+  //   validationSchema: payableValidationSchema(),
+  //   onSubmit: async (values) => {
+  //     if (!values.id || type === "copy") {
+  //       try {
+  //         values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
+  //         values.status = "";
+  //         let paybleDetailsData = values.details.map((item) =>
+  //           item?.new ? { ...item, id: null, new: false } : item
+  //         );
+  //         let response = await addPaybleEntry({
+  //           ...values,
+  //           paybleDetails: paybleDetailsData,
+  //         }).unwrap();
 
-          const message = response.message;
-          if (response.code == "SUCCESS") {
-            toast.custom(<CustomToast message={message} toast="warn" />, {
-              closeButton: false,
-            });
-            nav("/app/documentation/paybleEntry");
-          } else {
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          }
-        } catch (error) {
-          if (error.status === 409) {
-            const message = error.data.message;
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          } else {
-            toast.custom(
-              <CustomToast
-                message="An error occurred while submitting the form."
-                toast="error"
-              />,
-              {
-                closeButton: false,
-              }
-            );
-          }
-        }
-      } else {
-        // If there is an id, proceed with the update action
-        try {
-          setRejectError(false);
-          let paybleDetailsData = values.paybleDetails.map((item) =>
-            item?.new ? { ...item, id: null, new: false } : item
-          );
-          Boolean(values.status == "Active") && (values.statusCode = 1);
-          Boolean(values.status == "Inactive") && (values.statusCode = -2);
-          let response = await updatePaybleEntry({
-            ...values,
-            paybleDetails: paybleDetailsData,
-          }).unwrap();
+  //         const message = response.message;
+  //         if (response.code == "SUCCESS") {
+  //           toast.custom(<CustomToast message={message} toast="warn" />, {
+  //             closeButton: false,
+  //           });
+  //           nav("/app/documentation/paybleEntry");
+  //         } else {
+  //           toast.custom(<CustomToast message={message} toast="error" />, {
+  //             closeButton: false,
+  //           });
+  //         }
+  //       } catch (error) {
+  //         if (error.status === 409) {
+  //           const message = error.data.message;
+  //           toast.custom(<CustomToast message={message} toast="error" />, {
+  //             closeButton: false,
+  //           });
+  //         } else {
+  //           toast.custom(
+  //             <CustomToast
+  //               message="An error occurred while submitting the form."
+  //               toast="error"
+  //             />,
+  //             {
+  //               closeButton: false,
+  //             }
+  //           );
+  //         }
+  //       }
+  //     } else {
+  //       // If there is an id, proceed with the update action
+  //       try {
+  //         setRejectError(false);
+  //         let paybleDetailsData = values.details.map((item) =>
+  //           item?.new ? { ...item, id: null, new: false } : item
+  //         );
+  //         Boolean(values.status == "Active") && (values.statusCode = 1);
+  //         Boolean(values.status == "Inactive") && (values.statusCode = -2);
+  //         let response = await updatePaybleEntry({
+  //           ...values,
+  //           details: paybleDetailsData,
+  //         }).unwrap();
 
-          const message = response.message;
-          if (response.code == "SUCCESS") {
-            toast.custom(<CustomToast message={message} toast="success" />, {
-              closeButton: false,
-            });
-            nav(-1);
-          } else {
-            toast.custom(<CustomToast message={message} toast="warn" />, {
-              closeButton: false,
-            });
-          }
-        } catch (error) {
-          if (error.status === 409) {
-            const message = error.data.message;
-            toast.custom(<CustomToast message={message} toast="error" />, {
-              closeButton: false,
-            });
-          } else {
-            toast.custom(
-              <CustomToast
-                message="An error occurred while submitting the form."
-                toast="error"
-              />,
-              {
-                closeButton: false,
-              }
-            );
-          }
-        }
-      }
-    },
-  });
+  //         const message = response.message;
+  //         if (response.code == "SUCCESS") {
+  //           toast.custom(<CustomToast message={message} toast="success" />, {
+  //             closeButton: false,
+  //           });
+  //           nav(-1);
+  //         } else {
+  //           toast.custom(<CustomToast message={message} toast="warn" />, {
+  //             closeButton: false,
+  //           });
+  //         }
+  //       } catch (error) {
+  //         if (error.status === 409) {
+  //           const message = error.data.message;
+  //           toast.custom(<CustomToast message={message} toast="error" />, {
+  //             closeButton: false,
+  //           });
+  //         } else {
+  //           toast.custom(
+  //             <CustomToast
+  //               message="An error occurred while submitting the form."
+  //               toast="error"
+  //             />,
+  //             {
+  //               closeButton: false,
+  //             }
+  //           );
+  //         }
+  //       }
+  //     }
+  //   },
+  // });
 
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
@@ -223,8 +225,8 @@ export default function AddDebitAndInvoice({
         setshowDefaultCurrency(backendData?.[0]);
         formik.setFieldValue(
           "currency",
-          initialValues.currency
-            ? initialValues.currency
+          formik.values.currency
+            ? formik.values.currency
             : backendData?.[0].currency
         );
         const backendCurrencies = Array.from(
@@ -295,20 +297,17 @@ export default function AddDebitAndInvoice({
     } else {
       updatedNotes = [...chargesData, newNote];
     }
-    setChargesData(updatedNotes);
-    formik.setFieldValue("paybleDetails", updatedNotes);
+    formik.setFieldValue("details", updatedNotes);
     setSelectedPayEntry(null);
   };
 
   const handleDeleteEntry = (id) => {
     const updatedNotes = chargesData.filter((note) => note.id !== id);
-    setChargesData(updatedNotes);
-    formik.setFieldValue("paybleDetails", updatedNotes);
-    // localStorage.setItem("chargesData", JSON.stringify(updatedNotes));
+    formik.setFieldValue("details", updatedNotes);
   };
 
   const handleFetchPayable = () => {
-    const apiPayableData = formik?.values?.paybleDetails || [];
+    const apiPayableData = formik?.values?.details || [];
     const appendData = [...apiPayableData].reduce((acc, pay) => {
       if (!acc.some((n) => n.id === pay.id)) {
         acc.push(pay);
@@ -320,8 +319,8 @@ export default function AddDebitAndInvoice({
 
   useEffect(() => {
     handleFetchPayable();
-  }, [formik?.values?.chargesData]);
-
+  }, [formik?.values?.details]);
+  console.log("ff", formik.values);
   const DEBIT_INVOICE_COLUMNS = [
     {
       flex: 1.5,
@@ -338,7 +337,7 @@ export default function AddDebitAndInvoice({
     },
     {
       flex: 1,
-      field: "debitAmount",
+      field: "paybleAmount",
       headerName: "Debit",
       headerAlign: "center",
       align: "center",
@@ -409,7 +408,6 @@ export default function AddDebitAndInvoice({
       ),
     },
   ];
-
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>

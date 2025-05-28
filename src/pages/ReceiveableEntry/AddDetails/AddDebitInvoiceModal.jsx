@@ -49,7 +49,6 @@ export default function AddPayableEntryModal({
   setSelectedPayEntry,
   type,
 }) {
-  console.log("type", type);
   const modalValidationSchema = Yup.object().shape({
     chargeName: Yup.string().required("Charge Name is required"),
   });
@@ -78,10 +77,10 @@ export default function AddPayableEntryModal({
     customerName: "",
     currency: "",
     chargeName: "",
-    receivableRefNo: "",
+    // receivableRefNo: "",
     receivableAmount: 0,
     exRate: 0,
-    vatApplicable: true,
+    vatApplicable: "",
     vat: 0,
     unitType: "",
     numOfUnits: 0,
@@ -148,7 +147,7 @@ export default function AddPayableEntryModal({
           )
         : [...(formik.values.costDetails || []), updatedEntry];
 
-      formik.setFieldValue("costDetails", updatedList);
+      formik.setFieldValue("details", updatedList);
       if (onAddPayEntry) {
         onAddPayEntry(updatedEntry);
         setSelectedPayEntry(updatedEntry);
@@ -161,10 +160,10 @@ export default function AddPayableEntryModal({
         customerName: "",
         currency: "",
         chargeName: "",
-        receivableRefNo: "",
+        // receivableRefNo: "",
         receivableAmount: 0,
         exRate: 0,
-        vatApplicable: true,
+        vatApplicable: "",
         vat: 0,
         unitType: "",
         numOfUnits: 0,
@@ -183,7 +182,6 @@ export default function AddPayableEntryModal({
       }
     }
   };
-
   const handleClose = () => {
     setInvoiceEntry({
       id: Date.now(),
@@ -191,10 +189,10 @@ export default function AddPayableEntryModal({
       customerName: "",
       currency: "",
       chargeName: "",
-      receivableRefNo: "",
+      // receivableRefNo: "",
       receivableAmount: 0,
       exRate: 0,
-      vatApplicable: true,
+      vatApplicable: "",
       vat: 0,
       unitType: "",
       numOfUnits: 0,
@@ -214,10 +212,10 @@ export default function AddPayableEntryModal({
         customerName: "",
         currency: "",
         chargeName: "",
-        receivableRefNo: "",
+        // receivableRefNo: "",
         receivableAmount: 0,
         exRate: 0,
-        vatApplicable: true,
+        vatApplicable: "",
         vat: 0,
         unitType: "",
         numOfUnits: 0,
@@ -230,7 +228,6 @@ export default function AddPayableEntryModal({
   const handleInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
   };
-  console.log("invoiceEntry", invoiceEntry);
   return (
     <Modal
       keepMounted
@@ -281,7 +278,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} lg={4}>
+          {/* <Grid item xs={12} lg={4}>
             <InputBox
               label="Receivable Ref No."
               id="receivableRefNo"
@@ -290,7 +287,7 @@ export default function AddPayableEntryModal({
               onChange={(e) => handleChange("receivableRefNo", e.target.value)}
               fullWidth
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={4}>
             <SelectBox
               label="Currency"
@@ -360,6 +357,9 @@ export default function AddPayableEntryModal({
               onChange={(e) => handleChange("unitRate", e.target.value)}
               fullWidth
             />
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            
           </Grid>
           {/* Button */}
           <Grid item xs={4}>

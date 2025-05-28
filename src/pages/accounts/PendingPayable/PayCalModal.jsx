@@ -42,15 +42,11 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
     multipleSelected: false,
     statusCode: null,
   });
-console.log("data?.statusCode",data?.statusCode);
-
   useEffect(() => {
     if (data?.statusCode === 100) {
-      console.log("hello paid");
       fetchPayableData();
     } else {
       if (data?.statusCode === 101) {
-        console.log("hhello, unpaid")
         setInitialValues({
           multipleSelected: false,
           statusCode: data?.statusCode,

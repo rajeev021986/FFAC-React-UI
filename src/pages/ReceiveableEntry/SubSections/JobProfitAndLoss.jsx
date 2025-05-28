@@ -15,8 +15,6 @@ import SelectBox from "../../../components/common/SelectBox";
 import CostDetails from "./CostDetails";
 
 const JobProfitAndLoss = ({ formik }) => {
-  console.log("formik in job and profit",formik.values);
-  
   const payableRef = useRef(null);
   const [selectedInvoiceType, setSelectedInvoiceType] = useState(
     formik.values.type || "debit_note"
@@ -198,6 +196,9 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.type}
                 onChange={(e) => {
                   const value = e.target.value;
+                  if (formik.values.type !== value) {
+                    formik.setFieldValue("details", []); 
+                  }
                   setSelectedInvoiceType(value);
                   formik.setFieldValue("type", value);
                 }}
@@ -208,7 +209,6 @@ const JobProfitAndLoss = ({ formik }) => {
       </Box>
 
       <CostDetails
-        // customer_id={initialValues.id}
         formik={formik}
         selectedInvoiceType={formik.values.type}
         page={"jobProfitAndLoss"}
