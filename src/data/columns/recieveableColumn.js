@@ -81,7 +81,9 @@ export const RECIVEABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">
+        {(params?.value || "").replace(/_/g, " ").trim()}
+      </div>
     ),
   },
   {

@@ -326,6 +326,8 @@ export default function AddEditForm({
 
   const handleApproveRequest = async () => {
     setRejectError(false);
+    console.log("formik.values",formik.values);
+    
     const { vendorInvoiceNo, isDoc } = formik.values;
     // Validation logic
     if (vendorInvoiceNo && !isDoc) {

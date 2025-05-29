@@ -47,22 +47,33 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      renderCell: (params) => (
-        <button
-          disabled={selectedInvoiceType === "Add" ? true : false}
-          onClick={() => handleAdd(params)}
-          style={{
-            padding: "6px 12px",
-            cursor: "pointer",
-            backgroundColor: "#1976d2",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-          }}
-        >
-          {getButtonText()}
-        </button>
-      ),
+      renderCell: (params) => {
+        const isPaybleIdInDetails = formik.values.details.some(
+          (detail) => detail.paybleDetailId === params.row.paybleDetailId
+        );
+console.log("isPaybleIdInDetails",isPaybleIdInDetails)
+        return (
+          <button
+            disabled={isPaybleIdInDetails}
+            onClick={() => {
+              if (!isPaybleIdInDetails) handleAdd(params);
+            }}
+            style={{
+              padding: "6px 12px",
+              cursor: "pointer",
+              backgroundColor: isPaybleIdInDetails ? "#bdbdbd" :  "#1976d2",
+              // color: "#fff",
+              border: "none",
+              borderRadius: "4px",
+               cursor: isPaybleIdInDetails ? "not-allowed" : "pointer",
+              color: "#fff",
+              opacity: isPaybleIdInDetails ? 0.5 : 1,
+            }}
+          >
+            {getButtonText()}
+          </button>
+        );
+      },
     },
     {
       field: "chargeName",
@@ -192,6 +203,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
   const handleSearchBar = (e) => {
     setsearchValue(e.target.value);
   };
+  console.log("formik", formik.values);
 
   return (
     <>

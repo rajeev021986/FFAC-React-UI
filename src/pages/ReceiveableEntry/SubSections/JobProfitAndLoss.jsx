@@ -105,30 +105,6 @@ const JobProfitAndLoss = ({ formik }) => {
 
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
-                label="20 FT"
-                id="twentryFTContainer"
-                value={formik.values.twentryFTContainer}
-                error={formik.errors.twentryFTContainer}
-                onChange={formik.handleChange}
-                inputRef={payableRef}
-                disabled
-              />
-            </Grid>
-
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              <InputBox
-                label="40 FT"
-                id="fourtyFTContainer"
-                value={formik.values.fourtyFTContainer}
-                error={formik.errors.fourtyFTContainer}
-                onChange={formik.handleChange}
-                inputRef={payableRef}
-                disabled
-              />
-            </Grid>
-
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              <InputBox
                 label="Debit (Cost)"
                 id="debitCost"
                 value={formik.values.debitCost}
@@ -221,7 +197,7 @@ const JobProfitAndLoss = ({ formik }) => {
             </Grid>
             {formik.values.containerTypeDTO && formik.values.containerTypeDTO.length > 0 && (
               <>
-                {formik.values.containerTypeDTO.map((val, index) => (
+                {formik.values.containerTypeDTO?.map((val, index) => (
                   <Grid
                     item
                     xs={12}
