@@ -1,40 +1,22 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  IconButton,
-  Stack,
-  TextField,
-  InputAdornment,
-} from "@mui/material";
+import { TextField, InputAdornment } from "@mui/material";
+import { Box, IconButton, Stack } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
-import { useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import ClearIcon from "@mui/icons-material/Clear";
-import {
-  receivableEntrySetSortModel,
-  receivableEntryView,
-} from "../../../store/freatures/ReceivableEntrySlice";
 
 // Components
 import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
-import { useFetchContainerQuery } from "../../../store/api/containerApi";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 import useDebounce from "../../../hooks/useDebounce";
 
-export default function CostDetails({
-  page,
-  formik,
-  selectedInvoiceType,
-}) {
+export default function CostDetails({ formik, selectedInvoiceType }) {
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
     return "Add";
   };
-  const location = useLocation();
-  const dispatch = useDispatch();
   const [localPagination, setLocalPagination] = useState({
     page: 0,
     pageSize: 10,
@@ -48,10 +30,8 @@ export default function CostDetails({
     readOnly: false,
   });
   const debounceValue = useDebounce(searchValue, 500);
-
   const handleAdd = (params) => {
     const rowData = params?.row;
-
     setModal({
       open: true,
       type: "cost_details",
@@ -170,6 +150,7 @@ export default function CostDetails({
     //   align: "center",
     // },
   ];
+
   useEffect(() => {
     if (debounceValue.trim()) {
       const lowerSearch = debounceValue.toLowerCase();
@@ -183,6 +164,7 @@ export default function CostDetails({
       setFilteredData(formik.values.costDetails);
     }
   }, [debounceValue, formik.values.costDetails]);
+
   const paginatedCostDetails = React.useMemo(() => {
     const start = localPagination.page * localPagination.pageSize;
     const end = start + localPagination.pageSize;
@@ -241,7 +223,7 @@ export default function CostDetails({
                 pageSize: model.pageSize,
               })
             }
-            data={paginatedCostDetails  || []}
+            data={paginatedCostDetails || []}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={localPagination}
