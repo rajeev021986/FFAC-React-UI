@@ -51,6 +51,15 @@ export default function AddPayableEntryModal({
 }) {
   const modalValidationSchema = Yup.object().shape({
     chargeName: Yup.string().required("Charge Name is required"),
+    customerName: Yup.string().required("Customer Name is required"),
+    receivableAmount: Yup.string().required("Amount is required"),
+    currency: Yup.string().required("Currency is required"),
+    exRate: Yup.string().required("Exchange Rate is required"),
+    vat: Yup.string().required("VAT amount is required"),
+    vatApplicable: Yup.string().required("VAT applicable is required"),
+    unitType: Yup.string().required("Unit type is required"),
+    numOfUnits: Yup.string().required("Number of units is required"),
+    unitRate: Yup.string().required("Unit Rate is required"),
   });
   const [options, setOptions] = useState([]);
   const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
@@ -358,9 +367,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} lg={4}>
-            
-          </Grid>
+          <Grid item xs={12} lg={4}></Grid>
           {/* Button */}
           <Grid item xs={4}>
             <ThemeButton

@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 // components/AddNewReceivableModal.js
 import {
   Dialog,
@@ -13,7 +16,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 import { useFetchJobEntriesQuery } from "../../store/api/jobEntryApi";
-import { useDispatch, useSelector } from "react-redux";
+
 import {
   jobEntrySetSortModel,
   setPagination,
@@ -21,13 +24,13 @@ import {
 } from "../../store/freatures/JobEntrySlice";
 import ClearIcon from "@mui/icons-material/Clear";
 import { ThemeButton } from "../../components/common/Button";
-import { useState } from "react";
 import muiTextFieldStyles from "../../components/muiTextFieldStyles";
-import { useNavigate } from "react-router-dom";
+
 
 export default function AddNewReceivableModal({ open, onClose, data }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const codeJobEntryrSelector = useSelector((s) => s?.jobEntries);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -51,7 +54,6 @@ export default function AddNewReceivableModal({ open, onClose, data }) {
       headerAlign: "center",
       align: "center",
       minWidth: 100,
-
       editable: false,
       renderCell: (params) => (
         <div className="word-wrap-cell">
@@ -138,18 +140,24 @@ export default function AddNewReceivableModal({ open, onClose, data }) {
     data: jobEntriesData,
     isLoading,
     isFetching,
+    refetch,
   } = useFetchJobEntriesQuery({
     params: query,
     payload,
     page: "job-update/filter",
   });
-
+  const handleClose = () => {
+    dispatch(updateInput({ ...codeJobEntryrSelector.formData, jobNo: "" }));
+    onClose();
+    refetch();
+    setSelectedRows([]);
+  };
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>
         Add New Receivable Entry
         <IconButton
-          onClick={onClose}
+          onClick={handleClose}
           sx={{ position: "absolute", top: 8, right: 8, color: "grey.600" }}
         >
           <CloseIcon />
@@ -204,7 +212,7 @@ export default function AddNewReceivableModal({ open, onClose, data }) {
           columns={ReceivableEntryColumns}
           count={jobEntriesData?.body?.totalElements || 0}
           handlePage={handlePage}
-          data={jobEntriesData?.body?.data}
+          data={jobEntriesData?.body?.data || []}
           onRowClick={(params) => {
             setSelectedRows([params.row]); // Store the clicked row
           }}

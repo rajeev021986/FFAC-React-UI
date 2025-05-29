@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextField, InputAdornment } from "@mui/material";
+import { TextField, InputAdornment, Tooltip } from "@mui/material";
 import { Box, IconButton, Stack } from "@mui/material";
 import { Card, CardHeader } from "@mui/material";
 import dayjs from "dayjs";
@@ -69,7 +69,13 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       headerName: "Charge Name",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
+      renderCell: (params) => (
+        <div className="word-wrap-cell">
+          <Tooltip title={params.value || ""} arrow>
+            <span>{params.value || ""}</span>
+          </Tooltip>
+        </div>
+      ),
       headerAlign: "center",
       align: "center",
     },
@@ -78,7 +84,13 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       headerName: "Ref No",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
+      renderCell: (params) => (
+        <div className="word-wrap-cell">
+          <Tooltip title={params.value || ""} arrow>
+            <span>{params.value || ""}</span>
+          </Tooltip>
+        </div>
+      ),
       headerAlign: "center",
       align: "center",
     },
@@ -107,7 +119,13 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       headerName: "Ref No",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
+      renderCell: (params) => (
+        <div className="word-wrap-cell">
+          <Tooltip title={params.value || ""} arrow>
+            <span>{params.value || ""}</span>
+          </Tooltip>
+        </div>
+      ),
       headerAlign: "center",
       align: "center",
     },
