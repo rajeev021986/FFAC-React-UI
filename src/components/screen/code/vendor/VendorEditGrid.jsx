@@ -243,7 +243,6 @@ export default function VendorEditGrid({
                     ?.chargeId
                 }
                 onChange={(newValue) => {
-                  console.log(newValue,"rohit")
                   const rowIndex = formik.values.vendorEntityTariffs.findIndex(
                     (entity) => entity.id == params.id
                   );

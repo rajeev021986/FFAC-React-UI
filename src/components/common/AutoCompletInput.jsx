@@ -55,7 +55,6 @@ function AutoCompleteInput({
   };
 
   const handleSelectionChange = (event, newValue) => {
-    console.log(newValue, "ram");
     if (newValue) {
       // onChange(newValue.value);
 

@@ -41,7 +41,6 @@ const suggestionName = {
 };
 
 export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {
-  console.log(inputId,"inputId")
 
   inputId = suggestionName[inputId];
   try {

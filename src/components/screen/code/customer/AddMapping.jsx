@@ -111,7 +111,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
               const rowIndex = formik.values.customerEntityTariffs.findIndex(
                 (entity) => entity.id == params.id
               );
-              console.log(rowIndex,"rowIndex")
               // setTimeout(() => {
               formik.setValues({
                 ...formik.values,

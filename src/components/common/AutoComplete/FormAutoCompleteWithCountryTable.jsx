@@ -23,7 +23,6 @@ function FormAutoCompleteWithCountryTable(props) {
     formik,
     disabled,
   } = props;
-console.log(value,"value")
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -72,14 +71,12 @@ console.log(value,"value")
   //     const { country, port_name } = newValue.fullData;
 
   //     if (id == "originPortId") {
-  //       console.log(newValue, "newValue");
-
   //       setFieldValue("originPortId", newValue.value);
   //       setFieldValue("portOfLoading", port_name || "");
   //     } else if (id == "portOfLoading") {
   //       setFieldValue("portOfLoading", port_name);
   //       setFieldValue("originPortId", newValue.value || "");
-  //     }
+  //     } 
   //   } else {
   //     // Clear both fields when selection is removed
   //     setFieldValue(id, "");
@@ -115,8 +112,6 @@ console.log(value,"value")
       setSelectedOption(null); // Clear selected option
     }
   };
-  
-  console.log(selectedOption,"selectedOption")
   useEffect(() => {
     const initializeSelectedOption = async () => {
       const existingId = formik.values[id];
