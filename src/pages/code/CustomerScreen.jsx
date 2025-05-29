@@ -269,7 +269,7 @@ export default function CustomerScreen({ page }) {
         <CardHeader
           sx={{ padding: "8px" }}
           title={
-            <Stack direction="row" justifyContent="space-between">
+            <Stack >
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
                   filters={codeCustomerSelector?.formData}

@@ -711,7 +711,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                         </Box>
                         <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
                           {" "}
-                          <AddMapping disabled={disabled} formik={formik} />
+                          <AddMapping disabled={disabled} formik={formik} dropdownData={dropdownData} />
                         </TabPanel>
                       </TabContext>
                     </Box>

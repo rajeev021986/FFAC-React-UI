@@ -20,6 +20,7 @@ import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 import getFirstError from "../../../common/FieldToastError";
+
 const customToast = () => (
   <div
     style={{
@@ -51,6 +52,8 @@ export default function VendorFormInput({
     }
   }, []);
   const nav = useNavigate();
+  const { data: customerSettingsData } =
+    useGetOptionsSettingsQuery("customer_settings");
   const [dropdownData, setDropdownData] = useState({});
   const [loaderApprove, setLoaderApprove] = useState({
     approve: false,
@@ -157,7 +160,7 @@ export default function VendorFormInput({
     getFirstError(formik.errors);
   }, [formik.errors]);
   const disable = type == "Approve";
-  
+
   return (
     <>
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
@@ -511,6 +514,7 @@ export default function VendorFormInput({
               value={formik.values.telephone1}
               error={formik.errors.telephone1}
               onChange={formik.handleChange}
+              type="number"
             />
           </Grid>
           <Grid
@@ -529,6 +533,7 @@ export default function VendorFormInput({
               value={formik.values.telephone2}
               error={formik.errors.telephone2}
               onChange={formik.handleChange}
+              type="number"
             />
           </Grid>
           <Grid
@@ -544,6 +549,7 @@ export default function VendorFormInput({
             <InputBox
               label="Fax"
               id="fax"
+              type="number"
               value={formik.values.fax}
               error={formik.errors.fax}
               onChange={formik.handleChange}
@@ -561,10 +567,23 @@ export default function VendorFormInput({
             paddingLeft={1}
             marginTop={2}
           >
-            <InputBox
+            {/* <InputBox
               label="Credit Days"
               id="creditDays"
               value={formik.values.creditDays}
+              error={formik.errors.creditDays}
+              onChange={formik.handleChange}
+            /> */}
+
+            <SelectBox
+              label="Credit Days"
+              id="creditDays"
+              options={customerSettingsData?.body?.creditDays}
+              value={
+                formik.values.paymentType == "credit"
+                  ? formik.values.creditDays
+                  : formik.values.creditDays
+              }
               error={formik.errors.creditDays}
               onChange={formik.handleChange}
             />
@@ -584,8 +603,7 @@ export default function VendorFormInput({
           />
         </Grid>
 
-        {formik.values.statusCode === -1 ||
-        page == "vendorApproval" ? (
+        {formik.values.statusCode === -1 || page == "vendorApproval" ? (
           <Grid item xs={12} sx={{ padding: "10px 3px", margin: "auto" }}>
             <TextField
               label="Reject Remarks"

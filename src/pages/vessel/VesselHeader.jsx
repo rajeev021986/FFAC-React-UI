@@ -25,7 +25,7 @@ export function VesselHeader() {
   }, [vesselSelector.view, dispatch]);
 
   return (
-    <Stack>
+    <Stack >
       <Box sx={{ display: "flex", gap: 2 }}>
         <GridSearchInput
           filters={vesselSelector?.formData}
@@ -48,6 +48,14 @@ export function VesselHeader() {
             }}
           />
         )}
+        {vesselSelector.view == "grid" && (
+          <div
+            style={{
+              width: "800px",
+            }}
+          ></div>
+        )}
+
         <IconButton onClick={() => dispatch(vesselSetView("card"))}>
           <FormatListBulletedOutlined
             color={vesselSelector.view === "card" ? "primary" : "secondary"}

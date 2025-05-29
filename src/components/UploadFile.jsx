@@ -229,15 +229,15 @@ const UploadFile = ({
     //   return;
     // }
     // Validate Issue Date
-    const today = new Date();
-    const issueDate = new Date(formData.issueDate);
-    if (issueDate < today) {
-      // Show error toast if the Issue Date is a past date
-      toast.custom(
-        <CustomToast message="Issue Date cannot be a past date." />
-      );
-      return; // Stop further execution if the date is invalid
-    }
+    // const today = new Date();
+    // const issueDate = new Date(formData.issueDate);
+    // if (issueDate < today) {
+    //   // Show error toast if the Issue Date is a past date
+    //   toast.custom(
+    //     <CustomToast message="Issue Date cannot be a past date." />
+    //   );
+    //   return; // Stop further execution if the date is invalid
+    // }
     const resolvedDocumentType =
       formData.documentType === "Other"
         ? formData.other
