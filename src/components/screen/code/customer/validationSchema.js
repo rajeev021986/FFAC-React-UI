@@ -73,6 +73,7 @@ export const CustomerValidationSchema = () =>
     customerEntityTariffs: Yup.array().of(
       Yup.object().shape({
         unitRate: Yup.number().min(0, "Unit Rate must be a positive number"),
+        chargeId : Yup.string().required("Charge Name is required")
       })
     ),
 
@@ -90,4 +91,12 @@ export const CustomerValidationSchema = () =>
         ),
       })
     ),
+    bankDetails:Yup.array().of(
+      Yup.object().shape({
+        bankName: Yup.string().required("Bank Name is required"),
+        accountNo: Yup.string().required("Account Number is required"),
+        currency: Yup.string().required("Currency is required"),
+        swiftCode: Yup.string().required("Swift Code is required"),
+      })
+    )
   });

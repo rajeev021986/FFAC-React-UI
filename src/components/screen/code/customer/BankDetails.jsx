@@ -5,6 +5,7 @@ import { Delete } from "@mui/icons-material";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
+import AutoCompleteInput from "../../../common/AutoCompletInput";
 
 export default function CustomerBankDetails({
   formik,
@@ -69,6 +70,9 @@ export default function CustomerBankDetails({
             value={params.value}
             field={params.field}
             id={params.id}
+            error ={
+              formik.errors.bankDetails?.[params.rowIndex]?.bankName
+            }
             formik={formik}
             api={params.api}
             arrayName="bankDetails"
@@ -89,6 +93,9 @@ export default function CustomerBankDetails({
             value={params.value}
             field={params.field}
             id={params.id}
+            error ={
+              formik.errors.bankDetails?.[params.rowIndex]?.bankName
+            }
             formik={formik}
             api={params.api}
             arrayName="bankDetails"
@@ -109,6 +116,9 @@ export default function CustomerBankDetails({
             field={params.field}
             id={params.id}
             formik={formik}
+            error ={
+              formik.errors.bankDetails?.[params.rowIndex]?.accountNo
+            }
             api={params.api}
             arrayName="bankDetails"
             type="number"
@@ -124,13 +134,36 @@ export default function CustomerBankDetails({
       headerAlign: "center",
       renderCell: (params) => {
         return (
-          <InputBoxForGridTab
+          // <InputBoxForGridTab
+          //   value={params.value}
+          //   field={params.field}
+          //   id={params.id}
+          //   formik={formik}
+          //   api={params.api}
+          //   arrayName="bankDetails"
+          // />
+
+          <AutoCompleteInput
+            id="currency"
+            suggestionName="currency"
             value={params.value}
-            field={params.field}
-            id={params.id}
-            formik={formik}
-            api={params.api}
-            arrayName="bankDetails"
+            error={
+              formik.errors.bankDetails?.[params.rowIndex]?.currency
+            }
+            onChange={(newValue) => {
+              const rowIndex = formik.values.bankDetails.findIndex(
+                (entity) => entity.id === params.id
+              );
+              formik.setValues({
+                ...formik.values,
+                bankDetails: formik.values.bankDetails.map(
+                  (entity, index) =>
+                    index === rowIndex
+                      ? { ...entity, currency: newValue }
+                      : entity
+                ),
+              });
+            }}
           />
         );
       },
@@ -149,6 +182,10 @@ export default function CustomerBankDetails({
             id={params.id}
             formik={formik}
             api={params.api}
+            error ={
+              formik.errors.bankDetails?.[params.rowIndex]?.swiftCode
+            }
+            
             arrayName="bankDetails"
           />
         );
