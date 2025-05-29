@@ -94,8 +94,8 @@ function PortForm() {
       unCode: "",
       customCode: "",
       newPortName: "",
-      country: "",
-      region: "",
+      countryId: "",
+      regionId: "",
       basePort: "",
       type: "",
       iotaCode: "",
@@ -144,6 +144,7 @@ function PortForm() {
       }
       nav(-1);
     },
+  
   });
 
   return (

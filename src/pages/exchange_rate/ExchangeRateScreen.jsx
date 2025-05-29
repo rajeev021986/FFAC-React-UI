@@ -253,7 +253,7 @@ export function ExchangeRate({ page }) {
                 >
                   <ExchangeRateFilters />
                 </GridSearchInput>
-                <SelectBox
+                {/* <SelectBox
                   label="Sort By"
                   options={EXCHANGE_RATE_SORT_OPTIONS}
                   value={exchangeRateSelector.sortBy}
@@ -264,7 +264,7 @@ export function ExchangeRate({ page }) {
                     borderRadius: "20px",
                     width: "150px",
                   }}
-                />
+                /> */}
               </Box>
               <Box>
                 <IconButton

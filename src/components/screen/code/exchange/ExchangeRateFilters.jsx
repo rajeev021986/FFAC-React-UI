@@ -54,13 +54,13 @@ export default function ExchangeRateFilters({ setFilterOpen }) {
             value={formik.values.currency}
             onChange={formik.handleChange}
           />
-          <InputBox
+          {/* <InputBox
             label="Usd Exchange"
             id="usdExchange"
             value={formik.values.usdExchange}
             onChange={formik.handleChange}
             type="number"
-          />
+          /> */}
           <SelectBox
             label="Status"
             id="statusCode"

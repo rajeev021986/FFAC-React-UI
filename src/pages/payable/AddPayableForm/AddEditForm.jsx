@@ -52,6 +52,7 @@ import UploadFile from "../../../components/UploadFile";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import { formatIndianCurrency } from "../../../components/utils/utils";
+import FormAutoCompleteForJobNo from "../../../components/common/AutoComplete/FormAutoCompleteForJobNo";
 
 export default function AddEditForm({
   initialValues,
@@ -130,7 +131,7 @@ export default function AddEditForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: payableValidationSchema(),
+  validationSchema: payableValidationSchema(),
     onSubmit: async (values) => {
       const invoiceCurrencyAmount = getAmountData?.amount || 0;
       const invoiceCurrencyVat = getAmountData?.vatAmount || 0;
@@ -320,7 +321,7 @@ export default function AddEditForm({
       }
     };
 
-    fetchData();
+     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
 
   const handleApproveRequest = async () => {
@@ -810,14 +811,25 @@ export default function AddEditForm({
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <FormAutoCompleteWithLoader
-                      label="Job No.*"
+                    {/* <FormAutoCompleteWithLoader
+                      label="Job No."
                       id="jobNo"
                       value={formik.values.jobNo}
                       error={formik.errors.jobNo}
+                      name ={true}
                       onChange={formik.handleChange}
                       suggestionName="job_no"
                       disabled={isDisabled}
+                    /> */}
+                    <FormAutoCompleteForJobNo
+                    label="Job No*."
+                    id="jobNo"
+                    value={formik.values.jobNo}
+                    error={formik.errors.jobNo}
+                    name ={true}
+                    onChange={formik.handleChange}
+                    suggestionName="job_no"
+                    disabled={isDisabled}
                     />
                   </Grid>
 
@@ -836,11 +848,11 @@ export default function AddEditForm({
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <FormAutoCompleteWithLoader
-                      label="Vendor Name*"
-                      id="vendorName"
+                      label="Vendor Name"
+                      id="vendorId"
                       suggestionName="vendor_name"
-                      value={formik.values.vendorName}
-                      error={formik.errors.vendorName}
+                      value={formik.values.vendorId}
+                      error={formik.errors.vendorId}
                       onChange={formik.handleChange}
                       disabled={isDisabled}
                     />
@@ -922,6 +934,8 @@ export default function AddEditForm({
                         onChange={formik.handleChange}
                         suggestionName="usd_exchange"
                         disabled={isDisabled}
+                        name = {true}
+                        other ={formik.values.currency}
                       />
                     )}
                   </Grid>

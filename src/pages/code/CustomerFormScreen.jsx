@@ -34,7 +34,7 @@ export default function CustomerFormScreen({ page }) {
     add3: "",
     poNo: "",
     city: "",
-    country: "",
+    countryId: "",
     province: "",
     contactPerson: "",
     emailId: "",
@@ -54,7 +54,6 @@ export default function CustomerFormScreen({ page }) {
     customerEntityEmailsIds: [],
     bankDetails: [],
   });
-
   // Only fetch customer details after settings are loaded
   useEffect(() => {
     const fetchCustomerDetails = async () => {
@@ -79,7 +78,7 @@ export default function CustomerFormScreen({ page }) {
           add3: res.body?.add3 || "",
           poNo: res.body?.poNo || "",
           city: res.body?.city || "",
-          country: res.body?.country || "",
+          countryId: res.body?.countryId || "",
           province: res.body?.province || "",
           contactPerson: res.body?.contactPerson || "",
           emailId: res.body?.emailId || "",

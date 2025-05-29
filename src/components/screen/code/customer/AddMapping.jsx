@@ -14,7 +14,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     {
       id: 1,
-      chargeName: "",
+      chargeId: "",
       unitType: "",
       currency: "",
       shipmentType: "",
@@ -56,7 +56,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   const addRow = () => {
     const newRow = {
       id: Date.now(),
-      chargeName: "",
+      chargeId: "",
       unitType: "",
       currency: "",
       shipmentType: "",
@@ -92,31 +92,33 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   // Columns for DataGrid
   const columns = [
     {
-      field: "chargeName",
+      field: "chargeId",
       headerName: "Charge Name",
       flex: 1,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
+        
         return (
           <AutoCompleteInput
-            id="chargeName"
+            id="chargeId"
             suggestionName="charge_name"
-            value={params.value}
+            value={params.row?.chargeId}
             error={
-              formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeName
+              formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeId
             }
             onChange={(newValue) => {
               const rowIndex = formik.values.customerEntityTariffs.findIndex(
-                (entity) => entity.id === params.id
+                (entity) => entity.id == params.id
               );
+              console.log(rowIndex,"rowIndex")
               // setTimeout(() => {
               formik.setValues({
                 ...formik.values,
                 customerEntityTariffs: formik.values.customerEntityTariffs.map(
                   (entity, index) =>
                     index === rowIndex
-                      ? { ...entity, chargeName: newValue }
+                      ? { ...entity, chargeId: newValue }
                       : entity
                 ),
               });
@@ -178,7 +180,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
             suggestionName="currency"
             value={params.value}
             error={
-              formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeName
+              formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeId
             }
             onChange={(newValue) => {
               const rowIndex = formik.values.customerEntityTariffs.findIndex(

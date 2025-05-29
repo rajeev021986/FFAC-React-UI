@@ -200,10 +200,10 @@ export default function PortValueForm({
         >
           <FormAutoComplete
             label="Country"
-            id="country"
+            id="countryId"
             suggestionName="country"
-            value={formik.values.country}
-            error={formik.errors.country}
+            value={formik.values.countryId}
+            error={formik.errors.countryId}
             onChange={formik.handleChange}
           ></FormAutoComplete>
         </Grid>
@@ -219,10 +219,10 @@ export default function PortValueForm({
         >
           <FormAutoComplete
             label="Region"
-            id="region"
+            id="regionId"
             suggestionName="region"
-            value={formik.values.region}
-            error={formik.errors.region}
+            value={formik.values.regionId}
+            error={formik.errors.regionId}
             onChange={formik.handleChange}
             inputRef={FieldRef}
           ></FormAutoComplete>

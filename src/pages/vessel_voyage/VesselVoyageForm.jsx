@@ -50,7 +50,7 @@ export function VesselVoyageForm({ initialValues, type }) {
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: VesselVoyageValidation(),
+     validationSchema: VesselVoyageValidation(),
     onSubmit: async (values) => {
       if (type == "copy" || type == "add") {
         try {
@@ -191,10 +191,10 @@ export function VesselVoyageForm({ initialValues, type }) {
                     >
                       <FormAutoComplete
                         label="Vessel Name*"
-                        id="vessel"
+                        id="vesselId"
                         suggestionName="vessel_name"
-                        value={formik.values.vessel}
-                        error={formik.errors.vessel}
+                        value={formik.values.vesselId}
+                        error={formik.errors.vesselId}
                         onChange={formik.handleChange}
                         inputRef={FieldRef}
                       ></FormAutoComplete>
@@ -542,10 +542,10 @@ export function VesselVoyageForm({ initialValues, type }) {
                     >
                       <FormAutoComplete
                         label="Vessel Name*"
-                        id="vessel"
+                        id="vesselId"
                         suggestionName="vessel_name"
-                        value={formik.values.vessel}
-                        error={formik.errors.vessel}
+                        value={formik.values.vesselId}
+                        error={formik.errors.vesselId}
                         onChange={formik.handleChange}
                         inputRef={FieldRef}
                       ></FormAutoComplete>

@@ -4,14 +4,13 @@ import {
   Autocomplete,
   Box,
   CircularProgress,
-  MenuItem,
   Paper,
 } from "@mui/material";
 import useDebounce from "../../../hooks/useDebounce";
-import { GetAutoCompleteDataWithVoyage } from "../../utils/GetAutoCompleteDataWithVoyage";
+import { GetAutoCompleteDataWithCountry } from "../../utils/GetAutoCompleteDataCountry";
 import { useTheme } from "@mui/material/styles";
 
-function FormAutoCompleteWithVoyage(props) {
+function FormAutoCompleteWithCountryTable(props) {
   const {
     label,
     id,
@@ -24,23 +23,23 @@ function FormAutoCompleteWithVoyage(props) {
     formik,
     disabled,
   } = props;
-
+console.log(value,"value")
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
-
+  const [selectedOption, setSelectedOption] = useState(null);
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
 
   useEffect(() => {
-    if (!debounceValue) return; // Avoid API call on empty input
+    if (!debounceValue || debounceValue.length < 3) return; // Avoid API call on empty input
 
     let isMounted = true; // To prevent state updates on unmounted component
 
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await GetAutoCompleteDataWithVoyage(
+        const data = await GetAutoCompleteDataWithCountry(
           suggestionName,
           id,
           suggestionName,
@@ -68,37 +67,82 @@ function FormAutoCompleteWithVoyage(props) {
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);
   };
+  // const handleSelectionChange = (event, newValue) => {
+  //   if (newValue) {
+  //     const { country, port_name } = newValue.fullData;
+
+  //     if (id == "originPortId") {
+  //       console.log(newValue, "newValue");
+
+  //       setFieldValue("originPortId", newValue.value);
+  //       setFieldValue("portOfLoading", port_name || "");
+  //     } else if (id == "portOfLoading") {
+  //       setFieldValue("portOfLoading", port_name);
+  //       setFieldValue("originPortId", newValue.value || "");
+  //     }
+  //   } else {
+  //     // Clear both fields when selection is removed
+  //     setFieldValue(id, "");
+  //     if (id == "originPortId") {
+  //       setFieldValue("portOfLoading", "");
+  //     } else if (id === "portOfLoading") {
+  //       setFieldValue("originPortId", "");
+  //     }
+  //   }
+  // };
+
+
   const handleSelectionChange = (event, newValue) => {
+    setSelectedOption(newValue); // ✅ Maintain selection
+  
     if (newValue) {
-      const { vessel, voyage } = newValue.fullData;
-      const{value} = newValue;
-      if (id === "loadingVessel") {
-        setFieldValue("loadingVessel", vessel);
-        setFieldValue("loadingVoyage", voyage || "");
-      } else if (id === "loadingVoyage") {
-        setFieldValue("loadingVoyage", voyage);
-        setFieldValue("loadingVessel", vessel || "");
-      } else if (id === "dischargingVessel") {
-        setFieldValue("dischargingVessel", vessel);
-        setFieldValue("dischargeVoyage", voyage || "");
-      } else if (id === "dischargeVoyage") {
-        setFieldValue("dischargeVoyage", voyage);
-        setFieldValue("dischargingVessel", vessel || "");
+      const { country, port_name } = newValue.fullData;
+  
+      if (id === "originPortId") {
+        setFieldValue("originPortId", newValue.value);
+        setFieldValue("portOfLoading", port_name || "");
+      } else if (id === "portOfLoading") {
+        setFieldValue("portOfLoading", port_name);
+        setFieldValue("originPortId", newValue.value || "");
       }
     } else {
-      // Clear both fields when selection is removed
       setFieldValue(id, "");
-      if (id === "loadingVessel") {
-        setFieldValue("loadingVoyage", "");
-      } else if (id === "loadingVoyage") {
-        setFieldValue("loadingVessel", "");
-      } else if (id === "dischargingVessel") {
-        setFieldValue("dischargeVoyage", "");
-      } else if (id === "dischargeVoyage") {
-        setFieldValue("dischargingVessel", "");
+      if (id === "originPortId") {
+        setFieldValue("portOfLoading", "");
+      } else if (id === "portOfLoading") {
+        setFieldValue("originPortId", "");
       }
+      setSelectedOption(null); // Clear selected option
     }
   };
+  
+  console.log(selectedOption,"selectedOption")
+  useEffect(() => {
+    const initializeSelectedOption = async () => {
+      const existingId = formik.values[id];
+  
+      if (existingId && !selectedOption) {
+        try {
+          const result = await GetAutoCompleteDataWithCountry(
+            suggestionName,
+            id,
+            suggestionName,
+            "" // or pass a proper filter if needed
+          );
+  
+          const matched = result.find((opt) => opt.value == existingId);
+          if (matched) {
+            setSelectedOption(matched);
+          }
+        } catch (error) {
+          console.error("Error pre-filling autocomplete:", error);
+        }
+      }
+    };
+  
+    initializeSelectedOption();
+  }, [formik.values[id]]);
+  
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
@@ -109,15 +153,17 @@ function FormAutoCompleteWithVoyage(props) {
         id={id}
         noOptionsText="Type to Search"
         disabled={disabled}
-        value={formik.values[id] ? { label: formik.values[id] } : null}
+        value={selectedOption}
+
+        // value={formik.values[id] ? { label: formik.values[id] } : null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
         getOptionLabel={(option) =>
           option.label
             ? option.label
-            : `${option.fullData?.vessel || ""} - ${
-                option.fullData?.voyage || ""
+            : `${option.fullData?.country || ""} - ${
+                option.fullData?.port_name || ""
               }`
         }
         renderInput={(params) => (
@@ -159,8 +205,8 @@ function FormAutoCompleteWithVoyage(props) {
                 padding: "1px",
               }}
             >
-              <span>{option.fullData.vessel}</span>
-              <span>{option.fullData.voyage}</span>
+              <span>{option.fullData.country}</span>
+              <span>{option.fullData.port_name}</span>
             </Box>
           </Box>
         )}
@@ -189,34 +235,17 @@ function FormAutoCompleteWithVoyage(props) {
                 zIndex: 2, // Ensure it stays above the list
               }}
             >
-              <span>Vessel</span>
-              <span>Voyage</span>
+              <span>Country</span>
+              <span>Port</span>
             </Box>
 
             {/* Scrollable Options List */}
             {props.children}
           </Paper>
         )}
-        // renderOption={(props, option) => (
-        //   <MenuItem
-        //     {...props}
-        //     key={option.value}
-        //     sx={{
-        //       display: "flex",
-        //       justifyContent: "space-between",
-        //       width: "100%",
-        //     }}
-        //   >
-        //     <span style={{ flex: 1 }}>{option.fullData.vessel}</span>
-        //     <span style={{ flex: 1, textAlign: "right" }}>
-        //       {option.fullData.voyage}
-        //     </span>
-        //   </MenuItem>
-        // )}
-        // noOptionsText={inputValue ? "No results found" : "Type to search..."}
       />
     </Box>
   );
 }
 
-export default FormAutoCompleteWithVoyage;
+export default FormAutoCompleteWithCountryTable;

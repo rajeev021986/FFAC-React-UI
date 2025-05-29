@@ -7,7 +7,7 @@ import { Delete } from "@mui/icons-material";
 
 export function VesselMapping({ formik, disabled }) {
   const vesselLineEntity = formik.values.vesselLineEntities || [
-    { id: 1, vesselName: "", shippingLine: "" },
+    { id: 1, vesselId: "", shippingLine: "" },
   ];
 
   const newRowRef = useRef(null);
@@ -22,7 +22,7 @@ export function VesselMapping({ formik, disabled }) {
   const addRow = () => {
     const newRow = {
       id: Date.now(),
-      vesselName: "",
+      vesselId: "",
       shippingLine: "",
       new: true,
     };
@@ -39,29 +39,29 @@ export function VesselMapping({ formik, disabled }) {
   // Columns for DataGrid
   const columns = [
     {
-      field: "vesselName",
+      field: "vesselId",
       headerName: "Vessel Name",
       flex: 1,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
         <AutoCompleteInput
-          id="vesselName"
+          id="vesselId"
           suggestionName="vessel_name"
           value={params.value}
           error={
-            formik.errors.vesselLineEntities?.[params.rowIndex]?.vesselName
+            formik.errors.vesselLineEntities?.[params.rowIndex]?.vesselId
           }
           onChange={(newValue) => {
             const rowIndex = formik.values.vesselLineEntities.findIndex(
-              (entity) => entity.id === params.id
+              (entity) => entity.id == params.id
             );
             formik.setValues({
               ...formik.values,
               vesselLineEntities: formik.values.vesselLineEntities.map(
                 (entity, index) =>
                   index === rowIndex
-                    ? { ...entity, vesselName: newValue }
+                    ? { ...entity, vesselId: newValue }
                     : entity
               ),
             });
