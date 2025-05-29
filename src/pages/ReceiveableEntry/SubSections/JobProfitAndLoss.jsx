@@ -219,6 +219,27 @@ const JobProfitAndLoss = ({ formik }) => {
                 }}
               />
             </Grid>
+            {formik.values.containerTypeDTO && formik.values.containerTypeDTO.length > 0 && (
+              <>
+                {formik.values.containerTypeDTO.map((val, index) => (
+                  <Grid
+                    item
+                    xs={12}
+                    lg={3}
+                    paddingLeft={2}
+                    marginTop={2}
+                    key={index}
+                  >
+                    <InputBox
+                      label={val.type}
+                      id={val.type}
+                      value={val.count}
+                      disabled
+                    />
+                  </Grid>
+                ))}
+              </>
+            )}
           </Grid>
           {alertConfig.open && <PopupAlert alertConfig={alertConfig} />}
         </Box>
