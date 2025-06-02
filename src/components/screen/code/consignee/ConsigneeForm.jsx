@@ -121,7 +121,6 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
           );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
-
           let response = await updateConsignee({
             ...values,
             consigneeEntityFreeDays: freeDays,

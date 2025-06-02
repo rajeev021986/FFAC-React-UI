@@ -10,6 +10,8 @@ export function VesselMapping({ formik, disabled }) {
     { id: 1, vesselId: "", shippingLine: "" },
   ];
 
+  console.log(formik.values.vesselLineEntities, 74858478);
+
   const newRowRef = useRef(null);
   const setFocus = () => {
     setTimeout(() => {
@@ -49,9 +51,7 @@ export function VesselMapping({ formik, disabled }) {
           id="vesselId"
           suggestionName="vessel_name"
           value={params.value}
-          error={
-            formik.errors.vesselLineEntities?.[params.rowIndex]?.vesselId
-          }
+          error={formik.errors.vesselLineEntities?.[params.rowIndex]?.vesselId}
           onChange={(newValue) => {
             const rowIndex = formik.values.vesselLineEntities.findIndex(
               (entity) => entity.id == params.id
@@ -76,30 +76,34 @@ export function VesselMapping({ formik, disabled }) {
       flex: 1,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => (
-        <AutoCompleteInput
-          id="shippingLine"
-          suggestionName="name"
-          value={params.value}
-          error={
-            formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
-          }
-          onChange={(newValue) => {
-            const rowIndex = formik.values.vesselLineEntities.findIndex(
-              (entity) => entity.id === params.id
-            );
-            formik.setValues({
-              ...formik.values,
-              vesselLineEntities: formik.values.vesselLineEntities.map(
-                (entity, index) =>
-                  index === rowIndex
-                    ? { ...entity, shippingLine: newValue }
-                    : entity
-              ),
-            });
-          }}
-        />
-      ),
+      renderCell: (params) => {
+        console.log(params, 234567890);
+        return (
+          <AutoCompleteInput
+            id="shippingLine"
+            suggestionName="type"
+            value={params.value}
+            error={
+              formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
+            }
+            onChange={(newValue) => {
+              console.log(newValue , 234343567)
+              const rowIndex = formik.values.vesselLineEntities.findIndex(
+                (entity) => entity.id === params.id
+              );
+              formik.setValues({
+                ...formik.values,
+                vesselLineEntities: formik.values.vesselLineEntities.map(
+                  (entity, index) =>
+                    index === rowIndex
+                      ? { ...entity, shippingLine: newValue }
+                      : entity
+                ),
+              });
+            }}
+          />
+        );
+      },
     },
 
     {

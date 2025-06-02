@@ -55,15 +55,20 @@ function AutoCompleteInput({
   };
 
   const handleSelectionChange = (event, newValue) => {
+
+    console.log(newValue ,  343434567)
+
     if (newValue) {
       // onChange(newValue.value);
-
       onChange(newValue.fullData?.id ? newValue.fullData?.id : newValue?.value);
     } else {
       onChange(null);
     }
   };
 
+
+  console.log(value , 345678)
+  
   return (
     <Box
       sx={{
@@ -79,11 +84,10 @@ function AutoCompleteInput({
       <Autocomplete
         id={id}
         value={
-          id == "currency"
+          id == "currency" || id == "shippingLine"
             ? options.find((option) => option.value === value) || null
             : options.find((option) => option?.fullData?.id == value) || null
         }
-      
         // value={options.find((option) => option?.fullData?.id == value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}

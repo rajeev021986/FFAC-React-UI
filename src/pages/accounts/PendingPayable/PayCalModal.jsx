@@ -82,31 +82,30 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
     try {
       const res = await ApiManager.getPayDetails(data?.id);
       const { paybleInfo, payment } = res.body;
-        setInitialValues((prev) => ({
-          ...prev,
-          id: payment?.id ?? prev.id,
-          statusCode: payment?.statusCode ?? prev.statusCode,
-          vendorName: payment?.vendorName ?? prev.vendorName,
-          usdAmount: payment?.usdAmount ?? prev.usdAmount,
-          localAmount: payment?.localAmount ?? prev.localAmount,
-          paymentDate: payment?.paymentDate ?? prev.paymentDate,
-          currency: payment?.currency ?? prev.currency,
-          paymentType: payment?.paymentType ?? prev.paymentType,
-          bankName: payment?.bankName ?? prev.bankName,
-          chequeNo: payment?.chequeNo ?? prev.chequeNo,
-          chequeDate: payment?.chequeDate ?? prev.chequeDate,
-          usdAmountToBePaid:
-            payment?.usdAmountToBePaid ?? prev.usdAmountToBePaid,
-          localAmountToBePaid:
-            payment?.localAmountToBePaid ?? prev.localAmountToBePaid,
-          bankCharges: payment?.bankCharges ?? prev.bankCharges,
-          multiple: payment?.multiple ?? prev.multiple,
-        }));
+      setInitialValues((prev) => ({
+        ...prev,
+        id: payment?.id ?? prev.id,
+        statusCode: payment?.statusCode ?? prev.statusCode,
+        vendorName: payment?.vendorName ?? prev.vendorName,
+        usdAmount: payment?.usdAmount ?? prev.usdAmount,
+        localAmount: payment?.localAmount ?? prev.localAmount,
+        paymentDate: payment?.paymentDate ?? prev.paymentDate,
+        currency: payment?.currency ?? prev.currency,
+        paymentType: payment?.paymentType ?? prev.paymentType,
+        bankName: payment?.bankName ?? prev.bankName,
+        chequeNo: payment?.chequeNo ?? prev.chequeNo,
+        chequeDate: payment?.chequeDate ?? prev.chequeDate,
+        usdAmountToBePaid: payment?.usdAmountToBePaid ?? prev.usdAmountToBePaid,
+        localAmountToBePaid:
+          payment?.localAmountToBePaid ?? prev.localAmountToBePaid,
+        bankCharges: payment?.bankCharges ?? prev.bankCharges,
+        multiple: payment?.multiple ?? prev.multiple,
+      }));
 
       if (paybleInfo && Array.isArray(paybleInfo)) {
         setInitialValues((prev) => ({
           ...prev,
-          paybleRefNum:paybleInfo.map((item) => item.refNo).join(", "),
+          paybleRefNum: paybleInfo.map((item) => item.refNo).join(", "),
           paybleIds: paybleInfo.map((item) => item.id),
         }));
       }

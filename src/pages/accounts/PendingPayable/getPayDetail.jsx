@@ -77,11 +77,12 @@ export default function GetPayDetails({
       setIsDisabled(false);
     }
   }, [initialValues]);
+
   const validationSchema = Yup.object({
     currency: Yup.string().required("Currency is required!"),
     paymentType: Yup.string().required("Payment Type is required!"),
     paymentDate: Yup.string().required("Payment Date is required!"),
-    bankName: Yup.string().when("paymentType", {
+    bankId: Yup.string().when("paymentType", {
       is: (val) => val === "Cheque",
       then: () =>
         Yup.string().required(
@@ -108,6 +109,7 @@ export default function GetPayDetails({
       otherwise: () => Yup.string().nullable(),
     }),
   });
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -194,6 +196,7 @@ export default function GetPayDetails({
       });
     }
   }, [customerSettingsData, payableSettingData, optionsSettingsData]);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -404,7 +407,7 @@ export default function GetPayDetails({
 
                         if (value !== "Cheque") {
                           // Clear cheque-related fields when changing from Cheque to something else
-                          formik.setFieldValue("bankName", "");
+                          formik.setFieldValue("bankId", "");
                           formik.setFieldValue("chequeNo", "");
                           formik.setFieldValue("chequeDate", "");
                         }

@@ -39,6 +39,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       item: "",
       freeDays: "",
       storageRate: "",
+      new: true,
     };
     formik.setFieldValue("consigneeEntityFreeDays", [
       ...consigneeEntityFreeDays,
