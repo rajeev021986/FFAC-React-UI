@@ -81,7 +81,7 @@ export default function GetPayDetails({
     currency: Yup.string().required("Currency is required!"),
     paymentType: Yup.string().required("Payment Type is required!"),
     paymentDate: Yup.string().required("Payment Date is required!"),
-    bankName: Yup.string().when("paymentType", {
+    bankId: Yup.string().when("paymentType", {
       is: (val) => val === "Cheque",
       then: () =>
         Yup.string().required(

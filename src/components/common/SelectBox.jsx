@@ -17,6 +17,7 @@ export default function SelectBox({
   helperText,
   options,
   error,
+  disabled,
   fullWidth = true,
   ...props
 }) {
@@ -35,6 +36,7 @@ export default function SelectBox({
         value={value}
         label={label}
         onChange={onChange}
+        disabled={disabled}
         size="small"
         renderValue={(selected) => {
           const selectedOption = options?.find((opt) => opt.value === selected);
@@ -61,8 +63,9 @@ export default function SelectBox({
             id === "currency" ||
             id === "vatApplicable" ||
             id === "withHoldingTax" ||
-            id === "paymentType" || 
-            id === "type"
+            id === "paymentType" ||
+            id === "type" ||
+            id === "unitType"
           }
           sx={{ fontSize: "14px" }}
           value=""
