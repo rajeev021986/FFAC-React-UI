@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -27,9 +27,10 @@ import InputBox from "../../../common/InputBox";
 import InputBoxForGrid from "../../../common/InputBoxForGrid";
 import EditRowDialog from "../../../common/EditRowDialog";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
+import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+
 export default function VendorEditGrid({
   formik,
-  disabled = false,
   vendorSettingsData,
   dropdownData,
 }) {
@@ -37,7 +38,11 @@ export default function VendorEditGrid({
   const [editDialogData, setEditDialogData] = useState();
   const [openTable, setopenTable] = useState(true);
   const [EditRowDialogopen, setEditRowDialogOpen] = useState(false);
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
   const newRowRef = useRef(null);
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
+
   const setFocus = () => {
     setTimeout(() => {
       if (newRowRef.current) {
@@ -45,19 +50,21 @@ export default function VendorEditGrid({
       }
     }, 1000);
   };
+
   const OnChange = (params, e, name) => {
-    const rowIndex = formik.values[name].findIndex(
+    const rowIndex = formik.values[name]?.findIndex(
       (entity) => entity.id === params.id
     );
     formik.setValues({
       ...formik.values,
-      [name]: formik.values[name].map((entity, index) =>
+      [name]: formik.values[name]?.map((entity, index) =>
         index === rowIndex
           ? { ...entity, [params.field]: e.target.value }
           : entity
       ),
     });
   };
+
   const handleClose = () => {
     setEditRowDialogOpen(false);
     setEditDialogData({});
@@ -66,6 +73,43 @@ export default function VendorEditGrid({
       setopenTable(true);
     }, 10);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
+        const backendData = await response.body;
+
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
+        ];
+
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
 
   const TabsHosts = [
     {
@@ -127,8 +171,7 @@ export default function VendorEditGrid({
                 suggestionName="charge_name"
                 value={params.row?.chargeId}
                 error={
-                  formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeId
+                  formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeId
                 }
                 onChange={(newValue) => {
                   const rowIndex = formik.values.vendorEntityTariffs.findIndex(
@@ -228,37 +271,32 @@ export default function VendorEditGrid({
           ),
         },
         {
-          field: "currencyId",
+          field: "currency",
           headerName: "Currency",
-          flex: 1,
+          flex: 1.5,
           renderCell: (params) => {
             return (
-              <AutoCompleteInput
-                id="currency"
-                suggestionName="currency"
-                value={params.row.currency}
-
-                error={
-                  formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeId
-                }
-                onChange={(newValue) => {
-                  const rowIndex = formik.values.vendorEntityTariffs.findIndex(
-                    (entity) => entity.id == params.id
-                  );
-                  // setTimeout(() => {
-                  formik.setValues({
-                    ...formik.values,
-                    vendorEntityTariffs: formik.values.vendorEntityTariffs.map(
-                      (entity, index) =>
-                        index === rowIndex
-                          ? { ...entity, currency: newValue }
-                          : entity
-                    ),
-                  });
-                  // }, 1500);
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  height: "100%",
                 }}
-              />
+              >
+                <SelectBox
+                  placeholder={true}
+                  size="small"
+                  sx={{
+                    marginTop: "0px",
+                    marginBottom: "0px",
+                  }}
+                  options={mergedCurrencyOptions}
+                  value={params.value}
+                  onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
+                />
+              </div>
             );
           },
         },
@@ -778,21 +816,34 @@ export default function VendorEditGrid({
             );
           },
         },
+
         {
           field: "currency",
           headerName: "Currency",
-          flex: 1,
-          editable: false,
+          flex: 1.5,
           renderCell: (params) => {
             return (
-              <InputBoxForGridTab
-                value={params.value}
-                field={params.field}
-                id={params.id}
-                formik={formik}
-                api={params.api}
-                arrayName="bankDetails"
-              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <SelectBox
+                  placeholder={true}
+                  size="small"
+                  sx={{
+                    marginTop: "0px",
+                    marginBottom: "0px",
+                  }}
+                  options={mergedCurrencyOptions}
+                  value={params.value}
+                  onChange={(e) => OnChange(params, e, "bankDetails")}
+                />
+              </div>
             );
           },
         },
@@ -857,7 +908,7 @@ export default function VendorEditGrid({
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               {TabsHosts.map((value, index) => (
                 <Tab
-                  sx={{textTransform: "capitalize" }}
+                  sx={{ textTransform: "capitalize" }}
                   label={value.tabLable}
                   value={index}
                   className="nested1"

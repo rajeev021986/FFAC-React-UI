@@ -131,7 +131,7 @@ export default function AddEditForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-  validationSchema: payableValidationSchema(),
+    validationSchema: payableValidationSchema(),
     onSubmit: async (values) => {
       const invoiceCurrencyAmount = getAmountData?.amount || 0;
       const invoiceCurrencyVat = getAmountData?.vatAmount || 0;
@@ -321,13 +321,13 @@ export default function AddEditForm({
       }
     };
 
-     fetchData();
+    fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
 
   const handleApproveRequest = async () => {
     setRejectError(false);
-    console.log("formik.values",formik.values);
-    
+    console.log("formik.values", formik.values);
+
     const { vendorInvoiceNo, isDoc } = formik.values;
     // Validation logic
     if (vendorInvoiceNo && !isDoc) {
@@ -473,35 +473,9 @@ export default function AddEditForm({
     }
   }, [formik?.values?.currency]);
 
-  // const FieldRef = useRef(null);
-  // useEffect(() => {
-  //   if (FieldRef.current) {
-  //     FieldRef.current.focus();
-  //   }
-  // }, []);
-
-  const CurrencyData = [
-    {
-      label: "TZS",
-      value: "TZS",
-    },
-    {
-      label: "USD",
-      value: "USD",
-    },
-  ];
-
-  //
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
-
-  const disabled =
-    formik?.values?.statusCode === 1 ||
-    formik?.values?.statusCode === -3 ||
-    viewPage === "view"
-      ? true
-      : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -725,6 +699,7 @@ export default function AddEditForm({
     };
   };
   const getAmountData = getPaybleDetailsTotals(chargesData);
+
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -824,14 +799,14 @@ export default function AddEditForm({
                       disabled={isDisabled}
                     /> */}
                     <FormAutoCompleteForJobNo
-                    label="Job No*."
-                    id="jobNo"
-                    value={formik.values.jobNo}
-                    error={formik.errors.jobNo}
-                    name ={true}
-                    onChange={formik.handleChange}
-                    suggestionName="job_no"
-                    disabled={isDisabled}
+                      label="Job No*."
+                      id="jobNo"
+                      value={formik.values.jobNo}
+                      error={formik.errors.jobNo}
+                      name={true}
+                      onChange={formik.handleChange}
+                      suggestionName="job_no"
+                      disabled={isDisabled}
                     />
                   </Grid>
 
@@ -936,8 +911,8 @@ export default function AddEditForm({
                         onChange={formik.handleChange}
                         suggestionName="usd_exchange"
                         disabled={isDisabled}
-                        name = {true}
-                        other ={formik.values.currency}
+                        name={true}
+                        other={formik.values.currency}
                       />
                     )}
                   </Grid>

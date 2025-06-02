@@ -101,6 +101,7 @@ export default function AddPayableEntry({ page }) {
     }
   }, [state?.initialValues?.id]);
 
+
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
       <Stack sx={{ padding: "8px 0px" }}>

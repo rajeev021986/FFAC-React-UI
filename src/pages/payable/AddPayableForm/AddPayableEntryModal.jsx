@@ -49,7 +49,7 @@ export default function AddPayableEntryModal({
 }) {
   const modalValidationSchema = Yup.object().shape({
     jobNo: Yup.string().required("Job No. is required"),
-    chargeName: Yup.string().required("Charge Name is required"),
+    chargeId: Yup.string().required("Charge Name is required"),
     unitType: Yup.string().required("Unit Type is required"),
     unitRate: Yup.string().required("Unit Rate is required"),
     vatApplicable: Yup.string().required("VAT Applicable is required"),
@@ -59,13 +59,7 @@ export default function AddPayableEntryModal({
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
-  const selectedValue = formik.values.unitType;
   const [filteredOptions, setFilteredOptions] = useState([]);
-
-  const { data: optionsSettingsData } =
-    useGetOptionsSettingsQuery("common_settings");
-  const { data: payableSettingData } =
-    useGetOptionsSettingsQuery("payble_settings");
 
   const { data: vatAndHoldingTaxSettingData, refetch } =
     useFetchVatAndHoldingQuery({
@@ -77,6 +71,7 @@ export default function AddPayableEntryModal({
     id: null,
     jobNo: formik.values.jobNo,
     chargeName: "",
+    chargeId: "",
     unitType: "",
     noOfUnit: "",
     unitRate: "",
@@ -89,6 +84,7 @@ export default function AddPayableEntryModal({
     new: true,
   });
 
+  console.log(payableEntry, "payableEntry");
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
@@ -156,11 +152,13 @@ export default function AddPayableEntryModal({
         setSelectedPayEntry(updatedEntry);
       }
 
+      console.log(updatedEntry, 2345678);
       // Reset after add
       setPayableEntry({
         id: Date.now(),
         jobNo: "",
         chargeName: "",
+        chargeId: "",
         unitType: "",
         noOfUnit: "",
         unitRate: "",
@@ -190,6 +188,7 @@ export default function AddPayableEntryModal({
       id: Date.now(),
       jobNo: "",
       chargeName: "",
+      chargeId: "",
       unitType: "",
       noOfUnit: "",
       unitRate: "",
@@ -226,6 +225,7 @@ export default function AddPayableEntryModal({
         id: Date.now(),
         jobNo: formik.values.jobNo,
         chargeName: "",
+        chargeId: "",
         unitType: "",
         noOfUnit: "",
         unitRate: "",
@@ -314,8 +314,7 @@ export default function AddPayableEntryModal({
             <FormAutoCompleteWithLoader
               label="Job No."
               id="jobNo"
-              show ={false}
-
+              show={false}
               value={payableEntry.jobNo}
               onChange={(e) => {
                 const value = e.target.value;
@@ -338,11 +337,28 @@ export default function AddPayableEntryModal({
             <FormAutoCompleteWithLoader
               label="Charge Name"
               id="chargeId"
-              value={payableEntry.chargeName}
-              onChange={(e) => handleChange("chargeName", e.target.value)}
               suggestionName="charge_name"
+              value={{
+                chargeId: payableEntry.chargeId,
+                chargeName: payableEntry.chargeName,
+              }}
               error={errors.chargeName}
+              idKey="chargeId"
+              nameKey="chargeName"
+              onChange={(selected) => {
+                console.log(selected , 34563434)
+                handleChange("chargeId", selected.chargeId);
+                handleChange("chargeName", selected.fullData?.charge_name);
+              }}
             />
+            {/* <FormAutoCompleteWithLoader
+              label="Charge Name"
+              id="chargeId"
+              value={payableEntry.chargeId}
+              onChange={(e) => handleChange("chargeId", e.target.value)}
+              suggestionName="charge_name"
+              error={errors.chargeId}
+            /> */}
           </Grid>
           <Grid item xs={12} lg={4}>
             <Box sx={{ width: "100%" }}>
@@ -522,10 +538,3 @@ export default function AddPayableEntryModal({
     </Modal>
   );
 }
-
-const styles = {
-  root: {
-    borderRadius: "10px",
-    fontSize: "14px",
-  },
-};
