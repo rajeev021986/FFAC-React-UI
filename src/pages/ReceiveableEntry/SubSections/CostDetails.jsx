@@ -51,7 +51,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
         const isPaybleIdInDetails = formik.values.details.some(
           (detail) => detail.paybleDetailId === params.row.paybleDetailId
         );
-console.log("isPaybleIdInDetails",isPaybleIdInDetails)
+        console.log("isPaybleIdInDetails", isPaybleIdInDetails);
         return (
           <button
             disabled={isPaybleIdInDetails}
@@ -61,11 +61,11 @@ console.log("isPaybleIdInDetails",isPaybleIdInDetails)
             style={{
               padding: "6px 12px",
               cursor: "pointer",
-              backgroundColor: isPaybleIdInDetails ? "#bdbdbd" :  "#1976d2",
+              backgroundColor: isPaybleIdInDetails ? "#bdbdbd" : "#1976d2",
               // color: "#fff",
               border: "none",
               borderRadius: "4px",
-               cursor: isPaybleIdInDetails ? "not-allowed" : "pointer",
+              cursor: isPaybleIdInDetails ? "not-allowed" : "pointer",
               color: "#fff",
               opacity: isPaybleIdInDetails ? 0.5 : 1,
             }}
@@ -92,7 +92,7 @@ console.log("isPaybleIdInDetails",isPaybleIdInDetails)
     },
     {
       field: "paybleRefNo",
-      headerName: "Ref No",
+      headerName: "Payable Ref No",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => (
@@ -127,7 +127,7 @@ console.log("isPaybleIdInDetails",isPaybleIdInDetails)
     },
     {
       field: "receivableRefNo",
-      headerName: "Ref No",
+      headerName: "Receivable Ref No",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => (

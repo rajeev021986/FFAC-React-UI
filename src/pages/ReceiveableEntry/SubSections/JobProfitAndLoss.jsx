@@ -6,6 +6,8 @@ import InputBox from "../../../components/common/InputBox";
 import SelectBox from "../../../components/common/SelectBox";
 import CostDetails from "./CostDetails";
 import PopupAlert from "../../../components/common/Alert/PopupAlert";
+import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
+import ApiManager from "../../../services/ApiManager";
 
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
@@ -19,11 +21,51 @@ const JobProfitAndLoss = ({ formik }) => {
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
+        const backendData = await response.body;
+
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
+        ];
+
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
   useEffect(() => {
     if (payableRef?.current) {
       payableRef.current.focus();
     }
   }, []);
+  console.log("formik", formik.values);
 
   const OPTION_TYPE = [
     {
@@ -169,10 +211,13 @@ const JobProfitAndLoss = ({ formik }) => {
                 name="type"
                 options={OPTION_TYPE}
                 value={formik.values.type}
+                disabled={formik.values.id ? true : false}
                 error={formik.errors.type}
                 onChange={(e) => {
                   const value = e.target.value;
                   if (formik.values.type === value) return;
+                  if (formik.values.details.length === 0)
+                    return formik.values.type;
                   setPendingInvoiceType(value);
                   setAlertConfig({
                     open: true,
@@ -195,27 +240,38 @@ const JobProfitAndLoss = ({ formik }) => {
                 }}
               />
             </Grid>
-            {formik.values.containerTypeDTO && formik.values.containerTypeDTO.length > 0 && (
-              <>
-                {formik.values.containerTypeDTO?.map((val, index) => (
-                  <Grid
-                    item
-                    xs={12}
-                    lg={3}
-                    paddingLeft={2}
-                    marginTop={2}
-                    key={index}
-                  >
-                    <InputBox
-                      label={val.type}
-                      id={val.type}
-                      value={val.count}
-                      disabled
-                    />
-                  </Grid>
-                ))}
-              </>
-            )}
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+              <SelectBox
+                label="Currency"
+                id="currency"
+                options={mergedCurrencyOptions}
+                value={formik.values.currency}
+                error={formik.errors.currency}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            {formik.values.containerTypeDTO &&
+              formik.values.containerTypeDTO.length > 0 && (
+                <>
+                  {formik.values.containerTypeDTO?.map((val, index) => (
+                    <Grid
+                      item
+                      xs={12}
+                      lg={3}
+                      paddingLeft={2}
+                      marginTop={2}
+                      key={index}
+                    >
+                      <InputBox
+                        label={val.type}
+                        id={val.type}
+                        value={val.count}
+                        disabled
+                      />
+                    </Grid>
+                  ))}
+                </>
+              )}
           </Grid>
           {alertConfig.open && <PopupAlert alertConfig={alertConfig} />}
         </Box>

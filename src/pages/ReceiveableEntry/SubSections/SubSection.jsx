@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { CircularProgress, Grid, Stack } from "@mui/material";
+import { CircularProgress, Grid, Stack, Tab } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
 import toast from "react-hot-toast";
@@ -15,9 +15,15 @@ import getFirstError from "../../../components/common/FieldToastError";
 import JobProfitAndLoss from "./JobProfitAndLoss";
 import AddDebitAndInvoice from "./AddDebitAndInvoice";
 import { useAddReceivableMutation } from "../../../store/api/receivableApi";
+import { TabList } from "@mui/lab";
+import EditIconForHeader from "../../../components/common/commonIcons/EditIcons/EditIconForHeader";
+import AuditIcon from "../../../components/common/commonIcons/AuditIcon/AuditIcon";
+import AuditTimeLine from "../../../components/AuditTimeLine";
+import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
 export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
+  console.log("type", type);
   const nav = useNavigate();
   const [addReceivable, { isLoading }] = useAddReceivableMutation();
 
@@ -49,7 +55,7 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
 
         const message = response.message;
         if (response.code === "SUCCESS") {
-          toast.custom(<CustomToast message={message} toast="warn" />, {
+          toast.custom(<CustomToast message={message} toast="success" />, {
             closeButton: false,
           });
           nav("/app/accounts/operations/receivableEntry");
@@ -82,7 +88,9 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
     }, []);
     setChargesData(appendData);
   };
-
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   useEffect(() => {
     handleFetchPayable();
   }, [formik?.values?.chargesData]);
@@ -92,7 +100,53 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <JobProfitAndLoss formik={formik} />
+            {type !== "edit" ? (
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab
+                  label="Receivable Details"
+                  value="1"
+                  sx={{
+                    textTransform: "capitalize",
+                    minHeight: "50px",
+                  }}
+                  icon={<EditIconForHeader />}
+                  iconPosition="start"
+                />
+              </TabList>
+            ) : (
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab
+                  label="Job Entry Details"
+                  value="1"
+                  icon={<EditIconForHeader />}
+                  iconPosition="start"
+                  sx={{
+                    textTransform: "capitalize",
+                    minHeight: "50px",
+                    fontSize: { xs: "0.8rem", sm: "1.125rem" },
+                    padding: { xs: "5px", sm: "10px 16px" },
+                  }}
+                />
+                <Tab
+                  label="Audit Logs"
+                  value="2"
+                  icon={<AuditIcon />}
+                  iconPosition="start"
+                  sx={{
+                    textTransform: "capitalize",
+                    minHeight: "50px",
+                    fontSize: { xs: "0.8rem", sm: "1.125rem" },
+                    padding: { xs: "5px", sm: "10px 16px" },
+                  }}
+                />
+              </TabList>
+            )}
           </Box>
 
           <TabPanel value="1" sx={{ padding: 0 }}>
@@ -103,6 +157,7 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
                   padding: 1,
                 }}
               >
+                <JobProfitAndLoss formik={formik} />
                 <AddDebitAndInvoice
                   formik={formik}
                   dropdownData={dropdownData}
@@ -132,22 +187,44 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
                       Close
                     </OutlinedButton>
 
-                    <ThemeButton
-                      onClick={formik.handleSubmit}
-                      sx={{
-                        fontWeight: "500",
-                        color: "white !important",
-                      }}
-                    >
-                      {isLoading && (
-                        <CircularProgress size={20} color="white" />
-                      )}
-                      Generate TaxInvoice/Debit Note
-                    </ThemeButton>
+                    {formik.values.id ? (
+                      <ThemeButton
+                        onClick={formik.handleSubmit}
+                        sx={{
+                          fontWeight: "500",
+                          color: "white !important",
+                        }}
+                      >
+                        {isLoading && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Update TaxInvoice/Debit Note
+                      </ThemeButton>
+                    ) : (
+                      <ThemeButton
+                        onClick={formik.handleSubmit}
+                        sx={{
+                          fontWeight: "500",
+                          color: "white !important",
+                        }}
+                      >
+                        {isLoading && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Generate TaxInvoice/Debit Note
+                      </ThemeButton>
+                    )}
                   </Stack>
                 </Stack>
               </Grid>
             </Box>
+          </TabPanel>
+          <TabPanel value="2" sx={{ padding: "0px" }}>
+            <AuditTimeLine
+              id={formik.values.id}
+              page="receivable"
+              service={menuConfigUrl.account}
+            />
           </TabPanel>
         </TabContext>
       </Box>

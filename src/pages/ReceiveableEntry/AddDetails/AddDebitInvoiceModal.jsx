@@ -26,6 +26,7 @@ import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAuto
 import useDebounce from "../../../hooks/useDebounce";
 import { useFetchVatAndHoldingQuery } from "../../../store/api/settingAuditAPI";
 import ApiManager from "../../../services/ApiManager";
+import DateTimeField from "../../../components/common/DateTime/DateTimeField";
 
 const modalStyle = {
   position: "absolute",
@@ -49,6 +50,8 @@ export default function AddPayableEntryModal({
   setSelectedPayEntry,
   type,
 }) {
+  console.log("formiwewwk", formik.values);
+
   const modalValidationSchema = Yup.object().shape({
     chargeName: Yup.string().required("Charge Name is required"),
     customerName: Yup.string().required("Customer Name is required"),
@@ -67,7 +70,7 @@ export default function AddPayableEntryModal({
   const [inputValue, setInputValue] = useState("");
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
   const [filteredOptions, setFilteredOptions] = useState([]);
-
+  const getFormData = formik?.values;
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: payableSettingData } =
@@ -88,23 +91,52 @@ export default function AddPayableEntryModal({
     chargeName: "",
     // receivableRefNo: "",
     receivableAmount: 0,
-    exRate: 0,
+    totalAmount: 0,
+    exRate: "",
     vatApplicable: "",
     vat: 0,
     unitType: "",
     numOfUnits: 0,
     unitRate: 0,
     new: true,
+    receivableCreatedDate: null,
   });
 
   const [errors, setErrors] = useState({});
 
+  // const handleChange = (field, value) => {
+  //   setInvoiceEntry((prevEntry) => ({
+  //     ...prevEntry,
+  //     [field]: value,
+  //   }));
+  // };
   const handleChange = (field, value) => {
-    setInvoiceEntry((prevEntry) => ({
-      ...prevEntry,
-      [field]: value,
-    }));
+    setInvoiceEntry((prevEntry) => {
+      const updatedEntry = {
+        ...prevEntry,
+        [field]: value,
+      };
+      const unitRate = parseFloat(
+        field === "unitRate" ? value : updatedEntry.unitRate
+      );
+      const vatPercentage = parseFloat(
+        field === "vatApplicable" ? value : updatedEntry.vatApplicable
+      );
+      const numOfUnits = parseFloat(updatedEntry.numOfUnits || 0);
+
+      if (!isNaN(unitRate) && !isNaN(vatPercentage)) {
+        updatedEntry.vat = ((unitRate * vatPercentage) / 100).toFixed(2);
+      }
+      if (!isNaN(unitRate) && !isNaN(numOfUnits)) {
+        updatedEntry.receivableAmount = unitRate * numOfUnits;
+      }
+      updatedEntry.totalAmount =
+        updatedEntry.receivableAmount - updatedEntry.vat;
+
+      return updatedEntry;
+    });
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -171,13 +203,15 @@ export default function AddPayableEntryModal({
         chargeName: "",
         // receivableRefNo: "",
         receivableAmount: 0,
-        exRate: 0,
+        totalAmount: 0,
+        exRate: "",
         vatApplicable: "",
         vat: 0,
         unitType: "",
         numOfUnits: 0,
         unitRate: 0,
         new: true,
+        receivableCreatedDate: null,
       });
 
       handleTogglePayEntry();
@@ -200,12 +234,14 @@ export default function AddPayableEntryModal({
       chargeName: "",
       // receivableRefNo: "",
       receivableAmount: 0,
-      exRate: 0,
+      totalAmount: 0,
+      exRate: "",
       vatApplicable: "",
       vat: 0,
       unitType: "",
       numOfUnits: 0,
       unitRate: 0,
+      receivableCreatedDate: null,
       new: true,
     });
     handleTogglePayEntry();
@@ -223,13 +259,15 @@ export default function AddPayableEntryModal({
         chargeName: "",
         // receivableRefNo: "",
         receivableAmount: 0,
-        exRate: 0,
+        totalAmount: 0,
+        exRate: "",
         vatApplicable: "",
         vat: 0,
         unitType: "",
         numOfUnits: 0,
         unitRate: 0,
         new: true,
+        receivableCreatedDate: null,
       });
     }
   }, [selectedPayEntry]);
@@ -278,25 +316,35 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={4}>
+            <SelectBox
+              label="Unit Type"
+              id="unitType"
+              options={jobSettingData?.body?.unitTypes}
+              value={invoiceEntry?.unitType || ""}
+              error={errors.unitType}
+              onChange={(e) => handleChange("unitType", e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} lg={4}>
             <InputBox
-              label="Amount"
-              id="receivableAmount"
-              value={invoiceEntry?.receivableAmount || ""}
-              error={errors.receivableAmount}
-              onChange={(e) => handleChange("receivableAmount", e.target.value)}
+              label="No. of Units"
+              id="numOfUnits"
+              value={invoiceEntry?.numOfUnits || ""}
+              error={errors.numOfUnits}
+              onChange={(e) => handleChange("numOfUnits", e.target.value)}
               fullWidth
             />
           </Grid>
-          {/* <Grid item xs={12} lg={4}>
+          <Grid item xs={12} lg={4}>
             <InputBox
-              label="Receivable Ref No."
-              id="receivableRefNo"
-              value={invoiceEntry?.receivableRefNo || ""}
-              error={errors.receivableRefNo}
-              onChange={(e) => handleChange("receivableRefNo", e.target.value)}
+              label="Unit Rate"
+              id="unitRate"
+              value={invoiceEntry?.unitRate || ""}
+              error={errors.unitRate}
+              onChange={(e) => handleChange("unitRate", e.target.value)}
               fullWidth
             />
-          </Grid> */}
+          </Grid>
           <Grid item xs={12} lg={4}>
             <SelectBox
               label="Currency"
@@ -307,10 +355,42 @@ export default function AddPayableEntryModal({
               onChange={(e) => handleChange("currency", e.target.value)}
             />
           </Grid>
+          {/* <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+            {getFormData?.currency === "TZS" ||
+            getFormData?.currency === "INR" ? (
+              <InputBox
+                label="Ex. Rate"
+                id="exRate"
+                value={
+                  getFormData?.currency === "TZS" ||
+                  getFormData?.currency === "INR"
+                    ? 1
+                    : invoiceEntry?.exRate
+                }
+                error={formik.errors.exchangeRate}
+                onChange={(e) => handleChange("exRate", e.target.value)}
+                disabled={
+                  getFormData?.currency === "TZS" ||
+                  getFormData?.currency === "INR"
+                }
+              />
+            ) : (
+              <FormAutoCompleteWithLoader
+                label="Ex. Rate"
+                id="exRate"
+                value={invoiceEntry?.exRate || ""}
+                error={errors.exRate}
+                onChange={(e) => handleChange("exRate", e.target.value)}
+                suggestionName="usd_exchange"
+                name={true}
+                other={formik.values.currency}
+              />
+            )}
+          </Grid>  */}
           <Grid item xs={12} lg={4}>
             <FormAutoCompleteWithLoader
               label="Ex. Rate"
-              id="exchangeRate"
+              id="exRate"
               value={invoiceEntry?.exRate || ""}
               onChange={(e) => handleChange("exRate", e.target.value)}
               error={errors.exRate}
@@ -318,13 +398,14 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={4}>
-            <SelectBox
-              label="Unit Type"
-              id="unitType"
-              options={jobSettingData?.body?.unitTypes}
-              value={invoiceEntry?.unitType || ""}
-              error={errors.unitType}
-              onChange={(e) => handleChange("unitType", e.target.value)}
+            <InputBox
+              label="Amount"
+              id="receivableAmount"
+              value={invoiceEntry?.receivableAmount || ""}
+              error={errors.receivableAmount}
+              onChange={(e) => handleChange("receivableAmount", e.target.value)}
+              fullWidth
+              disabled={true}
             />
           </Grid>
           <Grid item xs={12} lg={4}>
@@ -345,29 +426,28 @@ export default function AddPayableEntryModal({
               error={errors.vat}
               onChange={(e) => handleChange("vat", e.target.value)}
               fullWidth
+              disabled={true}
             />
           </Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
-              label="Number of Units"
-              id="numOfUnits"
-              value={invoiceEntry?.numOfUnits || ""}
-              error={errors.numOfUnits}
-              onChange={(e) => handleChange("numOfUnits", e.target.value)}
+              label="Total Amount"
+              id="totalAmount"
+              value={invoiceEntry?.totalAmount || ""}
+              disabled
               fullWidth
             />
           </Grid>
           <Grid item xs={12} lg={4}>
-            <InputBox
-              label="Unit Rate"
-              id="unitRate"
-              value={invoiceEntry?.unitRate || ""}
-              error={errors.unitRate}
-              onChange={(e) => handleChange("unitRate", e.target.value)}
-              fullWidth
+            <DateTimeField
+              name="date"
+              label="Date"
+              id="receivableCreatedDate"
+              value={invoiceEntry?.receivableCreatedDate || ""}
+              disabled={true}
             />
           </Grid>
-          <Grid item xs={12} lg={4}></Grid>
+          <Grid item xs={12} lg={8}></Grid>
           {/* Button */}
           <Grid item xs={4}>
             <ThemeButton

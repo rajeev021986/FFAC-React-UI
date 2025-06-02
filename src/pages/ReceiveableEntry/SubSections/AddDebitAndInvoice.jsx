@@ -20,6 +20,7 @@ export default function AddDebitAndInvoice({ formik }) {
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
+  console.log("formikDetails", formik.values.details);
 
   const [dropdownData, setDropdownData] = useState({});
   const [isDisabled, setIsDisabled] = useState(false);
@@ -65,7 +66,7 @@ export default function AddDebitAndInvoice({ formik }) {
 
   useEffect(() => {
     if (formik.values?.currency !== "USD") {
-      formik.setFieldValue("exchangeRate", 1);
+      formik.setFieldValue("exRate", 1);
     }
   }, [formik.values?.currency]);
 
@@ -87,7 +88,7 @@ export default function AddDebitAndInvoice({ formik }) {
 
   useEffect(() => {
     if (formik?.values?.currency !== "USD") {
-      formik.setFieldValue("exchangeRate", 1);
+      formik.setFieldValue("exRate", 1);
     }
   }, [formik?.values?.currency]);
 
@@ -138,7 +139,20 @@ export default function AddDebitAndInvoice({ formik }) {
 
   const DEBIT_INVOICE_COLUMNS = [
     {
-      flex: 1.5,
+      flex: 1,
+      field: "customerName",
+      headerName: "Customer Name",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+      renderCell: (params) => (
+        <div className="word-wrap-cell">
+          {params.value?.trim() || ""} {/* Show "N/A" if empty */}
+        </div>
+      ),
+    },
+    {
+      flex: 1,
       field: "chargeName",
       headerName: "Charge Name",
       headerAlign: "center",
@@ -149,6 +163,54 @@ export default function AddDebitAndInvoice({ formik }) {
           {params.value?.trim() || ""} {/* Show "N/A" if empty */}
         </div>
       ),
+    },
+    {
+      flex: 1,
+      field: "unitType",
+      headerName: "Unit Type",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "numOfUnits",
+      headerName: "No. of units",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "unitRate",
+      headerName: "Unit Rate",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "currency",
+      headerName: "Currency",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "exRate",
+      headerName: "Ex. Rate",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "vatApplicable",
+      headerName: "Vat Applicable",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
     },
     {
       flex: 1,
@@ -169,7 +231,7 @@ export default function AddDebitAndInvoice({ formik }) {
     {
       flex: 1,
       field: "vatApplicable",
-      headerName: "Vat Rate",
+      headerName: "Vat Amount",
       headerAlign: "center",
       align: "center",
       editable: false,
