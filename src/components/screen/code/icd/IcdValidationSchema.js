@@ -26,9 +26,9 @@ Yup.object({
 
   tel_no: Yup.string()
     .matches(/^\d+$/, "Telephone must be a valid number")
-    .test("len", "Telephone must be between 8 and 15 digits", (val) => {
+    .test("len", "Telephone must be between 7 and 15 digits", (val) => {
       if (!val) return true; // skip if empty
-      return val.length >= 8 && val.length <= 15;
+      return val.length >= 7 && val.length <= 15;
     })
     .test("positive", "Telephone must be a positive number", (val) => {
       if (!val) return true;
