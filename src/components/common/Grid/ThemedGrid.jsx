@@ -17,8 +17,10 @@ const ThemedGrid = (props) => {
     paginationModel,
     loading,
     uniqueId,
+    hideColumns,
     ...rest
   } = props;
+console.log("hideColumns",hideColumns);
 
   const handleDate = (date) => {
     return date.split("T")[0];
@@ -116,7 +118,7 @@ const ThemedGrid = (props) => {
         disableColumnFilter
         slots={{
           toolbar: () => (
-            <Box sx={{ display: "flex", justifyContent: "flex-start", p: 0 }}>
+            <Box sx={{ display: hideColumns ? "none" : "flex", justifyContent: "flex-start", p: 0 }}>
               <GridToolbarColumnsButton />
             </Box>
           ),

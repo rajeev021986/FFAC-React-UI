@@ -246,12 +246,12 @@ export default function AddPayableEntryModal({
     });
     handleTogglePayEntry();
   };
-useEffect(() => {
+  useEffect(() => {
     if (invoiceEntry.currency !== "USD") {
-          setInvoiceEntry((prevEntry) => ({
-      ...prevEntry,
-      exRate: 1,
-    }));
+      setInvoiceEntry((prevEntry) => ({
+        ...prevEntry,
+        exRate: 1,
+      }));
     }
   }, [invoiceEntry.currency]);
 
@@ -299,7 +299,15 @@ useEffect(() => {
         </IconButton>
 
         <Typography variant="h6" gutterBottom>
-          {selectedPayEntry ? "Edit Debit Note" : "Add Debit Note"}
+          {formik.values.type === "debit_note"
+            ? selectedPayEntry
+              ? "Edit Debit Note"
+              : "Add Debit Note"
+            : formik.values.type === "tax_invoice"
+            ? selectedPayEntry
+              ? "Edit Tax Invoice"
+              : "Add Tax Invoice"
+            : null}
         </Typography>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -363,7 +371,7 @@ useEffect(() => {
               onChange={(e) => handleChange("currency", e.target.value)}
             />
           </Grid> */}
-           <Grid item xs={12} lg={4}>
+          <Grid item xs={12} lg={4}>
             <SelectBox
               label="Currency"
               id="currency"
@@ -383,22 +391,22 @@ useEffect(() => {
             />
           </Grid>
 
-           <Grid item xs={12} lg={4}>
+          <Grid item xs={12} lg={4}>
             {invoiceEntry?.currency === "TZS" ||
-          invoiceEntry?.currency === "INR" ? (
+            invoiceEntry?.currency === "INR" ? (
               <InputBox
                 label="Ex. Rate"
                 id="exRate"
                 value={
-                 invoiceEntry?.currency === "TZS" ||
-                 invoiceEntry?.currency === "INR"
+                  invoiceEntry?.currency === "TZS" ||
+                  invoiceEntry?.currency === "INR"
                     ? 1
                     : formatIndianCurrency(invoiceEntry?.exRate)
                 }
                 error={errors.exRate}
                 onChange={(e) => handleChange("exRate", e.target.value)}
                 disabled={
-                 invoiceEntry?.currency === "TZS" ||
+                  invoiceEntry?.currency === "TZS" ||
                   invoiceEntry?.currency === "INR"
                 }
               />
