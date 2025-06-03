@@ -48,13 +48,13 @@ export function VesselHeader() {
             }}
           />
         )}
-        {vesselSelector.view == "grid" && (
+        {/* {vesselSelector.view == "grid" && (
           <div
             style={{
               width: "800px",
             }}
           ></div>
-        )}
+        )} */}  
 
         <IconButton onClick={() => dispatch(vesselSetView("card"))}>
           <FormatListBulletedOutlined

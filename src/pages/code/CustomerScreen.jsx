@@ -20,9 +20,7 @@ import GridSearchInput from "../../components/common/Filter/GridSearchInput";
 import {
   useDeleteCustomerMutation,
   useFetchCustomerDatasQuery,
-  useLazyGetCustomerAuditQuery,
 } from "../../store/api/codeDataApi";
-import CustomerFilters from "../../components/screen/code/customer/CustomerFilters";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPagination,
@@ -45,7 +43,6 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { getCustomerListGridActionsCustomerApprovel } from "../../components/screen/code/customer/action copy";
-import ApiManager from "../../services/ApiManager";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
 import AuditTimeLine from "../../components/AuditTimeLine";
@@ -267,9 +264,9 @@ export default function CustomerScreen({ page }) {
       />
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
-          sx={{ padding: "8px" }}
+          sx={{ margin: "0px", padding: "8px" }}
           title={
-            <Stack >
+            <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
                   filters={codeCustomerSelector?.formData}
