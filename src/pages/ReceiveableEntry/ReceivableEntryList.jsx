@@ -49,6 +49,7 @@ import {
   setPagination,
 } from "../../store/freatures/ReceivableEntrySlice";
 import AddNewReceivableModal from "./AddNewReceivableModal";
+import CancelModalApprove from "../JobEntry/CancelModalApprove";
 
 export default function ReceivableEntryList({ page }) {
   const location = useLocation();
@@ -174,7 +175,35 @@ export default function ReceivableEntryList({ page }) {
       data: {},
     });
   };
+  const handleCancel = async () => {
+    const statusCode = modal?.data?.statusCode;
+    if (statusCode === 100) {
+      toast.custom(
+        <CustomToast
+          message="Cannot cancel paid receivable entry."
+          toast="error"
+        />
+      );
+      return;
+    }
 
+    try {
+      const response = await ApiManager.cancelRecievableEntry(
+        modal?.data?.id,
+        "RECEIVABLE_ENTRY"
+      );
+      const message = response.message;
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+      handleClose();
+      refetch();
+    } catch (error) {
+      toast.custom(<CustomToast message="Failed to cancel." toast="error" />, {
+        closeButton: false,
+      });
+    }
+  };
   const handleDelete = async () => {
     try {
       await deleteReceivable(modal.data.id)
@@ -376,14 +405,14 @@ export default function ReceivableEntryList({ page }) {
         </Drawer>
       )}
 
-      {/* <CancelModalApprove
+     <CancelModalApprove
         rowId={modal?.data?.id}
-        sourceName={modal?.data?.payableRefNo}
+        sourceName={modal?.data?.receivableRefNo}
         handleOpen={modal.open && modal.type === "cancel"}
         handleClose={handleClose}
         handleCancel={handleCancel}
       />
-      <ApprovePayableModal
+    {/*    <ApprovePayableModal
         rowId={modal?.data?.id}
         sourceName={modal?.data?.payableRefNo}
         handleOpen={modal.open && modal.type === "approve"}

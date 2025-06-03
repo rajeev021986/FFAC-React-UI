@@ -246,6 +246,14 @@ export default function AddPayableEntryModal({
     });
     handleTogglePayEntry();
   };
+useEffect(() => {
+    if (invoiceEntry.currency !== "USD") {
+          setInvoiceEntry((prevEntry) => ({
+      ...prevEntry,
+      exRate: 1,
+    }));
+    }
+  }, [invoiceEntry.currency]);
 
   useEffect(() => {
     if (selectedPayEntry) {
@@ -345,7 +353,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} lg={4}>
+          {/* <Grid item xs={12} lg={4}>
             <SelectBox
               label="Currency"
               id="currency"
@@ -354,24 +362,44 @@ export default function AddPayableEntryModal({
               error={errors.currency}
               onChange={(e) => handleChange("currency", e.target.value)}
             />
+          </Grid> */}
+           <Grid item xs={12} lg={4}>
+            <SelectBox
+              label="Currency"
+              id="currency"
+              options={mergedCurrencyOptions}
+              value={invoiceEntry?.currency || ""}
+              error={errors.currency}
+              onChange={(e) => {
+                const value = e.target.value;
+                handleChange("currency", value);
+                if (value === "USD") {
+                  // Clear currency-related fields when changing from USD to something else
+                  handleChange("exRate", null);
+                  // formik.setFieldValue("exRate", null);
+                }
+              }}
+              // disabled={isDisabled}
+            />
           </Grid>
-          {/* <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-            {getFormData?.currency === "TZS" ||
-            getFormData?.currency === "INR" ? (
+
+           <Grid item xs={12} lg={4}>
+            {invoiceEntry?.currency === "TZS" ||
+          invoiceEntry?.currency === "INR" ? (
               <InputBox
                 label="Ex. Rate"
                 id="exRate"
                 value={
-                  getFormData?.currency === "TZS" ||
-                  getFormData?.currency === "INR"
+                 invoiceEntry?.currency === "TZS" ||
+                 invoiceEntry?.currency === "INR"
                     ? 1
-                    : invoiceEntry?.exRate
+                    : formatIndianCurrency(invoiceEntry?.exRate)
                 }
-                error={formik.errors.exchangeRate}
+                error={errors.exRate}
                 onChange={(e) => handleChange("exRate", e.target.value)}
                 disabled={
-                  getFormData?.currency === "TZS" ||
-                  getFormData?.currency === "INR"
+                 invoiceEntry?.currency === "TZS" ||
+                  invoiceEntry?.currency === "INR"
                 }
               />
             ) : (
@@ -383,11 +411,11 @@ export default function AddPayableEntryModal({
                 onChange={(e) => handleChange("exRate", e.target.value)}
                 suggestionName="usd_exchange"
                 name={true}
-                other={formik.values.currency}
+                other={invoiceEntry?.currency}
               />
             )}
-          </Grid>  */}
-          <Grid item xs={12} lg={4}>
+          </Grid>
+          {/* <Grid item xs={12} lg={4}>
             <FormAutoCompleteWithLoader
               label="Ex. Rate"
               id="exRate"
@@ -396,7 +424,7 @@ export default function AddPayableEntryModal({
               error={errors.exRate}
               suggestionName="usd_exchange"
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={4}>
             <InputBox
               label="Amount"

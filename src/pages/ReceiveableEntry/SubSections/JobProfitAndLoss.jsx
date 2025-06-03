@@ -214,11 +214,12 @@ const JobProfitAndLoss = ({ formik }) => {
                 disabled={formik.values.id ? true : false}
                 error={formik.errors.type}
                 onChange={(e) => {
+                  console.log("value",e.target.value)
+                  console.log("formik.values.details.length",formik.values.details.length)
                   const value = e.target.value;
                   if (formik.values.type === value) return;
                   if (formik.values.details.length === 0)
-                    return formik.values.type;
-                  setPendingInvoiceType(value);
+                    return  formik.setFieldValue("type", value);
                   setAlertConfig({
                     open: true,
                     title: "Are you sure you want to change Invoice Type?",
@@ -230,11 +231,9 @@ const JobProfitAndLoss = ({ formik }) => {
                       formik.setFieldValue("type", value);
                       formik.setFieldValue("details", []);
                       setAlertConfig((prev) => ({ ...prev, open: false }));
-                      setPendingInvoiceType(null);
                     },
                     onClose: () => {
                       setAlertConfig((prev) => ({ ...prev, open: false }));
-                      setPendingInvoiceType(null);
                     },
                   });
                 }}
