@@ -55,9 +55,6 @@ function AutoCompleteInput({
   };
 
   const handleSelectionChange = (event, newValue) => {
-
-    console.log(newValue ,  343434567)
-
     if (newValue) {
       // onChange(newValue.value);
       onChange(newValue.fullData?.id ? newValue.fullData?.id : newValue?.value);
@@ -65,10 +62,6 @@ function AutoCompleteInput({
       onChange(null);
     }
   };
-
-
-  console.log(value , 345678)
-  
   return (
     <Box
       sx={{

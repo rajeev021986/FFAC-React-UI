@@ -9,9 +9,6 @@ export function VesselMapping({ formik, disabled }) {
   const vesselLineEntity = formik.values.vesselLineEntities || [
     { id: 1, vesselId: "", shippingLine: "" },
   ];
-
-  console.log(formik.values.vesselLineEntities, 74858478);
-
   const newRowRef = useRef(null);
   const setFocus = () => {
     setTimeout(() => {
@@ -77,7 +74,6 @@ export function VesselMapping({ formik, disabled }) {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
-        console.log(params, 234567890);
         return (
           <AutoCompleteInput
             id="shippingLine"
@@ -87,7 +83,6 @@ export function VesselMapping({ formik, disabled }) {
               formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
             }
             onChange={(newValue) => {
-              console.log(newValue , 234343567)
               const rowIndex = formik.values.vesselLineEntities.findIndex(
                 (entity) => entity.id === params.id
               );

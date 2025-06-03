@@ -51,7 +51,6 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
         const isPaybleIdInDetails = formik.values.details.some(
           (detail) => detail.paybleDetailId === params.row.paybleDetailId
         );
-        console.log("isPaybleIdInDetails", isPaybleIdInDetails);
         return (
           <button
             disabled={isPaybleIdInDetails}
@@ -203,8 +202,6 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
   const handleSearchBar = (e) => {
     setsearchValue(e.target.value);
   };
-  console.log("formik", formik.values);
-
   return (
     <>
       <Box sx={{ backgroundColor: "white.main" }}>

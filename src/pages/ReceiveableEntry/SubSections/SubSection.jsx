@@ -23,7 +23,6 @@ import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
 export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
-  console.log("type", type);
   const nav = useNavigate();
   const [addReceivable,{ isLoading }] = useAddReceivableMutation();
   const [updateReceivable,{ isUpdateLoading }] = useUpdateReceivableMutation();

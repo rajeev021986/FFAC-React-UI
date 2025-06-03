@@ -20,8 +20,6 @@ const ThemedGrid = (props) => {
     hideColumns,
     ...rest
   } = props;
-console.log("hideColumns",hideColumns);
-
   const handleDate = (date) => {
     return date.split("T")[0];
   };

@@ -20,8 +20,6 @@ export default function AddDebitAndInvoice({ formik }) {
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-  console.log("formikDetails", formik.values.details);
-
   const [dropdownData, setDropdownData] = useState({});
   const [isDisabled, setIsDisabled] = useState(false);
   const [chargesData, setChargesData] = useState(formik.values.details || []);

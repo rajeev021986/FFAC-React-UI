@@ -83,8 +83,6 @@ export default function AddPayableEntryModal({
     totalAmount: "",
     new: true,
   });
-
-  console.log(payableEntry, "payableEntry");
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
@@ -151,8 +149,6 @@ export default function AddPayableEntryModal({
         onAddPayEntry(updatedEntry);
         setSelectedPayEntry(updatedEntry);
       }
-
-      console.log(updatedEntry, 2345678);
       // Reset after add
       setPayableEntry({
         id: Date.now(),
@@ -346,7 +342,6 @@ export default function AddPayableEntryModal({
               idKey="chargeId"
               nameKey="chargeName"
               onChange={(selected) => {
-                console.log(selected , 34563434)
                 handleChange("chargeId", selected.chargeId);
                 handleChange("chargeName", selected.fullData?.charge_name);
               }}

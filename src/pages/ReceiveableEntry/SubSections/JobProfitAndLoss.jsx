@@ -65,8 +65,6 @@ const JobProfitAndLoss = ({ formik }) => {
       payableRef.current.focus();
     }
   }, []);
-  console.log("formik", formik.values);
-
   const OPTION_TYPE = [
     {
       label: "Tax Invoice",
@@ -214,8 +212,6 @@ const JobProfitAndLoss = ({ formik }) => {
                 disabled={formik.values.id ? true : false}
                 error={formik.errors.type}
                 onChange={(e) => {
-                  console.log("value",e.target.value)
-                  console.log("formik.values.details.length",formik.values.details.length)
                   const value = e.target.value;
                   if (formik.values.type === value) return;
                   if (formik.values.details.length === 0)

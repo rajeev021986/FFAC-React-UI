@@ -50,8 +50,6 @@ export default function AddPayableEntryModal({
   setSelectedPayEntry,
   type,
 }) {
-  console.log("formiwewwk", formik.values);
-
   const modalValidationSchema = Yup.object().shape({
     chargeName: Yup.string().required("Charge Name is required"),
     customerName: Yup.string().required("Customer Name is required"),
