@@ -15,6 +15,7 @@ const DebitNoteListData = ({
         count={chargesData.length}
         data={chargesData}
         disabled={disabled}
+        hideColumns={true}
       />
     </React.Fragment>
   );
