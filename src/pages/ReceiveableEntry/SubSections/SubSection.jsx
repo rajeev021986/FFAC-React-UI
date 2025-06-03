@@ -14,7 +14,7 @@ import getFirstError from "../../../components/common/FieldToastError";
 // Sections Components
 import JobProfitAndLoss from "./JobProfitAndLoss";
 import AddDebitAndInvoice from "./AddDebitAndInvoice";
-import { useAddReceivableMutation } from "../../../store/api/receivableApi";
+import { useAddReceivableMutation, useUpdateReceivableMutation } from "../../../store/api/receivableApi";
 import { TabList } from "@mui/lab";
 import EditIconForHeader from "../../../components/common/commonIcons/EditIcons/EditIconForHeader";
 import AuditIcon from "../../../components/common/commonIcons/AuditIcon/AuditIcon";
@@ -25,7 +25,8 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
   console.log("type", type);
   const nav = useNavigate();
-  const [addReceivable, { isLoading }] = useAddReceivableMutation();
+  const [addReceivable,{ isLoading }] = useAddReceivableMutation();
+  const [updateReceivable,{ isUpdateLoading }] = useUpdateReceivableMutation();
 
   const [dropdownData, setDropdownData] = useState({});
   const [value, setValue] = React.useState("1");
@@ -48,28 +49,50 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
     onSubmit: async (values) => {
       // Create a payload excluding 'type' and 'costDetails'
       const { costDetails, ...payload } = values;
-      try {
-        values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
-        values.status = "";
-        const response = await addReceivable(payload).unwrap();
+      if (!values.id) {
+        try {
+          const response = await addReceivable(payload).unwrap();
 
-        const message = response.message;
-        if (response.code === "SUCCESS") {
-          toast.custom(<CustomToast message={message} toast="success" />, {
-            closeButton: false,
-          });
-          nav("/app/accounts/operations/receivableEntry");
-        } else {
+          const message = response.message;
+          if (response.code === "SUCCESS") {
+            toast.custom(<CustomToast message={message} toast="success" />, {
+              closeButton: false,
+            });
+            nav("/app/accounts/operations/receivableEntry");
+          } else {
+            toast.custom(<CustomToast message={message} toast="error" />, {
+              closeButton: false,
+            });
+          }
+        } catch (error) {
+          const message =
+            error?.data?.message || "An error occurred while submitting.";
           toast.custom(<CustomToast message={message} toast="error" />, {
             closeButton: false,
           });
         }
-      } catch (error) {
-        const message =
-          error?.data?.message || "An error occurred while submitting.";
-        toast.custom(<CustomToast message={message} toast="error" />, {
-          closeButton: false,
-        });
+      } else {
+          try {
+          const response = await updateReceivable(payload).unwrap();
+
+          const message = response.message;
+          if (response.code === "SUCCESS") {
+            toast.custom(<CustomToast message={message} toast="success" />, {
+              closeButton: false,
+            });
+            nav("/app/accounts/operations/receivableEntry");
+          } else {
+            toast.custom(<CustomToast message={message} toast="error" />, {
+              closeButton: false,
+            });
+          }
+        } catch (error) {
+          const message =
+            error?.data?.message || "An error occurred while submitting.";
+          toast.custom(<CustomToast message={message} toast="error" />, {
+            closeButton: false,
+          });
+        }
       }
     },
   });
@@ -195,7 +218,7 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
                           color: "white !important",
                         }}
                       >
-                        {isLoading && (
+                        {isUpdateLoading && (
                           <CircularProgress size={20} color="white" />
                         )}
                         Update TaxInvoice/Debit Note

@@ -34,6 +34,8 @@ export default function ReceiveableEntryDetails({ page }) {
     paybleDetails: [],
     costDetails: [],
     type: "debit_note",
+    status: "",
+    statusCode: 0,
   });
 
   useEffect(() => {
@@ -55,6 +57,8 @@ export default function ReceiveableEntryDetails({ page }) {
       containerTypeDTO: data.containerTypeDTO || [],
       costDetails: data.costDetails || [],
       details: data?.receivableDetails || [],
+    status: data?.status || "",
+    statusCode: data?.statusCode || 0,
     });
     const init = async () => {
       try {

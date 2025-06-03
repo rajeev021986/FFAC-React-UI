@@ -3,6 +3,7 @@ import CustomToast from "../../../components/common/Toast/CustomToast";
 import EditIconDropdown from "../../../components/common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
 import AuditIconDropdown from "../../../components/common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
 import DeleteIconDropdown from "../../../components/common/commonIconDropdown/DeleteIconDropdown/DeleteIconDropdown";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
 export const getReceiveableEntryGridActionApprove = (nav, setModal) => {
   return [
@@ -49,6 +50,13 @@ export const getReceiveableEntryGridActionApprove = (nav, setModal) => {
         }
       },
       icon: <DeleteIconDropdown />,
+    },
+     {
+      label: "Cancel",
+      onClick: (params) => {
+        setModal({ open: true, type: "cancel", data: params.row });
+      },
+      icon: <CancelOutlinedIcon sx={{ width: "20px", marginTop: "5px" }} />,
     },
   ];
 };
