@@ -157,7 +157,7 @@ export default function VendorScreen({ page }) {
   VENDOR_COLUMNS[VENDOR_COLUMNS.length - 1].renderCell = GridActions({
     actions: Actions,
   });
-  
+
   const actions = seletectBox
     ? [
         { name: "New Vendor" },
@@ -248,12 +248,6 @@ export default function VendorScreen({ page }) {
           title={
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
-                {/* <KeywordSearch
-                  keyword={vendorSelector.formData.keyword}
-                  setKeyword={(keyword) =>
-                    dispatch(updateVendorInput({ keyword }))
-                  }
-                /> */}
                 <GridSearchInput
                   filters={vendorSelector?.formData}
                   setFilters={(filters) => dispatch(updateVendorInput(filters))}
@@ -325,6 +319,7 @@ export default function VendorScreen({ page }) {
           />
         )}
       </Card>
+      
       {/* {modal.type !== "audit" && (
         <ThemedModal
           open={modal.open}
