@@ -56,10 +56,9 @@ export default function AddPayableEntryModal({
     receivableAmount: Yup.string().required("Amount is required"),
     currency: Yup.string().required("Currency is required"),
     exRate: Yup.string().required("Exchange Rate is required"),
-    vat: Yup.string().required("VAT amount is required"),
     vatApplicable: Yup.string().required("VAT applicable is required"),
     unitType: Yup.string().required("Unit type is required"),
-    numOfUnits: Yup.string().required("Number of units is required"),
+    // numOfUnits: Yup.string().required("Number of units is required"),
     unitRate: Yup.string().required("Unit Rate is required"),
   });
   const [options, setOptions] = useState([]);
@@ -134,7 +133,31 @@ export default function AddPayableEntryModal({
       return updatedEntry;
     });
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!invoiceEntry?.customerName) return;
+      setLoading(true);
+      try {
+        const data = await GetAutoCompleteDataWithLoader(
+          "unit_type",
+          "unitTypeReceviable",
+          "unit_type",
+          debounceValue,
+          // invoiceEntry?.customerName
+          "Ananth"
+        );
+        const validData = data.filter((item) => item.label?.trim() !== "");
+        setOptions(validData);
+        setFilteredOptions(validData);
+      } catch (err) {
+        console.error("Error fetching unit types:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchData();
+  }, [debounceValue, invoiceEntry?.customerName]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -281,6 +304,21 @@ export default function AddPayableEntryModal({
   const handleInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
   };
+   const handleChangeUnitType = (event, newValue) => {
+    if (newValue) {
+      setInvoiceEntry((prev) => ({
+        ...prev,
+        unitType: newValue.value,
+        numOfUnits: newValue.fullData?.count || "",
+      }));
+    } else {
+      setInvoiceEntry((prev) => ({
+        ...prev,
+        unitType: "",
+        numOfUnits: "",
+      }));
+    }
+  };
   return (
     <Modal
       keepMounted
@@ -330,6 +368,62 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={4}>
+            <Box sx={{ width: "100%" }}>
+              <Autocomplete
+                id="unitType"
+                size="small"
+                disabled={!invoiceEntry?.customerName}
+                value={
+                  options.find((opt) => opt.value === invoiceEntry.unitType) ||
+                  null
+                }
+                onInputChange={handleInputChange}
+                onChange={handleChangeUnitType}
+                options={filteredOptions}
+                getOptionLabel={(option) => option.label || ""}
+                loading={loading}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Unit Type"
+                    placeholder="Type to search"
+                    variant="outlined"
+                    error={Boolean(errors.unitType)}
+                    helperText={errors.unitType}
+                    fullWidth
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "10px",
+                        fontSize: "14px",
+                        height: "43px",
+                      },
+                    }}
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {loading ? (
+                            <CircularProgress color="inherit" size={15} />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+                renderOption={(props, option) => (
+                  <MenuItem {...props} key={option.value}>
+                    {option.label}
+                  </MenuItem>
+                )}
+                noOptionsText={
+                  inputValue ? "No results found" : "Type to search..."
+                }
+              />
+            </Box>
+          </Grid>
+          {/* <Grid item xs={12} lg={4}>
+          
             <SelectBox
               label="Unit Type"
               id="unitType"
@@ -338,11 +432,12 @@ export default function AddPayableEntryModal({
               error={errors.unitType}
               onChange={(e) => handleChange("unitType", e.target.value)}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={4}>
             <InputBox
               label="No. of Units"
               id="numOfUnits"
+              disabled={true}
               value={invoiceEntry?.numOfUnits || ""}
               error={errors.numOfUnits}
               onChange={(e) => handleChange("numOfUnits", e.target.value)}

@@ -106,7 +106,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
     },
     {
       field: "paybleCreatedDate",
-      headerName: "Date",
+      headerName: "Payable Date",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => {
@@ -141,7 +141,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
     },
     {
       field: "receivableCreatedDate",
-      headerName: "Date",
+      headerName: "Receivable Date",
       flex: 1,
       minWidth: 200,
       renderCell: (params) => {

@@ -14,7 +14,10 @@ import getFirstError from "../../../components/common/FieldToastError";
 // Sections Components
 import JobProfitAndLoss from "./JobProfitAndLoss";
 import AddDebitAndInvoice from "./AddDebitAndInvoice";
-import { useAddReceivableMutation, useUpdateReceivableMutation } from "../../../store/api/receivableApi";
+import {
+  useAddReceivableMutation,
+  useUpdateReceivableMutation,
+} from "../../../store/api/receivableApi";
 import { TabList } from "@mui/lab";
 import EditIconForHeader from "../../../components/common/commonIcons/EditIcons/EditIconForHeader";
 import AuditIcon from "../../../components/common/commonIcons/AuditIcon/AuditIcon";
@@ -24,8 +27,8 @@ import { menuConfigUrl } from "../../../store/menuConfigUrl";
 export default function SubSections({ initialValues, page, type = "notcopy" }) {
   //
   const nav = useNavigate();
-  const [addReceivable,{ isLoading }] = useAddReceivableMutation();
-  const [updateReceivable,{ isUpdateLoading }] = useUpdateReceivableMutation();
+  const [addReceivable, { isLoading }] = useAddReceivableMutation();
+  const [updateReceivable, { isUpdateLoading }] = useUpdateReceivableMutation();
 
   const [dropdownData, setDropdownData] = useState({});
   const [value, setValue] = React.useState("1");
@@ -50,7 +53,13 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
       const { costDetails, ...payload } = values;
       if (!values.id) {
         try {
-          const response = await addReceivable(payload).unwrap();
+          let DetailsData = values.details.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
+          const response = await addReceivable({
+            ...payload,
+            details: DetailsData,
+          }).unwrap();
 
           const message = response.message;
           if (response.code === "SUCCESS") {
@@ -71,8 +80,14 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
           });
         }
       } else {
-          try {
-          const response = await updateReceivable(payload).unwrap();
+        try {
+          let DetailsData = values.details.map((item) =>
+            item?.new ? { ...item, id: null, new: false } : item
+          );
+          const response = await updateReceivable({
+            ...payload,
+            details: DetailsData,
+          }).unwrap();
 
           const message = response.message;
           if (response.code === "SUCCESS") {

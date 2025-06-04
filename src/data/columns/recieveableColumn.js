@@ -25,19 +25,6 @@ export const RECIVEABLE_COLUMNS = [
   },
   {
     flex: 1,
-    field: "companyCode",
-    headerName: "Company Code",
-    width: 140,
-    headerAlign: "center",
-    minWidth: 100,
-    align: "center",
-    editable: false,
-    renderCell: (params) => (
-      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
-    ),
-  },
-  {
-    flex: 1,
     field: "consigneeName",
     headerName: "Consignee Name",
     width: 110,
@@ -68,9 +55,9 @@ export const RECIVEABLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
-    },
+   renderCell: (params) => (
+      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
+    ),
   },
   {
     flex: 1,

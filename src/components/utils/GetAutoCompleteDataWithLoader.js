@@ -33,6 +33,7 @@ const suggestionName = {
   noOfUnit: "JOB_CONTAINER",
   exchangeRate: "EXCHANGE_RATE",
   exRate: "EXCHANGE_RATE",
+  unitTypeReceviable: "CUSTOMER_TARIFF",
 };
 
 export const GetAutoCompleteDataWithLoader = async (
