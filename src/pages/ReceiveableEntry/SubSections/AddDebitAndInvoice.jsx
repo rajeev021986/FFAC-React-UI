@@ -202,14 +202,7 @@ export default function AddDebitAndInvoice({ formik }) {
       align: "center",
       editable: false,
     },
-    {
-      flex: 1,
-      field: "vatApplicable",
-      headerName: "Vat Applicable",
-      headerAlign: "center",
-      align: "center",
-      editable: false,
-    },
+  
     {
       flex: 1,
       field: "paybleAmount",
@@ -229,6 +222,14 @@ export default function AddDebitAndInvoice({ formik }) {
     {
       flex: 1,
       field: "vatApplicable",
+      headerName: "Vat Applicable",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "vat",
       headerName: "Vat Amount",
       headerAlign: "center",
       align: "center",
