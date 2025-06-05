@@ -23,7 +23,6 @@ import ApiManager from "../../../../services/ApiManager";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import SelectBox from "../../../common/SelectBox";
-import InputBox from "../../../common/InputBox";
 import InputBoxForGrid from "../../../common/InputBoxForGrid";
 import EditRowDialog from "../../../common/EditRowDialog";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
@@ -40,6 +39,7 @@ export default function VendorEditGrid({
   const [EditRowDialogopen, setEditRowDialogOpen] = useState(false);
   const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
   const newRowRef = useRef(null);
+
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
 
@@ -50,21 +50,19 @@ export default function VendorEditGrid({
       }
     }, 1000);
   };
-
   const OnChange = (params, e, name) => {
-    const rowIndex = formik.values[name]?.findIndex(
+    const rowIndex = formik.values[name].findIndex(
       (entity) => entity.id === params.id
     );
     formik.setValues({
       ...formik.values,
-      [name]: formik.values[name]?.map((entity, index) =>
+      [name]: formik.values[name].map((entity, index) =>
         index === rowIndex
           ? { ...entity, [params.field]: e.target.value }
           : entity
       ),
     });
   };
-
   const handleClose = () => {
     setEditRowDialogOpen(false);
     setEditDialogData({});
@@ -174,7 +172,6 @@ export default function VendorEditGrid({
                   label: params.row?.chargeName ?? "",
                 }}
                 error={
-                  formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeId
                   formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeId
                 }
                 onChange={(newValue) => {
@@ -552,7 +549,7 @@ export default function VendorEditGrid({
               <AutoCompleteInput
                 id="countryId"
                 suggestionName="country"
-                // value={params.value} 
+                // value={params.value}
                 value={{
                   id: params.row?.countryId,
                   label: params.row?.countryName ?? "",
@@ -571,10 +568,11 @@ export default function VendorEditGrid({
                     vendorEntityFreeDays:
                       formik.values.vendorEntityFreeDays.map((entity, index) =>
                         index === rowIndex
-                          ? { ...entity,
-                             countryId: newValue?.id ?? null,
-                             countryName :newValue?.label ?? "",
-                             }
+                          ? {
+                              ...entity,
+                              countryId: newValue?.id ?? null,
+                              countryName: newValue?.label ?? "",
+                            }
                           : entity
                       ),
                   });
@@ -831,34 +829,21 @@ export default function VendorEditGrid({
             );
           },
         },
-
         {
           field: "currency",
           headerName: "Currency",
-          flex: 1.5,
+          flex: 1,
+          editable: false,
           renderCell: (params) => {
             return (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  height: "100%",
-                }}
-              >
-                <SelectBox
-                  placeholder={true}
-                  size="small"
-                  sx={{
-                    marginTop: "0px",
-                    marginBottom: "0px",
-                  }}
-                  options={mergedCurrencyOptions}
-                  value={params.value}
-                  onChange={(e) => OnChange(params, e, "bankDetails")}
-                />
-              </div>
+              <InputBoxForGridTab
+                value={params.value}
+                field={params.field}
+                id={params.id}
+                formik={formik}
+                api={params.api}
+                arrayName="bankDetails"
+              />
             );
           },
         },
