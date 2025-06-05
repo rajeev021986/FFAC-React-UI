@@ -10,6 +10,7 @@ import GetPayDetails from "./getPayDetail";
 
 const PayCalMultiple = ({ open, onClose, data, refetch }) => {
   const vendorName = data[0]?.vendorName;
+  const vendorId = data[0]?.vendorId
   const payableRefNums = data?.map((item) => item.paybleRefNum).join(", ");
 
   const usdAmount = data?.reduce((acc, curr) => acc + curr.totalAmount, 0);
@@ -76,6 +77,7 @@ const PayCalMultiple = ({ open, onClose, data, refetch }) => {
         vendorInvDate: data[0]?.vendorInvDate || null,
         vendorInvNo: data[0]?.vendorInvNo || "",
         vendorName: vendorName || "",
+        vendorId: vendorId || "",
         usdAmountToBePaid: usdAmountToBePaid || 0,
         usdAmount: usdAmount || 0,
         paymentDate: new Date().toISOString() || null,

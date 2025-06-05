@@ -860,7 +860,7 @@ export default function CustomerForm({
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
-                        Adds
+                        Add
                       </ThemeButton>
                     </Stack>
                   </Grid>

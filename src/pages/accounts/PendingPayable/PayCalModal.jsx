@@ -50,6 +50,7 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
         setInitialValues({
           multipleSelected: false,
           statusCode: data?.statusCode,
+          vendorId: data?.vendorId,
           paymentDate: new Date().toISOString() || null,
           createdDate: data?.createdDate,
           currency: data?.currency || "INR",
@@ -87,6 +88,7 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
         id: payment?.id ?? prev.id,
         statusCode: payment?.statusCode ?? prev.statusCode,
         vendorName: payment?.vendorName ?? prev.vendorName,
+        vendorId: payment?.vendorId ?? prev.vendorId,
         usdAmount: payment?.usdAmount ?? prev.usdAmount,
         localAmount: payment?.localAmount ?? prev.localAmount,
         paymentDate: payment?.paymentDate ?? prev.paymentDate,

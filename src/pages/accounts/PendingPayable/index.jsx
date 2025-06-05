@@ -353,6 +353,7 @@ export default function AccountsPendingPayableList({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(paymnetApprovalSetSortModel(sortModel))
             }
+             storageKey="pendingPayableGrid"
           />
         ) : (
           <CardsView

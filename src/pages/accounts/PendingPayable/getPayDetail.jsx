@@ -140,6 +140,7 @@ export default function GetPayDetails({
           usdAmountToBePaid: values?.usdAmountToBePaid || 0,
           localAmountToBePaid: values?.localAmountToBePaid || 0,
           bankCharges: values?.bankCharges || "",
+          vendorId: initialValues?.vendorId || ""
         };
         const multiplePayload = {
           paybleIds: values?.paybleIds || [],

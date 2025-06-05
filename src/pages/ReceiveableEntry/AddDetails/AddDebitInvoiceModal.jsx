@@ -200,7 +200,7 @@ export default function AddPayableEntryModal({
       setErrors({}); // Clear errors on successful validation
 
       const updatedEntry = selectedPayEntry
-        ? invoiceEntry
+        ? { ...invoiceEntry, id: Date.now(), new: true }
         : { ...invoiceEntry, id: Date.now(), new: true };
 
       const updatedList = selectedPayEntry

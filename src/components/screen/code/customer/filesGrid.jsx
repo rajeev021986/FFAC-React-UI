@@ -107,7 +107,7 @@ export default function FilesGrid({ formik, disabled, dropdownData }) {
     },
     {
       field: "emailId",
-      headerName: "Emsssail",
+      headerName: "Email",
       flex: 1,
       editable: true,
       headerAlign: "center",
