@@ -304,6 +304,14 @@ class ApiManager {
     );
     return ApiMethods.put(url);
   };
+   static cancelRecievableEntry = async (id, type) => {
+    const url = ENDPOINTS.JOB_ENTRY_CANCEL_REQUEST(
+      id,
+      type,
+      menuConfigUrl.account
+    );
+    return ApiMethods.put(url);
+  };
   static getUpdateJobEntryDetails = async (id) => {
     const url = ENDPOINTS.GET_UPDATE_JOBENTRY_DETAILS(
       id,
@@ -386,6 +394,14 @@ class ApiManager {
 
   static getReceivableEntryDeatils = async (id) => {
     const url = ENDPOINTS.GET_RECEIVABLENTRY_DETAILS(id, menuConfigUrl.account);
+    return ApiMethods.get(url);
+  };
+
+  static getReceivableData = async (data) => {
+    const url = ENDPOINTS.GET_RECEIVABLENTRY_DATA(
+      data?.job_number,
+      menuConfigUrl.account
+    );
     return ApiMethods.get(url);
   };
 }

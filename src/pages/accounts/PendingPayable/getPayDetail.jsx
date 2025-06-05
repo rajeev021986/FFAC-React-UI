@@ -77,6 +77,7 @@ export default function GetPayDetails({
       setIsDisabled(false);
     }
   }, [initialValues]);
+
   const validationSchema = Yup.object({
     currency: Yup.string().required("Currency is required!"),
     paymentType: Yup.string().required("Payment Type is required!"),
@@ -108,6 +109,7 @@ export default function GetPayDetails({
       otherwise: () => Yup.string().nullable(),
     }),
   });
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -139,6 +141,7 @@ export default function GetPayDetails({
           usdAmountToBePaid: values?.usdAmountToBePaid || 0,
           localAmountToBePaid: values?.localAmountToBePaid || 0,
           bankCharges: values?.bankCharges || "",
+          vendorId: initialValues?.vendorId || ""
         };
         const multiplePayload = {
           paybleIds: values?.paybleIds || [],
@@ -173,8 +176,6 @@ export default function GetPayDetails({
       }
     },
   });
-  console.log("initialValues", initialValues);
-  console.log("formik.values", formik.values.chequeNo);
 
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
@@ -198,6 +199,7 @@ export default function GetPayDetails({
       });
     }
   }, [customerSettingsData, payableSettingData, optionsSettingsData]);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -408,7 +410,7 @@ export default function GetPayDetails({
 
                         if (value !== "Cheque") {
                           // Clear cheque-related fields when changing from Cheque to something else
-                          formik.setFieldValue("bankName", "");
+                          formik.setFieldValue("bankId", "");
                           formik.setFieldValue("chequeNo", "");
                           formik.setFieldValue("chequeDate", "");
                         }
@@ -447,9 +449,9 @@ export default function GetPayDetails({
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Cheque No."
+                      label="Cheque No"
                       id="chequeNo"
-                      value={formik.values.chequeNo}
+                      value={formik.values.chequeNo || ""}
                       error={formik.errors.chequeNo}
                       onChange={formik.handleChange}
                       disabled={
@@ -457,7 +459,6 @@ export default function GetPayDetails({
                           ? false
                           : true
                       }
-                      // inputRef={payableRef}
                     />
                   </Grid>
 

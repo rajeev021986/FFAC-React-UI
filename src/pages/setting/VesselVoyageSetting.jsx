@@ -82,11 +82,11 @@ const VesselVoyageSetting = () => {
         <Loader />
       ) : (
         <Grid container spacing={2} flexWrap={"wrap"}>
-          <GlobalDrrpdownSetting
+          {/* <GlobalDrrpdownSetting
             value={documentType}
             setvalue={setDocumentType}
             title="Document Type"
-          />
+          /> */}
           <GlobalDrrpdownSetting
             value={portOperator}
             setvalue={setPortOperator}

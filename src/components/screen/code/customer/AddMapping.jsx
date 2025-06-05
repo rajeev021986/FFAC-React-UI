@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, IconButton, styled, Tooltip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, Delete } from "@mui/icons-material";
@@ -7,10 +7,13 @@ import AutoCompleteInput from "../../../common/AutoCompletInput";
 import ApiManager from "../../../../services/ApiManager";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import SelectBox from "../../../common/SelectBox";
-import InputBox from "../../../common/InputBox";
 import InputBoxForGrid from "../../../common/InputBoxForGrid";
+import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 
 export default function AddMapping({ formik, dropdownData, disabled }) {
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
   const customerEntityTariffs = formik.values.customerEntityTariffs || [
     {
       id: 1,
@@ -32,10 +35,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
     { label: "40ft", value: "40FT" },
     { label: "CBM", value: "CBM" },
   ];
-  const currencyOptions = [
-    { label: "KSH", value: "KSH" },
-    { label: "USD", value: "USD" },
-  ];
+
   const shipmentTypeOptions = dropdownData?.shipmentType || [
     { label: "IMPORT LOCAL", value: "IMPORT_LOCAL" },
     { label: "IMPORT TRANSIT", value: "IMPORT_TRANSIT" },
@@ -53,7 +53,42 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       }
     }, 1000);
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
+        const backendData = await response.body;
 
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
+        ];
+
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
   // Handler to add a new row
   const addRow = () => {
     const newRow = {
@@ -179,6 +214,8 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       field: "currency",
       headerName: "Currency",
       flex: 1,
+      headerAlign: "center",
+      align: "center",
       renderCell: (params) => {
         const rowIndex = formik.values.customerEntityTariffs.findIndex(
           (entity) => entity.id === params.id
@@ -188,18 +225,30 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
           formik.values.customerEntityTariffs?.[rowIndex]?.currency || "";
     
         return (
-          <AutoCompleteInput
-            id="currency"
-            suggestionName="currency"
-            value={currencyValue}
-            error={formik.errors.customerEntityTariffs?.[rowIndex]?.currency}
-            onChange={(newValue) => {
-              formik.setFieldValue(
-                `customerEntityTariffs[${rowIndex}].currency`,
-                newValue
-              );
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
             }}
-          />
+          >
+            <SelectBox
+              placeholder={true}
+              size="small"
+              sx={{
+                marginTop: "0px",
+                marginBottom: "0px",
+                fontSize: "14px",
+              }}
+              options={mergedCurrencyOptions}
+              value={params.value}
+              onChange={(e) =>
+                updateRowValue(params, e, "customerEntityTariffs")
+              }
+            />
+          </div>
         );
       },
     },

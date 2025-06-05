@@ -60,6 +60,7 @@ export default function AddEditForm({
   viewPage,
   type = "notcopy",
   onClose,
+  refetchPayableData,
 }) {
   const style = {
     position: "absolute",
@@ -470,35 +471,9 @@ export default function AddEditForm({
     }
   }, [formik?.values?.currency]);
 
-  // const FieldRef = useRef(null);
-  // useEffect(() => {
-  //   if (FieldRef.current) {
-  //     FieldRef.current.focus();
-  //   }
-  // }, []);
-
-  const CurrencyData = [
-    {
-      label: "TZS",
-      value: "TZS",
-    },
-    {
-      label: "USD",
-      value: "USD",
-    },
-  ];
-
-  //
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
-
-  const disabled =
-    formik?.values?.statusCode === 1 ||
-    formik?.values?.statusCode === -3 ||
-    viewPage === "view"
-      ? true
-      : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -589,7 +564,7 @@ export default function AddEditForm({
     {
       flex: 1,
       field: "noOfUnit",
-      headerName: "No Unit Units",
+      headerName: "No Of Units",
       headerAlign: "center",
       align: "center",
       editable: false,
@@ -722,6 +697,7 @@ export default function AddEditForm({
     };
   };
   const getAmountData = getPaybleDetailsTotals(chargesData);
+
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -1460,6 +1436,7 @@ export default function AddEditForm({
               disabled={isDisabled}
               dropdownData={dropdownData.jobDocumentType}
               sourceType="PAYBLE_ENTRY"
+              refetchPayableData={refetchPayableData}
             />
           </TabPanel>
 

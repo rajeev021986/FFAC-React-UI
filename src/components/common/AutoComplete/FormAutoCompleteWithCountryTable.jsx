@@ -71,14 +71,12 @@ function FormAutoCompleteWithCountryTable(props) {
   //     const { country, port_name } = newValue.fullData;
 
   //     if (id == "originPortId") {
-  //       console.log(newValue, "newValue");
-
   //       setFieldValue("originPortId", newValue.value);
   //       setFieldValue("portOfLoading", port_name || "");
   //     } else if (id == "portOfLoading") {
   //       setFieldValue("portOfLoading", port_name);
   //       setFieldValue("originPortId", newValue.value || "");
-  //     }
+  //     } 
   //   } else {
   //     // Clear both fields when selection is removed
   //     setFieldValue(id, "");
@@ -116,8 +114,6 @@ function FormAutoCompleteWithCountryTable(props) {
       setSelectedOption(null);
     }
   };
-
-  console.log(selectedOption, "selectedOption");
   useEffect(() => {
     const initializeSelectedOption = async () => {
       const existingId = formik.values[id];

@@ -64,24 +64,25 @@ export default function CardsView({
       modifiedDate: obj.modifiedDate
         ? handleDate(obj.modifiedDate)
         : obj.modifiedDate,
-        createdDate: obj.createdDate
+      createdDate: obj.createdDate
         ? handleDate(obj.createdDate)
         : obj.createdDate,
-       invoiceDate : obj.invoiceDate
+      invoiceDate: obj.invoiceDate
         ? handleDate(obj.invoiceDate)
         : obj.invoiceDate,
       vendorInvoiceDate: obj.vendorInvoiceDate
         ? handleDate(obj.vendorInvoiceDate)
         : obj.vendorInvoiceDate,
-        vendorInvDate : obj.vendorInvDate
+      vendorInvDate: obj.vendorInvDate
         ? handleDate(obj.vendorInvDate)
         : obj.vendorInvDate,
-        jobCreatedDate: obj.jobCreatedDate
+      jobCreatedDate: obj.jobCreatedDate
         ? handleDate(obj.jobCreatedDate)
         : obj.jobCreatedDate,
-        paybleCreatedDate: obj.paybleCreatedDate
+      paybleCreatedDate: obj.paybleCreatedDate
         ? handleDate(obj.paybleCreatedDate)
         : obj.paybleCreatedDate,
+      type: obj.type ? obj.type.replace(/_/g, " ").trim() : obj.type,
     };
   });
   return (

@@ -116,7 +116,6 @@ export default function CustomerForm({
           }
           values.tinNo = values?.tinNo?.trim() || null;
           values.vatNo = values?.vatNo?.trim() || null;
-          console.log(values, "mnnnnishh");
           let response = await addCustomer({
             ...values,
             customerEntityEmailsIds: emails,
@@ -239,7 +238,6 @@ export default function CustomerForm({
   let shouldShowTabs = Object.values(formik.values?.customerName).some(
     (value) => value !== ""
   );
-  console.log(formik.values, "formik");
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -343,7 +341,6 @@ export default function CustomerForm({
       customerNameRef.current.focus();
     }
   }, []);
-  console.log(formik.values?.countryId, "formik");
   return (
     <>
       {type == "add" ? (

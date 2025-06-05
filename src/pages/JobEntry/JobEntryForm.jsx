@@ -56,7 +56,6 @@ export default function JobEntryForm({
     useState(false);
   const nav = useNavigate();
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  console.log(selectedCustomer, "selectedCustomer");
   const shipmentTypeRef = useRef(null);
   const toastRef = useRef(null);
   const [value, setValue] = React.useState("1");
@@ -85,7 +84,6 @@ export default function JobEntryForm({
     validateOnChange: false,
     // validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
-      console.log(values, "mmmmmmm");
       if (isLoading) {
         return;
       }
@@ -156,7 +154,6 @@ export default function JobEntryForm({
           delete values.id;
           values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
           values.status = "";
-          console.log("values", values);
           let response = await addJobEntry({
             ...values,
             containerShipments: containerShipment,

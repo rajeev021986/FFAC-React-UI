@@ -1,19 +1,22 @@
+// DocumentViewModal.jsx
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  IconButton,
+} from "@mui/material";
+// import AddEditForm from "../AddReceievevaleForm/AddEditForm";
+import CustomToast from "../../../components/common/Toast/CustomToast";
 import toast from "react-hot-toast";
-import { Box, Card, CardContent, Stack } from "@mui/material";
-
-import ScreenToolbar from "../../../components/common/ScreenToolbar";
-import ThemedBreadcrumb from "../../../components/common/Breadcrumb";
 import ApiManager from "../../../services/ApiManager";
 import Loader from "../../../components/common/Loader/Loader";
-import CustomToast from "../../../components/common/Toast/CustomToast";
-import AddEditForm from "./AddEditForm";
+import CloseIcon from "@mui/icons-material/Close";
 
-export default function AddPayableEntry({ page }) {
+const PayableViewModal = ({ viewType, open, onClose, data }) => {
   const [loading, setLoading] = useState(true);
-  const { state } = useLocation();
-
   const [initialValues, setInitialValues] = React.useState({
     id: "",
     status: "",
@@ -24,8 +27,7 @@ export default function AddPayableEntry({ page }) {
     payableRefNo: "",
     jobNo: "",
     invoiceDate: "",
-    vendorId: "",
-    vendorName:"",
+    vendorName: "",
     vendorInvoiceNo: "",
     vendorInvoiceDate: "",
     currency: "",
@@ -45,7 +47,7 @@ export default function AddPayableEntry({ page }) {
 
   const fetchPayableData = async () => {
     try {
-      const res = await ApiManager.getPayableDeatils(state?.initialValues?.id);
+      const res = await ApiManager.getPayableDeatils(data?.id);
       let status = "";
       if (res.body?.status) {
         status =
@@ -62,11 +64,10 @@ export default function AddPayableEntry({ page }) {
         payableRefNo: res.body?.payableRefNo,
         jobNo: res.body?.jobNo,
         invoiceDate: res.body?.invoiceDate,
-        vendorId: res.body?.vendorId,
-        vendorName:res?.body?.vendorName || res?.body?.vendor,
+        vendorName: res.body?.vendorName,
         vendorInvoiceNo: res.body?.vendorInvoiceNo,
         vendorInvoiceDate: res.body?.vendorInvoiceDate,
-        currency: res.body?.currency || "INR",
+        currency: res.body?.currency || "",
         exchangeRate: res.body?.exchangeRate || null,
         invoiceCurrencyAmount: res.body?.invoiceCurrencyAmount,
         invoiceCurrencyVat: res.body?.invoiceCurrencyVat,
@@ -94,49 +95,47 @@ export default function AddPayableEntry({ page }) {
       );
     }
   };
-
   useEffect(() => {
-    if (state?.initialValues?.id) {
+    if (data?.id) {
       fetchPayableData();
     } else {
       setLoading(false);
     }
-  }, [state?.initialValues?.id]);
-
-
+  }, [data?.id]);
   return (
-    <Box sx={{ padding: 0, margin: 0 }}>
-      <Stack sx={{ padding: "8px 0px" }}>
-        <ScreenToolbar
-          leftComps={
-            <div>
-              <ThemedBreadcrumb />
-            </div>
-          }
-          rightComps={<div></div>}
-        />
-      </Stack>
+    <>
       {loading ? (
         <Loader />
       ) : (
-        <Card
-          sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
-        >
-          <CardContent
-            sx={{
-              margin: "0px",
-              padding: "0px ! important",
-            }}
-          >
-            <AddEditForm
-              initialValues={initialValues}
-              type={state?.formAction}
-              page={page}
-              refetchPayableData={fetchPayableData}
-            />
-          </CardContent>
-        </Card>
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="auto">
+          <DialogTitle>
+            View Payable Entry
+            <IconButton
+              onClick={onClose}
+              sx={{ position: "absolute", top: 8, right: 8, color: "grey.600" }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent>
+            {/* {viewType === "view" ? (
+              <AddEditForm
+                viewPage="view"
+                initialValues={initialValues}
+                onClose={onClose}
+              />
+            ) : (
+              <AddEditForm
+                viewPage="editForm"
+                initialValues={initialValues}
+                onClose={onClose}
+              />
+            )} */}
+          </DialogContent>
+        </Dialog>
       )}
-    </Box>
+    </>
   );
-}
+};
+
+export default PayableViewModal;

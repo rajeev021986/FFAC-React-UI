@@ -104,11 +104,11 @@ function PortForm() {
     validationSchema: Yup.object({
       newPortName: Yup.string().required("Port name is required"),
       type: Yup.string().required("Port type is required"),
+      countryId: Yup.string().required("Country is required"),
       // status: Yup.string().nullable(),
       // portDetails: Yup.string().nullable(),
       // unCode: Yup.string().nullable(),
       // customCode: Yup.string().nullable(),
-      // country: Yup.string().nullable(),
       // region: Yup.string().nullable(),
       // basePort: Yup.string().nullable(),
       // iotaCode: Yup.string().nullable(),

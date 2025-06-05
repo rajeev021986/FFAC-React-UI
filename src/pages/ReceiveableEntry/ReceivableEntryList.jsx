@@ -12,15 +12,9 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-import {
-  payableDashboardView,
-  updateInput,
-  setPagination,
-  payableSetSortModal,
-} from "../../store/freatures/payableEntrySlice";
 
 import GridActions from "../../components/common/Grid/GridActions";
-import { PAYABLE_COLUMNS } from "../../data/columns/paybleColumn";
+import { RECIVEABLE_COLUMNS } from "../../data/columns/recieveableColumn";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 
 import Backdrop from "@mui/material/Backdrop";
@@ -40,21 +34,29 @@ import FilterForm from "./Actions/FilterForm";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
 import { downloadBase64PDF, downloadExcel } from "../../utils/downloadExcel";
 
-import {
-  useFetchPaybleEntryDatasQuery,
-  useDeletePaybleEntryMutation,
-  usePrintPayableEntryMutation,
-} from "../../store/api/payableApi";
-import CancelModalApprove from "../JobEntry/CancelModalApprove";
+import { usePrintPayableEntryMutation } from "../../store/api/payableApi";
 import ApiManager from "../../services/ApiManager";
-import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
-import PayableViewModal from "./Actions/PayableViewModal";
 
-export default function PayableListScreen({ page }) {
-  const payableActionSelector = useSelector((state) => state.payableAction);
+import { getReceiveableEntryGridActionApprove } from "./Actions/action";
+import {
+  useDeleteReceivableMutation,
+  useFetchReceivableDatasQuery,
+} from "../../store/api/receivableApi";
+import {
+  receivableEntryView,
+  updateInput,
+  receivableEntrySetSortModel,
+  setPagination,
+} from "../../store/freatures/ReceivableEntrySlice";
+import AddNewReceivableModal from "./AddNewReceivableModal";
+import CancelModalApprove from "../JobEntry/CancelModalApprove";
+
+export default function ReceivableEntryList({ page }) {
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
+
+  const receivableEntrySelector = useSelector((s) => s?.receivableEntry);
 
   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
@@ -67,39 +69,39 @@ export default function PayableListScreen({ page }) {
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
-        { name: "New Entry" },
+        { name: "Add Entry" },
         { name: "Copy" },
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ]
-    : page === "payable_approve"
+    : page === "recieveable_approve"
     ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
     : [
-        { name: "New Entry" },
+        { name: "Add Entry" },
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ];
 
   const query = {
-    page: payableActionSelector?.pagination?.page + 1,
-    size: payableActionSelector?.pagination?.pageSize,
+    page: receivableEntrySelector?.pagination?.page + 1,
+    size: receivableEntrySelector?.pagination?.pageSize,
     sortBy:
-      payableActionSelector.sortModel.length > 0
-        ? payableActionSelector.sortModel[0].field
-        : payableActionSelector?.sortBy?.split("*")[0],
+      receivableEntrySelector.sortModel.length > 0
+        ? receivableEntrySelector.sortModel[0].field
+        : receivableEntrySelector?.sortBy?.split("*")[0],
     sortOrder:
-      payableActionSelector.sortModel.length > 0
-        ? payableActionSelector?.sortModel[0]?.sort
-        : payableActionSelector?.sortBy?.split("*")[1] || "",
+      receivableEntrySelector.sortModel.length > 0
+        ? receivableEntrySelector?.sortModel[0]?.sort
+        : receivableEntrySelector?.sortBy?.split("*")[1] || "",
   };
   if (
     Boolean(
-      payableActionSelector.sortModel.length > 0
-        ? payableActionSelector.sortModel[0].field === "cname"
-        : payableActionSelector?.sortBy?.split("*")[0] === "cname"
+      receivableEntrySelector.sortModel.length > 0
+        ? receivableEntrySelector.sortModel[0].field === "cname"
+        : receivableEntrySelector?.sortBy?.split("*")[0] === "cname"
     )
   ) {
     query.sortBy = "customerName";
   }
-  const payload = Object.entries(payableActionSelector?.formData)
+  const payload = Object.entries(receivableEntrySelector?.formData)
     .filter(([key, value]) => value !== "")
     .map(([key, value]) => {
       let fieldname = key;
@@ -112,18 +114,16 @@ export default function PayableListScreen({ page }) {
       };
     });
 
+  const [deleteReceivable] = useDeleteReceivableMutation();
   const {
-    data: payableLisData,
+    data: receiveableLisData,
     isLoading,
     isFetching,
     refetch,
-  } = useFetchPaybleEntryDatasQuery({
+  } = useFetchReceivableDatasQuery({
     params: query,
     payload,
-    page:
-      page == "payable_list"
-        ? "payble/entry/filter"
-        : "approval/filter/PAYBLE_ENTRY",
+    page: page == "receivableEntry" ? "receivable/filter" : "",
   });
 
   const handlePage = (params) => {
@@ -131,18 +131,19 @@ export default function PayableListScreen({ page }) {
     dispatch(setPagination({ page, pageSize }));
   };
 
-  PAYABLE_COLUMNS[PAYABLE_COLUMNS.length - 1].renderCell = GridActions({
+  RECIVEABLE_COLUMNS[RECIVEABLE_COLUMNS.length - 1].renderCell = GridActions({
     actions:
-      page == "payable_list"
-        ? getPayableListGridActions(nav, setModal)
-        : getPayableListGridActionApprove(nav, setModal),
+      page == "receivableEntry"
+        ? getReceiveableEntryGridActionApprove(nav, setModal)
+        : "",
   });
 
   const handleActionClick = async (actionName) => {
-    if (actionName === "New Entry") {
-      nav("addpayable", {
-        replace: true,
-        state: { formAction: "add" },
+    if (actionName === "Add Entry") {
+      setModal({
+        open: true,
+        type: "add-entry",
+        data: {},
       });
     }
     if (actionName === "Export") {
@@ -152,8 +153,8 @@ export default function PayableListScreen({ page }) {
           query: query,
           payload: payload,
           service: `${menuConfigUrl.entity}`,
-          page: "payable_list",
-          filename: "payable_list-data.xlsx",
+          page: "receivableEntry",
+          filename: "receivableEntry-data.xlsx",
         });
       } catch (error) {
         toast.custom(
@@ -167,41 +168,19 @@ export default function PayableListScreen({ page }) {
     }
   };
 
-  const [deletePaybleEntry] = useDeletePaybleEntryMutation();
-  const [printPayableEntry] = usePrintPayableEntryMutation();
-
-  const handleApprove = async () => {
-    // Validation logic
-    if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
+  const handleClose = () => {
+    setModal({
+      open: false,
+      type: "",
+      data: {},
+    });
+  };
+  const handleCancel = async () => {
+    const statusCode = modal?.data?.statusCode;
+    if (statusCode === 100) {
       toast.custom(
         <CustomToast
-          message="Please submit document as invoice type"
-          toast="error"
-        />,
-        {
-          closeButton: false,
-        }
-      );
-      return; // Prevent approval
-    }
-    if (modal?.data?.noOfCharges === 0) {
-      toast.custom(
-        <CustomToast
-          message="Please add charge details before approving"
-          toast="error"
-        />,
-        {
-          closeButton: false,
-        }
-      );
-      return; // Prevent approval
-    }
-
-    const jobStatus = modal?.data?.label;
-    if (jobStatus === "Cancelled Successfully") {
-      toast.custom(
-        <CustomToast
-          message="Cannot approve a cancelled payable entry."
+          message="Cannot cancel paid receivable entry."
           toast="error"
         />
       );
@@ -209,9 +188,9 @@ export default function PayableListScreen({ page }) {
     }
 
     try {
-      const response = await ApiManager.approveJobEntryRequest(
+      const response = await ApiManager.cancelRecievableEntry(
         modal?.data?.id,
-        "PAYBLE_ENTRY"
+        "RECEIVABLE_ENTRY"
       );
       const message = response.message;
       toast.custom(<CustomToast message={message} toast="success" />, {
@@ -220,57 +199,19 @@ export default function PayableListScreen({ page }) {
       handleClose();
       refetch();
     } catch (error) {
-      toast.custom(<CustomToast message="Failed to approve." toast="error" />, {
-        closeButton: false,
-      });
-    }
-  };
-
-  const handleCancel = async () => {
-    const statusCode = modal?.data?.statusCode;
-    if (statusCode === 100) {
-      toast.custom(
-        <CustomToast
-          message="Cannot cancel paid payable entry."
-          toast="error"
-        />
-      );
-      return;
-    }
-
-    try {
-      const response = await ApiManager.canceljobEntryApprove(
-        modal?.data?.id,
-        "PAYBLE_ENTRY"
-      );
-      const message = response.message;
-      toast.custom(<CustomToast message={message} toast="success" />, {
-        closeButton: false,
-      });
-      handleClose();
-    } catch (error) {
       toast.custom(<CustomToast message="Failed to cancel." toast="error" />, {
         closeButton: false,
       });
     }
   };
-
-  const handleClose = () => {
-    setModal({
-      open: false,
-      type: "",
-      data: {},
-    });
-  };
-
   const handleDelete = async () => {
     try {
-      await deletePaybleEntry(modal.data.id)
+      await deleteReceivable(modal.data.id)
         .unwrap()
         .then(() => refetch());
       toast.custom(
         <CustomToast
-          message="Customer deleted successfully!"
+          message="Receivable deleted successfully!"
           toast="success"
         />,
         {
@@ -280,50 +221,23 @@ export default function PayableListScreen({ page }) {
       handleClose();
     } catch (error) {
       toast.custom(
-        <CustomToast message="Failed to delete customer." toast="error" />,
+        <CustomToast message="Failed to delete Receivable." toast="error" />,
         {
           closeButton: false,
         }
       );
     }
   };
-
-  const handlePrintPDF = async () => {
-    try {
-      const resp = await printPayableEntry(modal?.data?.data?.id).unwrap();
-      downloadBase64PDF(resp?.body, modal?.data?.data?.payableRefNo);
-      toast.custom(
-        <CustomToast message="Download PDF successfully!" toast="success" />,
-        {
-          closeButton: false,
-        }
-      );
-      handleClose();
-    } catch (error) {
-      toast.custom(
-        <CustomToast message="Failed to download PDF!" toast="error" />,
-        {
-          closeButton: false,
-        }
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (modal?.type === "print") {
-      handlePrintPDF();
-    }
-  }, [modal]);
 
   useEffect(() => {
     refetch();
   }, [location.pathname]);
 
   useEffect(() => {
-    if (!payableActionSelector.view) {
-      dispatch(payableDashboardView("card"));
+    if (!receivableEntrySelector.view) {
+      dispatch(receivableEntryView("card"));
     }
-  }, [payableActionSelector.view, dispatch]);
+  }, [receivableEntrySelector.view, dispatch]);
 
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
@@ -332,7 +246,7 @@ export default function PayableListScreen({ page }) {
         rightComps={
           <>
             <Backdrop open={open} />
-            {(page == "payable_list" || page == "payable_approve") && (
+            {(page == "receivableEntry" || page == "recieveable_approve") && (
               <SpeedDial
                 ariaLabel="Text-only  SpeedDial"
                 sx={{
@@ -376,7 +290,7 @@ export default function PayableListScreen({ page }) {
                     }}
                     icon={
                       <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                       {action.name}
+                        {action.name}
                       </span>
                     }
                     onClick={() => handleActionClick(action.name)}
@@ -394,7 +308,7 @@ export default function PayableListScreen({ page }) {
             <Stack direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
-                  filters={payableActionSelector?.formData}
+                  filters={receivableEntrySelector?.formData}
                   setFilters={(filters) => dispatch(updateInput(filters))}
                   width="650px"
                 >
@@ -403,22 +317,22 @@ export default function PayableListScreen({ page }) {
               </Box>
               <Box>
                 <IconButton
-                  onClick={() => dispatch(payableDashboardView("card"))}
+                  onClick={() => dispatch(receivableEntryView("card"))}
                 >
                   <FormatListBulletedOutlined
                     color={
-                      payableActionSelector.view === "card"
+                      receivableEntrySelector.view === "card"
                         ? "primary"
                         : "secondary"
                     }
                   />
                 </IconButton>
                 <IconButton
-                  onClick={() => dispatch(payableDashboardView("grid"))}
+                  onClick={() => dispatch(receivableEntryView("grid"))}
                 >
                   <GridOnOutlined
                     color={
-                      payableActionSelector.view === "grid"
+                      receivableEntrySelector.view === "grid"
                         ? "primary"
                         : "secondary"
                     }
@@ -428,35 +342,36 @@ export default function PayableListScreen({ page }) {
             </Stack>
           }
         />
-        {payableActionSelector.view === "grid" ? (
+
+        {receivableEntrySelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"
-            columns={PAYABLE_COLUMNS}
-            count={payableLisData?.body?.totalElements || 0}
+            columns={RECIVEABLE_COLUMNS}
+            count={receiveableLisData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={payableLisData?.body?.data}
+            data={receiveableLisData?.body?.data}
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
-            paginationModel={payableActionSelector.pagination}
+            paginationModel={receivableEntrySelector.pagination}
             loading={isLoading || isFetching}
-            sortModel={payableActionSelector.sortModel}
+            sortModel={receivableEntrySelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(payableSetSortModal(sortModel))
+              dispatch(receivableEntrySetSortModel(sortModel))
             }
           />
         ) : (
           <CardsView
             uniqueId="id"
-            columns={PAYABLE_COLUMNS}
-            count={payableLisData?.body?.totalElements || 0}
+            columns={RECIVEABLE_COLUMNS}
+            count={receiveableLisData?.body?.totalElements || 0}
             handlePage={handlePage}
-            data={payableLisData?.body?.data}
-            paginationModel={payableActionSelector?.pagination}
+            data={receiveableLisData?.body?.data}
+            paginationModel={receivableEntrySelector?.pagination}
             loading={isLoading || isFetching}
             actions={
-              page == "payable_list"
-                ? getPayableListGridActions(nav, setModal)
-                : getPayableListGridActionApprove(nav, setModal)
+              page == "receivableEntry"
+                ? getReceiveableEntryGridActionApprove(nav, setModal)
+                : ""
             }
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
@@ -478,45 +393,54 @@ export default function PayableListScreen({ page }) {
         >
           <Box>
             <Typography variant="h6" component="div" margin="8px">
-              Payable Audit Logs
+              Receivable Entry Audit Logs
             </Typography>
 
             <AuditTimeLine
               id={modal.data.id}
-              page="payble/entry"
-              service={menuConfigUrl.document}
+              page="receivable"
+              service={menuConfigUrl.account}
             />
           </Box>
         </Drawer>
       )}
 
-      <CancelModalApprove
+     <CancelModalApprove
         rowId={modal?.data?.id}
-        sourceName={modal?.data?.payableRefNo}
+        sourceName={modal?.data?.receivableRefNo}
         handleOpen={modal.open && modal.type === "cancel"}
         handleClose={handleClose}
         handleCancel={handleCancel}
       />
-      <ApprovePayableModal
+    {/*    <ApprovePayableModal
         rowId={modal?.data?.id}
         sourceName={modal?.data?.payableRefNo}
         handleOpen={modal.open && modal.type === "approve"}
         handleClose={handleClose}
         handleApprove={handleApprove}
       />
-      <DeleteDialog
-        source={modal?.data?.deleteName?.payableRefNo}
-        // sourceName={modal?.data?.deleteName}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-        handleOpen={modal.open && modal.type === "delete"}
-      />
+    
       {modal.open && modal.type === "document" && (
         <PayableViewModal
           open={modal.open}
           data={modal.data}
           onClose={() => setModal((prev) => ({ ...prev, open: false }))}
           viewType={"view"}
+        />
+      )} */}
+
+      <DeleteDialog
+        source={modal?.data?.deleteName?.receivableRefNo}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+        handleOpen={modal.open && modal.type === "delete"}
+      />
+
+      {modal.open && modal.type === "add-entry" && (
+        <AddNewReceivableModal
+          open={modal.open}
+          onClose={handleClose}
+          data={modal.data}
         />
       )}
     </Box>

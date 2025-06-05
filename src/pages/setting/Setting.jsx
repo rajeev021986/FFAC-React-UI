@@ -31,10 +31,10 @@ const settingTabs = [
     label: "Port",
     value: "4",
   },
-  {
-    label: "Vessel",
-    value: "5",
-  },
+  // {
+  //   label: "Vessel",
+  //   value: "5",
+  // },
   {
     label: "Vessel Voyage",
     value: "6",
@@ -108,7 +108,7 @@ export default function SettingsPage() {
             {activeTab === "2" && <CustomerSetting />}
             {activeTab === "3" && <VendorSetting />}
             {activeTab === "4" && <PortSetting />}
-            {activeTab === "5" && <VesselSetting />}
+            {/* {activeTab === "5" && <VesselSetting />} */}
             {activeTab === "6" && <VesselVoyageSetting />}
             {activeTab === "7" && <ShipperSetting />}
             {activeTab === "8" && <ConsigneeSetting />}

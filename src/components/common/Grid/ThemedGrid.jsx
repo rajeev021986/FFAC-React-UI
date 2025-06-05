@@ -17,9 +17,9 @@ const ThemedGrid = (props) => {
     paginationModel,
     loading,
     uniqueId,
+    hideColumns,
     ...rest
   } = props;
-
   const handleDate = (date) => {
     return date.split("T")[0];
   };
@@ -69,7 +69,7 @@ const ThemedGrid = (props) => {
         "customerRefNo",
         "consigneeName",
         "portOfLoading",
-      "placeOfDelivery",
+        "placeOfDelivery",
       ];
       return {
         ...a,
@@ -114,10 +114,9 @@ const ThemedGrid = (props) => {
         onPaginationModelChange={paginationModel ? handlePage : undefined}
         getRowId={(row) => row[uniqueId]}
         disableColumnFilter
-        
         slots={{
           toolbar: () => (
-            <Box sx={{ display: "flex", justifyContent: "flex-start", p: 0 }}>
+            <Box sx={{ display: hideColumns ? "none" : "flex", justifyContent: "flex-start", p: 0 }}>
               <GridToolbarColumnsButton />
             </Box>
           ),

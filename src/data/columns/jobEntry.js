@@ -251,6 +251,15 @@ export const CONTAINER_COLUMNS  = (onContainerClick) => [
     align: "center",
     editable: false,
   },
+    {
+    flex: 1,
+    field: "driver",
+    headerName: "Driver",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    editable: false,
+  },
   {
     flex: 1,
     field: "truckTrailerNo",

@@ -43,18 +43,15 @@ const PayCalModal = ({ open, onClose, data, refetch }) => {
     multipleSelected: false,
     statusCode: null,
   });
-console.log("data?.statusCode",data?.statusCode);
-
   useEffect(() => {
     if (data?.statusCode === 100) {
-      console.log("hello paid");
       fetchPayableData();
     } else {
       if (data?.statusCode === 101) {
-        console.log("hhello, unpaid")
         setInitialValues({
           multipleSelected: false,
           statusCode: data?.statusCode,
+          vendorId: data?.vendorId,
           paymentDate: new Date().toISOString() || null,
           createdDate: data?.createdDate,
           currency: data?.currency || "INR",
@@ -87,32 +84,32 @@ console.log("data?.statusCode",data?.statusCode);
     try {
       const res = await ApiManager.getPayDetails(data?.id);
       const { paybleInfo, payment } = res.body;
-        setInitialValues((prev) => ({
-          ...prev,
-          id: payment?.id ?? prev.id,
-          statusCode: payment?.statusCode ?? prev.statusCode,
-          vendorName: payment?.vendorName ?? prev.vendorName,
-          usdAmount: payment?.usdAmount ?? prev.usdAmount,
-          localAmount: payment?.localAmount ?? prev.localAmount,
-          paymentDate: payment?.paymentDate ?? prev.paymentDate,
-          currency: payment?.currency ?? prev.currency,
-          paymentType: payment?.paymentType ?? prev.paymentType,
+      setInitialValues((prev) => ({
+        ...prev,
+        id: payment?.id ?? prev.id,
+        statusCode: payment?.statusCode ?? prev.statusCode,
+        vendorName: payment?.vendorName ?? prev.vendorName,
+        vendorId: payment?.vendorId ?? prev.vendorId,
+        usdAmount: payment?.usdAmount ?? prev.usdAmount,
+        localAmount: payment?.localAmount ?? prev.localAmount,
+        paymentDate: payment?.paymentDate ?? prev.paymentDate,
+        currency: payment?.currency ?? prev.currency,
+        paymentType: payment?.paymentType ?? prev.paymentType,
           bankId: payment?.bankId ?? prev.bankId,
-          bankName:payment?.bankName || payment?.bank ,
-          chequeNo: payment?.chequeNo ?? prev.chequeNo,
-          chequeDate: payment?.chequeDate ?? prev.chequeDate,
-          usdAmountToBePaid:
-            payment?.usdAmountToBePaid ?? prev.usdAmountToBePaid,
-          localAmountToBePaid:
-            payment?.localAmountToBePaid ?? prev.localAmountToBePaid,
-          bankCharges: payment?.bankCharges ?? prev.bankCharges,
-          multiple: payment?.multiple ?? prev.multiple,
-        }));
+        bankName:payment?.bankName || payment?.bank ,
+        chequeNo: payment?.chequeNo ?? prev.chequeNo,
+        chequeDate: payment?.chequeDate ?? prev.chequeDate,
+        usdAmountToBePaid: payment?.usdAmountToBePaid ?? prev.usdAmountToBePaid,
+        localAmountToBePaid:
+          payment?.localAmountToBePaid ?? prev.localAmountToBePaid,
+        bankCharges: payment?.bankCharges ?? prev.bankCharges,
+        multiple: payment?.multiple ?? prev.multiple,
+      }));
 
       if (paybleInfo && Array.isArray(paybleInfo)) {
         setInitialValues((prev) => ({
           ...prev,
-          paybleRefNum:paybleInfo.map((item) => item.refNo).join(", "),
+          paybleRefNum: paybleInfo.map((item) => item.refNo).join(", "),
           paybleIds: paybleInfo.map((item) => item.id),
         }));
       }

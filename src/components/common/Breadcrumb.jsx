@@ -82,6 +82,8 @@ const Routes = {
   accounts: { label: "Accounts (Operations)", disabled: true },
   pendingPayble: { label: "Pending Payable", disabled: true },
   receivableEntry: { label: "Receivable Entry", disabled: true },
+  addReceiveableEntry: { label: "Add Receivable Entry", disabled: true },
+  EditreceiveableEntry: { label: "Edit Receivable Entry", disabled: true },
 };
 
 const ThemedBreadcrumb = () => {

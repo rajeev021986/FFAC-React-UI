@@ -9,7 +9,6 @@ export function VesselMapping({ formik, disabled }) {
   const vesselLineEntity = formik.values.vesselLineEntities || [
     { id: 1, vesselId: "", shippingLine: "" },
   ];
-
   const newRowRef = useRef(null);
   const setFocus = () => {
     setTimeout(() => {
@@ -49,9 +48,7 @@ export function VesselMapping({ formik, disabled }) {
           id="vesselId"
           suggestionName="vessel_name"
           value={params.value}
-          error={
-            formik.errors.vesselLineEntities?.[params.rowIndex]?.vesselId
-          }
+          error={formik.errors.vesselLineEntities?.[params.rowIndex]?.vesselId}
           onChange={(newValue) => {
             const rowIndex = formik.values.vesselLineEntities.findIndex(
               (entity) => entity.id == params.id

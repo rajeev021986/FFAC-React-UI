@@ -87,11 +87,11 @@ const PortSetting = () => {
         <Loader />
       ) : (
         <Grid container spacing={2} flexWrap={"wrap"}>
-          <GlobalDrrpdownSetting
+          {/* <GlobalDrrpdownSetting
             value={documentType}
             setvalue={setDocumentType}
             title="Document Type"
-          />
+          /> */}
             <GlobalDrrpdownSetting
             value={basePort}
             setvalue={setBasePort}
