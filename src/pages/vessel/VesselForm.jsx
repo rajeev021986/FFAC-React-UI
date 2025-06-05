@@ -60,7 +60,7 @@ export function VesselForm({ initialValues, type }) {
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-     validationSchema: VesselValidation(),
+    validationSchema: VesselValidation(),
     onSubmit: async (values) => {
       if (type == "copy" || type == "add") {
         let line = values.vesselLineEntities.map((item) =>
@@ -227,9 +227,18 @@ export function VesselForm({ initialValues, type }) {
                       <FormAutoComplete
                         label="Line Name*"
                         id="lineId"
-                        value={formik.values.lineId}
+                        value={{
+                          lineId: formik.values.lineId,
+                          lineName: formik.values.lineName,
+                        }}
+                        idKey="lineId"
+                        nameKey="lineName"
+                        // value={formik.values.lineId}
                         error={formik.errors.lineId}
-                        onChange={formik.handleChange}
+                        onChange={(selected) => {
+                          formik.setFieldValue("lineId", selected.lineId);
+                          formik.setFieldValue("lineName", selected.lineName);
+                        }}
                         suggestionName="vendor_name"
                       ></FormAutoComplete>
                     </Grid>
@@ -399,12 +408,21 @@ export function VesselForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <FormAutoComplete
+                       <FormAutoComplete
                         label="Line Name*"
                         id="lineId"
-                        value={formik.values.lineId}
+                        value={{
+                          lineId: formik.values.lineId,
+                          lineName: formik.values.lineName,
+                        }}
+                        idKey="lineId"
+                        nameKey="lineName"
+                        // value={formik.values.lineId}
                         error={formik.errors.lineId}
-                        onChange={formik.handleChange}
+                        onChange={(selected) => {
+                          formik.setFieldValue("lineId", selected.lineId);
+                          formik.setFieldValue("lineName", selected.lineName);
+                        }}
                         suggestionName="vendor_name"
                       ></FormAutoComplete>
                     </Grid>

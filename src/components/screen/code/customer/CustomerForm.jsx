@@ -54,6 +54,7 @@ import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
 import DocumentIcon from "../../../common/commonIcons/DocumentIcons/DocumentIcon";
 import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
+import AutoCompleteInput from "../../../common/AutoCompletInput";
 
 export default function CustomerForm({
   initialValues,
@@ -90,8 +91,10 @@ export default function CustomerForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-     validationSchema: CustomerValidationSchema(),
+    //  validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
+      console.log(values, "value");
+  
       if (!values.id || type == "copy") {
         let emails = values.customerEntityEmailsIds.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
@@ -546,7 +549,7 @@ export default function CustomerForm({
                         error={formik.errors.poNo}
                         onChange={formik.handleChange}
                         disabled={disabled}
-                        type= "number"
+                        type="number"
                       />
                     </Grid>
                   </Grid>
@@ -603,9 +606,23 @@ export default function CustomerForm({
                         label="Country"
                         id="countryId"
                         suggestionName="country"
-                        value={formik.values?.countryId}
+                        value={{
+                          countryId: formik.values.countryId,
+                          countryName: formik.values.countryName,
+                        }}
                         error={formik.errors.countryId}
-                        onChange={formik.handleChange}
+                        idKey="countryId"
+                        nameKey="countryName"
+                        // onChange={formik.setFieldValue}
+                        onChange={(selected) => {
+                          formik.setFieldValue("countryId", selected.countryId);
+                          formik.setFieldValue(
+                            "countryName",
+                            selected.countryName
+                          );
+                        }}
+
+                        // onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
                   </Grid>
@@ -731,9 +748,9 @@ export default function CustomerForm({
                         // onChange={formik.handleChange}
                         onChange={(e) => {
                           formik.setFieldValue("creditAmount", "");
-                          formik.setFieldValue("creditDays", "");
-                          formik.setFieldError("creditAmount", "");
-                          formik.setFieldError("creditDays", "");
+                          // formik.setFieldValue("creditDays", "");
+                          // formik.setFieldError("creditAmount", "");
+                          //  formik.setFieldError("creditDays", "");
                           formik.setFieldValue("paymentType", e.target.value);
                         }}
                         disabled={disabled}
@@ -768,7 +785,20 @@ export default function CustomerForm({
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <InputBox
+                      <SelectBox
+                        label="Credit Days"
+                        id="creditDays"
+                        options={customerSettingsData?.body?.creditDays}
+                        value={
+                          formik.values.paymentType == "credit"
+                            ? formik.values.creditDays
+                            : formik.values.creditDays
+                        }
+                        error={formik.errors.creditDays}
+                        onChange={formik.handleChange}
+                      />
+
+                      {/* <InputBox
                         label="Credit Days"
                         id="creditDays"
                         value={
@@ -781,7 +811,7 @@ export default function CustomerForm({
                         disabled={
                           formik.values.paymentType === "cash" || disabled
                         }
-                      />
+                      /> */}
                     </Grid>
                     <Grid
                       item
@@ -863,7 +893,7 @@ export default function CustomerForm({
                         {isLoading && (
                           <CircularProgress size={20} color="white" />
                         )}{" "}
-                        Adds
+                        Add
                       </ThemeButton>
                     </Stack>
                   </Grid>
@@ -1199,13 +1229,27 @@ export default function CustomerForm({
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <FormAutoComplete
+                       <FormAutoComplete
                         label="Country"
                         id="countryId"
                         suggestionName="country"
-                        value={formik.values.countryId}
+                        value={{
+                          countryId: formik.values.countryId,
+                          countryName: formik.values.countryName,
+                        }}
                         error={formik.errors.countryId}
-                        onChange={formik.handleChange}
+                        idKey="countryId"
+                        nameKey="countryName"
+                        // onChange={formik.setFieldValue}
+                        onChange={(selected) => {
+                          formik.setFieldValue("countryId", selected.countryId);
+                          formik.setFieldValue(
+                            "countryName",
+                            selected.countryName
+                          );
+                        }}
+
+                        // onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
                   </Grid>
@@ -1330,9 +1374,9 @@ export default function CustomerForm({
                         value={formik.values.paymentType}
                         onChange={(e) => {
                           formik.setFieldValue("creditAmount", "");
-                          formik.setFieldValue("creditDays", "");
-                          formik.setFieldError("creditAmount", "");
-                          formik.setFieldError("creditDays", "");
+                          // formik.setFieldValue("creditDays", "");
+                          //  formik.setFieldError("creditAmount", "");
+                          // formik.setFieldError("creditDays", "");
                           formik.setFieldValue("paymentType", e.target.value);
                         }}
                         disabled={disabled}
@@ -1362,7 +1406,7 @@ export default function CustomerForm({
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <InputBox
+                      {/* <InputBox
                         label="Credit Days"
                         id="creditDays"
                         value={formik.values.creditDays}
@@ -1371,6 +1415,19 @@ export default function CustomerForm({
                         disabled={
                           formik.values.paymentType === "cash" || disabled
                         }
+                      /> */}
+
+                      <SelectBox
+                        label="Credit Days"
+                        id="creditDays"
+                        options={customerSettingsData?.body?.creditDays}
+                        value={
+                          formik.values.paymentType == "credit"
+                            ? formik.values.creditDays
+                            : formik.values.creditDays
+                        }
+                        error={formik.errors.creditDays}
+                        onChange={formik.handleChange}
                       />
                     </Grid>
                     <Grid

@@ -202,9 +202,20 @@ export default function PortValueForm({
             label="Country"
             id="countryId"
             suggestionName="country"
-            value={formik.values.countryId}
+            value={{
+              countryId: formik.values.countryId,
+              countryName: formik.values.countryName,
+            }}
             error={formik.errors.countryId}
-            onChange={formik.handleChange}
+            idKey="countryId"
+            nameKey="countryName"
+            // onChange={formik.setFieldValue}
+            onChange={(selected) => {
+              formik.setFieldValue("countryId", selected.countryId);
+              formik.setFieldValue("countryName", selected.countryName);
+            }}
+
+            // onChange={formik.handleChange}
           ></FormAutoComplete>
         </Grid>
         <Grid
@@ -221,9 +232,17 @@ export default function PortValueForm({
             label="Region"
             id="regionId"
             suggestionName="region"
-            value={formik.values.regionId}
+            idKey="regionId"
+            nameKey="regionName"
+            value={{
+              regionId: formik.values.regionId,
+              regionName: formik.values.regionName,
+            }}
             error={formik.errors.regionId}
-            onChange={formik.handleChange}
+            onChange={(selected) => {
+              formik.setFieldValue("regionId", selected.regionId);
+              formik.setFieldValue("regionName", selected.regionName);
+            }}
             inputRef={FieldRef}
           ></FormAutoComplete>
         </Grid>

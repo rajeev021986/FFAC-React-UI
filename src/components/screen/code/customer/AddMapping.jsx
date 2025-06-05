@@ -15,6 +15,8 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
     {
       id: 1,
       chargeId: "",
+      chargeName: "",
+
       unitType: "",
       currency: "",
       shipmentType: "",
@@ -98,31 +100,35 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
-        
         return (
           <AutoCompleteInput
             id="chargeId"
             suggestionName="charge_name"
-            value={params.row?.chargeId}
+            value={{
+              id: params.row?.chargeId,
+              label: params.row?.chargeName ?? "",
+            }}
             error={
               formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeId
             }
-            onChange={(newValue) => {
+            onChange={(selectedItem) => {
               const rowIndex = formik.values.customerEntityTariffs.findIndex(
                 (entity) => entity.id == params.id
               );
-              console.log(rowIndex,"rowIndex")
-              // setTimeout(() => {
+
               formik.setValues({
                 ...formik.values,
                 customerEntityTariffs: formik.values.customerEntityTariffs.map(
                   (entity, index) =>
                     index === rowIndex
-                      ? { ...entity, chargeId: newValue }
+                      ? {
+                          ...entity,
+                          chargeId: selectedItem?.id ?? null,
+                          chargeName: selectedItem?.label ?? "",
+                        }
                       : entity
                 ),
               });
-              // }, 1500);
             }}
             inputRef={newRowRef}
           />
@@ -174,34 +180,31 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       headerName: "Currency",
       flex: 1,
       renderCell: (params) => {
+        const rowIndex = formik.values.customerEntityTariffs.findIndex(
+          (entity) => entity.id === params.id
+        );
+    
+        const currencyValue =
+          formik.values.customerEntityTariffs?.[rowIndex]?.currency || "";
+    
         return (
           <AutoCompleteInput
             id="currency"
             suggestionName="currency"
-            value={params.value}
-            error={
-              formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeId
-            }
+            value={currencyValue}
+            error={formik.errors.customerEntityTariffs?.[rowIndex]?.currency}
             onChange={(newValue) => {
-              const rowIndex = formik.values.customerEntityTariffs.findIndex(
-                (entity) => entity.id === params.id
+              formik.setFieldValue(
+                `customerEntityTariffs[${rowIndex}].currency`,
+                newValue
               );
-              formik.setValues({
-                ...formik.values,
-                customerEntityTariffs: formik.values.customerEntityTariffs.map(
-                  (entity, index) =>
-                    index === rowIndex
-                      ? { ...entity, currency: newValue }
-                      : entity
-                ),
-              });
             }}
           />
         );
       },
-      headerAlign: "center",
-      align: "center",
     },
+    
+    
     {
       field: "shipmentType",
       headerName: "Shipment Type",

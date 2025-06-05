@@ -61,7 +61,10 @@ export function VesselMapping({ formik, disabled }) {
               vesselLineEntities: formik.values.vesselLineEntities.map(
                 (entity, index) =>
                   index === rowIndex
-                    ? { ...entity, vesselId: newValue }
+                    ? { ...entity, 
+                      vesselId: newValue?.id ?? null,
+                      vesselName:newValue?.label?? "",
+                     }
                     : entity
               ),
             });
@@ -76,31 +79,34 @@ export function VesselMapping({ formik, disabled }) {
       flex: 1,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => (
-        <AutoCompleteInput
-          id="shippingLine"
-          suggestionName="name"
-          value={params.value}
-          error={
-            formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
-          }
-          onChange={(newValue) => {
-            const rowIndex = formik.values.vesselLineEntities.findIndex(
-              (entity) => entity.id === params.id
-            );
-            formik.setValues({
-              ...formik.values,
-              vesselLineEntities: formik.values.vesselLineEntities.map(
-                (entity, index) =>
-                  index === rowIndex
-                    ? { ...entity, shippingLine: newValue }
-                    : entity
-              ),
-            });
-          }}
-        />
-      ),
+      renderCell: (params) => {
+        return (
+          <AutoCompleteInput
+            id="shippingLine"
+            suggestionName="type"
+            value={params.value}
+            error={
+              formik.errors.vesselLineEntities?.[params.rowIndex]?.shippingLine
+            }
+            onChange={(newValue) => {
+              const rowIndex = formik.values.vesselLineEntities.findIndex(
+                (entity) => entity.id === params.id
+              );
+              formik.setValues({
+                ...formik.values,
+                vesselLineEntities: formik.values.vesselLineEntities.map(
+                  (entity, index) =>
+                    index === rowIndex
+                      ? { ...entity, shippingLine: newValue }
+                      : entity
+                ),
+              });
+            }}
+          />
+        );
+      },
     },
+ 
 
     {
       field: "actions",

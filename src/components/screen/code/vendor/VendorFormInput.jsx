@@ -454,9 +454,20 @@ export default function VendorFormInput({
               label="Country"
               id="countryId"
               suggestionName="country"
-              value={formik.values.countryId}
+              value={{
+                countryId: formik.values.countryId,
+                countryName: formik.values.countryName,
+              }}
               error={formik.errors.countryId}
-              onChange={formik.handleChange}
+              idKey="countryId"
+              nameKey="countryName"
+              // onChange={formik.setFieldValue}
+              onChange={(selected) => {
+                formik.setFieldValue("countryId", selected.countryId);
+                formik.setFieldValue("countryName", selected.countryName);
+              }}
+
+              // onChange={formik.handleChange}
             ></FormAutoComplete>
           </Grid>
         </Grid>
@@ -636,7 +647,7 @@ export default function VendorFormInput({
                   sx={{ fontWeight: "500", color: "white !important" }}
                 >
                   {loading && <CircularProgress size={20} color="white" />}{" "}
-                  {type == "Edit" ? "Update" : "Adds"}
+                  {type == "Edit" ? "Update" : "Add"}
                 </ThemeButton>
               </Stack>
             </Stack>

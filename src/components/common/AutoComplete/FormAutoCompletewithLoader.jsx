@@ -22,6 +22,9 @@ function FormAutoCompleteWithLoader(props) {
     name,
     disabled,
     other,
+    idKey, 
+    nameKey,
+    sendLabelOnly,
   } = props;
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -52,7 +55,7 @@ function FormAutoCompleteWithLoader(props) {
     };
 
     fetchData();
-  }, [debounceValue, suggestionName, id, dataLabel,value]);
+  }, [debounceValue, suggestionName, id, dataLabel, value]);
 
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);
@@ -60,34 +63,51 @@ function FormAutoCompleteWithLoader(props) {
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      onChange({
-        target: {
-          name: id,
-          value: name == true ? newValue.value : newValue.fullData?.id,
-          label: newValue.label,
-          count: newValue?.fullData?.count || 0,
-          fullData: newValue.fullData,
-        },
-      });
+      if (sendLabelOnly) {
+        // 👇 Only send the label as value
+        onChange({
+          target: {
+            name: id,
+            value: newValue.label,
+          },
+        });
+      } else {
+        console.log(newValue,"newValue")
+        // 👇 Send both id + name
+        onChange({
+          [idKey]: newValue?.fullData?.id ?? newValue?.value,
+          [nameKey]: newValue?.label ?? "",
+          label: newValue?.label,
+          fullData: newValue?.fullData,
+        });
+      }
     } else {
-      onChange({
-        target: {
-          name: id,
-          value: null,
+      if (sendLabelOnly) {
+        onChange({
+          target: {
+            name: id,
+            value: "",
+          },
+        });
+      } else {
+        onChange({
+          [idKey]: null,
+          [nameKey]: "",
           label: "",
           fullData: null,
-          count: 0,
-        },
-      });
+        });
+      }
     }
   };
+
   const selectedOption =
     options.find(
       (option) =>
-        option?.value == value ||
-        option?.fullData?.id == value ||
-        option?.label == value
+        option?.value == value?.[idKey] ||
+        option?.fullData?.id == value?.[idKey] ||
+        option?.label == value?.[nameKey]
     ) || null;
+
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
@@ -98,7 +118,7 @@ function FormAutoCompleteWithLoader(props) {
         id={id}
         disabled={disabled}
         value={
-          id == "exchangeRate"
+          id == "exchangeRate" || id == "jobNo"
             ? options.find((option) => option.value == value) || null
             : selectedOption
         }

@@ -23,7 +23,6 @@ function FormAutoCompleteWithCountryTable(props) {
     formik,
     disabled,
   } = props;
-console.log(value,"value")
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -91,16 +90,17 @@ console.log(value,"value")
   //   }
   // };
 
-
   const handleSelectionChange = (event, newValue) => {
-    setSelectedOption(newValue); // ✅ Maintain selection
-  
+    setSelectedOption(newValue);
+
     if (newValue) {
-      const { country, port_name } = newValue.fullData;
-  
+      const { fullData } = newValue;
+      const { country, port_name } = fullData;
+
       if (id === "originPortId") {
         setFieldValue("originPortId", newValue.value);
         setFieldValue("portOfLoading", port_name || "");
+        setFieldValue("originPortName", newValue.label || ""); // ✅ ADD THIS LINE
       } else if (id === "portOfLoading") {
         setFieldValue("portOfLoading", port_name);
         setFieldValue("originPortId", newValue.value || "");
@@ -109,18 +109,19 @@ console.log(value,"value")
       setFieldValue(id, "");
       if (id === "originPortId") {
         setFieldValue("portOfLoading", "");
+        setFieldValue("originPortName", ""); // ✅ Clear this too
       } else if (id === "portOfLoading") {
         setFieldValue("originPortId", "");
       }
-      setSelectedOption(null); // Clear selected option
+      setSelectedOption(null);
     }
   };
-  
-  console.log(selectedOption,"selectedOption")
+
+  console.log(selectedOption, "selectedOption");
   useEffect(() => {
     const initializeSelectedOption = async () => {
       const existingId = formik.values[id];
-  
+
       if (existingId && !selectedOption) {
         try {
           const result = await GetAutoCompleteDataWithCountry(
@@ -129,7 +130,7 @@ console.log(value,"value")
             suggestionName,
             "" // or pass a proper filter if needed
           );
-  
+
           const matched = result.find((opt) => opt.value == existingId);
           if (matched) {
             setSelectedOption(matched);
@@ -139,10 +140,10 @@ console.log(value,"value")
         }
       }
     };
-  
+
     initializeSelectedOption();
   }, [formik.values[id]]);
-  
+
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
@@ -154,7 +155,6 @@ console.log(value,"value")
         noOptionsText="Type to Search"
         disabled={disabled}
         value={selectedOption}
-
         // value={formik.values[id] ? { label: formik.values[id] } : null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}

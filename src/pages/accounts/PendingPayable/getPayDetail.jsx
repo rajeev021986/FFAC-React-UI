@@ -39,7 +39,6 @@ export default function GetPayDetails({
 }) {
   //
 
-  
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
@@ -82,7 +81,7 @@ export default function GetPayDetails({
     currency: Yup.string().required("Currency is required!"),
     paymentType: Yup.string().required("Payment Type is required!"),
     paymentDate: Yup.string().required("Payment Date is required!"),
-    bankName: Yup.string().when("paymentType", {
+    bankId: Yup.string().when("paymentType", {
       is: (val) => val === "Cheque",
       then: () =>
         Yup.string().required(
@@ -113,7 +112,7 @@ export default function GetPayDetails({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema,
+     validationSchema,
     onSubmit: async (values) => {
       try {
         if (values?.vendorName === "") {
@@ -134,6 +133,7 @@ export default function GetPayDetails({
           paymentDate: values?.paymentDate || new Date().toISOString(),
           currency: values?.currency || "",
           bankId: values?.bankId || "",
+          bankName: values?.bankName || "",
           chequeNo: values?.chequeNo || "",
           chequeDate: values?.chequeDate || "",
           usdAmountToBePaid: values?.usdAmountToBePaid || 0,
@@ -144,6 +144,7 @@ export default function GetPayDetails({
           paybleIds: values?.paybleIds || [],
           payment: payload,
         };
+        console.log(multiplePayload,"multiplePayload")
         if (initialValues?.multipleSelected === true) {
           const res = await ApiManager.paySelectedIdsHandler(multiplePayload);
           if (res.success) {
@@ -173,7 +174,7 @@ export default function GetPayDetails({
     },
   });
   console.log("initialValues", initialValues);
-console.log("formik.values", formik.values.chequeNo);
+  console.log("formik.values", formik.values.chequeNo);
 
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
@@ -420,9 +421,22 @@ console.log("formik.values", formik.values.chequeNo);
                       label="Bank Name"
                       id="bankId"
                       suggestionName="bank_name"
-                      value={formik.values.bankId}
+                      idKey="bankId"
+                      nameKey="bankName"
+                      // value={formik.values.bankId}
+                      value={{
+                        bankId: formik.values.bankId,
+                        bankName: formik.values.bankName,
+                      }}
                       error={formik.errors.bankId}
-                      onChange={formik.handleChange}
+                      // onChange={formik.handleChange}
+                      onChange={(selected) => {
+                        formik.setFieldValue("bankId", selected.bankId);
+                        formik.setFieldValue(
+                          "bankName",
+                          selected.bankName
+                        );
+                      }}
                       disabled={
                         formik.values.paymentType === "Cheque" && !isDisabled
                           ? false

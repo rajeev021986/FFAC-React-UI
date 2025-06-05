@@ -120,11 +120,27 @@ export default function ShipmentDetails({ formik }) {
               label="Port Of Discharge"
               id="portOfDischargeId"
               suggestionName="port_name"
-              value={formik.values.portOfDischargeId}
+              // value={formik.values.portOfDischargeId}
+              value={{
+                portOfDischargeId: formik.values.portOfDischargeId,
+                portOfDischargeName: formik.values.portOfDischargeName,
+              }}
               error={formik.errors.portOfDischargeId}
-              onChange={formik.handleChange}
+              // onChange={formik.handleChange}
               inputRef={FieldRef}
+              idKey="portOfDischargeId"
+              nameKey="portOfDischargeName"
               disabled={disabled}
+              onChange={(selected) => {
+                formik.setFieldValue(
+                  "portOfDischargeId",
+                  selected.portOfDischargeId
+                );
+                formik.setFieldValue(
+                  "portOfDischargeName",
+                  selected.portOfDischargeName
+                );
+              }}
             />
           </Grid>
 
@@ -133,9 +149,25 @@ export default function ShipmentDetails({ formik }) {
               label="Place Of Delivery"
               id="placeOfDeliveryId"
               suggestionName="port_name"
-              value={formik.values.placeOfDeliveryId}
+              idKey="placeOfDeliveryId"
+              nameKey="placeOfDeliveryName"
+              // value={formik.values.placeOfDeliveryId}
+              value={{
+                placeOfDeliveryId: formik.values.placeOfDeliveryId,
+                placeOfDeliveryName: formik.values.placeOfDeliveryName,
+              }}
               error={formik.errors.placeOfDeliveryId}
-              onChange={formik.handleChange}
+              // onChange={formik.handleChange}
+              onChange={(selected) => {
+                formik.setFieldValue(
+                  "placeOfDeliveryId",
+                  selected.placeOfDeliveryId
+                );
+                formik.setFieldValue(
+                  "placeOfDeliveryName",
+                  selected.placeOfDeliveryName
+                );
+              }}
               inputRef={FieldRef}
               disabled={disabled}
             />

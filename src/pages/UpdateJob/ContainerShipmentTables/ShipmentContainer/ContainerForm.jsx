@@ -75,6 +75,7 @@ export default function ContainerNumberForm({
     sealNo: "",
     truckTrailerNo: "",
     transporterId: "",
+    transporterName:"",
     // truckTrailerNoTransporter: "",
     driver: "",
     agreedRate: "",
@@ -82,6 +83,7 @@ export default function ContainerNumberForm({
     passportNo: "",
     licenceNo: "",
     clerkId: "",
+    clerkName:"",
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
@@ -126,6 +128,7 @@ export default function ContainerNumberForm({
         sealNo: res?.body?.sealNo,
         truckTrailerNo: res?.body?.truckTrailerNo,
         transporterId: res?.body?.transporterId,
+        transporterName:res?.body?.transporter,
         // truckTrailerNoTransporter: res?.body?.truckTrailerNoTransporter,
         driver: res?.body?.driver,
         agreedRate: res?.body?.agreedRate,
@@ -133,6 +136,7 @@ export default function ContainerNumberForm({
         passportNo: res?.body?.passportNo,
         licenceNo: res?.body?.licenceNo,
         clerkId: res?.body?.clerkId,
+        clerkName:res?.body?.clerkName,
         clerkTelNo: res?.body?.clerkTelNo,
         reportingPlace: res?.body?.reportingPlace,
         reportingDate: res?.body?.reportingDate,
@@ -350,9 +354,25 @@ export default function ContainerNumberForm({
                     label="Transporter"
                     id="transporterId"
                     suggestionName="vendor_name"
-                    value={formik.values.transporterId}
+                    idKey="transporterId"
+                    nameKey="transporterName"
+                    // value={formik.values.transporterId}
+                    value={{
+                      transporterId: formik.values.transporterId,
+                      transporterName: formik.values.transporterName,
+                    }}
+                    onChange={(selected) => {
+                      formik.setFieldValue(
+                        "transporterId",
+                        selected.transporterId
+                      );
+                      formik.setFieldValue(
+                        "transporterName",
+                        selected.transporterName
+                      );
+                    }}
                     error={formik.errors.transporterId}
-                    onChange={formik.handleChange}
+                    // onChange={formik.handleChange}
                   ></FormAutoComplete>
                 </Grid>
 
@@ -436,9 +456,19 @@ export default function ContainerNumberForm({
                     label="Clerk Name"
                     id="clerkId"
                     suggestionName="first_name"
-                    value={formik.values.clerkId}
+                    // value={formik.values.clerkId}
+                    value={{
+                      clerkId: formik.values.clerkId,
+                      clerkName: formik.values.clerkName,
+                    }}
+                    idKey="clerkId"
+                    nameKey="clerkName"
                     error={formik.errors.clerkId}
-                    onChange={formik.handleChange}
+                    // onChange={formik.handleChange}
+                    onChange={(selected) => {
+                      formik.setFieldValue("clerkId", selected.clerkId);
+                      formik.setFieldValue("clerkName", selected.clerkName);
+                    }}
                   />
                 </Grid>
 
@@ -737,11 +767,10 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-             
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival Customer Place"
                     name="arrivalCustomerPlaceDate"
@@ -784,11 +813,10 @@ export default function ContainerNumberForm({
                     onChange={formik.handleChange}
                   />
                 </Grid>
-             
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <Box
                     display="flex"
                     alignItems="center"
@@ -1036,7 +1064,7 @@ export default function ContainerNumberForm({
           </TabPanel>
         </TabContext>
 
-        {(page === "containerNo" && value== '1') && (
+        {page === "containerNo" && value == "1" && (
           <Grid
             paddingLeft={3}
             marginTop={2}

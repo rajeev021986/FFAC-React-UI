@@ -137,7 +137,7 @@ export default function AddPayableEntryModal({
 
   const handleSubmit = async () => {
     try {
-      await modalValidationSchema.validate(payableEntry, { abortEarly: false });
+       await modalValidationSchema.validate(payableEntry, { abortEarly: false });
       setErrors({}); // Clear errors on successful validation
 
       const updatedEntry = selectedPayEntry
@@ -314,12 +314,12 @@ export default function AddPayableEntryModal({
             <FormAutoCompleteWithLoader
               label="Job No."
               id="jobNo"
-              show ={false}
-
+              show={false}
               value={payableEntry.jobNo}
+              sendLabelOnly={true}
               onChange={(e) => {
-                const value = e.target.value;
-                console.log(value,"targetValue")
+                const value = e.target?.value;
+                console.log(value, "targetValue");
                 handleChange("jobNo", value);
                 if (!value) {
                   setPayableEntry((prev) => ({
@@ -336,13 +336,29 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={8}>
-            <FormAutoCompleteWithLoader
+            {/* <FormAutoCompleteWithLoader
               label="Charge Name"
               id="chargeId"
               value={payableEntry.chargeName}
               onChange={(e) => handleChange("chargeName", e.target.value)}
               suggestionName="charge_name"
               error={errors.chargeName}
+            /> */}
+            <FormAutoCompleteWithLoader
+              label="Charge Name"
+              id="chargeId"
+              suggestionName="charge_name"
+              value={{
+                chargeId: payableEntry.chargeId,
+                chargeName: payableEntry.chargeName,
+              }}
+              error={errors.chargeName}
+              idKey="chargeId"
+              nameKey="chargeName"
+              onChange={(selected) => {
+                handleChange("chargeId", selected.chargeId);
+                handleChange("chargeName", selected.chargeName);
+              }}
             />
           </Grid>
           <Grid item xs={12} lg={4}>

@@ -50,7 +50,7 @@ export function VesselVoyageForm({ initialValues, type }) {
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-     validationSchema: VesselVoyageValidation(),
+    validationSchema: VesselVoyageValidation(),
     onSubmit: async (values) => {
       if (type == "copy" || type == "add") {
         try {
@@ -193,9 +193,20 @@ export function VesselVoyageForm({ initialValues, type }) {
                         label="Vessel Name*"
                         id="vesselId"
                         suggestionName="vessel_name"
-                        value={formik.values.vesselId}
+                        value={{
+                          vesselId: formik.values.vesselId,
+                          vesselName: formik.values.vesselName,
+                        }}
                         error={formik.errors.vesselId}
-                        onChange={formik.handleChange}
+                        idKey="vesselId"
+                        nameKey="vesselName"
+                        onChange={(selected) => {
+                          formik.setFieldValue("vesselId", selected.vesselId);
+                          formik.setFieldValue(
+                            "vesselName",
+                            selected.vesselName
+                          );
+                        }}
                         inputRef={FieldRef}
                       ></FormAutoComplete>
                     </Grid>
@@ -544,9 +555,20 @@ export function VesselVoyageForm({ initialValues, type }) {
                         label="Vessel Name*"
                         id="vesselId"
                         suggestionName="vessel_name"
-                        value={formik.values.vesselId}
+                        value={{
+                          vesselId: formik.values.vesselId,
+                          vesselName: formik.values.vesselName,
+                        }}
                         error={formik.errors.vesselId}
-                        onChange={formik.handleChange}
+                        idKey="vesselId"
+                        nameKey="vesselName"
+                        onChange={(selected) => {
+                          formik.setFieldValue("vesselId", selected.vesselId);
+                          formik.setFieldValue(
+                            "vesselName",
+                            selected.vesselName
+                          );
+                        }}
                         inputRef={FieldRef}
                       ></FormAutoComplete>
                     </Grid>

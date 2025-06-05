@@ -125,10 +125,12 @@ export default function VendorEditGrid({
               <AutoCompleteInput
                 id="chargeId"
                 suggestionName="charge_name"
-                value={params.row?.chargeId}
+                value={{
+                  id: params.row?.chargeId,
+                  label: params.row?.chargeName ?? "",
+                }}
                 error={
-                  formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeId
+                  formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeId
                 }
                 onChange={(newValue) => {
                   const rowIndex = formik.values.vendorEntityTariffs.findIndex(
@@ -140,7 +142,11 @@ export default function VendorEditGrid({
                     vendorEntityTariffs: formik.values.vendorEntityTariffs.map(
                       (entity, index) =>
                         index === rowIndex
-                          ? { ...entity, chargeId: newValue }
+                          ? {
+                              ...entity,
+                              chargeId: newValue?.id ?? null,
+                              chargeName: newValue?.label ?? "",
+                            }
                           : entity
                     ),
                   });
@@ -237,13 +243,10 @@ export default function VendorEditGrid({
                 id="currency"
                 suggestionName="currency"
                 value={params.row.currency}
-
                 error={
-                  formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeId
+                  formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeId
                 }
                 onChange={(newValue) => {
-                  console.log(newValue,"rohit")
                   const rowIndex = formik.values.vendorEntityTariffs.findIndex(
                     (entity) => entity.id == params.id
                   );
@@ -507,7 +510,11 @@ export default function VendorEditGrid({
               <AutoCompleteInput
                 id="countryId"
                 suggestionName="country"
-                value={params.value}
+                // value={params.value} 
+                value={{
+                  id: params.row?.countryId,
+                  label: params.row?.countryName ?? "",
+                }}
                 error={
                   formik.errors.vendorEntityFreeDays?.[params.rowIndex]
                     ?.countryId
@@ -522,7 +529,10 @@ export default function VendorEditGrid({
                     vendorEntityFreeDays:
                       formik.values.vendorEntityFreeDays.map((entity, index) =>
                         index === rowIndex
-                          ? { ...entity, countryId: newValue }
+                          ? { ...entity,
+                             countryId: newValue?.id ?? null,
+                             countryName :newValue?.label ?? "",
+                             }
                           : entity
                       ),
                   });
@@ -858,7 +868,7 @@ export default function VendorEditGrid({
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               {TabsHosts.map((value, index) => (
                 <Tab
-                  sx={{textTransform: "capitalize" }}
+                  sx={{ textTransform: "capitalize" }}
                   label={value.tabLable}
                   value={index}
                   className="nested1"
