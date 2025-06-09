@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -73,7 +72,7 @@ export default function VehicleNumberForm({
 
   const [initialValues, setInitialValues] = React.useState({
     clerkName: "",
-    clerkId:"",
+    clerkId: "",
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
@@ -174,7 +173,7 @@ export default function VehicleNumberForm({
         arrivalICDDate: res?.body?.arrivalICDDate,
         cargoReleaseDate: res?.body?.cargoReleaseDate,
         departICDDate: res?.body?.departICDDate,
-        bondNumber: bondDetails[0]?.bondNumber,
+        bondNumber:res?.body?.bondNumber,
         bondAmount: res?.body?.bondAmount,
         arrivalCustomerPlaceDate: res?.body?.arrivalCustomerPlaceDate,
         remark: res?.body?.remark,
@@ -202,7 +201,11 @@ export default function VehicleNumberForm({
   }, [vehicleId]);
 
   useEffect(() => {
-    if (optionsSettingsData?.body || customerSettingsData?.body || jobSettingData?.body) {
+    if (
+      optionsSettingsData?.body ||
+      customerSettingsData?.body ||
+      jobSettingData?.body
+    ) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
@@ -298,10 +301,10 @@ export default function VehicleNumberForm({
                       clerkId: formik.values.clerkId,
                       clerkName: formik.values.clerkName,
                     }}
-                      idKey="clerkId"
+                    idKey="clerkId"
                     nameKey="clerkName"
                     error={formik.errors.clerkId}
-                    // onChange={formik.handleChange} 
+                    // onChange={formik.handleChange}
                     onChange={(selected) => {
                       formik.setFieldValue("clerkId", selected.clerkId);
                       formik.setFieldValue("clerkName", selected.clerkName);
@@ -451,7 +454,7 @@ export default function VehicleNumberForm({
                   <InputBox
                     label="Bond Number"
                     id="bondNumber"
-                    value={formik.values.bondNumber}
+                    value={formik.values.bondNumber || ""}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -640,7 +643,7 @@ export default function VehicleNumberForm({
           </TabPanel>
         </TabContext>
 
-        {(page === "vehicleShipment"  && value == "1") && (
+        {page === "vehicleShipment" && value == "1" && (
           <Grid
             paddingLeft={3}
             marginTop={2}
@@ -703,6 +706,7 @@ export default function VehicleNumberForm({
             isNotShowType={true}
             sourceType={"JOB_VEHICLE"}
             type={SourceType}
+            disabled={false}
           />
         </Box>
       </Modal>

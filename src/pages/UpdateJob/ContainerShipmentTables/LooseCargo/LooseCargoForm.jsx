@@ -83,7 +83,7 @@ export default function LooseCargoForm({
     passportNo: "",
     licenceNo: "",
     clerkId: "",
-    clerkName:"",
+    clerkName: "",
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
@@ -125,7 +125,7 @@ export default function LooseCargoForm({
         passportNo: res.body?.passportNo,
         licenceNo: res.body?.licenceNo,
         clerkId: res.body?.clerkId,
-        clerkName:res?.body?.clerkName,
+        clerkName: res?.body?.clerkName,
         clerkTelNo: res.body?.clerkTelNo,
         reportingPlace: res.body?.reportingPlace,
         reportingDate: res.body?.reportingDate,
@@ -139,7 +139,7 @@ export default function LooseCargoForm({
         arrivalICDDate: res.body?.arrivalICDDate,
         cargoReleaseDate: res.body?.cargoReleaseDate,
         departICDDate: res.body?.departICDDate,
-        bondNumber: bondDetails[0]?.bondNumber,
+        bondNumber:  res.body?.bondNumber,
         bondAmount: res.body?.bondAmount,
         arrivalCustomerPlaceDate: res.body?.arrivalCustomerPlaceDate,
         remark: res.body?.remark,
@@ -557,7 +557,7 @@ export default function LooseCargoForm({
                   <InputBox
                     label="Bond Number"
                     id="bondNumber"
-                    value={formik.values.bondNumber}
+                    value={formik.values.bondNumber || ""}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -811,6 +811,7 @@ export default function LooseCargoForm({
             isNotShowType={true}
             sourceType={"JOB_LOOSE_CARGO"}
             type={SourceType}
+            disabled={false}
           />
         </Box>
       </Modal>

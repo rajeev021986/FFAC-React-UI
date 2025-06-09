@@ -49,7 +49,6 @@ export default function LineVessel({ formik }) {
               error={formik.errors.shippingLine}
               // onChange={formik.handleChange}
               onChange={(selected) => {
-                console.log(selected,"selected")
                 formik.setFieldValue("shippingLineId", selected.shippingLineId);
                 formik.setFieldValue("shippingLine", selected.shippingLine);
               }}

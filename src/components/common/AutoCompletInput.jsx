@@ -23,7 +23,6 @@ function AutoCompleteInput({
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
-  console.log(value,"value")
   const tooltipMessage =
     typeof value === "object" && value?.label
       ? value.label
@@ -60,7 +59,6 @@ function AutoCompleteInput({
   };
 
   // const handleSelectionChange = (event, newValue) => {
-  //   console.log(newValue, "ram");
   //   if (newValue) {
   //     // onChange(newValue.value);
 

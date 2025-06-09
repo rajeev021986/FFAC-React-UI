@@ -147,7 +147,6 @@ export default function GetPayDetails({
           paybleIds: values?.paybleIds || [],
           payment: payload,
         };
-        console.log(multiplePayload,"multiplePayload")
         if (initialValues?.multipleSelected === true) {
           const res = await ApiManager.paySelectedIdsHandler(multiplePayload);
           if (res.success) {

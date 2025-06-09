@@ -33,7 +33,6 @@ function FormAutoComplete(props) {
       (option) =>
         option.fullData?.id  == value?.[idKey]
     ) || null;
-  console.log(value, "selectedOption");
 
   useEffect(() => {
     const fetchData = async () => {

@@ -72,7 +72,6 @@ function FormAutoCompleteWithLoader(props) {
           },
         });
       } else {
-        console.log(newValue,"newValue")
         // 👇 Send both id + name
         onChange({
           [idKey]: newValue?.fullData?.id ?? newValue?.value,
@@ -118,15 +117,15 @@ function FormAutoCompleteWithLoader(props) {
         id={id}
         disabled={disabled}
         value={
-          id == "exchangeRate" || id == "jobNo"
-            ? options.find((option) => option.value == value) || null
+          id == "exchangeRate" || id == "jobNo" || id == "exRate"
+            ? options.find((option) => option.value == value) || value
             : selectedOption
         }
         // value={selectedOption}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
-        getOptionLabel={(option) => option.label || ""}
+        getOptionLabel={(option) => option.label || value}
         renderInput={(params) => (
           <TextField
             {...params}

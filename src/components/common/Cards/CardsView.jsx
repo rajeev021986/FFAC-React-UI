@@ -82,6 +82,60 @@ export default function CardsView({
       paybleCreatedDate: obj.paybleCreatedDate
         ? handleDate(obj.paybleCreatedDate)
         : obj.paybleCreatedDate,
+      reportingDate: obj.reportingDate
+        ? handleDate(obj.reportingDate)
+        : obj.reportingDate,
+      transferDate: obj.transferDate
+        ? handleDate(obj.transferDate)
+        : obj.transferDate,
+      t1C1ReadyDate: obj.t1C1ReadyDate
+        ? handleDate(obj.t1C1ReadyDate)
+        : obj.t1C1ReadyDate,
+      loadingDate: obj.loadingDate
+        ? handleDate(obj.loadingDate)
+        : obj.loadingDate,
+      cancellationDate: obj.cancellationDate
+        ? handleDate(obj.cancellationDate)
+        : obj.cancellationDate,
+      arrivalBorderDate: obj.arrivalBorderDate
+        ? handleDate(obj.arrivalBorderDate)
+        : obj.arrivalBorderDate,
+      crossedBorderDate: obj.crossedBorderDate
+        ? handleDate(obj.crossedBorderDate)
+        : obj.crossedBorderDate,
+      arrivalICDDate: obj.arrivalICDDate
+        ? handleDate(obj.arrivalICDDate)
+        : obj.arrivalICDDate,
+         cargoReleaseDate: obj.cargoReleaseDate
+        ? handleDate(obj.cargoReleaseDate)
+        : obj.cargoReleaseDate,
+          departICDDate: obj.departICDDate
+        ? handleDate(obj.departICDDate)
+        : obj.departICDDate,
+         departICDDate: obj.departICDDate
+        ? handleDate(obj.departICDDate)
+        : obj.departICDDate,
+        arrivalCustomerPlaceDate :  obj.arrivalCustomerPlaceDate
+        ? handleDate(obj.arrivalCustomerPlaceDate)
+        : obj.arrivalCustomerPlaceDate,
+         emptyReleasedDate :  obj.emptyReleasedDate
+        ? handleDate(obj.emptyReleasedDate)
+        : obj.emptyReleasedDate,
+         podDate :  obj.podDate
+        ? handleDate(obj.podDate)
+        : obj.podDate,
+         emptyReturnDate :  obj.emptyReturnDate
+        ? handleDate(obj.emptyReturnDate)
+        : obj.emptyReturnDate,
+         certificateOfExportDate :  obj.certificateOfExportDate
+        ? handleDate(obj.certificateOfExportDate)
+        : obj.certificateOfExportDate,
+         portGateInDate :  obj.portGateInDate
+        ? handleDate(obj.portGateInDate)
+        : obj.portGateInDate,
+         nominationDate :  obj.nominationDate
+        ? handleDate(obj.nominationDate)
+        : obj.nominationDate,
       type: obj.type ? obj.type.replace(/_/g, " ").trim() : obj.type,
     };
   });

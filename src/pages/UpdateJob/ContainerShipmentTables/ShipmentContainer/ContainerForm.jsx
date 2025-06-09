@@ -150,7 +150,7 @@ export default function ContainerNumberForm({
         arrivalICDDate: res?.body?.arrivalICDDate,
         cargoReleaseDate: res?.body?.cargoReleaseDate,
         departICDDate: res?.body?.departICDDate,
-        bondNumber: bondDetails[0]?.bondNumber,
+        bondNumber:  res?.body?.bondNumber,
         bondAmount: res?.body?.bondAmount,
         arrivalCustomerPlaceDate: res?.body?.arrivalCustomerPlaceDate,
         emptyReleasedDate: res?.body?.emptyReleasedDate,
@@ -621,7 +621,7 @@ export default function ContainerNumberForm({
                   <InputBox
                     label="Bond No."
                     id="bondNumber"
-                    value={formik.values.bondNumber}
+                    value={formik.values.bondNumber || ""}
                     onChange={formik.handleChange}
                     inputRef={FieldRef}
                   />
@@ -1127,6 +1127,7 @@ export default function ContainerNumberForm({
             isNotShowType={true}
             sourceType={"JOB_CONTAINER"}
             type={SourceType}
+            disabled={false}
           />
         </Box>
       </Modal>

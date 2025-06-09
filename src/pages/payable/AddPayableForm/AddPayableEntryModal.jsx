@@ -315,7 +315,6 @@ export default function AddPayableEntryModal({
               sendLabelOnly={true}
               onChange={(e) => {
                 const value = e.target?.value;
-                console.log(value, "targetValue");
                 handleChange("jobNo", value);
                 if (!value) {
                   setPayableEntry((prev) => ({

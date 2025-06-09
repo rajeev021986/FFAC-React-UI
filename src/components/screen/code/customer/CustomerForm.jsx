@@ -93,8 +93,6 @@ export default function CustomerForm({
     validateOnChange: false,
     //  validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
-      console.log(values, "value");
-  
       if (!values.id || type == "copy") {
         let emails = values.customerEntityEmailsIds.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
