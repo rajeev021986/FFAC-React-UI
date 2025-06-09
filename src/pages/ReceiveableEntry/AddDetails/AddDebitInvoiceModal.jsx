@@ -143,8 +143,8 @@ export default function AddPayableEntryModal({
           "unitTypeReceviable",
           "unit_type",
           debounceValue,
-          // invoiceEntry?.customerName
-          "Ananth"
+          invoiceEntry?.customerName
+          // "Ananth"
         );
         const validData = data.filter((item) => item.label?.trim() !== "");
         setOptions(validData);
@@ -304,7 +304,7 @@ export default function AddPayableEntryModal({
   const handleInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
   };
-   const handleChangeUnitType = (event, newValue) => {
+  const handleChangeUnitType = (event, newValue) => {
     if (newValue) {
       setInvoiceEntry((prev) => ({
         ...prev,
@@ -348,23 +348,57 @@ export default function AddPayableEntryModal({
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
           <Grid item xs={12} lg={4}>
-            <FormAutoCompleteWithLoader
+            {/* <FormAutoCompleteWithLoader
               label="Customer Name"
               id="customerName"
               value={invoiceEntry?.customerName || ""}
               error={errors.customerName}
               onChange={(e) => handleChange("customerName", e.target.value)}
               suggestionName="customer_name"
+            /> */}
+
+            <FormAutoCompleteWithLoader
+              label="Customer Name"
+              id="customerId"
+              suggestionName="customer_name"
+              value={{
+                customerId: invoiceEntry?.customerId,
+                customerName: invoiceEntry?.customerName,
+              }}
+              error={errors.customerName || errors.customerId}
+              idKey="customerId"
+              nameKey="customerName"
+              onChange={(selected) => {
+                handleChange("customerId", selected.customerId);
+                handleChange("customerName", selected.customerName);
+              }}
             />
           </Grid>
           <Grid item xs={12} lg={8}>
-            <FormAutoCompleteWithLoader
+            {/* <FormAutoCompleteWithLoader
               label="Charge Name"
               id="chargeName"
               value={invoiceEntry?.chargeName || ""}
               onChange={(e) => handleChange("chargeName", e.target.value)}
               suggestionName="charge_name"
               error={errors.chargeName}
+            /> */}
+
+            <FormAutoCompleteWithLoader
+              label="Charge Name"
+              id="chargeId"
+              suggestionName="charge_name"
+              value={{
+                chargeId: invoiceEntry.chargeId,
+                chargeName: invoiceEntry.chargeName,
+              }}
+              error={errors.chargeName}
+              idKey="chargeId"
+              nameKey="chargeName"
+              onChange={(selected) => {
+                handleChange("chargeId", selected.chargeId);
+                handleChange("chargeName", selected.chargeName);
+              }}
             />
           </Grid>
           <Grid item xs={12} lg={4}>
@@ -505,15 +539,15 @@ export default function AddPayableEntryModal({
               />
             ) : (
               <FormAutoCompleteWithLoader
-                label="Ex. Rate"
-                id="exRate"
-                value={invoiceEntry?.exRate || ""}
-                error={errors.exRate}
-                onChange={(e) => handleChange("exRate", e.target.value)}
-                suggestionName="usd_exchange"
-                name={true}
-                other={invoiceEntry?.currency}
-              />
+              label="Ex. Rate"
+              id="exRate"
+              value={invoiceEntry?.exRate || ""}
+              error={errors.exRate}
+              onChange={(e) => handleChange("exRate", e.target.value)}
+              suggestionName="usd_exchange"
+              name={true}
+              other={invoiceEntry?.currency}
+            />
             )}
           </Grid>
           {/* <Grid item xs={12} lg={4}>

@@ -311,7 +311,6 @@ export default function AddPayableEntryModal({
               label="Job No."
               id="jobNo"
               show={false}
-              show={false}
               value={payableEntry.jobNo}
               sendLabelOnly={true}
               onChange={(e) => {
@@ -351,7 +350,7 @@ export default function AddPayableEntryModal({
                 chargeId: payableEntry.chargeId,
                 chargeName: payableEntry.chargeName,
               }}
-              error={errors.chargeName}
+              error={errors.chargeName || errors.chargeId}
               idKey="chargeId"
               nameKey="chargeName"
               onChange={(selected) => {
