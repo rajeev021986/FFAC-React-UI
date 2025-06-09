@@ -27,7 +27,7 @@ function FormAutoComplete(props) {
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
   const selectedOption =
-  id =='shippingLine' ?
+  id =='shippingLine' || id == 'transporter' ?
   options.find((option) => option.value == value?.[nameKey]) || null :
     options.find(
       (option) =>
