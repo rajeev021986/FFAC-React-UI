@@ -51,6 +51,19 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
     onSubmit: async (values) => {
       // Create a payload excluding 'type' and 'costDetails'
       const { costDetails, ...payload } = values;
+      if (payload.details.length === 0) {
+      return  toast.custom(
+          <CustomToast
+            message={
+              "Please add atleast one entry to create TaxInvoice/Debit Note"
+            }
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
+      }
       if (!values.id) {
         try {
           let DetailsData = values.details.map((item) =>
