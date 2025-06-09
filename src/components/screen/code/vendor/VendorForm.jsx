@@ -249,7 +249,7 @@ export default function VendorForm({ page = "vendor" }) {
 
   const formik = useFormik({
     initialValues,
-      // validationSchema,
+    validationSchema,
     validateOnChange: false,
     onSubmit: async (values) => {
       let updatedValue = {
