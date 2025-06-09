@@ -126,7 +126,6 @@ export default function AddEditForm({
       setIsDisabled(false);
     }
   }, [viewPage, initialValues?.paidStatus]);
-
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -930,6 +929,26 @@ export default function AddEditForm({
                         name={true}
                         other={formik.values.currency}
                       />
+                      // <FormAutoCompleteWithLoader
+                      //   label="Ex. Rate"
+                      //   id="exchangeRate"
+                      //   value={{
+                      //     exRateId: formik.values?.exRateId,
+                      //     exchangeRate: formik.values?.exchangeRate,
+                      //   }}
+                      //   sendLabelOnly={true}
+                      //   error={formik.errors.exchangeRate}
+                      //   idKey="exRateId"
+                      //   nameKey="exchangeRate"
+                      //   // onChange={(e) => handleChange("exRate", e.target.value)}
+                      //   onChange={(selected) => {
+                      //     handleChange("exRateId", selected.exRateId);
+                      //     handleChange("exchangeRate", selected.exchangeRate);
+                      //   }}
+                      //   suggestionName="usd_exchange"
+                      //   name={true}
+                      //   other={formik.values.currency}
+                      // />
                     )}
                   </Grid>
 
