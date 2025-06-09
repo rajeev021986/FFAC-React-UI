@@ -74,6 +74,7 @@ export default function LooseCargoForm({
 
   const [initialValues, setInitialValues] = React.useState({
     transporterId: "",
+    transporterName:"",
     truckTrailerNo: "",
     truckNo: "",
     driver: "",
@@ -82,6 +83,7 @@ export default function LooseCargoForm({
     passportNo: "",
     licenceNo: "",
     clerkId: "",
+    clerkName:"",
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
@@ -115,6 +117,7 @@ export default function LooseCargoForm({
         status: status,
         truckNo: res.body?.truckNo,
         transporterId: res.body?.transporterId,
+        transporterName:res?.body?.transporterName || res?.body?.transporter,
         truckTrailerNo: res.body?.truckTrailerNo,
         driver: res.body?.driver,
         agreedRate: res.body?.agreedRate,
@@ -122,6 +125,7 @@ export default function LooseCargoForm({
         passportNo: res.body?.passportNo,
         licenceNo: res.body?.licenceNo,
         clerkId: res.body?.clerkId,
+        clerkName:res?.body?.clerkName,
         clerkTelNo: res.body?.clerkTelNo,
         reportingPlace: res.body?.reportingPlace,
         reportingDate: res.body?.reportingDate,
@@ -208,7 +212,11 @@ export default function LooseCargoForm({
     useGetOptionsSettingsQuery("customer_settings");
 
   useEffect(() => {
-    if (optionsSettingsData?.body || customerSettingsData?.body || jobSettingData?.body) {
+    if (
+      optionsSettingsData?.body ||
+      customerSettingsData?.body ||
+      jobSettingData?.body
+    ) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
@@ -306,11 +314,27 @@ export default function LooseCargoForm({
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <FormAutoComplete
                     label="Transporter"
-                    id="transporter"
+                    id="transporterId"
                     suggestionName="vendor_name"
-                    value={formik.values.transporterId}
+                    idKey="transporterId"
+                    nameKey="transporterName"
+                    // value={formik.values.transporterId}
+                    value={{
+                      transporterId: formik.values.transporterId,
+                      transporterName: formik.values.transporterName,
+                    }}
+                    onChange={(selected) => {
+                      formik.setFieldValue(
+                        "transporterId",
+                        selected.transporterId
+                      );
+                      formik.setFieldValue(
+                        "transporterName",
+                        selected.transporterName
+                      );
+                    }}
                     error={formik.errors.transporterId}
-                    onChange={formik.handleChange}
+                    // onChange={formik.handleChange}
                   ></FormAutoComplete>
                 </Grid>
 
@@ -376,9 +400,19 @@ export default function LooseCargoForm({
                     label="Clerk Name"
                     id="clerkId"
                     suggestionName="first_name"
-                    value={formik.values.clerkId}
+                    // value={formik.values.clerkId}
+                    value={{
+                      clerkId: formik.values.clerkId,
+                      clerkName: formik.values.clerkName,
+                    }}
+                    idKey="clerkId"
+                    nameKey="clerkName"
                     error={formik.errors.clerkId}
-                    onChange={formik.handleChange}
+                    // onChange={formik.handleChange}
+                    onChange={(selected) => {
+                      formik.setFieldValue("clerkId", selected.clerkId);
+                      formik.setFieldValue("clerkName", selected.clerkName);
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -714,7 +748,7 @@ export default function LooseCargoForm({
           </TabPanel>
         </TabContext>
 
-        {(page === "looseShipment"  && value =="1") && (
+        {page === "looseShipment" && value == "1" && (
           <Grid
             paddingLeft={3}
             marginTop={2}

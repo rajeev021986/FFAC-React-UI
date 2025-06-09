@@ -71,7 +71,7 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
   const formik = useFormik({
     initialValues,
     validateOnChange: false,
-    validationSchema: ConsigneeValidationSchema(),
+     validationSchema: ConsigneeValidationSchema(),
     enableReinitialize: true,
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
@@ -347,13 +347,27 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <FormAutoComplete
+                   <FormAutoComplete
                         label="Country"
                         id="countryId"
                         suggestionName="country"
-                        value={formik.values.countryId}
+                        value={{
+                          countryId: formik.values.countryId,
+                          countryName: formik.values.countryName,
+                        }}
                         error={formik.errors.countryId}
-                        onChange={formik.handleChange}
+                        idKey="countryId"
+                        nameKey="countryName"
+                        // onChange={formik.setFieldValue}
+                        onChange={(selected) => {
+                          formik.setFieldValue("countryId", selected.countryId);
+                          formik.setFieldValue(
+                            "countryName",
+                            selected.countryName
+                          );
+                        }}
+
+                        // onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
                     <Grid
@@ -634,14 +648,28 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                     xl={2}
                     paddingLeft={1}
                   >
-                    <FormAutoComplete
-                      label="Country"
-                      id="countryId"
-                      suggestionName="country"
-                      value={formik.values.countryId}
-                      error={formik.errors.countryId}
-                      onChange={formik.handleChange}
-                    ></FormAutoComplete>
+                 <FormAutoComplete
+                        label="Country"
+                        id="countryId"
+                        suggestionName="country"
+                        value={{
+                          countryId: formik.values.countryId,
+                          countryName: formik.values.countryName,
+                        }}
+                        error={formik.errors.countryId}
+                        idKey="countryId"
+                        nameKey="countryName"
+                        // onChange={formik.setFieldValue}
+                        onChange={(selected) => {
+                          formik.setFieldValue("countryId", selected.countryId);
+                          formik.setFieldValue(
+                            "countryName",
+                            selected.countryName
+                          );
+                        }}
+
+                        // onChange={formik.handleChange}
+                      ></FormAutoComplete>
                   </Grid>
 
                   <Grid

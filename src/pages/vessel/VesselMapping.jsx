@@ -58,7 +58,10 @@ export function VesselMapping({ formik, disabled }) {
               vesselLineEntities: formik.values.vesselLineEntities.map(
                 (entity, index) =>
                   index === rowIndex
-                    ? { ...entity, vesselId: newValue }
+                    ? { ...entity, 
+                      vesselId: newValue?.id ?? null,
+                      vesselName:newValue?.label?? "",
+                     }
                     : entity
               ),
             });
@@ -100,6 +103,7 @@ export function VesselMapping({ formik, disabled }) {
         );
       },
     },
+ 
 
     {
       field: "actions",

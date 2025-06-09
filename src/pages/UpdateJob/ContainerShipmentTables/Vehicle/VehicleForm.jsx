@@ -73,6 +73,7 @@ export default function VehicleNumberForm({
 
   const [initialValues, setInitialValues] = React.useState({
     clerkName: "",
+    clerkId:"",
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
@@ -159,6 +160,7 @@ export default function VehicleNumberForm({
         id: res.body?.id || "",
         status: status,
         clerkName: res?.body?.clerkName,
+        clerkId: res?.body?.clerkId || "",
         chasisNo: res?.body?.chasisNo,
         clerkTelNo: res?.body?.clerkTelNo,
         reportingPlace: res?.body?.reportingPlace,
@@ -291,9 +293,19 @@ export default function VehicleNumberForm({
                     label="Clerk Name"
                     id="clerkId"
                     suggestionName="first_name"
-                    value={formik.values.clerkId}
+                    // value={formik.values.clerkId}
+                    value={{
+                      clerkId: formik.values.clerkId,
+                      clerkName: formik.values.clerkName,
+                    }}
+                      idKey="clerkId"
+                    nameKey="clerkName"
                     error={formik.errors.clerkId}
-                    onChange={formik.handleChange}
+                    // onChange={formik.handleChange} 
+                    onChange={(selected) => {
+                      formik.setFieldValue("clerkId", selected.clerkId);
+                      formik.setFieldValue("clerkName", selected.clerkName);
+                    }}
                   />
                 </Grid>
 

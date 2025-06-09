@@ -88,16 +88,17 @@ function FormAutoCompleteWithCountryTable(props) {
   //   }
   // };
 
-
   const handleSelectionChange = (event, newValue) => {
-    setSelectedOption(newValue); // ✅ Maintain selection
-  
+    setSelectedOption(newValue);
+
     if (newValue) {
-      const { country, port_name } = newValue.fullData;
-  
+      const { fullData } = newValue;
+      const { country, port_name } = fullData;
+
       if (id === "originPortId") {
         setFieldValue("originPortId", newValue.value);
         setFieldValue("portOfLoading", port_name || "");
+        setFieldValue("originPortName", newValue.label || ""); // ✅ ADD THIS LINE
       } else if (id === "portOfLoading") {
         setFieldValue("portOfLoading", port_name);
         setFieldValue("originPortId", newValue.value || "");
@@ -106,16 +107,17 @@ function FormAutoCompleteWithCountryTable(props) {
       setFieldValue(id, "");
       if (id === "originPortId") {
         setFieldValue("portOfLoading", "");
+        setFieldValue("originPortName", ""); // ✅ Clear this too
       } else if (id === "portOfLoading") {
         setFieldValue("originPortId", "");
       }
-      setSelectedOption(null); // Clear selected option
+      setSelectedOption(null);
     }
   };
   useEffect(() => {
     const initializeSelectedOption = async () => {
       const existingId = formik.values[id];
-  
+
       if (existingId && !selectedOption) {
         try {
           const result = await GetAutoCompleteDataWithCountry(
@@ -124,7 +126,7 @@ function FormAutoCompleteWithCountryTable(props) {
             suggestionName,
             "" // or pass a proper filter if needed
           );
-  
+
           const matched = result.find((opt) => opt.value == existingId);
           if (matched) {
             setSelectedOption(matched);
@@ -134,10 +136,10 @@ function FormAutoCompleteWithCountryTable(props) {
         }
       }
     };
-  
+
     initializeSelectedOption();
   }, [formik.values[id]]);
-  
+
   return (
     <Box sx={{ width: "100%" }}>
       <Autocomplete
@@ -149,7 +151,6 @@ function FormAutoCompleteWithCountryTable(props) {
         noOptionsText="Type to Search"
         disabled={disabled}
         value={selectedOption}
-
         // value={formik.values[id] ? { label: formik.values[id] } : null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}

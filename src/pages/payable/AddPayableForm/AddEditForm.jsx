@@ -126,7 +126,6 @@ export default function AddEditForm({
       setIsDisabled(false);
     }
   }, [viewPage, initialValues?.paidStatus]);
-
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -822,13 +821,31 @@ export default function AddEditForm({
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <FormAutoCompleteWithLoader
+                    {/* <FormAutoCompleteWithLoader
                       label="Vendor Name"
                       id="vendorId"
                       suggestionName="vendor_name"
                       value={formik.values.vendorId}
                       error={formik.errors.vendorId}
                       onChange={formik.handleChange}
+                      disabled={isDisabled}
+                    /> */}
+
+                    <FormAutoCompleteWithLoader
+                      label="Vendor Name"
+                      id="vendorId"
+                      suggestionName="vendor_name"
+                      value={{
+                        vendorId: formik.values.vendorId,
+                        vendorName: formik.values.vendorName,
+                      }}
+                      error={formik.errors.vendorId}
+                      idKey="vendorId"
+                      nameKey="vendorName"
+                      onChange={(selected) => {
+                        formik.setFieldValue("vendorId", selected.vendorId);
+                        formik.setFieldValue("vendorName", selected.vendorName);
+                      }}
                       disabled={isDisabled}
                     />
                   </Grid>
@@ -912,6 +929,26 @@ export default function AddEditForm({
                         name={true}
                         other={formik.values.currency}
                       />
+                      // <FormAutoCompleteWithLoader
+                      //   label="Ex. Rate"
+                      //   id="exchangeRate"
+                      //   value={{
+                      //     exRateId: formik.values?.exRateId,
+                      //     exchangeRate: formik.values?.exchangeRate,
+                      //   }}
+                      //   sendLabelOnly={true}
+                      //   error={formik.errors.exchangeRate}
+                      //   idKey="exRateId"
+                      //   nameKey="exchangeRate"
+                      //   // onChange={(e) => handleChange("exRate", e.target.value)}
+                      //   onChange={(selected) => {
+                      //     handleChange("exRateId", selected.exRateId);
+                      //     handleChange("exchangeRate", selected.exchangeRate);
+                      //   }}
+                      //   suggestionName="usd_exchange"
+                      //   name={true}
+                      //   other={formik.values.currency}
+                      // />
                     )}
                   </Grid>
 

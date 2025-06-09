@@ -149,8 +149,7 @@ export default function JobEntryForm({
             item?.new ? { ...item, id: null, new: false } : item
           ),
         };
-      
-       
+
         try {
           delete values.id;
           values.statusCode = dropdownData?.approvalRequest ? 0 : 1;
@@ -250,7 +249,6 @@ export default function JobEntryForm({
               item?.new ? { ...item, id: null, new: false } : item
             ),
           };
-         
 
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
@@ -639,10 +637,22 @@ export default function JobEntryForm({
                   <FormAutoCompleteWithLoader
                     label="Customer Name*"
                     id="customerId"
-                    value={formik.values.customerId}
+                    // value={formik.formik.customerId}
+                    value={{
+                      customerId: formik.values.customerId,
+                      customerName: formik.values.customerName,
+                    }}
                     error={formik.errors.customerId}
-               
-                    onChange={formik.handleChange}
+                    idKey="customerId"
+                    nameKey="customerName"
+                    // onChange={formik.handleChange}
+                    onChange={(selected) => {
+                      formik.setFieldValue("customerId", selected.customerId || '');
+                      formik.setFieldValue(
+                        "customerName",
+                        selected.customerName || ''
+                      );
+                    }}
                     inputRef={FieldRef}
                     suggestionName="customer_name"
                     disabled={isDisabled}

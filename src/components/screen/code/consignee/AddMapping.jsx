@@ -7,8 +7,13 @@ import { Add } from "@mui/icons-material";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import SelectBox from "../../../common/SelectBox";
 import InputBox from "../../../common/InputBox";
+import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 
 export default function AddMapping({ formik, dropdownData, disabled }) {
+
+  const { data: consigneeSettingsData } =
+    useGetOptionsSettingsQuery("consignee_settings");
+
   const consigneeEntityFreeDays =
     formik.values.consigneeEntityFreeDays ||
     [
@@ -16,13 +21,13 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
     ];
 
   // Static options for dropdowns
-
-  const itemNameOptions = dropdownData?.item || [
-    { label: "Anode", value: "ANODE" },
-    { label: "Cathode", value: "CATHODE" },
-    { label: "Electrolyte", value: "ELECTROLYTE" },
-    { label: "Copper Cement", value: "COPPER CEMENT" },
-  ];
+  // const itemNameOptions = dropdownData?.item || [
+  //   { label: "Anode", value: "ANODE" },
+  //   { label: "Cathode", value: "CATHODE" },
+  //   { label: "Electrolyte", value: "ELECTROLYTE" },
+  //   { label: "Copper Cement", value: "COPPER CEMENT" },
+  // ];
+  const itemNameOptions =consigneeSettingsData?.body?.documentType || []
   const newRowRef = useRef(null);
   const setFocus = () => {
     setTimeout(() => {

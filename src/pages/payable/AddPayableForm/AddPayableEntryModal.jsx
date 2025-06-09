@@ -131,7 +131,7 @@ export default function AddPayableEntryModal({
 
   const handleSubmit = async () => {
     try {
-      await modalValidationSchema.validate(payableEntry, { abortEarly: false });
+       await modalValidationSchema.validate(payableEntry, { abortEarly: false });
       setErrors({}); // Clear errors on successful validation
 
       const updatedEntry = selectedPayEntry
@@ -312,8 +312,10 @@ export default function AddPayableEntryModal({
               id="jobNo"
               show={false}
               value={payableEntry.jobNo}
+              sendLabelOnly={true}
               onChange={(e) => {
-                const value = e.target.value;
+                const value = e.target?.value;
+                console.log(value, "targetValue");
                 handleChange("jobNo", value);
                 if (!value) {
                   setPayableEntry((prev) => ({
@@ -330,7 +332,7 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={8}>
-            <FormAutoCompleteWithLoader
+            {/* <FormAutoCompleteWithLoader
               label="Charge Name"
               id="chargeId"
               suggestionName="charge_name"
@@ -339,21 +341,23 @@ export default function AddPayableEntryModal({
                 chargeName: payableEntry.chargeName,
               }}
               error={errors.chargeName}
+            /> */}
+            <FormAutoCompleteWithLoader
+              label="Charge Name"
+              id="chargeId"
+              suggestionName="charge_name"
+              value={{
+                chargeId: payableEntry.chargeId,
+                chargeName: payableEntry.chargeName,
+              }}
+              error={errors.chargeName || errors.chargeId}
               idKey="chargeId"
               nameKey="chargeName"
               onChange={(selected) => {
                 handleChange("chargeId", selected.chargeId);
-                handleChange("chargeName", selected.fullData?.charge_name);
+                handleChange("chargeName", selected.chargeName);
               }}
             />
-            {/* <FormAutoCompleteWithLoader
-              label="Charge Name"
-              id="chargeId"
-              value={payableEntry.chargeId}
-              onChange={(e) => handleChange("chargeId", e.target.value)}
-              suggestionName="charge_name"
-              error={errors.chargeId}
-            /> */}
           </Grid>
           <Grid item xs={12} lg={4}>
             <Box sx={{ width: "100%" }}>

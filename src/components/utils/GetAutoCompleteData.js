@@ -32,7 +32,7 @@ const suggestionName = {
   clerkId: "USER",
 
   transporter: "VENDOR_TYPE",
-  transporterId:"VENDOR",
+  transporterId:"VENDOR_TYPE",
   regionId: "PORT_REGION",
   jobNo: "JOB_ENTRY",
   vendorName: "VENDOR",

@@ -23,8 +23,7 @@ export default function LineVessel({ formik }) {
       FieldRef.current.focus();
     }
   }, []);
-
-  return (
+    return (
     <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
       <Grid
         container
@@ -40,9 +39,20 @@ export default function LineVessel({ formik }) {
               label="Shipping Line"
               id="shippingLine"
               suggestionName="type"
-              value={formik.values.shippingLine}
+              // value={formik.values.shippingLine}
+              value={{
+                shippingLineId: formik.values.shippingLineId || '',
+                shippingLine: formik.values.shippingLine || '',
+              }}
+              idKey="shippingLineId"
+              nameKey="shippingLine"
               error={formik.errors.shippingLine}
-              onChange={formik.handleChange}
+              // onChange={formik.handleChange}
+              onChange={(selected) => {
+                console.log(selected,"selected")
+                formik.setFieldValue("shippingLineId", selected.shippingLineId);
+                formik.setFieldValue("shippingLine", selected.shippingLine);
+              }}
               inputRef={FieldRef}
               disabled={disabled}
             ></FormAutoComplete>
@@ -202,9 +212,19 @@ export default function LineVessel({ formik }) {
               label="Vessel/Local Agent"
               id="vesselAgentId"
               suggestionName="type"
-              value={formik.values.vesselAgentId}
+              // value={formik.values.vesselAgentId}
+              value={{
+                vesselAgentId: formik.values.vesselAgentId || '',
+                vesselAgentName: formik.values.vesselAgentName || '',
+              }}
+              idKey="vesselAgentId"
+              nameKey="vesselAgentName"
               error={formik.errors.vesselAgentId}
-              onChange={formik.handleChange}
+              // onChange={formik.handleChange}
+              onChange={(selected) => {
+                formik.setFieldValue("vesselAgentId", selected.vesselAgentId);
+                formik.setFieldValue("vesselAgentName", selected.vesselAgentName);
+              }}
               inputRef={FieldRef}
               disabled={disabled}
             ></FormAutoComplete>

@@ -94,6 +94,7 @@ function PortForm() {
       unCode: "",
       customCode: "",
       newPortName: "",
+      countryName:"",
       countryId: "",
       regionId: "",
       basePort: "",
