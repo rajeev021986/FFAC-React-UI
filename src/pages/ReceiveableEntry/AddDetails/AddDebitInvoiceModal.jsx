@@ -538,16 +538,34 @@ export default function AddPayableEntryModal({
                 }
               />
             ) : (
+              //   <FormAutoCompleteWithLoader
+              //   label="Ex. Rate"
+              //   id="exRate"
+              //   value={invoiceEntry?.exRate || ""}
+              //   error={errors.exRate}
+              //   onChange={(e) => handleChange("exRate", e.target.value)}
+              //   suggestionName="usd_exchange"
+              //   name={true}
+              //   other={invoiceEntry?.currency}
+              // />
               <FormAutoCompleteWithLoader
-              label="Ex. Rate"
-              id="exRate"
-              value={invoiceEntry?.exRate || ""}
-              error={errors.exRate}
-              onChange={(e) => handleChange("exRate", e.target.value)}
-              suggestionName="usd_exchange"
-              name={true}
-              other={invoiceEntry?.currency}
-            />
+                label="Ex. Rate"
+                id="exRate"
+                value={{
+                  exRate: invoiceEntry?.exRate,
+                  // exRate: invoiceEntry?.exRate,
+                }}
+                idKey="exRate"
+                nameKey="exRate"
+                error={errors.exRate}
+                onChange={(selected) => {
+                  // handleChange("customerId", selected.customerId);
+                  handleChange("exRate", selected.exRate);
+                }}
+                // onChange={(e) => handleChange("exRate", e.target.value)}
+                suggestionName="usd_exchange"
+                other={invoiceEntry?.currency}
+              />
             )}
           </Grid>
           {/* <Grid item xs={12} lg={4}>

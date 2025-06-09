@@ -75,7 +75,7 @@ export default function ContainerNumberForm({
     sealNo: "",
     truckTrailerNo: "",
     transporterId: "",
-    transporterName:"",
+    transporter:"",
     // truckTrailerNoTransporter: "",
     driver: "",
     agreedRate: "",
@@ -128,7 +128,7 @@ export default function ContainerNumberForm({
         sealNo: res?.body?.sealNo,
         truckTrailerNo: res?.body?.truckTrailerNo,
         transporterId: res?.body?.transporterId,
-        transporterName:res?.body?.transporter,
+        transporter:res?.body?.transporter,
         // truckTrailerNoTransporter: res?.body?.truckTrailerNoTransporter,
         driver: res?.body?.driver,
         agreedRate: res?.body?.agreedRate,
@@ -352,26 +352,26 @@ export default function ContainerNumberForm({
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <FormAutoComplete
                     label="Transporter"
-                    id="transporterId"
+                    id="transporter"
                     suggestionName="vendor_name"
                     idKey="transporterId"
-                    nameKey="transporterName"
+                    nameKey="transporter"
                     // value={formik.values.transporterId}
                     value={{
-                      transporterId: formik.values.transporterId,
-                      transporterName: formik.values.transporterName,
+                      // transporterId: formik.values.transporterId,
+                      transporter: formik.values.transporter,
                     }}
                     onChange={(selected) => {
+                      // formik.setFieldValue(
+                      //   "transporterId",
+                      //   selected.transporterId
+                      // );
                       formik.setFieldValue(
-                        "transporterId",
-                        selected.transporterId
-                      );
-                      formik.setFieldValue(
-                        "transporterName",
-                        selected.transporterName
+                        "transporter",
+                        selected.transporter
                       );
                     }}
-                    error={formik.errors.transporterId}
+                    error={formik.errors.transporter}
                     // onChange={formik.handleChange}
                   ></FormAutoComplete>
                 </Grid>

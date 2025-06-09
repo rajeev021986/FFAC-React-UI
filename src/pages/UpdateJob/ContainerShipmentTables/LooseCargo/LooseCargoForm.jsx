@@ -74,7 +74,7 @@ export default function LooseCargoForm({
 
   const [initialValues, setInitialValues] = React.useState({
     transporterId: "",
-    transporterName:"",
+    transporter:"",
     truckTrailerNo: "",
     truckNo: "",
     driver: "",
@@ -117,7 +117,7 @@ export default function LooseCargoForm({
         status: status,
         truckNo: res.body?.truckNo,
         transporterId: res.body?.transporterId,
-        transporterName:res?.body?.transporterName || res?.body?.transporter,
+        transporter: res?.body?.transporter || res?.body?.transporterName ,
         truckTrailerNo: res.body?.truckTrailerNo,
         driver: res.body?.driver,
         agreedRate: res.body?.agreedRate,
@@ -314,23 +314,23 @@ export default function LooseCargoForm({
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <FormAutoComplete
                     label="Transporter"
-                    id="transporterId"
+                    id="transporter"
                     suggestionName="vendor_name"
                     idKey="transporterId"
-                    nameKey="transporterName"
+                    nameKey="transporter"
                     // value={formik.values.transporterId}
                     value={{
                       transporterId: formik.values.transporterId,
-                      transporterName: formik.values.transporterName,
+                      transporter: formik.values.transporter,
                     }}
                     onChange={(selected) => {
+                      // formik.setFieldValue(
+                      //   "transporterId",
+                      //   selected.transporterId
+                      // );
                       formik.setFieldValue(
-                        "transporterId",
-                        selected.transporterId
-                      );
-                      formik.setFieldValue(
-                        "transporterName",
-                        selected.transporterName
+                        "transporter",
+                        selected.transporter
                       );
                     }}
                     error={formik.errors.transporterId}

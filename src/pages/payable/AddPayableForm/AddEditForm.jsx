@@ -53,6 +53,7 @@ import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import FormAutoCompleteForJobNo from "../../../components/common/AutoComplete/FormAutoCompleteForJobNo";
+import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoComplete/FormAutoCompleteWithExchangeLoader";
 
 export default function AddEditForm({
   initialValues,
@@ -469,6 +470,7 @@ export default function AddEditForm({
       formik.setFieldValue("exchangeRate", 1);
     }
   }, [formik?.values?.currency]);
+  console.log(formik?.values,"manish")
 
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
@@ -918,7 +920,7 @@ export default function AddEditForm({
                         }
                       />
                     ) : (
-                      <FormAutoCompleteWithLoader
+                      <FormAutoCompleteWithExchangeLoader
                         label="Ex. Rate"
                         id="exchangeRate"
                         value={formik.values.exchangeRate}
