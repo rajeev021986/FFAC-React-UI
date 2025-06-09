@@ -117,7 +117,7 @@ function FormAutoCompleteWithLoader(props) {
         id={id}
         disabled={disabled}
         value={
-          id == "exchangeRate" || id == "jobNo" || id == "exRate"
+          id == "exchangeRate" || id == "jobNo" 
             ? options.find((option) => option.value == value) || value
             : selectedOption
         }
