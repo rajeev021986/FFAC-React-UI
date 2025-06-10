@@ -128,7 +128,7 @@ export default function AddPayableEntryModal({
         updatedEntry.receivableAmount = unitRate * numOfUnits;
       }
       updatedEntry.totalAmount =
-        updatedEntry.receivableAmount - updatedEntry.vat;
+        updatedEntry.receivableAmount + updatedEntry.vat;
 
       return updatedEntry;
     });
