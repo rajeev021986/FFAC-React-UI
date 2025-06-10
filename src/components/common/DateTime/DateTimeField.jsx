@@ -37,6 +37,7 @@ export default function DateTimeField({
         helperText={error}
         inputRef={inputRef}
         sx={{
+          backgroundColor: "#fff",
           "& .MuiInputBase-input": {
             textTransform: "uppercase", // ✅ Capitalizes both placeholder & input
           },

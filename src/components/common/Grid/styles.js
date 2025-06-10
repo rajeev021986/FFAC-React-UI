@@ -1,3 +1,4 @@
+import { Padding } from "@mui/icons-material";
 import { TableCell } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
@@ -11,15 +12,16 @@ export const Cell = styled(TableCell)(({ theme }) => ({
 export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   width: "100%",
   minHeight: "100%",
-  borderRadius: "5px !important",
+  border: "none",
   "& .MuiDataGrid-columnHeader": {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: "white",
     lineHeight: 10,
     height: "38px !important",
   },
   "& .MuiDataGrid-columnHeaderTitle": {
-    color: "white",
+    color: "#000",
     fontSize: "14px",
+    fontWeight: "bold"
   },
   "& .MuiDataGrid-iconButtonContainer": {
     color: "white",
@@ -42,6 +44,10 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     justifyContent: "center", // horizontal center
     alignItems: "center", // vertical center
     textAlign: "center",
+  },
+  "& .css-18qmpb9-MuiButtonBase-root-MuiIconButton-root":{
+    padding: "0px",
+    backgroundColor: theme.palette.primary.main,
   },
   "& .MuiDataGrid-menuIconButton .MuiSvgIcon-root": {
     fill: "#fff",

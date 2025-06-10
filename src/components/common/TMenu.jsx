@@ -43,7 +43,8 @@ export default function TMenu({
         aria-controls={open ? "hover-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
-        sx={{ color: "white.main", ...buttonProps }}
+        sx={{ color: "white.main", padding: "0px",border: "1px solid #ECECEC", borderRadius: "5px", ...buttonProps }}
+        
       >
         {buttonIcon}
       </IconButton>

@@ -35,7 +35,7 @@ const modalStyle = {
   bgcolor: "background.paper",
   boxShadow: 24,
   borderRadius: "10px",
-  p: 4,
+
 };
 
 export default function AddPayableEntryModal({
@@ -131,7 +131,7 @@ export default function AddPayableEntryModal({
 
   const handleSubmit = async () => {
     try {
-       await modalValidationSchema.validate(payableEntry, { abortEarly: false });
+      await modalValidationSchema.validate(payableEntry, { abortEarly: false });
       setErrors({}); // Clear errors on successful validation
 
       const updatedEntry = selectedPayEntry
@@ -140,8 +140,8 @@ export default function AddPayableEntryModal({
 
       const updatedList = selectedPayEntry
         ? formik.values.paybleDetails.map((n) =>
-            n.id === updatedEntry.id ? updatedEntry : n
-          )
+          n.id === updatedEntry.id ? updatedEntry : n
+        )
         : [...(formik.values.paybleDetails || []), updatedEntry];
 
       formik.setFieldValue("paybleDetails", updatedList);
@@ -294,46 +294,46 @@ export default function AddPayableEntryModal({
       aria-labelledby="add-payable-entry"
     >
       <Box sx={modalStyle}>
-        <IconButton
-          onClick={handleClose}
-          sx={{ position: "absolute", top: 8, right: 8, color: "grey.600" }}
-        >
-          <CloseIcon />
-        </IconButton>
-
-        <Typography variant="h6" gutterBottom>
-          {selectedPayEntry ? "Edit Charges" : "Add New Charges"}
-        </Typography>
-
-        <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid item xs={12} lg={4}>
-            <FormAutoCompleteWithLoader
-              label="Job No."
-              id="jobNo"
-              show={false}
-              show={false}
-              value={payableEntry.jobNo}
-              sendLabelOnly={true}
-              onChange={(e) => {
-                const value = e.target?.value;
-                console.log(value, "targetValue");
-                handleChange("jobNo", value);
-                if (!value) {
-                  setPayableEntry((prev) => ({
-                    ...prev,
-                    unitType: "",
-                    noOfUnit: "",
-                  }));
-                  formik.setFieldValue("unitType", "");
-                  formik.setFieldValue("noOfUnit", "");
-                }
-              }}
-              suggestionName="job_no"
-              error={errors.jobNo}
-            />
-          </Grid>
-          <Grid item xs={12} lg={8}>
-            {/* <FormAutoCompleteWithLoader
+        <Box sx={{ backgroundColor: "#F9FAFB", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 20px", borderRadius: "10px 10px 0px 0px", }}>
+          <Typography variant="h6" gutterBottom fontWeight={"600"}>
+            {selectedPayEntry ? "Edit Charges" : "Add New Charges"}
+          </Typography>
+          <IconButton
+            onClick={handleClose}
+            sx={{ color: "grey.600" }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Box sx={{ padding: "20px" }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} lg={4}>
+              <FormAutoCompleteWithLoader
+                label="Job No."
+                id="jobNo"
+                show={false}
+                value={payableEntry.jobNo}
+                sendLabelOnly={true}
+                onChange={(e) => {
+                  const value = e.target?.value;
+                  console.log(value, "targetValue");
+                  handleChange("jobNo", value);
+                  if (!value) {
+                    setPayableEntry((prev) => ({
+                      ...prev,
+                      unitType: "",
+                      noOfUnit: "",
+                    }));
+                    formik.setFieldValue("unitType", "");
+                    formik.setFieldValue("noOfUnit", "");
+                  }
+                }}
+                suggestionName="job_no"
+                error={errors.jobNo}
+              />
+            </Grid>
+            <Grid item xs={12} lg={8}>
+              {/* <FormAutoCompleteWithLoader
               label="Charge Name"
               id="chargeId"
               suggestionName="charge_name"
@@ -343,197 +343,196 @@ export default function AddPayableEntryModal({
               }}
               error={errors.chargeName}
             /> */}
-            <FormAutoCompleteWithLoader
-              label="Charge Name"
-              id="chargeId"
-              suggestionName="charge_name"
-              value={{
-                chargeId: payableEntry.chargeId,
-                chargeName: payableEntry.chargeName,
-              }}
-              error={errors.chargeName}
-              idKey="chargeId"
-              nameKey="chargeName"
-              onChange={(selected) => {
-                handleChange("chargeId", selected.chargeId);
-                handleChange("chargeName", selected.chargeName);
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <Box sx={{ width: "100%" }}>
-              <Autocomplete
-                id="unitType"
-                size="small"
-                disabled={!payableEntry.jobNo}
-                value={
-                  options.find((opt) => opt.value === payableEntry.unitType) ||
-                  null
-                }
-                onInputChange={handleInputChange}
-                onChange={handleChangeUnitType}
-                options={filteredOptions}
-                getOptionLabel={(option) => option.label || ""}
-                loading={loading}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Unit Type"
-                    placeholder="Type to search"
-                    variant="outlined"
-                    error={Boolean(errors.unitType)}
-                    helperText={errors.unitType}
-                    fullWidth
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "10px",
-                        fontSize: "14px",
-                        height: "43px",
-                      },
-                    }}
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <>
-                          {loading ? (
-                            <CircularProgress color="inherit" size={15} />
-                          ) : null}
-                          {params.InputProps.endAdornment}
-                        </>
-                      ),
-                    }}
-                  />
-                )}
-                renderOption={(props, option) => (
-                  <MenuItem {...props} key={option.value}>
-                    {option.label}
-                  </MenuItem>
-                )}
-                noOptionsText={
-                  inputValue ? "No results found" : "Type to search..."
-                }
+              <FormAutoCompleteWithLoader
+                label="Charge Name"
+                id="chargeId"
+                suggestionName="charge_name"
+                value={{
+                  chargeId: payableEntry.chargeId,
+                  chargeName: payableEntry.chargeName,
+                }}
+                error={errors.chargeName}
+                idKey="chargeId"
+                nameKey="chargeName"
+                onChange={(selected) => {
+                  handleChange("chargeId", selected.chargeId);
+                  handleChange("chargeName", selected.chargeName);
+                }}
               />
-            </Box>
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <TextField
-              label="No of Units"
-              id="noOfUnit"
-              name="noOfUnit"
-              value={payableEntry.noOfUnit}
-              disabled={true}
-              onChange={(e) => handleChange("noOfUnit", e.target.value)}
-              fullWidth
-              size="small"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "10px",
-                  fontSize: "14px",
-                  height: "43px",
-                },
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <InputBox
-              label={`Unit Rate (${formik?.values?.currency})`}
-              id="unitRate"
-              value={formatIndianCurrency(payableEntry.unitRate)}
-              onChange={(e) => {
-                const rawValue = e.target.value.replace(/,/g, "");
-                if (!isNaN(rawValue)) {
-                  handleChange("unitRate", rawValue);
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <Box sx={{ width: "100%" }}>
+                <Autocomplete
+                  id="unitType"
+                  size="small"
+                  disabled={!payableEntry.jobNo}
+                  value={
+                    options.find((opt) => opt.value === payableEntry.unitType) ||
+                    null
+                  }
+                  onInputChange={handleInputChange}
+                  onChange={handleChangeUnitType}
+                  options={filteredOptions}
+                  getOptionLabel={(option) => option.label || ""}
+                  loading={loading}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Unit Type"
+                      placeholder="Type to search"
+                      variant="outlined"
+                      error={Boolean(errors.unitType)}
+                      helperText={errors.unitType}
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "10px",
+                          fontSize: "14px",
+                          height: "43px",
+                        },
+                      }}
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <>
+                            {loading ? (
+                              <CircularProgress color="inherit" size={15} />
+                            ) : null}
+                            {params.InputProps.endAdornment}
+                          </>
+                        ),
+                      }}
+                    />
+                  )}
+                  renderOption={(props, option) => (
+                    <MenuItem {...props} key={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  )}
+                  noOptionsText={
+                    inputValue ? "No results found" : "Type to search..."
+                  }
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <TextField
+                label="No of Units"
+                id="noOfUnit"
+                name="noOfUnit"
+                value={payableEntry.noOfUnit}
+                disabled={true}
+                onChange={(e) => handleChange("noOfUnit", e.target.value)}
+                fullWidth
+                size="small"
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                    fontSize: "14px",
+                    height: "43px",
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <InputBox
+                label={`Unit Rate (${formik?.values?.currency})`}
+                id="unitRate"
+                value={formatIndianCurrency(payableEntry.unitRate)}
+                onChange={(e) => {
+                  const rawValue = e.target.value.replace(/,/g, "");
+                  if (!isNaN(rawValue)) {
+                    handleChange("unitRate", rawValue);
+                  }
+                }}
+                fullWidth
+                error={errors.unitRate}
+              />
+            </Grid>
+            {/* Amount */}
+            <Grid item xs={12} lg={4}>
+              <InputBox
+                label="Amount"
+                id="amount"
+                value={formatIndianCurrency(payableEntry.amount)}
+                disabled
+                fullWidth
+                size="small"
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                    fontSize: "14px",
+                    height: "43px",
+                  },
+                }}
+              />
+            </Grid>
+            {/* VAT Applicable */}
+            <Grid item xs={12} lg={4}>
+              <SelectBox
+                label="VAT Applicable*"
+                id="vatApplicable"
+                options={vatAndHoldingTaxSettingData?.body?.vatSettings}
+                value={payableEntry.vatApplicable}
+                // error={formik.errors.vatApplicable}
+                error={errors.vatApplicable}
+                onChange={(e) => handleChange("vatApplicable", e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <InputBox
+                label="VAT Amount"
+                id="vatAmount"
+                value={formatIndianCurrency(payableEntry.vatAmount)}
+                disabled
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <SelectBox
+                label="With Holding Tax*"
+                id="withHoldingTax"
+                options={
+                  vatAndHoldingTaxSettingData?.body?.withHoldingTaxSettings
                 }
-              }}
-              fullWidth
-              error={errors.unitRate}
-            />
+                value={payableEntry.withHoldingTax}
+                error={errors.withHoldingTax}
+                onChange={(e) => handleChange("withHoldingTax", e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <InputBox
+                label="With Holding Amount"
+                id="withHoldingAmount"
+                value={formatIndianCurrency(payableEntry.withHoldingAmount)}
+                disabled
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <InputBox
+                label="Total Amount"
+                id="totalAmount"
+                value={formatIndianCurrency(payableEntry.totalAmount)}
+                disabled
+                fullWidth
+              />
+            </Grid>
+            
           </Grid>
-          {/* Amount */}
-          <Grid item xs={12} lg={4}>
-            <InputBox
-              label="Amount"
-              id="amount"
-              value={formatIndianCurrency(payableEntry.amount)}
-              disabled
-              fullWidth
-              size="small"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "10px",
-                  fontSize: "14px",
-                  height: "43px",
-                },
-              }}
-            />
-          </Grid>
-          {/* VAT Applicable */}
-          <Grid item xs={12} lg={4}>
-            <SelectBox
-              label="VAT Applicable*"
-              id="vatApplicable"
-              options={vatAndHoldingTaxSettingData?.body?.vatSettings}
-              value={payableEntry.vatApplicable}
-              // error={formik.errors.vatApplicable}
-              error={errors.vatApplicable}
-              onChange={(e) => handleChange("vatApplicable", e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <InputBox
-              label="VAT Amount"
-              id="vatAmount"
-              value={formatIndianCurrency(payableEntry.vatAmount)}
-              disabled
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <SelectBox
-              label="With Holding Tax*"
-              id="withHoldingTax"
-              options={
-                vatAndHoldingTaxSettingData?.body?.withHoldingTaxSettings
-              }
-              value={payableEntry.withHoldingTax}
-              error={errors.withHoldingTax}
-              onChange={(e) => handleChange("withHoldingTax", e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <InputBox
-              label="With Holding Amount"
-              id="withHoldingAmount"
-              value={formatIndianCurrency(payableEntry.withHoldingAmount)}
-              disabled
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} lg={4}></Grid>
-          <Grid item xs={12} lg={4}>
-            <InputBox
-              label="Total Amount"
-              id="totalAmount"
-              value={formatIndianCurrency(payableEntry.totalAmount)}
-              disabled
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} lg={4}></Grid> <Grid item xs={12} lg={4}></Grid>
-          {/* Button */}
-          <Grid item xs={4}>
+          <Box sx={{display: "flex", justifyContent: "end", marginTop: "20px"}}>
             <ThemeButton
-              onClick={handleSubmit}
-              disabled={disabled}
-              fullWidth
-              sx={{ fontWeight: 500 }}
-            >
-              {selectedPayEntry ? "Update" : "Add"}
-            </ThemeButton>
-          </Grid>
-        </Grid>
+                onClick={handleSubmit}
+                disabled={disabled}
+                fullWidth
+                sx={{ fontWeight: 500,width: "auto" }}
+              >
+                {selectedPayEntry ? "Update" : "Add"}
+              </ThemeButton>
+          </Box>
+        </Box>
       </Box>
     </Modal>
   );

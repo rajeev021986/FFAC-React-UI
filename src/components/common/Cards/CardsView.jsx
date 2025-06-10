@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import CardItem from "./CardItem";
+import { Padding } from "@mui/icons-material";
 
 export default function CardsView({
   columns,
@@ -90,17 +91,16 @@ export default function CardsView({
       sx={{
         maxWidth: "100%",
         borderRadius: "5px",
-        // height: "calc(100vh - 250px)",
+        height: "calc(100vh - 200px)",
         overflowY: "auto",
         position: "relative",
-        pt: 1,
         backgroundColor: "white.main",
         display: "flex",
         flexWrap: "wrap",
         gap: "10px",
       }}
     >
-      <Grid width="100%" gap={2} sx={styles.grid}>
+      <Grid width="100%"  sx={[styles.grid, { padding: "10px 15px" }]}>
         {gridData?.map((item, index) => (
           <CardItem
             key={item.id}

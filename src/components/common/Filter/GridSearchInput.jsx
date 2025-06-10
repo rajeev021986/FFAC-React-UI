@@ -63,7 +63,7 @@ const GridSearchInput = ({
   };
   return (
     <>
-      <Box sx={{ position: "relative", minWidth: "500px" }}>
+      <Box sx={{ position: "relative", }}>
         {/* Search Bar */}
         <InputWithChips
           inputRef={searchRef}

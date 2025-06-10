@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Button } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
@@ -24,9 +26,9 @@ import { PAYABLE_COLUMNS } from "../../data/columns/paybleColumn";
 import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 
 import Backdrop from "@mui/material/Backdrop";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+// import SpeedDial from "@mui/material/SpeedDial";
+// import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+// import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 import { getPayableListGridActions } from "./Actions/action";
 import { getPayableListGridActionApprove } from "./Actions/appproveAction";
@@ -67,13 +69,13 @@ export default function PayableListScreen({ page }) {
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
-        { name: "New Entry" },
-        { name: "Copy" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
-      ]
+      { name: "New Entry" },
+      { name: "Copy" },
+      { name: exportLoader ? <LoaderIcon /> : "Export" },
+    ]
     : page === "payable_approve"
-    ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
-    : [
+      ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
+      : [
         { name: "New Entry" },
         { name: exportLoader ? <LoaderIcon /> : "Export" },
       ];
@@ -332,99 +334,123 @@ export default function PayableListScreen({ page }) {
         rightComps={
           <>
             <Backdrop open={open} />
-            {(page == "payable_list" || page == "payable_approve") && (
-              <SpeedDial
-                ariaLabel="Text-only  SpeedDial"
-                sx={{
-                  "& .MuiFab-root": {
-                    width: 40,
-                    height: 40,
-                    minHeight: 40,
-                  },
-                }}
-                icon={
-                  <SpeedDialIcon
-                    sx={{
-                      fontSize: 20,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  />
-                }
-                direction="left"
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    tooltipTitle=""
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      px: 2,
-                      py: 1,
-                      borderRadius: "20px",
-                      minWidth: 92,
-                      width: "auto",
-                      height: 36,
-                      boxShadow: 3,
-                      textTransform: "none",
-                      fontSize: "12px",
-                      fontWeight: "bold",
-                      whiteSpace: "nowrap",
-                    }}
-                    icon={
-                      <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                       {action.name}
-                      </span>
-                    }
-                    onClick={() => handleActionClick(action.name)}
-                  ></SpeedDialAction>
-                ))}
-              </SpeedDial>
+            {(page === "payable_list" || page === "payable_approve") && (
+              <div style={{ display: "flex", gap: "12px", marginBottom: "10px" }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 384 512"
+                    width="20"
+                    height="20"
+                    fill="currentColor"  // uses text color of the button
+                  >
+                    <path d="M48 448L48 64c0-8.8 7.2-16 16-16l160 0 0 80c0 17.7 14.3 32 32 32l80 0 0 288c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16zM64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-293.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5 0 229.5 0L64 0zm90.9 233.3c-8.1-10.5-23.2-12.3-33.7-4.2s-12.3 23.2-4.2 33.7L161.6 320l-44.5 57.3c-8.1 10.5-6.3 25.5 4.2 33.7s25.5 6.3 33.7-4.2L192 359.1l37.1 47.6c8.1 10.5 23.2 12.3 33.7 4.2s12.3-23.2 4.2-33.7L222.4 320l44.5-57.3c8.1-10.5 6.3-25.5-4.2-33.7s-25.5-6.3-33.7 4.2L192 280.9l-37.1-47.6z" />
+                  </svg>}
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
+                  onClick={() => handleActionClick("Export Data")}
+                >
+                  Export Data
+                </Button>
+
+                <Button
+                  variant="contained"
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: "14px",
+                    color: "#fff"
+                  }}
+                  startIcon={<AddIcon />}
+                  onClick={() => handleActionClick("New Entry")}
+                >
+                  New Entry
+                </Button>
+
+              </div>
             )}
           </>
         }
       />
+
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
-          sx={{ padding: "8px" }}
+          sx={{ padding: "10px 15px", borderBottom: "1px solid #ECECEC" }}
           title={
             <Stack direction="row" justifyContent="space-between">
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <GridSearchInput
-                  filters={payableActionSelector?.formData}
-                  setFilters={(filters) => dispatch(updateInput(filters))}
-                  width="650px"
-                >
-                  <FilterForm />
-                </GridSearchInput>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <h3 style={{ margin: 0 }}>Payable List</h3>
+                <Box sx={{ display: "flex", }}>
+                  <GridSearchInput
+                    filters={payableActionSelector?.formData}
+                    setFilters={(filters) => dispatch(updateInput(filters))}
+
+                  >
+                    <FilterForm />
+                  </GridSearchInput>
+                </Box>
               </Box>
-              <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  border: "1px solid",
+                  borderColor: "primary.main",
+                  borderRadius: "6px",
+                  overflow: "hidden",
+                  width: "fit-content",
+                }}
+              >
                 <IconButton
                   onClick={() => dispatch(payableDashboardView("card"))}
+                  sx={{
+                    backgroundColor:
+                      payableActionSelector.view === "card" ? "primary.main" : "common.white",
+                    color:
+                      payableActionSelector.view === "card" ? "common.white" : "primary.main",
+                    borderRadius: 0,
+                    padding: "6px 8px",
+                    "&:hover": {
+                      backgroundColor:
+                        payableActionSelector.view === "card"
+                          ? "primary.dark"
+                          : "primary.light",
+                      color:
+                        payableActionSelector.view === "card"
+                          ? "common.white"
+                          : "primary.dark",
+                    },
+                  }}
                 >
-                  <FormatListBulletedOutlined
-                    color={
-                      payableActionSelector.view === "card"
-                        ? "primary"
-                        : "secondary"
-                    }
-                  />
+                  <FormatListBulletedOutlined />
                 </IconButton>
+
                 <IconButton
                   onClick={() => dispatch(payableDashboardView("grid"))}
+                  sx={{
+                    backgroundColor:
+                      payableActionSelector.view === "grid" ? "primary.main" : "common.white",
+                    color:
+                      payableActionSelector.view === "grid" ? "common.white" : "primary.main",
+                    borderRadius: 0,
+                    padding: "6px 8px",
+                    "&:hover": {
+                      backgroundColor:
+                        payableActionSelector.view === "grid"
+                          ? "primary.dark"
+                          : "primary.light",
+                      color:
+                        payableActionSelector.view === "grid"
+                          ? "common.white"
+                          : "primary.dark",
+                    },
+                  }}
                 >
-                  <GridOnOutlined
-                    color={
-                      payableActionSelector.view === "grid"
-                        ? "primary"
-                        : "secondary"
-                    }
-                  />
+                  <GridOnOutlined />
                 </IconButton>
               </Box>
+
             </Stack>
           }
         />
@@ -436,7 +462,7 @@ export default function PayableListScreen({ page }) {
             handlePage={handlePage}
             data={payableLisData?.body?.data}
             columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
+            columnVisibilityHandler={() => { }}
             paginationModel={payableActionSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={payableActionSelector.sortModel}

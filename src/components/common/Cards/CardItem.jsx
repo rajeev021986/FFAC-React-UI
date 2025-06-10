@@ -62,9 +62,9 @@ const styles = {
   root_item: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "98.5%",
+    alignItems: "start",
+    justifyContent: "space-between",
+    width: "100%",
     padding: "12px",
     backgroundColor: "white.main",
     border: "1px solid #e5e5e5",
@@ -72,7 +72,6 @@ const styles = {
       "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
     // margin: "auto",
     marginBottom: "16px",
-    marginLeft: "8px",
     borderRadius: "10px",
     height: "fit-content",
     transition: "background-color 0.3s ease, box-shadow 0.3s ease", // Smooth transition for hover effect

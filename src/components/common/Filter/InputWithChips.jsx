@@ -6,8 +6,13 @@ import {
   InputAdornment,
   IconButton,
   Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material";
 import { Search, Clear, FilterAltOutlined } from "@mui/icons-material";
+import DateField from "../../../components/common/DateTime/DateField";
 const Chips = {
   statusCode: {
     chipLabel: "Status",
@@ -119,9 +124,8 @@ const InputWithChips = ({
   const formattedFilter = Object.entries(filters)
     .map(([key, value]) => {
       if (value !== "") {
-        return `${Chips[key]?.chipLabel || key}: ${
-          Chips[key]?.chipvalues?.find((a) => a?.value == value)?.label || value
-        }`;
+        return `${Chips[key]?.chipLabel || key}: ${Chips[key]?.chipvalues?.find((a) => a?.value == value)?.label || value
+          }`;
       }
       return null;
     })
@@ -143,74 +147,93 @@ const InputWithChips = ({
     delete updatedFilters[Object.keys(updatedFilters)[index]];
     onFilterChange(updatedFilters);
   };
+  const [invoiceDate, setInvoiceDate] = useState('');
 
   return (
-    <Box sx={styles.input} ref={inputRef} onClick={onFocus}>
-      <Box sx={styles.field}>
+
+    <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+      <Box sx={styles.input} ref={inputRef} onClick={onFocus}>
+        <Box sx={styles.field}>
+          <Box sx={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+            {formattedFilter.map((chip, index) => (
+              <Chip
+                key={index}
+                variant="outlined"
+                color="primary"
+                size="small"
+                label={chip}
+                onDelete={() => handleDeleteChip(index)}
+              />
+            ))}
+            {formattedFilter.length === 0 && (
+              <Typography variant="body2" color="textSecondary">
+                {placeholder}
+              </Typography>
+            )}
+          </Box>
+        </Box>
         <Box sx={styles.startIcon}>
-          <Search color="primary" />
-        </Box>
-        <Box>
-          {formattedFilter.map((chip, index) => (
-            <Chip
-              key={index}
-              variant="outlined"
-              color="primary"
-              size="small"
-              label={chip}
-              onDelete={() => handleDeleteChip(index)}
-            />
-          ))}
-          {formattedFilter.length === 0 && (
-            <Typography variant="body2" color="textSecondary">
-              {placeholder}
-            </Typography>
-          )}
+          <Search sx={{ color: "#9c27b0" }} /> 
         </Box>
       </Box>
-      <Box>
-        <IconButton
-          aria-label=""
-          onClick={endButtonHandler}
-          sx={{ padding: "0px" }}
+
+      <FormControl size="small" sx={{ minWidth: 140 }}>
+        <InputLabel>Status</InputLabel>
+        <Select
+          value=""
+          label="Status"
+          sx={{
+            borderRadius: "8px",
+            bgcolor: "#fff",
+            '& .MuiSelect-select': {
+              padding: '7.5px 14px',
+            }
+          }}
         >
-          {formattedFilter.length > 0 ? <Clear /> : <FilterAltOutlined />}
-        </IconButton>
-      </Box>
+          <MenuItem value="">None</MenuItem>
+          <MenuItem value="pending">New</MenuItem>
+          <MenuItem value="paid">Active</MenuItem>
+          <MenuItem value="overdue">Pending</MenuItem>
+        </Select>
+      </FormControl>
+
+      <DateField
+        label="Invoice Date*"
+        name="invoiceDate"
+        id="invoiceDate"
+      />
+
+      <IconButton onClick={endButtonHandler} sx={{ padding: "6px" }}>
+        {formattedFilter.length > 0 ? <Clear /> : <FilterAltOutlined />}
+      </IconButton>
     </Box>
+
   );
 };
 
 const styles = {
   input: {
     display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    gap: "5px",
     alignItems: "center",
-    padding: "8px 15px",
+    justifyContent: "space-between",
+    flex: 1,
+    padding: "6px 12px",
     border: "1px solid #ccc",
-    borderRadius: "50px",
-    cursor: "text",
-    "& .MuiTextField-root": {
-      flex: "1",
-    },
-    "& .MuiChip-root": {
-      margin: "2px",
-    },
+    borderRadius: "8px",
+    minWidth: 200,
+    backgroundColor: "#fff",
   },
   field: {
+    flexGrow: 1,
     display: "flex",
-    flex: "1",
     alignItems: "center",
-    gap: "5px",
   },
   startIcon: {
+    paddingLeft: "8px",
     display: "flex",
     alignItems: "center",
-    //padding: "5px",
   },
 };
+
 
 export default InputWithChips;

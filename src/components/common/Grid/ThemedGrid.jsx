@@ -91,7 +91,7 @@ const ThemedGrid = (props) => {
         flexDirection: "column",
         alignItems: "center",
         overflowY: "auto",
-        paddingBottom: "0px",
+        padding: "15px",
         marginBottom: "0px",
       }}
     >

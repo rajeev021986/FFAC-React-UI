@@ -17,7 +17,16 @@ import {
   useAddPaybleEntryMutation,
   useUpdatePaybleEntryMutation,
 } from "../../../store/api/payableApi";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+import { alpha } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 import CustomToast from "../../../components/common/Toast/CustomToast";
@@ -53,6 +62,12 @@ import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import FormAutoCompleteForJobNo from "../../../components/common/AutoComplete/FormAutoCompleteForJobNo";
+
+import { GrStorage } from "react-icons/gr";
+import { HiReceiptPercent } from "react-icons/hi2";
+import { FaHandHoldingUsd } from "react-icons/fa";
+import { TbMoneybag } from "react-icons/tb";
+import { MdDescription } from "react-icons/md";
 
 export default function AddEditForm({
   initialValues,
@@ -702,65 +717,165 @@ export default function AddEditForm({
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Box sx={{display: "flex", padding: "15px"}}>
             {type === "add" ? (
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="Payable Details"
-                  value="1"
-                  icon={<EditIconForHeader />}
-                  iconPosition="start"
-                  sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                />
-              </TabList>
+              <h3 style={{ margin: 0, }}>Payable Details</h3>
+              // <TabList
+              //   onChange={handleChange}
+              //   aria-label="lab API tabs example"
+              // >
+              //   <Tab
+              //     label="Payable Details"
+              //     value="1"
+              //     icon={<EditIconForHeader />}
+              //     iconPosition="start"
+              //     sx={{ textTransform: "capitalize", minHeight: "50px" }}
+              //   />
+              // </TabList>
             ) : (
+
               <TabList
                 onChange={handleChange}
                 aria-label="lab API tabs example"
+                TabIndicatorProps={{ style: { display: "none" } }}
+                sx={{
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "999px",
+                  padding: "5px",
+                  minHeight: "50px",
+                  "& .MuiTabs-flexContainer": {
+                    gap: "4px",
+                  },
+                }}
               >
                 <Tab
                   label="Payable Details"
                   value="1"
                   icon={<EditIconForHeader />}
                   iconPosition="start"
-                  sx={{ textTransform: "capitalize", minHeight: "50px" }}
+                  sx={{
+                    textTransform: "none",
+                    minHeight: "42px",
+                    px: 2.5,
+                    borderRadius: "999px",
+                    fontWeight: 500,
+                    "&.Mui-selected": {
+                      backgroundColor: "primary.main",
+                      color: "#fff",
+                      "& svg": {
+                        color: "#fff",
+                      },
+                    },
+                    "& svg": {
+                      marginRight: "8px",
+                      fontSize: "18px",
+                      color: "text.secondary",
+                    },
+                    color: "text.secondary",
+                  }}
                 />
                 <Tab
                   label="Document Details"
                   value="2"
                   icon={<DocumentIcon />}
                   iconPosition="start"
-                  sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                  // disabled={formik.values.statusCode === -3}
+                  sx={{
+                    textTransform: "none",
+                    minHeight: "42px",
+                    px: 2.5,
+                    borderRadius: "999px",
+                    fontWeight: 500,
+                    "&.Mui-selected": {
+                      backgroundColor: "primary.main",
+                      color: "#fff",
+                      "& svg": {
+                        color: "#fff",
+                      },
+                    },
+                    "& svg": {
+                      marginRight: "8px",
+                      fontSize: "18px",
+                      color: "text.secondary",
+                    },
+                    color: "text.secondary",
+                  }}
                 />
                 <Tab
                   label="Audit Logs"
                   value="3"
                   icon={<AuditIcon />}
                   iconPosition="start"
-                  sx={{ textTransform: "capitalize", minHeight: "50px" }}
-                  // disabled={formik.values.statusCode === -3}
+                  sx={{
+                    textTransform: "none",
+                    minHeight: "42px",
+                    px: 2.5,
+                    borderRadius: "999px",
+                    fontWeight: 500,
+                    "&.Mui-selected": {
+                      backgroundColor: "primary.main",
+                      color: "#fff",
+                      "& svg": {
+                        color: "#fff",
+                      },
+                    },
+                    "& svg": {
+                      marginRight: "8px",
+                      fontSize: "18px",
+                      color: "text.secondary",
+                    },
+                    color: "text.secondary",
+                  }}
                 />
               </TabList>
+
+
+              // <TabList
+              //   onChange={handleChange}
+              //   aria-label="lab API tabs example"
+              // >
+              //   <Tab
+              //     label="Payable Details"
+              //     value="1"
+              //     icon={<EditIconForHeader />}
+              //     iconPosition="start"
+              //     sx={{ textTransform: "capitalize", minHeight: "50px" }}
+              //   />
+              //   <Tab
+              //     label="Document Details"
+              //     value="2"
+              //     icon={<DocumentIcon />}
+              //     iconPosition="start"
+              //     sx={{ textTransform: "capitalize", minHeight: "50px" }}
+              //   // disabled={formik.values.statusCode === -3}
+              //   />
+              //   <Tab
+              //     label="Audit Logs"
+              //     value="3"
+              //     icon={<AuditIcon />}
+              //     iconPosition="start"
+              //     sx={{ textTransform: "capitalize", minHeight: "50px" }}
+              //   // disabled={formik.values.statusCode === -3}
+              //   />
+              // </TabList>
             )}
+
           </Box>
 
-          <TabPanel value="1" sx={{ padding: 0 }}>
+          <TabPanel value="1"
+            sx={{
+              padding: "10px 15px",
+            }}>
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "space-between",
                 width: "100%",
-                padding: 0,
-                margin: 0,
+                marginBottom: 2,
+                borderRadius: "8px"
               }}
             >
-              <Box sx={{ width: "40%", paddingRight: 2 }}>
+              <Box sx={{ width: "100%", backgroundColor: "#F9FAFB" }}>
                 <Grid container sx={{ padding: 0, margin: 0 }}>
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={4} padding={1.2}>
                     <SelectBox
                       label="Invoice Type*"
                       id="invoiceType"
@@ -770,10 +885,11 @@ export default function AddEditForm({
                       onChange={formik.handleChange}
                       disabled={isDisabled}
                       inputRef={invoiceTypeRef}
+                      sx={{ backgroundColor: "#fff" }}
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={4} padding={1.2}>
                     <InputBox
                       label="Payable Ref. No.*"
                       id="payableRefNo"
@@ -782,10 +898,11 @@ export default function AddEditForm({
                       onChange={formik.handleChange}
                       inputRef={payableRef}
                       disabled
+                      sx={{ backgroundColor: "#fff" }}
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={4} padding={1.2}>
                     {/* <FormAutoCompleteWithLoader
                       label="Job No."
                       id="jobNo"
@@ -805,10 +922,11 @@ export default function AddEditForm({
                       onChange={formik.handleChange}
                       suggestionName="job_no"
                       disabled={isDisabled}
+                      sx={{ backgroundColor: "#fff" }}
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={4} padding={1.2}>
                     <DateTimeField
                       name="invoiceDate"
                       label="Invoice Date*"
@@ -818,10 +936,11 @@ export default function AddEditForm({
                       onChange={formik.setFieldValue}
                       inputRef={payableRef}
                       disabled={isDisabled}
+                      sx={{ backgroundColor: "#fff" }}
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={4} padding={1.2}>
                     {/* <FormAutoCompleteWithLoader
                       label="Vendor Name"
                       id="vendorId"
@@ -848,10 +967,11 @@ export default function AddEditForm({
                         formik.setFieldValue("vendorName", selected.vendorName);
                       }}
                       disabled={isDisabled}
+                      sx={{ backgroundColor: "#fff" }}
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={4} padding={1.2}>
                     <InputBox
                       label="Vendor Invoice No."
                       id="vendorInvoiceNo"
@@ -860,10 +980,11 @@ export default function AddEditForm({
                       onChange={formik.handleChange}
                       inputRef={payableRef}
                       disabled={isDisabled}
+                      sx={{ backgroundColor: "#fff" }}
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={4} padding={1.2}>
                     <DateTimeField
                       name="vendorInvoiceDate"
                       label="Vendor Invoice Date"
@@ -873,10 +994,11 @@ export default function AddEditForm({
                       onChange={formik.setFieldValue}
                       // inputRef={payableRef}
                       disabled={isDisabled}
+                      sx={{ backgroundColor: "#fff" }}
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={4} padding={1.2}>
                     <SelectBox
                       label="Currency"
                       id="currency"
@@ -892,18 +1014,19 @@ export default function AddEditForm({
                         }
                       }}
                       disabled={isDisabled}
+                      sx={{ backgroundColor: "#fff" }}
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={4} padding={1.2}>
                     {getFormData?.currency === "TZS" ||
-                    getFormData?.currency === "INR" ? (
+                      getFormData?.currency === "INR" ? (
                       <InputBox
                         label="Ex. Rate"
                         id="exchangRate"
                         value={
                           getFormData?.currency === "TZS" ||
-                          getFormData?.currency === "INR"
+                            getFormData?.currency === "INR"
                             ? 1
                             : formatIndianCurrency(formik.values.exchangeRate)
                         }
@@ -917,6 +1040,7 @@ export default function AddEditForm({
                           viewPage === "view" ||
                           isDisabled
                         }
+                        sx={{ backgroundColor: "#fff" }}
                       />
                     ) : (
                       <FormAutoCompleteWithLoader
@@ -929,6 +1053,7 @@ export default function AddEditForm({
                         disabled={isDisabled}
                         name={true}
                         other={formik.values.currency}
+                        sx={{ backgroundColor: "#fff" }}
                       />
                     )}
                   </Grid>
@@ -944,358 +1069,319 @@ export default function AddEditForm({
 
                 <PopupAlert alertConfig={alertConfig} />
               </Box>
-
-              <Box sx={{ width: "60%", padding: 2 }}>
-                <Box
-                  sx={{
-                    border: "1px solid #ccc",
-                    borderRadius: "10px",
-                    overflow: "hidden",
-                    marginLeft: "100px",
-                  }}
-                >
-                  <Grid
-                    container
-                    sx={{
-                      "& > .MuiGrid-item": {
-                        border: "1px solid #ccc",
-                      },
-                      "& > .MuiGrid-item > .MuiTypography-root": {
-                        padding: "10px",
-                      },
-                      "& fieldset": {
-                        border: "none",
-                      },
-                      "&:hover fieldset": {
-                        border: "none",
-                      },
-                      "&.Mui-focused fieldset": {
-                        border: "none",
-                      },
-                    }}
-                  >
-                    <Grid item xs={12} lg={4}></Grid>
-                    <Grid item xs={12} lg={4}>
-                      <Typography>{`Invoice Currency (${getFormData?.currency})`}</Typography>
-                    </Grid>
-                    <Grid item xs={12} lg={4}>
-                      <Typography>{showDefaultCurrency?.currency}</Typography>
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <Typography>Amount</Typography>
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        id="amount"
-                        name="amount"
-                        variant="outlined"
-                        value={formatIndianCurrency(getAmountData?.amount)}
-                        fullWidth
-                        size="small"
-                        sx={{
-                          ...muiTextFieldStyles.root,
-                          width: "100% !important",
-                        }}
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        variant="outlined"
-                        fullWidth
-                        size="small"
-                        sx={{ ...muiTextFieldStyles.root }}
-                        value={
-                          getFormData?.currency === "TZS" ||
-                          getFormData?.currency === "INR"
-                            ? formatIndianCurrency(getAmountData?.amount * 1)
-                            : formatIndianCurrency(
-                                getAmountData?.amount *
-                                  Number(getFormData?.exchangeRate)
-                              ) || 0
-                        }
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <Typography>VAT</Typography>
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        id="vatAmount"
-                        name="vatAmount"
-                        variant="outlined"
-                        value={formatIndianCurrency(getAmountData?.vatAmount)}
-                        fullWidth
-                        size="small"
-                        sx={{
-                          ...muiTextFieldStyles.root,
-                          width: "100% !important",
-                        }}
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        variant="outlined"
-                        fullWidth
-                        size="small"
-                        sx={{ ...muiTextFieldStyles.root }}
-                        value={
-                          getFormData?.currency === "TZS" ||
-                          getFormData?.currency === "INR"
-                            ? formatIndianCurrency(getAmountData?.vatAmount * 1)
-                            : formatIndianCurrency(
-                                getAmountData?.vatAmount *
-                                  getFormData?.exchangeRate
-                              ) || 0
-                        }
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <Typography>With holding Tax</Typography>
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        id="withHoldingAmount"
-                        name="withHoldingAmount"
-                        variant="outlined"
-                        value={formatIndianCurrency(
-                          getAmountData?.withHoldingAmount
-                        )}
-                        fullWidth
-                        size="small"
-                        sx={{
-                          ...muiTextFieldStyles.root,
-                          width: "100% !important",
-                        }}
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        variant="outlined"
-                        fullWidth
-                        size="small"
-                        sx={{ ...muiTextFieldStyles.root }}
-                        value={
-                          getFormData?.currency === "TZS" ||
-                          getFormData?.currency === "INR"
-                            ? formatIndianCurrency(
-                                getAmountData?.withHoldingAmount * 1
-                              )
-                            : formatIndianCurrency(
-                                getAmountData?.withHoldingAmount *
-                                  getFormData?.exchangeRate || 0
-                              )
-                        }
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <Typography>Net amount payable</Typography>
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        id="totalAmount"
-                        name="totalAmount"
-                        value={formatIndianCurrency(getAmountData?.totalAmount)}
-                        variant="outlined"
-                        fullWidth
-                        size="small"
-                        sx={{
-                          ...muiTextFieldStyles.root,
-                          width: "100% !important",
-                        }}
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        variant="outlined"
-                        fullWidth
-                        size="small"
-                        sx={{ ...muiTextFieldStyles.root }}
-                        value={
-                          getFormData?.currency === "TZS" ||
-                          getFormData?.currency === "INR"
-                            ? formatIndianCurrency(
-                                getAmountData?.totalAmount * 1
-                              )
-                            : formatIndianCurrency(
-                                getAmountData?.totalAmount *
-                                  getFormData?.exchangeRate || 0
-                              )
-                        }
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <Typography>Cost center</Typography>
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        id="amount"
-                        name="amount"
-                        variant="outlined"
-                        fullWidth
-                        size="small"
-                        sx={{
-                          ...muiTextFieldStyles.root,
-                          width: "100% !important",
-                        }}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={4}>
-                      <TextField
-                        hiddenLabel
-                        id="amount"
-                        name="amount"
-                        variant="outlined"
-                        fullWidth
-                        size="small"
-                        sx={{ ...muiTextFieldStyles.root }}
-                      />
-                    </Grid>
-                  </Grid>
-                </Box>
-              </Box>
             </Box>
-
-            <hr style={{ margin: "10px 0" }} />
-
-            <Stack direction="row" justifyContent="right" padding="5px 15px">
-              <Box>
-                {actionsSelector?.view === "card" && (
-                  <IconButton
-                    color="primary"
-                    onClick={handleTogglePayEntry}
-                    disabled={isDisabled}
+            <Box
+              sx={{
+                width: "100%",
+                borderRadius: "8px",
+                backgroundColor: "#F9FAFB"
+              }}
+            >
+              <Stack direction="row" justifyContent="space-between" padding="10px 15px">
+                <h3 style={{ margin: 0, color: "#646464" }}>Charges Details</h3>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  {actionsSelector?.view === "card" && (
+                    <IconButton
+                      color="primary"
+                      onClick={handleTogglePayEntry}
+                      disabled={isDisabled}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  )}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      border: "1px solid",
+                      borderColor: "primary.main",
+                      borderRadius: "6px",
+                      overflow: "hidden",
+                      width: "fit-content",
+                    }}
                   >
-                    <AddIcon />
-                  </IconButton>
-                )}
+                    <IconButton onClick={() => dispatch(formView("card"))}
+                      sx={{
+                        backgroundColor:
+                          actionsSelector.view === "card" ? "primary.main" : "common.white",
+                        color:
+                          actionsSelector.view === "card" ? "common.white" : "primary.main",
+                        borderRadius: 0,
+                        padding: "6px 8px",
+                        "&:hover": {
+                          backgroundColor:
+                            actionsSelector.view === "card"
+                              ? "primary.dark"
+                              : "primary.light",
+                          color:
+                            actionsSelector.view === "card"
+                              ? "common.white"
+                              : "primary.dark",
+                        },
+                      }}>
+                      <FormatListBulletedOutlined />
+                    </IconButton>
 
-                <IconButton onClick={() => dispatch(formView("card"))}>
-                  <FormatListBulletedOutlined
-                    color={
-                      actionsSelector.view === "card" ? "primary" : "secondary"
-                    }
-                  />
-                </IconButton>
+                    <IconButton onClick={() => dispatch(formView("grid"))}
+                      sx={{
+                        backgroundColor:
+                          actionsSelector.view === "grid" ? "primary.main" : "common.white",
+                        color:
+                          actionsSelector.view === "grid" ? "common.white" : "primary.main",
+                        borderRadius: 0,
+                        padding: "6px 8px",
+                        "&:hover": {
+                          backgroundColor:
+                            actionsSelector.view === "grid"
+                              ? "primary.dark"
+                              : "primary.light",
+                          color:
+                            actionsSelector.view === "grid"
+                              ? "common.white"
+                              : "primary.dark",
+                        },
+                      }}>
+                      <GridOnOutlined />
+                    </IconButton>
+                  </Box>
+                </Box>
+              </Stack>
 
-                <IconButton onClick={() => dispatch(formView("grid"))}>
-                  <GridOnOutlined
-                    color={
-                      actionsSelector.view === "grid" ? "primary" : "secondary"
-                    }
-                  />
-                </IconButton>
-              </Box>
-            </Stack>
-
-            {actionsSelector?.view === "card" ? (
-              <Box
-                sx={{
-                  width: "100%",
-                  borderBottom: "1px solid #ccc",
-                  paddingBottom: "3px",
-                }}
-              >
-                <PayableCardView
-                  uniqueId="id"
-                  columns={PAYABLE_COLUMNS}
-                  count={20}
-                  handlePage={handlePage}
-                  data={chargesData}
-                  paginationModel={actionsSelector.pagination}
-                  loading={isLoading}
-                  actions={getUserListGridActions(nav, payableSetSortModal)}
-                  page=""
-                  handleEditClick={handleEditClick}
-                  handleDeleteClick={handleDeleteNote}
-                  disabled={isDisabled}
-                />
-              </Box>
-            ) : (
-              <Box sx={{ width: "100%" }}>
+              {actionsSelector?.view === "card" ? (
                 <Box
                   sx={{
-                    border: "1px solid #ccc",
-                    borderRadius: "10px",
-                    margin: "8px",
+                    width: "100%",
+                    paddingBottom: "3px",
                   }}
                 >
-                  <PayableEntryList
-                    formik={formik}
-                    dropdownData={dropdownData}
+                  <PayableCardView
+                    uniqueId="id"
+                    columns={PAYABLE_COLUMNS}
+                    count={20}
+                    handlePage={handlePage}
+                    data={chargesData}
+                    paginationModel={actionsSelector.pagination}
+                    loading={isLoading}
+                    actions={getUserListGridActions(nav, payableSetSortModal)}
+                    page=""
+                    handleEditClick={handleEditClick}
+                    handleDeleteClick={handleDeleteNote}
                     disabled={isDisabled}
-                    chargesData={chargesData}
-                    PAYABLE_COLUMNS={PAYABLE_COLUMNS}
                   />
                 </Box>
-              </Box>
-            )}
-            <Box sx={{ gap: "10px", padding: "15px" }}>
-              {formik?.values?.status?.toLowerCase() === "rejected" ||
-              page == "payableApprove" ? (
-                <Grid item xs={12} paddingLeft={1} paddingTop={1}>
-                  <TextField
-                    label="Reject Remarks"
-                    name="rejectRemarks"
-                    value={formik.values.rejectRemarks}
-                    error={rejectError}
-                    helperText={
-                      rejectError
-                        ? "Reject remarks are required when rejecting a customer*."
-                        : formik.errors.rejectRemarks
-                    }
-                    onChange={formik.handleChange}
-                    disabled={page === "payable" ? true : false}
-                    multiline
-                    rows={4}
-                    variant="outlined"
-                    fullWidth
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "10px",
-                      },
-                    }}
-                  />
-                </Grid>
               ) : (
-                <></>
+                <Box sx={{ width: "100%" }}>
+                  <Box
+                    sx={{
+                      borderRadius: "8px",
+                      margin: "15px",
+                    }}
+                  >
+                    <PayableEntryList
+                      formik={formik}
+                      dropdownData={dropdownData}
+                      disabled={isDisabled}
+                      chargesData={chargesData}
+                      PAYABLE_COLUMNS={PAYABLE_COLUMNS}
+                    />
+                  </Box>
+                </Box>
               )}
+              <Box sx={{ gap: "10px", padding: "15px" }}>
+                {formik?.values?.status?.toLowerCase() === "rejected" ||
+                  page == "payableApprove" ? (
+                  <Grid item xs={12} paddingLeft={1} paddingTop={1}>
+                    <TextField
+                      label="Reject Remarks"
+                      name="rejectRemarks"
+                      value={formik.values.rejectRemarks}
+                      error={rejectError}
+                      helperText={
+                        rejectError
+                          ? "Reject remarks are required when rejecting a customer*."
+                          : formik.errors.rejectRemarks
+                      }
+                      onChange={formik.handleChange}
+                      disabled={page === "payable" ? true : false}
+                      multiline
+                      rows={4}
+                      variant="outlined"
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "10px",
+                        },
+                      }}
+                    />
+                  </Grid>
+                ) : (
+                  <></>
+                )}
+              </Box>
+              <Box sx={{ width: "100%", padding: 2 }}>
+                <Box
+                  sx={{
+                    overflow: "hidden",
+                  }}
+                >
+                  <TableContainer component={Paper}>
+                    <Table>
+                      <TableHead
+                        sx={(theme) => ({
+                          backgroundColor: theme.palette.primary.main,
+                          "& .MuiTableCell-root": {
+                            color: "#fff",
+                            fontWeight: "bold",
+                          },
+                        })}
+                      >
+                        <TableRow>
+                          <TableCell />
+                          <TableCell>
+                            <GrStorage style={{ verticalAlign: "middle", fontSize: "18px", marginRight: "10px" }} />
+                            <Typography variant="body2" component="span" fontWeight={"600"}>Amount</Typography>
+                          </TableCell>
+                          <TableCell>
+                            <HiReceiptPercent style={{ verticalAlign: "middle", fontSize: "18px", marginRight: "10px" }} />
+                            <Typography variant="body2" component="span" fontWeight={"600"}>VAT</Typography>
+                          </TableCell>
+                          <TableCell>
+                            <FaHandHoldingUsd style={{ verticalAlign: "middle", fontSize: "18px", marginRight: "10px" }} />
+                            <Typography variant="body2" component="span" fontWeight={"600"}>With holding Tax</Typography>
+                          </TableCell>
+                          <TableCell>
+                            <TbMoneybag style={{ verticalAlign: "middle", fontSize: "18px", marginRight: "10px" }} />
+                            <Typography variant="body2" component="span" fontWeight={"600"}>Net amount payable</Typography>
+                          </TableCell>
+                          <TableCell>
+                            <MdDescription style={{ verticalAlign: "middle", fontSize: "18px", marginRight: "10px" }} />
+                            <Typography variant="body2" component="span" fontWeight={"600"}>Cost center</Typography>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+
+                      <TableBody
+                        sx={{
+                          "& .MuiTableCell-root": {
+                            padding: "10px"
+                          },
+                        }}
+                      >
+
+                        <TableRow>
+                          <TableCell
+                            sx={(theme) => ({
+                              backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                              color: theme.palette.primary.main,
+                              fontWeight: 600,
+                            })}
+                          >
+                            <Typography>{`Invoice Currency (${getFormData?.currency})`}</Typography>
+                          </TableCell>
+
+                          {[getAmountData?.amount, getAmountData?.vatAmount, getAmountData?.withHoldingAmount, getAmountData?.totalAmount].map((value, idx) => (
+                            <TableCell key={idx} align="center">
+                              <TextField
+                                hiddenLabel
+                                variant="outlined"
+                                value={formatIndianCurrency(value)}
+                                fullWidth
+                                size="small"
+                                sx={(theme) => ({
+                                  ...muiTextFieldStyles.root,
+                                  width: "100% !important",
+                                  "& input": {
+                                    border: "none",
+                                    fontSize: "14px",
+                                  },
+                                  "& fieldset": {
+                                    border: "none",
+                                  },
+                                  "&:hover fieldset": {
+                                    border: "none",
+                                  },
+                                  "&.Mui-focused fieldset": {
+                                    border: "none",
+                                  },
+                                })}
+                                disabled
+                              />
+                            </TableCell>
+                          ))}
+
+                          <TableCell>
+                            <TextField
+                              hiddenLabel
+                              variant="outlined"
+                              fullWidth
+                              size="small"
+                              sx={muiTextFieldStyles.root}
+                            />
+                          </TableCell>
+                        </TableRow>
+
+                        {/* Row 2: Converted Values */}
+                        <TableRow>
+                          <TableCell
+                            sx={(theme) => ({
+                              backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                              color: theme.palette.primary.main,
+                              fontWeight: 600,
+                            })}
+                          >
+                            <Typography>{showDefaultCurrency?.currency}</Typography>
+                          </TableCell>
+
+                          {[getAmountData?.amount, getAmountData?.vatAmount, getAmountData?.withHoldingAmount, getAmountData?.totalAmount].map((value, idx) => (
+                            <TableCell key={idx} align="center">
+                              <TextField
+                                hiddenLabel
+                                variant="outlined"
+                                fullWidth
+                                size="small"
+                                sx={(theme) => ({
+                                  ...muiTextFieldStyles.root,
+                                  "& input": {
+                                    fontSize: "14px",
+                                  }, "& fieldset": {
+                                    border: "none",
+                                  },
+                                  "&:hover fieldset": {
+                                    border: "none",
+                                  },
+                                  "&.Mui-focused fieldset": {
+                                    border: "none",
+                                  },
+                                })}
+                                value={
+                                  getFormData?.currency === "TZS" || getFormData?.currency === "INR"
+                                    ? formatIndianCurrency(value * 1)
+                                    : formatIndianCurrency(value * Number(getFormData?.exchangeRate)) || 0
+                                }
+                                disabled
+                              />
+                            </TableCell>
+                          ))}
+
+                          <TableCell>
+                            <TextField
+                              hiddenLabel
+                              variant="outlined"
+                              fullWidth
+                              size="small"
+                              sx={muiTextFieldStyles.root}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              </Box>
             </Box>
 
             {viewPage !== "view" &&
               (page == "payable" ? (
-                <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                <Box sx={{ display: "flex", gap: "10px", justifyContent: "end", marginTop: "40px" }}>
                   <Grid item xs={12}>
                     <Stack
                       direction="row"
@@ -1351,7 +1437,7 @@ export default function AddEditForm({
                   </Grid>
                 </Box>
               ) : (
-                <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                <Box sx={{ display: "flex", gap: "10px", justifyContent: "end" }}>
                   <Grid item xs={12} sx={{ margin: 1 }}>
                     <Stack
                       direction="row"
@@ -1383,7 +1469,7 @@ export default function AddEditForm({
                             color: "white !important",
                             display:
                               viewPage === "editForm" &&
-                              initialValues?.paidStatus
+                                initialValues?.paidStatus
                                 ? "none"
                                 : "block",
                           }}

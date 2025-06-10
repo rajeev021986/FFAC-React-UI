@@ -113,6 +113,7 @@ function FormAutoCompleteWithLoader(props) {
       <Autocomplete
         sx={{
           border: "none !important",
+          backgroundColor: "#fff"
         }}
         size="small"
         id={id}
