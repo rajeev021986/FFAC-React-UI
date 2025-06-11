@@ -86,6 +86,7 @@ export default function AddPayableEntryModal({
     customerName: "",
     currency: "",
     chargeName: "",
+    mappedCharge: "",
     // receivableRefNo: "",
     receivableAmount: 0,
     totalAmount: 0,
@@ -223,6 +224,7 @@ export default function AddPayableEntryModal({
         customerName: "",
         currency: "",
         chargeName: "",
+        mappedCharge: "",
         // receivableRefNo: "",
         receivableAmount: 0,
         totalAmount: 0,
@@ -256,6 +258,7 @@ export default function AddPayableEntryModal({
       chargeName: "",
       // receivableRefNo: "",
       receivableAmount: 0,
+      mappedCharge: "",
       totalAmount: 0,
       exRate: "",
       vatApplicable: "",
@@ -287,6 +290,7 @@ export default function AddPayableEntryModal({
         customerName: "",
         currency: "",
         chargeName: "",
+        mappedCharge: "",
         // receivableRefNo: "",
         receivableAmount: 0,
         totalAmount: 0,
@@ -320,6 +324,8 @@ export default function AddPayableEntryModal({
       }));
     }
   };
+  console.log("finvoiceEntry.mappedCharge", invoiceEntry.mappedCharge);
+
   return (
     <Modal
       keepMounted
@@ -384,25 +390,39 @@ export default function AddPayableEntryModal({
                   handleChange("chargeName", selected.chargeName);
                 }}
               />
-            ) : 
-            formik.values.type === "tax_invoice" && invoiceEntry.new == true ? (
+            ) : formik.values.type === "tax_invoice" &&
+              type == "cost_details" ? (
               <FormAutoCompleteWithLoader
                 label="Charge Name"
-                id="chargeId"
+                id="mappedCharge"
                 suggestionName="mapped_charge"
                 value={{
-                  chargeId: invoiceEntry.chargeId,
-                  chargeName: invoiceEntry.mappedCharge,
+                  chargeId: invoiceEntry.chargeId || "",
+                  chargeName: invoiceEntry.mappedCharge || "",
                 }}
                 error={errors.chargeName}
                 idKey="chargeId"
                 nameKey="chargeName"
                 onChange={(selected) => {
-                  handleChange("chargeId", selected.chargeId);
-                  handleChange("chargeName", selected.chargeName);
+                  if (selected?.chargeId) {
+                    handleChange("chargeId", selected.chargeId);
+                    handleChange("chargeName", selected.chargeName);
+                    setInvoiceEntry((prev) => ({
+                      ...prev,
+                      chargeId: selected.chargeId,
+                      mappedCharge: selected.chargeName, 
+                    }));
+                  } else {
+                    handleChange("chargeId", "");
+                    handleChange("chargeName", "");
+                    setInvoiceEntry((prev) => ({
+                      ...prev,
+                      chargeId: "",
+                      mappedCharge: "", 
+                    }));
+                  }
                 }}
               />
-
             ) : (
               <FormAutoCompleteWithLoader
                 label="Charge Name"
