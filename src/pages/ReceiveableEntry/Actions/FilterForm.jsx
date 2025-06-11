@@ -2,7 +2,7 @@ import { Button, Stack } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InputBox from "../../../components/common/InputBox";
-import { updateInput } from "../../../store/freatures/payableEntrySlice";
+import { updateInput } from "../../../store/freatures/ReceivableEntrySlice";
 import { OutlinedButton } from "../../../components/common/Button";
 import SelectBox from "../../../components/common/SelectBox";
 import { useFormik } from "formik";
@@ -10,24 +10,22 @@ import { useFormik } from "formik";
 export default function FilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.codeCustomer.formData);
-
   const formik = useFormik({
     initialValues: inputs || {
       jobNo: inputs.jobNo || "",
       currency: inputs.currency || "",
       customerName: inputs.customerName || "",
-      companyCode: inputs.companyCode || "",
       exchangeRate: inputs.exchangeRate || "",
-      consigneeName: inputs.consigneeName || "",
       receivableRefNo: inputs.receivableRefNo || "",
-      status: inputs.status || "",
+      vendorInvoiceNo: inputs.vendorInvoiceNo || "",
+      consigneeName: inputs.consigneeName || "",
+      statusCode: inputs.statusCode || "",
       isDoc: inputs.isDoc || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
     },
   });
-
   const handleApply = (event) => {
     setFilterOpen(false);
     formik.handleSubmit(event);
@@ -40,11 +38,11 @@ export default function FilterForm({ setFilterOpen }) {
         jobNo: "",
         currency: "",
         customerName: "",
-        companyCode: "",
         exchangeRate: "",
-        consigneeName: "",
         receivableRefNo: "",
-        status: "",
+        vendorInvoiceNo: "",
+        consigneeName: "",
+        statusCode: "",
         isDoc: "",
       })
     );
@@ -52,19 +50,20 @@ export default function FilterForm({ setFilterOpen }) {
       jobNo: "",
       currency: "",
       customerName: "",
-      companyCode: "",
       exchangeRate: "",
-      consigneeName: "",
       receivableRefNo: "",
-      status: "",
+      vendorInvoiceNo: "",
+      consigneeName: "",
+      statusCode: "",
       isDoc: "",
     });
   };
 
   const statusOptions = [
     { value: 1, label: "Pending" },
-    { value: -2, label: "Approve" },
+    // { value: -2, label: "Approve" },
     { value: -1, label: "Rejected" },
+    { value: -3, label: "Canceled" },
   ];
 
   return (
@@ -116,9 +115,9 @@ export default function FilterForm({ setFilterOpen }) {
           <SelectBox
             sx={{ marginLeft: "8px !important" }}
             label="Status"
-            id="status"
+            id="statusCode"
             options={statusOptions}
-            value={formik.values.status}
+            value={formik.values.statusCode}
             onChange={formik.handleChange}
             MenuProps={{
               disablePortal: true,

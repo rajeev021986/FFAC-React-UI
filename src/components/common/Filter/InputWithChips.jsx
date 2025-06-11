@@ -16,7 +16,7 @@ const Chips = {
       { value: -2, label: "In Active" },
       { value: 0, label: "New & Pen Doc" },
       { value: -1, label: "Rejected" },
-      { value: -3, label: "Cancel" },
+      { value: -3, label: "Canceled" },
     ],
   },
   customerName: {
@@ -95,7 +95,7 @@ const Chips = {
       { value: 1, label: "Active" },
       { value: -2, label: "In Active" },
       { value: 0, label: "Pending" },
-      { value: -3, label: "Cancel" },
+      { value: -3, label: "Canceled" },
       { value: -1, label: "Rejected" },
     ],
   },

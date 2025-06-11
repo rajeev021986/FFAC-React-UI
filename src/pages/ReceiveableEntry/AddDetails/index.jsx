@@ -75,10 +75,9 @@ export default function ReceiveableEntryDetails({ page }) {
           setInitialValues(mapResponseToInitialValues(response.body));
         }
       } catch (error) {
-        console.error("Error loading receivable entry:", error);
         toast.custom(
           <CustomToast
-            message="Error occurred while loading form"
+            message={error.message}
             toast="error"
           />,
           { closeButton: false }

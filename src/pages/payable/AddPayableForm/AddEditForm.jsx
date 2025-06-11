@@ -62,6 +62,7 @@ export default function AddEditForm({
   type = "notcopy",
   onClose,
   refetchPayableData,
+  refetch,
 }) {
   const style = {
     position: "absolute",
@@ -127,6 +128,10 @@ export default function AddEditForm({
       setIsDisabled(false);
     }
   }, [viewPage, initialValues?.paidStatus]);
+  const handleClose = () => {
+    onClose();
+    refetch();
+  }
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -229,7 +234,7 @@ export default function AddEditForm({
             toast.custom(<CustomToast message={message} toast="success" />, {
               closeButton: false,
             });
-            viewPage === "editForm" ? onClose() : nav(-1);
+            viewPage === "editForm" ? handleClose() : nav(-1);
           } else {
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
@@ -470,8 +475,6 @@ export default function AddEditForm({
       formik.setFieldValue("exchangeRate", 1);
     }
   }, [formik?.values?.currency]);
-  console.log(formik?.values,"manish")
-
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);

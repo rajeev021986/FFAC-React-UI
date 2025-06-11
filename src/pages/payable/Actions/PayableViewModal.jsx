@@ -15,7 +15,7 @@ import ApiManager from "../../../services/ApiManager";
 import Loader from "../../../components/common/Loader/Loader";
 import CloseIcon from "@mui/icons-material/Close";
 
-const PayableViewModal = ({ viewType, open, onClose, data }) => {
+const PayableViewModal = ({ viewType, open, onClose,refetch, data }) => {
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = React.useState({
     id: "",
@@ -123,9 +123,9 @@ const PayableViewModal = ({ viewType, open, onClose, data }) => {
           </DialogTitle>
           <DialogContent>
             {viewType === "view" ? (
-              <AddEditForm viewPage="view" initialValues={initialValues} onClose ={onClose}/>
+              <AddEditForm viewPage="view" initialValues={initialValues} onClose ={onClose} refetch = {refetch}/>
             ) : (
-              <AddEditForm viewPage="editForm" initialValues={initialValues} onClose ={onClose}/>
+              <AddEditForm viewPage="editForm" initialValues={initialValues} onClose ={onClose} refetch = {refetch}/>
             )}
           </DialogContent>
         </Dialog>

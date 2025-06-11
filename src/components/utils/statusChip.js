@@ -134,6 +134,19 @@ export function StatusChip(status, field) {
             CANCEL
           </div>
         );
+        case "canceled":
+        return (
+          <div
+            style={{
+              ...styles.chip,
+              backgroundColor: "#ff3336",
+              borderColor: "#ff3336",
+              color: "#ffffff",
+            }}
+          >
+            CANCELED
+          </div>
+        );
       case "pending":
         return (
           <div

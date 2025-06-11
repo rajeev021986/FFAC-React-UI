@@ -516,6 +516,7 @@ export default function PayableListScreen({ page }) {
         <PayableViewModal
           open={modal.open}
           data={modal.data}
+          refetch={refetch}
           onClose={() => setModal((prev) => ({ ...prev, open: false }))}
           viewType={"view"}
         />

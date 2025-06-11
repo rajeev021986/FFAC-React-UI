@@ -328,8 +328,6 @@ export default function AddPayableEntryModal({
       }));
     }
   };
-  console.log("finvoiceEntry.mappedCharge", invoiceEntry.mappedCharge);
-
   return (
     <Modal
       keepMounted
