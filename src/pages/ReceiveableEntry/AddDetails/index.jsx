@@ -46,6 +46,7 @@ export default function ReceiveableEntryDetails({ page }) {
       creditCost: data.creditCost || "",
       currency: data.currency || "",
       customerName: data.customerName || "",
+      customerId: data.customerId || "",
       debitCost: data.debitCost || "",
       exRate: data.exRate || "",
       jobNo: data.jobNo || "",
