@@ -125,7 +125,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       ),
     });
   };
-
   // Columns for DataGrid
   const columns = [
     {
@@ -144,7 +143,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
               label: params.row?.chargeName ?? "",
             }}
             error={
-              formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeId
+               formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeName || formik.errors.customerEntityTariffs?.[params.rowIndex]?.chargeId 
             }
             onChange={(selectedItem) => {
               const rowIndex = formik.values.customerEntityTariffs.findIndex(
@@ -220,10 +219,10 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
         const rowIndex = formik.values.customerEntityTariffs.findIndex(
           (entity) => entity.id === params.id
         );
-    
+
         const currencyValue =
           formik.values.customerEntityTariffs?.[rowIndex]?.currency || "";
-    
+
         return (
           <div
             style={{
@@ -252,8 +251,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
         );
       },
     },
-    
-    
+
     {
       field: "shipmentType",
       headerName: "Shipment Type",

@@ -137,7 +137,7 @@ export default function CustomerScreen({ page }) {
       actions:
         page == "customer"
           ? getCustomerListGridActions(nav, setModal)
-          : getCustomerListGridActionsCustomerApprovel((nav, setModal)),
+          : getCustomerListGridActionsCustomerApprovel(nav, setModal),
     });
 
   useEffect(() => {
