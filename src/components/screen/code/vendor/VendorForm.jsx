@@ -94,7 +94,8 @@ export default function VendorForm({ page = "vendor" }) {
       /^[A-Za-z\s]+$/,
       "City must only contain letters"
     ),
-    country: Yup.string(),
+    // countryId: Yup.string(),
+    // country: Yup.string(),
     creditDays: Yup.number().min(0, "Credit Days cannot be negative"),
     province: Yup.string().matches(
       /^[A-Za-z\s]+$/,
@@ -252,6 +253,7 @@ export default function VendorForm({ page = "vendor" }) {
     validationSchema,
     validateOnChange: false,
     onSubmit: async (values) => {
+    
       let updatedValue = {
         ...values,
         vendorEntityTariffs: values.vendorEntityTariffs.map((s) =>

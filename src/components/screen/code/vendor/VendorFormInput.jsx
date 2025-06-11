@@ -450,13 +450,13 @@ export default function VendorFormInput({
                 countryId: formik.values.countryId,
                 countryName: formik.values.countryName,
               }}
-              error={formik.errors.countryId}
+              error={formik.errors.country || formik.errors.countryId}
               idKey="countryId"
               nameKey="countryName"
               // onChange={formik.setFieldValue}
               onChange={(selected) => {
-                formik.setFieldValue("countryId", selected.countryId);
-                formik.setFieldValue("countryName", selected.countryName);
+                formik.setFieldValue("countryId", selected?.countryId);
+                formik.setFieldValue("countryName", selected?.countryName);
               }}
 
               // onChange={formik.handleChange}

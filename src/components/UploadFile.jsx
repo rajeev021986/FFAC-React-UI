@@ -231,6 +231,12 @@ const UploadFile = ({
     // if (!validateForm()) {
     //   return;
     // }
+    if(!formData.documentType){
+      toast.custom(
+        <CustomToast message="Document Type is required." />
+      );
+      return;
+    }
     // Validate Issue Date
     // const today = new Date();
     // const issueDate = new Date(formData.issueDate);

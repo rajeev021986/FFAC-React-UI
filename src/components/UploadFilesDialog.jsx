@@ -57,6 +57,8 @@ export default function UploadFilesDialog({
               <SelectBox
                 label="Document Type"
                 id="documentType"
+                required ={true}
+              
                 options={dropdownData}
                 value={formData.documentType}
                 onChange={(e) => {
