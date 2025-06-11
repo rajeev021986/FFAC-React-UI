@@ -188,7 +188,7 @@ export const JOB_ENTRY_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -361,7 +361,7 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     align: "center",
     editable: false,
     renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -373,7 +373,7 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     align: "center",
     editable: false,
     renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -384,8 +384,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -396,8 +396,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -408,8 +408,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -420,8 +420,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -432,8 +432,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -444,8 +444,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -456,8 +456,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -468,8 +468,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -498,8 +498,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -510,8 +510,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -540,8 +540,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   // {
@@ -564,8 +564,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -576,8 +576,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -588,8 +588,8 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
     headerAlign: "center",
     align: "center",
     editable: false,
-       renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -613,7 +613,7 @@ export const CONTAINER_COLUMNS = (onContainerClick) => [
 ];
 
 export const VEHICLE_COLUMNS = [
- {
+  {
     flex: 1,
     field: "chasisNo",
     headerName: "Chasis No.",
@@ -675,7 +675,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -685,7 +687,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -695,7 +699,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -705,7 +711,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -715,7 +723,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -725,7 +735,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -735,7 +747,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -745,7 +759,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -755,7 +771,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -765,7 +783,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -793,7 +813,9 @@ export const VEHICLE_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -960,7 +982,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
 
   {
@@ -971,7 +995,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -981,7 +1007,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -991,7 +1019,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -1001,7 +1031,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -1011,7 +1043,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -1021,7 +1055,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -1031,7 +1067,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -1041,7 +1079,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -1051,7 +1091,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
@@ -1079,7 +1121,9 @@ export const LOOSECARGO_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => dayjs(params?.value).format("DD/MM/YYYY"),
+    renderCell: (params) => {
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
+    },
   },
   {
     flex: 1,
