@@ -91,7 +91,7 @@ export default function CustomerForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-     validationSchema: CustomerValidationSchema(),
+    validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
       if (!values.id || type == "copy") {
         let emails = values.customerEntityEmailsIds.map((item) =>
@@ -791,6 +791,10 @@ export default function CustomerForm({
                         }
                         error={formik.errors.creditDays}
                         onChange={formik.handleChange}
+                             disabled={
+                          formik.values.paymentType === "cash" || disabled
+                        }
+ 
                       />
 
                       {/* <InputBox
@@ -1172,6 +1176,7 @@ export default function CustomerForm({
                         error={formik.errors.poNo}
                         onChange={formik.handleChange}
                         disabled={disabled}
+                        type="number"
                       />
                     </Grid>
                   </Grid>
@@ -1224,7 +1229,7 @@ export default function CustomerForm({
                       paddingLeft={1}
                       marginTop={2}
                     >
-                       <FormAutoComplete
+                      <FormAutoComplete
                         label="Country"
                         id="countryId"
                         suggestionName="country"
@@ -1368,7 +1373,7 @@ export default function CustomerForm({
                         name="paymentType" // add name attribute here
                         value={formik.values.paymentType}
                         onChange={(e) => {
-                          formik.setFieldValue("creditAmount", "");
+                          // formik.setFieldValue("creditAmount", "");
                           // formik.setFieldValue("creditDays", "");
                           //  formik.setFieldError("creditAmount", "");
                           // formik.setFieldError("creditDays", "");
@@ -1423,6 +1428,9 @@ export default function CustomerForm({
                         }
                         error={formik.errors.creditDays}
                         onChange={formik.handleChange}
+                        disabled={
+                          formik.values.paymentType === "cash" || disabled
+                        }
                       />
                     </Grid>
                     <Grid
@@ -1442,7 +1450,7 @@ export default function CustomerForm({
                         error={formik.errors.creditAmount}
                         onChange={formik.handleChange}
                         disabled={
-                          formik.values.paymentType === "cash" || disabled
+                          formik.values.paymentType == "cash" || disabled
                         }
                       />
                     </Grid>

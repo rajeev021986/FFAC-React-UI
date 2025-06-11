@@ -79,13 +79,26 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       headerName: "Charge Name",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => (
-        <div className="word-wrap-cell">
-          <Tooltip title={params.value || ""} arrow>
-            <span>{params.value || ""}</span>
+      renderCell: (params) => {
+        const value = params.value || "";
+        const truncatedValue =
+          value.length > 25 ? value.slice(0, 25) + "..." : value;
+
+        return (
+          <Tooltip title={value} arrow>
+            <div
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+              }}
+            >
+              {truncatedValue}
+            </div>
           </Tooltip>
-        </div>
-      ),
+        );
+      },
       headerAlign: "center",
       align: "center",
     },
@@ -254,7 +267,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={localPagination}
-            hideColumns = {true}
+            hideColumns={true}
           />
         </Card>
       </Box>

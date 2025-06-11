@@ -49,6 +49,7 @@ import CancelModalApprove from "../JobEntry/CancelModalApprove";
 import ApiManager from "../../services/ApiManager";
 import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
 import PayableViewModal from "./Actions/PayableViewModal";
+import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
 
 export default function PayableListScreen({ page }) {
   const payableActionSelector = useSelector((state) => state.payableAction);
@@ -376,7 +377,7 @@ export default function PayableListScreen({ page }) {
                     }}
                     icon={
                       <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                       {action.name}
+                        {action.name}
                       </span>
                     }
                     onClick={() => handleActionClick(action.name)}
@@ -517,6 +518,16 @@ export default function PayableListScreen({ page }) {
           data={modal.data}
           onClose={() => setModal((prev) => ({ ...prev, open: false }))}
           viewType={"view"}
+        />
+      )}
+      {modal.open && modal.type === "reject" && (
+        <AddRejectedRemarks
+          handleOpen={modal.open && modal.type === "reject"}
+          handleClose={handleClose}
+          rowId={modal?.data?.id}
+          type="accounts_payable"
+          label="Reject Reason"
+          refetch={refetch}
         />
       )}
     </Box>
