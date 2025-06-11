@@ -4,7 +4,7 @@ const suggestionName = {
   country: "PORT_COUNTRY",
   chargeName: "CHARGE",
   chargeId: "CHARGE",
-
+  mappedCharge: "MAPPED_CHARGE",
   currency: "CURRENCY",
   vesselName: "VESSEL",
   vessel: "VESSEL",
@@ -43,7 +43,7 @@ export const GetAutoCompleteDataWithLoader = async (
   searchText,
   other
 ) => {
-  inputId = suggestionName[inputId];
+  inputId = suggestionName[inputId]; 
   try {
     const response = await ApiManager.fetchAutoCompleteData(
       searchText,

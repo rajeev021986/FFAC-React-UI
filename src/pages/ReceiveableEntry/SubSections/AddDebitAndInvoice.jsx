@@ -1,5 +1,5 @@
 // import { useFormik } from "formik";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -143,24 +143,54 @@ export default function AddDebitAndInvoice({ formik }) {
       headerAlign: "center",
       align: "center",
       editable: false,
-      renderCell: (params) => (
-        <div className="word-wrap-cell">
-          {params.value?.trim() || ""} {/* Show "N/A" if empty */}
-        </div>
-      ),
+      renderCell: (params) => {
+        const value = params.value || "";
+        const truncatedValue =
+          value.length > 25 ? value.slice(0, 25) + "..." : value;
+
+        return (
+          <Tooltip title={value} arrow>
+            <div
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+              }}
+            >
+              {truncatedValue}
+            </div>
+          </Tooltip>
+        );
+      },
     },
     {
-      flex: 1,
       field: "chargeName",
       headerName: "Charge Name",
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => {
+        const value = params.value || "";
+        const truncatedValue =
+          value.length > 25 ? value.slice(0, 25) + "..." : value;
+
+        return (
+          <Tooltip title={value} arrow>
+            <div
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+              }}
+            >
+              {truncatedValue}
+            </div>
+          </Tooltip>
+        );
+      },
       headerAlign: "center",
       align: "center",
-      editable: false,
-      renderCell: (params) => (
-        <div className="word-wrap-cell">
-          {params.value?.trim() || ""} {/* Show "N/A" if empty */}
-        </div>
-      ),
     },
     {
       flex: 1,
@@ -202,7 +232,7 @@ export default function AddDebitAndInvoice({ formik }) {
       align: "center",
       editable: false,
     },
-  
+
     {
       flex: 1,
       field: "paybleAmount",

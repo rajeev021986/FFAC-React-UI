@@ -128,7 +128,8 @@ export default function AddPayableEntryModal({
         updatedEntry.receivableAmount = unitRate * numOfUnits;
       }
       updatedEntry.totalAmount =
-        updatedEntry.receivableAmount + updatedEntry.vat;
+        parseFloat(updatedEntry.receivableAmount) +
+        parseFloat(updatedEntry.vat);
 
       return updatedEntry;
     });
@@ -348,15 +349,6 @@ export default function AddPayableEntryModal({
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
           <Grid item xs={12} lg={4}>
-            {/* <FormAutoCompleteWithLoader
-              label="Customer Name"
-              id="customerName"
-              value={invoiceEntry?.customerName || ""}
-              error={errors.customerName}
-              onChange={(e) => handleChange("customerName", e.target.value)}
-              suggestionName="customer_name"
-            /> */}
-
             <FormAutoCompleteWithLoader
               label="Customer Name"
               id="customerId"
@@ -375,31 +367,60 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={8}>
-            {/* <FormAutoCompleteWithLoader
-              label="Charge Name"
-              id="chargeName"
-              value={invoiceEntry?.chargeName || ""}
-              onChange={(e) => handleChange("chargeName", e.target.value)}
-              suggestionName="charge_name"
-              error={errors.chargeName}
-            /> */}
+            {formik.values.type === "debit_note" ? (
+              <FormAutoCompleteWithLoader
+                label="Charge Name"
+                id="chargeId"
+                suggestionName="charge_name"
+                value={{
+                  chargeId: invoiceEntry.chargeId,
+                  chargeName: invoiceEntry.chargeName,
+                }}
+                error={errors.chargeName}
+                idKey="chargeId"
+                nameKey="chargeName"
+                onChange={(selected) => {
+                  handleChange("chargeId", selected.chargeId);
+                  handleChange("chargeName", selected.chargeName);
+                }}
+              />
+            ) : 
+            formik.values.type === "tax_invoice" && invoiceEntry.new == true ? (
+              <FormAutoCompleteWithLoader
+                label="Charge Name"
+                id="chargeId"
+                suggestionName="mapped_charge"
+                value={{
+                  chargeId: invoiceEntry.chargeId,
+                  chargeName: invoiceEntry.mappedCharge,
+                }}
+                error={errors.chargeName}
+                idKey="chargeId"
+                nameKey="chargeName"
+                onChange={(selected) => {
+                  handleChange("chargeId", selected.chargeId);
+                  handleChange("chargeName", selected.chargeName);
+                }}
+              />
 
-            <FormAutoCompleteWithLoader
-              label="Charge Name"
-              id="chargeId"
-              suggestionName="charge_name"
-              value={{
-                chargeId: invoiceEntry.chargeId,
-                chargeName: invoiceEntry.chargeName,
-              }}
-              error={errors.chargeName}
-              idKey="chargeId"
-              nameKey="chargeName"
-              onChange={(selected) => {
-                handleChange("chargeId", selected.chargeId);
-                handleChange("chargeName", selected.chargeName);
-              }}
-            />
+            ) : (
+              <FormAutoCompleteWithLoader
+                label="Charge Name"
+                id="mappedCharge"
+                suggestionName="mapped_charge"
+                value={{
+                  chargeId: invoiceEntry.chargeId,
+                  chargeName: invoiceEntry.chargeName,
+                }}
+                error={errors.chargeName}
+                idKey="chargeId"
+                nameKey="chargeName"
+                onChange={(selected) => {
+                  handleChange("chargeId", selected.chargeId);
+                  handleChange("chargeName", selected.chargeName);
+                }}
+              />
+            )}
           </Grid>
           <Grid item xs={12} lg={4}>
             <Box sx={{ width: "100%" }}>
