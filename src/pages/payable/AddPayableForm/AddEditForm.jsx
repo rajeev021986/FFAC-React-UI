@@ -131,7 +131,7 @@ export default function AddEditForm({
   const handleClose = () => {
     onClose();
     refetch();
-  }
+  };
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -217,6 +217,7 @@ export default function AddEditForm({
         }
       } else {
         // If there is an id, proceed with the update action
+
         try {
           setRejectError(false);
           let paybleDetailsData = values.paybleDetails.map((item) =>
@@ -224,6 +225,33 @@ export default function AddEditForm({
           );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
+          if (viewPage === "editForm") {
+            const { vendorInvoiceNo, isDoc } = formik.values;
+            if (vendorInvoiceNo && !isDoc) {
+              toast.custom(
+                <CustomToast
+                  message="Please submit document as invoice type"
+                  toast="error"
+                />,
+                {
+                  closeButton: false,
+                }
+              );
+              return; // Prevent updating
+            }
+            if (formik.values?.paybleDetails.length === 0) {
+              toast.custom(
+                <CustomToast
+                  message="Please add charge details before updating"
+                  toast="error"
+                />,
+                {
+                  closeButton: false,
+                }
+              );
+              return; // Prevent update
+            }
+          }
           let response = await updatePaybleEntry({
             ...values,
             paybleDetails: paybleDetailsData,

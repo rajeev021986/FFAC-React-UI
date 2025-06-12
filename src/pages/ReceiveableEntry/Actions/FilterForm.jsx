@@ -21,6 +21,7 @@ export default function FilterForm({ setFilterOpen }) {
       consigneeName: inputs.consigneeName || "",
       statusCode: inputs.statusCode || "",
       isDoc: inputs.isDoc || "",
+      type: inputs.type || "",
     },
     onSubmit: (values) => {
       dispatch(updateInput(values));
@@ -44,6 +45,7 @@ export default function FilterForm({ setFilterOpen }) {
         consigneeName: "",
         statusCode: "",
         isDoc: "",
+        type: "",
       })
     );
     formik.setValues({
@@ -55,6 +57,7 @@ export default function FilterForm({ setFilterOpen }) {
       vendorInvoiceNo: "",
       consigneeName: "",
       statusCode: "",
+      type: "",
       isDoc: "",
     });
   };
@@ -65,7 +68,16 @@ export default function FilterForm({ setFilterOpen }) {
     { value: -1, label: "Rejected" },
     { value: -3, label: "Canceled" },
   ];
-
+  const OPTION_TYPE = [
+    {
+      label: "Tax Invoice",
+      value: "tax_invoice",
+    },
+    {
+      label: "Debit Note",
+      value: "debit_note",
+    },
+  ];
   return (
     <div>
       <Stack spacing={3} direction="column" justifyContent="space-between">
@@ -91,11 +103,16 @@ export default function FilterForm({ setFilterOpen }) {
         </Stack>
 
         <Stack direction="row" spacing={2}>
-          <InputBox
-            label="Company Code"
-            id="companyCode"
-            value={formik.values.companyCode}
+          <SelectBox
+            sx={{ marginLeft: "8px !important" }}
+            label="Invoice Type"
+            id="type"
+            options={OPTION_TYPE}
+            value={formik.values.type}
             onChange={formik.handleChange}
+            MenuProps={{
+              disablePortal: true,
+            }}
           />
           <InputBox
             label="Consignee Name"

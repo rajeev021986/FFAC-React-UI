@@ -39,7 +39,7 @@ export const getReceiveableEntryGridActionApprove = (nav, setModal) => {
         } else {
           toast.custom(
             <CustomToast
-              message="Only for Cancelled and Rejected Receivable"
+              message="Only for Cancelled Receivable"
               toast="error"
             />,
             {
@@ -51,11 +51,25 @@ export const getReceiveableEntryGridActionApprove = (nav, setModal) => {
       },
       icon: <DeleteIconDropdown />,
     },
-     {
+       {
       label: "Cancel",
       onClick: (params) => {
-        setModal({ open: true, type: "cancel", data: params.row });
+        if (params.row.statusCode !== -3) {
+          setModal({
+            open: true,
+            type: "cancel",
+            data: params.row,
+          });
+        } else {
+          toast.custom(
+            <CustomToast message="This entry has already been cancelled." toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
+        }
       },
+
       icon: <CancelOutlinedIcon sx={{ width: "20px", marginTop: "5px" }} />,
     },
   ];

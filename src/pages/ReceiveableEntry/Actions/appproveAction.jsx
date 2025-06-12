@@ -5,6 +5,8 @@ import ViewIconDropdown from "../../../components/common/commonIconDropdown/View
 
 import AuditIconDropdown from "../../../components/common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
 import ApproveIconDropdown from "../../../components/common/commonIconDropdown/ApproveIconDropdown/ApproveIconDropdown";
+import CustomToast from "../../../components/common/Toast/CustomToast";
+import toast from "react-hot-toast";
 
 export const getPayableListGridActionApprove = (nav, setModal) => {
   return [
@@ -48,8 +50,22 @@ export const getPayableListGridActionApprove = (nav, setModal) => {
     {
       label: "Cancel",
       onClick: (params) => {
-        setModal({ open: true, type: "cancel", data: params.row });
+        if (params.row.statusCode !== -3) {
+          setModal({
+            open: true,
+            type: "cancel",
+            data: params.row,
+          });
+        } else {
+          toast.custom(
+            <CustomToast message="Already cancelled entry" toast="error" />,
+            {
+              closeButton: false,
+            }
+          );
+        }
       },
+
       icon: <CancelOutlinedIcon sx={{ width: "20px", marginTop: "5px" }} />,
     },
   ];

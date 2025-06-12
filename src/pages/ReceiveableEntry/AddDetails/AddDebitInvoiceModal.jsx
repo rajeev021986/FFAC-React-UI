@@ -82,9 +82,9 @@ export default function AddPayableEntryModal({
 
   const [invoiceEntry, setInvoiceEntry] = useState({
     id: 0,
-    paybleDetailId: 0,
+    paybleDetailId: null,
     customerName: "",
-    customerId:"",
+    customerId: "",
     currency: "",
     chargeName: "",
     mappedCharge: "",
@@ -221,9 +221,9 @@ export default function AddPayableEntryModal({
       // Reset after add
       setInvoiceEntry({
         id: Date.now(),
-        paybleDetailId: 0,
+        paybleDetailId: null,
         customerName: "",
-        customerId:"",
+        customerId: "",
         currency: "",
         chargeName: "",
         mappedCharge: "",
@@ -254,9 +254,9 @@ export default function AddPayableEntryModal({
   const handleClose = () => {
     setInvoiceEntry({
       id: Date.now(),
-      paybleDetailId: 0,
+      paybleDetailId: null,
       customerName: "",
-      customerId:"",
+      customerId: "",
       currency: "",
       chargeName: "",
       // receivableRefNo: "",
@@ -289,9 +289,9 @@ export default function AddPayableEntryModal({
     } else {
       setInvoiceEntry({
         id: Date.now(),
-        paybleDetailId: 0,
+        paybleDetailId: null,
         customerName: "",
-        customerId:"",
+        customerId: "",
         currency: "",
         chargeName: "",
         mappedCharge: "",
@@ -412,7 +412,7 @@ export default function AddPayableEntryModal({
                     setInvoiceEntry((prev) => ({
                       ...prev,
                       chargeId: selected.chargeId,
-                      mappedCharge: selected.chargeName, 
+                      mappedCharge: selected.chargeName,
                     }));
                   } else {
                     handleChange("chargeId", "");
@@ -420,7 +420,7 @@ export default function AddPayableEntryModal({
                     setInvoiceEntry((prev) => ({
                       ...prev,
                       chargeId: "",
-                      mappedCharge: "", 
+                      mappedCharge: "",
                     }));
                   }
                 }}

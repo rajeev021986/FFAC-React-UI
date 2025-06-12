@@ -89,6 +89,9 @@ const Chips = {
   name: {
     chipLabel: "Name",
   },
+  paybleRefNum: {
+    chipLabel: "Payable Ref No",
+  },
   statusCode: {
     chipLabel: "Status",
     chipvalues: [
@@ -97,6 +100,19 @@ const Chips = {
       { value: 0, label: "Pending" },
       { value: -3, label: "Canceled" },
       { value: -1, label: "Rejected" },
+    ],
+  },
+  type: {
+    chipLabel: "Invoice Type",
+    chipvalues: [
+      {
+        label: "Tax Invoice",
+        value: "tax_invoice",
+      },
+      {
+        label: "Debit Note",
+        value: "debit_note",
+      },
     ],
   },
   paymentStatus: {
