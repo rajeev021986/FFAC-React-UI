@@ -82,7 +82,7 @@ export default function JobEntryForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    // validationSchema: JobEntryValidationSchema(),
+    validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
       if (isLoading) {
         return;
@@ -408,10 +408,6 @@ export default function JobEntryForm({
     setIsDisabled(shouldDisable);
   }, [initialValues?.statusCode, getPage]);
 
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
-
   const customerNameRef = useRef(null);
 
   useEffect(() => {
@@ -637,7 +633,6 @@ export default function JobEntryForm({
                   <FormAutoCompleteWithLoader
                     label="Customer Name*"
                     id="customerId"
-                    // value={formik.formik.customerId}
                     value={{
                       customerId: formik.values.customerId,
                       customerName: formik.values.customerName,
@@ -645,12 +640,14 @@ export default function JobEntryForm({
                     error={formik.errors.customerId}
                     idKey="customerId"
                     nameKey="customerName"
-                    // onChange={formik.handleChange}
                     onChange={(selected) => {
-                      formik.setFieldValue("customerId", selected.customerId || '');
+                      formik.setFieldValue(
+                        "customerId",
+                        selected.customerId || ""
+                      );
                       formik.setFieldValue(
                         "customerName",
-                        selected.customerName || ''
+                        selected.customerName || ""
                       );
                     }}
                     inputRef={FieldRef}
@@ -909,7 +906,21 @@ export default function JobEntryForm({
 
                       {!initialValues?.id ? (
                         <ThemeButton
-                          onClick={formik.handleSubmit}
+                          onClick={async () => {
+                            const errors = await formik.validateForm();
+
+                            if (Object.keys(errors).length > 0) {
+                              formik.setTouched(
+                                Object.fromEntries(
+                                  Object.keys(errors).map((key) => [key, true])
+                                ),
+                                true
+                              );
+                              getFirstError(errors); // Show toast from here directly
+                            } else {
+                              formik.handleSubmit(); // Submit if valid
+                            }
+                          }}
                           sx={{
                             fontWeight: "500",
                             color: "white !important",
@@ -922,7 +933,21 @@ export default function JobEntryForm({
                         </ThemeButton>
                       ) : (
                         <ThemeButton
-                          onClick={formik.handleSubmit}
+                          onClick={async () => {
+                            const errors = await formik.validateForm();
+
+                            if (Object.keys(errors).length > 0) {
+                              formik.setTouched(
+                                Object.fromEntries(
+                                  Object.keys(errors).map((key) => [key, true])
+                                ),
+                                true
+                              );
+                              getFirstError(errors);
+                            } else {
+                              formik.handleSubmit();
+                            }
+                          }}
                           sx={{
                             fontWeight: "500",
                             color: "white !important",
@@ -958,7 +983,21 @@ export default function JobEntryForm({
                       </OutlinedButton>
 
                       <ThemeButton
-                        onClick={formik.handleSubmit}
+                        onClick={async () => {
+                          const errors = await formik.validateForm();
+
+                          if (Object.keys(errors).length > 0) {
+                            formik.setTouched(
+                              Object.fromEntries(
+                                Object.keys(errors).map((key) => [key, true])
+                              ),
+                              true
+                            );
+                            getFirstError(errors);
+                          } else {
+                            formik.handleSubmit();
+                          }
+                        }}
                         sx={{
                           fontWeight: "500",
                           color: "white !important",

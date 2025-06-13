@@ -250,10 +250,6 @@ export default function ContainerNumberForm({
     }
   }, [optionsSettingsData, customerSettingsData]);
 
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
-
   const customerNameRef = useRef(null);
   useEffect(() => {
     if (customerNameRef.current) {

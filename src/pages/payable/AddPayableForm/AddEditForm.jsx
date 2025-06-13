@@ -464,10 +464,6 @@ export default function AddEditForm({
   };
 
   useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
-
-  useEffect(() => {
     if (payableRef?.current) {
       payableRef.current.focus();
     }
@@ -1372,7 +1368,24 @@ export default function AddEditForm({
 
                         {!initialValues?.id ? (
                           <ThemeButton
-                            onClick={formik.handleSubmit}
+                            onClick={async () => {
+                              const errors = await formik.validateForm();
+
+                              if (Object.keys(errors).length > 0) {
+                                formik.setTouched(
+                                  Object.fromEntries(
+                                    Object.keys(errors).map((key) => [
+                                      key,
+                                      true,
+                                    ])
+                                  ),
+                                  true
+                                );
+                                getFirstError(errors);
+                              } else {
+                                formik.handleSubmit();
+                              }
+                            }}
                             sx={{
                               fontWeight: "500",
                               color: "white !important",
@@ -1385,7 +1398,24 @@ export default function AddEditForm({
                           </ThemeButton>
                         ) : (
                           <ThemeButton
-                            onClick={formik.handleSubmit}
+                            onClick={async () => {
+                              const errors = await formik.validateForm();
+
+                              if (Object.keys(errors).length > 0) {
+                                formik.setTouched(
+                                  Object.fromEntries(
+                                    Object.keys(errors).map((key) => [
+                                      key,
+                                      true,
+                                    ])
+                                  ),
+                                  true
+                                );
+                                getFirstError(errors); // Show toast from here directly
+                              } else {
+                                formik.handleSubmit(); // Submit if valid
+                              }
+                            }}
                             sx={{
                               fontWeight: "500",
                               color: "white !important",
@@ -1429,7 +1459,21 @@ export default function AddEditForm({
                         </OutlinedButton>
 
                         <ThemeButton
-                          onClick={formik.handleSubmit}
+                          onClick={async () => {
+                            const errors = await formik.validateForm();
+
+                            if (Object.keys(errors).length > 0) {
+                              formik.setTouched(
+                                Object.fromEntries(
+                                  Object.keys(errors).map((key) => [key, true])
+                                ),
+                                true
+                              );
+                              getFirstError(errors); // Show toast from here directly
+                            } else {
+                              formik.handleSubmit(); // Submit if valid
+                            }
+                          }}
                           sx={{
                             fontWeight: "500",
                             color: "white !important",

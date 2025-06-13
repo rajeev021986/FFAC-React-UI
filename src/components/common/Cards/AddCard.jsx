@@ -41,6 +41,7 @@ import AuditTimeLine from "../../AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import EditIconForHeader from "../commonIcons/EditIcons/EditIconForHeader";
 import AuditIcon from "../commonIcons/AuditIcon/AuditIcon";
+import getFirstError from "../FieldToastError";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First Name is required"),
@@ -576,7 +577,20 @@ export default function AddCard() {
                     Close
                   </OutlinedButton>
                   <ThemeButton
-                    onClick={formik.handleSubmit}
+                    onClick={async () => {
+                      const errors = await formik.validateForm();
+                      if (Object.keys(errors).length > 0) {
+                        formik.setTouched(
+                          Object.fromEntries(
+                            Object.keys(errors).map((key) => [key, true])
+                          ),
+                          true
+                        );
+                        getFirstError(errors); 
+                      } else {
+                        formik.handleSubmit();
+                      }
+                    }}
                     sx={{
                       fontWeight: "500",
                       borderRadius: "12px",

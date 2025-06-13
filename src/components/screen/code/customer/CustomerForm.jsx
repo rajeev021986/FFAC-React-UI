@@ -63,6 +63,7 @@ export default function CustomerForm({
 }) {
   const [options, setOptions] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
+  const [submitClicked, setSubmitClicked] = useState(false);
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
   const [loaderApprove, setLoaderApprove] = useState({
     approve: false,
@@ -329,9 +330,7 @@ export default function CustomerForm({
 
   const disabled =
     page == "customer" || page == "customerApprove" ? false : true;
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
+
   const customerNameRef = useRef(null);
 
   useEffect(() => {
@@ -791,10 +790,9 @@ export default function CustomerForm({
                         }
                         error={formik.errors.creditDays}
                         onChange={formik.handleChange}
-                             disabled={
+                        disabled={
                           formik.values.paymentType === "cash" || disabled
                         }
- 
                       />
 
                       {/* <InputBox
@@ -882,7 +880,21 @@ export default function CustomerForm({
                         Close
                       </OutlinedButton>
                       <ThemeButton
-                        onClick={formik.handleSubmit}
+                        onClick={async () => {
+                          const errors = await formik.validateForm();
+
+                          if (Object.keys(errors).length > 0) {
+                            formik.setTouched(
+                              Object.fromEntries(
+                                Object.keys(errors).map((key) => [key, true])
+                              ),
+                              true
+                            );
+                            getFirstError(errors); 
+                          } else {
+                            formik.handleSubmit();
+                          }
+                        }}
                         sx={{
                           fontWeight: "500",
                           borderRadius: "12px",
@@ -1533,7 +1545,24 @@ export default function CustomerForm({
                             Close
                           </OutlinedButton>
                           <ThemeButton
-                            onClick={formik.handleSubmit}
+                            onClick={async () => {
+                              const errors = await formik.validateForm();
+
+                              if (Object.keys(errors).length > 0) {
+                                formik.setTouched(
+                                  Object.fromEntries(
+                                    Object.keys(errors).map((key) => [
+                                      key,
+                                      true,
+                                    ])
+                                  ),
+                                  true
+                                );
+                                getFirstError(errors);
+                              } else {
+                                formik.handleSubmit();
+                              }
+                            }}
                             sx={{
                               fontWeight: "500",
                               color: "white !important",

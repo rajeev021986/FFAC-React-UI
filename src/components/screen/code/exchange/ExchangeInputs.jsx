@@ -1,4 +1,4 @@
-import React, { useEffect, useRef ,useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../common/InputBox";
 import { CircularProgress, Grid, Stack, TextField } from "@mui/material";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
@@ -6,6 +6,7 @@ import DateTimeField from "../../../common/DateTime/DateTimeField";
 import SelectBox from "../../../common/SelectBox";
 import ApiManager from "../../../../services/ApiManager";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import getFirstError from "../../../common/FieldToastError";
 
 export default function ExchangeInputs({
   formik,
@@ -67,7 +68,6 @@ export default function ExchangeInputs({
           name="fromDate"
           label="From Date"
           id="fromDate"
-
           value={formik.values.fromDate}
           error={formik.errors.fromDate}
           onChange={formik.setFieldValue}
@@ -159,7 +159,21 @@ export default function ExchangeInputs({
               Close
             </OutlinedButton>
             <ThemeButton
-              onClick={formik.handleSubmit}
+              onClick={async () => {
+                const errors = await formik.validateForm();
+
+                if (Object.keys(errors).length > 0) {
+                  formik.setTouched(
+                    Object.fromEntries(
+                      Object.keys(errors).map((key) => [key, true])
+                    ),
+                    true
+                  );
+                  getFirstError(errors);
+                } else {
+                  formik.handleSubmit();
+                }
+              }}
               sx={{ fontWeight: "500", color: "white !important" }}
             >
               {loading && <CircularProgress size={20} color="white" />}{" "}
