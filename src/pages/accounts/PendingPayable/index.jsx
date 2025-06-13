@@ -398,6 +398,7 @@ export default function AccountsPendingPayableList({ page }) {
         <PayableViewModal
           open={modal.open}
           onClose={handleClose}
+          refetch={refetch}
           data={modal.data}
           viewType={pathname}
         />

@@ -65,7 +65,7 @@ export default function FilterForm({ setFilterOpen }) {
     { value: -2, label: "InActive" },
     { value: 0, label: "New & Pen Doc" },
     { value: -1, label: "Rejected" },
-    { value: -3, label: "Cancel" },
+    { value: -3, label: "Canceled" },
   ];
 
   const documentOptions = [

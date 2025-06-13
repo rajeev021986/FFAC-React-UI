@@ -56,7 +56,7 @@ export const PAYABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {
@@ -92,7 +92,7 @@ export const PAYABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
     },
   },
   {

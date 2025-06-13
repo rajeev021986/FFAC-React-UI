@@ -1,5 +1,4 @@
 import { Button, Stack } from "@mui/material";
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InputBox from "../../../components/common/InputBox";
 import { updateInput } from "../../../store/freatures/payableEntrySlice";
@@ -10,7 +9,6 @@ import { useFormik } from "formik";
 export default function FilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.codeCustomer.formData);
-
   const formik = useFormik({
     initialValues: inputs || {
       jobNo: inputs.jobNo || "",
@@ -66,7 +64,7 @@ export default function FilterForm({ setFilterOpen }) {
     { value: -2, label: "InActive" },
     { value: 0, label: "New & Pen Doc" },
     { value: -1, label: "Rejected" },
-    { value: -3, label: "Cancel" },
+    { value: -3, label: "Canceled" },
   ];
   const documentOptions = [
     { value: false, label: "Pending" },

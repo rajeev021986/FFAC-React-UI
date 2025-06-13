@@ -379,8 +379,6 @@ export default function PayableListScreen({ page }) {
     setStatus("");
   };
 
-  console.log(primaryColor, "primaryColor");
-  console.log(payableActionSelector.view, 234567);
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -659,10 +657,12 @@ export default function PayableListScreen({ page }) {
         <PayableViewModal
           open={modal.open}
           data={modal.data}
+          refetch={refetch}
           onClose={() => setModal((prev) => ({ ...prev, open: false }))}
           viewType={"view"}
         />
       )}
+      
       {modal.open && modal.type === "reject" && (
         <AddRejectedRemarks
           handleOpen={modal.open && modal.type === "reject"}

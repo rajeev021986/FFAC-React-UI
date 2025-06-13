@@ -1,4 +1,4 @@
-import { Grid, Stack, Tooltip, Typography } from "@mui/material";
+import { Grid, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import { appDateFormat } from "../../utils/date";
 import { StatusChip } from "../../utils/statusChip";
@@ -20,7 +20,7 @@ export default function CardField({ title, subtitle, icon, ...props }) {
       <Grid item xs={4}>
         {icon ? icon : null}
         <Typography variant="subtitle2" sx={styles.text}>
-          {title}:{" "}
+          {title }:
         </Typography>
       </Grid>
       <Grid item xs={8}>
@@ -45,7 +45,7 @@ export default function CardField({ title, subtitle, icon, ...props }) {
                 textTransform: "capitalize",
               }}
             >
-              {subtitle}
+              {subtitle || "----"}
             </Typography>
           </Tooltip>
         )}

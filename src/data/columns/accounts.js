@@ -41,7 +41,9 @@ export const ACCOUNTS_PENDING_PAYABLE = [
     renderCell: (params) => {
       return (
         <Tooltip title={`${dayjs(params?.value)?.format("DD/MM/YYYY")}`} arrow>
-          <div>{dayjs(params?.value)?.format("DD/MM/YYYY")}</div>
+          <div>
+            {params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""}
+          </div>
         </Tooltip>
       );
     },
@@ -57,7 +59,9 @@ export const ACCOUNTS_PENDING_PAYABLE = [
     renderCell: (params) => {
       return (
         <Tooltip title={`${dayjs(params?.value)?.format("DD/MM/YYYY")}`} arrow>
-          <div>{dayjs(params?.value)?.format("DD/MM/YYYY")}</div>
+          <div>
+            {params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""}
+          </div>
         </Tooltip>
       );
     },
@@ -91,7 +95,9 @@ export const ACCOUNTS_PENDING_PAYABLE = [
     renderCell: (params) => {
       return (
         <Tooltip title={`${dayjs(params?.value)?.format("DD/MM/YYYY")}`} arrow>
-          <div>{dayjs(params?.value)?.format("DD/MM/YYYY")}</div>
+          <div>
+            {params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""}
+          </div>
         </Tooltip>
       );
     },

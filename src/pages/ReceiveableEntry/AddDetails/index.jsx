@@ -43,16 +43,17 @@ export default function ReceiveableEntryDetails({ page }) {
       id: data.id || "",
       jobId: data.jobId || "",
       consigneeName: data.consigneeName || "",
-      creditCost: data.creditCost || "",
+      creditCost: data.creditCost || 0,
       currency: data.currency || "",
       customerName: data.customerName || "",
-      debitCost: data.debitCost || "",
+      customerId: data.customerId || "",
+      debitCost: data.debitCost || 0,
       exRate: data.exRate || "",
       jobNo: data.jobNo || "",
       netCost: data.netCost || "",
       paybleRefNo: data.paybleRefNo || "",
-      profitLoss: data.profitLoss || "",
-      totalRevenue: data.totalRevenue || "",
+      profitLoss: data.profitLoss || 0,
+      totalRevenue: data.totalRevenue || 0,
       type: data.type || "debit_note",
       containerTypeDTO: data.containerTypeDTO || [],
       costDetails: data.costDetails || [],
@@ -74,10 +75,9 @@ export default function ReceiveableEntryDetails({ page }) {
           setInitialValues(mapResponseToInitialValues(response.body));
         }
       } catch (error) {
-        console.error("Error loading receivable entry:", error);
         toast.custom(
           <CustomToast
-            message="Error occurred while loading form"
+            message={error.message}
             toast="error"
           />,
           { closeButton: false }

@@ -28,7 +28,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
+        {params.value?.trim() || "----"} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -42,7 +42,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || ""} {/* Show "N/A" if empty */}
+        {params.value?.trim() || "----"} {/* Show "N/A" if empty */}
       </div>
     ),
   },
@@ -56,7 +56,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     editable: false,
     renderCell: (params) => (
       <div className="word-wrap-cell">
-        {params.value?.trim() || ""} {/* Show "" if empty */}
+        {params.value?.trim() || "----"} {/* Show "" if empty */}
       </div>
     ),
   },
@@ -69,7 +69,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => params.value?.trim() || "",
+    renderCell: (params) => params.value?.trim() || "----",
   },
   {
     flex: 1,
@@ -79,7 +79,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => params.value?.trim() || "",
+    renderCell: (params) => params.value?.trim() || "----",
   },
   //   {
   //     flex: 1,
@@ -100,7 +100,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => {
-      return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+      return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : "----"; // Format date
     },
   },
   {
@@ -111,7 +111,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => params.value?.trim() || "",
+    renderCell: (params) => params.value?.trim() || "----",
   },
   {
     flex: 1,
@@ -121,7 +121,7 @@ export const JOB_ENTRY_NEW_COLUMNS = [
     headerAlign: "center",
     align: "center",
     editable: false,
-    renderCell: (params) => params.value?.trim() || "",
+    renderCell: (params) => params.value?.trim() || "----",
   },
   {
     flex: 1,

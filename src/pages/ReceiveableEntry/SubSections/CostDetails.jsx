@@ -123,7 +123,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       flex: 1,
       minWidth: 200,
       renderCell: (params) => {
-        return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+        return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
       },
       headerAlign: "center",
       align: "center",
@@ -133,7 +133,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       headerName: "Debit",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
+      renderCell: (params) => <span>{params.value || 0}</span>,
       headerAlign: "center",
       align: "center",
     },
@@ -158,7 +158,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       flex: 1,
       minWidth: 200,
       renderCell: (params) => {
-        return dayjs(params?.value)?.format("DD/MM/YYYY"); // Format date
+        return params?.value ? dayjs(params?.value)?.format("DD/MM/YYYY") : ""; // Format date
       },
       headerAlign: "center",
       align: "center",
@@ -168,7 +168,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       headerName: "Credit",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
+      renderCell: (params) => <span>{params.value || 0}</span>,
       headerAlign: "center",
       align: "center",
     },
@@ -177,7 +177,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       headerName: "Diff",
       flex: 1,
       minWidth: 200,
-      renderCell: (params) => <span>{params.value || ""}</span>,
+      renderCell: (params) => <span>{params.value || 0}</span>,
       headerAlign: "center",
       align: "center",
     },
