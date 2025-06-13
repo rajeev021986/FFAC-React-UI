@@ -1,11 +1,25 @@
+// #a27bb7
+
 import React, { useState, useEffect } from "react";
 import {
   FormatListBulletedOutlined,
   GridOnOutlined,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Card, CardHeader, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardHeader,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from "@mui/material";
 import { Drawer, IconButton, Stack } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 
 import CardsView from "../../components/common/Cards/CardsView";
 import ScreenToolbar from "../../components/common/ScreenToolbar";
@@ -25,20 +39,23 @@ import ThemedGrid from "../../components/common/Grid/ThemedGrid";
 
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+
+import { FiPlus } from "react-icons/fi";
+import { IoDocumentTextOutline } from "react-icons/io5";
 
 import { getPayableListGridActions } from "./Actions/action";
 import { getPayableListGridActionApprove } from "./Actions/appproveAction";
 
 import DeleteDialog from "../../components/common/DeleteDialog";
-import toast, { LoaderIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 import AuditTimeLine from "../../components/AuditTimeLine";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import FilterForm from "./Actions/FilterForm";
 
 import { menuConfigUrl } from "../../store/menuConfigUrl";
 import { downloadBase64PDF, downloadExcel } from "../../utils/downloadExcel";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import {
   useFetchPaybleEntryDatasQuery,
@@ -50,15 +67,21 @@ import ApiManager from "../../services/ApiManager";
 import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
 import PayableViewModal from "./Actions/PayableViewModal";
 import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
+import InputBox from "../../components/common/InputBox";
+import { getTheme } from "../../config/theme";
 
 export default function PayableListScreen({ page }) {
   const payableActionSelector = useSelector((state) => state.payableAction);
   const location = useLocation();
+
+  const primaryColor = useSelector((state) => state.dashboard.theme);
+
   const nav = useNavigate();
   const dispatch = useDispatch();
 
   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
+  const [status, setStatus] = useState("");
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -68,15 +91,37 @@ export default function PayableListScreen({ page }) {
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
-        { name: "New Entry" },
-        { name: "Copy" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
+        { name: "New Entry", icon: <FiPlus size={16} /> },
+        {
+          name: "Export",
+          icon: exportLoader ? (
+            <AiOutlineLoading3Quarters className="animate-spin" size={14} />
+          ) : (
+            <IoDocumentTextOutline size={16} />
+          ),
+        },
       ]
     : page === "payable_approve"
-    ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
+    ? [
+        {
+          name: "Export",
+          icon: exportLoader ? (
+            <AiOutlineLoading3Quarters className="animate-spin" size={16} />
+          ) : (
+            <IoDocumentTextOutline size={16} />
+          ),
+        },
+      ]
     : [
-        { name: "New Entry" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
+        { name: "New Entry", icon: <FiPlus size={16} /> },
+        {
+          name: "Export",
+          icon: exportLoader ? (
+            <AiOutlineLoading3Quarters className="animate-spin" size={16} />
+          ) : (
+            <IoDocumentTextOutline size={16} />
+          ),
+        },
       ];
 
   const query = {
@@ -326,6 +371,16 @@ export default function PayableListScreen({ page }) {
     }
   }, [payableActionSelector.view, dispatch]);
 
+  const handleChange = (event) => {
+    setStatus(event.target.value);
+  };
+
+  const handleClear = () => {
+    setStatus("");
+  };
+
+  console.log(primaryColor, "primaryColor");
+  console.log(payableActionSelector.view, 234567);
   return (
     <Box sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
@@ -335,25 +390,25 @@ export default function PayableListScreen({ page }) {
             <Backdrop open={open} />
             {(page == "payable_list" || page == "payable_approve") && (
               <SpeedDial
-                ariaLabel="Text-only  SpeedDial"
+                ariaLabel="Text-only SpeedDial"
+                open={true}
+                onOpen={() => {}}
+                onClose={() => {}}
+                FabProps={{ sx: { display: "none" } }}
                 sx={{
                   "& .MuiFab-root": {
                     width: 40,
                     height: 40,
                     minHeight: 40,
+                    paddingRight: "26px !important",
                   },
+                  "& .MuiSpeedDial-actions": {
+                    paddingRight: "25px",
+                  },
+                  gap: 1,
                 }}
-                icon={
-                  <SpeedDialIcon
-                    sx={{
-                      fontSize: 20,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  />
-                }
                 direction="left"
+                icon={null}
               >
                 {actions.map((action) => (
                   <SpeedDialAction
@@ -361,12 +416,12 @@ export default function PayableListScreen({ page }) {
                     tooltipTitle=""
                     sx={{
                       display: "flex",
-                      justifyContent: "center",
+                      justifyContent: "flex-start",
                       alignItems: "center",
                       px: 2,
                       py: 1,
-                      borderRadius: "20px",
-                      minWidth: 92,
+                      borderRadius: "10px",
+                      minWidth: 110,
                       width: "auto",
                       height: 36,
                       boxShadow: 3,
@@ -374,20 +429,31 @@ export default function PayableListScreen({ page }) {
                       fontSize: "12px",
                       fontWeight: "bold",
                       whiteSpace: "nowrap",
+                      gap: 1,
                     }}
                     icon={
-                      <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                        {action.name}
-                      </span>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                        }}
+                      >
+                        {action.icon}
+                        <span style={{ fontSize: "12px", fontWeight: "bold" }}>
+                          {action.name}
+                        </span>
+                      </Box>
                     }
                     onClick={() => handleActionClick(action.name)}
-                  ></SpeedDialAction>
+                  />
                 ))}
               </SpeedDial>
             )}
           </>
         }
       />
+
       <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
         <CardHeader
           sx={{ padding: "8px" }}
@@ -401,34 +467,111 @@ export default function PayableListScreen({ page }) {
                 >
                   <FilterForm />
                 </GridSearchInput>
-              </Box>
-              <Box>
-                <IconButton
-                  onClick={() => dispatch(payableDashboardView("card"))}
+
+                <FormControl
+                  sx={{
+                    minWidth: 220,
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                      height: "43px",
+                    },
+                  }}
+                  size="small"
                 >
-                  <FormatListBulletedOutlined
-                    color={
-                      payableActionSelector.view === "card"
-                        ? "primary"
-                        : "secondary"
+                  <InputLabel id="status-label">Status</InputLabel>
+                  <Select
+                    labelId="status-label"
+                    id="status-select"
+                    value={status}
+                    label="Status"
+                    onChange={handleChange}
+                    endAdornment={
+                      status && (
+                        <IconButton
+                          onClick={handleClear}
+                          size="small"
+                          sx={{ mr: 1 }}
+                          aria-label="clear"
+                        >
+                          <ClearIcon fontSize="small" />
+                        </IconButton>
+                      )
                     }
-                  />
-                </IconButton>
-                <IconButton
-                  onClick={() => dispatch(payableDashboardView("grid"))}
-                >
-                  <GridOnOutlined
-                    color={
-                      payableActionSelector.view === "grid"
-                        ? "primary"
-                        : "secondary"
-                    }
-                  />
-                </IconButton>
+                  >
+                    <MenuItem disabled value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="new">New & Pending</MenuItem>
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="inActive">In-Active</MenuItem>
+                    <MenuItem value="rejected">Rejected</MenuItem>
+                    <MenuItem value="cancel">Cancel</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <InputBox
+                  label="Payable Ref. No."
+                  id="paybleRefNo"
+                  // value={formik.values.paybleRefNo}
+                  // onChange={formik.handleChange}
+                />
               </Box>
+
+              <ToggleButtonGroup
+                value={payableActionSelector.view}
+                exclusive
+                onChange={(e, newValue) => {
+                  if (newValue !== null)
+                    dispatch(payableDashboardView(newValue));
+                }}
+                sx={{
+                  borderRadius: "10px",
+                  overflow: "hidden",
+                  border: `1px solid ${primaryColor}`,
+                }}
+              >
+                <ToggleButton
+                  value="card"
+                  sx={{
+                    border: "none",
+                    borderRadius: 0,
+                    color: primaryColor,
+                    "&.Mui-selected": {
+                      backgroundColor: primaryColor,
+                      color: "#fff",
+                    },
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                      color: "#000",
+                    },
+                  }}
+                >
+                  <FormatListBulletedOutlined />
+                </ToggleButton>
+
+                <ToggleButton
+                  value="grid"
+                  sx={{
+                    border: "none",
+                    borderRadius: 0,
+                    color: primaryColor,
+                    "&.Mui-selected": {
+                      backgroundColor: primaryColor,
+                      color: "#fff",
+                    },
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                      color: "#000",
+                    },
+                  }}
+                >
+                  <GridOnOutlined />
+                </ToggleButton>
+              </ToggleButtonGroup>
             </Stack>
           }
         />
+
         {payableActionSelector.view === "grid" ? (
           <ThemedGrid
             uniqueId="id"

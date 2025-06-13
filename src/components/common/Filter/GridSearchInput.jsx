@@ -61,9 +61,10 @@ const GridSearchInput = ({
     handleApproveAllRequest(); // Call the approval function
     handleCloseApproveDialog(); // Close the dialog
   };
+
   return (
     <>
-      <Box sx={{ position: "relative", minWidth: "500px" }}>
+      <Box sx={{ position: "relative", minWidth: "350px" }}>
         {/* Search Bar */}
         <InputWithChips
           inputRef={searchRef}
@@ -73,9 +74,7 @@ const GridSearchInput = ({
           onFilterReset={handleResetFilter}
           filters={filters}
         />
-
         {/* Filter Popup Box */}
-
         {filterOpen && (
           <ClickAwayListener onClickAway={() => setFilterOpen(false)}>
             <Paper
@@ -118,6 +117,7 @@ const GridSearchInput = ({
           </ClickAwayListener>
         )}
       </Box>
+
       {/* Approve Button */}
       {selectedIds?.length !== 0 && page === "jobApprove" && (
         <Button
@@ -135,7 +135,8 @@ const GridSearchInput = ({
           Approve
         </Button>
       )}
-      {/* Confirmation Dialog */}
+    
+      
       <Dialog open={openApproveDialog} onClose={handleCloseApproveDialog}>
         <DialogTitle>Confirm Approval</DialogTitle>
         <DialogContent>

@@ -78,7 +78,7 @@ const styles = {
     transition: "background-color 0.3s ease, box-shadow 0.3s ease", // Smooth transition for hover effect
 
     "&:hover": {
-      border: "1px solid #BF77F6", // Change background color on hover
+      border: "1px solid #A27BB7", // Change background color on hover
       backgroundColor: "#bf77f614",
     },
   },

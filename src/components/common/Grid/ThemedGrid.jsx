@@ -75,7 +75,7 @@ const ThemedGrid = (props) => {
         ...a,
         // flex: smallFields.includes(a.field) ? 3 : 1,
         minWidth: smallFields.includes(a.field) ? 190 : 60,
-        align: "center",
+        // align: "center",
         headerAlign: "center",
       };
     }
@@ -89,7 +89,7 @@ const ThemedGrid = (props) => {
         borderRadius: "5px",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        // alignItems: "center",
         overflowY: "auto",
         paddingBottom: "0px",
         marginBottom: "0px",

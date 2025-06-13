@@ -20,7 +20,7 @@ export const PAYABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || "----"}</div>
     ),
   },
   {
@@ -32,7 +32,7 @@ export const PAYABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || "----"}</div>
     ),
   },
   {
@@ -44,7 +44,7 @@ export const PAYABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || "----"}</div>
     ),
   },
   {
@@ -68,7 +68,7 @@ export const PAYABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || "----"}</div>
     ),
   },
   {
@@ -80,7 +80,7 @@ export const PAYABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || "----"}</div>
     ),
   },
   {
@@ -104,7 +104,7 @@ export const PAYABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{params?.value?.trim() || ""}</div>
+      <div className="word-wrap-cell">{params?.value?.trim() || "----"}</div>
     ),
   },
   {
@@ -116,7 +116,9 @@ export const PAYABLE_COLUMNS = [
     align: "center",
     editable: false,
     renderCell: (params) => (
-      <div className="word-wrap-cell">{String(params?.value ?? "").trim()}</div>
+      <div className="word-wrap-cell">
+        {String(params?.value ?? "----").trim()}
+      </div>
     ),
   },
   {

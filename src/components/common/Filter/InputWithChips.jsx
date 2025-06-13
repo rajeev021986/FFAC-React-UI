@@ -191,7 +191,7 @@ const styles = {
     alignItems: "center",
     padding: "8px 15px",
     border: "1px solid #ccc",
-    borderRadius: "50px",
+    borderRadius: "10px",
     cursor: "text",
     "& .MuiTextField-root": {
       flex: "1",

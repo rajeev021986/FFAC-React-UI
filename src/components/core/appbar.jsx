@@ -98,14 +98,14 @@ export default function TAppBar({ handleDrawerToggle }) {
               sx={{ width: 180, height: 40 }}
               size="small"
             >
-              <MenuItem value="#BF77F6">
+              <MenuItem value="#a27bb7">
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Box
                     sx={{
                       width: 15,
                       height: 15,
                       borderRadius: "50%",
-                      backgroundColor: "#BF77F6",
+                      backgroundColor: "#a27bb7",
                       marginRight: 1,
                     }}
                   />

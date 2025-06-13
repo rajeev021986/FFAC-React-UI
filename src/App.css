@@ -54,3 +54,6 @@
     background-color: #fcfcfa;
   }
 }
+.column_txt{
+  text-align: left !important;
+}

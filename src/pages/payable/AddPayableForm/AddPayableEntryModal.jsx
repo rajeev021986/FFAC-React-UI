@@ -17,10 +17,9 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import InputBox from "../../../components/common/InputBox";
-import { ThemeButton } from "../../../components/common/Button";
+import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 import SelectBox from "../../../components/common/SelectBox";
-import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
@@ -131,7 +130,7 @@ export default function AddPayableEntryModal({
 
   const handleSubmit = async () => {
     try {
-       await modalValidationSchema.validate(payableEntry, { abortEarly: false });
+      await modalValidationSchema.validate(payableEntry, { abortEarly: false });
       setErrors({}); // Clear errors on successful validation
 
       const updatedEntry = selectedPayEntry
@@ -294,16 +293,18 @@ export default function AddPayableEntryModal({
       aria-labelledby="add-payable-entry"
     >
       <Box sx={modalStyle}>
-        <IconButton
-          onClick={handleClose}
-          sx={{ position: "absolute", top: 8, right: 8, color: "grey.600" }}
-        >
-          <CloseIcon />
-        </IconButton>
+        <div style={{display: "flex"}}>
+          <IconButton
+            onClick={handleClose}
+            sx={{ position: "absolute", top: 8, right: 8, color: "grey.600" }}
+          >
+            <CloseIcon />
+          </IconButton>
 
-        <Typography variant="h6" gutterBottom>
-          {selectedPayEntry ? "Edit Charges" : "Add New Charges"}
-        </Typography>
+          <Typography variant="h6" gutterBottom>
+            {selectedPayEntry ? "Edit Charges" : "Add New Charges"}
+          </Typography>
+        </div>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
           <Grid item xs={12} lg={4}>
@@ -509,7 +510,6 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} lg={4}></Grid>
           <Grid item xs={12} lg={4}>
             <InputBox
               label="Total Amount"
@@ -519,9 +519,20 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} lg={4}></Grid> <Grid item xs={12} lg={4}></Grid>
-          {/* Button */}
-          <Grid item xs={4}>
+      
+          <Grid item xs={12} lg={8}></Grid>
+          <Grid item xs={2}>
+            <OutlinedButton
+              onClick={handleClose}
+              disabled={disabled}
+              fullWidth
+              sx={{ fontWeight: 500 }}
+            >
+              Cancel
+            </OutlinedButton>
+          </Grid>
+
+          <Grid item xs={2}>
             <ThemeButton
               onClick={handleSubmit}
               disabled={disabled}
