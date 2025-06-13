@@ -114,7 +114,7 @@ export default function GetPayDetails({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-     validationSchema,
+    validationSchema,
     onSubmit: async (values) => {
       try {
         if (values?.vendorName === "") {
@@ -141,7 +141,7 @@ export default function GetPayDetails({
           usdAmountToBePaid: values?.usdAmountToBePaid || 0,
           localAmountToBePaid: values?.localAmountToBePaid || 0,
           bankCharges: values?.bankCharges || "",
-          vendorId: initialValues?.vendorId || ""
+          vendorId: initialValues?.vendorId || "",
         };
         const multiplePayload = {
           paybleIds: values?.paybleIds || [],
@@ -198,7 +198,7 @@ export default function GetPayDetails({
       });
     }
   }, [customerSettingsData, payableSettingData, optionsSettingsData]);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -235,10 +235,6 @@ export default function GetPayDetails({
 
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
-
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
 
   useEffect(() => {
     if (payableRef?.current) {
@@ -433,10 +429,7 @@ export default function GetPayDetails({
                       // onChange={formik.handleChange}
                       onChange={(selected) => {
                         formik.setFieldValue("bankId", selected.bankId);
-                        formik.setFieldValue(
-                          "bankName",
-                          selected.bankName
-                        );
+                        formik.setFieldValue("bankName", selected.bankName);
                       }}
                       disabled={
                         formik.values.paymentType === "Cheque" && !isDisabled
@@ -564,7 +557,21 @@ export default function GetPayDetails({
                 >
                   <Stack direction="row" spacing={2}>
                     <ThemeButton
-                      onClick={formik.handleSubmit}
+                      onClick={async () => {
+                        const errors = await formik.validateForm();
+
+                        if (Object.keys(errors).length > 0) {
+                          formik.setTouched(
+                            Object.fromEntries(
+                              Object.keys(errors).map((key) => [key, true])
+                            ),
+                            true
+                          );
+                          getFirstError(errors);
+                        } else {
+                          formik.handleSubmit(); 
+                        }
+                      }}
                       sx={{
                         fontWeight: "500",
                         color: "white !important",

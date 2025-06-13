@@ -173,7 +173,7 @@ export default function VehicleNumberForm({
         arrivalICDDate: res?.body?.arrivalICDDate,
         cargoReleaseDate: res?.body?.cargoReleaseDate,
         departICDDate: res?.body?.departICDDate,
-        bondNumber:res?.body?.bondNumber,
+        bondNumber: res?.body?.bondNumber,
         bondAmount: res?.body?.bondAmount,
         arrivalCustomerPlaceDate: res?.body?.arrivalCustomerPlaceDate,
         remark: res?.body?.remark,
@@ -213,10 +213,6 @@ export default function VehicleNumberForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
-
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
 
   const customerNameRef = useRef(null);
   useEffect(() => {
@@ -672,7 +668,21 @@ export default function VehicleNumberForm({
                   Close
                 </OutlinedButton>
                 <ThemeButton
-                  onClick={formik.handleSubmit}
+                  onClick={async () => {
+                    const errors = await formik.validateForm();
+
+                    if (Object.keys(errors).length > 0) {
+                      formik.setTouched(
+                        Object.fromEntries(
+                          Object.keys(errors).map((key) => [key, true])
+                        ),
+                        true
+                      );
+                      getFirstError(errors);
+                    } else {
+                      formik.handleSubmit();
+                    }
+                  }}
                   sx={{
                     fontWeight: "500",
                     color: "white !important",

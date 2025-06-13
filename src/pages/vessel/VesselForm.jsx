@@ -161,10 +161,6 @@ export function VesselForm({ initialValues, type }) {
     }
   }, [optionsSettingsData, vesselSettingsData]);
 
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
-
   return (
     <>
       {type == "copy" || type == "add" ? (
@@ -322,7 +318,21 @@ export function VesselForm({ initialValues, type }) {
                         Close
                       </OutlinedButton>
                       <ThemeButton
-                        onClick={formik.handleSubmit}
+                        onClick={async () => {
+                          const errors = await formik.validateForm();
+
+                          if (Object.keys(errors).length > 0) {
+                            formik.setTouched(
+                              Object.fromEntries(
+                                Object.keys(errors).map((key) => [key, true])
+                              ),
+                              true
+                            );
+                            getFirstError(errors);
+                          } else {
+                            formik.handleSubmit();
+                          }
+                        }}
                         sx={{
                           fontWeight: "500",
                           borderRadius: "12px",
@@ -408,7 +418,7 @@ export function VesselForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                       <FormAutoComplete
+                      <FormAutoComplete
                         label="Line Name*"
                         id="lineId"
                         value={{
@@ -529,7 +539,21 @@ export function VesselForm({ initialValues, type }) {
                         Close
                       </OutlinedButton>
                       <ThemeButton
-                        onClick={formik.handleSubmit}
+                        onClick={async () => {
+                          const errors = await formik.validateForm();
+
+                          if (Object.keys(errors).length > 0) {
+                            formik.setTouched(
+                              Object.fromEntries(
+                                Object.keys(errors).map((key) => [key, true])
+                              ),
+                              true
+                            );
+                            getFirstError(errors); // Show toast from here directly
+                          } else {
+                            formik.handleSubmit(); // Submit if valid
+                          }
+                        }}
                         sx={{
                           fontWeight: "500",
                           borderRadius: "12px",
