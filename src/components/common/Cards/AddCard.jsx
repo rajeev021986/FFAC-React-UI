@@ -443,10 +443,16 @@ export default function AddCard() {
                     label="Company Name"
                     id="companyCode"
                     suggestionName="company_code"
+                    idKey="companyCode"
                     dataLabel="company_name"
-                    value={formik.values.companyCode}
+                    nameKey="companyName"
+                    value={{
+                      companyCode: formik.values.companyCode,
+                    }}
+                    onChange={(selected) => {
+                      formik.setFieldValue("companyCode", selected.companyCode);
+                    }}
                     error={formik.errors.companyCode}
-                    onChange={formik.handleChange}
                   ></FormAutoComplete>
                 </Grid>
               </Grid>
