@@ -54,6 +54,7 @@ import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
 import DocumentIcon from "../../../common/commonIcons/DocumentIcons/DocumentIcon";
 import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
+import AutoCompleteInput from "../../../common/AutoCompletInput";
 
 export default function CustomerForm({
   initialValues,
@@ -62,6 +63,7 @@ export default function CustomerForm({
 }) {
   const [options, setOptions] = useState([]);
   const [optionsCity, setCityOptions] = useState([]);
+  const [submitClicked, setSubmitClicked] = useState(false);
   const [addCustomer, { isLoading }] = useAddCustomerMutation();
   const [loaderApprove, setLoaderApprove] = useState({
     approve: false,
@@ -235,7 +237,6 @@ export default function CustomerForm({
   let shouldShowTabs = Object.values(formik.values?.customerName).some(
     (value) => value !== ""
   );
-
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const { data: customerSettingsData } =
@@ -329,9 +330,7 @@ export default function CustomerForm({
 
   const disabled =
     page == "customer" || page == "customerApprove" ? false : true;
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
+
   const customerNameRef = useRef(null);
 
   useEffect(() => {
@@ -339,7 +338,6 @@ export default function CustomerForm({
       customerNameRef.current.focus();
     }
   }, []);
-
   return (
     <>
       {type == "add" ? (
@@ -545,6 +543,7 @@ export default function CustomerForm({
                         error={formik.errors.poNo}
                         onChange={formik.handleChange}
                         disabled={disabled}
+                        type="number"
                       />
                     </Grid>
                   </Grid>
@@ -599,11 +598,25 @@ export default function CustomerForm({
                     >
                       <FormAutoComplete
                         label="Country"
-                        id="country"
+                        id="countryId"
                         suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
-                        onChange={formik.handleChange}
+                        value={{
+                          countryId: formik.values.countryId,
+                          countryName: formik.values.countryName,
+                        }}
+                        error={formik.errors.countryId}
+                        idKey="countryId"
+                        nameKey="countryName"
+                        // onChange={formik.setFieldValue}
+                        onChange={(selected) => {
+                          formik.setFieldValue("countryId", selected.countryId);
+                          formik.setFieldValue(
+                            "countryName",
+                            selected.countryName
+                          );
+                        }}
+
+                        // onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
                   </Grid>
@@ -729,9 +742,9 @@ export default function CustomerForm({
                         // onChange={formik.handleChange}
                         onChange={(e) => {
                           formik.setFieldValue("creditAmount", "");
-                          formik.setFieldValue("creditDays", "");
-                          formik.setFieldError("creditAmount", "");
-                          formik.setFieldError("creditDays", "");
+                          // formik.setFieldValue("creditDays", "");
+                          // formik.setFieldError("creditAmount", "");
+                          //  formik.setFieldError("creditDays", "");
                           formik.setFieldValue("paymentType", e.target.value);
                         }}
                         disabled={disabled}
@@ -766,7 +779,23 @@ export default function CustomerForm({
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <InputBox
+                      <SelectBox
+                        label="Credit Days"
+                        id="creditDays"
+                        options={customerSettingsData?.body?.creditDays}
+                        value={
+                          formik.values.paymentType == "credit"
+                            ? formik.values.creditDays
+                            : formik.values.creditDays
+                        }
+                        error={formik.errors.creditDays}
+                        onChange={formik.handleChange}
+                        disabled={
+                          formik.values.paymentType === "cash" || disabled
+                        }
+                      />
+
+                      {/* <InputBox
                         label="Credit Days"
                         id="creditDays"
                         value={
@@ -779,7 +808,7 @@ export default function CustomerForm({
                         disabled={
                           formik.values.paymentType === "cash" || disabled
                         }
-                      />
+                      /> */}
                     </Grid>
                     <Grid
                       item
@@ -851,7 +880,21 @@ export default function CustomerForm({
                         Close
                       </OutlinedButton>
                       <ThemeButton
-                        onClick={formik.handleSubmit}
+                        onClick={async () => {
+                          const errors = await formik.validateForm();
+
+                          if (Object.keys(errors).length > 0) {
+                            formik.setTouched(
+                              Object.fromEntries(
+                                Object.keys(errors).map((key) => [key, true])
+                              ),
+                              true
+                            );
+                            getFirstError(errors); 
+                          } else {
+                            formik.handleSubmit();
+                          }
+                        }}
                         sx={{
                           fontWeight: "500",
                           borderRadius: "12px",
@@ -1145,6 +1188,7 @@ export default function CustomerForm({
                         error={formik.errors.poNo}
                         onChange={formik.handleChange}
                         disabled={disabled}
+                        type="number"
                       />
                     </Grid>
                   </Grid>
@@ -1199,11 +1243,25 @@ export default function CustomerForm({
                     >
                       <FormAutoComplete
                         label="Country"
-                        id="country"
+                        id="countryId"
                         suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
-                        onChange={formik.handleChange}
+                        value={{
+                          countryId: formik.values.countryId,
+                          countryName: formik.values.countryName,
+                        }}
+                        error={formik.errors.countryId}
+                        idKey="countryId"
+                        nameKey="countryName"
+                        // onChange={formik.setFieldValue}
+                        onChange={(selected) => {
+                          formik.setFieldValue("countryId", selected.countryId);
+                          formik.setFieldValue(
+                            "countryName",
+                            selected.countryName
+                          );
+                        }}
+
+                        // onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
                   </Grid>
@@ -1327,10 +1385,10 @@ export default function CustomerForm({
                         name="paymentType" // add name attribute here
                         value={formik.values.paymentType}
                         onChange={(e) => {
-                          formik.setFieldValue("creditAmount", "");
-                          formik.setFieldValue("creditDays", "");
-                          formik.setFieldError("creditAmount", "");
-                          formik.setFieldError("creditDays", "");
+                          // formik.setFieldValue("creditAmount", "");
+                          // formik.setFieldValue("creditDays", "");
+                          //  formik.setFieldError("creditAmount", "");
+                          // formik.setFieldError("creditDays", "");
                           formik.setFieldValue("paymentType", e.target.value);
                         }}
                         disabled={disabled}
@@ -1360,10 +1418,26 @@ export default function CustomerForm({
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <InputBox
+                      {/* <InputBox
                         label="Credit Days"
                         id="creditDays"
                         value={formik.values.creditDays}
+                        error={formik.errors.creditDays}
+                        onChange={formik.handleChange}
+                        disabled={
+                          formik.values.paymentType === "cash" || disabled
+                        }
+                      /> */}
+
+                      <SelectBox
+                        label="Credit Days"
+                        id="creditDays"
+                        options={customerSettingsData?.body?.creditDays}
+                        value={
+                          formik.values.paymentType == "credit"
+                            ? formik.values.creditDays
+                            : formik.values.creditDays
+                        }
                         error={formik.errors.creditDays}
                         onChange={formik.handleChange}
                         disabled={
@@ -1388,7 +1462,7 @@ export default function CustomerForm({
                         error={formik.errors.creditAmount}
                         onChange={formik.handleChange}
                         disabled={
-                          formik.values.paymentType === "cash" || disabled
+                          formik.values.paymentType == "cash" || disabled
                         }
                       />
                     </Grid>
@@ -1428,7 +1502,7 @@ export default function CustomerForm({
                       </ThemeTabs>
                     </Box>
                   </Grid>
-                
+
                   {formik.values.statusCode === -1 ||
                   page == "customerApprove" ? (
                     <Grid item xs={12} paddingLeft={1} paddingTop={1}>
@@ -1471,7 +1545,24 @@ export default function CustomerForm({
                             Close
                           </OutlinedButton>
                           <ThemeButton
-                            onClick={formik.handleSubmit}
+                            onClick={async () => {
+                              const errors = await formik.validateForm();
+
+                              if (Object.keys(errors).length > 0) {
+                                formik.setTouched(
+                                  Object.fromEntries(
+                                    Object.keys(errors).map((key) => [
+                                      key,
+                                      true,
+                                    ])
+                                  ),
+                                  true
+                                );
+                                getFirstError(errors);
+                              } else {
+                                formik.handleSubmit();
+                              }
+                            }}
                             sx={{
                               fontWeight: "500",
                               color: "white !important",

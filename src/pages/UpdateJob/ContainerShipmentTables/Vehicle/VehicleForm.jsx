@@ -72,6 +72,7 @@ export default function VehicleNumberForm({
 
   const [initialValues, setInitialValues] = React.useState({
     clerkName: "",
+    clerkId: "",
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
@@ -158,6 +159,7 @@ export default function VehicleNumberForm({
         id: res.body?.id || "",
         status: status,
         clerkName: res?.body?.clerkName,
+        clerkId: res?.body?.clerkId || "",
         chasisNo: res?.body?.chasisNo,
         clerkTelNo: res?.body?.clerkTelNo,
         reportingPlace: res?.body?.reportingPlace,
@@ -171,7 +173,7 @@ export default function VehicleNumberForm({
         arrivalICDDate: res?.body?.arrivalICDDate,
         cargoReleaseDate: res?.body?.cargoReleaseDate,
         departICDDate: res?.body?.departICDDate,
-        bondNumber: bondDetails[0]?.bondNumber,
+        bondNumber: res?.body?.bondNumber,
         bondAmount: res?.body?.bondAmount,
         arrivalCustomerPlaceDate: res?.body?.arrivalCustomerPlaceDate,
         remark: res?.body?.remark,
@@ -199,7 +201,11 @@ export default function VehicleNumberForm({
   }, [vehicleId]);
 
   useEffect(() => {
-    if (optionsSettingsData?.body || customerSettingsData?.body || jobSettingData?.body) {
+    if (
+      optionsSettingsData?.body ||
+      customerSettingsData?.body ||
+      jobSettingData?.body
+    ) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
@@ -207,10 +213,6 @@ export default function VehicleNumberForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
-
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
 
   const customerNameRef = useRef(null);
   useEffect(() => {
@@ -288,11 +290,21 @@ export default function VehicleNumberForm({
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <FormAutoComplete
                     label="Clerk Name"
-                    id="clerkName"
+                    id="clerkId"
                     suggestionName="first_name"
-                    value={formik.values.clerkName}
-                    error={formik.errors.clerkName}
-                    onChange={formik.handleChange}
+                    // value={formik.values.clerkId}
+                    value={{
+                      clerkId: formik.values.clerkId,
+                      clerkName: formik.values.clerkName,
+                    }}
+                    idKey="clerkId"
+                    nameKey="clerkName"
+                    error={formik.errors.clerkId}
+                    // onChange={formik.handleChange}
+                    onChange={(selected) => {
+                      formik.setFieldValue("clerkId", selected.clerkId);
+                      formik.setFieldValue("clerkName", selected.clerkName);
+                    }}
                   />
                 </Grid>
 
@@ -438,7 +450,7 @@ export default function VehicleNumberForm({
                   <InputBox
                     label="Bond Number"
                     id="bondNumber"
-                    value={formik.values.bondNumber}
+                    value={formik.values.bondNumber || ""}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -627,7 +639,7 @@ export default function VehicleNumberForm({
           </TabPanel>
         </TabContext>
 
-        {(page === "vehicleShipment"  && value == "1") && (
+        {page === "vehicleShipment" && value == "1" && (
           <Grid
             paddingLeft={3}
             marginTop={2}
@@ -656,7 +668,21 @@ export default function VehicleNumberForm({
                   Close
                 </OutlinedButton>
                 <ThemeButton
-                  onClick={formik.handleSubmit}
+                  onClick={async () => {
+                    const errors = await formik.validateForm();
+
+                    if (Object.keys(errors).length > 0) {
+                      formik.setTouched(
+                        Object.fromEntries(
+                          Object.keys(errors).map((key) => [key, true])
+                        ),
+                        true
+                      );
+                      getFirstError(errors);
+                    } else {
+                      formik.handleSubmit();
+                    }
+                  }}
                   sx={{
                     fontWeight: "500",
                     color: "white !important",
@@ -690,6 +716,7 @@ export default function VehicleNumberForm({
             isNotShowType={true}
             sourceType={"JOB_VEHICLE"}
             type={SourceType}
+            disabled={false}
           />
         </Box>
       </Modal>

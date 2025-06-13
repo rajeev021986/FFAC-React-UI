@@ -12,6 +12,8 @@ import SelectBox from "../../components/common/SelectBox";
 import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
 import FormAutoCompleteWithTable from "../../components/common/AutoComplete/FormAutoCompletewithTable";
 import ApiManager from "../../services/ApiManager";
+import FormAutoCompleteWithCountryTable from "../../components/common/AutoComplete/FormAutoCompleteWithCountryTable";
+// import FormAutoCompleteWithCountryTable from "../../components/common/AutoComplete/FormAutoCompleteWithCountryTable";
 
 export default function ShipmentDetails({ formik }) {
   let disabled = formik?.values?.statusCode === -3;
@@ -26,6 +28,7 @@ export default function ShipmentDetails({ formik }) {
       FieldRef.current.focus();
     }
   }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,19 +65,31 @@ export default function ShipmentDetails({ formik }) {
 
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
+
   return (
     <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>
         <Grid paddingLeft={1} marginTop={0} container spacing={1}>
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <FormAutoCompleteWithTable
+            {/* <FormAutoCompleteWithTable
+            label="Origin Country"
+            id="originPortId"
+            suggestionName="originCountry"
+            value={formik.values.originPortId}
+            formik={formik}
+            setFieldValue={formik.setFieldValue}
+            error={formik.errors.originPortId}
+            disabled={false}
+          /> */}
+
+            <FormAutoCompleteWithCountryTable
               label="Origin Country"
-              id="originCountry"
+              id="originPortId"
               suggestionName="originCountry"
-              value={formik.values.originCountry}
+              value={formik.values.originPortId}
               formik={formik}
               setFieldValue={formik.setFieldValue}
-              error={formik.errors.originCountry}
+              error={formik.errors.originPortId}
               disabled={false}
             />
           </Grid>
@@ -90,29 +105,71 @@ export default function ShipmentDetails({ formik }) {
               error={formik.errors.portOfLoading}
               disabled={false}
             />
+            {/* <FormAutoCompleteWithTable
+              label="Port of Loading"
+              id="portOfLoading"
+              suggestionName="portOfLoading"
+              value={formik.values.portOfLoading}
+              formik={formik}
+              setFieldValue={formik.setFieldValue}
+              error={formik.errors.portOfLoading}
+              disabled={false}
+            /> */}
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Port Of Discharge"
-              id="portOfDischarge"
+              id="portOfDischargeId"
               suggestionName="port_name"
-              value={formik.values.portOfDischarge}
-              error={formik.errors.portOfDischarge}
-              onChange={formik.handleChange}
+              // value={formik.values.portOfDischargeId}
+              value={{
+                portOfDischargeId: formik.values.portOfDischargeId,
+                portOfDischargeName: formik.values.portOfDischargeName,
+              }}
+              error={formik.errors.portOfDischargeId}
+              // onChange={formik.handleChange}
               inputRef={FieldRef}
+              idKey="portOfDischargeId"
+              nameKey="portOfDischargeName"
               disabled={disabled}
+              onChange={(selected) => {
+                formik.setFieldValue(
+                  "portOfDischargeId",
+                  selected.portOfDischargeId
+                );
+                formik.setFieldValue(
+                  "portOfDischargeName",
+                  selected.portOfDischargeName
+                );
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Place Of Delivery"
-              id="placeOfDelivery"
+              id="placeOfDeliveryId"
               suggestionName="port_name"
-              value={formik.values.placeOfDelivery}
-              error={formik.errors.placeOfDelivery}
-              onChange={formik.handleChange}
+              idKey="placeOfDeliveryId"
+              nameKey="placeOfDeliveryName"
+              // value={formik.values.placeOfDeliveryId}
+              value={{
+                placeOfDeliveryId: formik.values.placeOfDeliveryId,
+                placeOfDeliveryName: formik.values.placeOfDeliveryName,
+              }}
+              error={formik.errors.placeOfDeliveryId}
+              // onChange={formik.handleChange}
+              onChange={(selected) => {
+                formik.setFieldValue(
+                  "placeOfDeliveryId",
+                  selected.placeOfDeliveryId
+                );
+                formik.setFieldValue(
+                  "placeOfDeliveryName",
+                  selected.placeOfDeliveryName
+                );
+              }}
               inputRef={FieldRef}
               disabled={disabled}
             />

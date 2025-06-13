@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -23,13 +23,13 @@ import ApiManager from "../../../../services/ApiManager";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import SelectBox from "../../../common/SelectBox";
-import InputBox from "../../../common/InputBox";
 import InputBoxForGrid from "../../../common/InputBoxForGrid";
 import EditRowDialog from "../../../common/EditRowDialog";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
+import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+
 export default function VendorEditGrid({
   formik,
-  disabled = false,
   vendorSettingsData,
   dropdownData,
 }) {
@@ -37,7 +37,12 @@ export default function VendorEditGrid({
   const [editDialogData, setEditDialogData] = useState();
   const [openTable, setopenTable] = useState(true);
   const [EditRowDialogopen, setEditRowDialogOpen] = useState(false);
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
   const newRowRef = useRef(null);
+
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
+
   const setFocus = () => {
     setTimeout(() => {
       if (newRowRef.current) {
@@ -67,6 +72,43 @@ export default function VendorEditGrid({
     }, 10);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
+        const backendData = await response.body;
+
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
+        ];
+
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
+
   const TabsHosts = [
     {
       tabLable: "Tariffs",
@@ -90,7 +132,7 @@ export default function VendorEditGrid({
         }
         const newRow = {
           id: Date.now(),
-          chargeName: "",
+          chargeId: "",
           type: "",
           finalDestination: "",
           unitType: "",
@@ -117,22 +159,24 @@ export default function VendorEditGrid({
       },
       columns: [
         {
-          field: "chargeName",
+          field: "chargeId",
           headerName: "Charge Name",
           flex: 1,
           renderCell: (params) => {
             return (
               <AutoCompleteInput
-                id="chargeName"
+                id="chargeId"
                 suggestionName="charge_name"
-                value={params.value}
+                value={{
+                  id: params.row?.chargeId,
+                  label: params.row?.chargeName ?? "",
+                }}
                 error={
-                  formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeName
+                  formik.errors.vendorEntityTariffs?.[params.rowIndex]?.chargeId
                 }
                 onChange={(newValue) => {
                   const rowIndex = formik.values.vendorEntityTariffs.findIndex(
-                    (entity) => entity.id === params.id
+                    (entity) => entity.id == params.id
                   );
                   // setTimeout(() => {
                   formik.setValues({
@@ -140,7 +184,11 @@ export default function VendorEditGrid({
                     vendorEntityTariffs: formik.values.vendorEntityTariffs.map(
                       (entity, index) =>
                         index === rowIndex
-                          ? { ...entity, chargeName: newValue }
+                          ? {
+                              ...entity,
+                              chargeId: newValue?.id ?? null,
+                              chargeName: newValue?.label ?? "",
+                            }
                           : entity
                     ),
                   });
@@ -230,34 +278,30 @@ export default function VendorEditGrid({
         {
           field: "currency",
           headerName: "Currency",
-          flex: 1,
+          flex: 1.5,
           renderCell: (params) => {
             return (
-              <AutoCompleteInput
-                id="currency"
-                suggestionName="currency"
-                value={params.value}
-                error={
-                  formik.errors.vendorEntityTariffs?.[params.rowIndex]
-                    ?.chargeName
-                }
-                onChange={(newValue) => {
-                  const rowIndex = formik.values.vendorEntityTariffs.findIndex(
-                    (entity) => entity.id === params.id
-                  );
-                  // setTimeout(() => {
-                  formik.setValues({
-                    ...formik.values,
-                    vendorEntityTariffs: formik.values.vendorEntityTariffs.map(
-                      (entity, index) =>
-                        index === rowIndex
-                          ? { ...entity, currency: newValue }
-                          : entity
-                    ),
-                  });
-                  // }, 1500);
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  height: "100%",
                 }}
-              />
+              >
+                <SelectBox
+                  placeholder={true}
+                  size="small"
+                  sx={{
+                    marginTop: "0px",
+                    marginBottom: "0px",
+                  }}
+                  options={mergedCurrencyOptions}
+                  value={params.value}
+                  onChange={(e) => OnChange(params, e, "vendorEntityTariffs")}
+                />
+              </div>
             );
           },
         },
@@ -296,7 +340,7 @@ export default function VendorEditGrid({
       value: formik.values.vendorEntityDemurageTariffs || [
         {
           id: 0,
-          country: "",
+          countryId: "",
           containerType: "",
           firstSlab: "",
           secondSlab: "",
@@ -324,7 +368,7 @@ export default function VendorEditGrid({
         }
         const newRow = {
           id: Date.now(),
-          country: "",
+          countryId: "",
           containerType: "",
           firstSlab: "",
           secondSlab: "",
@@ -474,7 +518,7 @@ export default function VendorEditGrid({
         }
         const newRow = {
           id: Date.now(),
-          country: "",
+          countryId: "",
           noOfFreeDays: 0,
           new: true,
         };
@@ -497,22 +541,26 @@ export default function VendorEditGrid({
       },
       columns: [
         {
-          field: "country",
+          field: "countryId",
           headerName: "Country",
           flex: 1,
           renderCell: (params) => {
             return (
               <AutoCompleteInput
-                id="country"
+                id="countryId"
                 suggestionName="country"
-                value={params.value}
+                // value={params.value}
+                value={{
+                  id: params.row?.countryId,
+                  label: params.row?.countryName ?? "",
+                }}
                 error={
                   formik.errors.vendorEntityFreeDays?.[params.rowIndex]
-                    ?.chargeName
+                    ?.countryId
                 }
                 onChange={(newValue) => {
                   const rowIndex = formik.values.vendorEntityFreeDays.findIndex(
-                    (entity) => entity.id === params.id
+                    (entity) => entity.id == params.id
                   );
                   // setTimeout(() => {
                   formik.setValues({
@@ -520,7 +568,11 @@ export default function VendorEditGrid({
                     vendorEntityFreeDays:
                       formik.values.vendorEntityFreeDays.map((entity, index) =>
                         index === rowIndex
-                          ? { ...entity, country: newValue }
+                          ? {
+                              ...entity,
+                              countryId: newValue?.id ?? null,
+                              countryName: newValue?.label ?? "",
+                            }
                           : entity
                       ),
                   });
@@ -856,7 +908,7 @@ export default function VendorEditGrid({
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               {TabsHosts.map((value, index) => (
                 <Tab
-                  sx={{textTransform: "capitalize" }}
+                  sx={{ textTransform: "capitalize" }}
                   label={value.tabLable}
                   value={index}
                   className="nested1"

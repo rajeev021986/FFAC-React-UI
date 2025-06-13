@@ -24,6 +24,7 @@ import { containerAPI } from "./api/containerApi";
 import { payableCodeAPI } from "./api/payableApi";
 import { pendingPaymentCodeAPI } from "./api/accountPendingApproval";
 import { settingAuditAPI } from "./api/settingAuditAPI";
+import { receivableCodeAPI } from "./api/receivableApi";
 
 import userManagementReducer from "./freatures/userManagementSlice";
 import authReducer from "./freatures/authSlice";
@@ -88,6 +89,7 @@ const store = configureStore({
     [payableCodeAPI.reducerPath]: payableCodeAPI.reducer,
     [pendingPaymentCodeAPI.reducerPath]: pendingPaymentCodeAPI.reducer,
     [settingAuditAPI.reducerPath]: settingAuditAPI.reducer,
+    [receivableCodeAPI.reducerPath]: receivableCodeAPI.reducer,
 
     // slice
     userManagement: userManagementReducer,
@@ -153,7 +155,8 @@ const store = configureStore({
       containerAPI.middleware,
       payableCodeAPI.middleware,
       pendingPaymentCodeAPI.middleware,
-      settingAuditAPI.middleware
+      settingAuditAPI.middleware,
+      receivableCodeAPI.middleware
     ),
 });
 

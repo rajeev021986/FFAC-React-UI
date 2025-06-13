@@ -73,6 +73,7 @@ export default function LooseCargoForm({
   };
 
   const [initialValues, setInitialValues] = React.useState({
+    transporterId: "",
     transporter: "",
     truckTrailerNo: "",
     truckNo: "",
@@ -81,6 +82,7 @@ export default function LooseCargoForm({
     telNo: "",
     passportNo: "",
     licenceNo: "",
+    clerkId: "",
     clerkName: "",
     clerkTelNo: "",
     reportingPlace: "",
@@ -114,14 +116,16 @@ export default function LooseCargoForm({
         id: res.body?.id || "",
         status: status,
         truckNo: res.body?.truckNo,
-        transporter: res.body?.transporter,
+        transporterId: res.body?.transporterId,
+        transporter: res?.body?.transporter || res?.body?.transporterName,
         truckTrailerNo: res.body?.truckTrailerNo,
         driver: res.body?.driver,
         agreedRate: res.body?.agreedRate,
         telNo: res.body?.telNo,
         passportNo: res.body?.passportNo,
         licenceNo: res.body?.licenceNo,
-        clerkName: res.body?.clerkName,
+        clerkId: res.body?.clerkId,
+        clerkName: res?.body?.clerkName,
         clerkTelNo: res.body?.clerkTelNo,
         reportingPlace: res.body?.reportingPlace,
         reportingDate: res.body?.reportingDate,
@@ -135,7 +139,7 @@ export default function LooseCargoForm({
         arrivalICDDate: res.body?.arrivalICDDate,
         cargoReleaseDate: res.body?.cargoReleaseDate,
         departICDDate: res.body?.departICDDate,
-        bondNumber: bondDetails[0]?.bondNumber,
+        bondNumber: res.body?.bondNumber,
         bondAmount: res.body?.bondAmount,
         arrivalCustomerPlaceDate: res.body?.arrivalCustomerPlaceDate,
         remark: res.body?.remark,
@@ -208,7 +212,11 @@ export default function LooseCargoForm({
     useGetOptionsSettingsQuery("customer_settings");
 
   useEffect(() => {
-    if (optionsSettingsData?.body || customerSettingsData?.body || jobSettingData?.body) {
+    if (
+      optionsSettingsData?.body ||
+      customerSettingsData?.body ||
+      jobSettingData?.body
+    ) {
       setDropdownData({
         ...optionsSettingsData?.body,
         ...customerSettingsData?.body,
@@ -216,10 +224,6 @@ export default function LooseCargoForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
-
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
 
   const customerNameRef = useRef(null);
   useEffect(() => {
@@ -308,9 +312,22 @@ export default function LooseCargoForm({
                     label="Transporter"
                     id="transporter"
                     suggestionName="vendor_name"
-                    value={formik.values.transporter}
-                    error={formik.errors.transporter}
-                    onChange={formik.handleChange}
+                    idKey="transporterId"
+                    nameKey="transporter"
+                    // value={formik.values.transporterId}
+                    value={{
+                      transporterId: formik.values.transporterId,
+                      transporter: formik.values.transporter,
+                    }}
+                    onChange={(selected) => {
+                      // formik.setFieldValue(
+                      //   "transporterId",
+                      //   selected.transporterId
+                      // );
+                      formik.setFieldValue("transporter", selected.transporter);
+                    }}
+                    error={formik.errors.transporterId}
+                    // onChange={formik.handleChange}
                   ></FormAutoComplete>
                 </Grid>
 
@@ -374,11 +391,21 @@ export default function LooseCargoForm({
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                   <FormAutoComplete
                     label="Clerk Name"
-                    id="clerkName"
+                    id="clerkId"
                     suggestionName="first_name"
-                    value={formik.values.clerkName}
-                    error={formik.errors.clerkName}
-                    onChange={formik.handleChange}
+                    // value={formik.values.clerkId}
+                    value={{
+                      clerkId: formik.values.clerkId,
+                      clerkName: formik.values.clerkName,
+                    }}
+                    idKey="clerkId"
+                    nameKey="clerkName"
+                    error={formik.errors.clerkId}
+                    // onChange={formik.handleChange}
+                    onChange={(selected) => {
+                      formik.setFieldValue("clerkId", selected.clerkId);
+                      formik.setFieldValue("clerkName", selected.clerkName);
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -523,7 +550,7 @@ export default function LooseCargoForm({
                   <InputBox
                     label="Bond Number"
                     id="bondNumber"
-                    value={formik.values.bondNumber}
+                    value={formik.values.bondNumber || ""}
                     onChange={formik.handleChange}
                   />
                 </Grid>
@@ -714,7 +741,7 @@ export default function LooseCargoForm({
           </TabPanel>
         </TabContext>
 
-        {(page === "looseShipment"  && value =="1") && (
+        {page === "looseShipment" && value == "1" && (
           <Grid
             paddingLeft={3}
             marginTop={2}
@@ -743,7 +770,21 @@ export default function LooseCargoForm({
                   Close
                 </OutlinedButton>
                 <ThemeButton
-                  onClick={formik.handleSubmit}
+                  onClick={async () => {
+                    const errors = await formik.validateForm();
+
+                    if (Object.keys(errors).length > 0) {
+                      formik.setTouched(
+                        Object.fromEntries(
+                          Object.keys(errors).map((key) => [key, true])
+                        ),
+                        true
+                      );
+                      getFirstError(errors);
+                    } else {
+                      formik.handleSubmit();
+                    }
+                  }}
                   sx={{
                     fontWeight: "500",
                     color: "white !important",
@@ -777,6 +818,7 @@ export default function LooseCargoForm({
             isNotShowType={true}
             sourceType={"JOB_LOOSE_CARGO"}
             type={SourceType}
+            disabled={false}
           />
         </Box>
       </Modal>

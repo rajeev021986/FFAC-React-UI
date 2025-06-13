@@ -71,7 +71,7 @@ function FormAutoCompleteWithVoyage(props) {
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
       const { vessel, voyage } = newValue.fullData;
-
+      const{value} = newValue;
       if (id === "loadingVessel") {
         setFieldValue("loadingVessel", vessel);
         setFieldValue("loadingVoyage", voyage || "");

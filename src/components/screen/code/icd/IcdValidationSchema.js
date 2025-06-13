@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-
+const phoneRegExp = /^[0-9]{7,15}$/;
 export const IcdValidationSchema = () =>
   Yup.object({
     icd_name: Yup.string().required("Name is required"),
@@ -14,10 +14,12 @@ export const IcdValidationSchema = () =>
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
         "Invalid email format"
       ),
-    tel_no: Yup.number()
-      .typeError("Telephone must be a valid number")
-      .positive("Telephone must be positive"),
-    mobile: Yup.number()
-      .typeError("Mobile must be a valid number")
-      .positive("Telephone must be positive"),
+    tel_no: Yup.string().matches(
+      phoneRegExp,
+      "Telephone must be between 7 to 15 digits"
+    ),
+    mobile: Yup.string().matches(
+      phoneRegExp,
+      "Mobile must be between 7 to 15 digits"
+    ),
   });

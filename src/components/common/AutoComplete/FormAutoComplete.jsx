@@ -18,11 +18,21 @@ function FormAutoComplete(props) {
     error,
     onChange,
     disabled,
+    idKey,
+    nameKey,
   } = props;
 
   const [options, setOptions] = useState([]);
+
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
+  const selectedOption =
+  id =='shippingLine' || id == 'transporter' ?
+  options.find((option) => option.value == value?.[nameKey]) || null :
+    options.find(
+      (option) =>
+        option.fullData?.id  == value?.[idKey]
+    ) || null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,24 +62,78 @@ function FormAutoComplete(props) {
     setFilteredOptions(filtered);
   };
 
+  //  const handleSelectionChange = (event, newValue) => {
+  //   if (newValue) {
+  //     const { fullData } = newValue;
+  //     const selectedAddress =
+  //       fullData.address1?.trim() ||
+  //       fullData.address2?.trim() ||
+  //       fullData.address3?.trim() ||
+  //       "";
+  //     const selectedCity = fullData.city || "";
+  //     const selectedCountry = fullData.country || "";
+  //     const formattedAddress = selectedAddress
+  //       ? `${selectedAddress}, ${selectedCity}, ${selectedCountry}`
+  //       : "";
+  //     onChange({
+  //       target: {
+  //         name: id,
+  //         // value: newValue.value,
+  //         value: newValue?.fullData?.id,
+
+  //         formattedAddress,
+  //         id: newValue.fullData?.id,
+  //       },
+  //     });
+  //   } else {
+  //     onChange({
+  //       target: { name: id, value: null, formattedAddress: "", id: "" },
+  //     });
+  //   }
+  // };
+
+  // const handleSelectionChange = (event, newValue) => {
+  //   if (newValue) {
+  //     const result = {
+  //       [idKey]: newValue?.fullData?.id,
+  //       [nameKey]: newValue?.label,
+  //     };
+  //     onChange(result);
+  //   } else {
+  //     onChange({ [idKey]: null, [nameKey]: "" });
+  //   }
+  // };
+
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
       const { fullData } = newValue;
+
+      // Create formattedAddress if address fields are present
       const selectedAddress =
-        fullData.address1?.trim() ||
-        fullData.address2?.trim() ||
-        fullData.address3?.trim() ||
+        fullData?.address1?.trim() ||
+        fullData?.address2?.trim() ||
+        fullData?.address3?.trim() ||
         "";
-      const selectedCity = fullData.city || "";
-      const selectedCountry = fullData.country || "";
+      const selectedCity = fullData?.city || "";
+      const selectedCountry = fullData?.country || "";
       const formattedAddress = selectedAddress
         ? `${selectedAddress}, ${selectedCity}, ${selectedCountry}`
         : "";
-      onChange({
-        target: { name: id, value: newValue.value, formattedAddress },
-      });
+
+      // Create result
+      const result = {
+        [idKey]: fullData?.id,
+        [nameKey]: newValue?.label,
+        formattedAddress, // ✅ add this
+      };
+
+      onChange(result);
     } else {
-      onChange({ target: { name: id, value: null, formattedAddress: "" } });
+      onChange({
+        [idKey]: null,
+        [nameKey]: "",
+        formattedAddress: "",
+      });
     }
   };
 
@@ -82,7 +146,9 @@ function FormAutoComplete(props) {
         size="small"
         id={id}
         noOptionsText="Type to Search"
-        value={options.find((option) => option.value == value) || null}
+        // value={options.find((option) => option.value === value) || null}
+        value={selectedOption}
+        // value={options.find((option) => option.fullData?.id == value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}

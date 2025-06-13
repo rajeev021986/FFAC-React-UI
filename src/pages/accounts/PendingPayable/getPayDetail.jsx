@@ -39,7 +39,6 @@ export default function GetPayDetails({
 }) {
   //
 
-  
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const [addPaybleEntry, { isLoading }] = useAddPaybleEntryMutation();
@@ -78,11 +77,12 @@ export default function GetPayDetails({
       setIsDisabled(false);
     }
   }, [initialValues]);
+
   const validationSchema = Yup.object({
     currency: Yup.string().required("Currency is required!"),
     paymentType: Yup.string().required("Payment Type is required!"),
     paymentDate: Yup.string().required("Payment Date is required!"),
-    bankName: Yup.string().when("paymentType", {
+    bankId: Yup.string().when("paymentType", {
       is: (val) => val === "Cheque",
       then: () =>
         Yup.string().required(
@@ -109,6 +109,7 @@ export default function GetPayDetails({
       otherwise: () => Yup.string().nullable(),
     }),
   });
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -133,12 +134,14 @@ export default function GetPayDetails({
           paymentType: values?.paymentType || "",
           paymentDate: values?.paymentDate || new Date().toISOString(),
           currency: values?.currency || "",
+          bankId: values?.bankId || "",
           bankName: values?.bankName || "",
           chequeNo: values?.chequeNo || "",
           chequeDate: values?.chequeDate || "",
           usdAmountToBePaid: values?.usdAmountToBePaid || 0,
           localAmountToBePaid: values?.localAmountToBePaid || 0,
           bankCharges: values?.bankCharges || "",
+          vendorId: initialValues?.vendorId || "",
         };
         const multiplePayload = {
           paybleIds: values?.paybleIds || [],
@@ -172,8 +175,6 @@ export default function GetPayDetails({
       }
     },
   });
-  console.log("initialValues", initialValues);
-console.log("formik.values", formik.values.chequeNo);
 
   const { data: customerSettingsData } =
     useGetOptionsSettingsQuery("customer_settings");
@@ -197,6 +198,7 @@ console.log("formik.values", formik.values.chequeNo);
       });
     }
   }, [customerSettingsData, payableSettingData, optionsSettingsData]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -233,10 +235,6 @@ console.log("formik.values", formik.values.chequeNo);
 
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
-
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
 
   useEffect(() => {
     if (payableRef?.current) {
@@ -407,7 +405,7 @@ console.log("formik.values", formik.values.chequeNo);
 
                         if (value !== "Cheque") {
                           // Clear cheque-related fields when changing from Cheque to something else
-                          formik.setFieldValue("bankName", "");
+                          formik.setFieldValue("bankId", "");
                           formik.setFieldValue("chequeNo", "");
                           formik.setFieldValue("chequeDate", "");
                         }
@@ -418,11 +416,21 @@ console.log("formik.values", formik.values.chequeNo);
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <FormAutoComplete
                       label="Bank Name"
-                      id="bankName"
+                      id="bankId"
                       suggestionName="bank_name"
-                      value={formik.values.bankName}
-                      error={formik.errors.bankName}
-                      onChange={formik.handleChange}
+                      idKey="bankId"
+                      nameKey="bankName"
+                      // value={formik.values.bankId}
+                      value={{
+                        bankId: formik.values.bankId,
+                        bankName: formik.values.bankName,
+                      }}
+                      error={formik.errors.bankId}
+                      // onChange={formik.handleChange}
+                      onChange={(selected) => {
+                        formik.setFieldValue("bankId", selected.bankId);
+                        formik.setFieldValue("bankName", selected.bankName);
+                      }}
                       disabled={
                         formik.values.paymentType === "Cheque" && !isDisabled
                           ? false
@@ -433,9 +441,9 @@ console.log("formik.values", formik.values.chequeNo);
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
                     <InputBox
-                      label="Cheque No."
+                      label="Cheque No"
                       id="chequeNo"
-                      value={formik.values.chequeNo}
+                      value={formik.values.chequeNo || ""}
                       error={formik.errors.chequeNo}
                       onChange={formik.handleChange}
                       disabled={
@@ -443,7 +451,6 @@ console.log("formik.values", formik.values.chequeNo);
                           ? false
                           : true
                       }
-                      // inputRef={payableRef}
                     />
                   </Grid>
 
@@ -550,7 +557,21 @@ console.log("formik.values", formik.values.chequeNo);
                 >
                   <Stack direction="row" spacing={2}>
                     <ThemeButton
-                      onClick={formik.handleSubmit}
+                      onClick={async () => {
+                        const errors = await formik.validateForm();
+
+                        if (Object.keys(errors).length > 0) {
+                          formik.setTouched(
+                            Object.fromEntries(
+                              Object.keys(errors).map((key) => [key, true])
+                            ),
+                            true
+                          );
+                          getFirstError(errors);
+                        } else {
+                          formik.handleSubmit(); 
+                        }
+                      }}
                       sx={{
                         fontWeight: "500",
                         color: "white !important",

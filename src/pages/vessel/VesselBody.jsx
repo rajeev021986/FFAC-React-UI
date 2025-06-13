@@ -21,6 +21,7 @@ import DeleteDialog from "../../components/common/DeleteDialog";
 import toast from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
+import GridActions from "../../components/common/Grid/GridActions";
 
 export function VesselBody({ selectBox, setSelectBox }) {
   const nav = useNavigate();
@@ -85,6 +86,10 @@ export function VesselBody({ selectBox, setSelectBox }) {
         logicalOperator: "and",
       };
     });
+
+  CARD_VESSEL_COLUMNS[CARD_VESSEL_COLUMNS.length - 1].renderCell = GridActions({
+    actions: getVesselListGridActions(nav, setModal),
+  });
 
   const {
     data: vesselData,

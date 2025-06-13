@@ -15,7 +15,7 @@ import ApiManager from "../../../services/ApiManager";
 import Loader from "../../../components/common/Loader/Loader";
 import CloseIcon from "@mui/icons-material/Close";
 
-const PayableViewModal = ({ viewType, open, onClose, data }) => {
+const PayableViewModal = ({ viewType, open, onClose, refetch, data }) => {
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = React.useState({
     id: "",
@@ -27,6 +27,7 @@ const PayableViewModal = ({ viewType, open, onClose, data }) => {
     payableRefNo: "",
     jobNo: "",
     invoiceDate: "",
+    vendorId: "",
     vendorName: "",
     vendorInvoiceNo: "",
     vendorInvoiceDate: "",
@@ -43,7 +44,7 @@ const PayableViewModal = ({ viewType, open, onClose, data }) => {
     shillingNetAmountPayable: "",
     shillingCostCentre: "",
     paybleDetails: [],
-    paidstatus :null,
+    paidstatus: null,
   });
 
   const fetchPayableData = async () => {
@@ -66,6 +67,7 @@ const PayableViewModal = ({ viewType, open, onClose, data }) => {
         jobNo: res.body?.jobNo,
         invoiceDate: res.body?.invoiceDate,
         vendorName: res.body?.vendorName,
+        vendorId: res.body?.vendorId,
         vendorInvoiceNo: res.body?.vendorInvoiceNo,
         vendorInvoiceDate: res.body?.vendorInvoiceDate,
         currency: res.body?.currency || "",
@@ -82,7 +84,7 @@ const PayableViewModal = ({ viewType, open, onClose, data }) => {
         shillingNetAmountPayable: res.body?.shillingNetAmountPayable,
         shillingCostCentre: res.body?.shillingCostCentre,
         paybleDetails: res?.body?.paybleDetails || [],
-        paidStatus: res?.body?.paidStatus ||  null,
+        paidStatus: res?.body?.paidStatus || null,
       });
       setLoading(false);
     } catch (error) {
@@ -121,9 +123,21 @@ const PayableViewModal = ({ viewType, open, onClose, data }) => {
           </DialogTitle>
           <DialogContent>
             {viewType === "view" ? (
-              <AddEditForm viewPage="view" initialValues={initialValues} onClose ={onClose}/>
+              <AddEditForm
+                viewPage="view"
+                initialValues={initialValues}
+                onClose={onClose}
+                refetch={refetch}
+                refetchPayableData={fetchPayableData}
+              />
             ) : (
-              <AddEditForm viewPage="editForm" initialValues={initialValues} onClose ={onClose}/>
+              <AddEditForm
+                viewPage="editForm"
+                initialValues={initialValues}
+                onClose={onClose}
+                refetch={refetch}
+                refetchPayableData={fetchPayableData}
+              />
             )}
           </DialogContent>
         </Dialog>

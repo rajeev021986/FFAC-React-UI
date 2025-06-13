@@ -60,14 +60,14 @@ export default function VendorForm({ page = "vendor" }) {
     add1: Yup.string().required("Address is required"),
     alias: Yup.string(),
     telephone1: Yup.string()
-      .required("Telephone 1 is required")
-      .matches(/^\d+$/, "Telephone must be a valid number")
-      .matches(/^\d{10,15}$/, "Telephone 1 must be between 10 and 15 digits"),
+      // .required("Telephone 1 is required")
+      .matches(/^\d+$/, "Mob number is  b/w 10 to 15 digits")
+      .matches(/^\d{10,15}$/, "Mob number is  b/w 10 to 15 digits"),
 
     telephone2: Yup.string()
-      .required("Telephone 2 is required")
-      .matches(/^\d+$/, "Telephone must be a valid number")
-      .matches(/^\d{10,15}$/, "Telephone 2 must be between 10 and 15 digits"),
+      // .required("Telephone 2 is required")
+      .matches(/^\d+$/, "Mob number is  b/w 10 to 15 digits")
+      .matches(/^\d{10,15}$/, "Mob number is  b/w 10 to 15 digits"),
     fax: Yup.string(),
     emailId: Yup.string()
       // .required("Email is required")
@@ -94,7 +94,8 @@ export default function VendorForm({ page = "vendor" }) {
       /^[A-Za-z\s]+$/,
       "City must only contain letters"
     ),
-    country: Yup.string(),
+    // countryId: Yup.string(),
+    // country: Yup.string(),
     creditDays: Yup.number().min(0, "Credit Days cannot be negative"),
     province: Yup.string().matches(
       /^[A-Za-z\s]+$/,
@@ -143,6 +144,11 @@ export default function VendorForm({ page = "vendor" }) {
     //     thirdWeek: Yup.string().required("Third Week is required"),
     //   })
     // ).required("Vendor Entity Demurage Tariffs are required"),
+    vendorEntityTariffs:Yup.array(
+      Yup.object({
+        chargeId:Yup.string().required("Charge Name is required")
+      })
+    ),
     vendorEntityFreeDays: Yup.array(
       Yup.object({
         id: Yup.number(),
@@ -227,7 +233,8 @@ export default function VendorForm({ page = "vendor" }) {
     tinNo: null,
     vrnNo: null,
     city: "",
-    country: "",
+    countryId: "",
+    countryName:"",
     creditDays: 0,
     province: "",
     poNo: "",
@@ -246,6 +253,7 @@ export default function VendorForm({ page = "vendor" }) {
     validationSchema,
     validateOnChange: false,
     onSubmit: async (values) => {
+    
       let updatedValue = {
         ...values,
         vendorEntityTariffs: values.vendorEntityTariffs.map((s) =>

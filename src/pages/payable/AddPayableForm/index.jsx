@@ -24,7 +24,8 @@ export default function AddPayableEntry({ page }) {
     payableRefNo: "",
     jobNo: "",
     invoiceDate: "",
-    vendorName: "",
+    vendorId: "",
+    vendorName:"",
     vendorInvoiceNo: "",
     vendorInvoiceDate: "",
     currency: "",
@@ -61,7 +62,8 @@ export default function AddPayableEntry({ page }) {
         payableRefNo: res.body?.payableRefNo,
         jobNo: res.body?.jobNo,
         invoiceDate: res.body?.invoiceDate,
-        vendorName: res.body?.vendorName,
+        vendorId: res.body?.vendorId,
+        vendorName:res?.body?.vendorName || res?.body?.vendor,
         vendorInvoiceNo: res.body?.vendorInvoiceNo,
         vendorInvoiceDate: res.body?.vendorInvoiceDate,
         currency: res.body?.currency || "INR",
@@ -100,6 +102,7 @@ export default function AddPayableEntry({ page }) {
       setLoading(false);
     }
   }, [state?.initialValues?.id]);
+
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>

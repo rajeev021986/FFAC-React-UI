@@ -16,7 +16,7 @@ const Chips = {
       { value: -2, label: "In Active" },
       { value: 0, label: "New & Pen Doc" },
       { value: -1, label: "Rejected" },
-      { value: -3, label: "Cancel" },
+      { value: -3, label: "Canceled" },
     ],
   },
   customerName: {
@@ -89,14 +89,30 @@ const Chips = {
   name: {
     chipLabel: "Name",
   },
+  paybleRefNum: {
+    chipLabel: "Payable Ref No",
+  },
   statusCode: {
     chipLabel: "Status",
     chipvalues: [
       { value: 1, label: "Active" },
       { value: -2, label: "In Active" },
       { value: 0, label: "Pending" },
-      { value: -3, label: "Cancel" },
+      { value: -3, label: "Canceled" },
       { value: -1, label: "Rejected" },
+    ],
+  },
+  type: {
+    chipLabel: "Invoice Type",
+    chipvalues: [
+      {
+        label: "Tax Invoice",
+        value: "tax_invoice",
+      },
+      {
+        label: "Debit Note",
+        value: "debit_note",
+      },
     ],
   },
   paymentStatus: {

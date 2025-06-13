@@ -1,16 +1,23 @@
 import { Box, Button, IconButton, Tooltip } from "@mui/material";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import InputBoxForGrid from "../../../common/InputBoxForGrid";
 import { Delete } from "@mui/icons-material";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
+import AutoCompleteInput from "../../../common/AutoCompletInput";
+import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import SelectBox from "../../../common/SelectBox";
+import ApiManager from "../../../../services/ApiManager";
 
 export default function CustomerBankDetails({
   formik,
   dropdownData,
   disabled,
 }) {
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
   const bankDetails = formik.values.bankDetails || [];
 
   const newRowRef = useRef(null);
@@ -54,7 +61,42 @@ export default function CustomerBankDetails({
       ),
     });
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
+        const backendData = await response.body;
 
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
+        ];
+
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
   // Columns for DataGrid
   const columns = [
     {
@@ -69,6 +111,7 @@ export default function CustomerBankDetails({
             value={params.value}
             field={params.field}
             id={params.id}
+            error={formik.errors.bankDetails?.[params.rowIndex]?.bankName}
             formik={formik}
             api={params.api}
             arrayName="bankDetails"
@@ -89,6 +132,7 @@ export default function CustomerBankDetails({
             value={params.value}
             field={params.field}
             id={params.id}
+            error={formik.errors.bankDetails?.[params.rowIndex]?.bankName}
             formik={formik}
             api={params.api}
             arrayName="bankDetails"
@@ -109,6 +153,7 @@ export default function CustomerBankDetails({
             field={params.field}
             id={params.id}
             formik={formik}
+            error={formik.errors.bankDetails?.[params.rowIndex]?.accountNo}
             api={params.api}
             arrayName="bankDetails"
             type="number"
@@ -124,14 +169,28 @@ export default function CustomerBankDetails({
       headerAlign: "center",
       renderCell: (params) => {
         return (
-          <InputBoxForGridTab
-            value={params.value}
-            field={params.field}
-            id={params.id}
-            formik={formik}
-            api={params.api}
-            arrayName="bankDetails"
-          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <SelectBox
+              placeholder={true}
+              size="small"
+              sx={{
+                marginTop: "0px",
+                marginBottom: "0px",
+                fontSize: "14px",
+              }}
+              options={mergedCurrencyOptions}
+              value={params.value}
+              onChange={(e) => updateRowValue(params, e, "bankDetails")}
+            />
+          </div>
         );
       },
     },
@@ -149,6 +208,7 @@ export default function CustomerBankDetails({
             id={params.id}
             formik={formik}
             api={params.api}
+            error={formik.errors.bankDetails?.[params.rowIndex]?.swiftCode}
             arrayName="bankDetails"
           />
         );

@@ -121,7 +121,6 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
           );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
-
           let response = await updateConsignee({
             ...values,
             consigneeEntityFreeDays: freeDays,
@@ -172,9 +171,6 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
     }
   }, [optionsSettingsData]);
   const disabled = page == "consignee" ? false : true;
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
 
   return (
     <>
@@ -350,11 +346,25 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                     >
                       <FormAutoComplete
                         label="Country"
-                        id="country"
+                        id="countryId"
                         suggestionName="country"
-                        value={formik.values.country}
-                        error={formik.errors.country}
-                        onChange={formik.handleChange}
+                        value={{
+                          countryId: formik.values.countryId,
+                          countryName: formik.values.countryName,
+                        }}
+                        error={formik.errors.countryId}
+                        idKey="countryId"
+                        nameKey="countryName"
+                        // onChange={formik.setFieldValue}
+                        onChange={(selected) => {
+                          formik.setFieldValue("countryId", selected.countryId);
+                          formik.setFieldValue(
+                            "countryName",
+                            selected.countryName
+                          );
+                        }}
+
+                        // onChange={formik.handleChange}
                       ></FormAutoComplete>
                     </Grid>
                     <Grid
@@ -438,7 +448,21 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                           Close
                         </OutlinedButton>
                         <ThemeButton
-                          onClick={formik.handleSubmit}
+                          onClick={async () => {
+                            const errors = await formik.validateForm();
+
+                            if (Object.keys(errors).length > 0) {
+                              formik.setTouched(
+                                Object.fromEntries(
+                                  Object.keys(errors).map((key) => [key, true])
+                                ),
+                                true
+                              );
+                              getFirstError(errors);
+                            } else {
+                              formik.handleSubmit();
+                            }
+                          }}
                           sx={{
                             fontWeight: "500",
                             borderRadius: "12px",
@@ -637,11 +661,25 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                   >
                     <FormAutoComplete
                       label="Country"
-                      id="country"
+                      id="countryId"
                       suggestionName="country"
-                      value={formik.values.country}
-                      error={formik.errors.country}
-                      onChange={formik.handleChange}
+                      value={{
+                        countryId: formik.values.countryId,
+                        countryName: formik.values.countryName,
+                      }}
+                      error={formik.errors.countryId}
+                      idKey="countryId"
+                      nameKey="countryName"
+                      // onChange={formik.setFieldValue}
+                      onChange={(selected) => {
+                        formik.setFieldValue("countryId", selected.countryId);
+                        formik.setFieldValue(
+                          "countryName",
+                          selected.countryName
+                        );
+                      }}
+
+                      // onChange={formik.handleChange}
                     ></FormAutoComplete>
                   </Grid>
 
@@ -711,7 +749,11 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                         </Box>
                         <TabPanel value={1} sx={{ margin: 0, padding: 0 }}>
                           {" "}
-                          <AddMapping disabled={disabled} formik={formik} />
+                          <AddMapping
+                            disabled={disabled}
+                            formik={formik}
+                            dropdownData={dropdownData}
+                          />
                         </TabPanel>
                       </TabContext>
                     </Box>
@@ -738,7 +780,21 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                         </OutlinedButton>
 
                         <ThemeButton
-                          onClick={formik.handleSubmit}
+                          onClick={async () => {
+                            const errors = await formik.validateForm();
+
+                            if (Object.keys(errors).length > 0) {
+                              formik.setTouched(
+                                Object.fromEntries(
+                                  Object.keys(errors).map((key) => [key, true])
+                                ),
+                                true
+                              );
+                              getFirstError(errors); // Show toast from here directly
+                            } else {
+                              formik.handleSubmit(); // Submit if valid
+                            }
+                          }}
                           sx={{ fontWeight: "500", color: "white !important" }}
                         >
                           {loadingUpdate && (

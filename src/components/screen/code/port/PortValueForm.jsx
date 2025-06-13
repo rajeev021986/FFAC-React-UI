@@ -18,9 +18,6 @@ export default function PortValueForm({
   const nav = useNavigate();
   const { data: portSettingsData } =
     useGetOptionsSettingsQuery("port_settings");
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
 
   const FieldRef = useRef(null);
   useEffect(() => {
@@ -200,11 +197,22 @@ export default function PortValueForm({
         >
           <FormAutoComplete
             label="Country"
-            id="country"
+            id="countryId"
             suggestionName="country"
-            value={formik.values.country}
-            error={formik.errors.country}
-            onChange={formik.handleChange}
+            value={{
+              countryId: formik.values.countryId,
+              countryName: formik.values.countryName,
+            }}
+            error={formik.errors.countryId}
+            idKey="countryId"
+            nameKey="countryName"
+            // onChange={formik.setFieldValue}
+            onChange={(selected) => {
+              formik.setFieldValue("countryId", selected.countryId);
+              formik.setFieldValue("countryName", selected.countryName);
+            }}
+
+            // onChange={formik.handleChange}
           ></FormAutoComplete>
         </Grid>
         <Grid
@@ -219,11 +227,19 @@ export default function PortValueForm({
         >
           <FormAutoComplete
             label="Region"
-            id="region"
+            id="regionId"
             suggestionName="region"
-            value={formik.values.region}
-            error={formik.errors.region}
-            onChange={formik.handleChange}
+            idKey="regionId"
+            nameKey="regionName"
+            value={{
+              regionId: formik.values.regionId,
+              regionName: formik.values.regionName,
+            }}
+            error={formik.errors.regionId}
+            onChange={(selected) => {
+              formik.setFieldValue("regionId", selected.regionId);
+              formik.setFieldValue("regionName", selected.regionName);
+            }}
             inputRef={FieldRef}
           ></FormAutoComplete>
         </Grid>
@@ -254,7 +270,21 @@ export default function PortValueForm({
               Close
             </OutlinedButton>
             <ThemeButton
-              onClick={formik.handleSubmit}
+              onClick={async () => {
+                const errors = await formik.validateForm();
+
+                if (Object.keys(errors).length > 0) {
+                  formik.setTouched(
+                    Object.fromEntries(
+                      Object.keys(errors).map((key) => [key, true])
+                    ),
+                    true
+                  );
+                  getFirstError(errors);
+                } else {
+                  formik.handleSubmit();
+                }
+              }}
               sx={{ fontWeight: "500", color: "white !important" }}
             >
               {loading && <CircularProgress size={20} color="white" />}{" "}

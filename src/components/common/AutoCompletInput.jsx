@@ -23,7 +23,10 @@ function AutoCompleteInput({
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
-  const tooltipMessage = value ? value : "This field is empty";
+  const tooltipMessage =
+    typeof value === "object" && value?.label
+      ? value.label
+      : "This field is empty";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,20 +51,61 @@ function AutoCompleteInput({
 
   const handleInputChange = async (event, newValue) => {
     setLoading(false);
-    const filtered = options.filter((option) =>
-      option.label.toLowerCase().includes(newValue.toLowerCase())
+    const filtered = options?.filter((option) =>
+      option?.label?.toLowerCase().includes(newValue?.toLowerCase())
     );
 
     setFilteredOptions(filtered);
   };
 
+  // const handleSelectionChange = (event, newValue) => {
+  //   if (newValue) {
+  //     // onChange(newValue.value);
+
+  //     onChange(newValue.fullData?.id ? newValue.fullData?.id : newValue?.value);
+  //   } else {
+  //     onChange(null);
+  //   }
+  // };
+
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      onChange(newValue.value);
+      if (id == "currency" || id == "shippingLine") {
+        // For currency: return only label as string
+        onChange(newValue.label);
+      } else {
+        // For others: return object
+        onChange({
+          id: newValue.fullData?.id ?? newValue?.value,
+          label: newValue.label ?? "",
+        });
+      }
     } else {
-      onChange(null);
+      onChange(id === "currency" || id == 'shippingLine'  ? "" : null);
     }
   };
+  
+
+const selectedOption =
+  options.find((option) => {
+    if (!value) return false;
+
+    // If currency field expects a string, match it against label or value
+    if (id === "currency" && typeof value === "string") {
+      return (
+        option.label === value ||
+        option.value === value
+      );
+    }
+
+    // For all other fields, expect value to be object
+    const valId = typeof value === "object" ? value.id : value;
+    return (
+      option.fullData?.id == valId ||
+      option.value == valId
+    );
+  }) || null;
+
 
   return (
     <Box
@@ -77,7 +121,14 @@ function AutoCompleteInput({
     >
       <Autocomplete
         id={id}
-        value={options.find((option) => option.value === value) || null}
+        value={selectedOption}
+        // value={
+        //   id == "currency"
+        //     ? options.find((option) => option.value === value) || null
+        //     : options.find((option) => option?.fullData?.id == value) || null
+        // }
+
+        // value={options.find((option) => option?.fullData?.id == value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}

@@ -63,5 +63,13 @@ export const CARD_VESSEL_COLUMNS = [
         align: 'center',
         editable: false
     },
+    {
+        flex: 1,
+        field: 'action',
+        headerName: 'Action',
+        width: 110,
+        headerAlign: 'center',
+        align: 'center', editable: false
+    }
 
 ]

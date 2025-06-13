@@ -145,9 +145,6 @@ export function VesselVoyageForm({ initialValues, type }) {
     { label: "Close", value: "close" },
     { label: "Open", value: "open" },
   ];
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
 
   return (
     <>
@@ -191,11 +188,22 @@ export function VesselVoyageForm({ initialValues, type }) {
                     >
                       <FormAutoComplete
                         label="Vessel Name*"
-                        id="vessel"
+                        id="vesselId"
                         suggestionName="vessel_name"
-                        value={formik.values.vessel}
-                        error={formik.errors.vessel}
-                        onChange={formik.handleChange}
+                        value={{
+                          vesselId: formik.values.vesselId,
+                          vesselName: formik.values.vesselName,
+                        }}
+                        error={formik.errors.vesselId}
+                        idKey="vesselId"
+                        nameKey="vesselName"
+                        onChange={(selected) => {
+                          formik.setFieldValue("vesselId", selected.vesselId);
+                          formik.setFieldValue(
+                            "vesselName",
+                            selected.vesselName
+                          );
+                        }}
                         inputRef={FieldRef}
                       ></FormAutoComplete>
                     </Grid>
@@ -473,7 +481,21 @@ export function VesselVoyageForm({ initialValues, type }) {
                         Close
                       </OutlinedButton>
                       <ThemeButton
-                        onClick={formik.handleSubmit}
+                        onClick={async () => {
+                          const errors = await formik.validateForm();
+
+                          if (Object.keys(errors).length > 0) {
+                            formik.setTouched(
+                              Object.fromEntries(
+                                Object.keys(errors).map((key) => [key, true])
+                              ),
+                              true
+                            );
+                            getFirstError(errors);
+                          } else {
+                            formik.handleSubmit();
+                          }
+                        }}
                         sx={{
                           fontWeight: "500",
                           borderRadius: "12px",
@@ -542,11 +564,22 @@ export function VesselVoyageForm({ initialValues, type }) {
                     >
                       <FormAutoComplete
                         label="Vessel Name*"
-                        id="vessel"
+                        id="vesselId"
                         suggestionName="vessel_name"
-                        value={formik.values.vessel}
-                        error={formik.errors.vessel}
-                        onChange={formik.handleChange}
+                        value={{
+                          vesselId: formik.values.vesselId,
+                          vesselName: formik.values.vesselName,
+                        }}
+                        error={formik.errors.vesselId}
+                        idKey="vesselId"
+                        nameKey="vesselName"
+                        onChange={(selected) => {
+                          formik.setFieldValue("vesselId", selected.vesselId);
+                          formik.setFieldValue(
+                            "vesselName",
+                            selected.vesselName
+                          );
+                        }}
                         inputRef={FieldRef}
                       ></FormAutoComplete>
                     </Grid>
@@ -847,7 +880,21 @@ export function VesselVoyageForm({ initialValues, type }) {
                         Close
                       </OutlinedButton>
                       <ThemeButton
-                        onClick={formik.handleSubmit}
+                        onClick={async () => {
+                          const errors = await formik.validateForm();
+
+                          if (Object.keys(errors).length > 0) {
+                            formik.setTouched(
+                              Object.fromEntries(
+                                Object.keys(errors).map((key) => [key, true])
+                              ),
+                              true
+                            );
+                            getFirstError(errors); // Show toast from here directly
+                          } else {
+                            formik.handleSubmit(); // Submit if valid
+                          }
+                        }}
                         sx={{
                           fontWeight: "500",
                           borderRadius: "12px",

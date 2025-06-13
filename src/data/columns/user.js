@@ -27,7 +27,7 @@ export const USER_MANAGEMENT_COLUMNS = [
     },
     {
         flex: 1,
-        field: 'companyCode',
+        field: 'companyName',
         headerName: 'Company Name',
         width: 110,
         headerAlign: 'center',

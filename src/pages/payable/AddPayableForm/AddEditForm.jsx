@@ -52,6 +52,8 @@ import UploadFile from "../../../components/UploadFile";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 import { formatIndianCurrency } from "../../../components/utils/utils";
+import FormAutoCompleteForJobNo from "../../../components/common/AutoComplete/FormAutoCompleteForJobNo";
+import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoComplete/FormAutoCompleteWithExchangeLoader";
 
 export default function AddEditForm({
   initialValues,
@@ -59,6 +61,8 @@ export default function AddEditForm({
   viewPage,
   type = "notcopy",
   onClose,
+  refetchPayableData,
+  refetch,
 }) {
   const style = {
     position: "absolute",
@@ -124,7 +128,10 @@ export default function AddEditForm({
       setIsDisabled(false);
     }
   }, [viewPage, initialValues?.paidStatus]);
-
+  const handleClose = () => {
+    onClose();
+    refetch();
+  };
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -210,6 +217,7 @@ export default function AddEditForm({
         }
       } else {
         // If there is an id, proceed with the update action
+
         try {
           setRejectError(false);
           let paybleDetailsData = values.paybleDetails.map((item) =>
@@ -217,6 +225,33 @@ export default function AddEditForm({
           );
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
+          if (viewPage === "editForm") {
+            const { vendorInvoiceNo, isDoc } = formik.values;
+            if (vendorInvoiceNo && !isDoc) {
+              toast.custom(
+                <CustomToast
+                  message="Please submit document as invoice type"
+                  toast="error"
+                />,
+                {
+                  closeButton: false,
+                }
+              );
+              return; // Prevent updating
+            }
+            if (formik.values?.paybleDetails.length === 0) {
+              toast.custom(
+                <CustomToast
+                  message="Please add charge details before updating"
+                  toast="error"
+                />,
+                {
+                  closeButton: false,
+                }
+              );
+              return; // Prevent update
+            }
+          }
           let response = await updatePaybleEntry({
             ...values,
             paybleDetails: paybleDetailsData,
@@ -227,7 +262,7 @@ export default function AddEditForm({
             toast.custom(<CustomToast message={message} toast="success" />, {
               closeButton: false,
             });
-            viewPage === "editForm" ? onClose() : nav(-1);
+            viewPage === "editForm" ? handleClose() : nav(-1);
           } else {
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
@@ -429,10 +464,6 @@ export default function AddEditForm({
   };
 
   useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
-
-  useEffect(() => {
     if (payableRef?.current) {
       payableRef.current.focus();
     }
@@ -468,36 +499,9 @@ export default function AddEditForm({
       formik.setFieldValue("exchangeRate", 1);
     }
   }, [formik?.values?.currency]);
-
-  // const FieldRef = useRef(null);
-  // useEffect(() => {
-  //   if (FieldRef.current) {
-  //     FieldRef.current.focus();
-  //   }
-  // }, []);
-
-  const CurrencyData = [
-    {
-      label: "TZS",
-      value: "TZS",
-    },
-    {
-      label: "USD",
-      value: "USD",
-    },
-  ];
-
-  //
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);
-
-  const disabled =
-    formik?.values?.statusCode === 1 ||
-    formik?.values?.statusCode === -3 ||
-    viewPage === "view"
-      ? true
-      : false;
 
   const handleEditClick = (data) => {
     setSelectedPayEntry(data);
@@ -588,7 +592,7 @@ export default function AddEditForm({
     {
       flex: 1,
       field: "noOfUnit",
-      headerName: "No Unit Units",
+      headerName: "No Of Units",
       headerAlign: "center",
       align: "center",
       editable: false,
@@ -721,6 +725,7 @@ export default function AddEditForm({
     };
   };
   const getAmountData = getPaybleDetailsTotals(chargesData);
+
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -809,11 +814,22 @@ export default function AddEditForm({
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <FormAutoCompleteWithLoader
-                      label="Job No.*"
+                    {/* <FormAutoCompleteWithLoader
+                      label="Job No."
                       id="jobNo"
                       value={formik.values.jobNo}
                       error={formik.errors.jobNo}
+                      name ={true}
+                      onChange={formik.handleChange}
+                      suggestionName="job_no"
+                      disabled={isDisabled}
+                    /> */}
+                    <FormAutoCompleteForJobNo
+                      label="Job No*."
+                      id="jobNo"
+                      value={formik.values.jobNo}
+                      error={formik.errors.jobNo}
+                      name={true}
                       onChange={formik.handleChange}
                       suggestionName="job_no"
                       disabled={isDisabled}
@@ -834,13 +850,31 @@ export default function AddEditForm({
                   </Grid>
 
                   <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    <FormAutoCompleteWithLoader
-                      label="Vendor Name*"
-                      id="vendorName"
+                    {/* <FormAutoCompleteWithLoader
+                      label="Vendor Name"
+                      id="vendorId"
                       suggestionName="vendor_name"
-                      value={formik.values.vendorName}
-                      error={formik.errors.vendorName}
+                      value={formik.values.vendorId}
+                      error={formik.errors.vendorId}
                       onChange={formik.handleChange}
+                      disabled={isDisabled}
+                    /> */}
+
+                    <FormAutoCompleteWithLoader
+                      label="Vendor Name"
+                      id="vendorId"
+                      suggestionName="vendor_name"
+                      value={{
+                        vendorId: formik.values.vendorId,
+                        vendorName: formik.values.vendorName,
+                      }}
+                      error={formik.errors.vendorId}
+                      idKey="vendorId"
+                      nameKey="vendorName"
+                      onChange={(selected) => {
+                        formik.setFieldValue("vendorId", selected.vendorId);
+                        formik.setFieldValue("vendorName", selected.vendorName);
+                      }}
                       disabled={isDisabled}
                     />
                   </Grid>
@@ -913,7 +947,7 @@ export default function AddEditForm({
                         }
                       />
                     ) : (
-                      <FormAutoCompleteWithLoader
+                      <FormAutoCompleteWithExchangeLoader
                         label="Ex. Rate"
                         id="exchangeRate"
                         value={formik.values.exchangeRate}
@@ -921,7 +955,29 @@ export default function AddEditForm({
                         onChange={formik.handleChange}
                         suggestionName="usd_exchange"
                         disabled={isDisabled}
+                        name={true}
+                        other={formik.values.currency}
                       />
+                      // <FormAutoCompleteWithLoader
+                      //   label="Ex. Rate"
+                      //   id="exchangeRate"
+                      //   value={{
+                      //     exRateId: formik.values?.exRateId,
+                      //     exchangeRate: formik.values?.exchangeRate,
+                      //   }}
+                      //   sendLabelOnly={true}
+                      //   error={formik.errors.exchangeRate}
+                      //   idKey="exRateId"
+                      //   nameKey="exchangeRate"
+                      //   // onChange={(e) => handleChange("exRate", e.target.value)}
+                      //   onChange={(selected) => {
+                      //     handleChange("exRateId", selected.exRateId);
+                      //     handleChange("exchangeRate", selected.exchangeRate);
+                      //   }}
+                      //   suggestionName="usd_exchange"
+                      //   name={true}
+                      //   other={formik.values.currency}
+                      // />
                     )}
                   </Grid>
 
@@ -1312,7 +1368,24 @@ export default function AddEditForm({
 
                         {!initialValues?.id ? (
                           <ThemeButton
-                            onClick={formik.handleSubmit}
+                            onClick={async () => {
+                              const errors = await formik.validateForm();
+
+                              if (Object.keys(errors).length > 0) {
+                                formik.setTouched(
+                                  Object.fromEntries(
+                                    Object.keys(errors).map((key) => [
+                                      key,
+                                      true,
+                                    ])
+                                  ),
+                                  true
+                                );
+                                getFirstError(errors);
+                              } else {
+                                formik.handleSubmit();
+                              }
+                            }}
                             sx={{
                               fontWeight: "500",
                               color: "white !important",
@@ -1325,7 +1398,24 @@ export default function AddEditForm({
                           </ThemeButton>
                         ) : (
                           <ThemeButton
-                            onClick={formik.handleSubmit}
+                            onClick={async () => {
+                              const errors = await formik.validateForm();
+
+                              if (Object.keys(errors).length > 0) {
+                                formik.setTouched(
+                                  Object.fromEntries(
+                                    Object.keys(errors).map((key) => [
+                                      key,
+                                      true,
+                                    ])
+                                  ),
+                                  true
+                                );
+                                getFirstError(errors); // Show toast from here directly
+                              } else {
+                                formik.handleSubmit(); // Submit if valid
+                              }
+                            }}
                             sx={{
                               fontWeight: "500",
                               color: "white !important",
@@ -1369,7 +1459,21 @@ export default function AddEditForm({
                         </OutlinedButton>
 
                         <ThemeButton
-                          onClick={formik.handleSubmit}
+                          onClick={async () => {
+                            const errors = await formik.validateForm();
+
+                            if (Object.keys(errors).length > 0) {
+                              formik.setTouched(
+                                Object.fromEntries(
+                                  Object.keys(errors).map((key) => [key, true])
+                                ),
+                                true
+                              );
+                              getFirstError(errors); // Show toast from here directly
+                            } else {
+                              formik.handleSubmit(); // Submit if valid
+                            }
+                          }}
                           sx={{
                             fontWeight: "500",
                             color: "white !important",
@@ -1428,6 +1532,7 @@ export default function AddEditForm({
               disabled={isDisabled}
               dropdownData={dropdownData.jobDocumentType}
               sourceType="PAYBLE_ENTRY"
+              refetchPayableData={refetchPayableData}
             />
           </TabPanel>
 

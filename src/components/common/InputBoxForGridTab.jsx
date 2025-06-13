@@ -54,6 +54,7 @@ const InputBoxForGridTab = (props) => {
             onBlur={handleBlur}
             onChange={handleChange}
             onKeyDown={handleKeyDown} 
+            error={formik?.errors?.[arrayName]?.[id]?.[field] ? true : false}
             fullWidth
             size="small"
             InputProps={{
@@ -70,6 +71,21 @@ const InputBoxForGridTab = (props) => {
             inputProps={{
               style: {
                 textAlign: "center",
+              },
+            }}
+            sx={{
+              // Hide arrows in Chrome, Safari, Edge, Opera
+              '& input[type=number]::-webkit-outer-spin-button': {
+                WebkitAppearance: 'none',
+                margin: 0,
+              },
+              '& input[type=number]::-webkit-inner-spin-button': {
+                WebkitAppearance: 'none',
+                margin: 0,
+              },
+              // Hide arrows in Firefox
+              '& input[type=number]': {
+                MozAppearance: 'textfield',
               },
             }}
             {...props}

@@ -3,6 +3,8 @@ import ApiManager from "../../services/ApiManager";
 const suggestionName = {
   country: "PORT_COUNTRY",
   chargeName: "CHARGE",
+  chargeId: "CHARGE",
+  mappedCharge: "MAPPED_CHARGE",
   currency: "CURRENCY",
   vesselName: "VESSEL",
   vessel: "VESSEL",
@@ -10,6 +12,7 @@ const suggestionName = {
   shippingLine: "SHIPPER",
   companyCode: "COMPANY",
   customerName: "CUSTOMER",
+  customerId: "CUSTOMER",
   supplierName: "SHIPPER",
   consigneeName: "CONSIGNEE",
   shippingLine: "VENDOR_TYPE",
@@ -23,10 +26,14 @@ const suggestionName = {
   bond_number: "BOND",
   region: "PORT_REGION",
   jobNo: "JOB_ENTRY",
+  jobNoId: "JOB_ENTRY",
   vendorName: "VENDOR",
+  vendorId: "VENDOR",
   unitType: "JOB_CONTAINER",
   noOfUnit: "JOB_CONTAINER",
   exchangeRate: "EXCHANGE_RATE",
+  exRate: "EXCHANGE_RATE",
+  unitTypeReceviable: "CUSTOMER_TARIFF",
 };
 
 export const GetAutoCompleteDataWithLoader = async (
@@ -34,14 +41,14 @@ export const GetAutoCompleteDataWithLoader = async (
   inputId,
   dataLabel,
   searchText,
-  other 
+  other
 ) => {
-  inputId = suggestionName[inputId];
+  inputId = suggestionName[inputId]; 
   try {
     const response = await ApiManager.fetchAutoCompleteData(
       searchText,
       inputId,
-      other || "",
+      other || ""
     );
     const data = await response.body;
 

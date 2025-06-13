@@ -26,6 +26,7 @@ export default function InputBox({
   minRows,
   multiline = false,
   error,
+  type,
   ...props
 }) {
   return (
@@ -33,6 +34,7 @@ export default function InputBox({
       id={id}
       name={id}
       label={label}
+      type={type}
       variant="outlined"
       fullWidth
       disabled={disabled}
@@ -45,8 +47,26 @@ export default function InputBox({
       multiline={multiline}
       autoComplete="off"
       error={error ? true : false}
-      sx={{ ...styles.root, ...sx }}
+      // sx={{ ...styles.root, ...sx }}
       {...props}
+      sx={{
+
+        ...styles.root,
+        ...sx,
+        // Hide arrows in Chrome, Safari, Edge, Opera
+        '& input[type=number]::-webkit-outer-spin-button': {
+          WebkitAppearance: 'none',
+          margin: 0,
+        },
+        '& input[type=number]::-webkit-inner-spin-button': {
+          WebkitAppearance: 'none',
+          margin: 0,
+        },
+        // Hide arrows in Firefox
+        '& input[type=number]': {
+          MozAppearance: 'textfield',
+        },
+      }}
     />
   );
 }

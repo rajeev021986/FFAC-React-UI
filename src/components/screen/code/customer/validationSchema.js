@@ -31,19 +31,19 @@ export const CustomerValidationSchema = () =>
       ),
     // .required("Email is required");
 
-    telephone: Yup.string()
-      // .required("Telephone is required")
-      .matches(/^\d+$/, "Telephone must be a valid number")
-      .test(
-        "len",
-        "Telephone must be between 7 and 15 digits",
-        (val) => val && val.length >= 7 && val.length <= 15
-      )
-      .test(
-        "positive",
-        "Telephone must be a positive number",
-        (val) => val && !val.startsWith("-")
-      ),
+    // telephone: Yup.string()
+    //   // .required("Telephone is required")
+    //   .matches(/^\d+$/, "Telephone must be a valid number")
+    //   .test(
+    //     "len",
+    //     "Telephone must be between 7 and 15 digits",
+    //     (val) => val && val.length >= 7 && val.length <= 15
+    //   )
+    //   .test(
+    //     "positive",
+    //     "Telephone must be a positive number",
+    //     (val) => val && !val.startsWith("-")
+    //   ),
     accountNo: Yup.number()
       .typeError("Account number must be a valid number")
       .positive("Account number must be positive"),
@@ -73,6 +73,7 @@ export const CustomerValidationSchema = () =>
     customerEntityTariffs: Yup.array().of(
       Yup.object().shape({
         unitRate: Yup.number().min(0, "Unit Rate must be a positive number"),
+        chargeId : Yup.string().required("Charge Name is required")
       })
     ),
 
@@ -90,4 +91,12 @@ export const CustomerValidationSchema = () =>
         ),
       })
     ),
+    bankDetails:Yup.array().of(
+      Yup.object().shape({
+        bankName: Yup.string().required("Bank Name is required"),
+        accountNo: Yup.string().required("Account Number is required"),
+        currency: Yup.string().required("Currency is required"),
+        swiftCode: Yup.string().required("Swift Code is required"),
+      })
+    )
   });

@@ -18,17 +18,19 @@ function FormAutoCompleteWithLoader(props) {
     value,
     error,
     onChange,
+    show,
+    name,
     disabled,
-    other, 
+    other,
+    idKey, 
+    nameKey,
+    sendLabelOnly,
   } = props;
-
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
-
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -51,7 +53,7 @@ function FormAutoCompleteWithLoader(props) {
     };
 
     fetchData();
-  }, [debounceValue, suggestionName, id, dataLabel]);
+  }, [debounceValue, suggestionName, id, dataLabel, value]);
 
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);
@@ -59,19 +61,49 @@ function FormAutoCompleteWithLoader(props) {
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
-      onChange({
-        target: {
-          name: id,
-          value: newValue.value,
-          count: newValue?.fullData?.count || 0,
-        },
-      });
+      if (sendLabelOnly) {
+        // 👇 Only send the label as value
+        onChange({
+          target: {
+            name: id,
+            value: newValue.label,
+          },
+        });
+      } else {
+        // 👇 Send both id + name
+        onChange({
+          [idKey]: newValue?.fullData?.id ?? newValue?.value,
+          [nameKey]: newValue?.label ?? "",
+          label: newValue?.label,
+          fullData: newValue?.fullData,
+        });
+      }
     } else {
-      onChange({
-        target: { name: id, value: null, count: 0 },
-      });
+      if (sendLabelOnly) {
+        onChange({
+          target: {
+            name: id,
+            value: "",
+          },
+        });
+      } else {
+        onChange({
+          [idKey]: null,
+          [nameKey]: "",
+          label: "",
+          fullData: null,
+        });
+      }
     }
   };
+
+  const selectedOption =
+    options.find(
+      (option) =>
+        option?.value == value?.[idKey] ||
+        option?.fullData?.id == value?.[idKey] ||
+        option?.label == value?.[nameKey]
+    ) || null;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -82,11 +114,16 @@ function FormAutoCompleteWithLoader(props) {
         size="small"
         id={id}
         disabled={disabled}
-        value={options.find((option) => option.value == value) || null}
+        value={
+          id == "exchangeRate" || id == "jobNo" 
+            ? options.find((option) => option.value == value) || value
+            : selectedOption
+        }
+        // value={selectedOption}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}
         options={filteredOptions}
-        getOptionLabel={(option) => option.label || ""}
+        getOptionLabel={(option) => option.label || value}
         renderInput={(params) => (
           <TextField
             {...params}

@@ -66,7 +66,7 @@ export default function UserCard({ setDraweropen }) {
       <TMenu
         buttonIcon={
           <Avatar alt="Remy Sharp" sx={styles.avater}>
-            {localStorage?.getItem("userId").charAt(0).toUpperCase()}
+            {localStorage?.getItem("userId")?.charAt(0).toUpperCase()}
           </Avatar>
         }
         buttonProps={{ p: 0 }}
@@ -75,9 +75,9 @@ export default function UserCard({ setDraweropen }) {
       <Typography variant="subtitle1" style={{ fontWeight: 500 }}>
         {localStorage
           .getItem("userId")
-          .split(" ")
-          .map(
-            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          ?.split(" ")
+          ?.map(
+            (word) => word?.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
           )
           .join(" ")}
       </Typography>

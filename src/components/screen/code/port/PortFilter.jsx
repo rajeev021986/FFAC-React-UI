@@ -55,14 +55,15 @@ export default function PortFilterForm({ setFilterOpen }) {
             value={formik.values.newPortName}
             onChange={formik.handleChange}
           />
-          <FormAutoComplete
+          
+          {/* <FormAutoComplete
             label="Country"
             id="country"
             suggestionName="country"
             value={formik.values.country}
             error={formik.errors.country}
             onChange={formik.handleChange}
-          ></FormAutoComplete>
+          ></FormAutoComplete> */}
 
           <SelectBox
             label="Status"

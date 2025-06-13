@@ -236,7 +236,7 @@ export default function BondEditGrid({ formik, disabled }) {
                 <span>
                   <Button
                     variant="text"
-                    onClick={() => isExistingRow && handleOpenUploadModal(row.id)}
+                   onClick={() => isExistingRow && handleOpenUploadModal(row?.id)}
                     sx={{ textTransform: "none" }}
                     disabled={!isExistingRow}
                   >
@@ -353,6 +353,8 @@ export default function BondEditGrid({ formik, disabled }) {
             isNotShowType={true}
             sourceType={"BOND_POLICY"}
             type={"POLICY"}
+            disabled={disabled}
+
           />
         </Box>
       </Modal>

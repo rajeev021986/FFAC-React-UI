@@ -13,7 +13,6 @@ import { useGetOptionsSettingsQuery } from "../../store/api/settingsApi";
 export default function ShipperDetails({ formik }) {
   let disabled = formik?.values?.statusCode === -3;
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-
   const FieldRef = useRef(null);
   useEffect(() => {
     if (FieldRef.current) {
@@ -28,15 +27,22 @@ export default function ShipperDetails({ formik }) {
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Supplier Name"
-              id="supplierName"
+              id="supplierId"
               suggestionName="name"
-              value={formik.values.supplierName}
-              error={formik.errors.supplierName}
-              onChange={(event) => {
-                formik.setFieldValue("supplierName", event.target.value);
+              // value={formik.values.supplierId}
+              value={{
+                supplierId: formik.values.supplierId,
+                supplierName: formik.values.supplierName,
+              }}
+              error={formik.errors.supplierId}
+              idKey="supplierId"
+              nameKey="supplierName"
+              onChange={(selected) => {
+                formik.setFieldValue("supplierId", selected.supplierId);
+                formik.setFieldValue("supplierName", selected.supplierName);
                 formik.setFieldValue(
                   "supplierAddress",
-                  event.target.formattedAddress || ""
+                  selected.formattedAddress || ""
                 );
               }}
               inputRef={FieldRef}
@@ -58,15 +64,23 @@ export default function ShipperDetails({ formik }) {
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <FormAutoComplete
               label="Consignee Name"
-              id="consigneeName"
+              id="consigneeId"
               suggestionName="consignee_name"
-              value={formik.values.consigneeName}
-              error={formik.errors.consigneeName}
-              onChange={(event) => {
-                formik.setFieldValue("consigneeName", event.target.value);
+              // value={formik.values.consigneeId}
+              value={{
+                consigneeId: formik.values.consigneeId,
+                consigneeName: formik.values.consigneeName,
+              }}
+              idKey="consigneeId"
+              nameKey="consigneeName"
+              error={formik.errors.consigneeId}
+              onChange={(selected) => {
+                formik.setFieldValue("consigneeId", selected.consigneeId);
+                formik.setFieldValue("consigneeName", selected.consigneeName);
+
                 formik.setFieldValue(
                   "consigneeAddress",
-                  event.target.formattedAddress || ""
+                  selected.formattedAddress || ""
                 );
               }}
               inputRef={FieldRef}

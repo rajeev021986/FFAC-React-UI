@@ -50,7 +50,6 @@ import ApiManager from "../../services/ApiManager";
 import ApprovePayableModal from "./AddPayableForm/ApprovePayableModal";
 import PayableViewModal from "./Actions/PayableViewModal";
 import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
-import { getReceiveableEntryGridActionApprove } from "../accounts/PendingPayable/actionCopy";
 
 export default function PayableListScreen({ page }) {
   const payableActionSelector = useSelector((state) => state.payableAction);
@@ -137,8 +136,6 @@ export default function PayableListScreen({ page }) {
     actions:
       page == "payable_list"
         ? getPayableListGridActions(nav, setModal)
-        : page == "receivableEntry"
-        ? getReceiveableEntryGridActionApprove(nav, setModal)
         : getPayableListGridActionApprove(nav, setModal),
   });
 
@@ -175,7 +172,6 @@ export default function PayableListScreen({ page }) {
   const [printPayableEntry] = usePrintPayableEntryMutation();
 
   const handleApprove = async () => {
-    console.log("modal?.data?", modal?.data);
     // Validation logic
     if (modal?.data?.vendorInvoiceNo && !modal?.data?.isDoc) {
       toast.custom(
@@ -190,7 +186,6 @@ export default function PayableListScreen({ page }) {
       return; // Prevent approval
     }
     if (modal?.data?.noOfCharges === 0) {
-      console.log("no charge");
       toast.custom(
         <CustomToast
           message="Please add charge details before approving"
@@ -462,8 +457,6 @@ export default function PayableListScreen({ page }) {
             actions={
               page == "payable_list"
                 ? getPayableListGridActions(nav, setModal)
-                : page == "receivableEntry"
-                ? getReceiveableEntryGridActionApprove(nav, setModal)
                 : getPayableListGridActionApprove(nav, setModal)
             }
             setSelectedBox={setSelectedBox}
@@ -523,8 +516,19 @@ export default function PayableListScreen({ page }) {
         <PayableViewModal
           open={modal.open}
           data={modal.data}
+          refetch={refetch}
           onClose={() => setModal((prev) => ({ ...prev, open: false }))}
           viewType={"view"}
+        />
+      )}
+      {modal.open && modal.type === "reject" && (
+        <AddRejectedRemarks
+          handleOpen={modal.open && modal.type === "reject"}
+          handleClose={handleClose}
+          rowId={modal?.data?.id}
+          type="accounts_payable"
+          label="Reject Reason"
+          refetch={refetch}
         />
       )}
     </Box>

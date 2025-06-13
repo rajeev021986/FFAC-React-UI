@@ -49,7 +49,7 @@ export default function AddPayableEntryModal({
 }) {
   const modalValidationSchema = Yup.object().shape({
     jobNo: Yup.string().required("Job No. is required"),
-    chargeName: Yup.string().required("Charge Name is required"),
+    chargeId: Yup.string().required("Charge Name is required"),
     unitType: Yup.string().required("Unit Type is required"),
     unitRate: Yup.string().required("Unit Rate is required"),
     vatApplicable: Yup.string().required("VAT Applicable is required"),
@@ -59,13 +59,7 @@ export default function AddPayableEntryModal({
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
-  const selectedValue = formik.values.unitType;
   const [filteredOptions, setFilteredOptions] = useState([]);
-
-  const { data: optionsSettingsData } =
-    useGetOptionsSettingsQuery("common_settings");
-  const { data: payableSettingData } =
-    useGetOptionsSettingsQuery("payble_settings");
 
   const { data: vatAndHoldingTaxSettingData, refetch } =
     useFetchVatAndHoldingQuery({
@@ -77,6 +71,7 @@ export default function AddPayableEntryModal({
     id: null,
     jobNo: formik.values.jobNo,
     chargeName: "",
+    chargeId: "",
     unitType: "",
     noOfUnit: "",
     unitRate: "",
@@ -88,7 +83,6 @@ export default function AddPayableEntryModal({
     totalAmount: "",
     new: true,
   });
-
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
@@ -137,7 +131,7 @@ export default function AddPayableEntryModal({
 
   const handleSubmit = async () => {
     try {
-      await modalValidationSchema.validate(payableEntry, { abortEarly: false });
+       await modalValidationSchema.validate(payableEntry, { abortEarly: false });
       setErrors({}); // Clear errors on successful validation
 
       const updatedEntry = selectedPayEntry
@@ -155,12 +149,12 @@ export default function AddPayableEntryModal({
         onAddPayEntry(updatedEntry);
         setSelectedPayEntry(updatedEntry);
       }
-
       // Reset after add
       setPayableEntry({
         id: Date.now(),
         jobNo: "",
         chargeName: "",
+        chargeId: "",
         unitType: "",
         noOfUnit: "",
         unitRate: "",
@@ -190,6 +184,7 @@ export default function AddPayableEntryModal({
       id: Date.now(),
       jobNo: "",
       chargeName: "",
+      chargeId: "",
       unitType: "",
       noOfUnit: "",
       unitRate: "",
@@ -226,6 +221,7 @@ export default function AddPayableEntryModal({
         id: Date.now(),
         jobNo: formik.values.jobNo,
         chargeName: "",
+        chargeId: "",
         unitType: "",
         noOfUnit: "",
         unitRate: "",
@@ -314,9 +310,11 @@ export default function AddPayableEntryModal({
             <FormAutoCompleteWithLoader
               label="Job No."
               id="jobNo"
+              show={false}
               value={payableEntry.jobNo}
+              sendLabelOnly={true}
               onChange={(e) => {
-                const value = e.target.value;
+                const value = e.target?.value;
                 handleChange("jobNo", value);
                 if (!value) {
                   setPayableEntry((prev) => ({
@@ -333,13 +331,31 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={8}>
+            {/* <FormAutoCompleteWithLoader
+              label="Charge Name"
+              id="chargeId"
+              suggestionName="charge_name"
+              value={{
+                chargeId: payableEntry.chargeId,
+                chargeName: payableEntry.chargeName,
+              }}
+              error={errors.chargeName}
+            /> */}
             <FormAutoCompleteWithLoader
               label="Charge Name"
-              id="chargeName"
-              value={payableEntry.chargeName}
-              onChange={(e) => handleChange("chargeName", e.target.value)}
+              id="chargeId"
               suggestionName="charge_name"
-              error={errors.chargeName}
+              value={{
+                chargeId: payableEntry.chargeId,
+                chargeName: payableEntry.chargeName,
+              }}
+              error={errors.chargeName || errors.chargeId}
+              idKey="chargeId"
+              nameKey="chargeName"
+              onChange={(selected) => {
+                handleChange("chargeId", selected.chargeId);
+                handleChange("chargeName", selected.chargeName);
+              }}
             />
           </Grid>
           <Grid item xs={12} lg={4}>
@@ -520,10 +536,3 @@ export default function AddPayableEntryModal({
     </Modal>
   );
 }
-
-const styles = {
-  root: {
-    borderRadius: "10px",
-    fontSize: "14px",
-  },
-};

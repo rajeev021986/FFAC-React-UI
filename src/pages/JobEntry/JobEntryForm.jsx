@@ -55,6 +55,7 @@ export default function JobEntryForm({
   const [isSelectedShipmentTypeValid, setIsSelectedShipmentTypeValid] =
     useState(false);
   const nav = useNavigate();
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
   const shipmentTypeRef = useRef(null);
   const toastRef = useRef(null);
   const [value, setValue] = React.useState("1");
@@ -62,6 +63,7 @@ export default function JobEntryForm({
     approve: false,
     reject: false,
   });
+  const [customerIds, setCustomerIds] = useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -247,10 +249,12 @@ export default function JobEntryForm({
               item?.new ? { ...item, id: null, new: false } : item
             ),
           };
+
           Boolean(values.status == "Active") && (values.statusCode = 1);
           Boolean(values.status == "Inactive") && (values.statusCode = -2);
           let response = await updateJobEntry({
             ...values,
+
             containerShipments: containerShipment,
             vehicleShipments: vehicleShipment,
             looseCargoShipments: looseCargo,
@@ -404,10 +408,6 @@ export default function JobEntryForm({
     setIsDisabled(shouldDisable);
   }, [initialValues?.statusCode, getPage]);
 
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
-
   const customerNameRef = useRef(null);
 
   useEffect(() => {
@@ -482,7 +482,6 @@ export default function JobEntryForm({
     //   }
     // }
   }, [formik.values.shipmentType, jobSettingData]);
-
   return (
     <>
       <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
@@ -633,14 +632,39 @@ export default function JobEntryForm({
                 >
                   <FormAutoCompleteWithLoader
                     label="Customer Name*"
-                    id="customerName"
-                    value={formik.values.customerName}
-                    error={formik.errors.customerName}
-                    onChange={formik.handleChange}
+                    id="customerId"
+                    value={{
+                      customerId: formik.values.customerId,
+                      customerName: formik.values.customerName,
+                    }}
+                    error={formik.errors.customerId}
+                    idKey="customerId"
+                    nameKey="customerName"
+                    onChange={(selected) => {
+                      formik.setFieldValue(
+                        "customerId",
+                        selected.customerId || ""
+                      );
+                      formik.setFieldValue(
+                        "customerName",
+                        selected.customerName || ""
+                      );
+                    }}
                     inputRef={FieldRef}
                     suggestionName="customer_name"
                     disabled={isDisabled}
                   />
+
+                  {/* <FormAutoCompleteWithLoader
+                    label="Customer Name*"
+                    id="customerId" // <- Updated
+                    value={formik.values.customerId} // <- Updated
+                    error={formik.errors.customerId}
+                    onChange={formik.handleChange}
+                    inputRef={FieldRef}
+                    suggestionName="customer_name"
+                    disabled={isDisabled}
+                  /> */}
                 </Tooltip>
               </Grid>
 
@@ -882,7 +906,21 @@ export default function JobEntryForm({
 
                       {!initialValues?.id ? (
                         <ThemeButton
-                          onClick={formik.handleSubmit}
+                          onClick={async () => {
+                            const errors = await formik.validateForm();
+
+                            if (Object.keys(errors).length > 0) {
+                              formik.setTouched(
+                                Object.fromEntries(
+                                  Object.keys(errors).map((key) => [key, true])
+                                ),
+                                true
+                              );
+                              getFirstError(errors); // Show toast from here directly
+                            } else {
+                              formik.handleSubmit(); // Submit if valid
+                            }
+                          }}
                           sx={{
                             fontWeight: "500",
                             color: "white !important",
@@ -895,7 +933,21 @@ export default function JobEntryForm({
                         </ThemeButton>
                       ) : (
                         <ThemeButton
-                          onClick={formik.handleSubmit}
+                          onClick={async () => {
+                            const errors = await formik.validateForm();
+
+                            if (Object.keys(errors).length > 0) {
+                              formik.setTouched(
+                                Object.fromEntries(
+                                  Object.keys(errors).map((key) => [key, true])
+                                ),
+                                true
+                              );
+                              getFirstError(errors);
+                            } else {
+                              formik.handleSubmit();
+                            }
+                          }}
                           sx={{
                             fontWeight: "500",
                             color: "white !important",
@@ -931,7 +983,21 @@ export default function JobEntryForm({
                       </OutlinedButton>
 
                       <ThemeButton
-                        onClick={formik.handleSubmit}
+                        onClick={async () => {
+                          const errors = await formik.validateForm();
+
+                          if (Object.keys(errors).length > 0) {
+                            formik.setTouched(
+                              Object.fromEntries(
+                                Object.keys(errors).map((key) => [key, true])
+                              ),
+                              true
+                            );
+                            getFirstError(errors);
+                          } else {
+                            formik.handleSubmit();
+                          }
+                        }}
                         sx={{
                           fontWeight: "500",
                           color: "white !important",

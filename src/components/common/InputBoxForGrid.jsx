@@ -15,7 +15,6 @@ export default function InputBoxForGrid(props) {
     inputRef,
     isEditable,
   } = props;
-
   const tooltipMessage = value ? value : "This field is empty";
   const [inputValue, setInputValue] = useState(value || "");
   const [error, setError] = useState(false);
@@ -26,15 +25,15 @@ export default function InputBoxForGrid(props) {
   }, [props.value]);
   const handleChange = (event) => {
     const rawValue = event.target.value;
-  
+
     // Remove non-alphanumeric characters
-    const cleaned = rawValue.replace(/[^a-zA-Z0-9]/g, '');
-  
+    const cleaned = rawValue.replace(/[^a-zA-Z0-9]/g, "");
+
     if (field === "tflSealNo") {
       let digitsCount = 0;
       let lettersCount = 0;
-      let finalValue = '';
-  
+      let finalValue = "";
+
       for (const char of cleaned) {
         if (/\d/.test(char) && digitsCount < 7) {
           finalValue += char;
@@ -43,35 +42,36 @@ export default function InputBoxForGrid(props) {
           finalValue += char;
           lettersCount++;
         }
-  
+
         if (finalValue.length === 11) break;
       }
-  
+
       setInputValue(finalValue);
       setError(false);
-  
+
       // if (finalValue.length === 11) {
-        api.setEditCellValue({ id, field, value: finalValue }, event);
+      api.setEditCellValue({ id, field, value: finalValue }, event);
       // }
+    } else if (field == "emailId") {
+      setInputValue(rawValue);
+      setError(false);
+      api.setEditCellValue({ id, field, value: rawValue }, event);
     } else {
       // For all other fields
-      const sanitized = rawValue.replace(/[^a-zA-Z0-9]/g, '');
+      const sanitized = rawValue.replace(/[^a-zA-Z0-9]/g, "");
       setInputValue(sanitized);
       setError(false);
       api.setEditCellValue({ id, field, value: sanitized }, event);
     }
   };
-  
-  
-  
-  
+
   const handleChangeContainerNo = (event) => {
-    const rawValue = event.target.value.replace(/[^a-zA-Z0-9]/g, '');
-  
+    const rawValue = event.target.value.replace(/[^a-zA-Z0-9]/g, "");
+
     let lettersCount = 0;
     let digitsCount = 0;
-    let finalValue = '';
-  
+    let finalValue = "";
+
     for (let char of rawValue) {
       if (/[a-zA-Z]/.test(char) && lettersCount < 4) {
         finalValue += char;
@@ -80,21 +80,17 @@ export default function InputBoxForGrid(props) {
         finalValue += char;
         digitsCount++;
       }
-  
+
       if (lettersCount === 4 && digitsCount === 7) break;
     }
     setInputValue(finalValue);
     setError(false);
-  
+
     // if (finalValue.length === 11) {
-      api.setEditCellValue(
-        { id, field, value: finalValue },
-        event 
-      );
+    api.setEditCellValue({ id, field, value: finalValue }, event);
     // }
-  }; 
-  
-  
+  };
+
   const handleBlur = () => {
     if (
       (field === "containerNo" || field === "tflSealNo") &&
@@ -105,9 +101,6 @@ export default function InputBoxForGrid(props) {
       setError(false); // Hide error if it's valid
     }
   };
-  
-  
-  
 
   return (
     <div
@@ -162,11 +155,11 @@ export default function InputBoxForGrid(props) {
               <Tooltip title={tooltipMessage} arrow>
                 <TextField
                   size="small"
-                  type={  fieldType}
+                  type={fieldType}
                   fullWidth
                   disabled={field === "balanceBondAmount" || props.disabled}
                   value={inputValue}
-                  onBlur={handleBlur} 
+                  onBlur={handleBlur}
                   onChange={
                     field == "containerNo"
                       ? handleChangeContainerNo

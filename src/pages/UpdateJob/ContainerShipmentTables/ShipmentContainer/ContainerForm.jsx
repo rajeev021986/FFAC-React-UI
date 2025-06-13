@@ -74,14 +74,16 @@ export default function ContainerNumberForm({
     sizeType: "",
     sealNo: "",
     truckTrailerNo: "",
-    transporter: "",
+    transporterId: "",
+    transporter:"",
     // truckTrailerNoTransporter: "",
     driver: "",
     agreedRate: "",
     telNo: "",
     passportNo: "",
     licenceNo: "",
-    clerkName: "",
+    clerkId: "",
+    clerkName:"",
     clerkTelNo: "",
     reportingPlace: "",
     reportingDate: "",
@@ -125,14 +127,16 @@ export default function ContainerNumberForm({
         sizeType: res?.body?.sizeType,
         sealNo: res?.body?.sealNo,
         truckTrailerNo: res?.body?.truckTrailerNo,
-        transporter: res?.body?.transporter,
+        transporterId: res?.body?.transporterId,
+        transporter:res?.body?.transporter,
         // truckTrailerNoTransporter: res?.body?.truckTrailerNoTransporter,
         driver: res?.body?.driver,
         agreedRate: res?.body?.agreedRate,
         telNo: res?.body?.telNo,
         passportNo: res?.body?.passportNo,
         licenceNo: res?.body?.licenceNo,
-        clerkName: res?.body?.clerkName,
+        clerkId: res?.body?.clerkId,
+        clerkName:res?.body?.clerkName,
         clerkTelNo: res?.body?.clerkTelNo,
         reportingPlace: res?.body?.reportingPlace,
         reportingDate: res?.body?.reportingDate,
@@ -146,7 +150,7 @@ export default function ContainerNumberForm({
         arrivalICDDate: res?.body?.arrivalICDDate,
         cargoReleaseDate: res?.body?.cargoReleaseDate,
         departICDDate: res?.body?.departICDDate,
-        bondNumber: bondDetails[0]?.bondNumber,
+        bondNumber:  res?.body?.bondNumber,
         bondAmount: res?.body?.bondAmount,
         arrivalCustomerPlaceDate: res?.body?.arrivalCustomerPlaceDate,
         emptyReleasedDate: res?.body?.emptyReleasedDate,
@@ -245,10 +249,6 @@ export default function ContainerNumberForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData]);
-
-  useEffect(() => {
-    getFirstError(formik.errors);
-  }, [formik.errors]);
 
   const customerNameRef = useRef(null);
   useEffect(() => {
@@ -350,9 +350,25 @@ export default function ContainerNumberForm({
                     label="Transporter"
                     id="transporter"
                     suggestionName="vendor_name"
-                    value={formik.values.transporter}
+                    idKey="transporterId"
+                    nameKey="transporter"
+                    // value={formik.values.transporterId}
+                    value={{
+                      // transporterId: formik.values.transporterId,
+                      transporter: formik.values.transporter,
+                    }}
+                    onChange={(selected) => {
+                      // formik.setFieldValue(
+                      //   "transporterId",
+                      //   selected.transporterId
+                      // );
+                      formik.setFieldValue(
+                        "transporter",
+                        selected.transporter
+                      );
+                    }}
                     error={formik.errors.transporter}
-                    onChange={formik.handleChange}
+                    // onChange={formik.handleChange}
                   ></FormAutoComplete>
                 </Grid>
 
@@ -434,11 +450,21 @@ export default function ContainerNumberForm({
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <FormAutoComplete
                     label="Clerk Name"
-                    id="clerkName"
+                    id="clerkId"
                     suggestionName="first_name"
-                    value={formik.values.clerkName}
-                    error={formik.errors.clerkName}
-                    onChange={formik.handleChange}
+                    // value={formik.values.clerkId}
+                    value={{
+                      clerkId: formik.values.clerkId,
+                      clerkName: formik.values.clerkName,
+                    }}
+                    idKey="clerkId"
+                    nameKey="clerkName"
+                    error={formik.errors.clerkId}
+                    // onChange={formik.handleChange}
+                    onChange={(selected) => {
+                      formik.setFieldValue("clerkId", selected.clerkId);
+                      formik.setFieldValue("clerkName", selected.clerkName);
+                    }}
                   />
                 </Grid>
 
@@ -591,7 +617,7 @@ export default function ContainerNumberForm({
                   <InputBox
                     label="Bond No."
                     id="bondNumber"
-                    value={formik.values.bondNumber}
+                    value={formik.values.bondNumber || ""}
                     onChange={formik.handleChange}
                     inputRef={FieldRef}
                   />
@@ -737,11 +763,10 @@ export default function ContainerNumberForm({
                     inputRef={FieldRef}
                   />
                 </Grid>
-             
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <DateTimeField
                     label="Arrival Customer Place"
                     name="arrivalCustomerPlaceDate"
@@ -784,11 +809,10 @@ export default function ContainerNumberForm({
                     onChange={formik.handleChange}
                   />
                 </Grid>
-             
               </Grid>
 
               <Grid paddingLeft={1} marginTop={2} container spacing={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <Box
                     display="flex"
                     alignItems="center"
@@ -1036,7 +1060,7 @@ export default function ContainerNumberForm({
           </TabPanel>
         </TabContext>
 
-        {(page === "containerNo" && value== '1') && (
+        {page === "containerNo" && value == "1" && (
           <Grid
             paddingLeft={3}
             marginTop={2}
@@ -1099,6 +1123,7 @@ export default function ContainerNumberForm({
             isNotShowType={true}
             sourceType={"JOB_CONTAINER"}
             type={SourceType}
+            disabled={false}
           />
         </Box>
       </Modal>
