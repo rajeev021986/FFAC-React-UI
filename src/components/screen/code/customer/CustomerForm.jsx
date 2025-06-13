@@ -94,6 +94,20 @@ export default function CustomerForm({
     validateOnChange: false,
     validationSchema: CustomerValidationSchema(),
     onSubmit: async (values) => {
+      if (
+        values.tinNo?.trim() &&
+        values.vatNo?.trim() &&
+        values.tinNo.trim() === values.vatNo.trim()
+      ) {
+        toast.custom(
+          <CustomToast
+            message="TIN No. and VAT No. cannot be the same."
+            toast="error"
+          />,
+          { closeButton: false }
+        );
+        return; // Stop form submission
+      }
       if (!values.id || type == "copy") {
         let emails = values.customerEntityEmailsIds.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
@@ -890,7 +904,7 @@ export default function CustomerForm({
                               ),
                               true
                             );
-                            getFirstError(errors); 
+                            getFirstError(errors);
                           } else {
                             formik.handleSubmit();
                           }

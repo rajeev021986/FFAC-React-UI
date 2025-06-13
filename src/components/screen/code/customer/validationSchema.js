@@ -5,6 +5,12 @@ export const CustomerValidationSchema = () =>
     customerName: Yup.string().required("Name is required"),
     tinNo: Yup.number().nullable(),
     vatNo: Yup.number().nullable(),
+    fax: Yup.string()
+      .matches(
+        /^[0-9+\-()]*$/,
+        "Fax number can only contain digits, +, -, (, )"
+      )
+      .nullable(),
     // status: Yup.string().required("Status is required"),
     add1: Yup.string().required("Address is required"),
     // add2: Yup.string().required("Address is required"),
@@ -73,7 +79,7 @@ export const CustomerValidationSchema = () =>
     customerEntityTariffs: Yup.array().of(
       Yup.object().shape({
         unitRate: Yup.number().min(0, "Unit Rate must be a positive number"),
-        chargeId : Yup.string().required("Charge Name is required")
+        chargeId: Yup.string().required("Charge Name is required"),
       })
     ),
 
@@ -91,12 +97,12 @@ export const CustomerValidationSchema = () =>
         ),
       })
     ),
-    bankDetails:Yup.array().of(
+    bankDetails: Yup.array().of(
       Yup.object().shape({
         bankName: Yup.string().required("Bank Name is required"),
         accountNo: Yup.string().required("Account Number is required"),
         currency: Yup.string().required("Currency is required"),
         swiftCode: Yup.string().required("Swift Code is required"),
       })
-    )
+    ),
   });
