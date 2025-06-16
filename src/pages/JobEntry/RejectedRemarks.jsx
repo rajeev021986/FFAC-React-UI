@@ -79,6 +79,33 @@ export default function AddRejectedRemarks({
         } finally {
           setLoading(false);
         }
+      } else if (type === "reject_recievble") {
+        try {
+          const res = await ApiManager.reciveableRejectHandler(
+            rowId,
+            "RECEIVABLE_ENTRY",
+            values.remarks
+          );
+          if (res.success) {
+            toast.custom(<CustomToast message={res.message} toast="success" />);
+            handleClose();
+            refetch();
+          } else {
+            console.error("Failed to reject:", res);
+            toast.custom(
+              <CustomToast
+                message={res.message || "Failed to reject"}
+                toast="error"
+              />
+            );
+          }
+        } catch (error) {
+          toast.custom(
+            <CustomToast message={"Something went wrong!"} toast="error" />
+          );
+        } finally {
+          setLoading(false);
+        }
       } else {
         try {
           const res = await ApiManager.rejectjobEntryApprove(
