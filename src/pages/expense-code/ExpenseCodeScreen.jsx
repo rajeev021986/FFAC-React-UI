@@ -103,6 +103,7 @@ export default function ExpenseCodeScreen() {
           paginationModel={expenseCodeSelector.pagination}
           loading={isLoading || isFetching}
           disableColumnMenu
+          storageKey="ExpenseCodeDataGrid"
         />
       </Card>
 

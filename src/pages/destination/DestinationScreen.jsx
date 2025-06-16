@@ -100,6 +100,7 @@ export default function DestinationScreen() {
           columnVisibilityHandler={() => {}}
           paginationModel={destinationSelector.pagination}
           loading={isLoading || isFetching}
+          storageKey="DestinationDataGrid"
           disableColumnMenu
           disableColumnSorting
         />

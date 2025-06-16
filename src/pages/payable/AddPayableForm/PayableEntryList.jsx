@@ -10,6 +10,7 @@ const PayableEntryList = ({ chargesData, PAYABLE_COLUMNS, disabled }) => {
         count={chargesData.length}
         data={chargesData}
         disabled={disabled}
+        storageKey="PayableEntryDataGrid"
       />
     </React.Fragment>
   );

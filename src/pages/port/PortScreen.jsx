@@ -269,6 +269,7 @@ export default function PortScreen() {
             disableColumnMenu
             sortModel={portSelector.sortModel}
             onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
+            storageKey="PortDataGrid"
           />
         ) : (
           <CardsView

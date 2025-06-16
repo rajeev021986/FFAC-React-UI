@@ -286,6 +286,7 @@ export default function LooseShipmentView({ page, customer_id,bondDetails }) {
             onSortModelChange={(sortModel) =>
               dispatch(looseCargoSetSortModel(sortModel))
             }
+            storageKey="CargoListDataGrid"
           />
         ) : (
           <CardsView

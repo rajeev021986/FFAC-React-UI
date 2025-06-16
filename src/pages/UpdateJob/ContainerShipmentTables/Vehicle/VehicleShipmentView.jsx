@@ -286,6 +286,7 @@ export default function VehicleShipmentView({ page, customer_id,bondDetails}) {
             onSortModelChange={(sortModel) =>
               dispatch(vehicleSetSortModel(sortModel))
             }
+            storageKey="VehicleShipmentDataGrid"
           />
         ) : (
           <CardsView

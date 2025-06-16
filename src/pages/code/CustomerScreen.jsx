@@ -328,6 +328,7 @@ export default function CustomerScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(customerSetSortModel(sortModel))
             }
+            storageKey="CustomerScreenGrid"
           />
         ) : (
           <CardsView

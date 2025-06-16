@@ -321,6 +321,7 @@ export default function ShipperScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(shipperSetSortModel(sortModel))
             }
+            storageKey="ShipperDataGrid"
           />
         ) : (
           <CardsView

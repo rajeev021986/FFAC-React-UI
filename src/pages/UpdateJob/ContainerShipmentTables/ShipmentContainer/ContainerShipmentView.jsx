@@ -298,6 +298,7 @@ export default function ContainerShipmentView({
             onSortModelChange={(sortModel) =>
               dispatch(containerSetSortModel(sortModel))
             }
+            storageKey="ContainerShipmentDataGrid"
           />
         ) : (
           <CardsView

@@ -585,6 +585,7 @@ export default function PayableListScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(payableSetSortModal(sortModel))
             }
+            storageKey="PayableListDataGrid"
           />
         ) : (
           <CardsView

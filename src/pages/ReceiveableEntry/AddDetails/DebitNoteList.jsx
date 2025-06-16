@@ -16,6 +16,7 @@ const DebitNoteListData = ({
         data={chargesData}
         disabled={disabled}
         hideColumns={true}
+        storageKey="DebitInvoiceDataGrid"
       />
     </React.Fragment>
   );

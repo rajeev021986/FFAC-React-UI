@@ -226,6 +226,8 @@ export default function OtmBolScreen() {
             rowSelectionModel={rowSelectionModel} // Pass current selection state
             checkboxSelection
             disableRowSelectionOnClick
+             storageKey="OtmBolDataGrid"
+
             // isRowSelectable={isRowSelectable} // Disable rows based on conditions
           />
         )}

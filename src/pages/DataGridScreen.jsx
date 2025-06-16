@@ -39,6 +39,7 @@ export default function DataGridScreen() {
                     columnVisibilityHandler={() => { }}
                     paginationModel={{}}
                     loading={false}
+                    storageKey="UserManagementGrid"
                 />) : (
                     <CardsView
                         columns={USER_MANAGEMENT_COLUMNS}

@@ -303,6 +303,7 @@ export function ChargesScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(chargesSetSortModel(sortModel))
             }
+            storageKey="ChargesDataGrid"
           />
         ) : (
           <CardsView

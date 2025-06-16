@@ -196,6 +196,7 @@ export default function NewRegisteredUserScreen() {
             onSortModelChange={(sortModel) => {
               dispatch(setSortModel(sortModel));
             }}
+            storageKey="RegisteredUserDataGrid"
           />
         ) : (
           <CardsView

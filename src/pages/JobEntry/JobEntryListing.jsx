@@ -475,6 +475,7 @@ export default function JobEntryScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(jobEntrySetSortModel(sortModel))
             }
+            storageKey="JobEntryGrid"
           />
         )}
       </Card>

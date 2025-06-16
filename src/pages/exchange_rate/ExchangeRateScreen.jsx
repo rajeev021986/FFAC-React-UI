@@ -308,6 +308,7 @@ export function ExchangeRate({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(exchangeRateSetSortModel(sortModel))
             }
+            storageKey="ExchangeDataGrid"
           />
         ) : (
           <CardsView

@@ -267,7 +267,8 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
             columnVisibility={{}}
             columnVisibilityHandler={() => {}}
             paginationModel={localPagination}
-            hideColumns={true}
+            hideColumns = {true}
+            storageKey="CostListDataGrid"
           />
         </Card>
       </Box>

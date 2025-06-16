@@ -305,6 +305,7 @@ export default function VendorScreen({ page }) {
             // disableColumnSorting
             sortModel={vendorSelector.sortModel}
             onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
+            storageKey="VendorScreenDataGrid"
           />
         ) : (
           <CardsView

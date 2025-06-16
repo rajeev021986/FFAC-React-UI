@@ -3,7 +3,7 @@ import { Paper, Pagination, Box } from "@mui/material";
 import { StyledDataGrid } from "./styles";
 import { GridToolbarColumnsButton } from "@mui/x-data-grid";
 import { StatusChip } from "../../utils/statusChip";
-
+import { useEffect, useState } from "react";
 const ThemedGrid = (props) => {
   const {
     columns,
@@ -18,8 +18,26 @@ const ThemedGrid = (props) => {
     loading,
     uniqueId,
     hideColumns,
+    storageKey,
     ...rest
   } = props;
+  const LOCAL_STORAGE_KEY = `themedGrid_${storageKey || "default"}`;
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({});
+  useEffect(() => {
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (saved) {
+      try {
+        setColumnVisibilityModel(JSON.parse(saved));
+      } catch {
+        setColumnVisibilityModel({});
+      }
+    }
+  }, []);
+  const handleColumnVisibilityChange = (newModel) => {
+    setColumnVisibilityModel(newModel);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newModel));
+  };
+
   const handleDate = (date) => {
     return date.split("T")[0];
   };
@@ -111,12 +129,20 @@ const ThemedGrid = (props) => {
         rowCount={paginationModel ? count : gridData.length}
         pageSizeOptions={paginationModel ? [10, 20, 50, 100] : undefined}
         paginationModel={paginationModel || undefined}
+        columnVisibilityModel={columnVisibilityModel}
+        onColumnVisibilityModelChange={handleColumnVisibilityChange}
         onPaginationModelChange={paginationModel ? handlePage : undefined}
         getRowId={(row) => row[uniqueId]}
         disableColumnFilter
         slots={{
           toolbar: () => (
-            <Box sx={{ display: hideColumns ? "none" : "flex", justifyContent: "flex-start", p: 0 }}>
+            <Box
+              sx={{
+                display: hideColumns ? "none" : "flex",
+                justifyContent: "flex-start",
+                p: 0,
+              }}
+            >
               <GridToolbarColumnsButton />
             </Box>
           ),

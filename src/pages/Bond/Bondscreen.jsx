@@ -269,6 +269,7 @@ export default function BondScreen() {
             disableColumnMenu
             sortModel={bondSelector.sortModel}
             onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
+            storageKey="BondDataGrid"
           />
         ) : (
           <CardsView

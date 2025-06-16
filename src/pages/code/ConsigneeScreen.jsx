@@ -335,6 +335,7 @@ export default function ConsigneeScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(consigneeSetSortModel(sortModel))
             }
+            storageKey="ConsigneeDataGrid"
           />
         ) : (
           <CardsView

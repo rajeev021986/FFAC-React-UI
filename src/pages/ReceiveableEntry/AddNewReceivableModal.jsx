@@ -224,6 +224,7 @@ export default function AddNewReceivableModal({ open, onClose, data }) {
           onSortModelChange={(sortModel) =>
             dispatch(jobEntrySetSortModel(sortModel))
           }
+          storageKey="ReceivableDataGrid"
         />
       </DialogContent>
       <DialogActions>

@@ -173,6 +173,7 @@ export default function UpdateJobListingScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(jobEntrySetSortModel(sortModel))
             }
+            storageKey="UpdateJobGrid"
           />
         )}
       </Card>

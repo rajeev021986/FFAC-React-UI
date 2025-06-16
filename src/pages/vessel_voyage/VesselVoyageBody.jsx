@@ -138,6 +138,8 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
           onSortModelChange={(sortModel) =>
             dispatch(voyageSetSortModel(sortModel))
           }
+          storageKey="VesselVoyageDataGrid"
+
         />
       ) : (
         <CardsView

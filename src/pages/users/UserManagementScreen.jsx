@@ -276,6 +276,7 @@ export default function UserManagementScreen() {
             loading={isLoading || isFetching}
             sortModel={userManagementSelector.sortModel}
             onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
+            storageKey="UserManagementScreenDataGrid"
           />
         ) : (
           <CardsView

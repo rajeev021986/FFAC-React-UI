@@ -321,6 +321,7 @@ export default function IcdScreen({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(icdSetSortModel(sortModel))
             }
+            storageKey="IcdDataGrid"
           />
         ) : (
           <CardsView

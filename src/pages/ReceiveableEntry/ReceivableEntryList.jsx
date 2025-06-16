@@ -358,6 +358,7 @@ export default function ReceivableEntryList({ page }) {
             onSortModelChange={(sortModel) =>
               dispatch(receivableEntrySetSortModel(sortModel))
             }
+            storageKey="ReceivableEntryDataGrid"
           />
         ) : (
           <CardsView

@@ -195,6 +195,7 @@ export default function PackingListScreen() {
             checkboxSelection
             disableRowSelectionOnClick
             isRowSelectable={isRowSelectable} // Disable rows based on conditions
+            storageKey="PackingListDataGrid"
           />
         ) : (
           <PackingListCardsView

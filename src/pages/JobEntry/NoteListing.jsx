@@ -175,6 +175,7 @@ const NotesTable = ({ formik }) => {
         columns={NOTE_COLUMNS}
         count={notes.length}
         data={notes}
+        storageKey="NotesDataGrid"
       />
 
       {/* <ThemeButton
