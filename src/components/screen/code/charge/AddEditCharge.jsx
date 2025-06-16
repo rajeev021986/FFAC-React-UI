@@ -202,6 +202,7 @@ const AddEditCharge = ({ onClose, id, type }) => {
             nav={nav}
             handleChange={handleChange}
             loading={loadingAdd || loadingUpdate}
+            onClose = {onClose}
           />
       </Box>
     </Modal>

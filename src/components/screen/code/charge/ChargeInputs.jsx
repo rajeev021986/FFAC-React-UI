@@ -24,6 +24,7 @@ export default function ChargeInputs({
   ChargeSettingsData,
   type,
   loading,
+  onClose,
   nav,
 }) {
   const newRowRef = useRef(null);
@@ -129,7 +130,7 @@ const vatApplicableOptions = [
         <Grid item xs={12} lg={8}></Grid>
         <Grid item xs={2}>
           <OutlinedButton
-            onClick={() => nav("/app/admin/charges")}
+            onClick={() => onClose()}
             fullWidth
             sx={{ fontWeight: 500 }}
           >
