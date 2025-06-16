@@ -1,0 +1,399 @@
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  IconButton,
+  Stack,
+  Tab,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import InputBox from "../../../common/InputBox";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { DataGrid } from "@mui/x-data-grid";
+import AddIcon from "@mui/icons-material/Add";
+import { toast } from "react-hot-toast";
+import { GridDeleteIcon } from "@mui/x-data-grid";
+import SelectBox from "../../../common/SelectBox";
+import { OutlinedButton, ThemeButton } from "../../../common/Button";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { ChargeMapping } from "./ChargeMapping";
+import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
+import { StyledDataGrid } from "../../../common/Grid/styles";
+import getFirstError from "../../../common/FieldToastError";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import ThemedBreadcrumb from "../../../common/Breadcrumb";
+import ScreenToolbar from "../../../common/ScreenToolbar";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../../common/Loader/Loader";
+import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
+import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
+import AuditTimeLine from "../../../AuditTimeLine";
+import { menuConfigUrl } from "../../../../store/menuConfigUrl";
+import {
+  useFetchMappedChargesDatasQuery,
+  useUpdateMappedChargeMutation,
+} from "../../../../store/api/mappedChargesDataApi";
+import CustomToast from "../../../common/Toast/CustomToast";
+import FormAutoCompleteWithLoader from "../../../common/AutoComplete/FormAutoCompletewithLoader";
+// import { useFetchMappedChargesDatasQuery, useLazyGetMappedChargeQuery } from "../../../../store/api/MappedChargesDataApi";
+
+export default function MappedCharges({ ChargeSettingsData, type, loading }) {
+  const newRowRef = useRef(null);
+  const nav = useNavigate();
+  const {
+    data: mappedChargesData,
+    isLoading,
+    isError,
+    error,
+  } = useFetchMappedChargesDatasQuery();
+  const [updateMappedCharge, { isLoading: loadingMappedUpdate }] =
+    useUpdateMappedChargeMutation();
+  const validationSchema = Yup.array().of(
+    Yup.object().shape({
+      directIncome: Yup.string().required("Direct Income is required"),
+      directExpense: Yup.string().required("Direct Expense is required"),
+    })
+  );
+
+  const tabs = [
+    {
+      label: "Mapped Charges Details",
+      value: 1,
+      icon: <EditIconForHeader />,
+    },
+    // { label: "Audit Logs", value: 2, icon: <AuditIcon /> },
+  ];
+  Boolean(type === "copy" || type === "new") && tabs.splice(1, 1);
+  const initialValues = [];
+  const setFocus = () => {
+    setTimeout(() => {
+      if (newRowRef.current) {
+        newRowRef.current.focus();
+      }
+    }, 1000);
+  };
+
+  const [value, setValue] = React.useState("1");
+  const FieldRef = useRef(null);
+
+  useEffect(() => {
+    if (FieldRef.current) {
+      FieldRef.current.focus();
+    }
+  }, []);
+
+  const onSubmit = async (values) => {
+    const updatedValue = formik.values.map((row) =>
+      row.new ? { ...row, id: null, new: undefined } : row
+    );
+    try {
+      let res = await updateMappedCharge(updatedValue).unwrap();
+      if (res.success) {
+        toast.custom(<CustomToast message={res.message} toast="success" />, {
+          closeButton: false,
+        });
+        nav("/app/admin/charges");
+      }
+    } catch (error) {
+      toast.custom(<CustomToast message={error.data.message} toast="error" />, {
+        closeButton: false,
+      });
+    }
+    // }
+  };
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    validateOnChange: false,
+    onSubmit,
+  });
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const addNewRow = () => {
+    const hasEmptyFields = formik.values.some((row) =>
+      Object.values(row).some(
+        (value) => value === "" || value === null || value === undefined
+      )
+    );
+    if (false) {
+      toast.error("Please fill in all fields before adding a new row.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+    const newRow = {
+      id: Date.now(),
+      directExpense: "",
+      directIncome: "",
+      expenseId: null,
+      incomeId: null,
+      new: true,
+    };
+
+    formik.setValues([...formik.values, newRow]);
+    setFocus();
+  };
+  const deleteRow = (id) => {
+    const updatedRows = formik.values.filter((row) => row.id !== id);
+    formik.setValues(updatedRows);
+  };
+
+  const handleProcessRowUpdate = (newRow) => {
+    const updatedRows = formik.values.map((row) =>
+      row.id === newRow.id ? { ...row, ...newRow } : row
+    );
+    formik.setValues(updatedRows);
+    return newRow;
+  };
+
+  const columns = [
+    {
+      field: "directIncome",
+      headerName: "Direct Income",
+      flex: 1,
+      renderCell: (params) => {
+        const rowIndex = formik.values.findIndex(
+          (row) => row.id === params.row.id
+        );
+        const rowErrors = formik.errors?.[rowIndex] || {};
+        return (
+          <Box sx={{ width: "100%", margin: "12px",  }}>
+            <FormAutoCompleteWithLoader
+              placeholder="Direct Income"
+              id="directIncome"
+              suggestionName="charge_name"
+              value={{
+                incomeId: params.row.incomeId,
+                directIncome: params.row.incomeId,
+              }}
+              error={rowErrors.directIncome}
+              idKey="incomeId"
+              nameKey="directIncome"
+              onChange={(selected) => {
+                const updatedRows = formik.values.map((row) =>
+                  row.id === params.row.id
+                    ? {
+                        ...row,
+                        incomeId: selected.incomeId,
+                        directIncome: selected.directIncome,
+                      }
+                    : row
+                );
+                formik.setValues(updatedRows);
+              }}
+            />
+          </Box>
+        );
+      },
+    },
+    {
+      field: "directExpense",
+      headerName: "Direct Expense",
+      flex: 1,
+      renderCell: (params) => {
+        const rowIndex = formik.values.findIndex(
+          (row) => row.id === params.row.id
+        );
+        const rowErrors = formik.errors?.[rowIndex] || {};
+        return (
+          <FormAutoCompleteWithLoader
+            placeholder="Direct Expense"
+            id="directExpense"
+            suggestionName="charge_name"
+            value={{
+              expenseId: params.row.expenseId,
+              directExpense: params.row.directExpense,
+            }}
+            error={rowErrors.directExpense}
+            idKey="expenseId"
+            nameKey="directExpense"
+            onChange={(selected) => {
+              const updatedRows = formik.values.map((row) =>
+                row.id === params.row.id
+                  ? {
+                      ...row,
+                      expenseId: selected.expenseId,
+                      directExpense: selected.directExpense,
+                    }
+                  : row
+              );
+              formik.setValues(updatedRows);
+            }}
+          />
+        );
+      },
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      sortable: false,
+      flex: 0,
+      renderHeader: () => (
+        <IconButton color="white">
+          <AddCircleIcon onClick={addNewRow} />
+        </IconButton>
+      ),
+      renderCell: (params) => (
+        <IconButton color="error" onClick={() => deleteRow(params.row.id)}>
+          <GridDeleteIcon />
+        </IconButton>
+      ),
+    },
+  ];
+  useEffect(() => {
+    if (mappedChargesData?.body) {
+      formik.setValues(mappedChargesData.body);
+    }
+  }, [mappedChargesData]);
+  return (
+    <>
+      <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
+        <Stack sx={{ padding: "8px 0px" }}>
+          <ScreenToolbar
+            leftComps={
+              <div>
+                <ThemedBreadcrumb />
+              </div>
+            }
+            rightComps={<div></div>}
+          />
+        </Stack>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <Card
+            sx={{ borderWidth: 1, borderColor: "border.main", padding: "0px" }}
+          >
+            <CardContent
+              sx={{ margin: "0px !important", padding: "0px !important" }}
+            >
+              <TabContext value={value}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="lab API tabs example"
+                  >
+                    <Tab
+                      label="Mapping Details"
+                      value="1"
+                      className="nested1"
+                      sx={{
+                        textTransform: "capitalize",
+                        minHeight: "50px",
+                      }}
+                      icon=<EditIconForHeader />
+                      iconPosition="start"
+                    />
+                    {/* <Tab
+                      label="Audit Logs"
+                      value="2"
+                      className="nested1"
+                      sx={{
+                        textTransform: "capitalize",
+                        minHeight: "50px",
+                      }}
+                      icon=<AuditIcon />
+                      iconPosition="start"
+                    /> */}
+                  </TabList>
+                </Box>
+                <TabPanel
+                  value="1"
+                  sx={{ margin: "0px !important", padding: "0px !important" }}
+                >
+                  {" "}
+                  <Box
+                    sx={{
+                      width: "100%",
+                      marginTop: 1,
+                      padding: "0px !important",
+                    }}
+                    paddingInline={2}
+                  >
+                    <Box sx={{ height: 400 }}>
+                      <StyledDataGrid
+                        rows={formik.values || []}
+                        columns={columns.map((column) => ({
+                          ...column,
+                          headerAlign: "center",
+                          align: "center",
+                        }))}
+                        disableSelectionOnClick
+                        processRowUpdate={handleProcessRowUpdate}
+                        experimentalFeatures={{ newEditingApi: true }}
+                        getRowId={(row) => row.id}
+                        disableColumnMenu
+                      />
+                    </Box>
+                  </Box>
+                  <br />
+                  <Grid item xs={12} sx={{ margin: 1 }}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="space-between"
+                    >
+                      <Stack direction="row" spacing={2}>
+                        <OutlinedButton
+                          sx={{ fontWeight: "500" }}
+                          onClick={() => nav("/app/admin/charges")}
+                        >
+                          Close
+                        </OutlinedButton>
+                        <ThemeButton
+                          onClick={async () => {
+                            const errors = await formik.validateForm();
+                            if (Object.keys(errors).length > 0) {
+                              formik.setTouched(
+                                formik.values.map(() => ({
+                                  directIncome: true,
+                                  directExpense: true,
+                                })),
+                                true
+                              );
+
+                              getFirstError(errors);
+                            } else {
+                              formik.handleSubmit();
+                            }
+                          }}
+                          sx={{ fontWeight: "500", color: "white !important" }}
+                        >
+                          {loading && (
+                            <CircularProgress size={20} color="white" />
+                          )}{" "}
+                          Submit
+                        </ThemeButton>
+                      </Stack>
+                    </Stack>
+                  </Grid>
+                </TabPanel>
+                {/* <TabPanel
+                  value={2}
+                  sx={{ margin: "0px !important", padding: "0px !important" }}
+                >
+                  <AuditTimeLine
+                    id={id}
+                    page="charge"
+                    service={menuConfigUrl.admin}
+                  />
+                </TabPanel> */}
+              </TabContext>
+            </CardContent>
+          </Card>
+        )}
+      </Box>
+    </>
+  );
+}

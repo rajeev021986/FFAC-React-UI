@@ -51,6 +51,7 @@ import AddPayableEntry from "./pages/payable/AddPayableForm";
 import AccountsPendingPayableList from "./pages/accounts/PendingPayable";
 import ReceiveableEntryDetails from "./pages/ReceiveableEntry/AddDetails";
 import ReceivableEntryList from "./pages/ReceiveableEntry/ReceivableEntryList";
+import MappedCharges from "./components/screen/code/charge/MappedCharges";
 
 function App() {
   const theme = getTheme(
@@ -228,8 +229,8 @@ function App() {
               element={<ChargesScreen page={"charges"} />}
             />
             <Route
-              path="admin/charges/newcharges"
-              element={<AddEditCharge />}
+              path="admin/charges/addmapping"
+              element={<MappedCharges />}
             />
             <Route
               path="admin/charges/editcharges"

@@ -60,6 +60,7 @@ import payableReducer from "./freatures/payableEntrySlice";
 import pendingPaymentReducer from "./freatures/paymentApprovalSlice";
 import vatAndHoldingReducer from "./freatures/vatAndHoldingSlice";
 import receivableEntryReducer from "./freatures/ReceivableEntrySlice";
+import { mappedChargesDataApi } from "./api/mappedChargesDataApi";
 
 const store = configureStore({
   reducer: {
@@ -83,6 +84,7 @@ const store = configureStore({
     [bondDataAPI.reducerPath]: bondDataAPI.reducer,
     [vesselVoyageDataApi.reducerPath]: vesselVoyageDataApi.reducer,
     [chargesDataApi.reducerPath]: chargesDataApi.reducer,
+    [mappedChargesDataApi.reducerPath]: mappedChargesDataApi.reducer,
     [exchangeRateDataApi.reducerPath]: exchangeRateDataApi.reducer,
     [jobEntry.reducerPath]: jobEntry.reducer,
     [containerAPI.reducerPath]: containerAPI.reducer,
@@ -150,6 +152,7 @@ const store = configureStore({
       bondDataAPI.middleware,
       vesselVoyageDataApi.middleware,
       chargesDataApi.middleware,
+      mappedChargesDataApi.middleware,
       exchangeRateDataApi.middleware,
       jobEntry.middleware,
       containerAPI.middleware,

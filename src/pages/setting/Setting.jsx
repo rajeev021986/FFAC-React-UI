@@ -13,6 +13,7 @@ import ConsigneeSetting from "./ConsigneeSetting";
 import JobEntrySetting from "./jobEntrySetting";
 import PayableSettings from "./PayableSetting";
 import VatAndHoldingTaxSettings from "./Vat-HoldingTax";
+import ChargeSettings from "./ChargeSettings";
 
 const settingTabs = [
   {
@@ -58,6 +59,10 @@ const settingTabs = [
   {
     label: "Vat and Holding Tax",
     value: "11",
+  },
+    {
+    label: "Charge",
+    value: "12",
   },
 ];
 
@@ -115,6 +120,7 @@ export default function SettingsPage() {
             {activeTab === "9" && <JobEntrySetting />}
             {activeTab === "10" && <PayableSettings />}
             {activeTab === "11" && <VatAndHoldingTaxSettings />}
+            {activeTab === "12" && <ChargeSettings />}
           </Box>
         </Box>
       </Grid>
