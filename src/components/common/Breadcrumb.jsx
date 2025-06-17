@@ -60,6 +60,7 @@ const Routes = {
   shipper: { label: "Shipper", disabled: false },
   users: { label: "Users", disabled: false },
   charges: { label: "Charges", disabled: false },
+  addmapping: { label: "Add Mapping", disabled: false },
   newcharges: { label: "Create Charges", disabled: false },
   editcharges: { label: "Edit Charges", disabled: false },
   exchangeRate: { label: "Exchange Rate", disabled: false },

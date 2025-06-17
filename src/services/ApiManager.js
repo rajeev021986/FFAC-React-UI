@@ -304,7 +304,7 @@ class ApiManager {
     );
     return ApiMethods.put(url);
   };
-   static cancelRecievableEntry = async (id, type) => {
+  static cancelRecievableEntry = async (id, type) => {
     const url = ENDPOINTS.JOB_ENTRY_CANCEL_REQUEST(
       id,
       type,
@@ -403,6 +403,24 @@ class ApiManager {
       menuConfigUrl.account
     );
     return ApiMethods.get(url);
+  };
+
+  static reciveableApproveHandler = async (id, type) => {
+    const url = ENDPOINTS.RECEIVABLE_APPROVE_REQUEST(
+      id,
+      type,
+      menuConfigUrl.account
+    );
+    return ApiMethods.put(url);
+  };
+
+  static reciveableRejectHandler = async (id, type) => {
+    const url = ENDPOINTS.RECEIVABLE_REJECTED_REQUEST(
+      id,
+      type,
+      menuConfigUrl.account
+    );
+    return ApiMethods.put(url);
   };
 }
 

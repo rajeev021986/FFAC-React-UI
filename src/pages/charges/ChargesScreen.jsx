@@ -48,6 +48,7 @@ import AuditTimeLine from "../../components/AuditTimeLine";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
 import { downloadExcel } from "../../utils/downloadExcel";
+import AddEditCharge from "../../components/screen/code/charge/AddEditCharge";
 export function ChargesScreen({ page }) {
   const chargesSelector = useSelector((state) => state.chargesStore);
   const [exportLoader, setExportLoader] = useState(false);
@@ -56,6 +57,12 @@ export function ChargesScreen({ page }) {
   const dispatch = useDispatch();
   const [seletectBox, setSelectedBox] = useState("");
   const [deleteCharge] = useDeleteChargeMutation();
+  const [modalOpen, setModalOpen] = useState({
+    open: false,
+    type: "",
+    id: null,
+  });
+
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -63,6 +70,7 @@ export function ChargesScreen({ page }) {
   });
   const [open, setOpen] = React.useState(false);
   const actions = [
+    { name: "Add Mapping" },
     { name: "New Charges" },
     { name: exportLoader ? <LoaderIcon /> : "Export" },
   ];
@@ -134,11 +142,15 @@ export function ChargesScreen({ page }) {
   }, [chargesSelector.view, dispatch]);
 
   const handleActionClick = async (actionName) => {
-    if (actionName === "New Charges") {
-      nav("newcharges", {
+    if (actionName === "Add Mapping") {
+      nav("addmapping", {
         replace: true,
         state: { type: "new", id: null },
       });
+    }
+    if (actionName === "New Charges") {
+      setModalOpen({ open: true, type: "add", id: null });
+      return;
     }
     if (actionName === "Export") {
       setExportLoader(true);
@@ -314,7 +326,7 @@ export function ChargesScreen({ page }) {
             data={ChargesData?.body?.data}
             paginationModel={chargesSelector?.pagination}
             loading={isLoading || isFetching}
-            actions={getChargesListGridActions(nav, setModal)}
+            actions={getChargesListGridActions(nav, setModal, setModalOpen)}
             // actions={getCustomerListGridActions(nav, setModal)}
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
@@ -341,11 +353,19 @@ export function ChargesScreen({ page }) {
             <AuditTimeLine
               id={modal.data.id}
               page="charge"
-             service={menuConfigUrl.admin}
+              service={menuConfigUrl.admin}
             />
           </Box>
         </Drawer>
       )}
+      {modalOpen.open && (
+        <AddEditCharge
+          id={modalOpen.id}
+          type={modalOpen.type}
+          onClose={() => setModalOpen({ open: false, type: "", id: null })}
+        />
+      )}
+
       <DeleteDialog
         source="charge"
         sourceName={modal?.data?.deleteName}

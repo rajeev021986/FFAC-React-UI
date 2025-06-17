@@ -22,8 +22,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
-import { getPayableListGridActions } from "./Actions/action";
-import { getPayableListGridActionApprove } from "./Actions/appproveAction";
+import { getRecieveAbleListGridActionApprove } from "./Actions/appproveAction";
 
 import DeleteDialog from "../../components/common/DeleteDialog";
 import toast, { LoaderIcon } from "react-hot-toast";
@@ -32,9 +31,7 @@ import CustomToast from "../../components/common/Toast/CustomToast";
 import FilterForm from "./Actions/FilterForm";
 
 import { menuConfigUrl } from "../../store/menuConfigUrl";
-import { downloadBase64PDF, downloadExcel } from "../../utils/downloadExcel";
-
-import { usePrintPayableEntryMutation } from "../../store/api/payableApi";
+import { downloadExcel } from "../../utils/downloadExcel";
 import ApiManager from "../../services/ApiManager";
 
 import { getReceiveableEntryGridActionApprove } from "./Actions/action";
@@ -50,6 +47,8 @@ import {
 } from "../../store/freatures/ReceivableEntrySlice";
 import AddNewReceivableModal from "./AddNewReceivableModal";
 import CancelModalApprove from "../JobEntry/CancelModalApprove";
+import ApprovePayableModal from "../payable/AddPayableForm/ApprovePayableModal";
+import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
 
 export default function ReceivableEntryList({ page }) {
   const location = useLocation();
@@ -123,7 +122,10 @@ export default function ReceivableEntryList({ page }) {
   } = useFetchReceivableDatasQuery({
     params: query,
     payload,
-    page: page == "receivableEntry" ? "receivable/filter" : "",
+    page:
+      page == "receivableEntry"
+        ? "receivable/filter"
+        : "approval/filter/RECEIVABLE_ENTRY",
   });
 
   const handlePage = (params) => {
@@ -135,7 +137,7 @@ export default function ReceivableEntryList({ page }) {
     actions:
       page == "receivableEntry"
         ? getReceiveableEntryGridActionApprove(nav, setModal)
-        : "",
+        : getRecieveAbleListGridActionApprove(nav, setModal),
   });
 
   const handleActionClick = async (actionName) => {
@@ -175,6 +177,7 @@ export default function ReceivableEntryList({ page }) {
       data: {},
     });
   };
+
   const handleCancel = async () => {
     const statusCode = modal?.data?.statusCode;
     if (statusCode === 100) {
@@ -204,6 +207,7 @@ export default function ReceivableEntryList({ page }) {
       });
     }
   };
+
   const handleDelete = async () => {
     try {
       await deleteReceivable(modal.data.id)
@@ -226,6 +230,25 @@ export default function ReceivableEntryList({ page }) {
           closeButton: false,
         }
       );
+    }
+  };
+
+  const handleApprove = async () => {
+    try {
+      const response = await ApiManager.reciveableApproveHandler(
+        modal?.data?.id,
+        "RECEIVABLE_ENTRY"
+      );
+      const message = response.message;
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+      handleClose();
+      refetch();
+    } catch (error) {
+      toast.custom(<CustomToast message="Failed to approve." toast="error" />, {
+        closeButton: false,
+      });
     }
   };
 
@@ -372,7 +395,7 @@ export default function ReceivableEntryList({ page }) {
             actions={
               page == "receivableEntry"
                 ? getReceiveableEntryGridActionApprove(nav, setModal)
-                : ""
+                : getRecieveAbleListGridActionApprove(nav, setModal)
             }
             setSelectedBox={setSelectedBox}
             seletectBox={seletectBox}
@@ -406,29 +429,32 @@ export default function ReceivableEntryList({ page }) {
         </Drawer>
       )}
 
-     <CancelModalApprove
+      <CancelModalApprove
         rowId={modal?.data?.id}
         sourceName={modal?.data?.receivableRefNo}
         handleOpen={modal.open && modal.type === "cancel"}
         handleClose={handleClose}
         handleCancel={handleCancel}
       />
-    {/*    <ApprovePayableModal
+
+      <ApprovePayableModal
         rowId={modal?.data?.id}
-        sourceName={modal?.data?.payableRefNo}
+        sourceName={modal?.data?.receivableRefNo}
         handleOpen={modal.open && modal.type === "approve"}
         handleClose={handleClose}
         handleApprove={handleApprove}
       />
-    
-      {modal.open && modal.type === "document" && (
-        <PayableViewModal
-          open={modal.open}
-          data={modal.data}
-          onClose={() => setModal((prev) => ({ ...prev, open: false }))}
-          viewType={"view"}
+
+      {modal.open && modal.type === "reject" && (
+        <AddRejectedRemarks
+          handleOpen={modal.open && modal.type === "reject"}
+          handleClose={handleClose}
+          rowId={modal?.data?.id}
+          type="reject_recievble"
+          label="Reject Reason"
+          refetch={refetch}
         />
-      )} */}
+      )}
 
       <DeleteDialog
         source={modal?.data?.deleteName?.receivableRefNo}

@@ -7,14 +7,12 @@ import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconFor
 import DeleteIconDropdown from "../../../common/commonIconDropdown/DeleteIconDropdown/DeleteIconDropdown";
 import AuditIconDropdown from "../../../common/commonIconDropdown/AuditIconDropdown/AuditIconDropdown";
 import EditIconDropdown from "../../../common/commonIconDropdown/EditIconDropdown/EditIconDropdown";
-export const getChargesListGridActions = (nav, setModal) => {
+export const getChargesListGridActions = (nav, setModal,setModalOpen) => {
   return [
     {
       label: "Edit",
       onClick: (params) => {
-        nav(`editcharges`, {
-          state: { type: "Edit", id: params.row.id },
-        });
+        setModalOpen({ open: true, type: "edit", id: params.row.id }); // open modal with ID
       },
       icon: <EditIconDropdown />,
     },

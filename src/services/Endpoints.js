@@ -108,6 +108,11 @@ const ENDPOINTS = {
     `/${BasePageUrl}/receivable/${id}`,
   GET_RECEIVABLENTRY_DATA: (id, BasePageUrl) =>
     `/${BasePageUrl}/receivable?jobNo=${id}`,
+
+  RECEIVABLE_APPROVE_REQUEST: (id, type, BasePageUrl) =>
+    `/${BasePageUrl}/approval/approved/${type}/${id}`,
+  RECEIVABLE_REJECTED_REQUEST: (id, type, BasePageUrl) =>
+    `/${BasePageUrl}/approval/rejected/${type}/${id}`,
 };
 
 export default ENDPOINTS;

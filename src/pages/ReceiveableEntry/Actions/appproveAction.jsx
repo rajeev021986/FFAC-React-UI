@@ -8,31 +8,31 @@ import ApproveIconDropdown from "../../../components/common/commonIconDropdown/A
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import toast from "react-hot-toast";
 
-export const getPayableListGridActionApprove = (nav, setModal) => {
+export const getRecieveAbleListGridActionApprove = (nav, setModal) => {
   return [
-    {
-      label: "Edit",
-      onClick: (params) => {
-        nav(`approvePayableRequest`, {
-          state: { formAction: "edit", initialValues: params.row },
-        });
-      },
-      icon: <EditIconDropdown />,
-    },
-    {
-      label: "Audit",
-      onClick: (params) => {
-        setModal({ open: true, type: "audit", data: params.row });
-      },
-      icon: <AuditIconDropdown />,
-    },
-    {
-      label: "View",
-      onClick: (params) => {
-        setModal({ open: true, type: "document", data: params.row });
-      },
-      icon: <ViewIconDropdown />,
-    },
+    // {
+    //   label: "Edit",
+    //   onClick: (params) => {
+    //     nav(`approvePayableRequest`, {
+    //       state: { formAction: "edit", initialValues: params.row },
+    //     });
+    //   },
+    //   icon: <EditIconDropdown />,
+    // },
+    // {
+    //   label: "Audit",
+    //   onClick: (params) => {
+    //     setModal({ open: true, type: "audit", data: params.row });
+    //   },
+    //   icon: <AuditIconDropdown />,
+    // },
+    // {
+    //   label: "View",
+    //   onClick: (params) => {
+    //     setModal({ open: true, type: "document", data: params.row });
+    //   },
+    //   icon: <ViewIconDropdown />,
+    // },
     {
       label: "Approve",
       onClick: (params) => {
@@ -50,7 +50,7 @@ export const getPayableListGridActionApprove = (nav, setModal) => {
     {
       label: "Cancel",
       onClick: (params) => {
-        if (params.row.statusCode !== -3) {
+        if (params.row.statusCode !== -3) { 
           setModal({
             open: true,
             type: "cancel",
