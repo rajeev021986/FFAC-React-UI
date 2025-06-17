@@ -39,7 +39,6 @@ export default function ReceiveableEntryDetails({ page }) {
     status: "",
     statusCode: 0,
   });
-console.log("getDataFormParams",getDataFormParams);
 
   useEffect(() => {
     const mapResponseToInitialValues = (data = {}) => ({

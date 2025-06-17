@@ -14,15 +14,10 @@ import React, { useEffect, useRef } from "react";
 import InputBox from "../../../common/InputBox";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { DataGrid } from "@mui/x-data-grid";
-import AddIcon from "@mui/icons-material/Add";
 import { toast } from "react-hot-toast";
 import { GridDeleteIcon } from "@mui/x-data-grid";
-import SelectBox from "../../../common/SelectBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { ChargeMapping } from "./ChargeMapping";
-import InputBoxForGridTab from "../../../common/InputBoxForGridTab";
 import { StyledDataGrid } from "../../../common/Grid/styles";
 import getFirstError from "../../../common/FieldToastError";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
@@ -31,28 +26,19 @@ import ScreenToolbar from "../../../common/ScreenToolbar";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../common/Loader/Loader";
 import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
-import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
-import AuditTimeLine from "../../../AuditTimeLine";
-import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 import {
   useFetchMappedChargesDatasQuery,
   useUpdateMappedChargeMutation,
 } from "../../../../store/api/mappedChargesDataApi";
 import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoCompleteWithLoader from "../../../common/AutoComplete/FormAutoCompletewithLoader";
-// import { useFetchMappedChargesDatasQuery, useLazyGetMappedChargeQuery } from "../../../../store/api/MappedChargesDataApi";
 
-export default function MappedCharges({ ChargeSettingsData, type, loading }) {
+export default function MappedCharges({ type, loading }) {
   const newRowRef = useRef(null);
   const nav = useNavigate();
-  const {
-    data: mappedChargesData,
-    isLoading,
-    isError,
-    error,
-  } = useFetchMappedChargesDatasQuery();
-  const [updateMappedCharge, { isLoading: loadingMappedUpdate }] =
-    useUpdateMappedChargeMutation();
+  const { data: mappedChargesData, isLoading } =
+    useFetchMappedChargesDatasQuery();
+  const [updateMappedCharge, {}] = useUpdateMappedChargeMutation();
   const validationSchema = Yup.array().of(
     Yup.object().shape({
       directIncome: Yup.string().required("Direct Income is required"),
@@ -116,22 +102,6 @@ export default function MappedCharges({ ChargeSettingsData, type, loading }) {
     setValue(newValue);
   };
   const addNewRow = () => {
-    const hasEmptyFields = formik.values.some((row) =>
-      Object.values(row).some(
-        (value) => value === "" || value === null || value === undefined
-      )
-    );
-    if (false) {
-      toast.error("Please fill in all fields before adding a new row.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      return;
-    }
     const newRow = {
       id: Date.now(),
       directExpense: "",
@@ -168,7 +138,7 @@ export default function MappedCharges({ ChargeSettingsData, type, loading }) {
         );
         const rowErrors = formik.errors?.[rowIndex] || {};
         return (
-          <Box sx={{ width: "100%", margin: "12px",  }}>
+          <Box sx={{ width: "100%", margin: "12px" }}>
             <FormAutoCompleteWithLoader
               placeholder="Direct Income"
               id="directIncome"
@@ -192,6 +162,7 @@ export default function MappedCharges({ ChargeSettingsData, type, loading }) {
                 );
                 formik.setValues(updatedRows);
               }}
+              className={true}
             />
           </Box>
         );
@@ -230,6 +201,7 @@ export default function MappedCharges({ ChargeSettingsData, type, loading }) {
               );
               formik.setValues(updatedRows);
             }}
+            className={true}
           />
         );
       },
@@ -295,17 +267,6 @@ export default function MappedCharges({ ChargeSettingsData, type, loading }) {
                       icon=<EditIconForHeader />
                       iconPosition="start"
                     />
-                    {/* <Tab
-                      label="Audit Logs"
-                      value="2"
-                      className="nested1"
-                      sx={{
-                        textTransform: "capitalize",
-                        minHeight: "50px",
-                      }}
-                      icon=<AuditIcon />
-                      iconPosition="start"
-                    /> */}
                   </TabList>
                 </Box>
                 <TabPanel
@@ -334,6 +295,7 @@ export default function MappedCharges({ ChargeSettingsData, type, loading }) {
                         experimentalFeatures={{ newEditingApi: true }}
                         getRowId={(row) => row.id}
                         disableColumnMenu
+                        // style={{height: "200px"}}
                       />
                     </Box>
                   </Box>
@@ -379,16 +341,6 @@ export default function MappedCharges({ ChargeSettingsData, type, loading }) {
                     </Stack>
                   </Grid>
                 </TabPanel>
-                {/* <TabPanel
-                  value={2}
-                  sx={{ margin: "0px !important", padding: "0px !important" }}
-                >
-                  <AuditTimeLine
-                    id={id}
-                    page="charge"
-                    service={menuConfigUrl.admin}
-                  />
-                </TabPanel> */}
               </TabContext>
             </CardContent>
           </Card>

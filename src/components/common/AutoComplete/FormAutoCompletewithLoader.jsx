@@ -22,9 +22,10 @@ function FormAutoCompleteWithLoader(props) {
     name,
     disabled,
     other,
-    idKey, 
+    idKey,
     nameKey,
     sendLabelOnly,
+    className,
   } = props;
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -115,7 +116,7 @@ function FormAutoCompleteWithLoader(props) {
         id={id}
         disabled={disabled}
         value={
-          id == "exchangeRate" || id == "jobNo" 
+          id == "exchangeRate" || id == "jobNo"
             ? options.find((option) => option.value == value) || value
             : selectedOption
         }
@@ -137,7 +138,8 @@ function FormAutoCompleteWithLoader(props) {
               "& .MuiOutlinedInput-root": {
                 borderRadius: "10px",
                 fontSize: "14px",
-                height: "43px", // Increase height here
+                height: `${className ? "35px" : "42px"}`,
+                marginTop: `${className ? "5px" : ""}`,
               },
             }}
             InputProps={{
