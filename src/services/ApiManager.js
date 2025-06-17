@@ -398,9 +398,12 @@ class ApiManager {
   };
 
   static getReceivableData = async (data) => {
+    console.log(data, 3456789)
     const url = ENDPOINTS.GET_RECEIVABLENTRY_DATA(
       data?.job_number,
-      menuConfigUrl.account
+      menuConfigUrl.account,
+      data?.currency,
+      data?.exRate
     );
     return ApiMethods.get(url);
   };

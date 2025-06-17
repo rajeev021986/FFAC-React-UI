@@ -24,7 +24,12 @@ import AuditIcon from "../../../components/common/commonIcons/AuditIcon/AuditIco
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
 
-export default function SubSections({ initialValues, page, type = "notcopy" }) {
+export default function SubSections({
+  initialValues,
+  page,
+  type = "notcopy",
+  setgetDataFormParams,
+}) {
   //
   const nav = useNavigate();
   const [addReceivable, { isLoading }] = useAddReceivableMutation();
@@ -52,7 +57,7 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
       // Create a payload excluding 'type' and 'costDetails'
       const { costDetails, ...payload } = values;
       if (payload.details.length === 0) {
-      return  toast.custom(
+        return toast.custom(
           <CustomToast
             message={
               "Please add atleast one entry to create TaxInvoice/Debit Note"
@@ -141,9 +146,16 @@ export default function SubSections({ initialValues, page, type = "notcopy" }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   useEffect(() => {
     handleFetchPayable();
   }, [formik?.values?.chargesData]);
+
+  useEffect(() => {
+    if (formik?.values) {
+      setgetDataFormParams(formik?.values);
+    }
+  }, [formik?.values]);
 
   return (
     <>
