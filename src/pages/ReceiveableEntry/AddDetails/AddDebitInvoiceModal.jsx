@@ -149,15 +149,21 @@ export default function AddPayableEntryModal({
           invoiceEntry?.customerName
           // "Ananth"
         );
-        const validData = data.filter((item) => item.label?.trim() !== "");
-         validData?.push({
-          label: "Flat",
-          value: "Flat",
-          fullData: {
-            count: 3,
-            unit_type: "Flat",
-          },
-        });
+        const validData = data?.filter((item) => item.label?.trim() !== "");
+        const flatExists = validData.some(
+          (item) => item.label?.toLowerCase() === "flat"
+        );
+
+        if (!flatExists) {
+          validData.push({
+            label: "Flat",
+            value: "Flat",
+            fullData: {
+              count: 1,
+              unit_type: "Flat",
+            },
+          });
+        }
         setOptions(validData);
 
         setFilteredOptions(validData);

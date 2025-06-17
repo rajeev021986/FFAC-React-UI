@@ -216,22 +216,6 @@ export default function AddDebitAndInvoice({ formik }) {
       align: "center",
       editable: false,
     },
-    {
-      flex: 1,
-      field: "receivableAmount",
-      headerName: "Amount",
-      headerAlign: "center",
-      align: "center",
-      editable: false,
-    },
-    {
-      flex: 1,
-      field: "totalAmount",
-      headerName: "Total Amount",
-      headerAlign: "center",
-      align: "center",
-      editable: false,
-    },
     // {
     //   flex: 1,
     //   field: "currency",
@@ -277,6 +261,22 @@ export default function AddDebitAndInvoice({ formik }) {
       flex: 1,
       field: "vat",
       headerName: "Vat Amount",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "receivableAmount",
+      headerName: "Amount",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    {
+      flex: 1,
+      field: "totalAmount",
+      headerName: "Total Amount",
       headerAlign: "center",
       align: "center",
       editable: false,
@@ -334,7 +334,7 @@ export default function AddDebitAndInvoice({ formik }) {
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider",margin:2 }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", margin: 2 }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab
                 label="Tax Invoice/Debit Note Details"

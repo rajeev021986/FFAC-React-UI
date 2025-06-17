@@ -7,6 +7,7 @@ import {
   Typography,
   Toolbar,
   AppBar,
+  Grid,
 } from "@mui/material";
 import { Box, IconButton, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -32,18 +33,74 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { getTheme } from "../../../config/theme";
 import { useGridSelector } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
+import InputBox from "../../../components/common/InputBox";
+import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
+import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
+import ApiManager from "../../../services/ApiManager";
+import SelectBox from "../../../components/common/SelectBox";
+import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoComplete/FormAutoCompleteWithExchangeLoader";
+import { formatIndianCurrency } from "../../../components/utils/utils";
 export default function CostDetails({ formik, selectedInvoiceType }) {
+  console.log("formik",formik.values)
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
     return "Add";
   };
+  const { data: optionsSettingsData } =
+    useGetOptionsSettingsQuery("common_settings");
+     const [alertConfig, setAlertConfig] = useState({
+        open: false,
+        title: "",
+        message:
+          "All the Tax Invoice/Debit Note Details will be cleared if you change invoice type ",
+        severity: "info",
+        onConfirm: null,
+        onClose: () => setAlertConfig({ ...alertConfig, open: false }),
+      });
   const [localPagination, setLocalPagination] = useState({
     page: 0,
     pageSize: 10,
   });
   const [filteredData, setFilteredData] = useState([]);
   const [searchValue, setsearchValue] = useState("");
+  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiManager.fetchAutoCompleteData(
+          "",
+          "COMPANY_CODE"
+        );
+        const backendData = await response.body;
+
+        // Extract backend currencies safely
+        const backendCurrencies = Array.from(
+          new Set(
+            (backendData || []).map((item) => item.currency).filter(Boolean)
+          )
+        ).map((curr) => ({ id: curr, value: curr }));
+
+        // Get setting currencies safely
+        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
+
+        // Merge both arrays avoiding duplicates (based on `value`)
+        const mergedCurrencies = [
+          ...backendCurrencies,
+          ...settingCurrencies.filter(
+            (setting) =>
+              !backendCurrencies.some((item) => item.value === setting.value)
+          ),
+        ];
+
+        setMergedCurrencyOptions(mergedCurrencies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [optionsSettingsData?.body?.currencyType]);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -240,32 +297,40 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
 
   return (
     <>
-      <Accordion defaultExpanded style={{
-        marginTop:"10px",
-        border:"0px",
-      }}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{
-          // padding:"0" 
-          margin:"0px"
-        }}>
-        <Toolbar
-          sx={{
-            minHeight: "10px !important",
-            display: "flex",
-            borderRadius: "18px !important",
+      <Accordion
+        defaultExpanded
+        style={{
+          marginTop: "10px",
+          border: "0px",
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={{
+            // padding:"0"
+            margin: "0px",
           }}
         >
-          <Box style ={{margin:"0px"}}>
-            <Typography variant="body1">
-              <strong style={{
-                 color: theme.palette.primary.main,
-                 margin:"0px"
-
-              }}>Cost Details </strong>
-            </Typography>
-            
-          </Box>
-        </Toolbar>
+          <Toolbar
+            sx={{
+              minHeight: "10px !important",
+              display: "flex",
+              borderRadius: "18px !important",
+            }}
+          >
+            <Box style={{ margin: "0px" }}>
+              <Typography variant="body1">
+                <strong
+                  style={{
+                    color: theme.palette.primary.main,
+                    margin: "0px",
+                  }}
+                >
+                  Cost Details{" "}
+                </strong>
+              </Typography>
+            </Box>
+          </Toolbar>
         </AccordionSummary>
         <AccordionDetails>
           <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
@@ -323,7 +388,104 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
           </Card>
         </AccordionDetails>
       </Accordion>
-
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+          padding: "4px 0",
+          margin: 0,
+        }}
+      >
+        <Box sx={{ width: "100%", paddingRight: 2 }}>
+          <Grid container sx={{ padding: 0, margin: 0 }}>
+            <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
+              <FormAutoCompleteWithLoader
+                label="Customer Name*"
+                id="customerId"
+                value={{
+                  customerId: formik.values.customerId,
+                  customerName: formik.values.customerName,
+                }}
+                error={formik.errors.customerId}
+                idKey="customerId"
+                nameKey="customerName"
+                onChange={(selected) => {
+                  formik.setFieldValue("customerId", selected.customerId || "");
+                  formik.setFieldValue(
+                    "customerName",
+                    selected.customerName || ""
+                  );
+                }}
+                suggestionName="customer_name"
+              />
+            </Grid>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+              <SelectBox
+                label="Currency"
+                id="currency"
+                options={mergedCurrencyOptions}
+                value={formik.values.currency}
+                error={formik.errors.currency}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (formik.values.currency === value) return;
+                  if (formik.values.details.length === 0)
+                    return formik.setFieldValue("currency", value);
+                  setAlertConfig({
+                    open: true,
+                    title: "Are you sure you want to change currency?",
+                    message:
+                      "All the Tax Invoice/Debit Note Details will be cleared if you change currency.",
+                    severity: "info",
+                    confirmText: "Yes",
+                    onConfirm: () => {
+                      formik.setFieldValue("currency", value);
+                      formik.setFieldValue("details", []);
+                      setAlertConfig((prev) => ({ ...prev, open: false }));
+                    },
+                    onClose: () => {
+                      setAlertConfig((prev) => ({ ...prev, open: false }));
+                    },
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+              {formik.values?.currency === "TZS" ||
+              formik.values?.currency === "INR" ? (
+                <InputBox
+                  label="Ex. Rate"
+                  id="exchangRate"
+                  value={
+                    formik.values?.currency === "TZS" ||
+                    formik.values?.currency === "INR"
+                      ? 1
+                      : formatIndianCurrency(formik.values.exchangeRate)
+                  }
+                  error={formik.errors.exchangeRate}
+                  onChange={formik.handleChange}
+                  disabled={
+                    formik.values?.currency === "TZS" ||
+                    formik.values?.currency === "INR"
+                  }
+                />
+              ) : (
+                <FormAutoCompleteWithExchangeLoader
+                  label="Ex. Rate"
+                  id="exchangeRate"
+                  value={formik.values.exchangeRate}
+                  error={formik.errors.exchangeRate}
+                  onChange={formik.handleChange}
+                  suggestionName="usd_exchange"
+                  name={true}
+                  other={formik.values.currency}
+                />
+              )}
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
       <AddPayableEntryModal
         togglePayEntry={modal.open}
         handleTogglePayEntry={() =>
