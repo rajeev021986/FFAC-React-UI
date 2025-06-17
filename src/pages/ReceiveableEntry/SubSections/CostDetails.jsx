@@ -1,7 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { TextField, InputAdornment, Tooltip } from "@mui/material";
+import {
+  TextField,
+  InputAdornment,
+  Tooltip,
+  Tab,
+  Typography,
+  Toolbar,
+  AppBar,
+} from "@mui/material";
 import { Box, IconButton, Stack } from "@mui/material";
-import { Card, CardHeader } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
+import {
+  Card,
+  CardHeader,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
 import dayjs from "dayjs";
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -10,7 +26,12 @@ import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 import useDebounce from "../../../hooks/useDebounce";
-
+import { TabList } from "@mui/lab";
+import EditIconForHeader from "../../../components/common/commonIcons/EditIcons/EditIconForHeader";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { getTheme } from "../../../config/theme";
+import { useGridSelector } from "@mui/x-data-grid";
+import { useSelector } from "react-redux";
 export default function CostDetails({ formik, selectedInvoiceType }) {
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
@@ -215,63 +236,94 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
   const handleSearchBar = (e) => {
     setsearchValue(e.target.value);
   };
+  const theme = useTheme();
+
   return (
     <>
-      <Box sx={{ backgroundColor: "white.main" }}>
-        <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-          <CardHeader
-            sx={{ padding: "8px" }}
-            title={
-              <Stack direction="row" justifyContent="space-between">
-                <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
-                  <TextField
-                    hiddenLabel
-                    id="search"
-                    name="search"
-                    label="Search"
-                    variant="outlined"
-                    fullWidth
-                    size="small"
-                    value={searchValue}
-                    onChange={handleSearchBar}
-                    sx={{ ...muiTextFieldStyles.root }}
-                    InputProps={{
-                      endAdornment: searchValue && (
-                        <InputAdornment position="end">
-                          <IconButton
-                            size="small"
-                            onClick={() => setsearchValue("")}
-                            edge="end"
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Box>
-              </Stack>
-            }
-          />
-          <ThemedGrid
-            uniqueId="id"
-            columns={costDetailsColumns}
-            count={filteredData.length || 0}
-            handlePage={(model) =>
-              setLocalPagination({
-                page: model.page,
-                pageSize: model.pageSize,
-              })
-            }
-            data={paginatedCostDetails || []}
-            columnVisibility={{}}
-            columnVisibilityHandler={() => {}}
-            paginationModel={localPagination}
-            hideColumns = {true}
-            storageKey="CostListDataGrid"
-          />
-        </Card>
-      </Box>
+      <Accordion defaultExpanded style={{
+        marginTop:"10px",
+        border:"0px",
+      }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{
+          // padding:"0" 
+          margin:"0px"
+        }}>
+        <Toolbar
+          sx={{
+            minHeight: "10px !important",
+            display: "flex",
+            borderRadius: "18px !important",
+          }}
+        >
+          <Box style ={{margin:"0px"}}>
+            <Typography variant="body1">
+              <strong style={{
+                 color: theme.palette.primary.main,
+                 margin:"0px"
+
+              }}>Cost Details </strong>
+            </Typography>
+            
+          </Box>
+        </Toolbar>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+            <CardHeader
+              sx={{ padding: "8px" }}
+              title={
+                <Stack direction="row" justifyContent="space-between">
+                  <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
+                    <TextField
+                      hiddenLabel
+                      id="search"
+                      name="search"
+                      label="Search"
+                      variant="outlined"
+                      fullWidth
+                      size="small"
+                      value={searchValue}
+                      onChange={handleSearchBar}
+                      sx={{ ...muiTextFieldStyles.root }}
+                      InputProps={{
+                        endAdornment: searchValue && (
+                          <InputAdornment position="end">
+                            <IconButton
+                              size="small"
+                              onClick={() => setsearchValue("")}
+                              edge="end"
+                            >
+                              <ClearIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Box>
+                </Stack>
+              }
+            />
+            <ThemedGrid
+              uniqueId="id"
+              columns={costDetailsColumns}
+              count={filteredData.length || 0}
+              handlePage={(model) =>
+                setLocalPagination({
+                  page: model.page,
+                  pageSize: model.pageSize,
+                })
+              }
+              data={paginatedCostDetails || []}
+              columnVisibility={{}}
+              columnVisibilityHandler={() => {}}
+              paginationModel={localPagination}
+              hideColumns={true}
+              storageKey="CostListDataGrid"
+            />
+          </Card>
+        </AccordionDetails>
+      </Accordion>
+
       <AddPayableEntryModal
         togglePayEntry={modal.open}
         handleTogglePayEntry={() =>

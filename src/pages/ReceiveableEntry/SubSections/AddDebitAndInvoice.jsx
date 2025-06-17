@@ -136,34 +136,34 @@ export default function AddDebitAndInvoice({ formik }) {
   }, [formik?.values?.details]);
 
   const DEBIT_INVOICE_COLUMNS = [
-    {
-      flex: 1,
-      field: "customerName",
-      headerName: "Customer Name",
-      headerAlign: "center",
-      align: "center",
-      editable: false,
-      renderCell: (params) => {
-        const value = params.value || "";
-        const truncatedValue =
-          value.length > 25 ? value.slice(0, 25) + "..." : value;
+    // {
+    //   flex: 1,
+    //   field: "customerName",
+    //   headerName: "Customer Name",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   editable: false,
+    //   renderCell: (params) => {
+    //     const value = params.value || "";
+    //     const truncatedValue =
+    //       value.length > 25 ? value.slice(0, 25) + "..." : value;
 
-        return (
-          <Tooltip title={value} arrow>
-            <div
-              style={{
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                maxWidth: "100%",
-              }}
-            >
-              {truncatedValue}
-            </div>
-          </Tooltip>
-        );
-      },
-    },
+    //     return (
+    //       <Tooltip title={value} arrow>
+    //         <div
+    //           style={{
+    //             whiteSpace: "nowrap",
+    //             overflow: "hidden",
+    //             textOverflow: "ellipsis",
+    //             maxWidth: "100%",
+    //           }}
+    //         >
+    //           {truncatedValue}
+    //         </div>
+    //       </Tooltip>
+    //     );
+    //   },
+    // },
     {
       field: "chargeName",
       headerName: "Charge Name",
@@ -218,37 +218,53 @@ export default function AddDebitAndInvoice({ formik }) {
     },
     {
       flex: 1,
-      field: "currency",
-      headerName: "Currency",
-      headerAlign: "center",
-      align: "center",
-      editable: false,
-    },
-    {
-      flex: 1,
-      field: "exRate",
-      headerName: "Ex. Rate",
-      headerAlign: "center",
-      align: "center",
-      editable: false,
-    },
-
-    {
-      flex: 1,
-      field: "paybleAmount",
-      headerName: "Debit",
-      headerAlign: "center",
-      align: "center",
-      editable: false,
-    },
-    {
-      flex: 1,
       field: "receivableAmount",
-      headerName: "Credit",
+      headerName: "Receivable Amount",
       headerAlign: "center",
       align: "center",
       editable: false,
     },
+    {
+      flex: 1,
+      field: "totalAmount",
+      headerName: "Total Amount",
+      headerAlign: "center",
+      align: "center",
+      editable: false,
+    },
+    // {
+    //   flex: 1,
+    //   field: "currency",
+    //   headerName: "Currency",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   editable: false,
+    // },
+    // {
+    //   flex: 1,
+    //   field: "exRate",
+    //   headerName: "Ex. Rate",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   editable: false,
+    // },
+
+    // {
+    //   flex: 1,
+    //   field: "paybleAmount",
+    //   headerName: "Debit",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   editable: false,
+    // },
+    // {
+    //   flex: 1,
+    //   field: "receivableAmount",
+    //   headerName: "Credit",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   editable: false,
+    // },
     {
       flex: 1,
       field: "vatApplicable",
@@ -318,7 +334,7 @@ export default function AddDebitAndInvoice({ formik }) {
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider",margin:2 }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab
                 label="Tax Invoice/Debit Note Details"

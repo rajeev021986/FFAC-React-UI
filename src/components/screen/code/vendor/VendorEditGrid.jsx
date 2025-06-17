@@ -836,13 +836,24 @@ export default function VendorEditGrid({
           editable: false,
           renderCell: (params) => {
             return (
-              <InputBoxForGridTab
+              // <InputBoxForGridTab
+              //   value={params.value}
+              //   field={params.field}
+              //   id={params.id}
+              //   formik={formik}
+              //   api={params.api}
+              //   arrayName="bankDetails"
+              // />
+              <SelectBox
+                placeholder={true}
+                size="small"
+                sx={{
+                  marginTop: "0px",
+                  marginBottom: "0px",
+                }}
+                options={mergedCurrencyOptions}
                 value={params.value}
-                field={params.field}
-                id={params.id}
-                formik={formik}
-                api={params.api}
-                arrayName="bankDetails"
+                onChange={(e) => OnChange(params, e, "bankDetails")}
               />
             );
           },
