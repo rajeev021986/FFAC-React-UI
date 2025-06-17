@@ -108,6 +108,17 @@ export default function CustomerForm({
         );
         return; // Stop form submission
       }
+      if (values.telephone && !/^\d{7,10}$/.test(values.telephone)) {
+        toast.custom(
+          <CustomToast
+            message="Telephone must be between 7 and 10 digits."
+            toast="error"
+          />,
+          { closeButton: false }
+        );
+        return;
+      }
+
       if (!values.id || type == "copy") {
         let emails = values.customerEntityEmailsIds.map((item) =>
           item?.new ? { ...item, id: null, new: false } : item
@@ -690,6 +701,7 @@ export default function CustomerForm({
                         error={formik.errors.telephone}
                         onChange={formik.handleChange}
                         disabled={disabled}
+                        type ="number"
                       />
                     </Grid>
                     <Grid
@@ -756,7 +768,7 @@ export default function CustomerForm({
                         // onChange={formik.handleChange}
                         onChange={(e) => {
                           formik.setFieldValue("creditAmount", "");
-                          // formik.setFieldValue("creditDays", "");
+                          formik.setFieldValue("creditDays", "");
                           // formik.setFieldError("creditAmount", "");
                           //  formik.setFieldError("creditDays", "");
                           formik.setFieldValue("paymentType", e.target.value);
@@ -1335,6 +1347,7 @@ export default function CustomerForm({
                         error={formik.errors.telephone}
                         onChange={formik.handleChange}
                         disabled={disabled}
+                        type='number'
                       />
                     </Grid>
                     <Grid
@@ -1660,6 +1673,7 @@ export default function CustomerForm({
                   disabled={disabled}
                   dropdownData={dropdownData.documentType}
                   sourceType="CUSTOMER"
+                  showDocmentType="true"
                 />
               </TabPanel>
               <TabPanel value="3" sx={{ padding: "0px" }}>
