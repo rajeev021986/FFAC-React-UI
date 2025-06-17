@@ -52,10 +52,10 @@ export default function AddPayableEntryModal({
 }) {
   const modalValidationSchema = Yup.object().shape({
     chargeName: Yup.string().required("Charge Name is required"),
-    customerName: Yup.string().required("Customer Name is required"),
+    // customerName: Yup.string().required("Customer Name is required"),
     receivableAmount: Yup.string().required("Amount is required"),
-    currency: Yup.string().required("Currency is required"),
-    exRate: Yup.string().required("Exchange Rate is required"),
+    // currency: Yup.string().required("Currency is required"),
+    // exRate: Yup.string().required("Exchange Rate is required"),
     vatApplicable: Yup.string().required("VAT applicable is required"),
     unitType: Yup.string().required("Unit type is required"),
     // numOfUnits: Yup.string().required("Number of units is required"),
@@ -150,7 +150,16 @@ export default function AddPayableEntryModal({
           // "Ananth"
         );
         const validData = data.filter((item) => item.label?.trim() !== "");
+         validData?.push({
+          label: "Flat",
+          value: "Flat",
+          fullData: {
+            count: 3,
+            unit_type: "Flat",
+          },
+        });
         setOptions(validData);
+
         setFilteredOptions(validData);
       } catch (err) {
         console.error("Error fetching unit types:", err);
@@ -356,8 +365,8 @@ export default function AddPayableEntryModal({
         </Typography>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid item xs={12} lg={4}>
-            <FormAutoCompleteWithLoader
+          {/* <Grid item xs={12} lg={4}>
+             <FormAutoCompleteWithLoader
               label="Customer Name"
               id="customerId"
               suggestionName="customer_name"
@@ -372,8 +381,8 @@ export default function AddPayableEntryModal({
                 handleChange("customerId", selected.customerId);
                 handleChange("customerName", selected.customerName);
               }}
-            />
-          </Grid>
+            /> 
+          </Grid> */}
           <Grid item xs={12} lg={8}>
             {formik.values.type === "debit_note" ? (
               <FormAutoCompleteWithLoader
@@ -541,7 +550,7 @@ export default function AddPayableEntryModal({
               onChange={(e) => handleChange("currency", e.target.value)}
             />
           </Grid> */}
-          <Grid item xs={12} lg={4}>
+          {/* <Grid item xs={12} lg={4}>
             <SelectBox
               label="Currency"
               id="currency"
@@ -559,9 +568,9 @@ export default function AddPayableEntryModal({
               }}
               // disabled={isDisabled}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} lg={4}>
+          {/* <Grid item xs={12} lg={4}>
             {invoiceEntry?.currency === "TZS" ||
             invoiceEntry?.currency === "INR" ? (
               <InputBox
@@ -610,7 +619,7 @@ export default function AddPayableEntryModal({
                 other={invoiceEntry?.currency}
               />
             )}
-          </Grid>
+          </Grid> */}
           {/* <Grid item xs={12} lg={4}>
             <FormAutoCompleteWithLoader
               label="Ex. Rate"
@@ -662,7 +671,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} lg={4}>
+          {/* <Grid item xs={12} lg={4}>
             <DateTimeField
               name="date"
               label="Date"
@@ -670,7 +679,7 @@ export default function AddPayableEntryModal({
               value={invoiceEntry?.receivableCreatedDate || ""}
               disabled={true}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={8}></Grid>
           {/* Button */}
           <Grid item xs={4}>

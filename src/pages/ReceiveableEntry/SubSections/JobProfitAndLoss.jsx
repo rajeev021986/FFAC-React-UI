@@ -101,13 +101,13 @@ const JobProfitAndLoss = ({ formik }) => {
           display: "flex",
           justifyContent: "space-between",
           width: "100%",
-          padding: "8px 0",
-          margin: 0,
+          padding: "4px 0",
+          margin:0,
         }}
       >
         <Box sx={{ width: "100%", paddingRight: 2 }}>
           <Grid container sx={{ padding: 0, margin: 0 }}>
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
               <InputBox
                 label="Job No"
                 id="jobNo"
@@ -155,7 +155,7 @@ const JobProfitAndLoss = ({ formik }) => {
               />
             </Grid>
 
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
               <InputBox
                 label="Credit (Cost)"
                 id="creditCost"
@@ -202,7 +202,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 disabled
               />
             </Grid>
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+            <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
               <SelectBox
                 label="Invoice Type"
                 id="type"
