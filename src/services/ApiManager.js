@@ -416,13 +416,14 @@ class ApiManager {
     return ApiMethods.put(url);
   };
 
-  static reciveableRejectHandler = async (id, type) => {
+  static reciveableRejectHandler = async (id, type, remarkMessage) => {
+    let payload = { remarks: remarkMessage };
     const url = ENDPOINTS.RECEIVABLE_REJECTED_REQUEST(
       id,
       type,
-      menuConfigUrl.account
+      menuConfigUrl.document
     );
-    return ApiMethods.put(url);
+    return ApiMethods.put(url, payload);
   };
 }
 

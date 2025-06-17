@@ -129,6 +129,7 @@ export default function SubSections({
     },
   });
 
+  const data = setgetDataFormParams(formik?.values);
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -143,6 +144,7 @@ export default function SubSections({
     }, []);
     setChargesData(appendData);
   };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -150,12 +152,6 @@ export default function SubSections({
   useEffect(() => {
     handleFetchPayable();
   }, [formik?.values?.chargesData]);
-
-  useEffect(() => {
-    if (formik?.values?.currency || formik?.values?.exchangeRate) {
-      setgetDataFormParams(formik?.values);
-    }
-  }, [formik?.values?.currency, formik?.values?.exchangeRate]);
 
   return (
     <>

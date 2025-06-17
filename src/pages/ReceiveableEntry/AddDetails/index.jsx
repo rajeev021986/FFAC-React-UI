@@ -40,8 +40,6 @@ export default function ReceiveableEntryDetails({ page }) {
     statusCode: 0,
   });
 
-  console.log(getDataFormParams, "getDataFormParams");
-
   useEffect(() => {
     const mapResponseToInitialValues = (data = {}) => ({
       id: data.id || "",
@@ -95,12 +93,7 @@ export default function ReceiveableEntryDetails({ page }) {
       }
     };
     init();
-  }, [
-    job_number,
-    getDataFormParams?.currency,
-    getDataFormParams?.exchangeRate,
-    state?.initialValues?.id,
-  ]);
+  }, [job_number, getDataFormParams, state?.initialValues?.id]);
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
