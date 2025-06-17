@@ -81,7 +81,7 @@ const JobProfitAndLoss = ({ formik }) => {
       value: "debit_note",
     },
   ];
-console.log("formik.values.currency",formik.values.currency)
+
   return (
     <React.Fragment>
       <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>
@@ -146,7 +146,6 @@ console.log("formik.values.currency",formik.values.currency)
                 suggestionName="customer_name"
               />
             </Grid>
-
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Consignee Name"
@@ -264,7 +263,10 @@ console.log("formik.values.currency",formik.values.currency)
                   if (!formik.values.currency) {
                     return formik.setFieldValue("currency", value);
                   }
-                  if (formik.values.details?.length === 0 || formik.values?.paybleDetails === 0)
+                  if (
+                    formik.values.details?.length === 0 ||
+                    formik.values?.paybleDetails === 0
+                  )
                     return formik.setFieldValue("currency", value);
                   setAlertConfig({
                     open: true,

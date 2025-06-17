@@ -138,7 +138,7 @@ export default function AddPayableEntryModal({
   };
   useEffect(() => {
     const fetchData = async () => {
-      if (!invoiceEntry?.customerName) return;
+      if (!formik.values.customerName) return;
       setLoading(true);
       try {
         const data = await GetAutoCompleteDataWithLoader(
@@ -146,7 +146,7 @@ export default function AddPayableEntryModal({
           "unitTypeReceviable",
           "unit_type",
           debounceValue,
-          invoiceEntry?.customerName
+          formik.values.customerName || "", 
           // "Ananth"
         );
         const validData = data?.filter((item) => item.label?.trim() !== "");
@@ -175,7 +175,7 @@ export default function AddPayableEntryModal({
     };
 
     fetchData();
-  }, [debounceValue, invoiceEntry?.customerName]);
+  }, [debounceValue, formik.values.customerName]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -464,7 +464,7 @@ export default function AddPayableEntryModal({
               <Autocomplete
                 id="unitType"
                 size="small"
-                disabled={!invoiceEntry?.customerName}
+                disabled={!formik.values.customerName}
                 value={
                   options.find((opt) => opt.value === invoiceEntry.unitType) ||
                   null
