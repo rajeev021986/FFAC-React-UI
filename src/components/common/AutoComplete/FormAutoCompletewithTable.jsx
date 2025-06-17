@@ -70,21 +70,24 @@ function FormAutoCompleteWithTable(props) {
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
       const { country, port_name } = newValue.fullData;
-
       if (id === "originCountry") {
         setFieldValue("originCountry", country);
         setFieldValue("portOfLoading", port_name || "");
-      } else if (id === "portOfLoading") {
+      } 
+      else if (id == "portOfLoading") {
         setFieldValue("portOfLoading", port_name);
-        setFieldValue("originCountry", country || "");
+        setFieldValue("originPortId", newValue?.value || "");
+       
+        // setFieldValue("originCountry", country || "");
       }
     } else {
+    
       // Clear both fields when selection is removed
       setFieldValue(id, "");
       if (id === "originCountry") {
         setFieldValue("portOfLoading", "");
       } else if (id === "portOfLoading") {
-        setFieldValue("originCountry", "");
+        setFieldValue("originPortId", "");
       }
     }
   };

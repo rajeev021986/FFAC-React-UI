@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 const phoneRegExp = /^[0-9]{7,15}$/;
+const mobileRegExp = /^[0-9]{10,15}$/;
 export const IcdValidationSchema = () =>
   Yup.object({
     icd_name: Yup.string().required("Name is required"),
@@ -19,7 +20,7 @@ export const IcdValidationSchema = () =>
       "Telephone must be between 7 to 15 digits"
     ),
     mobile: Yup.string().matches(
-      phoneRegExp,
-      "Mobile must be between 7 to 15 digits"
+      mobileRegExp,
+      "Mobile must be between 10 to 15 digits"
     ),
   });

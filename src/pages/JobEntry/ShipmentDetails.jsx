@@ -86,7 +86,7 @@ export default function ShipmentDetails({ formik }) {
               label="Origin Country"
               id="originPortId"
               suggestionName="originCountry"
-              value={formik.values.originPortId}
+              value={formik?.values?.originPortId}
               formik={formik}
               setFieldValue={formik.setFieldValue}
               error={formik.errors.originPortId}

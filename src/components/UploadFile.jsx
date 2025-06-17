@@ -52,6 +52,7 @@ const UploadFile = ({
   sourceType = null,
   isNotShowType,
   type,
+  showDocmentType,
   refetchPayableData,
 }) => {
   const [viewloader, setViewloader] = useState(false);
@@ -231,7 +232,7 @@ const UploadFile = ({
     // if (!validateForm()) {
     //   return;
     // }
-    if(!formData.documentType){
+    if(showDocmentType == "true" && !formData.documentType){
       toast.custom(
         <CustomToast message="Document Type is required." />
       );

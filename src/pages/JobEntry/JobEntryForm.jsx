@@ -82,7 +82,7 @@ export default function JobEntryForm({
     initialValues,
     enableReinitialize: true,
     validateOnChange: false,
-    validationSchema: JobEntryValidationSchema(),
+     validationSchema: JobEntryValidationSchema(),
     onSubmit: async (values) => {
       if (isLoading) {
         return;

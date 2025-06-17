@@ -381,6 +381,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       value={formik.values.tel_no}
                       error={formik.errors.tel_no}
                       onChange={formik.handleChange}
+                      type="number"
                     />
                   </Grid>
 
@@ -400,6 +401,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       value={formik.values.mobile}
                       error={formik.errors.mobile}
                       onChange={formik.handleChange}
+                      type="number"
                     />
                   </Grid>
 
@@ -673,6 +675,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       value={formik.values.tel_no}
                       error={formik.errors.tel_no}
                       onChange={formik.handleChange}
+                      type="number"
                     />
                   </Grid>
 
@@ -692,6 +695,7 @@ export default function IcdForm({ initialValues, page, type, id }) {
                       value={formik.values.mobile}
                       error={formik.errors.mobile}
                       onChange={formik.handleChange}
+                      type="number"
                     />
                   </Grid>
 

@@ -446,6 +446,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                       <SelectBox
                         label="Designation"
                         id="designation"
+                        value={formik.values.designation}
                         options={dropdownData?.designation}
                         error={formik.errors.status}
                         onChange={formik.handleChange}
@@ -837,6 +838,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                       label="Designation"
                       id="designation"
                       options={dropdownData?.designation}
+                      value={formik.values.designation}
                       error={formik.errors.status}
                       onChange={formik.handleChange}
                     />
@@ -979,6 +981,7 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                   customer_id={initialValues.id}
                   dropdownData={dropdownData?.documentType}
                   sourceType="SHIPPER"
+                    disabled={disabled}
                 />
               </TabPanel>
               <TabPanel value={3} sx={{ margin: 0, padding: 0 }}>
