@@ -11,7 +11,6 @@ import ApiManager from "../../../services/ApiManager";
 
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
-  const [pendingInvoiceType, setPendingInvoiceType] = useState(null);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",
@@ -21,9 +20,11 @@ const JobProfitAndLoss = ({ formik }) => {
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
+  const { jobNo, currency, exRate } = formik?.values;
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -60,11 +61,13 @@ const JobProfitAndLoss = ({ formik }) => {
 
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
+
   useEffect(() => {
     if (payableRef?.current) {
       payableRef.current.focus();
     }
   }, []);
+
   const OPTION_TYPE = [
     {
       label: "Tax Invoice",
@@ -75,6 +78,7 @@ const JobProfitAndLoss = ({ formik }) => {
       value: "debit_note",
     },
   ];
+
   return (
     <React.Fragment>
       <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>
@@ -102,7 +106,7 @@ const JobProfitAndLoss = ({ formik }) => {
           justifyContent: "space-between",
           width: "100%",
           padding: "4px 0",
-          margin:0,
+          margin: 0,
         }}
       >
         <Box sx={{ width: "100%", paddingRight: 2 }}>
@@ -215,7 +219,7 @@ const JobProfitAndLoss = ({ formik }) => {
                   const value = e.target.value;
                   if (formik.values.type === value) return;
                   if (formik.values.details.length === 0)
-                    return  formik.setFieldValue("type", value);
+                    return formik.setFieldValue("type", value);
                   setAlertConfig({
                     open: true,
                     title: "Are you sure you want to change Invoice Type?",
@@ -272,11 +276,13 @@ const JobProfitAndLoss = ({ formik }) => {
         </Box>
       </Box>
 
-      <CostDetails
-        formik={formik}
-        selectedInvoiceType={formik.values.type}
-        page={"jobProfitAndLoss"}
-      />
+      {jobNo && currency && exRate ? (
+        <CostDetails
+          formik={formik}
+          selectedInvoiceType={formik.values.type}
+          page={"jobProfitAndLoss"}
+        />
+      ) : null}
     </React.Fragment>
   );
 };

@@ -15,6 +15,8 @@ export default function ReceiveableEntryDetails({ page }) {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const job_number = queryParams.get("job_number");
+
+  const [getDataFormParams, setgetDataFormParams] = useState(null);
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = React.useState({
     consigneeName: "",
@@ -49,7 +51,7 @@ export default function ReceiveableEntryDetails({ page }) {
       customerId: data.customerId || "",
       debitCost: data.debitCost || 0,
       exRate: data.exRate || "",
-      jobNo: data.jobNo || "",
+      jobNo: data.jobNo || job_number,
       netCost: data.netCost || "",
       paybleRefNo: data.paybleRefNo || "",
       profitLoss: data.profitLoss || 0,
@@ -58,14 +60,22 @@ export default function ReceiveableEntryDetails({ page }) {
       containerTypeDTO: data.containerTypeDTO || [],
       costDetails: data.costDetails || [],
       details: data?.receivableDetails || [],
-    status: data?.status || "",
-    statusCode: data?.statusCode || 0,
+      status: data?.status || "",
+      statusCode: data?.statusCode || 0,
     });
     const init = async () => {
       try {
         let response;
-        if (job_number) {
-          response = await ApiManager.getReceivableData({ job_number });
+        if (
+          job_number &&
+          getDataFormParams?.currency &&
+          getDataFormParams?.exRate
+        ) {
+          response = await ApiManager.getReceivableData({
+            job_number,
+            currency: getDataFormParams?.currency,
+            exRate: getDataFormParams?.exRate,
+          });
         } else if (state?.initialValues?.id) {
           response = await ApiManager.getReceivableEntryDeatils(
             state.initialValues.id
@@ -73,21 +83,18 @@ export default function ReceiveableEntryDetails({ page }) {
         }
         if (response?.body) {
           setInitialValues(mapResponseToInitialValues(response.body));
+          console.log(response.body, 234567890);
         }
       } catch (error) {
-        toast.custom(
-          <CustomToast
-            message={error.message}
-            toast="error"
-          />,
-          { closeButton: false }
-        );
+        toast.custom(<CustomToast message={error.message} toast="error" />, {
+          closeButton: false,
+        });
       } finally {
         setLoading(false);
       }
     };
     init();
-  }, [job_number, state?.initialValues?.id]);
+  }, [job_number, getDataFormParams, state?.initialValues?.id]);
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
@@ -118,6 +125,7 @@ export default function ReceiveableEntryDetails({ page }) {
               initialValues={initialValues}
               type={state?.formAction}
               page={page}
+              setgetDataFormParams={setgetDataFormParams}
             />
           </CardContent>
         </Card>
