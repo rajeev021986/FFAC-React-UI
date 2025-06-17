@@ -48,9 +48,31 @@ const GlobalSetting = () => {
         setInvoicePatternData(data.body.invoicePatternData);
     }
   }, [data, geterror]);
-
   const Postdata = async () => {
     setIsLoading(true);
+    // Validation: Check if Tax Invoice and Debit Note have same invoicePattern
+    const taxInvoice = invoicePatternData.find(
+      (item) => item.invoiceType === "Tax Invoice"
+    );
+    const debitNote = invoicePatternData.find(
+      (item) => item.invoiceType === "Debit Note"
+    );
+
+    if (
+      taxInvoice &&
+      debitNote &&
+      taxInvoice.invoicePattern.trim() === debitNote.invoicePattern.trim()
+    ) {
+      toast.custom(
+        <CustomToast
+          message="Tax Invoice and Debit Note cannot have the same invoice pattern."
+          toast="error"
+        />,
+        { closeButton: false }
+      );
+      setIsLoading(false);
+      return; // Stop submission
+    }
     const filteredData = {
       status: status.filter((item) => !item.value.includes("Type the")),
       account_type: account_type.filter(

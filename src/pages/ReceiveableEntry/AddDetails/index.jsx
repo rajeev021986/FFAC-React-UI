@@ -35,12 +35,13 @@ export default function ReceiveableEntryDetails({ page }) {
     containerTypeDTO: [],
     paybleDetails: [],
     costDetails: [],
+    totalAmount: 0,
+    vatAmount: 0,
+    totalAmount: 0,
     type: "debit_note",
     status: "",
     statusCode: 0,
   });
-console.log("getDataFormParams",getDataFormParams);
-
   useEffect(() => {
     const mapResponseToInitialValues = (data = {}) => ({
       id: data.id || "",
@@ -63,6 +64,9 @@ console.log("getDataFormParams",getDataFormParams);
       details: data?.receivableDetails || [],
       status: data?.status || "",
       statusCode: data?.statusCode || 0,
+      amount: data?.amount || 0,
+      vatAmount: data?.vatAmount || 0,
+      totalAmount: data?.totalAmount || 0,
     });
     const init = async () => {
       try {

@@ -293,6 +293,26 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
     setsearchValue(e.target.value);
   };
   const theme = useTheme();
+  useEffect(() => {
+    const details = formik.values.details || [];
+
+    const totalVat = details.reduce(
+      (sum, item) => sum + parseFloat(item.vat || 0),
+      0
+    );
+    const totalReceivable = details.reduce(
+      (sum, item) => sum + parseFloat(item.receivableAmount || 0),
+      0
+    );
+    const totalCombined = details.reduce(
+      (sum, item) => sum + parseFloat(item.totalAmount || 0),
+      0
+    );
+
+    formik.setFieldValue("vatAmount", totalVat.toFixed(2));
+    formik.setFieldValue("amount", totalReceivable.toFixed(2));
+    formik.setFieldValue("totalAmount", totalCombined.toFixed(2));
+  }, [formik.values.details]);
 
   return (
     <>
@@ -485,9 +505,9 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="VAT Amount"
-                id="profitLoss"
-                value={formik.values.vat}
-                error={formik.errors.vat}
+                id="vatAmount"
+                value={formik.values.vatAmount}
+                error={formik.errors.vatAmount}
                 onChange={formik.handleChange}
                 disabled
               />
@@ -495,9 +515,9 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
             <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
               <InputBox
                 label="Amount"
-                id="profitLoss"
-                value={formik.values.profitLoss}
-                error={formik.errors.profitLoss}
+                id="amount"
+                value={formik.values.amount}
+                error={formik.errors.amount}
                 onChange={formik.handleChange}
                 disabled
               />
@@ -505,7 +525,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <InputBox
                 label="Total Amount"
-                id="profitLoss"
+                id="totalAmount"
                 value={formik.values.totalAmount}
                 error={formik.errors.totalAmount}
                 onChange={formik.handleChange}
