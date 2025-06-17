@@ -4,7 +4,6 @@ const suggestionName = {
   country: "PORT_COUNTRY",
   chargeName: "CHARGE",
   chargeId: "CHARGE",
-  mappedCharge: "MAPPED_CHARGE",
   currency: "CURRENCY",
   vesselName: "VESSEL",
   vessel: "VESSEL",
@@ -16,6 +15,7 @@ const suggestionName = {
   supplierName: "SHIPPER",
   consigneeName: "CONSIGNEE",
   shippingLine: "VENDOR_TYPE",
+  mappedCharge: "CHARGE",
   loadingVoyage: "VESSEL_VOYAGE",
   dischargeVoyage: "VESSEL_VOYAGE",
   vesselAgent: "VENDOR_TYPE",
@@ -45,7 +45,7 @@ export const GetAutoCompleteDataWithLoader = async (
   searchText,
   other
 ) => {
-  inputId = suggestionName[inputId]; 
+  inputId = suggestionName[inputId];
   try {
     const response = await ApiManager.fetchAutoCompleteData(
       searchText,
@@ -53,7 +53,6 @@ export const GetAutoCompleteDataWithLoader = async (
       other || ""
     );
     const data = await response.body;
-
     let uniqueSuggestions = data
       .filter(
         (value, index, self) =>
@@ -64,7 +63,6 @@ export const GetAutoCompleteDataWithLoader = async (
         value: item[dataKey],
         fullData: item,
       }));
-
     return uniqueSuggestions;
   } catch (error) {
     return [];

@@ -153,6 +153,12 @@ export default function SubSections({
     handleFetchPayable();
   }, [formik?.values?.chargesData]);
 
+  useEffect(() => {
+    if (formik?.values) {
+      setgetDataFormParams(formik?.values);
+    }
+  }, [formik?.values]);
+console.log("formik?.values",formik?.values)
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>

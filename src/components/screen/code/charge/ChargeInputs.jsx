@@ -18,6 +18,7 @@ import SelectBox from "../../../common/SelectBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import getFirstError from "../../../common/FieldToastError";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
+import FormAutoCompleteWithLoader from "../../../common/AutoComplete/FormAutoCompletewithLoader";
 
 export default function ChargeInputs({
   formik,
@@ -28,7 +29,7 @@ export default function ChargeInputs({
   nav,
 }) {
   const newRowRef = useRef(null);
-const vatApplicableOptions = [
+  const vatApplicableOptions = [
     { label: "Yes", value: "YES" },
     { label: "No", value: "NO" },
   ];
@@ -100,12 +101,21 @@ const vatApplicableOptions = [
           </Grid>
         )}
         <Grid item xs={12} lg={4}>
-          <InputBox
+          <FormAutoCompleteWithLoader
             label="Mapped Charge"
             id="mappedCharge"
-            value={formik.values.mappedCharge}
+            suggestionName="charge_name"
+            value={{
+              mappedChargeId: formik.values.mappedChargeId,
+              mappedCharge: formik.values.mappedCharge,
+            }}
             error={formik.errors.mappedCharge}
-            onChange={formik.handleChange}
+            idKey="mappedChargeId"
+            nameKey="mappedCharge"
+            onChange={(selected) => {
+              formik.setFieldValue("mappedCharge", selected.mappedCharge);
+              formik.setFieldValue("mappedChargeId", selected.mappedChargeId);
+            }}
           />
         </Grid>
         <Grid item xs={12} lg={4}>

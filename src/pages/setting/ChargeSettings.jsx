@@ -41,8 +41,7 @@ const ChargeSettings = () => {
       type: "charge_settings",
     })
       .then((res) => {
-        if (res) {
-          console.log("res.error", res.error);
+        if (res.error) {
           toast.custom(
             <CustomToast message={res.error.data.message} toast="error" />,
             {

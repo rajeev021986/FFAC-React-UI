@@ -128,7 +128,6 @@ export default function JobEntryScreen({ page }) {
     page:
       page == "job-entry" ? "job-detail/filter" : "approval/filter/JOB_DETAIL",
   });
-console.log("jobEntriesData",jobEntriesData)
   const handlePage = (params) => {
     let { page, pageSize } = params;
     dispatch(setPagination({ page, pageSize }));
