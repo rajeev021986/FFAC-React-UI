@@ -998,7 +998,7 @@ export default function AddEditForm({
                     getFormData?.currency === "INR" ? (
                       <InputBox
                         label="Ex. Rate"
-                        id="exchangRate"
+                        id="exchangeRate"
                         value={
                           getFormData?.currency === "TZS" ||
                           getFormData?.currency === "INR"

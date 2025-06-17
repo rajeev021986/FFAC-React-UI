@@ -25,7 +25,7 @@ export default function ReceiveableEntryDetails({ page }) {
     customerName: "",
     customerId: "",
     debitCost: "",
-    exRate: "",
+   exchangeRate: "",
     jobId: "",
     jobNo: "",
     netCost: "",
@@ -39,6 +39,7 @@ export default function ReceiveableEntryDetails({ page }) {
     status: "",
     statusCode: 0,
   });
+console.log("getDataFormParams",getDataFormParams);
 
   useEffect(() => {
     const mapResponseToInitialValues = (data = {}) => ({
@@ -74,7 +75,7 @@ export default function ReceiveableEntryDetails({ page }) {
           response = await ApiManager.getReceivableData({
             job_number,
             currency: getDataFormParams?.currency,
-            exRate: getDataFormParams?.exchangeRate,
+            exchangeRate: getDataFormParams?.exchangeRate,
           });
         } else if (state?.initialValues?.id) {
           response = await ApiManager.getReceivableEntryDeatils(

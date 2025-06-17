@@ -264,7 +264,7 @@ console.log("formik.values.currency",formik.values.currency)
                   if (!formik.values.currency) {
                     return formik.setFieldValue("currency", value);
                   }
-                  if (formik.values.details?.length === 0)
+                  if (formik.values.details?.length === 0 || formik.values?.paybleDetails === 0)
                     return formik.setFieldValue("currency", value);
                   setAlertConfig({
                     open: true,
@@ -290,7 +290,7 @@ console.log("formik.values.currency",formik.values.currency)
               formik.values?.currency === "INR" ? (
                 <InputBox
                   label="Ex. Rate"
-                  id="exchangRate"
+                  id="exchangeRate"
                   value={
                     formik.values?.currency === "TZS" ||
                     formik.values?.currency === "INR"

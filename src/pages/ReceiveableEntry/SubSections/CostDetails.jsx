@@ -455,7 +455,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
               formik.values?.currency === "INR" ? (
                 <InputBox
                   label="Ex. Rate"
-                  id="exchangRate"
+                  id="exchangeRate"
                   value={
                     formik.values?.currency === "TZS" ||
                     formik.values?.currency === "INR"

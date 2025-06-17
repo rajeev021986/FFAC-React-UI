@@ -402,7 +402,7 @@ class ApiManager {
       data?.job_number,
       menuConfigUrl.account,
       data?.currency,
-      data?.exRate
+      data?.exchangeRate
     );
     return ApiMethods.get(url);
   };
