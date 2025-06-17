@@ -73,6 +73,7 @@ const AddEditCharge = ({ onClose, id, type }) => {
     chargeFor: "",
     chargeName: "",
     mappedCharge: "",
+    mappedChargeId:"",
     vatApplicable: "",
     chargeCode: "",
   };

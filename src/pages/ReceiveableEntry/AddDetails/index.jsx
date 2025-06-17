@@ -83,7 +83,6 @@ export default function ReceiveableEntryDetails({ page }) {
         }
         if (response?.body) {
           setInitialValues(mapResponseToInitialValues(response.body));
-          console.log(response.body, 234567890);
         }
       } catch (error) {
         toast.custom(<CustomToast message={error.message} toast="error" />, {

@@ -81,7 +81,7 @@ const JobProfitAndLoss = ({ formik }) => {
       value: "debit_note",
     },
   ];
-
+console.log("formik.values.currency",formik.values.currency)
   return (
     <React.Fragment>
       <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>

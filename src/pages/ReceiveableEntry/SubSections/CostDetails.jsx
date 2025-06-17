@@ -41,7 +41,6 @@ import SelectBox from "../../../components/common/SelectBox";
 import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoComplete/FormAutoCompleteWithExchangeLoader";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 export default function CostDetails({ formik, selectedInvoiceType }) {
-  console.log("formik",formik.values)
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
@@ -49,15 +48,15 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
   };
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
-     const [alertConfig, setAlertConfig] = useState({
-        open: false,
-        title: "",
-        message:
-          "All the Tax Invoice/Debit Note Details will be cleared if you change invoice type ",
-        severity: "info",
-        onConfirm: null,
-        onClose: () => setAlertConfig({ ...alertConfig, open: false }),
-      });
+  const [alertConfig, setAlertConfig] = useState({
+    open: false,
+    title: "",
+    message:
+      "All the Tax Invoice/Debit Note Details will be cleared if you change invoice type ",
+    severity: "info",
+    onConfirm: null,
+    onClose: () => setAlertConfig({ ...alertConfig, open: false }),
+  });
   const [localPagination, setLocalPagination] = useState({
     page: 0,
     pageSize: 10,
@@ -482,6 +481,36 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                   other={formik.values.currency}
                 />
               )}
+            </Grid>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="VAT Amount"
+                id="profitLoss"
+                value={formik.values.vat}
+                error={formik.errors.vat}
+                onChange={formik.handleChange}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
+              <InputBox
+                label="Amount"
+                id="profitLoss"
+                value={formik.values.profitLoss}
+                error={formik.errors.profitLoss}
+                onChange={formik.handleChange}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+              <InputBox
+                label="Total Amount"
+                id="profitLoss"
+                value={formik.values.totalAmount}
+                error={formik.errors.totalAmount}
+                onChange={formik.handleChange}
+                disabled
+              />
             </Grid>
           </Grid>
         </Box>

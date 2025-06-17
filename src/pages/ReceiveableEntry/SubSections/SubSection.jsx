@@ -156,7 +156,7 @@ export default function SubSections({
       setgetDataFormParams(formik?.values);
     }
   }, [formik?.values]);
-
+console.log("formik?.values",formik?.values)
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>

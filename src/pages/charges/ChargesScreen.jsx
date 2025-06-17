@@ -132,7 +132,7 @@ export function ChargesScreen({ page }) {
 
   CARD_CHARGES_COLUMNS[CARD_CHARGES_COLUMNS.length - 1].renderCell =
     GridActions({
-      actions: getChargesListGridActions(nav, setModal),
+      actions: getChargesListGridActions(nav, setModal, setModalOpen),
     });
 
   useEffect(() => {
