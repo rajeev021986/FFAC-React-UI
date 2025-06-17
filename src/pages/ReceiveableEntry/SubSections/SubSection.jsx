@@ -152,10 +152,10 @@ export default function SubSections({
   }, [formik?.values?.chargesData]);
 
   useEffect(() => {
-    if (formik?.values) {
+    if (formik?.values?.currency || formik?.values?.exchangeRate) {
       setgetDataFormParams(formik?.values);
     }
-  }, [formik?.values]);
+  }, [formik?.values?.currency, formik?.values?.exchangeRate]);
 
   return (
     <>

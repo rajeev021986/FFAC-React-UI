@@ -40,6 +40,8 @@ export default function ReceiveableEntryDetails({ page }) {
     statusCode: 0,
   });
 
+  console.log(getDataFormParams, "getDataFormParams");
+
   useEffect(() => {
     const mapResponseToInitialValues = (data = {}) => ({
       id: data.id || "",
@@ -50,7 +52,7 @@ export default function ReceiveableEntryDetails({ page }) {
       customerName: data.customerName || "",
       customerId: data.customerId || "",
       debitCost: data.debitCost || 0,
-      exRate: data.exRate || "",
+      exchangeRate: data.exchangeRate || "",
       jobNo: data.jobNo || job_number,
       netCost: data.netCost || "",
       paybleRefNo: data.paybleRefNo || "",
@@ -69,12 +71,12 @@ export default function ReceiveableEntryDetails({ page }) {
         if (
           job_number &&
           getDataFormParams?.currency &&
-          getDataFormParams?.exRate
+          getDataFormParams?.exchangeRate
         ) {
           response = await ApiManager.getReceivableData({
             job_number,
             currency: getDataFormParams?.currency,
-            exRate: getDataFormParams?.exRate,
+            exRate: getDataFormParams?.exchangeRate,
           });
         } else if (state?.initialValues?.id) {
           response = await ApiManager.getReceivableEntryDeatils(
@@ -83,7 +85,6 @@ export default function ReceiveableEntryDetails({ page }) {
         }
         if (response?.body) {
           setInitialValues(mapResponseToInitialValues(response.body));
-          console.log(response.body, 234567890);
         }
       } catch (error) {
         toast.custom(<CustomToast message={error.message} toast="error" />, {
@@ -94,7 +95,12 @@ export default function ReceiveableEntryDetails({ page }) {
       }
     };
     init();
-  }, [job_number, getDataFormParams, state?.initialValues?.id]);
+  }, [
+    job_number,
+    getDataFormParams?.currency,
+    getDataFormParams?.exchangeRate,
+    state?.initialValues?.id,
+  ]);
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>

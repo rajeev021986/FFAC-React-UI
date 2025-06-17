@@ -23,7 +23,7 @@ const JobProfitAndLoss = ({ formik }) => {
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
   });
-  const { jobNo, currency, exRate } = formik?.values;
+  const { jobNo, currency, exchangeRate } = formik?.values;
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
@@ -345,7 +345,7 @@ const JobProfitAndLoss = ({ formik }) => {
         </Box>
       </Box>
 
-      {jobNo && currency && exRate ? (
+      {jobNo && currency && exchangeRate ? (
         <CostDetails
           formik={formik}
           selectedInvoiceType={formik.values.type}
