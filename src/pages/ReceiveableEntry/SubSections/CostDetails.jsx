@@ -40,6 +40,7 @@ import ApiManager from "../../../services/ApiManager";
 import SelectBox from "../../../components/common/SelectBox";
 import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoComplete/FormAutoCompleteWithExchangeLoader";
 import { formatIndianCurrency } from "../../../components/utils/utils";
+import PopupAlert from "../../../components/common/Alert/PopupAlert";
 export default function CostDetails({ formik, selectedInvoiceType }) {
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
@@ -52,7 +53,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
     open: false,
     title: "",
     message:
-      "All the Tax Invoice/Debit Note Details will be cleared if you change invoice type ",
+      "All the Tax Invoice/Debit Note Details will be cleared if you change currency ",
     severity: "info",
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
@@ -313,7 +314,6 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
     formik.setFieldValue("amount", totalReceivable.toFixed(2));
     formik.setFieldValue("totalAmount", totalCombined.toFixed(2));
   }, [formik.values.details]);
-
   return (
     <>
       <Accordion
@@ -448,8 +448,13 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                 error={formik.errors.currency}
                 onChange={(e) => {
                   const value = e.target.value;
+                  console.log("Selected currency:", value);
                   if (formik.values.currency === value) return;
-                  if (formik.values.details.length === 0)
+
+                  if (!formik.values.currency) {
+                    return formik.setFieldValue("currency", value);
+                  }
+                  if (formik.values.details?.length === 0)
                     return formik.setFieldValue("currency", value);
                   setAlertConfig({
                     open: true,
@@ -460,6 +465,12 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                     confirmText: "Yes",
                     onConfirm: () => {
                       formik.setFieldValue("currency", value);
+                      if (value === "USD") {
+                        formik.setFieldValue("exchangeRate", "");
+                      }
+                      if (value === "INR") {
+                        formik.setFieldValue("exchangeRate", 1);
+                      }
                       formik.setFieldValue("details", []);
                       setAlertConfig((prev) => ({ ...prev, open: false }));
                     },
@@ -535,6 +546,8 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
           </Grid>
         </Box>
       </Box>
+      {alertConfig.open && <PopupAlert alertConfig={alertConfig} />}
+
       <AddPayableEntryModal
         togglePayEntry={modal.open}
         handleTogglePayEntry={() =>

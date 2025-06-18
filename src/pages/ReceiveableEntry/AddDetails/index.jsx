@@ -25,7 +25,7 @@ export default function ReceiveableEntryDetails({ page }) {
     customerName: "",
     customerId: "",
     debitCost: "",
-   exchangeRate: "",
+    exchangeRate: "",
     jobId: "",
     jobNo: "",
     netCost: "",
@@ -131,6 +131,7 @@ export default function ReceiveableEntryDetails({ page }) {
               type={state?.formAction}
               page={page}
               setgetDataFormParams={setgetDataFormParams}
+              job_number={job_number}
             />
           </CardContent>
         </Card>

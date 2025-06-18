@@ -56,7 +56,7 @@ export default function SubSections({
     onSubmit: async (values) => {
       // Create a payload excluding 'type' and 'costDetails'
       const { costDetails, ...payload } = values;
-      if (payload.details.length === 0) {
+      if (payload.details?.length === 0 || formik.values.paybleDetails?.length === 0) {
         return toast.custom(
           <CustomToast
             message={
@@ -128,8 +128,6 @@ export default function SubSections({
       }
     },
   });
-
-  const data = setgetDataFormParams(formik?.values);
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -158,7 +156,8 @@ export default function SubSections({
       setgetDataFormParams(formik?.values);
     }
   }, [formik?.values]);
-  
+  console.log(formik?.values, "formik?.values");
+
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -222,11 +221,20 @@ export default function SubSections({
                 }}
               >
                 <JobProfitAndLoss formik={formik} />
-                <AddDebitAndInvoice
-                  formik={formik}
-                  dropdownData={dropdownData}
-                  disabled={false}
-                />
+                  <AddDebitAndInvoice
+                    formik={formik}
+                    dropdownData={dropdownData}
+                    disabled={false}
+                  />
+                      {/* {formik?.values?.jobNo &&
+                formik?.values?.currency &&
+                formik?.values?.exchangeRate ? (
+                  <AddDebitAndInvoice
+                    formik={formik}
+                    dropdownData={dropdownData}
+                    disabled={false}
+                  />
+                ) : null} */}
               </Box>
             </Box>
             <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>

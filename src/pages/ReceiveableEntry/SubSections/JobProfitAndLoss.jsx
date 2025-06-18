@@ -12,7 +12,7 @@ import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoC
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 
-const JobProfitAndLoss = ({ formik }) => {
+const JobProfitAndLoss = ({ formik, job_number }) => {
   const payableRef = useRef(null);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
@@ -81,6 +81,7 @@ const JobProfitAndLoss = ({ formik }) => {
       value: "debit_note",
     },
   ];
+  console.log("formik values", formik.values);
 
   return (
     <React.Fragment>
@@ -118,7 +119,7 @@ const JobProfitAndLoss = ({ formik }) => {
               <InputBox
                 label="Job No"
                 id="jobNo"
-                value={formik.values.jobNo}
+                value={formik.values.jobNo ? formik.values.jobNo : job_number}
                 error={formik.errors.jobNo}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
@@ -229,7 +230,10 @@ const JobProfitAndLoss = ({ formik }) => {
                 onChange={(e) => {
                   const value = e.target.value;
                   if (formik.values.type === value) return;
-                  if (formik.values.details.length === 0)
+                  if (
+                    formik.values.details?.length === 0 ||
+                    formik.values.paybleDetails?.length === 0
+                  )
                     return formik.setFieldValue("type", value);
                   setAlertConfig({
                     open: true,
@@ -259,13 +263,14 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.currency}
                 onChange={(e) => {
                   const value = e.target.value;
+
                   if (formik.values.currency === value) return;
                   if (!formik.values.currency) {
                     return formik.setFieldValue("currency", value);
                   }
                   if (
                     formik.values.details?.length === 0 ||
-                    formik.values?.paybleDetails === 0
+                    formik.values?.paybleDetails?.length === 0
                   )
                     return formik.setFieldValue("currency", value);
                   setAlertConfig({
@@ -278,6 +283,12 @@ const JobProfitAndLoss = ({ formik }) => {
                     onConfirm: () => {
                       formik.setFieldValue("currency", value);
                       formik.setFieldValue("details", []);
+                      if (value === "USD") {
+                        formik.setFieldValue("exchangeRate", "");
+                      }
+                      if (value === "INR") {
+                        formik.setFieldValue("exchangeRate", 1);
+                      }
                       setAlertConfig((prev) => ({ ...prev, open: false }));
                     },
                     onClose: () => {
