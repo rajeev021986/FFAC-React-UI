@@ -271,7 +271,6 @@ export default function VendorForm({ page = "vendor" }) {
           s.new ? { ...s, new: null, id: null } : s
         ),
       };
-      console.log(values.bankDetails, "length");
       if (values.bankDetails.length > 0) {
         const { bankAddress, bankName, currency, swiftCode, accountNo } =
           values.bankDetails;

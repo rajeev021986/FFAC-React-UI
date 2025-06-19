@@ -37,6 +37,8 @@ import AutoCompleteInput from "../../../common/AutoCompletInput";
 export default function MappedCharges({ type, loading }) {
   const newRowRef = useRef(null);
   const nav = useNavigate();
+  const [pageSize, setPageSize] = React.useState(10);
+  const [page, setPage] = React.useState(0);
   const { data: mappedChargesData, isLoading } =
     useFetchMappedChargesDatasQuery();
   const [updateMappedCharge, {}] = useUpdateMappedChargeMutation();
@@ -138,8 +140,6 @@ export default function MappedCharges({ type, loading }) {
           (row) => row.id === params.row.id
         );
         const rowErrors = formik.errors?.[rowIndex] || {};
-        console.log("params.row.incomeId", params.row);
-
         return (
           <Box sx={{ width: "100%", margin: "12px" }}>
             <AutoCompleteInput
@@ -152,7 +152,6 @@ export default function MappedCharges({ type, loading }) {
               }}
               error={rowErrors.directIncome}
               onChange={(newValue) => {
-                console.log("newValue", newValue);
                 const updated = [...formik.values];
                 updated[rowIndex] = {
                   ...updated[rowIndex],
@@ -218,6 +217,7 @@ export default function MappedCharges({ type, loading }) {
 
   useEffect(() => {
     if (mappedChargesData?.body) {
+      console.log("mappedChargesData", mappedChargesData);
       formik.setValues(mappedChargesData.body);
     }
   }, [mappedChargesData]);
@@ -284,8 +284,19 @@ export default function MappedCharges({ type, loading }) {
                           align: "center",
                           justifyContent: "center",
                         }))}
-                        minHeight={"70px"}
-                        disableSelectionOnClick
+                        pagination
+                        pageSizeOptions={[5, 10, 25, 50]}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { pageSize: 5, page: 0 },
+                          },
+                        }}
+                        paginationModel={{ page, pageSize }}
+                        onPaginationModelChange={(model) => {
+                          setPage(model.page);
+                          setPageSize(model.pageSize);
+                        }}
+                        disableRowSelectionOnClick
                         processRowUpdate={handleProcessRowUpdate}
                         experimentalFeatures={{ newEditingApi: true }}
                         getRowId={(row) => row.id}
@@ -302,13 +313,12 @@ export default function MappedCharges({ type, loading }) {
                             minHeight: "64px !important",
                             maxHeight: "44px !important",
                             lineHeight: "44px !important",
-                            display: "flex", // make it a flexbox
-                            justifyContent: "center", // horizontal center
-                            alignItems: "center", // vertical center
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
                             textAlign: "center",
                           },
                         }}
-                        // style={{height: "200px"}}
                       />
                     </Box>
                   </Box>
