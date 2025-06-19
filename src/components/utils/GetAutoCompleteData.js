@@ -37,7 +37,9 @@ const suggestionName = {
   jobNo: "JOB_ENTRY",
   vendorName: "VENDOR",
   bankName: "BANK",
-  bankId:"BANK"
+  bankId:"BANK",
+  directIncome: "CHARGE",
+  directExpense: "CHARGE",
 };
 
 export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {

@@ -32,6 +32,7 @@ import {
 } from "../../../../store/api/mappedChargesDataApi";
 import CustomToast from "../../../common/Toast/CustomToast";
 import FormAutoCompleteWithLoader from "../../../common/AutoComplete/FormAutoCompletewithLoader";
+import AutoCompleteInput from "../../../common/AutoCompletInput";
 
 export default function MappedCharges({ type, loading }) {
   const newRowRef = useRef(null);
@@ -137,32 +138,29 @@ export default function MappedCharges({ type, loading }) {
           (row) => row.id === params.row.id
         );
         const rowErrors = formik.errors?.[rowIndex] || {};
+        console.log("params.row.incomeId", params.row);
+        
         return (
           <Box sx={{ width: "100%", margin: "12px" }}>
-            <FormAutoCompleteWithLoader
-              placeholder="Direct Income"
+            <AutoCompleteInput
               id="directIncome"
               suggestionName="charge_name"
+              placeholder="Direct Income"
               value={{
-                incomeId: params.row.incomeId,
-                directIncome: params.row.incomeId,
+                id: params.row.incomeId,
+                label: params.row.directIncome,
               }}
               error={rowErrors.directIncome}
-              idKey="incomeId"
-              nameKey="directIncome"
-              onChange={(selected) => {
-                const updatedRows = formik.values.map((row) =>
-                  row.id === params.row.id
-                    ? {
-                        ...row,
-                        incomeId: selected.incomeId,
-                        directIncome: selected.directIncome,
-                      }
-                    : row
-                );
-                formik.setValues(updatedRows);
+              onChange={( newValue) => {
+                console.log("newValue", newValue);
+                const updated = [...formik.values];
+                updated[rowIndex] = {
+                  ...updated[rowIndex],
+                  incomeId: newValue?.id || null,
+                  directIncome: newValue?.label || "",
+                };
+                formik.setValues(updated);
               }}
-              className={true}
             />
           </Box>
         );
@@ -178,30 +176,24 @@ export default function MappedCharges({ type, loading }) {
         );
         const rowErrors = formik.errors?.[rowIndex] || {};
         return (
-          <FormAutoCompleteWithLoader
+          <AutoCompleteInput
             placeholder="Direct Expense"
             id="directExpense"
             suggestionName="charge_name"
             value={{
-              expenseId: params.row.expenseId,
-              directExpense: params.row.directExpense,
+              id: params.row.expenseId,
+              label: params.row.directExpense,
             }}
             error={rowErrors.directExpense}
-            idKey="expenseId"
-            nameKey="directExpense"
-            onChange={(selected) => {
-              const updatedRows = formik.values.map((row) =>
-                row.id === params.row.id
-                  ? {
-                      ...row,
-                      expenseId: selected.expenseId,
-                      directExpense: selected.directExpense,
-                    }
-                  : row
-              );
-              formik.setValues(updatedRows);
+            onChange={(newValue) => {
+              const updated = [...formik.values];
+              updated[rowIndex] = {
+                ...updated[rowIndex],
+                expenseId: newValue?.id || null,
+                directExpense: newValue?.label || "",
+              };
+              formik.setValues(updated);
             }}
-            className={true}
           />
         );
       },
@@ -223,6 +215,7 @@ export default function MappedCharges({ type, loading }) {
       ),
     },
   ];
+
   useEffect(() => {
     if (mappedChargesData?.body) {
       formik.setValues(mappedChargesData.body);
@@ -265,7 +258,8 @@ export default function MappedCharges({ type, loading }) {
                         minHeight: "50px",
                       }}
                       icon=<EditIconForHeader />
-                      iconPosition="start" />
+                      iconPosition="start"
+                    />
                   </TabList>
                 </Box>
                 <TabPanel
