@@ -350,6 +350,7 @@ export default function CustomerScreen({ page }) {
           />
         )}
       </Card>
+      
       {modal.type === "audit" && (
         <Drawer
           anchor="right"

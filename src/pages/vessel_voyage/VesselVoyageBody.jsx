@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import { menuConfigUrl } from "../../store/menuConfigUrl";
+import GridActions from "../../components/common/Grid/GridActions";
 
 export function VesselVoyageBody({ selectBox, setSelectBox }) {
   const nav = useNavigate();
@@ -77,12 +78,15 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
   const {
     data: voyageData,
     isLoading,
-    error,
     isFetching,
     refetch,
   } = useFetchVoyageQuery({
     params: query,
     payload: payload,
+  });
+
+  CARD_VOYAGE_COLUMNS[CARD_VOYAGE_COLUMNS.length - 1].renderCell = GridActions({
+    actions: getVoyageListGridActions(nav, setModal),
   });
 
   useEffect(() => {
@@ -133,13 +137,13 @@ export function VesselVoyageBody({ selectBox, setSelectBox }) {
           columnVisibility={{}}
           columnVisibilityHandler={() => {}}
           paginationModel={voyageSelector.pagination}
+          actions={getVoyageListGridActions(nav, setModal)}
           loading={isLoading || isFetching}
           sortModel={voyageSelector.sortModel}
           onSortModelChange={(sortModel) =>
             dispatch(voyageSetSortModel(sortModel))
           }
           storageKey="VesselVoyageDataGrid"
-
         />
       ) : (
         <CardsView

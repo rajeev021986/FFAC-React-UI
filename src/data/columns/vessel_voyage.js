@@ -82,4 +82,14 @@ export const CARD_VOYAGE_COLUMNS = [
         align: 'center',
         editable: false
     },
+     {
+        flex: 1,
+        field: 'action',
+        headerName: 'Action',
+
+        headerAlign: 'center',
+        align: 'center',
+        editable: false
+
+    }
 ]
