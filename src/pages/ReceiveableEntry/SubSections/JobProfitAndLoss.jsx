@@ -1,5 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  AppBar,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Grid,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 
 // Components
 import InputBox from "../../../components/common/InputBox";
@@ -12,16 +24,23 @@ import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoC
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 
-const JobProfitAndLoss = ({ formik, job_number }) => {
+const JobProfitAndLoss = ({ formik, job_number, selectedRow }) => {
   const payableRef = useRef(null);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",
-    message:
-      "All the Tax Invoice/Debit Note Details will be cleared if you change invoice type ",
+    message: "",
     severity: "info",
     onConfirm: null,
     onClose: () => setAlertConfig({ ...alertConfig, open: false }),
+  });
+  const [openDialog, setOpenDialog] = useState({
+    open: false,
+    title: "",
+    message: "",
+    severity: "info",
+    onConfirm: null,
+    onClose: () => setOpenDialog({ ...openDialog, open: false }),
   });
   const { jobNo, currency, exchangeRate } = formik?.values;
   const { data: optionsSettingsData } =
@@ -82,7 +101,20 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
     },
   ];
   console.log("formik values", formik.values);
-
+  console.log("job_number", job_number);
+  useEffect(() => {
+    if (!formik.values?.currency && !formik.values?.exchangeRate) {
+      setOpenDialog({
+        open: true,
+        title: "Information",
+        message:
+          "Please select currency and exchange rate to generate Tax Invoice/Debit Note details.",
+        severity: "info",
+        onConfirm: null,
+        onClose: () => setOpenDialog((prev) => ({ ...prev, open: false })),
+      });
+    }
+  }, []);
   return (
     <React.Fragment>
       <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>
@@ -119,7 +151,8 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
               <InputBox
                 label="Job No"
                 id="jobNo"
-                value={formik.values.jobNo ? formik.values.jobNo : job_number}
+                name="jobNo"
+                value={formik.values.jobNo}
                 error={formik.errors.jobNo}
                 onChange={formik.handleChange}
                 inputRef={payableRef}
@@ -259,6 +292,7 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
                 label="Currency"
                 id="currency"
                 options={mergedCurrencyOptions}
+                inputRef={payableRef}
                 value={formik.values.currency}
                 error={formik.errors.currency}
                 onChange={(e) => {
@@ -327,6 +361,7 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
                   onChange={formik.handleChange}
                   suggestionName="usd_exchange"
                   name={true}
+                  inputRef={payableRef}
                   other={formik.values.currency}
                 />
               )}
@@ -355,6 +390,24 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
               )}
           </Grid>
           {alertConfig.open && <PopupAlert alertConfig={alertConfig} />}
+          <Dialog
+            open={openDialog.open}
+            onClose={openDialog.onClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent sx={{ padding: 0 }}>
+              <Alert severity={openDialog.severity}>
+                <AlertTitle>{openDialog.title}</AlertTitle>
+                {openDialog.message}
+              </Alert>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={openDialog.onClose} color="primary" autoFocus>
+                Okay
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       </Box>
 

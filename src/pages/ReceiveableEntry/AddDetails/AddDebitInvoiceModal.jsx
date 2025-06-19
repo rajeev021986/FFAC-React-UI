@@ -50,6 +50,7 @@ export default function AddPayableEntryModal({
   setSelectedPayEntry,
   type,
 }) {
+  console.log("typewwwww",type)
   const modalValidationSchema = Yup.object().shape({
     chargeName: Yup.string().required("Charge Name is required"),
     // customerName: Yup.string().required("Customer Name is required"),
@@ -83,12 +84,9 @@ export default function AddPayableEntryModal({
   const [invoiceEntry, setInvoiceEntry] = useState({
     id: 0,
     paybleDetailId: null,
-    customerName: "",
-    customerId: "",
     currency: "",
     chargeName: "",
     mappedCharge: "",
-    // receivableRefNo: "",
     receivableAmount: 0,
     totalAmount: 0,
     exRate: "",
@@ -146,7 +144,7 @@ export default function AddPayableEntryModal({
           "unitTypeReceviable",
           "unit_type",
           debounceValue,
-          formik.values.customerName || "", 
+          formik.values.customerName || ""
           // "Ananth"
         );
         const validData = data?.filter((item) => item.label?.trim() !== "");
@@ -237,8 +235,6 @@ export default function AddPayableEntryModal({
       setInvoiceEntry({
         id: Date.now(),
         paybleDetailId: null,
-        customerName: "",
-        customerId: "",
         currency: "",
         chargeName: "",
         mappedCharge: "",
@@ -270,8 +266,6 @@ export default function AddPayableEntryModal({
     setInvoiceEntry({
       id: Date.now(),
       paybleDetailId: null,
-      customerName: "",
-      customerId: "",
       currency: "",
       chargeName: "",
       // receivableRefNo: "",
@@ -299,18 +293,53 @@ export default function AddPayableEntryModal({
   }, [invoiceEntry.currency]);
 
   useEffect(() => {
-    if (selectedPayEntry) {
-      setInvoiceEntry(selectedPayEntry);
-    } else {
+    if (selectedPayEntry && type === "cost_details") {
+      const receivableAmount = selectedPayEntry.paybleAmount || 0;
+      const vat = selectedPayEntry.paybleVatAmount || 0;
+      setInvoiceEntry({
+        id: selectedPayEntry.id,
+        paybleDetailId: selectedPayEntry.paybleDetailId,
+        currency: selectedPayEntry.paybleCurrency || "",
+        chargeName: selectedPayEntry.chargeName || "",
+        mappedCharge: selectedPayEntry.mappedCharge || "",
+        receivableAmount: selectedPayEntry.paybleAmount || 0,
+        totalAmount: receivableAmount + vat || 0,
+        exRate: selectedPayEntry.paybleExchangeRate || 0,
+        vatApplicable: selectedPayEntry.paybleVatApplicable || "",
+        vat: selectedPayEntry.paybleVatAmount || 0,
+        unitType: selectedPayEntry.paybleUnitType || "",
+        numOfUnits: selectedPayEntry.paybleNumOfUnit || 0,
+        unitRate: parseFloat(selectedPayEntry.paybleUnitRate) || 0,
+        new: false,
+        receivableCreatedDate: selectedPayEntry.paybleCreatedDate || null,
+      });
+    } 
+    else if (selectedPayEntry && type !== "cost_details") {
+      setInvoiceEntry({
+        id: selectedPayEntry.id,
+        paybleDetailId: selectedPayEntry.paybleDetailId,
+        currency: selectedPayEntry.currency || "",
+        chargeName: selectedPayEntry.chargeName || "",
+        mappedCharge: selectedPayEntry.mappedCharge || "",
+        receivableAmount: selectedPayEntry.receivableAmount || 0,
+        totalAmount: selectedPayEntry.totalAmount || 0,
+        exRate: selectedPayEntry.exRate || 0,
+        vatApplicable: selectedPayEntry.vatApplicable || "",
+        vat: selectedPayEntry.vat || 0,
+        unitType: selectedPayEntry.unitType || "",
+        numOfUnits: selectedPayEntry.numOfUnits || 0,
+        unitRate: selectedPayEntry.unitRate || 0,
+        new: false,
+        receivableCreatedDate: selectedPayEntry.receivableCreatedDate || null,
+      });
+    }
+    else {
       setInvoiceEntry({
         id: Date.now(),
         paybleDetailId: null,
-        customerName: "",
-        customerId: "",
         currency: "",
         chargeName: "",
         mappedCharge: "",
-        // receivableRefNo: "",
         receivableAmount: 0,
         totalAmount: 0,
         exRate: "",
@@ -371,24 +400,6 @@ export default function AddPayableEntryModal({
         </Typography>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
-          {/* <Grid item xs={12} lg={4}>
-             <FormAutoCompleteWithLoader
-              label="Customer Name"
-              id="customerId"
-              suggestionName="customer_name"
-              value={{
-                customerId: invoiceEntry?.customerId,
-                customerName: invoiceEntry?.customerName,
-              }}
-              error={errors.customerName || errors.customerId}
-              idKey="customerId"
-              nameKey="customerName"
-              onChange={(selected) => {
-                handleChange("customerId", selected.customerId);
-                handleChange("customerName", selected.customerName);
-              }}
-            /> 
-          </Grid> */}
           <Grid item xs={12} lg={8}>
             {formik.values.type === "debit_note" ? (
               <FormAutoCompleteWithLoader
@@ -402,6 +413,11 @@ export default function AddPayableEntryModal({
                 error={errors.chargeName}
                 idKey="chargeId"
                 nameKey="chargeName"
+                disabled={
+                  type == "cost_details" && formik.values.type === "debit_note"
+                    ? true
+                    : false
+                }
                 onChange={(selected) => {
                   handleChange("chargeId", selected.chargeId);
                   handleChange("chargeName", selected.chargeName);
@@ -417,6 +433,11 @@ export default function AddPayableEntryModal({
                   chargeId: invoiceEntry.chargeId || "",
                   chargeName: invoiceEntry.mappedCharge || "",
                 }}
+                disabled={
+                  type == "cost_details" && formik.values.type === "debit_note"
+                    ? true
+                    : false
+                }
                 error={errors.chargeName}
                 idKey="chargeId"
                 nameKey="chargeName"
@@ -450,6 +471,11 @@ export default function AddPayableEntryModal({
                   chargeName: invoiceEntry.chargeName,
                 }}
                 error={errors.chargeName}
+                disabled={
+                  type == "cost_details" && formik.values.type === "debit_note"
+                    ? true
+                    : false
+                }
                 idKey="chargeId"
                 nameKey="chargeName"
                 onChange={(selected) => {
@@ -464,15 +490,25 @@ export default function AddPayableEntryModal({
               <Autocomplete
                 id="unitType"
                 size="small"
-                disabled={!formik.values.customerName}
+                disabled={
+                  !formik.values.customerName ||
+                  (type == "cost_details" )
+                    ? true
+                    : false
+                }
                 value={
                   options.find((opt) => opt.value === invoiceEntry.unitType) ||
-                  null
+                  invoiceEntry.unitType ||
+                  ""
                 }
                 onInputChange={handleInputChange}
                 onChange={handleChangeUnitType}
                 options={filteredOptions}
-                getOptionLabel={(option) => option.label || ""}
+                getOptionLabel={(option) =>
+                  invoiceEntry.unitType
+                    ? invoiceEntry.unitType
+                    : option.label || ""
+                }
                 loading={loading}
                 renderInput={(params) => (
                   <TextField
@@ -504,7 +540,7 @@ export default function AddPayableEntryModal({
                   />
                 )}
                 renderOption={(props, option) => (
-                  <MenuItem {...props} key={option.value}>
+                  <MenuItem {...props} key={option?.value}>
                     {option.label}
                   </MenuItem>
                 )}
@@ -542,105 +578,20 @@ export default function AddPayableEntryModal({
               id="unitRate"
               value={invoiceEntry?.unitRate || ""}
               error={errors.unitRate}
+              disabled={
+                type == "cost_details" 
+                  ? true
+                  : false
+              }
               onChange={(e) => handleChange("unitRate", e.target.value)}
               fullWidth
             />
           </Grid>
-          {/* <Grid item xs={12} lg={4}>
-            <SelectBox
-              label="Currency"
-              id="currency"
-              options={mergedCurrencyOptions}
-              value={invoiceEntry?.currency || ""}
-              error={errors.currency}
-              onChange={(e) => handleChange("currency", e.target.value)}
-            />
-          </Grid> */}
-          {/* <Grid item xs={12} lg={4}>
-            <SelectBox
-              label="Currency"
-              id="currency"
-              options={mergedCurrencyOptions}
-              value={invoiceEntry?.currency || ""}
-              error={errors.currency}
-              onChange={(e) => {
-                const value = e.target.value;
-                handleChange("currency", value);
-                if (value === "USD") {
-                  // Clear currency-related fields when changing from USD to something else
-                  handleChange("exRate", null);
-                  // formik.setFieldValue("exRate", null);
-                }
-              }}
-              // disabled={isDisabled}
-            />
-          </Grid> */}
-
-          {/* <Grid item xs={12} lg={4}>
-            {invoiceEntry?.currency === "TZS" ||
-            invoiceEntry?.currency === "INR" ? (
-              <InputBox
-                label="Ex. Rate"
-                id="exRate"
-                value={
-                  invoiceEntry?.currency === "TZS" ||
-                  invoiceEntry?.currency === "INR"
-                    ? 1
-                    : formatIndianCurrency(invoiceEntry?.exRate)
-                }
-                error={errors.exRate}
-                onChange={(e) => handleChange("exRate", e.target.value)}
-                disabled={
-                  invoiceEntry?.currency === "TZS" ||
-                  invoiceEntry?.currency === "INR"
-                }
-              />
-            ) : (
-              //   <FormAutoCompleteWithLoader
-              //   label="Ex. Rate"
-              //   id="exRate"
-              //   value={invoiceEntry?.exRate || ""}
-              //   error={errors.exRate}
-              //   onChange={(e) => handleChange("exRate", e.target.value)}
-              //   suggestionName="usd_exchange"
-              //   name={true}
-              //   other={invoiceEntry?.currency}
-              // />
-              <FormAutoCompleteWithLoader
-                label="Ex. Rate"
-                id="exRate"
-                value={{
-                  exRate: invoiceEntry?.exRate,
-                  // exRate: invoiceEntry?.exRate,
-                }}
-                idKey="exRate"
-                nameKey="exRate"
-                error={errors.exRate}
-                onChange={(selected) => {
-                  // handleChange("customerId", selected.customerId);
-                  handleChange("exRate", selected.exRate);
-                }}
-                // onChange={(e) => handleChange("exRate", e.target.value)}
-                suggestionName="usd_exchange"
-                other={invoiceEntry?.currency}
-              />
-            )}
-          </Grid> */}
-          {/* <Grid item xs={12} lg={4}>
-            <FormAutoCompleteWithLoader
-              label="Ex. Rate"
-              id="exRate"
-              value={invoiceEntry?.exRate || ""}
-              onChange={(e) => handleChange("exRate", e.target.value)}
-              error={errors.exRate}
-              suggestionName="usd_exchange"
-            />
-          </Grid> */}
           <Grid item xs={12} lg={4}>
             <InputBox
               label="Amount"
               id="receivableAmount"
-              value={invoiceEntry?.receivableAmount || ""}
+              value={invoiceEntry?.receivableAmount || 0}
               error={errors.receivableAmount}
               onChange={(e) => handleChange("receivableAmount", e.target.value)}
               fullWidth
@@ -654,6 +605,11 @@ export default function AddPayableEntryModal({
               options={vatAndHoldingTaxSettingData?.body?.vatSettings || []}
               value={invoiceEntry?.vatApplicable || ""}
               error={errors.vatApplicable}
+              disabled={
+                type == "cost_details"
+                  ? true
+                  : false
+              }
               onChange={(e) => handleChange("vatApplicable", e.target.value)}
             />
           </Grid>
@@ -661,7 +617,7 @@ export default function AddPayableEntryModal({
             <InputBox
               label="VAT Amount"
               id="vat"
-              value={invoiceEntry?.vat || ""}
+              value={invoiceEntry?.vat || 0}
               error={errors.vat}
               onChange={(e) => handleChange("vat", e.target.value)}
               fullWidth

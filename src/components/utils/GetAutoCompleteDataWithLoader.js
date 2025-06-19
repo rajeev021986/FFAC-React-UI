@@ -15,7 +15,7 @@ const suggestionName = {
   supplierName: "SHIPPER",
   consigneeName: "CONSIGNEE",
   shippingLine: "VENDOR_TYPE",
-  mappedCharge: "CHARGE",
+  mappedCharge: "MAPPED_CHARGE",
   loadingVoyage: "VESSEL_VOYAGE",
   dischargeVoyage: "VESSEL_VOYAGE",
   vesselAgent: "VENDOR_TYPE",

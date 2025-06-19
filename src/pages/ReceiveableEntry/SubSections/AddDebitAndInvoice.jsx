@@ -17,7 +17,6 @@ import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 import DebitNoteListData from "../AddDetails/DebitNoteList";
 
 export default function AddDebitAndInvoice({ formik }) {
-
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
@@ -129,36 +128,8 @@ export default function AddDebitAndInvoice({ formik }) {
   useEffect(() => {
     handleFetchPayable();
   }, [formik?.values?.details]);
-
+  console.log("debit", formik?.values?.details);
   const DEBIT_INVOICE_COLUMNS = [
-    // {
-    //   flex: 1,
-    //   field: "customerName",
-    //   headerName: "Customer Name",
-    //   headerAlign: "center",
-    //   align: "center",
-    //   editable: false,
-    //   renderCell: (params) => {
-    //     const value = params.value || "";
-    //     const truncatedValue =
-    //       value.length > 25 ? value.slice(0, 25) + "..." : value;
-
-    //     return (
-    //       <Tooltip title={value} arrow>
-    //         <div
-    //           style={{
-    //             whiteSpace: "nowrap",
-    //             overflow: "hidden",
-    //             textOverflow: "ellipsis",
-    //             maxWidth: "100%",
-    //           }}
-    //         >
-    //           {truncatedValue}
-    //         </div>
-    //       </Tooltip>
-    //     );
-    //   },
-    // },
     {
       field: "chargeName",
       headerName: "Charge Name",
@@ -211,39 +182,6 @@ export default function AddDebitAndInvoice({ formik }) {
       align: "center",
       editable: false,
     },
-    // {
-    //   flex: 1,
-    //   field: "currency",
-    //   headerName: "Currency",
-    //   headerAlign: "center",
-    //   align: "center",
-    //   editable: false,
-    // },
-    // {
-    //   flex: 1,
-    //   field: "exRate",
-    //   headerName: "Ex. Rate",
-    //   headerAlign: "center",
-    //   align: "center",
-    //   editable: false,
-    // },
-
-    // {
-    //   flex: 1,
-    //   field: "paybleAmount",
-    //   headerName: "Debit",
-    //   headerAlign: "center",
-    //   align: "center",
-    //   editable: false,
-    // },
-    // {
-    //   flex: 1,
-    //   field: "receivableAmount",
-    //   headerName: "Credit",
-    //   headerAlign: "center",
-    //   align: "center",
-    //   editable: false,
-    // },
     {
       flex: 1,
       field: "vatApplicable",
@@ -284,45 +222,52 @@ export default function AddDebitAndInvoice({ formik }) {
       headerAlign: "center",
       renderHeader: () => (
         <IconButton
-          disabled={!formik.values?.jobNo && !formik.values.exchangeRate || !formik.values?.currency}
+          disabled={
+            (!formik.values?.jobNo && !formik.values.exchangeRate) ||
+            !formik.values?.currency
+          }
           color="white"
           onClick={handleTogglePayEntry}
         >
           <AddCircleIcon />
         </IconButton>
       ),
-      renderCell: (params) => (
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          <EditIcon
+      renderCell: (params) => {
+        const row = params.row;
+        const isEditDisabled = row.paybleDetailId === null || row.paybleDetailId === 0;
+
+        return (
+          <div
             style={{
-              cursor: isDisabled ? "not-allowed" : "pointer",
-              color: isDisabled ? "#ccc" : "#166ee0",
-              opacity: isDisabled ? 0.5 : 1,
+              display: "flex",
+              gap: "8px",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
             }}
-            onClick={() => {
-              if (!isDisabled) handleEditClick(params.row);
-            }}
-          />
-          <Delete
-            style={{
-              cursor: isDisabled ? "not-allowed" : "pointer",
-              color: isDisabled ? "#ccc" : "red",
-              opacity: isDisabled ? 0.5 : 1,
-            }}
-            onClick={() => {
-              if (!isDisabled) handleDeleteEntry(params.row.id);
-            }}
-          />
-        </div>
-      ),
+          >
+            <EditIcon
+              style={{
+                cursor: isEditDisabled ? "not-allowed" : "pointer",
+                color: isEditDisabled ? "#ccc" : "#166ee0",
+                opacity: isEditDisabled ? 0.5 : 1,
+              }}
+              onClick={() => {
+                if (!isEditDisabled) handleEditClick(row);
+              }}
+            />
+            <Delete
+              style={{
+                cursor: "pointer",
+                color: "red",
+              }}
+              onClick={() => {
+                handleDeleteEntry(row.id);
+              }}
+            />
+          </div>
+        );
+      },
     },
   ];
   return (

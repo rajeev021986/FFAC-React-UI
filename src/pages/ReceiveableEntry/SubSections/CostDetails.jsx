@@ -42,6 +42,7 @@ import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoC
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import PopupAlert from "../../../components/common/Alert/PopupAlert";
 export default function CostDetails({ formik, selectedInvoiceType }) {
+  console.log(" formik.values.costDetails", formik.values.costDetails);
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
@@ -126,25 +127,26 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       align: "center",
       headerAlign: "center",
       renderCell: (params) => {
-        const isPaybleIdInDetails = formik.values.details.some(
-          (detail) => detail.paybleDetailId === params.row.paybleDetailId
+        const hasNullOrZeroInCostDetails = formik.values.costDetails.some(
+          (detail) =>
+            detail.paybleDetailId === null || detail.paybleDetailId === 0
         );
         return (
           <button
-            disabled={isPaybleIdInDetails}
+            disabled={hasNullOrZeroInCostDetails}
             onClick={() => {
-              if (!isPaybleIdInDetails) handleAdd(params);
+              if (!hasNullOrZeroInCostDetails) handleAdd(params);
             }}
             style={{
               padding: "6px 12px",
               cursor: "pointer",
-              backgroundColor: isPaybleIdInDetails ? "#bdbdbd" : "#1976d2",
+              backgroundColor: hasNullOrZeroInCostDetails ? "#bdbdbd" : "#1976d2",
               // color: "#fff",
               border: "none",
               borderRadius: "4px",
-              cursor: isPaybleIdInDetails ? "not-allowed" : "pointer",
+              cursor: hasNullOrZeroInCostDetails  ? "not-allowed" : "pointer",
               color: "#fff",
-              opacity: isPaybleIdInDetails ? 0.5 : 1,
+              opacity: hasNullOrZeroInCostDetails  ? 0.5 : 1,
             }}
           >
             {getButtonText()}
