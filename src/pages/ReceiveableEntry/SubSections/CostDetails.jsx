@@ -127,26 +127,25 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
       align: "center",
       headerAlign: "center",
       renderCell: (params) => {
-        const hasNullOrZeroInCostDetails = formik.values.costDetails.some(
-          (detail) =>
-            detail.paybleDetailId === null || detail.paybleDetailId === 0
+        const isPaybleIdInDetails = formik.values.details.some(
+          (detail) => detail.paybleDetailId === params.row.paybleDetailId
         );
         return (
           <button
-            disabled={hasNullOrZeroInCostDetails}
+            disabled={isPaybleIdInDetails}
             onClick={() => {
-              if (!hasNullOrZeroInCostDetails) handleAdd(params);
+              if (!isPaybleIdInDetails) handleAdd(params);
             }}
             style={{
               padding: "6px 12px",
               cursor: "pointer",
-              backgroundColor: hasNullOrZeroInCostDetails ? "#bdbdbd" : "#1976d2",
+              backgroundColor: isPaybleIdInDetails ? "#bdbdbd" : "#1976d2",
               // color: "#fff",
               border: "none",
               borderRadius: "4px",
-              cursor: hasNullOrZeroInCostDetails  ? "not-allowed" : "pointer",
+              cursor: isPaybleIdInDetails ? "not-allowed" : "pointer",
               color: "#fff",
-              opacity: hasNullOrZeroInCostDetails  ? 0.5 : 1,
+              opacity: isPaybleIdInDetails ? 0.5 : 1,
             }}
           >
             {getButtonText()}
