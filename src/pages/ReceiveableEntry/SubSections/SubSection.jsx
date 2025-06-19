@@ -29,6 +29,7 @@ export default function SubSections({
   page,
   type = "notcopy",
   setgetDataFormParams,
+  selectedRow,
 }) {
   //
   const nav = useNavigate();
@@ -220,7 +221,7 @@ export default function SubSections({
                   padding: 1,
                 }}
               >
-                <JobProfitAndLoss formik={formik} />
+                <JobProfitAndLoss formik={formik} selectedRow={selectedRow} />
                   <AddDebitAndInvoice
                     formik={formik}
                     dropdownData={dropdownData}

@@ -42,8 +42,9 @@ export default function AddNewReceivableModal({ open, onClose, data }) {
       return;
     }
     navigate(
-      `/app/accounts/operations/receivableEntry/addReceiveableEntry?job_number=${selectedRows?.[0]?.jobNo}`
-    );
+    `/app/accounts/operations/receivableEntry/addReceiveableEntry?job_number=${selectedRows[0]?.jobNo}`,
+    { state: { selectedRow: selectedRows[0] } }
+  );
   };
   const ReceivableEntryColumns = [
     {

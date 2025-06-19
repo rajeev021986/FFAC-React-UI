@@ -13,21 +13,22 @@ import SubSections from "../SubSections/SubSection";
 export default function ReceiveableEntryDetails({ page }) {
   const { state } = useLocation();
   const location = useLocation();
+  const selectedRow = location.state?.selectedRow;
   const queryParams = new URLSearchParams(location.search);
   const job_number = queryParams.get("job_number");
 
   const [getDataFormParams, setgetDataFormParams] = useState(null);
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = React.useState({
-    consigneeName: "",
+    consigneeName: selectedRow?.consigneeName || "",
     creditCost: "",
     currency: "",
-    customerName: "",
-    customerId: "",
+    customerName: selectedRow?.customerName || "",
+    customerId: selectedRow?.customerId || "",
     debitCost: "",
     exchangeRate: "",
     jobId: "",
-    jobNo: "",
+    jobNo: selectedRow?.jobNo || "",
     netCost: "",
     paybleRefNo: "",
     profitLoss: "",
@@ -99,7 +100,7 @@ export default function ReceiveableEntryDetails({ page }) {
       }
     };
     init();
-  }, [job_number, getDataFormParams, state?.initialValues?.id]);
+  }, [getDataFormParams, state?.initialValues?.id]);
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
@@ -132,6 +133,7 @@ export default function ReceiveableEntryDetails({ page }) {
               page={page}
               setgetDataFormParams={setgetDataFormParams}
               job_number={job_number}
+              selectedRow={selectedRow}
             />
           </CardContent>
         </Card>
