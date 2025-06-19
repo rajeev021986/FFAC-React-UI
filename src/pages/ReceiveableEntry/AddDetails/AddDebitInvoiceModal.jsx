@@ -6,12 +6,8 @@ import {
   Box,
   Grid,
   IconButton,
-  Select,
   MenuItem,
   TextField,
-  InputLabel,
-  FormControl,
-  FormHelperText,
   CircularProgress,
   Autocomplete,
 } from "@mui/material";
@@ -20,13 +16,9 @@ import InputBox from "../../../components/common/InputBox";
 import { ThemeButton } from "../../../components/common/Button";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 import SelectBox from "../../../components/common/SelectBox";
-import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
-import { formatIndianCurrency } from "../../../components/utils/utils";
 import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
 import { useFetchVatAndHoldingQuery } from "../../../store/api/settingAuditAPI";
-import ApiManager from "../../../services/ApiManager";
-import DateTimeField from "../../../components/common/DateTime/DateTimeField";
 
 const modalStyle = {
   position: "absolute",
@@ -50,46 +42,30 @@ export default function AddPayableEntryModal({
   setSelectedPayEntry,
   type,
 }) {
-  console.log("typewwwww",type)
   const modalValidationSchema = Yup.object().shape({
     chargeName: Yup.string().required("Charge Name is required"),
-    // customerName: Yup.string().required("Customer Name is required"),
     receivableAmount: Yup.string().required("Amount is required"),
-    // currency: Yup.string().required("Currency is required"),
-    // exRate: Yup.string().required("Exchange Rate is required"),
     vatApplicable: Yup.string().required("VAT applicable is required"),
     unitType: Yup.string().required("Unit type is required"),
-    // numOfUnits: Yup.string().required("Number of units is required"),
     unitRate: Yup.string().required("Unit Rate is required"),
   });
   const [options, setOptions] = useState([]);
-  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
   const [filteredOptions, setFilteredOptions] = useState([]);
-  const getFormData = formik?.values;
-  const { data: optionsSettingsData } =
-    useGetOptionsSettingsQuery("common_settings");
-  const { data: payableSettingData } =
-    useGetOptionsSettingsQuery("payble_settings");
-  const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
-
-  const { data: vatAndHoldingTaxSettingData, refetch } =
-    useFetchVatAndHoldingQuery({
-      params: { type: "VAT" },
-      page: "settings/api",
-    });
+  const { data: vatAndHoldingTaxSettingData } = useFetchVatAndHoldingQuery({
+    params: { type: "VAT" },
+    page: "settings/api",
+  });
 
   const [invoiceEntry, setInvoiceEntry] = useState({
     id: 0,
     paybleDetailId: null,
-    currency: "",
     chargeName: "",
     mappedCharge: "",
     receivableAmount: 0,
     totalAmount: 0,
-    exRate: "",
     vatApplicable: "",
     vat: 0,
     unitType: "",
@@ -100,40 +76,46 @@ export default function AddPayableEntryModal({
   });
 
   const [errors, setErrors] = useState({});
-
-  // const handleChange = (field, value) => {
-  //   setInvoiceEntry((prevEntry) => ({
-  //     ...prevEntry,
-  //     [field]: value,
-  //   }));
-  // };
   const handleChange = (field, value) => {
     setInvoiceEntry((prevEntry) => {
       const updatedEntry = {
         ...prevEntry,
         [field]: value,
       };
-      const unitRate = parseFloat(
-        field === "unitRate" ? value : updatedEntry.unitRate
-      );
-      const vatPercentage = parseFloat(
-        field === "vatApplicable" ? value : updatedEntry.vatApplicable
-      );
-      const numOfUnits = parseFloat(updatedEntry.numOfUnits || 0);
+      // Parse relevant fields
+      const unitRate =
+        parseFloat(field === "unitRate" ? value : updatedEntry.unitRate) || 0;
+      const vatPercentage = parseFloat(updatedEntry.vatApplicable) || 0;
+      const numOfUnits = parseFloat(updatedEntry.numOfUnits) || 0;
 
-      if (!isNaN(unitRate) && !isNaN(vatPercentage)) {
-        updatedEntry.vat = ((unitRate * vatPercentage) / 100).toFixed(2);
-      }
+      // Calculate receivableAmount
       if (!isNaN(unitRate) && !isNaN(numOfUnits)) {
-        updatedEntry.receivableAmount = unitRate * numOfUnits;
+        updatedEntry.receivableAmount = (unitRate * numOfUnits).toFixed(2);
+      } else {
+        updatedEntry.receivableAmount = 0;
       }
-      updatedEntry.totalAmount =
-        parseFloat(updatedEntry.receivableAmount) +
-        parseFloat(updatedEntry.vat);
+
+      // Calculate VAT if vatApplicable is selected
+      if (
+        !isNaN(vatPercentage) &&
+        vatPercentage > 0 &&
+        !isNaN(updatedEntry.receivableAmount)
+      ) {
+        updatedEntry.vat = (
+          (updatedEntry.receivableAmount * vatPercentage) /
+          100
+        ).toFixed(2);
+      } else {
+        updatedEntry.vat = 0; // Ensure VAT is 0 if no valid vatPercentage or receivableAmount
+      }
+      updatedEntry.totalAmount = (
+        parseFloat(updatedEntry.receivableAmount) + parseFloat(updatedEntry.vat)
+      ).toFixed(2);
 
       return updatedEntry;
     });
   };
+
   useEffect(() => {
     const fetchData = async () => {
       if (!formik.values.customerName) return;
@@ -174,42 +156,7 @@ export default function AddPayableEntryModal({
 
     fetchData();
   }, [debounceValue, formik.values.customerName]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await ApiManager.fetchAutoCompleteData(
-          "",
-          "COMPANY_CODE"
-        );
-        const backendData = await response.body;
 
-        // Extract backend currencies safely
-        const backendCurrencies = Array.from(
-          new Set(
-            (backendData || []).map((item) => item.currency).filter(Boolean)
-          )
-        ).map((curr) => ({ id: curr, value: curr }));
-
-        // Get setting currencies safely
-        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
-
-        // Merge both arrays avoiding duplicates (based on `value`)
-        const mergedCurrencies = [
-          ...backendCurrencies,
-          ...settingCurrencies.filter(
-            (setting) =>
-              !backendCurrencies.some((item) => item.value === setting.value)
-          ),
-        ];
-
-        setMergedCurrencyOptions(mergedCurrencies);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [optionsSettingsData?.body?.currencyType]);
   const handleSubmit = async () => {
     try {
       await modalValidationSchema.validate(invoiceEntry, { abortEarly: false });
@@ -235,13 +182,11 @@ export default function AddPayableEntryModal({
       setInvoiceEntry({
         id: Date.now(),
         paybleDetailId: null,
-        currency: "",
         chargeName: "",
         mappedCharge: "",
         // receivableRefNo: "",
         receivableAmount: 0,
         totalAmount: 0,
-        exRate: "",
         vatApplicable: "",
         vat: 0,
         unitType: "",
@@ -262,17 +207,16 @@ export default function AddPayableEntryModal({
       }
     }
   };
+
   const handleClose = () => {
     setInvoiceEntry({
       id: Date.now(),
       paybleDetailId: null,
-      currency: "",
       chargeName: "",
       // receivableRefNo: "",
       receivableAmount: 0,
       mappedCharge: "",
       totalAmount: 0,
-      exRate: "",
       vatApplicable: "",
       vat: 0,
       unitType: "",
@@ -283,76 +227,6 @@ export default function AddPayableEntryModal({
     });
     handleTogglePayEntry();
   };
-  useEffect(() => {
-    if (invoiceEntry.currency !== "USD") {
-      setInvoiceEntry((prevEntry) => ({
-        ...prevEntry,
-        exRate: 1,
-      }));
-    }
-  }, [invoiceEntry.currency]);
-
-  useEffect(() => {
-    if (selectedPayEntry && type === "cost_details") {
-      const receivableAmount = selectedPayEntry.paybleAmount || 0;
-      const vat = selectedPayEntry.paybleVatAmount || 0;
-      setInvoiceEntry({
-        id: selectedPayEntry.id,
-        paybleDetailId: selectedPayEntry.paybleDetailId,
-        currency: selectedPayEntry.paybleCurrency || "",
-        chargeName: selectedPayEntry.chargeName || "",
-        mappedCharge: selectedPayEntry.mappedCharge || "",
-        receivableAmount: selectedPayEntry.paybleAmount || 0,
-        totalAmount: receivableAmount + vat || 0,
-        exRate: selectedPayEntry.paybleExchangeRate || 0,
-        vatApplicable: selectedPayEntry.paybleVatApplicable || "",
-        vat: selectedPayEntry.paybleVatAmount || 0,
-        unitType: selectedPayEntry.paybleUnitType || "",
-        numOfUnits: selectedPayEntry.paybleNumOfUnit || 0,
-        unitRate: parseFloat(selectedPayEntry.paybleUnitRate) || 0,
-        new: false,
-        receivableCreatedDate: selectedPayEntry.paybleCreatedDate || null,
-      });
-    } 
-    else if (selectedPayEntry && type !== "cost_details") {
-      setInvoiceEntry({
-        id: selectedPayEntry.id,
-        paybleDetailId: selectedPayEntry.paybleDetailId,
-        currency: selectedPayEntry.currency || "",
-        chargeName: selectedPayEntry.chargeName || "",
-        mappedCharge: selectedPayEntry.mappedCharge || "",
-        receivableAmount: selectedPayEntry.receivableAmount || 0,
-        totalAmount: selectedPayEntry.totalAmount || 0,
-        exRate: selectedPayEntry.exRate || 0,
-        vatApplicable: selectedPayEntry.vatApplicable || "",
-        vat: selectedPayEntry.vat || 0,
-        unitType: selectedPayEntry.unitType || "",
-        numOfUnits: selectedPayEntry.numOfUnits || 0,
-        unitRate: selectedPayEntry.unitRate || 0,
-        new: false,
-        receivableCreatedDate: selectedPayEntry.receivableCreatedDate || null,
-      });
-    }
-    else {
-      setInvoiceEntry({
-        id: Date.now(),
-        paybleDetailId: null,
-        currency: "",
-        chargeName: "",
-        mappedCharge: "",
-        receivableAmount: 0,
-        totalAmount: 0,
-        exRate: "",
-        vatApplicable: "",
-        vat: 0,
-        unitType: "",
-        numOfUnits: 0,
-        unitRate: 0,
-        new: true,
-        receivableCreatedDate: null,
-      });
-    }
-  }, [selectedPayEntry]);
 
   const handleInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
@@ -372,6 +246,69 @@ export default function AddPayableEntryModal({
       }));
     }
   };
+
+
+
+  useEffect(() => {
+    if (selectedPayEntry && type === "cost_details") {
+      const receivableAmount = selectedPayEntry.paybleAmount || 0;
+      const vat = selectedPayEntry.paybleVatAmount || 0;
+      setInvoiceEntry({
+        id: selectedPayEntry.id,
+        paybleDetailId: selectedPayEntry.paybleDetailId,
+        chargeName: selectedPayEntry.chargeName || "",
+        mappedCharge: selectedPayEntry.mappedCharge || "",
+        receivableAmount: selectedPayEntry.paybleAmount || 0,
+        totalAmount: receivableAmount + vat || 0,
+        vatApplicable: selectedPayEntry.paybleVatApplicable || "",
+        vat: selectedPayEntry.paybleVatAmount || 0,
+        unitType: selectedPayEntry.paybleUnitType || "",
+        numOfUnits: selectedPayEntry.paybleNumOfUnit || 0,
+        unitRate: parseFloat(selectedPayEntry.paybleUnitRate) || 0,
+        new: false,
+        receivableCreatedDate: selectedPayEntry.paybleCreatedDate || null,
+      });
+    } else if (selectedPayEntry && type !== "cost_details") {
+      setInvoiceEntry({
+        id: selectedPayEntry.id,
+        paybleDetailId: selectedPayEntry.paybleDetailId,
+        chargeName: selectedPayEntry.chargeName || "",
+        mappedCharge: selectedPayEntry.mappedCharge || "",
+        receivableAmount: selectedPayEntry.receivableAmount || 0,
+        totalAmount: selectedPayEntry.totalAmount || 0,
+        vatApplicable: selectedPayEntry.vatApplicable || "",
+        vat: selectedPayEntry.vat || 0,
+        unitType: selectedPayEntry.unitType || "",
+        numOfUnits: selectedPayEntry.numOfUnits || 0,
+        unitRate: selectedPayEntry.unitRate || 0,
+        new: false,
+        receivableCreatedDate: selectedPayEntry.receivableCreatedDate || null,
+      });
+    } else {
+      setInvoiceEntry({
+        id: Date.now(),
+        paybleDetailId: null,
+        chargeName: "",
+        mappedCharge: "",
+        receivableAmount: 0,
+        totalAmount: 0,
+        vatApplicable: "",
+        vat: 0,
+        unitType: "",
+        numOfUnits: 0,
+        unitRate: 0,
+        new: true,
+        receivableCreatedDate: null,
+      });
+    }
+  }, [selectedPayEntry]);
+
+  useEffect(() => {
+    if (invoiceEntry.unitRate) {
+      handleChange("numOfUnits", invoiceEntry.numOfUnits);
+    }
+  }, [invoiceEntry.unitType, invoiceEntry.numOfUnits]);
+
   return (
     <Modal
       keepMounted
@@ -491,8 +428,7 @@ export default function AddPayableEntryModal({
                 id="unitType"
                 size="small"
                 disabled={
-                  !formik.values.customerName ||
-                  (type == "cost_details" )
+                  !formik.values.customerName || type == "cost_details"
                     ? true
                     : false
                 }
@@ -550,17 +486,7 @@ export default function AddPayableEntryModal({
               />
             </Box>
           </Grid>
-          {/* <Grid item xs={12} lg={4}>
-          
-            <SelectBox
-              label="Unit Type"
-              id="unitType"
-              options={jobSettingData?.body?.unitTypes}
-              value={invoiceEntry?.unitType || ""}
-              error={errors.unitType}
-              onChange={(e) => handleChange("unitType", e.target.value)}
-            />
-          </Grid> */}
+
           <Grid item xs={12} lg={4}>
             <InputBox
               label="No. of Units"
@@ -578,11 +504,7 @@ export default function AddPayableEntryModal({
               id="unitRate"
               value={invoiceEntry?.unitRate || ""}
               error={errors.unitRate}
-              disabled={
-                type == "cost_details" 
-                  ? true
-                  : false
-              }
+              disabled={type == "cost_details" ? true : false}
               onChange={(e) => handleChange("unitRate", e.target.value)}
               fullWidth
             />
@@ -605,11 +527,7 @@ export default function AddPayableEntryModal({
               options={vatAndHoldingTaxSettingData?.body?.vatSettings || []}
               value={invoiceEntry?.vatApplicable || ""}
               error={errors.vatApplicable}
-              disabled={
-                type == "cost_details"
-                  ? true
-                  : false
-              }
+              disabled={type == "cost_details" ? true : false}
               onChange={(e) => handleChange("vatApplicable", e.target.value)}
             />
           </Grid>
@@ -633,17 +551,8 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-          {/* <Grid item xs={12} lg={4}>
-            <DateTimeField
-              name="date"
-              label="Date"
-              id="receivableCreatedDate"
-              value={invoiceEntry?.receivableCreatedDate || ""}
-              disabled={true}
-            />
-          </Grid> */}
+
           <Grid item xs={12} lg={8}></Grid>
-          {/* Button */}
           <Grid item xs={4}>
             <ThemeButton
               onClick={handleSubmit}

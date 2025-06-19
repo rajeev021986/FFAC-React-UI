@@ -13,6 +13,7 @@ import SubSections from "../SubSections/SubSection";
 export default function ReceiveableEntryDetails({ page }) {
   const { state } = useLocation();
   const location = useLocation();
+
   const selectedRow = location.state?.selectedRow;
   const queryParams = new URLSearchParams(location.search);
   const job_number = queryParams.get("job_number");
@@ -39,7 +40,7 @@ export default function ReceiveableEntryDetails({ page }) {
     totalAmount: 0,
     vatAmount: 0,
     totalAmount: 0,
-    type: "debit_note",
+    type: getDataFormParams?.type,
     status: "",
     statusCode: 0,
   });
@@ -60,7 +61,7 @@ export default function ReceiveableEntryDetails({ page }) {
       paybleRefNo: data.paybleRefNo || "",
       profitLoss: data.profitLoss || 0,
       totalRevenue: data.totalRevenue || 0,
-      type: data.type || "debit_note",
+      type: data.type || getDataFormParams?.type, 
       containerTypeDTO: data.containerTypeDTO || [],
       costDetails: data.costDetails || [],
       details: data?.receivableDetails || [],
@@ -70,8 +71,10 @@ export default function ReceiveableEntryDetails({ page }) {
       vatAmount: data?.vatAmount || 0,
       totalAmount: data?.totalAmount || 0,
     });
+
     const init = async () => {
       try {
+        setLoading(true);
         let response;
         if (
           job_number &&
@@ -80,8 +83,8 @@ export default function ReceiveableEntryDetails({ page }) {
         ) {
           response = await ApiManager.getReceivableData({
             job_number,
-            currency: getDataFormParams?.currency,
-            exchangeRate: getDataFormParams?.exchangeRate,
+            currency: getDataFormParams.currency,
+            exchangeRate: getDataFormParams.exchangeRate,
           });
         } else if (state?.initialValues?.id) {
           response = await ApiManager.getReceivableEntryDeatils(
@@ -99,8 +102,14 @@ export default function ReceiveableEntryDetails({ page }) {
         setLoading(false);
       }
     };
+
     init();
-  }, [getDataFormParams, state?.initialValues?.id]);
+  }, [
+    job_number,
+    getDataFormParams?.currency,
+    getDataFormParams?.exchangeRate,
+    state?.initialValues?.id,
+  ]);
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
@@ -133,7 +142,6 @@ export default function ReceiveableEntryDetails({ page }) {
               page={page}
               setgetDataFormParams={setgetDataFormParams}
               job_number={job_number}
-              selectedRow={selectedRow}
             />
           </CardContent>
         </Card>

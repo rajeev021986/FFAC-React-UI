@@ -19,13 +19,7 @@ export const getRecieveAbleListGridActionApprove = (nav, setModal) => {
     //   },
     //   icon: <EditIconDropdown />,
     // },
-    // {
-    //   label: "Audit",
-    //   onClick: (params) => {
-    //     setModal({ open: true, type: "audit", data: params.row });
-    //   },
-    //   icon: <AuditIconDropdown />,
-    // },
+
     // {
     //   label: "View",
     //   onClick: (params) => {
@@ -33,6 +27,14 @@ export const getRecieveAbleListGridActionApprove = (nav, setModal) => {
     //   },
     //   icon: <ViewIconDropdown />,
     // },
+    
+    {
+      label: "Audit",
+      onClick: (params) => {
+        setModal({ open: true, type: "audit", data: params.row });
+      },
+      icon: <AuditIconDropdown />,
+    },
     {
       label: "Approve",
       onClick: (params) => {
@@ -50,7 +52,7 @@ export const getRecieveAbleListGridActionApprove = (nav, setModal) => {
     {
       label: "Cancel",
       onClick: (params) => {
-        if (params.row.statusCode !== -3) { 
+        if (params.row.statusCode !== -3) {
           setModal({
             open: true,
             type: "cancel",

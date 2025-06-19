@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Autocomplete,
@@ -8,9 +8,8 @@ import {
 } from "@mui/material";
 import { GetAutoCompleteDataWithLoader } from "../../utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
-import autoCompleteCache from "../../utils/AutoCompleteCache";
 
-function FormAutoCompleteWithLoader(props) {
+function FormAutoCompleteWithLoaderOld(props) {
   const {
     label,
     id,
@@ -33,53 +32,6 @@ function FormAutoCompleteWithLoader(props) {
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
-  const suggestionRef = useRef({
-    suggestionName,
-    id,
-    dataLabel,
-    debounceValue,
-    other,
-  });
-
-  // With Cache
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const cacheKey = `${suggestionName}-${id}-${dataLabel || suggestionName}-${other || ""}`;
-
-  //     // Check if data already exists in cache
-  //     if (autoCompleteCache.has(cacheKey)) {
-  //       const cachedData = autoCompleteCache.get(cacheKey);
-  //       setOptions(cachedData);
-  //       setFilteredOptions(cachedData);
-  //       return;
-  //     }
-
-  //     setLoading(true);
-  //     try {
-  //       const data = await GetAutoCompleteDataWithLoader(
-  //         suggestionName,
-  //         id,
-  //         dataLabel || suggestionName,
-  //         debounceValue,
-  //         other || ""
-  //       );
-  //       const validData = data.filter((item) => item.label?.trim() !== "");
-
-  //       // Save result in cache
-  //       autoCompleteCache.set(cacheKey, validData);
-
-  //       setOptions(validData);
-  //       setFilteredOptions(validData);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -218,4 +170,4 @@ function FormAutoCompleteWithLoader(props) {
   );
 }
 
-export default FormAutoCompleteWithLoader;
+export default FormAutoCompleteWithLoaderOld;

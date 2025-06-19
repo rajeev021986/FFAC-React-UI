@@ -46,7 +46,7 @@ export default function ExchangeInputs({
 
         // Merge both arrays avoiding duplicates (based on `value`)
         const mergedCurrencies = [
-          ...backendCurrencies,
+          // ...backendCurrencies,
           ...settingCurrencies.filter(
             (setting) =>
               !backendCurrencies.some((item) => item.value === setting.value)

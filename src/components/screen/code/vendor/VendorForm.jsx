@@ -144,9 +144,9 @@ export default function VendorForm({ page = "vendor" }) {
     //     thirdWeek: Yup.string().required("Third Week is required"),
     //   })
     // ).required("Vendor Entity Demurage Tariffs are required"),
-    vendorEntityTariffs:Yup.array(
+    vendorEntityTariffs: Yup.array(
       Yup.object({
-        chargeId:Yup.string().required("Charge Name is required")
+        chargeId: Yup.string().required("Charge Name is required"),
       })
     ),
     vendorEntityFreeDays: Yup.array(
@@ -234,7 +234,7 @@ export default function VendorForm({ page = "vendor" }) {
     vrnNo: null,
     city: "",
     countryId: "",
-    countryName:"",
+    countryName: "",
     creditDays: 0,
     province: "",
     poNo: "",
@@ -253,7 +253,6 @@ export default function VendorForm({ page = "vendor" }) {
     validationSchema,
     validateOnChange: false,
     onSubmit: async (values) => {
-    
       let updatedValue = {
         ...values,
         vendorEntityTariffs: values.vendorEntityTariffs.map((s) =>
@@ -272,6 +271,35 @@ export default function VendorForm({ page = "vendor" }) {
           s.new ? { ...s, new: null, id: null } : s
         ),
       };
+      console.log(values.bankDetails, "length");
+      if (values.bankDetails.length > 0) {
+        const { bankAddress, bankName, currency, swiftCode, accountNo } =
+          values.bankDetails;
+
+        if (values.bankDetails.length > 0) {
+          const isAnyBankDetailIncomplete = values.bankDetails.some((bank) => {
+            const { bankName, bankAddress, currency, accountNo, swiftCode } =
+              bank;
+            return (
+              !bankName || !bankAddress || !currency || !accountNo || !swiftCode
+            );
+          });
+
+          if (isAnyBankDetailIncomplete) {
+            toast.custom(
+              <CustomToast
+                message="Please fill all bank details"
+                toast="error"
+              />,
+              {
+                closeButton: false,
+              }
+            );
+            return;
+          }
+        }
+      }
+
       if (type == "copy" || type == "new") {
         try {
           updatedValue.statusCode = vendorSettingsData?.body?.approvalRequest

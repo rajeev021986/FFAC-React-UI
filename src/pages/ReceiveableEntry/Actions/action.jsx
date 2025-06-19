@@ -51,26 +51,26 @@ export const getReceiveableEntryGridActionApprove = (nav, setModal) => {
       },
       icon: <DeleteIconDropdown />,
     },
-       {
-      label: "Cancel",
-      onClick: (params) => {
-        if (params.row.statusCode !== -3) {
-          setModal({
-            open: true,
-            type: "cancel",
-            data: params.row,
-          });
-        } else {
-          toast.custom(
-            <CustomToast message="This entry has already been cancelled." toast="error" />,
-            {
-              closeButton: false,
-            }
-          );
-        }
-      },
+    //    {
+    //   label: "Cancel",
+    //   onClick: (params) => {
+    //     if (params.row.statusCode !== -3) {
+    //       setModal({
+    //         open: true,
+    //         type: "cancel",
+    //         data: params.row,
+    //       });
+    //     } else {
+    //       toast.custom(
+    //         <CustomToast message="This entry has already been cancelled." toast="error" />,
+    //         {
+    //           closeButton: false,
+    //         }
+    //       );
+    //     }
+    //   },
 
-      icon: <CancelOutlinedIcon sx={{ width: "20px", marginTop: "5px" }} />,
-    },
+    //   icon: <CancelOutlinedIcon sx={{ width: "20px", marginTop: "5px" }} />,
+    // },
   ];
 };

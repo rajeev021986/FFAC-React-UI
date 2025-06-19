@@ -274,7 +274,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Eta"
                         id="eta"
                         value={formik.values.eta}
@@ -310,7 +310,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Arrival Date"
                         id="arrivalDatePilotStation"
                         value={formik.values.arrivalDatePilotStation}
@@ -328,7 +328,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Document Deadline"
                         id="documentDeadLine"
                         value={formik.values.documentDeadLine}
@@ -348,7 +348,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Payment Cutoff"
                         id="paymentCutOff"
                         value={formik.values.paymentCutOff}
@@ -422,7 +422,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Last Sling Date"
                         id="vesselLast_SlingDate"
                         value={formik.values.vesselLast_SlingDate}
@@ -674,7 +674,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Eta"
                         id="eta"
                         value={formik.values.eta}
@@ -710,7 +710,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Arrival Date"
                         id="arrivalDatePilotStation"
                         value={formik.values.arrivalDatePilotStation}
@@ -728,7 +728,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Document Deadline"
                         id="documentDeadLine"
                         value={formik.values.documentDeadLine}
@@ -748,7 +748,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Payment Cutoff"
                         id="paymentCutOff"
                         value={formik.values.paymentCutOff}
@@ -822,7 +822,7 @@ export function VesselVoyageForm({ initialValues, type }) {
                       paddingLeft={1}
                       marginTop={2}
                     >
-                      <DateField
+                      <DateTimeField
                         label="Last Sling Date"
                         id="vesselLast_SlingDate"
                         value={formik.values.vesselLast_SlingDate}

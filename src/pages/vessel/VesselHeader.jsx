@@ -25,48 +25,53 @@ export function VesselHeader() {
   }, [vesselSelector.view, dispatch]);
 
   return (
-    <Stack >
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <GridSearchInput
-          filters={vesselSelector?.formData}
-          setFilters={(filters) => dispatch(updateInput(filters))}
-          width="650px"
-        >
-          <VesselFilters />
-        </GridSearchInput>
-        {vesselSelector.view === "card" && (
-          <SelectBox
-            label="Sort By"
-            options={VESSEL_SORT_OPTIONS}
-            value={vesselSelector.sortBy}
-            onChange={(event) => {
-              dispatch(setSortBy(event.target.value));
-            }}
-            sx={{
-              borderRadius: "20px",
-              width: "150px",
-            }}
-          />
-        )}
-        {/* {vesselSelector.view == "grid" && (
-          <div
-            style={{
-              width: "800px",
-            }}
-          ></div>
-        )} */}  
-
-        <IconButton onClick={() => dispatch(vesselSetView("card"))}>
-          <FormatListBulletedOutlined
-            color={vesselSelector.view === "card" ? "primary" : "secondary"}
-          />
-        </IconButton>
-        <IconButton onClick={() => dispatch(vesselSetView("grid"))}>
-          <GridOnOutlined
-            color={vesselSelector.view === "grid" ? "primary" : "secondary"}
-          />
-        </IconButton>
-      </Box>
+    <Stack>
+      <CardHeader
+        sx={{ margin: "0px", padding: "8px" }}
+        title={
+          <Stack spacing={2} direction="row" justifyContent="space-between">
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <GridSearchInput
+                filters={vesselSelector?.formData}
+                setFilters={(filters) => dispatch(updateInput(filters))}
+                width="650px"
+              >
+                <VesselFilters />
+              </GridSearchInput>
+              {vesselSelector.view === "card" && (
+                <SelectBox
+                  label="Sort By"
+                  options={VESSEL_SORT_OPTIONS}
+                  value={vesselSelector.sortBy}
+                  onChange={(event) => {
+                    dispatch(setSortBy(event.target.value));
+                  }}
+                  sx={{
+                    borderRadius: "20px",
+                    width: "150px",
+                  }}
+                />
+              )}
+            </Box>
+            <Box>
+              <IconButton onClick={() => dispatch(vesselSetView("card"))}>
+                <FormatListBulletedOutlined
+                  color={
+                    vesselSelector.view === "card" ? "primary" : "secondary"
+                  }
+                />
+              </IconButton>
+              <IconButton onClick={() => dispatch(vesselSetView("grid"))}>
+                <GridOnOutlined
+                  color={
+                    vesselSelector.view === "grid" ? "primary" : "secondary"
+                  }
+                />
+              </IconButton>
+            </Box>
+          </Stack>
+        }
+      />
     </Stack>
   );
 }

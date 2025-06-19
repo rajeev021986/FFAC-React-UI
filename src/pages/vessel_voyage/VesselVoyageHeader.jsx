@@ -27,39 +27,52 @@ export function VesselVoyageHeader() {
 
   return (
     <Stack>
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <GridSearchInput
-          filters={voyageSelector?.formData}
-          setFilters={(filters) => dispatch(updateInput(filters))}
-          width="650px"
-        >
-          <VesselVoyageFilters />
-        </GridSearchInput>
-        {voyageSelector.view === "card" && (
-          <SelectBox
-            label="Sort By"
-            options={VOYAGE_SORT_OPTIONS}
-            value={voyageSelector.sortBy}
-            onChange={(event) => {
-              dispatch(setSortBy(event.target.value));
-            }}
-            sx={{
-              borderRadius: "20px",
-              width: "150px",
-            }}
-          />
-        )}
-        <IconButton onClick={() => dispatch(voyageSetView("card"))}>
-          <FormatListBulletedOutlined
-            color={voyageSelector.view === "card" ? "primary" : "secondary"}
-          />
-        </IconButton>
-        <IconButton onClick={() => dispatch(voyageSetView("grid"))}>
-          <GridOnOutlined
-            color={voyageSelector.view === "grid" ? "primary" : "secondary"}
-          />
-        </IconButton>
-      </Box>
+      <CardHeader
+        sx={{ margin: "0px", padding: "8px" }}
+        title={
+          <Stack spacing={2} direction="row" justifyContent="space-between">
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <GridSearchInput
+                filters={voyageSelector?.formData}
+                setFilters={(filters) => dispatch(updateInput(filters))}
+                width="650px"
+              >
+                <VesselVoyageFilters />
+              </GridSearchInput>
+              {voyageSelector.view === "card" && (
+                <SelectBox
+                  label="Sort By"
+                  options={VOYAGE_SORT_OPTIONS}
+                  value={voyageSelector.sortBy}
+                  onChange={(event) => {
+                    dispatch(setSortBy(event.target.value));
+                  }}
+                  sx={{
+                    borderRadius: "20px",
+                    width: "150px",
+                  }}
+                />
+              )}
+            </Box>
+            <Box>
+              <IconButton onClick={() => dispatch(voyageSetView("card"))}>
+                <FormatListBulletedOutlined
+                  color={
+                    voyageSelector.view === "card" ? "primary" : "secondary"
+                  }
+                />
+              </IconButton>
+              <IconButton onClick={() => dispatch(voyageSetView("grid"))}>
+                <GridOnOutlined
+                  color={
+                    voyageSelector.view === "grid" ? "primary" : "secondary"
+                  }
+                />
+              </IconButton>
+            </Box>
+          </Stack>
+        }
+      />
     </Stack>
   );
 }

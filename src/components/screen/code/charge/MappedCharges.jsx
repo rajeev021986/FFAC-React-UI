@@ -265,8 +265,7 @@ export default function MappedCharges({ type, loading }) {
                         minHeight: "50px",
                       }}
                       icon=<EditIconForHeader />
-                      iconPosition="start"
-                    />
+                      iconPosition="start" />
                   </TabList>
                 </Box>
                 <TabPanel
@@ -282,19 +281,39 @@ export default function MappedCharges({ type, loading }) {
                     }}
                     paddingInline={2}
                   >
-                    <Box sx={{ height: 400 }}>
+                    <Box sx={{ width: "100%", height: "100%" }}>
                       <StyledDataGrid
                         rows={formik.values || []}
                         columns={columns.map((column) => ({
                           ...column,
                           headerAlign: "center",
                           align: "center",
+                          justifyContent: "center",
                         }))}
+                        minHeight={"70px"}
                         disableSelectionOnClick
                         processRowUpdate={handleProcessRowUpdate}
                         experimentalFeatures={{ newEditingApi: true }}
                         getRowId={(row) => row.id}
                         disableColumnMenu
+                        sx={{
+                          "& .MuiDataGrid-row": {
+                            fontSize: "14px",
+                            height: "44px",
+                            minHeight: "64px !important",
+                            maxHeight: "44px !important",
+                          },
+                          "& .MuiDataGrid-cell": {
+                            height: "44px",
+                            minHeight: "64px !important",
+                            maxHeight: "44px !important",
+                            lineHeight: "44px !important",
+                            display: "flex", // make it a flexbox
+                            justifyContent: "center", // horizontal center
+                            alignItems: "center", // vertical center
+                            textAlign: "center",
+                          },
+                        }}
                         // style={{height: "200px"}}
                       />
                     </Box>

@@ -85,6 +85,7 @@ const Routes = {
   receivableEntry: { label: "Receivable Entry", disabled: false },
   addReceiveableEntry: { label: "Add Receivable Entry", disabled: false },
   EditreceiveableEntry: { label: "Edit Receivable Entry", disabled: false },
+  approveReceivable: { label: "Approve Receivable Entry", disabled: false },
 };
 
 const ThemedBreadcrumb = () => {
