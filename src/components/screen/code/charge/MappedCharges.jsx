@@ -139,7 +139,7 @@ export default function MappedCharges({ type, loading }) {
         );
         const rowErrors = formik.errors?.[rowIndex] || {};
         console.log("params.row.incomeId", params.row);
-        
+
         return (
           <Box sx={{ width: "100%", margin: "12px" }}>
             <AutoCompleteInput
@@ -151,7 +151,7 @@ export default function MappedCharges({ type, loading }) {
                 label: params.row.directIncome,
               }}
               error={rowErrors.directIncome}
-              onChange={( newValue) => {
+              onChange={(newValue) => {
                 console.log("newValue", newValue);
                 const updated = [...formik.values];
                 updated[rowIndex] = {
