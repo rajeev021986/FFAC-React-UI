@@ -115,6 +115,11 @@ const JobProfitAndLoss = ({ formik, job_number, selectedRow }) => {
       });
     }
   }, []);
+  useEffect(() => {
+    if (formik.values.currency === "INR") {
+      formik.setFieldValue("exchangeRate", 1);
+    }
+  }, [formik.values.currency]);
   return (
     <React.Fragment>
       <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>

@@ -130,22 +130,23 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
         const isPaybleIdInDetails = formik.values.details.some(
           (detail) => detail.paybleDetailId === params.row.paybleDetailId
         );
+        // const isEditDisabled = params.row.paybleDetailId === null;
         return (
           <button
-            disabled={isPaybleIdInDetails}
+            disabled={isPaybleIdInDetails || params.row.paybleDetailId === null}
             onClick={() => {
               if (!isPaybleIdInDetails) handleAdd(params);
             }}
             style={{
               padding: "6px 12px",
               cursor: "pointer",
-              backgroundColor: isPaybleIdInDetails ? "#bdbdbd" : "#1976d2",
+              backgroundColor: isPaybleIdInDetails || params.row.paybleDetailId === null ? "#bdbdbd" : "#1976d2",
               // color: "#fff",
               border: "none",
               borderRadius: "4px",
-              cursor: isPaybleIdInDetails ? "not-allowed" : "pointer",
+              cursor: isPaybleIdInDetails || params.row.paybleDetailId === null  ? "not-allowed" : "pointer",
               color: "#fff",
-              opacity: isPaybleIdInDetails ? 0.5 : 1,
+              opacity: isPaybleIdInDetails || params.row.paybleDetailId === null  ? 0.5 : 1,
             }}
           >
             {getButtonText()}

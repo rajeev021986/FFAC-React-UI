@@ -234,7 +234,7 @@ export default function AddDebitAndInvoice({ formik }) {
       ),
       renderCell: (params) => {
         const row = params.row;
-        const isEditDisabled = row.paybleDetailId === null || row.paybleDetailId === 0;
+        const isEditDisabled = row.paybleDetailId === null;
 
         return (
           <div
@@ -248,12 +248,12 @@ export default function AddDebitAndInvoice({ formik }) {
           >
             <EditIcon
               style={{
-                cursor: isEditDisabled ? "not-allowed" : "pointer",
-                color: isEditDisabled ? "#ccc" : "#166ee0",
-                opacity: isEditDisabled ? 0.5 : 1,
+                cursor: !isEditDisabled ? "not-allowed" : "pointer",
+                color: !isEditDisabled ? "#ccc" : "#166ee0",
+                opacity: !isEditDisabled ? 0.5 : 1,
               }}
               onClick={() => {
-                if (!isEditDisabled) handleEditClick(row);
+                if (isEditDisabled) handleEditClick(row);
               }}
             />
             <Delete
