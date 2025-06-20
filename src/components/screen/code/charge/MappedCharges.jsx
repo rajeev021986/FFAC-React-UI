@@ -224,7 +224,7 @@ export default function MappedCharges({ type, loading }) {
   }, [mappedChargesData]);
   return (
     <>
-      <Box sx={{ padding: 0, margin: 0, height: "calc(100vh - 65px)" }}>
+      <Box sx={{ padding: 0, margin: 0 }}>
         <Stack sx={{ padding: "8px 0px" }}>
           <ScreenToolbar
             leftComps={
@@ -276,7 +276,15 @@ export default function MappedCharges({ type, loading }) {
                     }}
                     paddingInline={2}
                   >
-                    <Box sx={{ width: "100%", height: "100%" }}>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        height: "60vh",
+                        "& .MuiDataGrid-virtualScrollerContent": {
+                          flexBasis: "0px !important",
+                        },
+                      }}
+                    >
                       <StyledDataGrid
                         rows={formik.values || []}
                         columns={columns.map((column) => ({
@@ -318,6 +326,10 @@ export default function MappedCharges({ type, loading }) {
                             justifyContent: "center",
                             alignItems: "center",
                             textAlign: "center",
+                          },
+                          "& .MuiInputBase-root": {
+                            height: "36px",
+                            padding: "6px",
                           },
                         }}
                       />

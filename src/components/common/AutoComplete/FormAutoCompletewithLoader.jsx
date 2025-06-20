@@ -41,44 +41,8 @@ function FormAutoCompleteWithLoader(props) {
     other,
   });
 
-  // With Cache
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const cacheKey = `${suggestionName}-${id}-${dataLabel || suggestionName}-${other || ""}`;
+ 
 
-  //     // Check if data already exists in cache
-  //     if (autoCompleteCache.has(cacheKey)) {
-  //       const cachedData = autoCompleteCache.get(cacheKey);
-  //       setOptions(cachedData);
-  //       setFilteredOptions(cachedData);
-  //       return;
-  //     }
-
-  //     setLoading(true);
-  //     try {
-  //       const data = await GetAutoCompleteDataWithLoader(
-  //         suggestionName,
-  //         id,
-  //         dataLabel || suggestionName,
-  //         debounceValue,
-  //         other || ""
-  //       );
-  //       const validData = data.filter((item) => item.label?.trim() !== "");
-
-  //       // Save result in cache
-  //       autoCompleteCache.set(cacheKey, validData);
-
-  //       setOptions(validData);
-  //       setFilteredOptions(validData);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
