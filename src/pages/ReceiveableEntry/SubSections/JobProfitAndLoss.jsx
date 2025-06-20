@@ -24,7 +24,7 @@ import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoC
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 
-const JobProfitAndLoss = ({ formik, job_number }) => {
+const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
@@ -46,7 +46,6 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
   const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
-
 
   useEffect(() => {
     const fetchData = async () => {
