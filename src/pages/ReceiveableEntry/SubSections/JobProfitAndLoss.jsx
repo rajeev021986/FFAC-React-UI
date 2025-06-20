@@ -118,7 +118,7 @@ const JobProfitAndLoss = ({ formik }) => {
   useEffect(() => {
     if (formik.values.currency === "INR") {
       formik.setFieldValue("exchangeRate", 1);
-    } else {
+    } else if (!formik.values.exchangeRate) {
       formik.setFieldValue("exchangeRate", "");
     }
   }, [formik.values.currency]);

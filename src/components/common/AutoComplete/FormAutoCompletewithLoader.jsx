@@ -102,7 +102,7 @@ function FormAutoCompleteWithLoader(props) {
     };
 
     fetchData();
-  }, [debounceValue, suggestionName, id, dataLabel, value]);
+  }, [debounceValue, suggestionName, id, dataLabel ]);
 
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);

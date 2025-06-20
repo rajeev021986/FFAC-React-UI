@@ -481,6 +481,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                     },
                   });
                 }}
+                disabled={formik.values.id ? true : false}
               />
             </Grid>
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
