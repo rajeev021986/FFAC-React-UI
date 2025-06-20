@@ -117,7 +117,7 @@ const JobProfitAndLoss = ({ formik }) => {
 
   useEffect(() => {
     if (formik.values.currency === "INR") {
-      formik.setFieldValue("exchangeRate", 1);
+      formik.setFieldValue("exchangeRate", "1");
     } else if (!formik.values.exchangeRate) {
       formik.setFieldValue("exchangeRate", "");
     }
@@ -329,7 +329,7 @@ const JobProfitAndLoss = ({ formik }) => {
                         formik.setFieldValue("exchangeRate", "");
                       }
                       if (value === "INR") {
-                        formik.setFieldValue("exchangeRate", 1);
+                        formik.setFieldValue("exchangeRate", "1");
                       }
                       setAlertConfig((prev) => ({ ...prev, open: false }));
                     },

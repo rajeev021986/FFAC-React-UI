@@ -64,7 +64,7 @@ export default function AddDebitAndInvoice({ formik }) {
 
   useEffect(() => {
     if (formik.values?.currency !== "USD") {
-      formik.setFieldValue("exchangeRate", 1);
+      formik.setFieldValue("exchangeRate", "1");
     }
   }, [formik.values?.currency]);
 

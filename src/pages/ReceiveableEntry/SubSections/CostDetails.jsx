@@ -471,7 +471,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                         formik.setFieldValue("exchangeRate", "");
                       }
                       if (value === "INR") {
-                        formik.setFieldValue("exchangeRate", 1);
+                        formik.setFieldValue("c", "1");
                       }
                       formik.setFieldValue("details", []);
                       setAlertConfig((prev) => ({ ...prev, open: false }));
