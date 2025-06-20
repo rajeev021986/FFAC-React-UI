@@ -47,6 +47,7 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
     useGetOptionsSettingsQuery("common_settings");
   const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -118,6 +119,8 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
   useEffect(() => {
     if (formik.values.currency === "INR") {
       formik.setFieldValue("exchangeRate", 1);
+    } else {
+      formik.setFieldValue("exchangeRate", "");
     }
   }, [formik.values.currency]);
 

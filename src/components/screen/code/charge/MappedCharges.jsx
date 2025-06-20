@@ -175,25 +175,27 @@ export default function MappedCharges({ type, loading }) {
         );
         const rowErrors = formik.errors?.[rowIndex] || {};
         return (
-          <AutoCompleteInput
-            placeholder="Direct Expense"
-            id="directExpense"
-            suggestionName="charge_name"
-            value={{
-              id: params.row.expenseId,
-              label: params.row.directExpense,
-            }}
-            error={rowErrors.directExpense}
-            onChange={(newValue) => {
-              const updated = [...formik.values];
-              updated[rowIndex] = {
-                ...updated[rowIndex],
-                expenseId: newValue?.id || null,
-                directExpense: newValue?.label || "",
-              };
-              formik.setValues(updated);
-            }}
-          />
+          <Box sx={{ width: "100%", margin: "12px" }}>
+            <AutoCompleteInput
+              placeholder="Direct Expense"
+              id="directExpense"
+              suggestionName="charge_name"
+              value={{
+                id: params.row.expenseId,
+                label: params.row.directExpense,
+              }}
+              error={rowErrors.directExpense}
+              onChange={(newValue) => {
+                const updated = [...formik.values];
+                updated[rowIndex] = {
+                  ...updated[rowIndex],
+                  expenseId: newValue?.id || null,
+                  directExpense: newValue?.label || "",
+                };
+                formik.setValues(updated);
+              }}
+            />
+          </Box>
         );
       },
     },
