@@ -76,19 +76,22 @@ export default function SubSections({
           }
         );
       }
-      if (values.currency === "USD" && values.exchangeRate == "1") {
+
+      if (
+        (values.currency === "USD" && values.exchangeRate === "1") ||
+        !values.exchangeRate
+      ) {
         return toast.custom(
           <CustomToast
             message={
-              "Please select currency and exchange Rate to create TaxInvoice/Debit Note"
+              "Please select currency and exchange rate to create Tax Invoice / Debit Note"
             }
             toast="error"
           />,
-          {
-            closeButton: false,
-          }
+          { closeButton: false }
         );
       }
+
       if (!values.id) {
         try {
           let DetailsData = values.details.map((item) =>
