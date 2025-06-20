@@ -469,7 +469,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                         formik.setFieldValue("exchangeRate", "");
                       }
                       if (value === "INR") {
-                        formik.setFieldValue("exchangeRate", 1);
+                        formik.setFieldValue("c", "1");
                       }
                       formik.setFieldValue("details", []);
                       setAlertConfig((prev) => ({ ...prev, open: false }));
@@ -479,6 +479,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                     },
                   });
                 }}
+                disabled={formik.values.id ? true : false}
               />
             </Grid>
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>

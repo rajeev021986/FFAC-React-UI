@@ -24,7 +24,7 @@ import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoC
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
 
-const JobProfitAndLoss = ({ formik, job_number }) => {
+const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
@@ -117,7 +117,9 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
 
   useEffect(() => {
     if (formik.values.currency === "INR") {
-      formik.setFieldValue("exchangeRate", 1);
+      formik.setFieldValue("exchangeRate", "1");
+    } else if (!formik.values.exchangeRate) {
+      formik.setFieldValue("exchangeRate", "");
     }
   }, [formik.values.currency]);
 
@@ -327,7 +329,7 @@ const JobProfitAndLoss = ({ formik, job_number }) => {
                         formik.setFieldValue("exchangeRate", "");
                       }
                       if (value === "INR") {
-                        formik.setFieldValue("exchangeRate", 1);
+                        formik.setFieldValue("exchangeRate", "1");
                       }
                       setAlertConfig((prev) => ({ ...prev, open: false }));
                     },

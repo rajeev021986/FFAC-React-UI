@@ -38,7 +38,6 @@ export default function SubSections({
   const [dropdownData, setDropdownData] = useState({});
   const [value, setValue] = React.useState("1");
   const [chargesData, setChargesData] = useState([]);
-
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",

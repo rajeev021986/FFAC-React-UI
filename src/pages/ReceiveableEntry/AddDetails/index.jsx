@@ -40,7 +40,7 @@ export default function ReceiveableEntryDetails({ page }) {
     totalAmount: 0,
     vatAmount: 0,
     totalAmount: 0,
-    type: getDataFormParams?.type,
+    type: getDataFormParams?.type || "debit_note",
     status: "",
     statusCode: 0,
   });
