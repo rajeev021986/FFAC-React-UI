@@ -523,6 +523,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                   suggestionName="usd_exchange"
                   name={true}
                   other={formik.values.currency}
+                disabled={formik.values.id ? true : false}
                 />
               )}
             </Grid>

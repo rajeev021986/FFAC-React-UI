@@ -309,8 +309,8 @@ const JobProfitAndLoss = ({ formik }) => {
                   if (!formik.values.currency) {
                     return formik.setFieldValue("currency", value);
                   }
-                   if (value=== "USD") {
-                     formik.setFieldValue("exchangeRate", "");
+                  if (value === "USD") {
+                    formik.setFieldValue("exchangeRate", "");
                   }
                   if (
                     formik.values.details?.length === 0 ||
@@ -374,6 +374,7 @@ const JobProfitAndLoss = ({ formik }) => {
                   name={true}
                   inputRef={payableRef}
                   other={formik.values.currency}
+                  disabled={formik.values.id ? true : false}
                 />
               )}
             </Grid>
