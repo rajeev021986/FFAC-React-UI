@@ -62,47 +62,8 @@ function FormAutoComplete(props) {
     setFilteredOptions(filtered);
   };
 
-  //  const handleSelectionChange = (event, newValue) => {
-  //   if (newValue) {
-  //     const { fullData } = newValue;
-  //     const selectedAddress =
-  //       fullData.address1?.trim() ||
-  //       fullData.address2?.trim() ||
-  //       fullData.address3?.trim() ||
-  //       "";
-  //     const selectedCity = fullData.city || "";
-  //     const selectedCountry = fullData.country || "";
-  //     const formattedAddress = selectedAddress
-  //       ? `${selectedAddress}, ${selectedCity}, ${selectedCountry}`
-  //       : "";
-  //     onChange({
-  //       target: {
-  //         name: id,
-  //         // value: newValue.value,
-  //         value: newValue?.fullData?.id,
 
-  //         formattedAddress,
-  //         id: newValue.fullData?.id,
-  //       },
-  //     });
-  //   } else {
-  //     onChange({
-  //       target: { name: id, value: null, formattedAddress: "", id: "" },
-  //     });
-  //   }
-  // };
 
-  // const handleSelectionChange = (event, newValue) => {
-  //   if (newValue) {
-  //     const result = {
-  //       [idKey]: newValue?.fullData?.id,
-  //       [nameKey]: newValue?.label,
-  //     };
-  //     onChange(result);
-  //   } else {
-  //     onChange({ [idKey]: null, [nameKey]: "" });
-  //   }
-  // };
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
