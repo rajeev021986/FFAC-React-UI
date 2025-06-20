@@ -1,5 +1,11 @@
 import { useFormik } from "formik";
-import { CircularProgress, Grid, Stack } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Stack,
+} from "@mui/material";
 import { IconButton, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import InputBox from "../../../components/common/InputBox";
@@ -858,7 +864,7 @@ export default function AddEditForm({
             >
               <Box sx={{ width: "40%", paddingRight: 2 }}>
                 <Grid container sx={{ padding: 0, margin: 0 }}>
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={6} marginTop={2}>
                     <SelectBox
                       label="Invoice Type*"
                       id="invoiceType"
@@ -883,17 +889,7 @@ export default function AddEditForm({
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    {/* <FormAutoCompleteWithLoader
-                      label="Job No."
-                      id="jobNo"
-                      value={formik.values.jobNo}
-                      error={formik.errors.jobNo}
-                      name ={true}
-                      onChange={formik.handleChange}
-                      suggestionName="job_no"
-                      disabled={isDisabled}
-                    /> */}
+                  <Grid item xs={12} lg={6} marginTop={2}>
                     <FormAutoCompleteForJobNo
                       label="Job No*."
                       id="jobNo"
@@ -919,17 +915,7 @@ export default function AddEditForm({
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
-                    {/* <FormAutoCompleteWithLoader
-                      label="Vendor Name"
-                      id="vendorId"
-                      suggestionName="vendor_name"
-                      value={formik.values.vendorId}
-                      error={formik.errors.vendorId}
-                      onChange={formik.handleChange}
-                      disabled={isDisabled}
-                    /> */}
-
+                  <Grid item xs={12} lg={6} marginTop={2}>
                     <FormAutoCompleteWithLoader
                       label="Vendor Name"
                       id="vendorId"
@@ -961,7 +947,7 @@ export default function AddEditForm({
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={6} marginTop={2}>
                     <DateTimeField
                       name="vendorInvoiceDate"
                       label="Vendor Invoice Date"
@@ -993,7 +979,7 @@ export default function AddEditForm({
                     />
                   </Grid>
 
-                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                  <Grid item xs={12} lg={6} marginTop={2}>
                     {getFormData?.currency === "TZS" ||
                     getFormData?.currency === "INR" ? (
                       <InputBox
@@ -1028,26 +1014,6 @@ export default function AddEditForm({
                         name={true}
                         other={formik.values.currency}
                       />
-                      // <FormAutoCompleteWithLoader
-                      //   label="Ex. Rate"
-                      //   id="exchangeRate"
-                      //   value={{
-                      //     exRateId: formik.values?.exRateId,
-                      //     exchangeRate: formik.values?.exchangeRate,
-                      //   }}
-                      //   sendLabelOnly={true}
-                      //   error={formik.errors.exchangeRate}
-                      //   idKey="exRateId"
-                      //   nameKey="exchangeRate"
-                      //   // onChange={(e) => handleChange("exRate", e.target.value)}
-                      //   onChange={(selected) => {
-                      //     handleChange("exRateId", selected.exRateId);
-                      //     handleChange("exchangeRate", selected.exchangeRate);
-                      //   }}
-                      //   suggestionName="usd_exchange"
-                      //   name={true}
-                      //   other={formik.values.currency}
-                      // />
                     )}
                   </Grid>
                 </Grid>
@@ -1055,234 +1021,253 @@ export default function AddEditForm({
                 <PopupAlert alertConfig={alertConfig} />
               </Box>
 
-              <Box sx={{ width: "60%", padding: 2 }}>
-                <Grid
-                  container
-                  sx={{
-                    "& > .MuiGrid-item": {
-                      border: "1px solid #ccc",
-                    },
-                    "& > .MuiGrid-item > .MuiTypography-root": {
-                      padding: "10px",
-                    },
-                    "& fieldset": {
-                      border: "none",
-                    },
-                    "&:hover fieldset": {
-                      border: "none",
-                    },
-                    "&.Mui-focused fieldset": {
-                      border: "none",
-                    },
-                  }}
-                >
-                  <Grid item xs={12} lg={4}></Grid>
-                  <Grid item xs={12} lg={4}>
-                    <Typography>{`Invoice Currency (${getFormData?.currency})`}</Typography>
-                  </Grid>
-                  <Grid item xs={12} lg={4}>
-                    <Typography>{showDefaultCurrency?.currency}</Typography>
-                  </Grid>
+              <Box sx={{ width: "60%", padding: 2, marginLeft: 7 }}>
+                <Card>
+                  <Grid
+                    container
+                    sx={{
+                      "& > .MuiGrid-item": {
+                        // border: "1px solid #ccc",
+                      },
+                      "& > .MuiGrid-item > .MuiTypography-root": {
+                        padding: "10px",
+                      },
+                      "& fieldset": {
+                        border: "none",
+                      },
+                      "&:hover fieldset": {
+                        border: "none",
+                      },
+                      "&.Mui-focused fieldset": {
+                        border: "none",
+                      },
+                    }}
+                  >
+                    <Grid
+                      style={{ backgroundColor: "#EAEEF5" }}
+                      item
+                      xs={12}
+                      lg={4}
+                    ></Grid>
+                    <Grid
+                      style={{ backgroundColor: "#EAEEF5" }}
+                      item
+                      xs={12}
+                      lg={4}
+                    >
+                      <Typography>{`Invoice Currency (${getFormData?.currency})`}</Typography>
+                    </Grid>
+                    <Grid
+                      style={{ backgroundColor: "#EAEEF5" }}
+                      item
+                      xs={12}
+                      lg={4}
+                    >
+                      <Typography>{showDefaultCurrency?.currency}</Typography>
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <Typography>Amount</Typography>
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <Typography>Amount</Typography>
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      value={formatIndianCurrency(getAmountData?.amount)}
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                      disabled
-                    />
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        value={formatIndianCurrency(getAmountData?.amount)}
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                        disabled
+                      />
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                      value={
-                        getFormData?.currency === "TZS" ||
-                        getFormData?.currency === "INR"
-                          ? formatIndianCurrency(getAmountData?.amount * 1)
-                          : formatIndianCurrency(
-                              getAmountData?.amount *
-                                Number(getFormData?.exchangeRate)
-                            ) || 0
-                      }
-                      disabled
-                    />
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
+                            ? formatIndianCurrency(getAmountData?.amount * 1)
+                            : formatIndianCurrency(
+                                getAmountData?.amount *
+                                  Number(getFormData?.exchangeRate)
+                              ) || 0
+                        }
+                        disabled
+                      />
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <Typography>VAT</Typography>
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <Typography>VAT</Typography>
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="vatAmount"
-                      name="vatAmount"
-                      variant="outlined"
-                      value={formatIndianCurrency(getAmountData?.vatAmount)}
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                      disabled
-                    />
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="vatAmount"
+                        name="vatAmount"
+                        variant="outlined"
+                        value={formatIndianCurrency(getAmountData?.vatAmount)}
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                        disabled
+                      />
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                      value={
-                        getFormData?.currency === "TZS" ||
-                        getFormData?.currency === "INR"
-                          ? formatIndianCurrency(getAmountData?.vatAmount * 1)
-                          : formatIndianCurrency(
-                              getAmountData?.vatAmount *
-                                getFormData?.exchangeRate
-                            ) || 0
-                      }
-                      disabled
-                    />
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
+                            ? formatIndianCurrency(getAmountData?.vatAmount * 1)
+                            : formatIndianCurrency(
+                                getAmountData?.vatAmount *
+                                  getFormData?.exchangeRate
+                              ) || 0
+                        }
+                        disabled
+                      />
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <Typography>With holding Tax</Typography>
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <Typography>With holding Tax</Typography>
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="withHoldingAmount"
-                      name="withHoldingAmount"
-                      variant="outlined"
-                      value={formatIndianCurrency(
-                        getAmountData?.withHoldingAmount
-                      )}
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                      disabled
-                    />
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="withHoldingAmount"
+                        name="withHoldingAmount"
+                        variant="outlined"
+                        value={formatIndianCurrency(
+                          getAmountData?.withHoldingAmount
+                        )}
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                        disabled
+                      />
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                      value={
-                        getFormData?.currency === "TZS" ||
-                        getFormData?.currency === "INR"
-                          ? formatIndianCurrency(
-                              getAmountData?.withHoldingAmount * 1
-                            )
-                          : formatIndianCurrency(
-                              getAmountData?.withHoldingAmount *
-                                getFormData?.exchangeRate || 0
-                            )
-                      }
-                      disabled
-                    />
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
+                            ? formatIndianCurrency(
+                                getAmountData?.withHoldingAmount * 1
+                              )
+                            : formatIndianCurrency(
+                                getAmountData?.withHoldingAmount *
+                                  getFormData?.exchangeRate || 0
+                              )
+                        }
+                        disabled
+                      />
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <Typography>Net amount payable</Typography>
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <Typography>Net amount payable</Typography>
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="totalAmount"
-                      name="totalAmount"
-                      value={formatIndianCurrency(getAmountData?.totalAmount)}
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                      disabled
-                    />
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="totalAmount"
+                        name="totalAmount"
+                        value={formatIndianCurrency(getAmountData?.totalAmount)}
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                        disabled
+                      />
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                      value={
-                        getFormData?.currency === "TZS" ||
-                        getFormData?.currency === "INR"
-                          ? formatIndianCurrency(getAmountData?.totalAmount * 1)
-                          : formatIndianCurrency(
-                              getAmountData?.totalAmount *
-                                getFormData?.exchangeRate || 0
-                            )
-                      }
-                      disabled
-                    />
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                        value={
+                          getFormData?.currency === "TZS" ||
+                          getFormData?.currency === "INR"
+                            ? formatIndianCurrency(
+                                getAmountData?.totalAmount * 1
+                              )
+                            : formatIndianCurrency(
+                                getAmountData?.totalAmount *
+                                  getFormData?.exchangeRate || 0
+                              )
+                        }
+                        disabled
+                      />
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <Typography>Cost center</Typography>
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <Typography>Cost center</Typography>
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{
-                        ...muiTextFieldStyles.root,
-                        width: "100% !important",
-                      }}
-                    />
-                  </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{
+                          ...muiTextFieldStyles.root,
+                          width: "100% !important",
+                        }}
+                      />
+                    </Grid>
 
-                  <Grid item xs={12} lg={4}>
-                    <TextField
-                      hiddenLabel
-                      id="amount"
-                      name="amount"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      sx={{ ...muiTextFieldStyles.root }}
-                    />
+                    <Grid item xs={12} lg={4}>
+                      <TextField
+                        hiddenLabel
+                        id="amount"
+                        name="amount"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        sx={{ ...muiTextFieldStyles.root }}
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
+                </Card>
               </Box>
             </Box>
 
