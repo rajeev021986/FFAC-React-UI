@@ -42,7 +42,6 @@ import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoC
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import PopupAlert from "../../../components/common/Alert/PopupAlert";
 export default function CostDetails({ formik, selectedInvoiceType }) {
-  console.log(" formik.values.costDetails", formik.values.costDetails);
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
@@ -450,7 +449,6 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                 error={formik.errors.currency}
                 onChange={(e) => {
                   const value = e.target.value;
-                  console.log("Selected currency:", value);
                   if (formik.values.currency === value) return;
 
                   if (!formik.values.currency) {

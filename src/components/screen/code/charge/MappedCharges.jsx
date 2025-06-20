@@ -217,7 +217,6 @@ export default function MappedCharges({ type, loading }) {
 
   useEffect(() => {
     if (mappedChargesData?.body) {
-      console.log("mappedChargesData", mappedChargesData);
       formik.setValues(mappedChargesData.body);
     }
   }, [mappedChargesData]);

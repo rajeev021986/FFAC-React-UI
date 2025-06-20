@@ -128,7 +128,6 @@ export default function AddDebitAndInvoice({ formik }) {
   useEffect(() => {
     handleFetchPayable();
   }, [formik?.values?.details]);
-  console.log("debit", formik?.values?.details);
   const DEBIT_INVOICE_COLUMNS = [
     {
       field: "chargeName",
