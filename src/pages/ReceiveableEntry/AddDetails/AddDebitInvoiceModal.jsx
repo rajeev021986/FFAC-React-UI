@@ -258,7 +258,7 @@ export default function AddPayableEntryModal({
         paybleDetailId: selectedPayEntry.paybleDetailId,
         chargeName: selectedPayEntry.chargeName || "",
         mappedCharge: selectedPayEntry.mappedCharge || "",
-        receivableAmount: selectedPayEntry.paybleAmount || 0,
+        receivableAmount: receivableAmount || 0,
         totalAmount: receivableAmount + vat || 0,
         vatApplicable: selectedPayEntry.paybleVatApplicable || "",
         vat: selectedPayEntry.paybleVatAmount || 0,
@@ -304,7 +304,7 @@ export default function AddPayableEntryModal({
   }, [selectedPayEntry]);
 
   useEffect(() => {
-    if (invoiceEntry.unitRate) {
+    if (invoiceEntry.unitRate && type !== "cost_details") {
       handleChange("numOfUnits", invoiceEntry.numOfUnits);
     }
   }, [invoiceEntry.unitType, invoiceEntry.numOfUnits]);
