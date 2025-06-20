@@ -10,23 +10,23 @@ import toast from "react-hot-toast";
 
 export const getRecieveAbleListGridActionApprove = (nav, setModal) => {
   return [
-    // {
-    //   label: "Edit",
-    //   onClick: (params) => {
-    //     nav(`approvePayableRequest`, {
-    //       state: { formAction: "edit", initialValues: params.row },
-    //     });
-    //   },
-    //   icon: <EditIconDropdown />,
-    // },
+    {
+      label: "Edit",
+      onClick: (params) => {
+        nav(`approveReceivableRequest`, {
+          state: { formAction: "edit", initialValues: params.row },
+        });
+      },
+      icon: <EditIconDropdown />,
+    },
 
-    // {
-    //   label: "View",
-    //   onClick: (params) => {
-    //     setModal({ open: true, type: "document", data: params.row });
-    //   },
-    //   icon: <ViewIconDropdown />,
-    // },
+    {
+      label: "View",
+      onClick: (params) => {
+        setModal({ open: true, type: "document", data: params.row });
+      },
+      icon: <ViewIconDropdown />,
+    },
     
     {
       label: "Audit",

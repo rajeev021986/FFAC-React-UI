@@ -205,7 +205,10 @@ function App() {
               path="accounts/operations/approveReceivable"
               element={<ReceivableEntryList page="approveReceivable" />}
             />
-
+            <Route
+              path="accounts/operations/approveReceivable/approveReceivableRequest"
+              element={<ReceiveableEntryDetails page="approveReceivableEntry" />}
+            />
             <Route
               path="accounts/operations/receivableEntry/EditreceiveableEntry"
               element={<ReceiveableEntryDetails page="receivableEntry" />}

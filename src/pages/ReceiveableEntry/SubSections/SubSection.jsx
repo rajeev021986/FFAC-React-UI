@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { CircularProgress, Grid, Stack, Tab } from "@mui/material";
+import { CircularProgress, Grid, Stack, Tab, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { OutlinedButton, ThemeButton } from "../../../components/common/Button";
 import toast from "react-hot-toast";
@@ -23,6 +23,7 @@ import EditIconForHeader from "../../../components/common/commonIcons/EditIcons/
 import AuditIcon from "../../../components/common/commonIcons/AuditIcon/AuditIcon";
 import AuditTimeLine from "../../../components/AuditTimeLine";
 import { menuConfigUrl } from "../../../store/menuConfigUrl";
+import ApiManager from "../../../services/ApiManager";
 
 export default function SubSections({
   initialValues,
@@ -34,9 +35,13 @@ export default function SubSections({
   const nav = useNavigate();
   const [addReceivable, { isLoading }] = useAddReceivableMutation();
   const [updateReceivable, { isUpdateLoading }] = useUpdateReceivableMutation();
-
+  const [loaderApprove, setLoaderApprove] = useState({
+    approve: false,
+    reject: false,
+  });
   const [dropdownData, setDropdownData] = useState({});
   const [value, setValue] = React.useState("1");
+  const [rejectError, setRejectError] = useState(false);
   const [chargesData, setChargesData] = useState([]);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
@@ -63,6 +68,19 @@ export default function SubSections({
           <CustomToast
             message={
               "Please add atleast one entry to create TaxInvoice/Debit Note"
+            }
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
+      }
+      if (values.currency === "USD" && values.exchangeRate == "1") {
+        return toast.custom(
+          <CustomToast
+            message={
+              "Please select currency and exchange Rate to create TaxInvoice/Debit Note"
             }
             toast="error"
           />,
@@ -166,6 +184,59 @@ export default function SubSections({
     }
   }, [formik?.values?.currency, formik?.values?.exchangeRate]);
 
+  const handleApproveRequest = async () => {
+    // setRejectError(false);
+    try {
+      setLoaderApprove((prevState) => ({
+        ...prevState,
+        approve: true,
+      }));
+
+      const response = await ApiManager.reciveableApproveHandler(
+        formik.values.id,
+        "RECEIVABLE_ENTRY"
+      );
+      console.log("response.message", response);
+      const message = response.message;
+      nav("/app/accounts/operations/approveReceivable");
+
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+    } catch (error) {
+      toast.custom(
+        <CustomToast
+          message="Error occurred while approve payable"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+    }
+
+    setLoaderApprove((prevState) => ({
+      ...prevState,
+      approve: false,
+    }));
+  };
+
+  const handleReject = async () => {
+    try {
+      const response = await ApiManager.reciveableRejectHandler(
+        formik.values.id,
+        "RECEIVABLE_ENTRY"
+      );
+      const message = response.message;
+      toast.custom(<CustomToast message={message} toast="success" />, {
+        closeButton: false,
+      });
+    } catch (error) {
+      toast.custom(<CustomToast message="Failed to reject." toast="error" />, {
+        closeButton: false,
+      });
+    }
+  };
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -235,30 +306,121 @@ export default function SubSections({
                   disabled={false}
                 />
               </Box>
-            </Box>
-            <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
-              <Grid item xs={12} sx={{ margin: 1 }}>
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Stack direction="row" spacing={2}>
-                    {/*  */}
-                    <OutlinedButton
-                      sx={{ fontWeight: "500" }}
-                      onClick={() =>
-                        page === "receivableEntry"
-                          ? nav("/app/accounts/operations/receivableEntry")
-                          : nav("/app/accounts/operations/receivableEntry")
-                      }
-                    >
-                      Close
-                    </OutlinedButton>
 
-                    {formik.values.id ? (
+              {/* <Box sx={{ gap: "10px", padding: "15px" }}>
+                {formik?.values?.status?.toLowerCase() === "rejected" ||
+                page == "approveReceivableEntry" ? (
+                  <Grid item xs={12} paddingTop={1}>
+                    <TextField
+                      label="Reject Remarks"
+                      name="rejectRemarks"
+                      value={formik.values.rejectRemarks}
+                      error={rejectError}
+                      helperText={
+                        rejectError
+                          ? "Reject remarks are required when rejecting a entry*."
+                          : formik.errors.rejectRemarks
+                      }
+                      onChange={formik.handleChange}
+                      // disabled={page === "payable" ? true : false}
+                      multiline
+                      rows={4}
+                      variant="outlined"
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "10px",
+                        },
+                      }}
+                    />
+                  </Grid>
+                ) : (
+                  <></>
+                )}
+              </Box> */}
+            </Box>
+            {page == "receivableEntry" ? (
+              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                <Grid item xs={12}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Stack direction="row" spacing={2}>
+                      <OutlinedButton
+                        sx={{
+                          fontWeight: "500",
+                        }}
+                        onClick={() =>
+                          page === "receivableEntry"
+                            ? nav("/app/accounts/operations/receivableEntry")
+                            : nav("/app/accounts/operations/approveReceivable")
+                        }
+                      >
+                        Close
+                      </OutlinedButton>
+
+                      {!formik.values?.id ? (
+                        <ThemeButton
+                          onClick={formik.handleSubmit}
+                          sx={{
+                            fontWeight: "500",
+                            color: "white !important",
+                          }}
+                        >
+                          {isLoading && (
+                            <CircularProgress size={20} color="white" />
+                          )}
+                          Generate TaxInvoice/Debit Note
+                        </ThemeButton>
+                      ) : (
+                        <ThemeButton
+                          onClick={formik.handleSubmit}
+                          sx={{
+                            fontWeight: "500",
+                            color: "white !important",
+                          }}
+                          // disabled={isDisabled}
+                        >
+                          {isUpdateLoading && (
+                            <CircularProgress size={20} color="white" />
+                          )}
+                          Update TaxInvoice/Debit Note
+                        </ThemeButton>
+                      )}
+                    </Stack>
+                  </Stack>
+                </Grid>
+              </Box>
+            ) : (
+              <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
+                <Grid item xs={12} sx={{ margin: 1 }}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Stack direction="row" spacing={2}>
+                      {/*  */}
+                      <OutlinedButton
+                        sx={{
+                          fontWeight: "500",
+                          // display: viewPage === "editForm" ? "none" : "block",
+                        }}
+                        onClick={() =>
+                          page === "receivableEntry"
+                            ? nav("/app/accounts/operations/receivableEntry")
+                            : nav("/app/accounts/operations/approveReceivable")
+                        }
+                      >
+                        Close
+                      </OutlinedButton>
+
                       <ThemeButton
                         onClick={formik.handleSubmit}
                         sx={{
@@ -271,24 +433,42 @@ export default function SubSections({
                         )}
                         Update TaxInvoice/Debit Note
                       </ThemeButton>
-                    ) : (
+
+                      {/* <ThemeButton
+                        sx={{
+                          fontWeight: "500",
+                          backgroundColor: "red",
+                          color: "white !important",
+                          // visibility:
+                          //   viewPage === "editForm" ? "hidden" : "visible",
+                        }}
+                        onClick={() => handleReject()}
+                      >
+                        {loaderApprove.reject && (
+                          <CircularProgress size={20} color="white" />
+                        )}
+                        Reject
+                      </ThemeButton> */}
+
                       <ThemeButton
-                        onClick={formik.handleSubmit}
                         sx={{
                           fontWeight: "500",
                           color: "white !important",
+                          // visibility:
+                          //   viewPage === "editForm" ? "hidden" : "visible",
                         }}
+                        onClick={() => handleApproveRequest()}
                       >
-                        {isLoading && (
+                        {loaderApprove.approve && (
                           <CircularProgress size={20} color="white" />
                         )}
-                        Generate TaxInvoice/Debit Note
+                        Approve
                       </ThemeButton>
-                    )}
+                    </Stack>
                   </Stack>
-                </Stack>
-              </Grid>
-            </Box>
+                </Grid>
+              </Box>
+            )}
           </TabPanel>
           <TabPanel value="2" sx={{ padding: "0px" }}>
             <AuditTimeLine
