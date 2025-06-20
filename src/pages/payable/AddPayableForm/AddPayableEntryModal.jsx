@@ -293,7 +293,7 @@ export default function AddPayableEntryModal({
       aria-labelledby="add-payable-entry"
     >
       <Box sx={modalStyle}>
-        <div style={{display: "flex"}}>
+        <div style={{ display: "flex" }}>
           <IconButton
             onClick={handleClose}
             sx={{ position: "absolute", top: 8, right: 8, color: "grey.600" }}
@@ -519,7 +519,7 @@ export default function AddPayableEntryModal({
               fullWidth
             />
           </Grid>
-      
+
           <Grid item xs={12} lg={8}></Grid>
           <Grid item xs={2}>
             <OutlinedButton

@@ -66,27 +66,7 @@ function FormAutoCompleteWithCountryTable(props) {
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);
   };
-  // const handleSelectionChange = (event, newValue) => {
-  //   if (newValue) {
-  //     const { country, port_name } = newValue.fullData;
 
-  //     if (id == "originPortId") {
-  //       setFieldValue("originPortId", newValue.value);
-  //       setFieldValue("portOfLoading", port_name || "");
-  //     } else if (id == "portOfLoading") {
-  //       setFieldValue("portOfLoading", port_name);
-  //       setFieldValue("originPortId", newValue.value || "");
-  //     } 
-  //   } else {
-  //     // Clear both fields when selection is removed
-  //     setFieldValue(id, "");
-  //     if (id == "originPortId") {
-  //       setFieldValue("portOfLoading", "");
-  //     } else if (id === "portOfLoading") {
-  //       setFieldValue("originPortId", "");
-  //     }
-  //   }
-  // };
 
   const handleSelectionChange = (event, newValue) => {
     setSelectedOption(newValue);
