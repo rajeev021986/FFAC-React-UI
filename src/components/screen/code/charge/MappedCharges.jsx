@@ -219,7 +219,6 @@ export default function MappedCharges({ type, loading }) {
 
   useEffect(() => {
     if (mappedChargesData?.body) {
-      console.log("mappedChargesData", mappedChargesData);
       formik.setValues(mappedChargesData.body);
     }
   }, [mappedChargesData]);
@@ -277,7 +276,7 @@ export default function MappedCharges({ type, loading }) {
                     }}
                     paddingInline={2}
                   >
-                    <Box sx={{ width: "100%", height: "100%" }}>
+                    <Box sx={{ width: "100%", height: "400px" }}>
                       <StyledDataGrid
                         rows={formik.values || []}
                         columns={columns.map((column) => ({

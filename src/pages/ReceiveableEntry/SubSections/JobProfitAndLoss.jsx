@@ -305,10 +305,12 @@ const JobProfitAndLoss = ({ formik }) => {
                 error={formik.errors.currency}
                 onChange={(e) => {
                   const value = e.target.value;
-
                   if (formik.values.currency === value) return;
                   if (!formik.values.currency) {
                     return formik.setFieldValue("currency", value);
+                  }
+                   if (value=== "USD") {
+                     formik.setFieldValue("exchangeRate", "");
                   }
                   if (
                     formik.values.details?.length === 0 ||

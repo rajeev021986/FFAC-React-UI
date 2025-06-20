@@ -42,7 +42,6 @@ import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoC
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import PopupAlert from "../../../components/common/Alert/PopupAlert";
 export default function CostDetails({ formik, selectedInvoiceType }) {
-  console.log(" formik.values.costDetails", formik.values.costDetails);
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
@@ -140,13 +139,22 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
             style={{
               padding: "6px 12px",
               cursor: "pointer",
-              backgroundColor: isPaybleIdInDetails || params.row.paybleDetailId === null ? "#bdbdbd" : "#1976d2",
+              backgroundColor:
+                isPaybleIdInDetails || params.row.paybleDetailId === null
+                  ? "#bdbdbd"
+                  : "#1976d2",
               // color: "#fff",
               border: "none",
               borderRadius: "4px",
-              cursor: isPaybleIdInDetails || params.row.paybleDetailId === null  ? "not-allowed" : "pointer",
+              cursor:
+                isPaybleIdInDetails || params.row.paybleDetailId === null
+                  ? "not-allowed"
+                  : "pointer",
               color: "#fff",
-              opacity: isPaybleIdInDetails || params.row.paybleDetailId === null  ? 0.5 : 1,
+              opacity:
+                isPaybleIdInDetails || params.row.paybleDetailId === null
+                  ? 0.5
+                  : 1,
             }}
           >
             {getButtonText()}
@@ -450,11 +458,13 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                 error={formik.errors.currency}
                 onChange={(e) => {
                   const value = e.target.value;
-                  console.log("Selected currency:", value);
                   if (formik.values.currency === value) return;
 
                   if (!formik.values.currency) {
                     return formik.setFieldValue("currency", value);
+                  }
+                  if (value === "USD") {
+                    formik.setFieldValue("exchangeRate", "");
                   }
                   if (formik.values.details?.length === 0)
                     return formik.setFieldValue("currency", value);
