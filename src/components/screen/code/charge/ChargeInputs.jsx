@@ -1,24 +1,11 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Grid,
-  IconButton,
-  Stack,
-  Tab,
-  Typography,
-} from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import InputBox from "../../../common/InputBox";
-import { DataGrid } from "@mui/x-data-grid";
-import AddIcon from "@mui/icons-material/Add";
-import { toast } from "react-hot-toast";
-import { GridDeleteIcon } from "@mui/x-data-grid";
 import SelectBox from "../../../common/SelectBox";
 import { OutlinedButton, ThemeButton } from "../../../common/Button";
 import getFirstError from "../../../common/FieldToastError";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
-import FormAutoCompleteWithLoader from "../../../common/AutoComplete/FormAutoCompletewithLoader";
+import FormAutoComplete from "../../../common/AutoComplete/FormAutoComplete";
 
 export default function ChargeInputs({
   formik,
@@ -28,12 +15,10 @@ export default function ChargeInputs({
   onClose,
   nav,
 }) {
-  const newRowRef = useRef(null);
   const vatApplicableOptions = [
     { label: "Yes", value: "YES" },
     { label: "No", value: "NO" },
   ];
-  const [value, setValue] = React.useState("1");
   const FieldRef = useRef(null);
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("charge_settings");
@@ -101,7 +86,7 @@ export default function ChargeInputs({
           </Grid>
         )}
         <Grid item xs={12} lg={4}>
-          <FormAutoCompleteWithLoader
+          <FormAutoComplete
             label="Mapped Charge"
             id="mappedCharge"
             suggestionName="charge_name"

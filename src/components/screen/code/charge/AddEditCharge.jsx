@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  IconButton,
-  Modal,
-  Tab,
-  Typography,
-} from "@mui/material";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { Box, IconButton, Modal, Tab, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -17,13 +8,9 @@ import {
   useUpdateChargeMutation,
 } from "../../../../store/api/chargesDataApi";
 import toast from "react-hot-toast";
-import Loader from "../../../common/Loader/Loader";
 import ChargeInputs from "./ChargeInputs";
-import AuditTimeLine from "../../../AuditTimeLine";
 import CustomToast from "../../../common/Toast/CustomToast";
-import { menuConfigUrl } from "../../../../store/menuConfigUrl";
 import EditIconForHeader from "../../../common/commonIcons/EditIcons/EditIconForHeader";
-import AuditIcon from "../../../common/commonIcons/AuditIcon/AuditIcon";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 import { useNavigate } from "react-router-dom";
@@ -73,26 +60,14 @@ const AddEditCharge = ({ onClose, id, type }) => {
     chargeFor: "",
     chargeName: "",
     mappedCharge: "",
-    mappedChargeId:"",
+    mappedChargeId: "",
     vatApplicable: "",
     chargeCode: "",
   };
 
   const validationSchema = Yup.object({
     chargeName: Yup.string().required("Charge name is required"),
-    //     status: Yup.string(),
-    //     chargeDetails: Yup.string().required("Required"),
     chargeFor: Yup.string().required("Charge For is required"),
-    //     mappedCharge: Yup.string().required("Required"),
-    //     vatApplicable: Yup.string().required("Required"),
-    //     chargeCode: Yup.string().required("Required"),
-    //     mappingDetails: Yup.array().of(
-    //       Yup.object({
-    //         id: Yup.number().required(),
-    //         directIncome: Yup.string().required("Required"),
-    //         directExpense: Yup.string().required("Required"),
-    //       })
-    //     ),
   });
 
   const onSubmit = async (values) => {
@@ -169,6 +144,7 @@ const AddEditCharge = ({ onClose, id, type }) => {
       );
     }
   };
+
   useEffect(() => {
     if (id && ChargeSettingsData) {
       handleFetchCharge();
@@ -195,16 +171,16 @@ const AddEditCharge = ({ onClose, id, type }) => {
             <CloseIcon />
           </IconButton>
         </Box>
-          <ChargeInputs
-            formik={formik}
-            ChargeSettingsData={ChargeSettingsData}
-            type={type}
-            value={value}
-            nav={nav}
-            handleChange={handleChange}
-            loading={loadingAdd || loadingUpdate}
-            onClose = {onClose}
-          />
+        <ChargeInputs
+          formik={formik}
+          ChargeSettingsData={ChargeSettingsData}
+          type={type}
+          value={value}
+          nav={nav}
+          handleChange={handleChange}
+          loading={loadingAdd || loadingUpdate}
+          onClose={onClose}
+        />
       </Box>
     </Modal>
   );

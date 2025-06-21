@@ -27,12 +27,9 @@ function FormAutoComplete(props) {
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [loading, setLoading] = useState(false);
   const selectedOption =
-  id =='shippingLine' || id == 'transporter' ?
-  options.find((option) => option.value == value?.[nameKey]) || null :
-    options.find(
-      (option) =>
-        option.fullData?.id  == value?.[idKey]
-    ) || null;
+    id == "shippingLine" || id == "transporter"
+      ? options.find((option) => option.value == value?.[nameKey]) || null
+      : options.find((option) => option.fullData?.id == value?.[idKey]) || null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,9 +58,6 @@ function FormAutoComplete(props) {
     );
     setFilteredOptions(filtered);
   };
-
-
-
 
   const handleSelectionChange = (event, newValue) => {
     if (newValue) {
