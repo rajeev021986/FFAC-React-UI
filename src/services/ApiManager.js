@@ -421,7 +421,7 @@ class ApiManager {
     const url = ENDPOINTS.RECEIVABLE_REJECTED_REQUEST(
       id,
       type,
-      menuConfigUrl.document
+      menuConfigUrl.account
     );
     return ApiMethods.put(url, payload);
   };

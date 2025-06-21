@@ -20,14 +20,14 @@ export const getRecieveAbleListGridActionApprove = (nav, setModal) => {
       icon: <EditIconDropdown />,
     },
 
-    {
-      label: "View",
-      onClick: (params) => {
-        setModal({ open: true, type: "document", data: params.row });
-      },
-      icon: <ViewIconDropdown />,
-    },
-    
+    // {
+    //   label: "View",
+    //   onClick: (params) => {
+    //     setModal({ open: true, type: "document", data: params.row });
+    //   },
+    //   icon: <ViewIconDropdown />,
+    // },
+
     {
       label: "Audit",
       onClick: (params) => {
