@@ -38,8 +38,8 @@ const suggestionName = {
   vendorName: "VENDOR",
   bankName: "BANK",
   bankId: "BANK",
-  directIncome: "CHARGE",
-  directExpense: "CHARGE",
+  directIncome: "INCOME_CHARGE",
+  directExpense: "EXPENSE_CHARGE",
   mappedCharge: "CHARGE",
 };
 
