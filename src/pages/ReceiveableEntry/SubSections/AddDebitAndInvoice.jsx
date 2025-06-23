@@ -223,7 +223,8 @@ export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
         <IconButton
           disabled={
             (!formik.values?.jobNo && !formik.values.exchangeRate) ||
-            !formik.values?.currency
+            !formik.values?.currency ||
+            isViewDisabled
           }
           color="white"
           onClick={handleTogglePayEntry}
@@ -247,21 +248,23 @@ export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
           >
             <EditIcon
               style={{
-                cursor: !isEditDisabled ? "not-allowed" : "pointer",
-                color: !isEditDisabled ? "#ccc" : "#166ee0",
-                opacity: !isEditDisabled ? 0.5 : 1,
+                cursor:
+                  !isEditDisabled || isViewDisabled ? "not-allowed" : "pointer",
+                color: !isEditDisabled || isViewDisabled ? "#ccc" : "#166ee0",
+                opacity: !isEditDisabled || isViewDisabled ? 0.5 : 1,
               }}
               onClick={() => {
-                if (isEditDisabled) handleEditClick(row);
+                if (isEditDisabled || isViewDisabled) handleEditClick(row);
               }}
             />
             <Delete
               style={{
-                cursor: "pointer",
-                color: "red",
+                cursor: isViewDisabled ? "not-allowed" : "pointer",
+                color: isViewDisabled ? "#ccc" : "red",
+                opacity: isViewDisabled ? 0.5 : 1,
               }}
               onClick={() => {
-                handleDeleteEntry(row.id);
+                if (isViewDisabled) handleDeleteEntry(row.id);
               }}
             />
           </div>
@@ -300,7 +303,7 @@ export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
                   disabled={isDisabled}
                   chargesData={chargesData}
                   DEBIT_INVOICE_COLUMNS={DEBIT_INVOICE_COLUMNS}
-                  Isdisabled={Isdisabled}
+                  isViewDisabled={isViewDisabled}
                 />
               </Box>
             </Box>
