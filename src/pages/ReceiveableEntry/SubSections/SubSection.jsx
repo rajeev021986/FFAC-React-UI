@@ -39,7 +39,6 @@ export default function SubSections({
     approve: false,
     reject: false,
   });
-  const [dropdownData, setDropdownData] = useState({});
   const [value, setValue] = React.useState("1");
   const [rejectError, setRejectError] = useState(false);
   const [chargesData, setChargesData] = useState([]);
@@ -188,7 +187,6 @@ export default function SubSections({
   }, [formik?.values?.currency, formik?.values?.exchangeRate]);
 
   const handleApproveRequest = async () => {
-    // setRejectError(false);
     try {
       setLoaderApprove((prevState) => ({
         ...prevState,
@@ -199,10 +197,8 @@ export default function SubSections({
         formik.values.id,
         "RECEIVABLE_ENTRY"
       );
-      console.log("response.message", response);
       const message = response.message;
       nav("/app/accounts/operations/approveReceivable");
-
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
       });
@@ -228,18 +224,21 @@ export default function SubSections({
     try {
       const response = await ApiManager.reciveableRejectHandler(
         formik.values.id,
-        "RECEIVABLE_ENTRY"
+        "RECEIVABLE_ENTRY",
+        formik?.values?.rejectRemarks
       );
       const message = response.message;
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
       });
+      nav("/app/accounts/operations/receivableEntry");
     } catch (error) {
       toast.custom(<CustomToast message="Failed to reject." toast="error" />, {
         closeButton: false,
       });
     }
   };
+
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
@@ -267,7 +266,7 @@ export default function SubSections({
                 aria-label="lab API tabs example"
               >
                 <Tab
-                  label="Job Entry Details"
+                  label="Receivable Details"
                   value="1"
                   icon={<EditIconForHeader />}
                   iconPosition="start"
@@ -303,14 +302,10 @@ export default function SubSections({
                 }}
               >
                 <JobProfitAndLoss formik={formik} />
-                <AddDebitAndInvoice
-                  formik={formik}
-                  dropdownData={dropdownData}
-                  disabled={false}
-                />
+                <AddDebitAndInvoice formik={formik} disabled={false} />
               </Box>
 
-              {/* <Box sx={{ gap: "10px", padding: "15px" }}>
+              <Box sx={{ gap: "10px", padding: "15px" }}>
                 {formik?.values?.status?.toLowerCase() === "rejected" ||
                 page == "approveReceivableEntry" ? (
                   <Grid item xs={12} paddingTop={1}>
@@ -340,7 +335,7 @@ export default function SubSections({
                 ) : (
                   <></>
                 )}
-              </Box> */}
+              </Box>
             </Box>
             {page == "receivableEntry" ? (
               <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
@@ -437,13 +432,11 @@ export default function SubSections({
                         Update TaxInvoice/Debit Note
                       </ThemeButton>
 
-                      {/* <ThemeButton
+                      <ThemeButton
                         sx={{
                           fontWeight: "500",
                           backgroundColor: "red",
                           color: "white !important",
-                          // visibility:
-                          //   viewPage === "editForm" ? "hidden" : "visible",
                         }}
                         onClick={() => handleReject()}
                       >
@@ -451,7 +444,7 @@ export default function SubSections({
                           <CircularProgress size={20} color="white" />
                         )}
                         Reject
-                      </ThemeButton> */}
+                      </ThemeButton>
 
                       <ThemeButton
                         sx={{

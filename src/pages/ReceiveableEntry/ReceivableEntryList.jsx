@@ -49,6 +49,7 @@ import AddNewReceivableModal from "./AddNewReceivableModal";
 import CancelModalApprove from "../JobEntry/CancelModalApprove";
 import ApprovePayableModal from "../payable/AddPayableForm/ApprovePayableModal";
 import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
+import RecieveableViewModal from "./ViewReceivable/ReceveableViewModal";
 
 export default function ReceivableEntryList({ page }) {
   const location = useLocation();
@@ -468,6 +469,16 @@ export default function ReceivableEntryList({ page }) {
           open={modal.open}
           onClose={handleClose}
           data={modal.data}
+        />
+      )}
+
+      {modal.open && modal.type === "document" && (
+        <RecieveableViewModal
+          open={modal.open}
+          data={modal.data}
+          refetch={refetch}
+          onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+          viewType={"view"}
         />
       )}
     </Box>
