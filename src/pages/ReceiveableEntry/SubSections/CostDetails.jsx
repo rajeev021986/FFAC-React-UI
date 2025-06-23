@@ -3,10 +3,8 @@ import {
   TextField,
   InputAdornment,
   Tooltip,
-  Tab,
   Typography,
   Toolbar,
-  AppBar,
   Grid,
 } from "@mui/material";
 import { Box, IconButton, Stack } from "@mui/material";
@@ -27,28 +25,19 @@ import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 import useDebounce from "../../../hooks/useDebounce";
-import { TabList } from "@mui/lab";
-import EditIconForHeader from "../../../components/common/commonIcons/EditIcons/EditIconForHeader";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { getTheme } from "../../../config/theme";
-import { useGridSelector } from "@mui/x-data-grid";
-import { useSelector } from "react-redux";
 import InputBox from "../../../components/common/InputBox";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
-import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
-import ApiManager from "../../../services/ApiManager";
 import SelectBox from "../../../components/common/SelectBox";
 import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoComplete/FormAutoCompleteWithExchangeLoader";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import PopupAlert from "../../../components/common/Alert/PopupAlert";
-export default function CostDetails({ formik, selectedInvoiceType }) {
+export default function CostDetails({ formik, selectedInvoiceType, mergedCurrencyOptions }) {
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
     return "Add";
   };
-  const { data: optionsSettingsData } =
-    useGetOptionsSettingsQuery("common_settings");
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",
@@ -64,43 +53,6 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
   });
   const [filteredData, setFilteredData] = useState([]);
   const [searchValue, setsearchValue] = useState("");
-  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await ApiManager.fetchAutoCompleteData(
-          "",
-          "COMPANY_CODE"
-        );
-        const backendData = await response.body;
-
-        // Extract backend currencies safely
-        const backendCurrencies = Array.from(
-          new Set(
-            (backendData || []).map((item) => item.currency).filter(Boolean)
-          )
-        ).map((curr) => ({ id: curr, value: curr }));
-
-        // Get setting currencies safely
-        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
-
-        // Merge both arrays avoiding duplicates (based on `value`)
-        const mergedCurrencies = [
-          ...backendCurrencies,
-          ...settingCurrencies.filter(
-            (setting) =>
-              !backendCurrencies.some((item) => item.value === setting.value)
-          ),
-        ];
-
-        setMergedCurrencyOptions(mergedCurrencies);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [optionsSettingsData?.body?.currencyType]);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",

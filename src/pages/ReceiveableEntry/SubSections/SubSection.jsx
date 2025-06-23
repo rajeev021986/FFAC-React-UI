@@ -39,10 +39,8 @@ export default function SubSections({
     approve: false,
     reject: false,
   });
-  const [dropdownData, setDropdownData] = useState({});
   const [value, setValue] = React.useState("1");
   const [rejectError, setRejectError] = useState(false);
-  const [chargesData, setChargesData] = useState([]);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",
@@ -158,24 +156,9 @@ export default function SubSections({
     getFirstError(formik.errors);
   }, [formik.errors]);
 
-  const handleFetchPayable = () => {
-    const apiPayableData = formik?.values?.paybleDetails || [];
-    const appendData = [...apiPayableData].reduce((acc, pay) => {
-      if (!acc.some((n) => n.id === pay.id)) {
-        acc.push(pay);
-      }
-      return acc;
-    }, []);
-    setChargesData(appendData);
-  };
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  useEffect(() => {
-    handleFetchPayable();
-  }, [formik?.values?.chargesData]);
 
   useEffect(() => {
     if (formik?.values?.currency && formik?.values?.exchangeRate) {
@@ -305,7 +288,6 @@ export default function SubSections({
                 <JobProfitAndLoss formik={formik} />
                 <AddDebitAndInvoice
                   formik={formik}
-                  dropdownData={dropdownData}
                   disabled={false}
                 />
               </Box>
