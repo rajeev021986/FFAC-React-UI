@@ -223,59 +223,62 @@ export default function SubSections({
     }
   };
 
+  console.log(page, 234567890);
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            {type !== "edit" ? (
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="Receivable Details"
-                  value="1"
-                  sx={{
-                    textTransform: "capitalize",
-                    minHeight: "50px",
-                  }}
-                  icon={<EditIconForHeader />}
-                  iconPosition="start"
-                />
-              </TabList>
-            ) : (
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="Receivable Details"
-                  value="1"
-                  icon={<EditIconForHeader />}
-                  iconPosition="start"
-                  sx={{
-                    textTransform: "capitalize",
-                    minHeight: "50px",
-                    fontSize: { xs: "0.8rem", sm: "1.125rem" },
-                    padding: { xs: "5px", sm: "10px 16px" },
-                  }}
-                />
-                <Tab
-                  label="Audit Logs"
-                  value="2"
-                  icon={<AuditIcon />}
-                  iconPosition="start"
-                  sx={{
-                    textTransform: "capitalize",
-                    minHeight: "50px",
-                    fontSize: { xs: "0.8rem", sm: "1.125rem" },
-                    padding: { xs: "5px", sm: "10px 16px" },
-                  }}
-                />
-              </TabList>
-            )}
-          </Box>
+          {page !== "approveReceivableEntry" && (
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              {type !== "edit" ? (
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <TabList
+                    label="Receivable Details"
+                    value="1"
+                    sx={{
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<EditIconForHeader />}
+                    iconPosition="start"
+                  />
+                </TabList>
+              ) : (
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab
+                    label="Receivable Details"
+                    value="1"
+                    icon={<EditIconForHeader />}
+                    iconPosition="start"
+                    sx={{
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                      fontSize: { xs: "0.8rem", sm: "1.125rem" },
+                      padding: { xs: "5px", sm: "10px 16px" },
+                    }}
+                  />
+                  <Tab
+                    label="Audit Logs"
+                    value="2"
+                    icon={<AuditIcon />}
+                    iconPosition="start"
+                    sx={{
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                      fontSize: { xs: "0.8rem", sm: "1.125rem" },
+                      padding: { xs: "5px", sm: "10px 16px" },
+                    }}
+                  />
+                </TabList>
+              )}
+            </Box>
+          )}
 
           <TabPanel value="1" sx={{ padding: 0 }}>
             <Box sx={{ width: "100%" }}>
@@ -285,11 +288,10 @@ export default function SubSections({
                   padding: 1,
                 }}
               >
-                <JobProfitAndLoss formik={formik} />
-                <AddDebitAndInvoice
-                  formik={formik}
-                  disabled={false}
-                />
+                {page !== "approveReceivableEntry" && (
+                  <JobProfitAndLoss formik={formik} />
+                )}
+                <AddDebitAndInvoice formik={formik} disabled={false} />
               </Box>
 
               <Box sx={{ gap: "10px", padding: "15px" }}>
