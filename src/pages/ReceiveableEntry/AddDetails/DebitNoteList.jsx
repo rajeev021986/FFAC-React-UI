@@ -5,6 +5,7 @@ const DebitNoteListData = ({
   chargesData,
   DEBIT_INVOICE_COLUMNS,
   disabled,
+  isViewDisabled,
 }) => {
   //  const chargesData = formik.values.details || [];
   return (
@@ -14,7 +15,7 @@ const DebitNoteListData = ({
         columns={DEBIT_INVOICE_COLUMNS}
         count={chargesData.length}
         data={chargesData}
-        disabled={disabled}
+        disabled={disabled || isViewDisabled}
         hideColumns={true}
         storageKey="DebitInvoiceDataGrid"
       />

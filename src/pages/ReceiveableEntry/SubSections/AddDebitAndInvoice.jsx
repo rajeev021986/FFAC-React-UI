@@ -16,7 +16,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 import DebitNoteListData from "../AddDetails/DebitNoteList";
 
-export default function AddDebitAndInvoice({ formik }) {
+export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
@@ -300,6 +300,7 @@ export default function AddDebitAndInvoice({ formik }) {
                   disabled={isDisabled}
                   chargesData={chargesData}
                   DEBIT_INVOICE_COLUMNS={DEBIT_INVOICE_COLUMNS}
+                  Isdisabled={Isdisabled}
                 />
               </Box>
             </Box>

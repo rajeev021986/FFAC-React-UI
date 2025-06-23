@@ -257,7 +257,7 @@ export default function ViewPageForm({ page, initialValues }) {
             </Box>
           </Box>
 
-          <AddDebitAndInvoice formik={formik} Isdisabled={true} />
+          <AddDebitAndInvoice formik={formik} isViewDisabled={true} />
         </TabPanel>
       </TabContext>
     </Box>
