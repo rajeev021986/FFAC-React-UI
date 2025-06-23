@@ -127,7 +127,6 @@ export default function AddPayableEntryModal({
           "unit_type",
           debounceValue,
           formik.values.customerName || ""
-          // "Ananth"
         );
         const validData = data?.filter((item) => item.label?.trim() !== "");
         const flatExists = validData.some(
@@ -246,8 +245,6 @@ export default function AddPayableEntryModal({
       }));
     }
   };
-
-
 
   useEffect(() => {
     if (selectedPayEntry && type === "cost_details") {

@@ -428,6 +428,7 @@ const JobProfitAndLoss = ({ formik }) => {
           formik={formik}
           selectedInvoiceType={formik.values.type}
           page={"jobProfitAndLoss"}
+          mergedCurrencyOptions= {mergedCurrencyOptions}
         />
       ) : null}
     </React.Fragment>
