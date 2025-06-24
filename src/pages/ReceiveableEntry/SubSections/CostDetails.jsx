@@ -37,6 +37,9 @@ export default function CostDetails({
   selectedInvoiceType,
   mergedCurrencyOptions,
 }) {
+    const handleDate = (date) => {
+    return date.split("T")[0];
+  };
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
@@ -529,7 +532,7 @@ export default function CostDetails({
                   <InputBox
                     label="Created Date"
                     id="createdDate"
-                    value={formik.values.createdDate}
+                    value={handleDate(formik.values.createdDate) || null }
                     error={formik.errors.createdDate}
                     onChange={formik.handleChange}
                     disabled
