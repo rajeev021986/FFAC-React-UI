@@ -32,7 +32,11 @@ import SelectBox from "../../../components/common/SelectBox";
 import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoComplete/FormAutoCompleteWithExchangeLoader";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import PopupAlert from "../../../components/common/Alert/PopupAlert";
-export default function CostDetails({ formik, selectedInvoiceType, mergedCurrencyOptions }) {
+export default function CostDetails({
+  formik,
+  selectedInvoiceType,
+  mergedCurrencyOptions,
+}) {
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
@@ -475,7 +479,7 @@ export default function CostDetails({ formik, selectedInvoiceType, mergedCurrenc
                   suggestionName="usd_exchange"
                   name={true}
                   other={formik.values.currency}
-                disabled={formik.values.id ? true : false}
+                  disabled={formik.values.id ? true : false}
                 />
               )}
             </Grid>
@@ -509,6 +513,32 @@ export default function CostDetails({ formik, selectedInvoiceType, mergedCurrenc
                 disabled
               />
             </Grid>
+
+            {formik?.values?.id && (
+              <>
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <InputBox
+                    label="Created Date"
+                    id="createdDate"
+                    value={formik.values.createdDate}
+                    error={formik.errors.createdDate}
+                    onChange={formik.handleChange}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <InputBox
+                    label="Receivable RefNo."
+                    id="receivableRefNo"
+                    value={formik.values.receivableRefNo}
+                    error={formik.errors.receivableRefNo}
+                    onChange={formik.handleChange}
+                    disabled
+                  />
+                </Grid>
+              </>
+            )}
           </Grid>
         </Box>
       </Box>

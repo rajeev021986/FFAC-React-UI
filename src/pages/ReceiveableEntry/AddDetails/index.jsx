@@ -68,6 +68,8 @@ export default function ReceiveableEntryDetails({ page }) {
     amount: data?.amount || 0,
     vatAmount: data?.vatAmount || 0,
     totalAmount: data?.totalAmount || 0,
+    createdDate: data?.createdDate || "",
+    receivableRefNo: data?.receivableRefNo || "",
   });
   useEffect(() => {
     const init = async () => {

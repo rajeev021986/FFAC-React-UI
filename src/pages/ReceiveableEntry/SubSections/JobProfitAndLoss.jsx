@@ -259,6 +259,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 disabled
               />
             </Grid>
+
             <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
               <SelectBox
                 label="Invoice Type"
@@ -295,6 +296,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 }}
               />
             </Grid>
+
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               <SelectBox
                 label="Currency"
@@ -343,6 +345,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 disabled={formik.values.id ? true : false}
               />
             </Grid>
+
             <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
               {formik.values?.currency === "TZS" ||
               formik.values?.currency === "INR" ? (
@@ -378,6 +381,7 @@ const JobProfitAndLoss = ({ formik }) => {
                 />
               )}
             </Grid>
+
             {formik.values.containerTypeDTO &&
               formik.values.containerTypeDTO.length > 0 && (
                 <>
