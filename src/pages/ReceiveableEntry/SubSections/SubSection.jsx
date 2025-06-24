@@ -291,7 +291,7 @@ export default function SubSections({
                 {page !== "approveReceivableEntry" && (
                   <JobProfitAndLoss formik={formik} />
                 )}
-                <AddDebitAndInvoice formik={formik} disabled={false} />
+                <AddDebitAndInvoice formik={formik} isViewDisabled={false} />
               </Box>
 
               <Box sx={{ gap: "10px", padding: "15px" }}>

@@ -64,6 +64,7 @@ export default function AddPayableEntryModal({
     id: 0,
     paybleDetailId: null,
     chargeName: "",
+    chargeId: null,
     mappedCharge: "",
     receivableAmount: 0,
     totalAmount: 0,
@@ -183,6 +184,7 @@ export default function AddPayableEntryModal({
         id: Date.now(),
         paybleDetailId: null,
         chargeName: "",
+         chargeId: null,
         mappedCharge: "",
         // receivableRefNo: "",
         receivableAmount: 0,
@@ -213,6 +215,7 @@ export default function AddPayableEntryModal({
       id: Date.now(),
       paybleDetailId: null,
       chargeName: "",
+       chargeId: null,
       // receivableRefNo: "",
       receivableAmount: 0,
       mappedCharge: "",
@@ -255,6 +258,7 @@ export default function AddPayableEntryModal({
         id: selectedPayEntry.id,
         paybleDetailId: selectedPayEntry.paybleDetailId,
         chargeName: selectedPayEntry.chargeName || "",
+        chargeId: selectedPayEntry.chargeId || null,
         mappedCharge: selectedPayEntry.mappedCharge || "",
         receivableAmount: receivableAmount || 0,
         totalAmount: receivableAmount + vat || 0,
@@ -271,6 +275,7 @@ export default function AddPayableEntryModal({
         id: selectedPayEntry.id,
         paybleDetailId: selectedPayEntry.paybleDetailId,
         chargeName: selectedPayEntry.chargeName || "",
+        chargeId: selectedPayEntry.chargeId || "",
         mappedCharge: selectedPayEntry.mappedCharge || "",
         receivableAmount: selectedPayEntry.receivableAmount || 0,
         totalAmount: selectedPayEntry.totalAmount || 0,
@@ -287,6 +292,7 @@ export default function AddPayableEntryModal({
         id: Date.now(),
         paybleDetailId: null,
         chargeName: "",
+         chargeId: null,
         mappedCharge: "",
         receivableAmount: 0,
         totalAmount: 0,
@@ -392,7 +398,7 @@ export default function AddPayableEntryModal({
                 nameKey="chargeName"
               />
             ) : formik.values.type === "debit_note" ? (
-              <FormAutoCompleteWithLoader
+               <FormAutoCompleteWithLoader
                 label="Charge Name"
                 id="chargeId"
                 suggestionName="charge_name"
@@ -420,7 +426,17 @@ export default function AddPayableEntryModal({
                     vatAndHoldingTaxSettingData?.body?.vatSettings
                   );
                 }}
-              />
+              /> 
+              /* <InputBox
+                label="Charge Name"
+                id="chargeName"
+                value={invoiceEntry.chargeName}
+                disabled={
+                  type === "cost_details" && formik.values.type === "debit_note"
+                    ? true
+                    : false
+                }
+              /> */
             ) : formik.values.type === "tax_invoice" &&
               type === "cost_details" ? (
               <FormAutoCompleteWithLoader

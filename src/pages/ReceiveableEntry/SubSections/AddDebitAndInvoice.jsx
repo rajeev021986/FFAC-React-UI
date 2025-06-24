@@ -17,6 +17,7 @@ import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 import DebitNoteListData from "../AddDetails/DebitNoteList";
 
 export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
+  console.log("isViewDisabled",isViewDisabled)
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
@@ -264,7 +265,7 @@ export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
                 opacity: isViewDisabled ? 0.5 : 1,
               }}
               onClick={() => {
-                if (isViewDisabled) handleDeleteEntry(row.id);
+                if (!isViewDisabled) handleDeleteEntry(row.id);
               }}
             />
           </div>
