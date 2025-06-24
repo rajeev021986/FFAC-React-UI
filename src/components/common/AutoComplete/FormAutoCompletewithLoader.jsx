@@ -33,16 +33,6 @@ function FormAutoCompleteWithLoader(props) {
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
-  const suggestionRef = useRef({
-    suggestionName,
-    id,
-    dataLabel,
-    debounceValue,
-    other,
-  });
-
- 
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,7 +56,7 @@ function FormAutoCompleteWithLoader(props) {
     };
 
     fetchData();
-  }, [debounceValue, suggestionName, id, dataLabel ]);
+  }, [debounceValue, suggestionName, id, dataLabel]);
 
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);

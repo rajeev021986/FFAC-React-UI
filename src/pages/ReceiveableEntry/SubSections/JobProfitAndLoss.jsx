@@ -23,6 +23,8 @@ import ApiManager from "../../../services/ApiManager";
 import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoComplete/FormAutoCompleteWithExchangeLoader";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
+import CustomToast from "../../../components/common/Toast/CustomToast";
+import toast from "react-hot-toast";
 
 const JobProfitAndLoss = ({ formik }) => {
   const payableRef = useRef(null);
@@ -102,16 +104,14 @@ const JobProfitAndLoss = ({ formik }) => {
   ];
 
   useEffect(() => {
-    if (!formik.values?.currency && !formik.values?.exchangeRate) {
-      setOpenDialog({
-        open: true,
-        title: "Information",
-        message:
-          "Please select currency and exchange rate to generate Tax Invoice/Debit Note details.",
-        severity: "info",
-        onConfirm: null,
-        onClose: () => setOpenDialog((prev) => ({ ...prev, open: false })),
-      });
+    if (!formik.values?.currency || !formik.values?.exchangeRate) {
+      toast.custom(
+        <CustomToast
+          message="Please select currency and exchange rate to generate Tax Invoice/Debit Note details."
+          toast="info"
+        />,
+        { closeButton: false }
+      );
     }
   }, []);
 
@@ -402,24 +402,6 @@ const JobProfitAndLoss = ({ formik }) => {
               )}
           </Grid>
           {alertConfig.open && <PopupAlert alertConfig={alertConfig} />}
-          <Dialog
-            open={openDialog.open}
-            onClose={openDialog.onClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogContent sx={{ padding: 0 }}>
-              <Alert severity={openDialog.severity}>
-                <AlertTitle>{openDialog.title}</AlertTitle>
-                {openDialog.message}
-              </Alert>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={openDialog.onClose} color="primary" autoFocus>
-                Okay
-              </Button>
-            </DialogActions>
-          </Dialog>
         </Box>
       </Box>
 
@@ -428,7 +410,7 @@ const JobProfitAndLoss = ({ formik }) => {
           formik={formik}
           selectedInvoiceType={formik.values.type}
           page={"jobProfitAndLoss"}
-          mergedCurrencyOptions= {mergedCurrencyOptions}
+          mergedCurrencyOptions={mergedCurrencyOptions}
         />
       ) : null}
     </React.Fragment>
