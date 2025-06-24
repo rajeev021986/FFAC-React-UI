@@ -27,6 +27,7 @@ function FormAutoCompleteWithLoader(props) {
     nameKey,
     sendLabelOnly,
     className,
+    apitype
   } = props;
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -43,7 +44,8 @@ function FormAutoCompleteWithLoader(props) {
           id,
           dataLabel || suggestionName,
           debounceValue,
-          other || ""
+          other || "",
+          apitype
         );
         const validData = data.filter((item) => item.label?.trim() !== "");
         setOptions(validData);

@@ -423,11 +423,11 @@ export default function AddPayableEntryModal({
               />
             ) : formik.values.type === "tax_invoice" &&
               type === "cost_details" ? (
-              <FormAutoComplete
+              <FormAutoCompleteWithLoader
                 label="Charge Name"
                 id="mappedCharge"
                 apitype="INCOME_MAPPED_CHARGE"
-                suggestionName="mapped_charge"
+                suggestionName="charge_name"
                 value={{
                   chargeId: invoiceEntry.chargeId || "",
                   chargeName: invoiceEntry.mappedCharge || "",
