@@ -223,7 +223,6 @@ export default function SubSections({
     }
   };
 
-  console.log(page, 234567890);
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
