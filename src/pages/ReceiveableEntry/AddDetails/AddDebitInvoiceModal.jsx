@@ -426,7 +426,7 @@ export default function AddPayableEntryModal({
               <FormAutoComplete
                 label="Charge Name"
                 id="mappedCharge"
-                apitype="EXPENSE_INCOME_CHARGE"
+                apitype="INCOME_MAPPED_CHARGE"
                 suggestionName="mapped_charge"
                 value={{
                   chargeId: invoiceEntry.chargeId || "",
