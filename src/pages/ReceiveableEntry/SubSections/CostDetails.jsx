@@ -85,10 +85,13 @@ export default function CostDetails({
         const isPaybleIdInDetails = formik.values.details.some(
           (detail) => detail.paybleDetailId === params.row.paybleDetailId
         );
-        // const isEditDisabled = params.row.paybleDetailId === null;
         return (
           <button
-            disabled={isPaybleIdInDetails || params.row.paybleDetailId === null}
+            disabled={
+              isPaybleIdInDetails ||
+              params.row.paybleDetailId === null ||
+              params?.row?.receivableDetailId !== null
+            }
             onClick={() => {
               if (!isPaybleIdInDetails) handleAdd(params);
             }}
@@ -96,19 +99,25 @@ export default function CostDetails({
               padding: "6px 12px",
               cursor: "pointer",
               backgroundColor:
-                isPaybleIdInDetails || params.row.paybleDetailId === null
+                isPaybleIdInDetails ||
+                params.row.paybleDetailId === null ||
+                params?.row?.receivableDetailId !== null
                   ? "#bdbdbd"
                   : "#1976d2",
               // color: "#fff",
               border: "none",
               borderRadius: "4px",
               cursor:
-                isPaybleIdInDetails || params.row.paybleDetailId === null
+                isPaybleIdInDetails ||
+                params.row.paybleDetailId === null ||
+                params?.row?.receivableDetailId !== null
                   ? "not-allowed"
                   : "pointer",
               color: "#fff",
               opacity:
-                isPaybleIdInDetails || params.row.paybleDetailId === null
+                isPaybleIdInDetails ||
+                params.row.paybleDetailId === null ||
+                params?.row?.receivableDetailId !== null
                   ? 0.5
                   : 1,
             }}
