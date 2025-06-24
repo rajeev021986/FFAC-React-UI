@@ -43,10 +43,10 @@ const suggestionName = {
   mappedCharge: "CHARGE",
 };
 
-export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {
-  inputId = suggestionName[inputId];
+export const GetAutoCompleteData = async (dataKey, inputId, dataLabel,apitype) => {
+ const Type = apitype || suggestionName[inputId];
   try {
-    const response = await ApiManager.fetchAutoCompleteData("", inputId);
+    const response = await ApiManager.fetchAutoCompleteData("", Type);
     const data = await response.body;
     let uniqueSuggestions = [];
     uniqueSuggestions = data.filter(

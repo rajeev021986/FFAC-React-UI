@@ -19,6 +19,7 @@ import SelectBox from "../../../components/common/SelectBox";
 import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
 import { useFetchVatAndHoldingQuery } from "../../../store/api/settingAuditAPI";
+import FormAutoComplete from "../../../components/common/AutoComplete/FormAutoComplete";
 
 const modalStyle = {
   position: "absolute",
@@ -305,6 +306,31 @@ export default function AddPayableEntryModal({
       handleChange("numOfUnits", invoiceEntry.numOfUnits);
     }
   }, [invoiceEntry.unitType, invoiceEntry.numOfUnits]);
+  const handleVatApplicableFromSelected = (
+    selected,
+    handleChange,
+    vatSettings
+  ) => {
+    const vatValueFromCharge = selected?.fullData?.vat_applicable;
+
+    if (vatValueFromCharge?.toUpperCase() === "NO") {
+      const noOption = vatSettings?.find(
+        (opt) => opt.value.toUpperCase() === "NO"
+      );
+      if (noOption) {
+        handleChange("vatApplicable", noOption.value);
+      } else {
+        handleChange("vatApplicable", "No");
+      }
+    } else if (vatValueFromCharge?.toUpperCase() === "YES") {
+      const defaultVat = vatSettings?.[0];
+      if (defaultVat) {
+        handleChange("vatApplicable", defaultVat.value);
+      }
+    } else {
+      handleChange("vatApplicable", "");
+    }
+  };
 
   return (
     <Modal
@@ -335,7 +361,37 @@ export default function AddPayableEntryModal({
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
           <Grid item xs={12} lg={8}>
-            {formik.values.type === "debit_note" ? (
+            {formik.values.type === "debit_note" && type !== "cost_details" ? (
+              <FormAutoComplete
+                label="Charge Name"
+                id="chargeId"
+                apitype="EXPENSE_CHARGE"
+                suggestionName="charge_name"
+                value={{
+                  chargeId: invoiceEntry.chargeId,
+                  chargeName: invoiceEntry.chargeName,
+                }}
+                disabled={
+                  type === "cost_details" && formik.values.type === "debit_note"
+                }
+                onChange={(selected) => {
+                  const selectedId = selected?.chargeId || "";
+                  const selectedName = selected?.chargeName || "";
+
+                  handleChange("chargeId", selectedId);
+                  handleChange("chargeName", selectedName);
+
+                  handleVatApplicableFromSelected(
+                    selected,
+                    handleChange,
+                    vatAndHoldingTaxSettingData?.body?.vatSettings
+                  );
+                }}
+                error={errors.chargeName}
+                idKey="chargeId"
+                nameKey="chargeName"
+              />
+            ) : formik.values.type === "debit_note" ? (
               <FormAutoCompleteWithLoader
                 label="Charge Name"
                 id="chargeId"
@@ -348,27 +404,36 @@ export default function AddPayableEntryModal({
                 idKey="chargeId"
                 nameKey="chargeName"
                 disabled={
-                  type == "cost_details" && formik.values.type === "debit_note"
+                  type === "cost_details" && formik.values.type === "debit_note"
                     ? true
                     : false
                 }
                 onChange={(selected) => {
-                  handleChange("chargeId", selected.chargeId);
-                  handleChange("chargeName", selected.chargeName);
+                  const selectedId = selected?.chargeId || "";
+                  const selectedName = selected?.chargeName || "";
+                  handleChange("chargeId", selectedId);
+                  handleChange("chargeName", selectedName);
+
+                  handleVatApplicableFromSelected(
+                    selected,
+                    handleChange,
+                    vatAndHoldingTaxSettingData?.body?.vatSettings
+                  );
                 }}
               />
             ) : formik.values.type === "tax_invoice" &&
-              type == "cost_details" ? (
-              <FormAutoCompleteWithLoader
+              type === "cost_details" ? (
+              <FormAutoComplete
                 label="Charge Name"
                 id="mappedCharge"
+                apitype="EXPENSE_INCOME_CHARGE"
                 suggestionName="mapped_charge"
                 value={{
                   chargeId: invoiceEntry.chargeId || "",
                   chargeName: invoiceEntry.mappedCharge || "",
                 }}
                 disabled={
-                  type == "cost_details" && formik.values.type === "debit_note"
+                  type === "cost_details" && formik.values.type === "debit_note"
                     ? true
                     : false
                 }
@@ -393,32 +458,61 @@ export default function AddPayableEntryModal({
                       mappedCharge: "",
                     }));
                   }
+
+                  handleVatApplicableFromSelected(
+                    selected,
+                    handleChange,
+                    vatAndHoldingTaxSettingData?.body?.vatSettings
+                  );
                 }}
               />
             ) : (
-              <FormAutoCompleteWithLoader
+              <FormAutoComplete
                 label="Charge Name"
                 id="mappedCharge"
-                suggestionName="mapped_charge"
+                apitype="INCOME_MAPPED_CHARGE"
+                suggestionName="charge_name"
                 value={{
-                  chargeId: invoiceEntry.chargeId,
-                  chargeName: invoiceEntry.chargeName,
+                  chargeId: invoiceEntry.chargeId || "",
+                  chargeName: invoiceEntry.chargeName || "",
                 }}
-                error={errors.chargeName}
                 disabled={
-                  type == "cost_details" && formik.values.type === "debit_note"
+                  type === "cost_details" && formik.values.type === "debit_note"
                     ? true
                     : false
                 }
+                error={errors.chargeName}
                 idKey="chargeId"
                 nameKey="chargeName"
                 onChange={(selected) => {
-                  handleChange("chargeId", selected.chargeId);
-                  handleChange("chargeName", selected.chargeName);
+                  if (selected?.chargeId) {
+                    handleChange("chargeId", selected.chargeId);
+                    handleChange("chargeName", selected.chargeName);
+                    setInvoiceEntry((prev) => ({
+                      ...prev,
+                      chargeId: selected.chargeId,
+                      chargeName: selected.chargeName,
+                    }));
+                  } else {
+                    handleChange("chargeId", "");
+                    handleChange("chargeName", "");
+                    setInvoiceEntry((prev) => ({
+                      ...prev,
+                      chargeId: "",
+                      chargeName: "",
+                    }));
+                  }
+
+                  handleVatApplicableFromSelected(
+                    selected,
+                    handleChange,
+                    vatAndHoldingTaxSettingData?.body?.vatSettings
+                  );
                 }}
               />
             )}
           </Grid>
+
           <Grid item xs={12} lg={4}>
             <Box sx={{ width: "100%" }}>
               <Autocomplete
@@ -524,7 +618,8 @@ export default function AddPayableEntryModal({
               options={vatAndHoldingTaxSettingData?.body?.vatSettings || []}
               value={invoiceEntry?.vatApplicable || ""}
               error={errors.vatApplicable}
-              disabled={type == "cost_details" ? true : false}
+              // disabled={type == "cost_details" ? true : false}
+              disabled={true}
               onChange={(e) => handleChange("vatApplicable", e.target.value)}
             />
           </Grid>

@@ -20,6 +20,7 @@ function FormAutoComplete(props) {
     disabled,
     idKey,
     nameKey,
+    apitype,
   } = props;
 
   const [options, setOptions] = useState([]);
@@ -38,7 +39,8 @@ function FormAutoComplete(props) {
         const data = await GetAutoCompleteData(
           suggestionName,
           id,
-          !dataLabel ? suggestionName : dataLabel
+          !dataLabel ? suggestionName : dataLabel,
+          apitype
         );
         setOptions(data);
         setFilteredOptions(data);
@@ -49,7 +51,7 @@ function FormAutoComplete(props) {
       }
     };
     fetchData();
-  }, [suggestionName, id]);
+  }, [suggestionName, id, apitype]);
 
   const handleInputChange = (event, newValue) => {
     setLoading(false);
@@ -80,6 +82,7 @@ function FormAutoComplete(props) {
         [idKey]: fullData?.id,
         [nameKey]: newValue?.label,
         formattedAddress, // ✅ add this
+        fullData
       };
 
       onChange(result);
@@ -88,6 +91,7 @@ function FormAutoComplete(props) {
         [idKey]: null,
         [nameKey]: "",
         formattedAddress: "",
+        fullData: {}
       });
     }
   };
