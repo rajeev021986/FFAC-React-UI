@@ -6,7 +6,7 @@ export const CARD_VESSEL_COLUMNS = [
         width: 110,
         headerAlign: 'center',
         align: 'center',
-        editable: true
+        editable: false
     },
 
     {
@@ -16,7 +16,7 @@ export const CARD_VESSEL_COLUMNS = [
         width: 110,
         headerAlign: 'center',
         align: 'center',
-        editable: true
+        editable: false
     },
     {
         flex: 1,
@@ -25,7 +25,7 @@ export const CARD_VESSEL_COLUMNS = [
         width: 110,
         headerAlign: 'center',
         align: 'center',
-        editable: true
+        editable: false
     },
     {
         flex: 1,

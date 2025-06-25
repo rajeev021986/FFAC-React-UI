@@ -97,7 +97,9 @@ export default function ShipperScreen({ page }) {
     query.sortBy = "name";
   }
   const payload = Object.entries(shipperSelector?.formData)
-    .filter(([key, value]) => value)
+    .filter(
+      ([key, value]) => value !== "" && value !== null && value !== undefined
+    )
     .map(([key, value]) => {
       let fieldname = key;
       Boolean(key == "sname") && (fieldname = "name");

@@ -10,7 +10,6 @@ import InputBox from "../../../common/InputBox";
 import { useGetOptionsSettingsQuery } from "../../../../store/api/settingsApi";
 
 export default function AddMapping({ formik, dropdownData, disabled }) {
-
   const { data: consigneeSettingsData } =
     useGetOptionsSettingsQuery("consignee_settings");
 
@@ -27,7 +26,7 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   //   { label: "Electrolyte", value: "ELECTROLYTE" },
   //   { label: "Copper Cement", value: "COPPER CEMENT" },
   // ];
-  const itemNameOptions =consigneeSettingsData?.body?.documentType || []
+  const itemNameOptions = consigneeSettingsData?.body?.itemType || [];
   const newRowRef = useRef(null);
   const setFocus = () => {
     setTimeout(() => {
@@ -108,6 +107,14 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
               onChange={(e) =>
                 updateRowValue(params, e, "consigneeEntityFreeDays")
               }
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: "30vh",
+                    overflowY: "auto",
+                  },
+                },
+              }}
               inputRef={newRowRef}
             />
           </div>

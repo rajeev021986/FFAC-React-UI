@@ -86,6 +86,15 @@ const Chips = {
   consigneeName: {
     chipLabel: "Consignee Name",
   },
+  consignee_name: {
+    chipLabel: "Consignee Name",
+  },
+  standard_free_days: {
+    chipLabel: "Standard Free Days"
+  },
+  standard_rate: {
+    chipLabel: "Standard Rate"
+  },
   name: {
     chipLabel: "Name",
   },

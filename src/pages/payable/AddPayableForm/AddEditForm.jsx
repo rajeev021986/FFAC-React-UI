@@ -1016,6 +1016,17 @@ export default function AddEditForm({
                       />
                     )}
                   </Grid>
+                  <Grid item xs={12} lg={6} paddingLeft={2} marginTop={2}>
+                    <SelectBox
+                      label="Cost Center"
+                      id="costCentre"
+                      options={payableSettingData?.body?.costCenterType}
+                      value={formik.values.costCentre}
+                      error={formik.errors.costCentre}
+                      onChange={formik.handleChange}
+                      disabled={isDisabled}
+                    />
+                  </Grid>
                 </Grid>
 
                 <PopupAlert alertConfig={alertConfig} />
@@ -1236,10 +1247,10 @@ export default function AddEditForm({
                       />
                     </Grid>
 
-                    <Grid item xs={12} lg={4}>
+                    {/* <Grid item xs={12} lg={4}>
                       <Typography>Cost center</Typography>
-                    </Grid>
-
+                    </Grid> */}
+{/* 
                     <Grid item xs={12} lg={4}>
                       <TextField
                         hiddenLabel
@@ -1265,7 +1276,7 @@ export default function AddEditForm({
                         size="small"
                         sx={{ ...muiTextFieldStyles.root }}
                       />
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 </Card>
               </Box>

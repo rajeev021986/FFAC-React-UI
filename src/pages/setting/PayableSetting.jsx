@@ -27,12 +27,14 @@ const PayableSettings = () => {
   const [invoiceType, setInvoiceType] = useState([]);
   const [holdingTax, setHoldingTax] = useState([]);
   const [paymentType, setPaymentType] = useState([]);
+  const [costCenterType, setCostCenterType] = useState([]);
   const [isLoadingsave, setIsLoading] = useState(false);
 
   useEffect(() => {
     setInvoiceType(data?.body.invoiceType || []);
     setHoldingTax(data?.body.holdingTax || []);
     setPaymentType(data?.body.paymentType || []);
+    setCostCenterType(data?.body.costCenterType || []);
   }, [data, geterror]);
 
   const Postdata = async () => {
@@ -40,6 +42,7 @@ const PayableSettings = () => {
       invoiceType: invoiceType.filter((it) => !it.value.includes("Type the")),
       holdingTax: holdingTax.filter((it) => !it.value.includes("Type the")),
       paymentType: paymentType.filter((it) => !it.value.includes("Type the")),
+      costCenterType: costCenterType.filter((it) => !it.value.includes("Type the")),
     };
     setIsLoading(true);
     await addOptons({
@@ -97,6 +100,11 @@ const PayableSettings = () => {
             value={paymentType}
             setvalue={setPaymentType}
             title="Payment Type"
+          />
+          <GlobalDrrpdownSetting
+            value={costCenterType}
+            setvalue={setCostCenterType}
+            title="Cost Center"
           />
         </Grid>
       )}
