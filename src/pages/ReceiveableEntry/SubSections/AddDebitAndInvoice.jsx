@@ -63,8 +63,9 @@ export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
 
+
   useEffect(() => {
-    if (formik.values?.currency !== "USD") {
+    if (formik.values?.currency === "INR") {
       formik.setFieldValue("exchangeRate", "1");
     }
   }, [formik.values?.currency]);
