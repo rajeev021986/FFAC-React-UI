@@ -1,9 +1,9 @@
 // mui components
 import { Paper, Pagination, Box } from "@mui/material";
 import { StyledDataGrid } from "./styles";
-import { GridToolbarColumnsButton } from "@mui/x-data-grid";
+import { GridToolbarColumnsButton, useGridApiRef } from "@mui/x-data-grid";
 import { StatusChip } from "../../utils/statusChip";
-import { useEffect, useState } from "react";
+import { useEffect, useImperativeHandle, useState } from "react";
 const ThemedGrid = (props) => {
   const {
     columns,
@@ -19,6 +19,8 @@ const ThemedGrid = (props) => {
     uniqueId,
     hideColumns,
     storageKey,
+    receiptsData,
+    setEditedRows ,
     ...rest
   } = props;
   const LOCAL_STORAGE_KEY = `themedGrid_${storageKey || "default"}`;
@@ -41,6 +43,8 @@ const ThemedGrid = (props) => {
   const handleDate = (date) => {
     return date.split("T")[0];
   };
+  // new changes
+
   const gridData = data?.map((obj) => {
     return {
       ...obj,
@@ -53,6 +57,7 @@ const ThemedGrid = (props) => {
     };
   });
 
+  console.log(gridData, "gridData");
   let modifiedColumns = columns.map((a) => {
     if (a.field === "status") {
       return {
@@ -119,6 +124,9 @@ const ThemedGrid = (props) => {
         //     handleClick(e);
         //   }
         // }}
+       
+   
+        experimentalFeatures={{ newEditingApi: true }}
         pagination={!!paginationModel}
         paginationMode={paginationModel ? "server" : null}
         // sortingMode="server"
@@ -126,7 +134,7 @@ const ThemedGrid = (props) => {
         columns={modifiedColumns}
         rows={gridData}
         columnHeaderHeight={42}
-        rowCount={paginationModel ? count : gridData.length}
+        rowCount={paginationModel ? count : gridData?.length}
         pageSizeOptions={paginationModel ? [10, 20, 50, 100] : undefined}
         paginationModel={paginationModel || undefined}
         columnVisibilityModel={columnVisibilityModel}

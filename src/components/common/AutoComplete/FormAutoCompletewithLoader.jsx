@@ -33,6 +33,7 @@ function FormAutoCompleteWithLoader(props) {
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  console.log(suggestionName,"suggestionName")
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
 
   useEffect(() => {

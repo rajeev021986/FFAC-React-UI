@@ -20,6 +20,8 @@ import { chargesDataApi } from "./api/chargesDataApi";
 import { exchangeRateDataApi } from "./api/exchangeRateDataApi";
 import { otmBolDataApi } from "./api/otmBolDataApi";
 import { jobEntry } from "./api/jobEntryApi";
+import { receiptsApi } from "./api/receiptsApi";
+
 import { containerAPI } from "./api/containerApi";
 import { payableCodeAPI } from "./api/payableApi";
 import { pendingPaymentCodeAPI } from "./api/accountPendingApproval";
@@ -53,6 +55,8 @@ import vesselVoyagaReducer from "./freatures/VesselVoyageSlice";
 import chargesReducer from "./freatures/ChargesSlice";
 import exchangeRateReducer from "./freatures/ExchangeRateSlice";
 import jonEntryReducer from "./freatures/JobEntrySlice";
+import receiptsEntryReducer from "./freatures/receiptsEntrySlice";
+
 import containerReducer from "./freatures/containersSlice";
 import vehicleReducer from "./freatures/vehicleSlice";
 import looseCargoReducer from "./freatures/LoseCargoSlice";
@@ -61,6 +65,7 @@ import pendingPaymentReducer from "./freatures/paymentApprovalSlice";
 import vatAndHoldingReducer from "./freatures/vatAndHoldingSlice";
 import receivableEntryReducer from "./freatures/ReceivableEntrySlice";
 import { mappedChargesDataApi } from "./api/mappedChargesDataApi";
+// import receiptsEntryReducer from "./freatures/receiptsEntrySlice";
 
 const store = configureStore({
   reducer: {
@@ -87,6 +92,7 @@ const store = configureStore({
     [mappedChargesDataApi.reducerPath]: mappedChargesDataApi.reducer,
     [exchangeRateDataApi.reducerPath]: exchangeRateDataApi.reducer,
     [jobEntry.reducerPath]: jobEntry.reducer,
+    [receiptsApi.reducerPath] :receiptsApi.reducer,
     [containerAPI.reducerPath]: containerAPI.reducer,
     [payableCodeAPI.reducerPath]: payableCodeAPI.reducer,
     [pendingPaymentCodeAPI.reducerPath]: pendingPaymentCodeAPI.reducer,
@@ -122,6 +128,7 @@ const store = configureStore({
     chargesStore: chargesReducer,
     exchangeRateStore: exchangeRateReducer,
     jobEntries: jonEntryReducer,
+    // receiptsEntries: receiptsEntryReducer,
     containers: containerReducer,
     vehicle: vehicleReducer,
     looseCargo: looseCargoReducer,
@@ -129,6 +136,7 @@ const store = configureStore({
     accountsPendingPayments: pendingPaymentReducer,
     vatAndHolding: vatAndHoldingReducer,
     receivableEntry: receivableEntryReducer,
+    receiptsEntry:receiptsEntryReducer
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -155,6 +163,7 @@ const store = configureStore({
       mappedChargesDataApi.middleware,
       exchangeRateDataApi.middleware,
       jobEntry.middleware,
+      receiptsApi.middleware,
       containerAPI.middleware,
       payableCodeAPI.middleware,
       pendingPaymentCodeAPI.middleware,

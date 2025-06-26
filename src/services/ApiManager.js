@@ -425,6 +425,22 @@ class ApiManager {
     );
     return ApiMethods.put(url, payload);
   };
+  static getReceivableReceiptsData = async (date,data) => {
+    const url = ENDPOINTS.GET_RECEIVABL_RECEIPTS_DATA(
+      date,
+      data,
+      menuConfigUrl.receipts,
+    
+    );
+    return ApiMethods.get(url );
+  };
+  static getAllReceivableReceiptsData = async (data) => {
+    const url = ENDPOINTS.GET_ALL_RECEIVABL_RECEIPTS_DATA(
+      menuConfigUrl.receipts,
+    
+    );
+    return ApiMethods.get(url);
+  };
 }
 
 export default ApiManager;
