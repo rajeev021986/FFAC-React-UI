@@ -26,7 +26,7 @@ import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/
 import CustomToast from "../../../components/common/Toast/CustomToast";
 import toast from "react-hot-toast";
 
-const JobProfitAndLoss = ({ formik }) => {
+const JobProfitAndLoss = ({ formik, page }) => {
   const payableRef = useRef(null);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
@@ -125,296 +125,307 @@ const JobProfitAndLoss = ({ formik }) => {
 
   return (
     <React.Fragment>
-      <AppBar position="static" sx={{ minHeight: "40px", borderRadius: "5px" }}>
-        <Toolbar
-          sx={{
-            minHeight: "40px !important",
-            px: 2,
-            display: "flex",
-            justifyContent: "space-between",
-            borderRadius: "8px !important",
-          }}
-        >
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <Typography variant="body1">
-              <strong>Job Profit And Loss </strong>
-            </Typography>
-            <Typography variant="body1"></Typography>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      {page !== "approveReceivableEntry" && (
+        <>
+          <AppBar
+            position="static"
+            sx={{ minHeight: "40px", borderRadius: "5px" }}
+          >
+            <Toolbar
+              sx={{
+                minHeight: "40px !important",
+                px: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                borderRadius: "8px !important",
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Typography variant="body1">
+                  <strong>Job Profit And Loss </strong>
+                </Typography>
+                <Typography variant="body1"></Typography>
+              </Box>
+            </Toolbar>
+          </AppBar>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
-          padding: "4px 0",
-          margin: 0,
-        }}
-      >
-        <Box sx={{ width: "100%", paddingRight: 2 }}>
-          <Grid container sx={{ padding: 0, margin: 0 }}>
-            <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
-              <InputBox
-                label="Job No"
-                id="jobNo"
-                name="jobNo"
-                value={formik.values.jobNo}
-                error={formik.errors.jobNo}
-                onChange={formik.handleChange}
-                inputRef={payableRef}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              <FormAutoCompleteWithLoader
-                label="Customer Name*"
-                id="customerId"
-                value={{
-                  customerId: formik.values.customerId,
-                  customerName: formik.values.customerName,
-                }}
-                error={formik.errors.customerId}
-                idKey="customerId"
-                nameKey="customerName"
-                onChange={(selected) => {
-                  formik.setFieldValue("customerId", selected.customerId || "");
-                  formik.setFieldValue(
-                    "customerName",
-                    selected.customerName || ""
-                  );
-                }}
-                suggestionName="customer_name"
-              />
-            </Grid>
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              <InputBox
-                label="Consignee Name"
-                id="consigneeName"
-                value={formik.values.consigneeName}
-                error={formik.errors.consigneeName}
-                onChange={formik.handleChange}
-                inputRef={payableRef}
-                disabled
-              />
-            </Grid>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+              padding: "4px 0",
+              margin: 0,
+            }}
+          >
+            <Box sx={{ width: "100%", paddingRight: 2 }}>
+              <Grid container sx={{ padding: 0, margin: 0 }}>
+                <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
+                  <InputBox
+                    label="Job No"
+                    id="jobNo"
+                    name="jobNo"
+                    value={formik.values.jobNo}
+                    error={formik.errors.jobNo}
+                    onChange={formik.handleChange}
+                    inputRef={payableRef}
+                    disabled
+                  />
+                </Grid>
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <FormAutoCompleteWithLoader
+                    label="Customer Name*"
+                    id="customerId"
+                    value={{
+                      customerId: formik.values.customerId,
+                      customerName: formik.values.customerName,
+                    }}
+                    disabled = {formik.values?.statusCode === -3}
+                    error={formik.errors.customerId}
+                    idKey="customerId"
+                    nameKey="customerName"
+                    onChange={(selected) => {
+                      formik.setFieldValue(
+                        "customerId",
+                        selected.customerId || ""
+                      );
+                      formik.setFieldValue(
+                        "customerName",
+                        selected.customerName || ""
+                      );
+                    }}
+                    suggestionName="customer_name"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <InputBox
+                    label="Consignee Name"
+                    id="consigneeName"
+                    value={formik.values.consigneeName}
+                    error={formik.errors.consigneeName}
+                    onChange={formik.handleChange}
+                    inputRef={payableRef}
+                    disabled
+                  />
+                </Grid>
 
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              <InputBox
-                label="Debit (Cost)"
-                id="debitCost"
-                value={formik.values.debitCost}
-                error={formik.errors.debitCost}
-                onChange={formik.handleChange}
-                inputRef={payableRef}
-                disabled
-              />
-            </Grid>
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <InputBox
+                    label="Debit (Cost)"
+                    id="debitCost"
+                    value={formik.values.debitCost}
+                    error={formik.errors.debitCost}
+                    onChange={formik.handleChange}
+                    inputRef={payableRef}
+                    disabled
+                  />
+                </Grid>
 
-            <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
-              <InputBox
-                label="Credit (Cost)"
-                id="creditCost"
-                value={formik.values.creditCost}
-                error={formik.errors.creditCost}
-                onChange={formik.handleChange}
-                inputRef={payableRef}
-                disabled
-              />
-            </Grid>
+                <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
+                  <InputBox
+                    label="Credit (Cost)"
+                    id="creditCost"
+                    value={formik.values.creditCost}
+                    error={formik.errors.creditCost}
+                    onChange={formik.handleChange}
+                    inputRef={payableRef}
+                    disabled
+                  />
+                </Grid>
 
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              <InputBox
-                label="Net (Cost)"
-                id="netCost"
-                value={formik.values.netCost}
-                error={formik.errors.netCost}
-                onChange={formik.handleChange}
-                inputRef={payableRef}
-                disabled
-              />
-            </Grid>
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <InputBox
+                    label="Net (Cost)"
+                    id="netCost"
+                    value={formik.values.netCost}
+                    error={formik.errors.netCost}
+                    onChange={formik.handleChange}
+                    inputRef={payableRef}
+                    disabled
+                  />
+                </Grid>
 
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              <InputBox
-                label="Total Revenue"
-                id="totalRevenue"
-                value={formik.values.totalRevenue}
-                error={formik.errors.totalRevenue}
-                onChange={formik.handleChange}
-                inputRef={payableRef}
-                disabled
-              />
-            </Grid>
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <InputBox
+                    label="Total Revenue"
+                    id="totalRevenue"
+                    value={formik.values.totalRevenue}
+                    error={formik.errors.totalRevenue}
+                    onChange={formik.handleChange}
+                    inputRef={payableRef}
+                    disabled
+                  />
+                </Grid>
 
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              <InputBox
-                label="Profit/Loss"
-                id="profitLoss"
-                value={formik.values.profitLoss}
-                error={formik.errors.profitLoss}
-                onChange={formik.handleChange}
-                inputRef={payableRef}
-                disabled
-              />
-            </Grid>
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <InputBox
+                    label="Profit/Loss"
+                    id="profitLoss"
+                    value={formik.values.profitLoss}
+                    error={formik.errors.profitLoss}
+                    onChange={formik.handleChange}
+                    inputRef={payableRef}
+                    disabled
+                  />
+                </Grid>
 
-            <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
-              <SelectBox
-                label="Invoice Type"
-                id="type"
-                name="type"
-                options={OPTION_TYPE}
-                value={formik.values.type}
-                disabled={formik.values.id ? true : false}
-                error={formik.errors.type}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (formik.values.type === value) return;
-                  if (
-                    formik.values.details?.length === 0 ||
-                    formik.values.paybleDetails?.length === 0
-                  )
-                    return formik.setFieldValue("type", value);
-                  setAlertConfig({
-                    open: true,
-                    title: "Are you sure you want to change Invoice Type?",
-                    message:
-                      "All the Tax Invoice/Debit Note Details will be cleared if you change invoice type.",
-                    severity: "info",
-                    confirmText: "Yes",
-                    onConfirm: () => {
-                      formik.setFieldValue("type", value);
-                      formik.setFieldValue("details", []);
-                      setAlertConfig((prev) => ({ ...prev, open: false }));
-                    },
-                    onClose: () => {
-                      setAlertConfig((prev) => ({ ...prev, open: false }));
-                    },
-                  });
-                }}
-              />
-            </Grid>
+                <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
+                  <SelectBox
+                    label="Invoice Type"
+                    id="type"
+                    name="type"
+                    options={OPTION_TYPE}
+                    value={formik.values.type}
+                    disabled={formik.values.id ? true : false}
+                    error={formik.errors.type}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (formik.values.type === value) return;
+                      if (
+                        formik.values.details?.length === 0 ||
+                        formik.values.paybleDetails?.length === 0
+                      )
+                        return formik.setFieldValue("type", value);
+                      setAlertConfig({
+                        open: true,
+                        title: "Are you sure you want to change Invoice Type?",
+                        message:
+                          "All the Tax Invoice/Debit Note Details will be cleared if you change invoice type.",
+                        severity: "info",
+                        confirmText: "Yes",
+                        onConfirm: () => {
+                          formik.setFieldValue("type", value);
+                          formik.setFieldValue("details", []);
+                          setAlertConfig((prev) => ({ ...prev, open: false }));
+                        },
+                        onClose: () => {
+                          setAlertConfig((prev) => ({ ...prev, open: false }));
+                        },
+                      });
+                    }}
+                  />
+                </Grid>
 
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              <SelectBox
-                label="Currency"
-                id="currency"
-                options={mergedCurrencyOptions}
-                inputRef={payableRef}
-                value={formik.values.currency}
-                error={formik.errors.currency}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (formik.values.currency === value) return;
-                  if (!formik.values.currency) {
-                    return formik.setFieldValue("currency", value);
-                  }
-                  if (value === "USD") {
-                    formik.setFieldValue("exchangeRate", "");
-                  }
-                  if (
-                    formik.values.details?.length === 0 ||
-                    formik.values?.paybleDetails?.length === 0
-                  )
-                    return formik.setFieldValue("currency", value);
-                  setAlertConfig({
-                    open: true,
-                    title: "Are you sure you want to change currency?",
-                    message:
-                      "All the Tax Invoice/Debit Note Details will be cleared if you change currency.",
-                    severity: "info",
-                    confirmText: "Yes",
-                    onConfirm: () => {
-                      formik.setFieldValue("currency", value);
-                      formik.setFieldValue("details", []);
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <SelectBox
+                    label="Currency"
+                    id="currency"
+                    options={mergedCurrencyOptions}
+                    inputRef={payableRef}
+                    value={formik.values.currency}
+                    error={formik.errors.currency}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (formik.values.currency === value) return;
+                      if (!formik.values.currency) {
+                        return formik.setFieldValue("currency", value);
+                      }
                       if (value === "USD") {
                         formik.setFieldValue("exchangeRate", "");
                       }
-                      if (value === "INR") {
-                        formik.setFieldValue("exchangeRate", "1");
+                      if (
+                        formik.values.details?.length === 0 ||
+                        formik.values?.paybleDetails?.length === 0
+                      )
+                        return formik.setFieldValue("currency", value);
+                      setAlertConfig({
+                        open: true,
+                        title: "Are you sure you want to change currency?",
+                        message:
+                          "All the Tax Invoice/Debit Note Details will be cleared if you change currency.",
+                        severity: "info",
+                        confirmText: "Yes",
+                        onConfirm: () => {
+                          formik.setFieldValue("currency", value);
+                          formik.setFieldValue("details", []);
+                          if (value === "USD") {
+                            formik.setFieldValue("exchangeRate", "");
+                          }
+                          if (value === "INR") {
+                            formik.setFieldValue("exchangeRate", "1");
+                          }
+                          setAlertConfig((prev) => ({ ...prev, open: false }));
+                        },
+                        onClose: () => {
+                          setAlertConfig((prev) => ({ ...prev, open: false }));
+                        },
+                      });
+                    }}
+                    disabled={formik.values.id ? true : false}
+                  />
+                </Grid>
+
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  {formik.values?.currency === "TZS" ||
+                  formik.values?.currency === "INR" ? (
+                    <InputBox
+                      label="Ex. Rate"
+                      id="exchangeRate"
+                      value={
+                        formik.values?.currency === "TZS" ||
+                        formik.values?.currency === "INR"
+                          ? 1
+                          : formatIndianCurrency(formik.values.exchangeRate)
                       }
-                      setAlertConfig((prev) => ({ ...prev, open: false }));
-                    },
-                    onClose: () => {
-                      setAlertConfig((prev) => ({ ...prev, open: false }));
-                    },
-                  });
-                }}
-                disabled={formik.values.id ? true : false}
-              />
-            </Grid>
+                      error={formik.errors.exchangeRate}
+                      onChange={formik.handleChange}
+                      inputRef={payableRef}
+                      disabled={
+                        formik.values?.currency === "TZS" ||
+                        formik.values?.currency === "INR"
+                      }
+                    />
+                  ) : (
+                    <FormAutoCompleteWithExchangeLoader
+                      label="Ex. Rate"
+                      id="exchangeRate"
+                      value={formik.values.exchangeRate}
+                      error={formik.errors.exchangeRate}
+                      onChange={formik.handleChange}
+                      suggestionName="usd_exchange"
+                      name={true}
+                      inputRef={payableRef}
+                      other={formik.values.currency}
+                      disabled={formik.values.id ? true : false}
+                    />
+                  )}
+                </Grid>
 
-            <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-              {formik.values?.currency === "TZS" ||
-              formik.values?.currency === "INR" ? (
-                <InputBox
-                  label="Ex. Rate"
-                  id="exchangeRate"
-                  value={
-                    formik.values?.currency === "TZS" ||
-                    formik.values?.currency === "INR"
-                      ? 1
-                      : formatIndianCurrency(formik.values.exchangeRate)
-                  }
-                  error={formik.errors.exchangeRate}
-                  onChange={formik.handleChange}
-                  inputRef={payableRef}
-                  disabled={
-                    formik.values?.currency === "TZS" ||
-                    formik.values?.currency === "INR"
-                  }
-                />
-              ) : (
-                <FormAutoCompleteWithExchangeLoader
-                  label="Ex. Rate"
-                  id="exchangeRate"
-                  value={formik.values.exchangeRate}
-                  error={formik.errors.exchangeRate}
-                  onChange={formik.handleChange}
-                  suggestionName="usd_exchange"
-                  name={true}
-                  inputRef={payableRef}
-                  other={formik.values.currency}
-                  disabled={formik.values.id ? true : false}
-                />
-              )}
-            </Grid>
-
-            {formik.values.containerTypeDTO &&
-              formik.values.containerTypeDTO.length > 0 && (
-                <>
-                  {formik.values.containerTypeDTO?.map((val, index) => (
-                    <Grid
-                      item
-                      xs={12}
-                      lg={3}
-                      paddingLeft={index % 5 === 1 ? 0 : 2}
-                      marginTop={2}
-                      key={index}
-                    >
-                      <InputBox
-                        label={val.type}
-                        id={val.type}
-                        value={val.count}
-                        disabled
-                      />
-                    </Grid>
-                  ))}
-                </>
-              )}
-          </Grid>
-          {alertConfig.open && <PopupAlert alertConfig={alertConfig} />}
-        </Box>
-      </Box>
-
+                {formik.values.containerTypeDTO &&
+                  formik.values.containerTypeDTO.length > 0 && (
+                    <>
+                      {formik.values.containerTypeDTO?.map((val, index) => (
+                        <Grid
+                          item
+                          xs={12}
+                          lg={3}
+                          paddingLeft={index % 5 === 1 ? 0 : 2}
+                          marginTop={2}
+                          key={index}
+                        >
+                          <InputBox
+                            label={val.type}
+                            id={val.type}
+                            value={val.count}
+                            disabled
+                          />
+                        </Grid>
+                      ))}
+                    </>
+                  )}
+              </Grid>
+              {alertConfig.open && <PopupAlert alertConfig={alertConfig} />}
+            </Box>
+          </Box>
+        </>
+      )}
       {jobNo && currency && exchangeRate ? (
         <CostDetails
           formik={formik}
           selectedInvoiceType={formik.values.type}
-          page={"jobProfitAndLoss"}
+          // page={"jobProfitAndLoss"}
           mergedCurrencyOptions={mergedCurrencyOptions}
+          page = {page}
         />
       ) : null}
     </React.Fragment>

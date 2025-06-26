@@ -226,7 +226,8 @@ export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
           disabled={
             (!formik.values?.jobNo && !formik.values.exchangeRate) ||
             !formik.values?.currency ||
-            isViewDisabled
+            isViewDisabled ||
+            formik.values?.statusCode === -3
           }
           color="white"
           onClick={handleTogglePayEntry}
@@ -251,22 +252,22 @@ export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
             <EditIcon
               style={{
                 cursor:
-                  !isEditDisabled || isViewDisabled ? "not-allowed" : "pointer",
-                color: !isEditDisabled || isViewDisabled ? "#ccc" : "#166ee0",
-                opacity: !isEditDisabled || isViewDisabled ? 0.5 : 1,
+                  !isEditDisabled || isViewDisabled || formik.values?.statusCode === -3 ? "not-allowed" : "pointer",
+                color: !isEditDisabled || isViewDisabled || formik.values?.statusCode === -3 ? "#ccc" : "#166ee0",
+                opacity: !isEditDisabled || isViewDisabled || formik.values?.statusCode === -3 ? 0.5 : 1,
               }}
               onClick={() => {
-                if (isEditDisabled || isViewDisabled) handleEditClick(row);
+                if (isEditDisabled || isViewDisabled || formik.values?.statusCode === -3) handleEditClick(row);
               }}
             />
             <Delete
               style={{
-                cursor: isViewDisabled ? "not-allowed" : "pointer",
-                color: isViewDisabled ? "#ccc" : "red",
-                opacity: isViewDisabled ? 0.5 : 1,
+                cursor: isViewDisabled || formik.values?.statusCode === -3 ? "not-allowed" : "pointer",
+                color: isViewDisabled || formik.values?.statusCode === -3? "#ccc" : "red",
+                opacity: isViewDisabled || formik.values?.statusCode === -3 ? 0.5 : 1,
               }}
               onClick={() => {
-                if (!isViewDisabled) handleDeleteEntry(row.id);
+                if (!isViewDisabled || formik.values?.statusCode === -3) handleDeleteEntry(row.id);
               }}
             />
           </div>

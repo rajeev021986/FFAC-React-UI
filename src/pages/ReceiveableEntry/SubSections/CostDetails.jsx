@@ -36,8 +36,9 @@ export default function CostDetails({
   formik,
   selectedInvoiceType,
   mergedCurrencyOptions,
+  page,
 }) {
-    const handleDate = (date) => {
+  const handleDate = (date) => {
     return date.split("T")[0];
   };
   const getButtonText = () => {
@@ -94,6 +95,7 @@ export default function CostDetails({
               isPaybleIdInDetails ||
               params.row.paybleDetailId === null ||
               params?.row?.receivableDetailId !== null
+              || formik.values?.statusCode === -3
             }
             onClick={() => {
               if (!isPaybleIdInDetails) handleAdd(params);
@@ -294,97 +296,99 @@ export default function CostDetails({
   }, [formik.values.details]);
   return (
     <>
-      <Accordion
-        defaultExpanded
-        style={{
-          marginTop: "10px",
-          border: "0px",
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+      {page !== "approveReceivableEntry" && (
+        <Accordion
+          defaultExpanded
           style={{
-            // padding:"0"
-            margin: "0px",
+            marginTop: "10px",
+            border: "0px",
           }}
         >
-          <Toolbar
-            sx={{
-              minHeight: "10px !important",
-              display: "flex",
-              borderRadius: "18px !important",
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            style={{
+              // padding:"0"
+              margin: "0px",
             }}
           >
-            <Box style={{ margin: "0px" }}>
-              <Typography variant="body1">
-                <strong
-                  style={{
-                    color: theme.palette.primary.main,
-                    margin: "0px",
-                  }}
-                >
-                  Cost Details{" "}
-                </strong>
-              </Typography>
-            </Box>
-          </Toolbar>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-            <CardHeader
-              sx={{ padding: "8px" }}
-              title={
-                <Stack direction="row" justifyContent="space-between">
-                  <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
-                    <TextField
-                      hiddenLabel
-                      id="search"
-                      name="search"
-                      label="Search"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      value={searchValue}
-                      onChange={handleSearchBar}
-                      sx={{ ...muiTextFieldStyles.root }}
-                      InputProps={{
-                        endAdornment: searchValue && (
-                          <InputAdornment position="end">
-                            <IconButton
-                              size="small"
-                              onClick={() => setsearchValue("")}
-                              edge="end"
-                            >
-                              <ClearIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Box>
-                </Stack>
-              }
-            />
-            <ThemedGrid
-              uniqueId="id"
-              columns={costDetailsColumns}
-              count={filteredData.length || 0}
-              handlePage={(model) =>
-                setLocalPagination({
-                  page: model.page,
-                  pageSize: model.pageSize,
-                })
-              }
-              data={paginatedCostDetails || []}
-              columnVisibility={{}}
-              columnVisibilityHandler={() => {}}
-              paginationModel={localPagination}
-              hideColumns={true}
-              storageKey="CostListDataGrid"
-            />
-          </Card>
-        </AccordionDetails>
-      </Accordion>
+            <Toolbar
+              sx={{
+                minHeight: "10px !important",
+                display: "flex",
+                borderRadius: "18px !important",
+              }}
+            >
+              <Box style={{ margin: "0px" }}>
+                <Typography variant="body1">
+                  <strong
+                    style={{
+                      color: theme.palette.primary.main,
+                      margin: "0px",
+                    }}
+                  >
+                    Cost Details{" "}
+                  </strong>
+                </Typography>
+              </Box>
+            </Toolbar>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+              <CardHeader
+                sx={{ padding: "8px" }}
+                title={
+                  <Stack direction="row" justifyContent="space-between">
+                    <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
+                      <TextField
+                        hiddenLabel
+                        id="search"
+                        name="search"
+                        label="Search"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        value={searchValue}
+                        onChange={handleSearchBar}
+                        sx={{ ...muiTextFieldStyles.root }}
+                        InputProps={{
+                          endAdornment: searchValue && (
+                            <InputAdornment position="end">
+                              <IconButton
+                                size="small"
+                                onClick={() => setsearchValue("")}
+                                edge="end"
+                              >
+                                <ClearIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Box>
+                  </Stack>
+                }
+              />
+              <ThemedGrid
+                uniqueId="id"
+                columns={costDetailsColumns}
+                count={filteredData.length || 0}
+                handlePage={(model) =>
+                  setLocalPagination({
+                    page: model.page,
+                    pageSize: model.pageSize,
+                  })
+                }
+                data={paginatedCostDetails || []}
+                columnVisibility={{}}
+                columnVisibilityHandler={() => {}}
+                paginationModel={localPagination}
+                hideColumns={true}
+                storageKey="CostListDataGrid"
+              />
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+      )}
       <Box
         sx={{
           display: "flex",
@@ -405,6 +409,7 @@ export default function CostDetails({
                   customerName: formik.values.customerName,
                 }}
                 error={formik.errors.customerId}
+                disabled={page === "approveReceivableEntry" || formik.values?.statusCode === -3}
                 idKey="customerId"
                 nameKey="customerName"
                 onChange={(selected) => {
@@ -532,7 +537,7 @@ export default function CostDetails({
                   <InputBox
                     label="Created Date"
                     id="createdDate"
-                    value={handleDate(formik.values.createdDate) || null }
+                    value={handleDate(formik.values.createdDate) || null}
                     error={formik.errors.createdDate}
                     onChange={formik.handleChange}
                     disabled

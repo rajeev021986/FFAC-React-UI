@@ -63,9 +63,9 @@ export default function FilterForm({ setFilterOpen }) {
   };
 
   const statusOptions = [
-    // { value: 1, label: "Pending" },
-    // { value: -2, label: "Approve" },
-    // { value: -1, label: "Rejected" },
+    { value: 0, label: "New & Pending" },
+    { value: 1, label: "Active" },
+    { value: -1, label: "Rejected" },
     { value: -3, label: "Canceled" },
   ];
   const OPTION_TYPE = [

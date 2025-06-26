@@ -179,6 +179,7 @@ export function ExchangeRate({ page }) {
         }
       );
       handleClose();
+      refetch();
     } catch (error) {
       toast.custom(
         <CustomToast message="Failed to delete exchange rate." toast="error" />,
