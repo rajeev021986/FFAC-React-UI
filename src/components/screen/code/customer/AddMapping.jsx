@@ -19,7 +19,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
       id: 1,
       chargeId: "",
       chargeName: "",
-
       unitType: "",
       currency: "",
       shipmentType: "",
@@ -28,7 +27,6 @@ export default function AddMapping({ formik, dropdownData, disabled }) {
   ];
 
   // Static options for dropdowns
-  const chargeNameOptions = [{ label: "Agency Fees", value: "Agency Fees" }];
   const unitTypeOptions = dropdownData?.unitType || [
     { label: "Flat", value: "FLAT" },
     { label: "20ft", value: "20FT" },

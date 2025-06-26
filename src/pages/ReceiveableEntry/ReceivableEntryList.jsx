@@ -264,7 +264,7 @@ export default function ReceivableEntryList({ page }) {
   }, [receivableEntrySelector.view, dispatch]);
 
   return (
-    <Box sx={{ backgroundColor: "white.main" }}>
+    <Box  sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
         leftComps={<ThemedBreadcrumb />}
         rightComps={
@@ -325,11 +325,11 @@ export default function ReceivableEntryList({ page }) {
           </>
         }
       />
-      <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+      <Card sx={{ borderWidth: 1, borderColor: "border.main", height: "calc(100vh - 150px)", overflow: "auto" }}>
         <CardHeader
           sx={{ padding: "8px" }}
           title={
-            <Stack direction="row" justifyContent="space-between">
+            <Stack  direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
                   filters={receivableEntrySelector?.formData}
