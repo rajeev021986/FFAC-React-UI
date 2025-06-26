@@ -16,38 +16,13 @@ export default function ViewPageForm({ page, initialValues }) {
     enableReinitialize: true,
     validateOnChange: false,
   });
-
-  const OPTION_TYPE = [
-    {
-      label: "Tax Invoice",
-      value: "tax_invoice",
-    },
-    {
-      label: "Debit Note",
-      value: "debit_note",
-    },
-  ];
-
+  const handleDate = (date) => {
+    return date.split("T")[0];
+  };
+  console.log("formi", formik.values);
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <TabList aria-label="lab API tabs example">
-            <Tab
-              label="Receivable Details"
-              value="1"
-              icon={<EditIconForHeader />}
-              iconPosition="start"
-              sx={{
-                textTransform: "capitalize",
-                minHeight: "50px",
-                fontSize: { xs: "0.8rem", sm: "1.125rem" },
-                padding: { xs: "5px", sm: "10px 16px" },
-              }}
-            />
-          </TabList>
-        </Box>
-
         <TabPanel value="1" sx={{ padding: 0 }}>
           <Box sx={{ width: "100%" }}>
             <Box
@@ -56,28 +31,6 @@ export default function ViewPageForm({ page, initialValues }) {
                 padding: 1,
               }}
             >
-              <AppBar
-                position="static"
-                sx={{ minHeight: "40px", borderRadius: "5px" }}
-              >
-                <Toolbar
-                  sx={{
-                    minHeight: "40px !important",
-                    px: 2,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    borderRadius: "8px !important",
-                  }}
-                >
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <Typography variant="body1">
-                      <strong>Job Profit And Loss </strong>
-                    </Typography>
-                    <Typography variant="body1"></Typography>
-                  </Box>
-                </Toolbar>
-              </AppBar>
-
               <Box
                 sx={{
                   display: "flex",
@@ -101,156 +54,99 @@ export default function ViewPageForm({ page, initialValues }) {
                       />
                     </Grid>
                     <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-                      <FormAutoCompleteWithLoader
+                      <InputBox
                         label="Customer Name*"
                         id="customerId"
-                        value={{
-                          customerId: formik.values.customerId,
-                          customerName: formik.values.customerName,
-                        }}
+                        name="customerId"
+                        value={formik.values.customerName}
                         error={formik.errors.customerId}
-                        idKey="customerId"
-                        nameKey="customerName"
-                        suggestionName="customer_name"
+                        onChange={formik.handleChange}
                         disabled
                       />
                     </Grid>
                     <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
                       <InputBox
-                        label="Consignee Name"
-                        id="consigneeName"
-                        value={formik.values.consigneeName}
-                        error={formik.errors.consigneeName}
-                        onChange={formik.handleChange}
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-                      <InputBox
-                        label="Debit (Cost)"
-                        id="debitCost"
-                        value={formik.values.debitCost}
-                        error={formik.errors.debitCost}
-                        onChange={formik.handleChange}
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
-                      <InputBox
-                        label="Credit (Cost)"
-                        id="creditCost"
-                        value={formik.values.creditCost}
-                        error={formik.errors.creditCost}
-                        onChange={formik.handleChange}
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-                      <InputBox
-                        label="Net (Cost)"
-                        id="netCost"
-                        value={formik.values.netCost}
-                        error={formik.errors.netCost}
-                        onChange={formik.handleChange}
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-                      <InputBox
-                        label="Total Revenue"
-                        id="totalRevenue"
-                        value={formik.values.totalRevenue}
-                        error={formik.errors.totalRevenue}
-                        onChange={formik.handleChange}
-                        disabled
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-                      <InputBox
-                        label="Profit/Loss"
-                        id="profitLoss"
-                        value={formik.values.profitLoss}
-                        error={formik.errors.profitLoss}
-                        onChange={formik.handleChange}
-                        disabled
-                      />
-                    </Grid>
-                    <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
-                      <SelectBox
-                        label="Invoice Type"
-                        id="type"
-                        name="type"
-                        options={OPTION_TYPE}
-                        value={formik.values.type}
-                        disabled={formik.values.id ? true : false}
-                        error={formik.errors.type}
-                      />
-                    </Grid>
-                    <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-                      <SelectBox
                         label="Currency"
                         id="currency"
-                        // options={mergedCurrencyOptions}
+                        name="currency"
                         value={formik.values.currency}
                         error={formik.errors.currency}
-                        disabled={formik.values.id ? true : false}
+                        onChange={formik.handleChange}
+                        disabled
                       />
                     </Grid>
+
                     <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
-                      {formik.values?.currency === "TZS" ||
-                      formik.values?.currency === "INR" ? (
-                        <InputBox
-                          label="Ex. Rate"
-                          id="exchangeRate"
-                          value={formik.values?.currency}
-                          error={formik.errors.exchangeRate}
-                          onChange={formik.handleChange}
-                          disabled={
-                            formik.values?.currency === "TZS" ||
-                            formik.values?.currency === "INR"
-                          }
-                        />
-                      ) : (
-                        <FormAutoCompleteWithExchangeLoader
-                          label="Ex. Rate"
-                          id="exchangeRate"
-                          value={formik.values.exchangeRate}
-                          error={formik.errors.exchangeRate}
-                          onChange={formik.handleChange}
-                          suggestionName="usd_exchange"
-                          name={true}
-                          other={formik.values.currency}
-                          disabled={formik.values.id ? true : false}
-                        />
-                      )}
+                      <InputBox
+                        label="Ex. Rate"
+                        id="exchangeRate"
+                        name="exchangeRate"
+                        value={formik.values.exchangeRate}
+                        error={formik.errors.exchangeRate}
+                        onChange={formik.handleChange}
+                        disabled
+                      />
                     </Grid>
-                    {formik.values.containerTypeDTO &&
-                      formik.values.containerTypeDTO.length > 0 && (
-                        <>
-                          {formik.values.containerTypeDTO?.map((val, index) => (
-                            <Grid
-                              item
-                              xs={12}
-                              lg={3}
-                              paddingLeft={index % 5 === 1 ? 0 : 2}
-                              marginTop={2}
-                              key={index}
-                            >
-                              <InputBox
-                                label={val.type}
-                                id={val.type}
-                                value={val.count}
-                                disabled
-                              />
-                            </Grid>
-                          ))}
-                        </>
-                      )}
+
+                    <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
+                      <InputBox
+                        label="VAT Amount"
+                        id="vatAmount"
+                        value={formik.values.vatAmount}
+                        error={formik.errors.vatAmount}
+                        onChange={formik.handleChange}
+                        disabled
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                      <InputBox
+                        label="Amount"
+                        id="amount"
+                        value={formik.values.amount}
+                        error={formik.errors.amount}
+                        onChange={formik.handleChange}
+                        disabled
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                      <InputBox
+                        label="Total Amount"
+                        id="totalAmount"
+                        value={formik.values.totalAmount}
+                        error={formik.errors.totalAmount}
+                        onChange={formik.handleChange}
+                        disabled
+                      />
+                    </Grid>
+                    {formik?.values?.id && (
+                      <>
+                        <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                          <InputBox
+                            label="Created Date"
+                            id="createdDate"
+                            value={
+                              handleDate(formik.values.createdDate) || null
+                            }
+                            error={formik.errors.createdDate}
+                            onChange={formik.handleChange}
+                            disabled
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} lg={3} paddingLeft={0} marginTop={2}>
+                          <InputBox
+                            label="Receivable RefNo."
+                            id="receivableRefNo"
+                            value={formik.values.receivableRefNo}
+                            error={formik.errors.receivableRefNo}
+                            onChange={formik.handleChange}
+                            disabled
+                          />
+                        </Grid>
+                      </>
+                    )}
                   </Grid>
                 </Box>
               </Box>

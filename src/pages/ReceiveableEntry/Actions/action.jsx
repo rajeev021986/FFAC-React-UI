@@ -39,7 +39,7 @@ export const getReceiveableEntryGridActionApprove = (nav, setModal) => {
         } else {
           toast.custom(
             <CustomToast
-              message="Only for Cancelled Receivable"
+              message="Only for Cancelled and Rejected Receivable"
               toast="error"
             />,
             {

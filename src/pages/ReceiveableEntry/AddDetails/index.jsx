@@ -43,6 +43,7 @@ export default function ReceiveableEntryDetails({ page }) {
     type: getDataFormParams?.type || "debit_note",
     status: "",
     statusCode: 0,
+    rejectRemarks: ""
   });
   const mapResponseToInitialValues = (data = {}) => ({
     id: data.id || "",
@@ -70,6 +71,7 @@ export default function ReceiveableEntryDetails({ page }) {
     totalAmount: data?.totalAmount || 0,
     createdDate: data?.createdDate || "",
     receivableRefNo: data?.receivableRefNo || "",
+    rejectRemarks: data?.rejectRemarks || ""
   });
   useEffect(() => {
     const init = async () => {
@@ -93,9 +95,15 @@ export default function ReceiveableEntryDetails({ page }) {
           setInitialValues(mapResponseToInitialValues(response.body));
         }
       } catch (error) {
-        toast.custom(<CustomToast message={error.message} toast="error" />, {
-          closeButton: false,
-        });
+        toast.custom(
+          <CustomToast
+            message={error.message || "Error while loading the form"}
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
       } finally {
         setLoading(false);
       }
@@ -123,9 +131,16 @@ export default function ReceiveableEntryDetails({ page }) {
           setInitialValues(mapResponseToInitialValues(response.body));
         }
       } catch (error) {
-        toast.custom(<CustomToast message={error.message} toast="error" />, {
-          closeButton: false,
-        });
+        console.log("err", error);
+        toast.custom(
+          <CustomToast
+            message={error.message || "Error while loading the form"}
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
       } finally {
         setLoading(false);
       }

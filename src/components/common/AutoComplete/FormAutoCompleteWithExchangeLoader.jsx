@@ -51,7 +51,7 @@ function FormAutoCompleteWithExchangeLoader(props) {
     };
  
     fetchData();
-  }, [debounceValue, suggestionName, id, dataLabel]);
+  }, [debounceValue, suggestionName, id, dataLabel,other]);
  
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);

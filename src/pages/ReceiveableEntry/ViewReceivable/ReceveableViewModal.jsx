@@ -34,6 +34,8 @@ const RecieveableViewModal = ({ viewType, open, onClose, data }) => {
     type: "",
     status: "",
     statusCode: 0,
+    createdDate:null,
+    receivableRefNo: ""
   });
 
   const fetchPayableData = async () => {
@@ -69,12 +71,14 @@ const RecieveableViewModal = ({ viewType, open, onClose, data }) => {
         amount: res.body?.amount || 0,
         vatAmount: res.body?.vatAmount || 0,
         totalAmount: res.body?.totalAmount || 0,
+        createdDate: res.body?.createdDate || null,
+        receivableRefNo: res.body?.receivableRefNo || ""
       });
       setLoading(false);
     } catch (error) {
       toast.custom(
         <CustomToast
-          message="Error occurred while loading form"
+          message= {error.message || "Error occurred while loading form"}
           toast="error"
         />,
         {

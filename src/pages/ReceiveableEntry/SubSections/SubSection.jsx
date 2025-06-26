@@ -171,6 +171,18 @@ export default function SubSections({
   }, [formik?.values?.currency, formik?.values?.exchangeRate]);
 
   const handleApproveRequest = async () => {
+    if (formik.values.details.length === 0) {
+      toast.custom(
+        <CustomToast
+          message="Please add atleast one entry to approve TaxInvoice/Debit Note"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+      return;
+    }
     try {
       setLoaderApprove((prevState) => ({
         ...prevState,
@@ -205,6 +217,29 @@ export default function SubSections({
   };
 
   const handleReject = async () => {
+    if (!formik.values.rejectRemarks) {
+      setRejectError(true);
+      toast.custom(
+        <CustomToast message="Reject remarks to be filled!" toast="warn" />,
+        {
+          closeButton: false,
+        }
+      );
+      return;
+    }
+    if (formik.values.details.length === 0) {
+      setRejectError(true);
+      toast.custom(
+        <CustomToast
+          message="Please add atleast one entry to reject TaxInvoice/Debit Note"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+      return;
+    }
     try {
       const response = await ApiManager.reciveableRejectHandler(
         formik.values.id,
@@ -287,9 +322,9 @@ export default function SubSections({
                   padding: 1,
                 }}
               >
-                {page !== "approveReceivableEntry" && (
-                  <JobProfitAndLoss formik={formik} />
-                )}
+                {/* {page !== "approveReceivableEntry" && ( */}
+                <JobProfitAndLoss formik={formik} page={page} />
+                {/* )} */}
                 <AddDebitAndInvoice formik={formik} isViewDisabled={false} />
               </Box>
 
@@ -308,7 +343,7 @@ export default function SubSections({
                           : formik.errors.rejectRemarks
                       }
                       onChange={formik.handleChange}
-                      // disabled={page === "payable" ? true : false}
+                      disabled={page === "receivableEntry" ? true : false}
                       multiline
                       rows={4}
                       variant="outlined"
@@ -370,6 +405,7 @@ export default function SubSections({
                             color: "white !important",
                           }}
                           // disabled={isDisabled}
+                          disabled={formik.values?.statusCode === -3}
                         >
                           {isUpdateLoading && (
                             <CircularProgress size={20} color="white" />
