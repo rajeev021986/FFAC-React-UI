@@ -1048,6 +1048,8 @@ export default function JobEntryForm({
               disabled={isDisabled}
               dropdownData={dropdownData.jobDocumentType}
               sourceType="JOB_DETAIL"
+                  showDocmentType ='true'
+
             />
           </TabPanel>
 

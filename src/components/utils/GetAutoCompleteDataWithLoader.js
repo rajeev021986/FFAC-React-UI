@@ -12,6 +12,7 @@ const suggestionName = {
   companyCode: "COMPANY",
   customerName: "CUSTOMER",
   customerId: "CUSTOMER",
+  receivablePartyId:"RECEIVABLE_CUSTOMER",
   supplierName: "SHIPPER",
   consigneeName: "CONSIGNEE",
   shippingLine: "VENDOR_TYPE",

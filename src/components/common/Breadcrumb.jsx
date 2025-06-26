@@ -86,12 +86,13 @@ const Routes = {
   addReceiveableEntry: { label: "Add Receivable Entry", disabled: false },
   EditreceiveableEntry: { label: "Edit Receivable Entry", disabled: false },
   approveReceivable: { label: "Approve Receivable Entry", disabled: false },
+  receipts: { label: "Receipts Entry", disabled: false },
+
 };
 
 const ThemedBreadcrumb = () => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
-
   return (
     <MUIBreadcrumbs
       aria-label="breadcrumb"
@@ -110,7 +111,7 @@ const ThemedBreadcrumb = () => {
         Home
       </Link>
       {pathnames.map((value, index) => {
-        const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
+        const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;      
         const isLast = index === pathnames?.length - 1;
         if (!Routes[value]?.label) return null;
         return isLast || Routes[value]?.disabled ? (

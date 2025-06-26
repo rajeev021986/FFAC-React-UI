@@ -1049,6 +1049,8 @@ export default function ContainerNumberForm({
               disabled={false}
               dropdownData={dropdownData.jobDocumentType}
               sourceType="JOB_CONTAINER"
+               showDocmentType ='true'
+              
             />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: "0px" }}>
@@ -1124,6 +1126,8 @@ export default function ContainerNumberForm({
             sourceType={"JOB_CONTAINER"}
             type={SourceType}
             disabled={false}
+               showDocmentType ='true'
+
           />
         </Box>
       </Modal>

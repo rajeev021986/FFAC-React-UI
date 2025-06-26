@@ -982,6 +982,8 @@ export default function ShipperForm({ initialValues, page, type, id }) {
                   dropdownData={dropdownData?.documentType}
                   sourceType="SHIPPER"
                     disabled={disabled}
+                  showDocmentType ='true'
+
                 />
               </TabPanel>
               <TabPanel value={3} sx={{ margin: 0, padding: 0 }}>
