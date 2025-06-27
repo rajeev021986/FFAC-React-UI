@@ -5,14 +5,9 @@ import InputBox from "../../../components/common/InputBox";
 import { updateInput } from "../../../store/freatures/receiptsEntrySlice";
 import { OutlinedButton } from "../../../components/common/Button";
 import { useFormik } from "formik";
-import SelectBox from "../../../components/common/SelectBox";
 
 export default function FilterForm({ setFilterOpen }) {
   const dispatch = useDispatch();
-  const statusOptions = [
-    { value: 100, label: "Paid" },
-    { value: 101, label: "Unpaid" },
-  ];
   const inputs = useSelector((state) => state.receiptsEntry.formData);
   const formik = useFormik({
       initialValues: inputs || {
