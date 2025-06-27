@@ -43,8 +43,9 @@ export default function CardsView({
       right: 0,
       backgroundColor: "white.main",
       borderTop: "1px solid #e0e0e0",
+      borderBottom: "1px solid #e0e0e0",
       width: "100%",
-      height: "50px",
+      // height: "50px",
       marginTop: "auto",
     },
   };

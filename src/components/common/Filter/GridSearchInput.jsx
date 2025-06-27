@@ -135,8 +135,7 @@ const GridSearchInput = ({
           Approve
         </Button>
       )}
-    
-      
+
       <Dialog open={openApproveDialog} onClose={handleCloseApproveDialog}>
         <DialogTitle>Confirm Approval</DialogTitle>
         <DialogContent>
