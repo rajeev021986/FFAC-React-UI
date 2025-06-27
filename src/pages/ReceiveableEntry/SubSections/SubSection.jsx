@@ -77,9 +77,7 @@ export default function SubSections({
       if (!formik.values?.customerId) {
         return toast.custom(
           <CustomToast
-            message={
-              "Please add Customer Name to create TaxInvoice/Debit Note"
-            }
+            message={"Please add Customer Name to create TaxInvoice/Debit Note"}
             toast="error"
           />,
           {
@@ -161,8 +159,6 @@ export default function SubSections({
       }
     },
   });
-
-  // const data = setgetDataFormParams(formik?.values);
 
   useEffect(() => {
     getFirstError(formik.errors);
