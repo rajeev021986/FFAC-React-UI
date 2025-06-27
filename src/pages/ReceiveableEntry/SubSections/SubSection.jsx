@@ -74,12 +74,10 @@ export default function SubSections({
           }
         );
       }
-      if (!payload.values?.customerId) {
+      if (!formik.values?.customerId) {
         return toast.custom(
           <CustomToast
-            message={
-              "Please add Customer Name to create TaxInvoice/Debit Note"
-            }
+            message={"Please add Customer Name to create TaxInvoice/Debit Note"}
             toast="error"
           />,
           {
@@ -162,8 +160,6 @@ export default function SubSections({
     },
   });
 
-  // const data = setgetDataFormParams(formik?.values);
-
   useEffect(() => {
     getFirstError(formik.errors);
   }, [formik.errors]);
@@ -181,7 +177,6 @@ export default function SubSections({
       });
     }
   }, [formik?.values?.currency, formik?.values?.exchangeRate]);
-
   const handleApproveRequest = async () => {
     if (formik.values.details.length === 0) {
       toast.custom(

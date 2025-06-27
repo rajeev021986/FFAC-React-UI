@@ -131,7 +131,6 @@ export default function ReceiveableEntryDetails({ page }) {
           setInitialValues(mapResponseToInitialValues(response.body));
         }
       } catch (error) {
-        console.log("err", error);
         toast.custom(
           <CustomToast
             message={error.message || "Error while loading the form"}
@@ -148,6 +147,7 @@ export default function ReceiveableEntryDetails({ page }) {
 
     init();
   }, [state?.initialValues?.id]);
+  console.log("ii",initialValues)
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
       <Stack sx={{ padding: "8px 0px" }}>
