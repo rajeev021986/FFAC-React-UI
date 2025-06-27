@@ -308,11 +308,7 @@ export default function AddEditForm({
       });
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
-  useEffect(() => {
-    if (formik.values?.currency !== "USD") {
-      formik.setFieldValue("exchangeRate", 1);
-    }
-  }, [formik.values?.currency]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -490,11 +486,11 @@ export default function AddEditForm({
       },
     },
   };
-  useEffect(() => {
-    if (formik?.values?.currency !== "USD") {
-      formik.setFieldValue("exchangeRate", 1);
-    }
-  }, [formik?.values?.currency]);
+  // useEffect(() => {
+  //   if (formik?.values?.currency !== "USD") {
+  //     formik.setFieldValue("exchangeRate", 1);
+  //   }
+  // }, [formik?.values?.currency]);
   const [chargesData, setChargesData] = useState([]);
   const [togglePayEntry, setToggleNotes] = useState(false);
   const [selectedPayEntry, setSelectedPayEntry] = useState(null);

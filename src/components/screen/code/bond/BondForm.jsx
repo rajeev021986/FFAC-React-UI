@@ -123,13 +123,14 @@ export default function BondForm() {
     onSubmit: async (values) => {
       if (type == "copy" || type == "new") {
         try {
-          values.status = "";
+          const bondPurchaseDetailsEntities =
+            values.bondPurchaseDetailsEntities.map((a) => ({ ...a, id: null }))(
+              (values.status = "")
+            );
           values.statusCode = 1;
           const result = await addBond({
             ...values,
-            bondPurchaseDetailsEntities: values.bondPurchaseDetailsEntities.map(
-              (a) => ({ ...a, id: null })
-            ),
+            bondPurchaseDetailsEntities: bondPurchaseDetailsEntities,
             id: null,
           }).unwrap();
         } catch (error) {
@@ -156,7 +157,6 @@ export default function BondForm() {
             bondPurchaseDetailsEntities:
               values?.bondPurchaseDetailsEntities?.map((a) => ({
                 ...a,
-                id: null,
               })),
           };
 

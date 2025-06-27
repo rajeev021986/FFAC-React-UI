@@ -224,21 +224,21 @@ export default function BondEditGrid({ formik, disabled }) {
           align: "center",
           renderCell: (params) => {
             const row = params.row;
-            const isDateAddedRow = row.validUpToDate
+            const isExistingRow = row.id && !row.new;
             return (
               <Tooltip
                 title={
-                  isDateAddedRow
+                  isExistingRow
                     ? ""
-                    : "Please first add the Valid Up to Date to upload document."
+                    :  "Please first add/save the row to upload document."
                 }
               >
                 <span>
                   <Button
                     variant="text"
-                   onClick={() => isDateAddedRow && handleOpenUploadModal(row?.id)}
+                   onClick={() => isExistingRow  && handleOpenUploadModal(row?.id)}
                     sx={{ textTransform: "none" }}
-                    disabled={!isDateAddedRow}
+                    disabled={!isExistingRow }
                   >
                     Upload Document
                   </Button>

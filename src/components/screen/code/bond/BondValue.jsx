@@ -151,24 +151,21 @@ export default function BondValue({
               Close
             </OutlinedButton>
             <ThemeButton
-           onClick={async () => {
-                              const errors = await formik.validateForm();
+              onClick={async () => {
+                const errors = await formik.validateForm();
 
-                              if (Object.keys(errors).length > 0) {
-                                formik.setTouched(
-                                  Object.fromEntries(
-                                    Object.keys(errors).map((key) => [
-                                      key,
-                                      true,
-                                    ])
-                                  ),
-                                  true
-                                );
-                                getFirstError(errors); 
-                              } else {
-                                formik.handleSubmit(); 
-                              }
-                            }}
+                if (Object.keys(errors).length > 0) {
+                  formik.setTouched(
+                    Object.fromEntries(
+                      Object.keys(errors).map((key) => [key, true])
+                    ),
+                    true
+                  );
+                  getFirstError(errors);
+                } else {
+                  formik.handleSubmit();
+                }
+              }}
               sx={{ fontWeight: "500", color: "white !important" }}
             >
               {loading && <CircularProgress size={20} color="white" />}{" "}
