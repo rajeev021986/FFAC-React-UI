@@ -1549,6 +1549,8 @@ export default function CustomerForm({
                   disabled={disabled}
                   dropdownData={dropdownData.documentType}
                   sourceType="CUSTOMER"
+                  showDocmentType ='true'
+
                 />
               </TabPanel>
               <TabPanel value="3" sx={{ padding: "0px" }}>

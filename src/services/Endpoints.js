@@ -114,6 +114,10 @@ const ENDPOINTS = {
     `/${BasePageUrl}/approval/approved/${type}/${id}`,
   RECEIVABLE_REJECTED_REQUEST: (id, type, BasePageUrl) =>
     `/${BasePageUrl}/approval/rejected/${type}/${id}`,
+   GET_RECEIVABL_RECEIPTS_DATA: (date,id, BasePageUrl) =>
+    `/${BasePageUrl}/receivable/receipt/upto/${id}?upTo=${date}`,
+    GET_ALL_RECEIVABL_RECEIPTS_DATA: ( BasePageUrl) =>
+    `/${BasePageUrl}/receivable/receipt`,
 };
 
 export default ENDPOINTS;

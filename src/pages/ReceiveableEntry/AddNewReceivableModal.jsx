@@ -33,6 +33,7 @@ export default function AddNewReceivableModal({ open, onClose, data }) {
   const location = useLocation();
 
   const codeJobEntryrSelector = useSelector((s) => s?.jobEntries);
+  console.log(codeJobEntryrSelector,"codeJobEntryrSelector")
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchValue, setsearchValue] = useState("");
 

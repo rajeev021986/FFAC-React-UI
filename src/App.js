@@ -52,6 +52,8 @@ import AccountsPendingPayableList from "./pages/accounts/PendingPayable";
 import ReceiveableEntryDetails from "./pages/ReceiveableEntry/AddDetails";
 import ReceivableEntryList from "./pages/ReceiveableEntry/ReceivableEntryList";
 import MappedCharges from "./components/screen/code/charge/MappedCharges";
+import ReceiptsEntryList from "./pages/receipts/ReceiptsEntryList";
+import AddReceiptsEntry from "./pages/receipts/AddReceiptsEntry";
 
 function App() {
   const theme = getTheme(
@@ -217,6 +219,23 @@ function App() {
             <Route
               path="accounts/operations/receivableEntry/addReceiveableEntry"
               element={<ReceiveableEntryDetails page="receivableEntry" />}
+            />
+            {/* receipts */}
+             <Route
+              path="accounts/operations/receipts"
+              element={<ReceiptsEntryList page="receiptsEntry" />}
+            />
+               <Route
+              path="accounts/operations/receipts/newEntry"
+              element={<AddReceiptsEntry page="receipts-entry" />}
+            />
+             <Route
+              path="accounts/operations/receipts/editReceipt"
+              element={<AddReceiptsEntry page="receipts-entry" />}
+            />
+            <Route
+              path="accounts/operations/receipts/editReceiptsEntry"
+              element={<AddReceiptsEntry page="receipts-entry" />}
             />
 
             <Route path="admin/settings" element={<SettingsPage />} />

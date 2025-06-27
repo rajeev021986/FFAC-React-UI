@@ -81,7 +81,7 @@ function FormAutoCompleteWithExchangeLoader(props) {
         }}
         size="small"
         id={id}
-        disabled={disabled}
+        disabled={disabled} 
         value={options.find((option) => option.value == value) || null}
         onInputChange={handleInputChange}
         onChange={handleSelectionChange}

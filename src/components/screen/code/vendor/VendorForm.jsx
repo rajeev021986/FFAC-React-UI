@@ -409,6 +409,7 @@ export default function VendorForm({ page = "vendor" }) {
                   sourceType="VENDOR"
                   page={page}
                   disabled={page == "vendorApproval"}
+                  showDocmentType ='true'
                   dropdownData={vendorSettingsData?.body?.documentType}
                 />
               </TabPanel>

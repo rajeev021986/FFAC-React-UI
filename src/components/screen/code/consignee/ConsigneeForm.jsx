@@ -813,6 +813,8 @@ export default function ConsigneeForm({ initialValues, page, type, id }) {
                   dropdownData={consigneeSettingsData?.body?.documentType}
                   sourceType="CONSIGNEE"
                   disabled={disabled}
+                  showDocmentType ='true'
+
                 />
               </TabPanel>
               <TabPanel value={3} sx={{ margin: 0, padding: 0 }}>

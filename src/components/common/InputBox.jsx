@@ -47,6 +47,7 @@ export default function InputBox({
       multiline={multiline}
       autoComplete="off"
       error={error ? true : false}
+      
       // sx={{ ...styles.root, ...sx }}
       {...props}
       sx={{
