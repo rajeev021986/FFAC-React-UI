@@ -9,6 +9,7 @@ import {
   Card,
   CardHeader,
   Drawer,
+  SpeedDialIcon,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -20,7 +21,6 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-
 
 import GridActions from "../../components/common/Grid/GridActions";
 import { RECEIPTS_ENTRY_COLUMNS } from "../../data/columns/receiptsEntry";
@@ -75,13 +75,13 @@ export default function PayableListScreen({ page }) {
     ? [
         { name: "Add Receipts" },
         { name: "Copy" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
+        // { name: exportLoader ? <LoaderIcon /> : "Export" },
       ]
     : page == "receiptsEntry_approve"
     ? [{ name: exportLoader ? <LoaderIcon /> : "Export" }]
     : [
         { name: "Add Receipts" },
-        { name: exportLoader ? <LoaderIcon /> : "Export" },
+        // { name: exportLoader ? <LoaderIcon /> : "Export" },
       ];
 
   const query = {
@@ -229,24 +229,26 @@ export default function PayableListScreen({ page }) {
             {(page == "receiptsEntry" || page == "payable_approve") && (
               <SpeedDial
                 ariaLabel="Text-only SpeedDial"
-                open={true}
-                onOpen={() => {}}
-                onClose={() => {}}
-                FabProps={{ sx: { display: "none" } }}
                 sx={{
                   "& .MuiFab-root": {
                     width: 40,
                     height: 40,
                     minHeight: 40,
-                    paddingRight: "26px !important",
                   },
-                  "& .MuiSpeedDial-actions": {
-                    paddingRight: "25px",
-                  },
+
                   gap: 1,
                 }}
                 direction="left"
-                icon={null}
+                icon={
+                  <SpeedDialIcon
+                    sx={{
+                      fontSize: 20,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  />
+                }
               >
                 {actions.map((action) => (
                   <SpeedDialAction
@@ -270,21 +272,21 @@ export default function PayableListScreen({ page }) {
                       gap: 1,
                     }}
                     icon={
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                        }}
-                      >
-                        {action.icon}
-                        <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-                          {action.name}
-                        </span>
-                      </Box>
+                      // <Box
+                      //   sx={{
+                      //     display: "flex",
+                      //     alignItems: "center",
+                      //     gap: 1,
+                      //   }}
+                      // >
+                      //   {action.icon}
+                      <span style={{ fontSize: "12px", fontWeight: "bold" }}>
+                        {action.name}
+                      </span>
+                      // </Box>
                     }
                     onClick={() => handleActionClick(action.name)}
-                  />
+                  ></SpeedDialAction>
                 ))}
               </SpeedDial>
             )}
@@ -374,9 +376,7 @@ export default function PayableListScreen({ page }) {
             paginationModel={receitptSelector.pagination}
             loading={isLoading || isFetching}
             sortModel={receitptSelector.sortModel}
-            onSortModelChange={(sortModel) =>
-              dispatch(setSortModel(sortModel))
-            }
+            onSortModelChange={(sortModel) => dispatch(setSortModel(sortModel))}
             storageKey="PayableListDataGrid"
           />
         ) : (

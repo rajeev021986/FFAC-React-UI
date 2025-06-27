@@ -32,6 +32,7 @@ export default function AddReceiptsEntry({ page }) {
     withHoldingTaxRecov: "",
     mode: "",
     bankName: "",
+    bankId: "",
     chequeNo: "",
     chequeDate: "",
     recPayAmount: "",
@@ -39,7 +40,7 @@ export default function AddReceiptsEntry({ page }) {
     details: [
       {
         id: "",
-        uiId:"",
+        uiId: "",
         refNo: "",
         receivableAmount: "",
         date: "",
@@ -73,6 +74,7 @@ export default function AddReceiptsEntry({ page }) {
           withHoldingTaxRecov: res?.body?.withHoldingTaxRecov || "",
           mode: res?.body?.mode || "",
           bankName: res?.body?.bankName || "",
+          bankId: res?.body?.bankId || "",
           chequeNo: res?.body?.chequeNo || "",
           chequeDate: res?.body?.chequeDate || "",
           recPayAmount: res?.body?.recPayAmount || "",
@@ -80,7 +82,7 @@ export default function AddReceiptsEntry({ page }) {
           details:
             res?.body?.details?.map((item) => ({
               id: item.id ?? "",
-              uiId:item.uiId ?? "",
+              uiId: item.uiId ?? "",
               refNo: item.refNo ?? "",
               receivableAmount: item.receivableAmount ?? "",
               date: item.date ?? "",

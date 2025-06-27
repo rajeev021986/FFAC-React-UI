@@ -48,17 +48,6 @@ const ThemedGrid = (props) => {
   };
   // new changes
 
-  // const gridData = data?.map((obj) => {
-  //   return {
-  //     ...obj,
-  //     modifiedDate: obj?.modifiedDate
-  //       ? handleDate(obj?.modifiedDate)
-  //       : obj?.modifiedDate,
-  //     createdDate: obj?.createdDate
-  //       ? handleDate(obj?.createdDate)
-  //       : obj?.createdDate,
-  //   };
-  // });
   const gridData = useMemo(() => {
     return data?.map((row) => {
       const edits = rest.editedRows?.[row[uniqueId]] || {};
@@ -132,17 +121,7 @@ const ThemedGrid = (props) => {
       }}
     >
       <StyledDataGrid
-        // onCellClick={(e) => {
-        //   if (e.field == "containerNo") {
-        //     handleClick(e);
-        //   }
-        // }}
-        // onCellEditStart={(params) => {
-        //   setEditingCell({ id: params.id, field: params.field });
-        // }}
-        // onCellEditStop={() => {
-        //   setEditingCell(null);
-        // }}
+       
         editMode="cell"
         apiRef={apiRef}
         experimentalFeatures={{ newEditingApi: true }}
