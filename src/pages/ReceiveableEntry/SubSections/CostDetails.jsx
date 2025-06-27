@@ -94,8 +94,8 @@ export default function CostDetails({
             disabled={
               isPaybleIdInDetails ||
               params.row.paybleDetailId === null ||
-              params?.row?.receivableDetailId !== null
-              || formik.values?.statusCode === -3
+              params?.row?.receivableDetailId !== null ||
+              formik.values?.statusCode === -3
             }
             onClick={() => {
               if (!isPaybleIdInDetails) handleAdd(params);
@@ -249,7 +249,13 @@ export default function CostDetails({
     //   align: "center",
     // },
   ];
-
+  useEffect(() => {
+    if (formik.values.currency === "INR") {
+      formik.setFieldValue("exchangeRate", "1");
+    } else if (!formik.values.exchangeRate) {
+      formik.setFieldValue("exchangeRate", "");
+    }
+  }, [formik.values.currency]);
   useEffect(() => {
     if (debounceValue.trim()) {
       const lowerSearch = debounceValue.toLowerCase();
@@ -409,7 +415,10 @@ export default function CostDetails({
                   customerName: formik.values.customerName,
                 }}
                 error={formik.errors.customerId}
-                disabled={page === "approveReceivableEntry" || formik.values?.statusCode === -3}
+                disabled={
+                  page === "approveReceivableEntry" ||
+                  formik.values?.statusCode === -3
+                }
                 idKey="customerId"
                 nameKey="customerName"
                 onChange={(selected) => {
@@ -436,7 +445,7 @@ export default function CostDetails({
                   if (!formik.values.currency) {
                     return formik.setFieldValue("currency", value);
                   }
-                  if (value === "USD") {
+                  if (value && value !== "INR") {
                     formik.setFieldValue("exchangeRate", "");
                   }
                   if (formik.values.details?.length === 0)
@@ -450,11 +459,11 @@ export default function CostDetails({
                     confirmText: "Yes",
                     onConfirm: () => {
                       formik.setFieldValue("currency", value);
-                      if (value === "USD") {
+                      if (value && value !== "INR") {
                         formik.setFieldValue("exchangeRate", "");
                       }
                       if (value === "INR") {
-                        formik.setFieldValue("c", "1");
+                        formik.setFieldValue("exchangeRate", "1");
                       }
                       formik.setFieldValue("details", []);
                       setAlertConfig((prev) => ({ ...prev, open: false }));
