@@ -354,11 +354,24 @@ export default function ReceiptsEntryForm({
   }, [optionsSettingsData?.body?.currencyType, initialValues.currency]);
 
   useEffect(() => {
+    if (
+      (formik.values.currency === "INR" || formik.values.currency === "TZS") &&
+      formik.values.exchangeRate !== "1"
+    ) {
+      formik.setFieldValue("exchangeRate", "1");
+    }
+  }, [formik.values.currency]);
+
+  useEffect(() => {
+    console.log("Exchange Rate updated:", formik.values.exchangeRate);
+  }, [formik.values.exchangeRate]);
+
+  useEffect(() => {
     const {
       receivablePartyId,
       currency,
       upTo,
-      exchangeRate,
+      exchangeRate ,
       receivablePartyName,
     } = formik.values;
 
@@ -366,19 +379,22 @@ export default function ReceiptsEntryForm({
       receivablePartyId &&
       receivablePartyName &&
       currency &&
-      upTo &&
-      exchangeRate !== null &&
-      exchangeRate !== "";
+      upTo 
+      //&&
+      // exchangeRate !== null &&
+      // exchangeRate !== "";
 
-    if (allFilled) {
-      const payload = {
-        receivablePartyId,
-        receivablePartyName,
-        currency,
-        upTo,
-        exchangeRate,
-      };
+     if (!allFilled) return;
 
+    const payload = {
+      receivablePartyId,
+      receivablePartyName,
+      currency,
+      upTo,
+      exchangeRate : exchangeRate || 1,
+    };
+
+    const delay = setTimeout(() => {
       addReceivableReceiptsDetails(payload)
         .unwrap()
         .then((res) => {
@@ -395,9 +411,13 @@ export default function ReceiptsEntryForm({
         .catch((err) => {
           console.error("Error adding customer:", err);
         });
-    }
+    }, 1000); // 2 seconds
+
+    // Cleanup if values change within 2 seconds
+    return () => clearTimeout(delay);
   }, [
     formik.values.receivablePartyId,
+    formik.values.receivablePartyName,
     formik.values.currency,
     formik.values.upTo,
     formik.values.exchangeRate,
@@ -521,19 +541,8 @@ export default function ReceiptsEntryForm({
                 disabled={isDisabled}
               />
             </Grid>
+
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <DateTimeField
-                name="upTo"
-                label="UPTO*"
-                id="upTo"
-                value={formik.values.upTo}
-                error={formik.errors.upTo}
-                onChange={formik.setFieldValue}
-                inputRef={FieldRef}
-                disabled={isDisabled}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
               <InputBox
                 label="Ex. Rate"
                 id="exchangeRate"
@@ -546,6 +555,18 @@ export default function ReceiptsEntryForm({
                 error={formik.errors.exchangeRate}
                 onChange={formik.handleChange}
                 disabled={true}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <DateTimeField
+                name="upTo"
+                label="UPTO*"
+                id="upTo"
+                value={formik.values.upTo}
+                error={formik.errors.upTo}
+                onChange={formik.setFieldValue}
+                inputRef={FieldRef}
+                disabled={isDisabled}
               />
             </Grid>
           </Grid>
@@ -599,7 +620,7 @@ export default function ReceiptsEntryForm({
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
                 label="Charge"
                 id="charge"
@@ -623,7 +644,7 @@ export default function ReceiptsEntryForm({
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
                 label="WithHolding Tax Recov."
                 id="withHoldingTaxRecov"
