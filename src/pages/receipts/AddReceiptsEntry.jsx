@@ -38,11 +38,12 @@ export default function AddReceiptsEntry({ page }) {
     remarks: "",
     details: [
       {
-        id: 0,
+        id: "",
+        uiId:"",
         refNo: "",
         receivableAmount: "",
         date: "",
-        amount: null,
+        amount: "",
         withHoldingAmount: "",
       },
     ],
@@ -76,16 +77,16 @@ export default function AddReceiptsEntry({ page }) {
           chequeDate: res?.body?.chequeDate || "",
           recPayAmount: res?.body?.recPayAmount || "",
           remarks: res?.body?.remarks || "",
-          details: [
-            {
-              id: 0,
-              refNo: res?.body?.details?.refNo,
-              receivableAmount: res?.body?.details?.receivableAmount,
-              date: res?.body?.details?.date || "",
-              amount: res?.body?.details?.amount || "",
-              withHoldingAmount: res.body?.withHoldingAmount || "",
-            },
-          ],
+          details:
+            res?.body?.details?.map((item) => ({
+              id: item.id ?? "",
+              uiId:item.uiId ?? "",
+              refNo: item.refNo ?? "",
+              receivableAmount: item.receivableAmount ?? "",
+              date: item.date ?? "",
+              amount: item.amount ?? "",
+              withHoldingAmount: item.withHoldingAmount ?? "",
+            })) || [],
         });
         setLoading(false);
       } catch (error) {
@@ -106,6 +107,7 @@ export default function AddReceiptsEntry({ page }) {
       setLoading(false);
     }
   }, [state?.initialValues?.id]);
+  console.log(initialValues, "initialValues");
 
   return (
     <Box sx={{ padding: 0, margin: 0 }}>

@@ -20,12 +20,7 @@ import ScreenToolbar from "../../components/common/ScreenToolbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemedBreadcrumb from "../../components/common/Breadcrumb";
 import GridSearchInput from "../../components/common/Filter/GridSearchInput";
-import {
-  payableDashboardView,
-  updateInput,
-  setPagination,
-  payableSetSortModal,
-} from "../../store/freatures/payableEntrySlice";
+
 
 import GridActions from "../../components/common/Grid/GridActions";
 import { RECEIPTS_ENTRY_COLUMNS } from "../../data/columns/receiptsEntry";
@@ -39,7 +34,6 @@ import { getPayableListGridActionApprove } from "../payable/Actions/appproveActi
 
 import toast, { LoaderIcon } from "react-hot-toast";
 import CustomToast from "../../components/common/Toast/CustomToast";
-import FilterForm from "../accounts/PendingPayable/FilterForm";
 
 import { menuConfigUrl } from "../../store/menuConfigUrl";
 import { downloadBase64PDF, downloadExcel } from "../../utils/downloadExcel";
@@ -51,9 +45,15 @@ import {
 import { getReceiptseListGridActions } from "./Actions/action";
 import DeleteDialog from "../../components/common/DeleteDialog";
 import AuditTimeLine from "../../components/AuditTimeLine";
-
+import FilterForm from "./Actions/FilterForm";
+import {
+  receiptsEntrySetView,
+  updateInput,
+  setPagination,
+  setSortModel,
+} from "../../store/freatures/receiptsEntrySlice";
 export default function PayableListScreen({ page }) {
-  const receitptSelector = useSelector((state) => state.payableAction);
+  const receitptSelector = useSelector((state) => state.receiptsEntry);
   const location = useLocation();
 
   const primaryColor = useSelector((state) => state.dashboard.theme);
@@ -61,7 +61,6 @@ export default function PayableListScreen({ page }) {
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [deleteReceipts] = useDeleteReceiptsMutation();
-
   const [exportLoader, setExportLoader] = useState(false);
   const [seletectBox, setSelectedBox] = useState("");
   const [status, setStatus] = useState("");
@@ -70,7 +69,7 @@ export default function PayableListScreen({ page }) {
     type: "",
     data: {},
   });
-
+  console.log(modal, "modal");
   const [open, setOpen] = React.useState(false);
   const actions = seletectBox
     ? [
@@ -208,7 +207,7 @@ export default function PayableListScreen({ page }) {
 
   useEffect(() => {
     if (!receitptSelector.view) {
-      dispatch(payableDashboardView("card"));
+      dispatch(receiptsEntrySetView("card"));
     }
   }, [receitptSelector.view, dispatch]);
 
@@ -313,7 +312,7 @@ export default function PayableListScreen({ page }) {
                 exclusive
                 onChange={(e, newValue) => {
                   if (newValue !== null)
-                    dispatch(payableDashboardView(newValue));
+                    dispatch(receiptsEntrySetView(newValue));
                 }}
                 sx={{
                   borderRadius: "10px",
@@ -376,7 +375,7 @@ export default function PayableListScreen({ page }) {
             loading={isLoading || isFetching}
             sortModel={receitptSelector.sortModel}
             onSortModelChange={(sortModel) =>
-              dispatch(payableSetSortModal(sortModel))
+              dispatch(setSortModel(sortModel))
             }
             storageKey="PayableListDataGrid"
           />
@@ -400,7 +399,7 @@ export default function PayableListScreen({ page }) {
         )}
       </Card>
       <DeleteDialog
-        source={modal?.data?.deleteName?.receivableRefNo}
+        source={modal?.data?.deleteName?.receiptRefNo}
         handleClose={handleClose}
         handleDelete={handleDelete}
         handleOpen={modal.open && modal.type === "delete"}
@@ -424,7 +423,7 @@ export default function PayableListScreen({ page }) {
 
             <AuditTimeLine
               id={modal.data.id}
-              page="receipts"
+              page="receivable/receipt"
               service={menuConfigUrl.receipts}
             />
           </Box>

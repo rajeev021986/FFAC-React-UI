@@ -55,6 +55,9 @@ import { useSelector } from "react-redux";
 import getFirstError from "../../components/common/FieldToastError";
 import { GetAutoCompleteDataWithLoader } from "../../components/utils/GetAutoCompleteDataWithLoader";
 import { StyledDataGrid } from "../../components/common/Grid/styles";
+import { useGridApiRef } from "@mui/x-data-grid";
+import FormAutoComplete from "../../components/common/AutoComplete/FormAutoComplete";
+import ThemedGridReceipt from "../../components/common/Grid/ThemeGridReceipt";
 
 export default function ReceiptsEntryForm({
   initialValues,
@@ -63,6 +66,8 @@ export default function ReceiptsEntryForm({
   getUserId,
 }) {
   const location = useLocation();
+  const { state } = useLocation();
+
   const primaryColor = useSelector((state) => state.dashboard.theme);
   const [loading, setLoading] = useState(false);
 
@@ -106,7 +111,7 @@ export default function ReceiptsEntryForm({
   };
 
   const [apiCalled, setApiCalled] = useState(false);
-
+  const apiRef = useGridApiRef();
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
@@ -116,7 +121,14 @@ export default function ReceiptsEntryForm({
       if (isLoading) {
         return;
       }
-      values.details = getSelectedRows();
+
+      const selectedEditedRows = receiptsData.body.details
+        .filter((row) => selectedIds.includes(row.uiId))
+        .map((row) => {
+          const edits = editedRows[row.uiId];
+          return edits ? { ...row, ...edits } : row;
+        });
+      values.details = selectedEditedRows;
 
       let hasError = false;
       console.log(values, "values");
@@ -133,7 +145,7 @@ export default function ReceiptsEntryForm({
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
             });
-            nav("/app/documentation/jobEntry");
+            nav("/app/accounts/operations/receipts");
           } else {
             toast.custom(<CustomToast message={message} toast="error" />, {
               duration: 1000, // 2 seconds
@@ -174,7 +186,7 @@ export default function ReceiptsEntryForm({
             toast.custom(<CustomToast message={message} toast="success" />, {
               closeButton: false,
             });
-            nav(-1);
+            nav("/app/accounts/operations/receipts");
           } else {
             toast.custom(<CustomToast message={message} toast="warn" />, {
               closeButton: false,
@@ -221,6 +233,7 @@ export default function ReceiptsEntryForm({
       upTo &&
       exchangeRate !== null &&
       exchangeRate !== "";
+    // if ((allFilled && state?.initialValues?.id == null) || undefined) {
 
     if (allFilled) {
       const payload = {
@@ -269,6 +282,7 @@ export default function ReceiptsEntryForm({
   }, []);
 
   const [selectedIds, setSelectedIds] = useState([]);
+  console.log(selectedIds, "selectedIds");
 
   const FieldRef = useRef(null);
   useEffect(() => {
@@ -276,11 +290,50 @@ export default function ReceiptsEntryForm({
       FieldRef.current.focus();
     }
   }, []);
+
   const { data: optionsSettingsData } =
     useGetOptionsSettingsQuery("common_settings");
+  const allGridRows =
+    initialValues?.id && initialValues?.details?.length
+      ? initialValues.details
+      : receiptsData?.body?.details || [];
+
+  // const handleCheckboxChange = (id) => {
+  //   setSelectedIds((prevSelected) => {
+  //     const isSelected = prevSelected.includes(id);
+  //     let updatedSelected;
+
+  //     const editedRow = editedRows?.[id];
+  //     const sourceRow = allGridRows.find((row) => row.uiId === id);
+
+  //     // Use edited value if available, otherwise fallback to source
+  //     const recAmount = parseFloat(editedRow?.amount);
+  //     console.log(recAmount, "recAmount");
+
+  //     const currentTotal = parseFloat(formik.values.recAmount || 0) || 0;
+  //     console.log(currentTotal, "currentTota");
+
+  //     if (isSelected) {
+  //       // Deselection: subtract the amount
+  //       updatedSelected = prevSelected.filter((item) => item !== id);
+  //       const newTotal = currentTotal - (isNaN(recAmount) ? 0 : recAmount);
+  //       formik.setFieldValue("recAmount", newTotal.toFixed(2));
+  //     } else {
+  //       // Selection: add the amount
+  //       updatedSelected = [...prevSelected, id];
+  //       const newTotal = currentTotal + (isNaN(recAmount) ? 0 : recAmount);
+  //       console.log(newTotal,"newTotal")
+  //       formik.setFieldValue("recAmount", newTotal.toFixed(2));
+  //     }
+
+  //     return updatedSelected;
+  //   });
+  // };
   const handleCheckboxChange = (id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    setSelectedIds((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((item) => item !== id)
+        : [...prevSelected, id]
     );
   };
 
@@ -327,15 +380,36 @@ export default function ReceiptsEntryForm({
   };
 
   const [editedRows, setEditedRows] = useState({});
+  console.log(editedRows, "editedRows");
   const getSelectedRows = () => {
     const allRows = receiptsData?.body?.details || [];
     return selectedIds
       .map((id) => {
-        return editedRows[id] || allRows.find((row) => row.uiId === id);
+        return editedRows[id] || allRows.find((row) => row.uiId == id);
       })
       .filter(Boolean);
   };
+  console.log(getSelectedRows(), "selectedRow");
 
+  useEffect(() => {
+    let totalRecAmount = 0;
+    let totalWithholding = 0;
+
+    selectedIds.forEach((id) => {
+      const editedRow = editedRows?.[id];
+      const sourceRow = allGridRows.find((row) => row.uiId === id);
+      console.log(editedRow, "editedRow");
+
+      const recAmount = parseFloat(editedRow?.amount);
+      const withHolding = parseFloat(editedRow?.withHoldingAmount);
+
+      totalRecAmount += isNaN(recAmount) ? 0 : recAmount;
+      totalWithholding += isNaN(withHolding) ? 0 : withHolding;
+    });
+
+    formik.setFieldValue("recAmount", totalRecAmount.toFixed(2));
+    formik.setFieldValue("withHoldingTaxRecov", totalWithholding.toFixed(2));
+  }, [editedRows, selectedIds]);
 
   const receiptsEntryColumns = [
     {
@@ -347,13 +421,15 @@ export default function ReceiptsEntryForm({
       renderCell: (params) => (
         <input
           type="checkbox"
-          style={{ cursor: "pointer" }}
           checked={selectedIds.includes(params.row.uiId)}
-          onChange={() => {
-            gridRef.current?.commitCellChanges();
-            getSelectedRows();
-            handleCheckboxChange(params.row.uiId);
+          onClick={(e) => {
+            e.stopPropagation();
+
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
           }}
+          onChange={() => handleCheckboxChange(params.row.uiId)}
         />
       ),
     },
@@ -574,10 +650,10 @@ export default function ReceiptsEntryForm({
             </Grid> */}
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
               <InputBox
-                label="REC. AMOUNT"
-                id="recAmount"
-                value={formik.values.recAmount}
-                error={formik.errors.recAmount}
+                label="REC.OUTSTANDING AMOUNT."
+                id="recOutstandingAmount"
+                value={formik.values.recOutstandingAmount}
+                error={formik.errors.recOutstandingAmount}
                 onChange={formik.handleChange}
                 disabled={isDisabled}
                 InputProps={{
@@ -705,14 +781,37 @@ export default function ReceiptsEntryForm({
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <SelectBox
+                  {/* <SelectBox
                     label="Bank Name"
                     id="bankName"
                     value={formik.values.bankName}
                     error={formik.errors.bankName}
                     onChange={formik.handleChange}
                     disabled={isDisabled}
-                  />
+                  /> */}
+                  <FormAutoComplete
+                    label="Bank Name"
+                    id="bankId"
+                    suggestionName="bank_name"
+                    idKey="bankId"
+                    nameKey="bankName"
+                    // value={formik.values.bankId}
+                    value={{
+                      bankId: formik.values.bankId,
+                      bankName: formik.values.bankName,
+                    }}
+                    error={formik.errors.bankId}
+                    // onChange={formik.handleChange}
+                    onChange={(selected) => {
+                      formik.setFieldValue("bankId", selected.bankId);
+                      formik.setFieldValue("bankName", selected.bankName);
+                    }}
+                    // disabled={
+                    //   formik.values.paymentType === "Cheque" && !isDisabled
+                    //     ? false
+                    //     : true
+                    // }
+                  ></FormAutoComplete>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={2} xl={2}>
@@ -778,17 +877,21 @@ export default function ReceiptsEntryForm({
               borderRadius: "10px",
             }}
           >
-            <ThemedGrid
+            <ThemedGridReceipt
               uniqueId="id"
+              setEditedRows={setEditedRows}
               columns={receiptsEntryColumns}
               count={receiptsData?.body?.totalElements || 0}
               handlePage={handlePage}
               getRowId={(row) => row?.uiId}
-              setEditedRows={setEditedRows}
               editedRows={editedRows}
-              data={receiptsData?.body?.details || []}
+              data={
+                state?.initialValues?.id
+                  ? initialValues?.details
+                  : receiptsData?.body?.details
+              }
+              // data={receiptsData?.body?.details || []}
               columnVisibility={{}}
-             
               columnVisibilityHandler={() => {}}
               paginationModel={receiptsData.pagination}
               loading={isLoading}

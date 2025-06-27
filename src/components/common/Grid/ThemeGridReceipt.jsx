@@ -1,10 +1,10 @@
 // mui components
 import { Paper, Pagination, Box } from "@mui/material";
 import { StyledDataGrid } from "./styles";
-import { GridToolbarColumnsButton } from "@mui/x-data-grid";
+import { GridToolbarColumnsButton, useGridApiRef } from "@mui/x-data-grid";
 import { StatusChip } from "../../utils/statusChip";
-import { useEffect, useState } from "react";
-const ThemedGridReceipt = (props) => {
+import { useEffect, useImperativeHandle, useMemo, useState } from "react";
+const ThemedGrid = (props) => {
   const {
     columns,
     count,
@@ -19,6 +19,8 @@ const ThemedGridReceipt = (props) => {
     uniqueId,
     hideColumns,
     storageKey,
+    receiptsData,
+    setEditedRows,
     ...rest
   } = props;
   const LOCAL_STORAGE_KEY = `themedGrid_${storageKey || "default"}`;
@@ -33,26 +35,42 @@ const ThemedGridReceipt = (props) => {
       }
     }
   }, []);
+  const [editingCell, setEditingCell] = useState({ id: null, field: null });
+  const [editingRowId, setEditingRowId] = useState(null);
+  const apiRef = useGridApiRef();
   const handleColumnVisibilityChange = (newModel) => {
     setColumnVisibilityModel(newModel);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newModel));
   };
- 
+
   const handleDate = (date) => {
     return date.split("T")[0];
   };
-  const gridData = data?.map((obj) => {
-    return {
-      ...obj,
-      modifiedDate: obj?.modifiedDate
-        ? handleDate(obj?.modifiedDate)
-        : obj?.modifiedDate,
-      createdDate: obj?.createdDate
-        ? handleDate(obj?.createdDate)
-        : obj?.createdDate,
-    };
-  });
- 
+  // new changes
+
+  // const gridData = data?.map((obj) => {
+  //   return {
+  //     ...obj,
+  //     modifiedDate: obj?.modifiedDate
+  //       ? handleDate(obj?.modifiedDate)
+  //       : obj?.modifiedDate,
+  //     createdDate: obj?.createdDate
+  //       ? handleDate(obj?.createdDate)
+  //       : obj?.createdDate,
+  //   };
+  // });
+  const gridData = useMemo(() => {
+    return data?.map((row) => {
+      const edits = rest.editedRows?.[row[uniqueId]] || {};
+      return {
+        ...row,
+        ...edits,
+      };
+    });
+  }, [data, rest.editedRows, uniqueId]);
+
+  console.log(gridData, "gridData");
+
   let modifiedColumns = columns.map((a) => {
     if (a.field === "status") {
       return {
@@ -70,7 +88,7 @@ const ThemedGridReceipt = (props) => {
         field: "isDoc",
         headerName: "Document",
         width: 150,
- 
+
         headerAlign: "center",
         align: "center",
         renderCell: (params) => {
@@ -98,7 +116,7 @@ const ThemedGridReceipt = (props) => {
       };
     }
   });
- 
+
   return (
     <Paper
       sx={{
@@ -119,6 +137,49 @@ const ThemedGridReceipt = (props) => {
         //     handleClick(e);
         //   }
         // }}
+        // onCellEditStart={(params) => {
+        //   setEditingCell({ id: params.id, field: params.field });
+        // }}
+        // onCellEditStop={() => {
+        //   setEditingCell(null);
+        // }}
+        editMode="cell"
+        apiRef={apiRef}
+        experimentalFeatures={{ newEditingApi: true }}
+        processRowUpdate={(newRow) => {
+          setEditedRows((prev) => ({
+            ...prev,
+            [newRow.uiId]: {
+              ...(prev[newRow.uiId] || {}),
+              ...newRow,
+            },
+          }));
+          return newRow;
+        }}
+        onRowEditStop={(params, event) => {
+          if (event.reason === "rowFocusOut") {
+            event.defaultMuiPrevented = true;
+          }
+        }}
+        onCellEditStart={(params) => {
+          if (
+            editingCell.id !== null &&
+            (editingCell.id !== params.id || editingCell.field !== params.field)
+          ) {
+            // ✅ stop previous cell edit safely
+            apiRef.current.stopCellEditMode({
+              id: editingCell.id,
+              field: editingCell.field,
+            });
+          }
+          setEditingCell({ id: params.id, field: params.field });
+        }}
+        onCellEditStop={() => {
+          setEditingCell({ id: null, field: null });
+        }}
+        onProcessRowUpdateError={(error) => {
+          console.error("❌ Row update error:", error);
+        }}
         pagination={!!paginationModel}
         paginationMode={paginationModel ? "server" : null}
         // sortingMode="server"
@@ -152,7 +213,5 @@ const ThemedGridReceipt = (props) => {
     </Paper>
   );
 };
- 
-export default ThemedGridReceipt;
- 
- 
+
+export default ThemedGrid;

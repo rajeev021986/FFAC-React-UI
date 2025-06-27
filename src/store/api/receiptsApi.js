@@ -175,7 +175,7 @@ export const receiptsApi = createApi({
     deleteReceipts: builder.mutation({
       query: (id) => {
         return {
-          url: `${menuConfigUrl.receipts}/receipts/${id}`,
+          url: `${menuConfigUrl.receipts}/receivable/receipt/${id}`,
           method: "DELETE",
           headers: getAppHeaders(),
         };
