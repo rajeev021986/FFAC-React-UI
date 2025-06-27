@@ -19,7 +19,7 @@ export const GetAutoCompleteDataWithCountry = async (
     const response = await ApiManager.fetchAutoCompleteData(searchText, apiKey);
     const data = await response.body;
     return data.map((item) => ({
-      label: `${item.country} - ${item.port_name}`,
+      label: `${item.country}`,
       value: item.id,
       fullData: item,
     }));

@@ -27,6 +27,7 @@ function FormAutoCompleteWithLoader(props) {
     nameKey,
     sendLabelOnly,
     className,
+    apitype
   } = props;
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -34,16 +35,6 @@ function FormAutoCompleteWithLoader(props) {
   const [inputValue, setInputValue] = useState("");
   console.log(suggestionName,"suggestionName")
   const debounceValue = useDebounce(inputValue, 800); // Custom Hook
-  const suggestionRef = useRef({
-    suggestionName,
-    id,
-    dataLabel,
-    debounceValue,
-    other,
-  });
-
- 
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +45,8 @@ function FormAutoCompleteWithLoader(props) {
           id,
           dataLabel || suggestionName,
           debounceValue,
-          other || ""
+          other || "",
+          apitype
         );
         const validData = data.filter((item) => item.label?.trim() !== "");
         setOptions(validData);
@@ -67,7 +59,7 @@ function FormAutoCompleteWithLoader(props) {
     };
 
     fetchData();
-  }, [debounceValue, suggestionName, id, dataLabel ]);
+  }, [debounceValue, suggestionName, id, dataLabel]);
 
   const handleInputChange = (event, newValue) => {
     setInputValue(newValue);

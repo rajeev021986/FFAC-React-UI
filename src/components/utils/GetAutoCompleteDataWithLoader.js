@@ -35,8 +35,8 @@ const suggestionName = {
   exchangeRate: "EXCHANGE_RATE",
   exRate: "EXCHANGE_RATE",
   unitTypeReceviable: "CUSTOMER_TARIFF",
-  directIncome: "CHARGE",
-  directExpense: "CHARGE",
+  directIncome: "INCOME_CHARGE",
+  directExpense: "EXPENSE_CHARGE",
 };
 
 export const GetAutoCompleteDataWithLoader = async (
@@ -44,13 +44,14 @@ export const GetAutoCompleteDataWithLoader = async (
   inputId,
   dataLabel,
   searchText,
-  other
+  other,
+  apitype
 ) => {
-  inputId = suggestionName[inputId];
+ const Type = apitype || suggestionName[inputId];
   try {
     const response = await ApiManager.fetchAutoCompleteData(
       searchText,
-      inputId,
+      Type,
       other || ""
     );
     const data = await response.body;

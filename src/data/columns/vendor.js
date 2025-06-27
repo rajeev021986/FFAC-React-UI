@@ -83,7 +83,7 @@ export const VENDOR_COLUMNS = [
     },
     {
         field: 'action',
-        headerName: 'Asction',
+        headerName: 'Action',
         width: 130,
         headerAlign: 'center',
         align: 'center',

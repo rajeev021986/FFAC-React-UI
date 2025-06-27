@@ -38,15 +38,15 @@ const suggestionName = {
   vendorName: "VENDOR",
   bankName: "BANK",
   bankId: "BANK",
-  directIncome: "CHARGE",
-  directExpense: "CHARGE",
+  directIncome: "INCOME_CHARGE",
+  directExpense: "EXPENSE_CHARGE",
   mappedCharge: "CHARGE",
 };
 
-export const GetAutoCompleteData = async (dataKey, inputId, dataLabel) => {
-  inputId = suggestionName[inputId];
+export const GetAutoCompleteData = async (dataKey, inputId, dataLabel,apitype) => {
+ const Type = apitype || suggestionName[inputId];
   try {
-    const response = await ApiManager.fetchAutoCompleteData("", inputId);
+    const response = await ApiManager.fetchAutoCompleteData("", Type);
     const data = await response.body;
     let uniqueSuggestions = [];
     uniqueSuggestions = data.filter(

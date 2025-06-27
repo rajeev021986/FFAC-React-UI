@@ -16,7 +16,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 import DebitNoteListData from "../AddDetails/DebitNoteList";
 
-export default function AddDebitAndInvoice({ formik }) {
+export default function AddDebitAndInvoice({ formik, isViewDisabled }) {
+  console.log("isViewDisabled",isViewDisabled)
   const invoiceTypeRef = useRef(null);
   const payableRef = useRef(null);
   const { data: jobSettingData } = useGetOptionsSettingsQuery("job_settings");
@@ -62,8 +63,9 @@ export default function AddDebitAndInvoice({ formik }) {
     }
   }, [optionsSettingsData, customerSettingsData, payableSettingData]);
 
+
   useEffect(() => {
-    if (formik.values?.currency !== "USD") {
+    if (formik.values?.currency === "INR") {
       formik.setFieldValue("exchangeRate", "1");
     }
   }, [formik.values?.currency]);
@@ -223,7 +225,9 @@ export default function AddDebitAndInvoice({ formik }) {
         <IconButton
           disabled={
             (!formik.values?.jobNo && !formik.values.exchangeRate) ||
-            !formik.values?.currency
+            !formik.values?.currency ||
+            isViewDisabled ||
+            formik.values?.statusCode === -3
           }
           color="white"
           onClick={handleTogglePayEntry}
@@ -247,21 +251,23 @@ export default function AddDebitAndInvoice({ formik }) {
           >
             <EditIcon
               style={{
-                cursor: !isEditDisabled ? "not-allowed" : "pointer",
-                color: !isEditDisabled ? "#ccc" : "#166ee0",
-                opacity: !isEditDisabled ? 0.5 : 1,
+                cursor:
+                  !isEditDisabled || isViewDisabled || formik.values?.statusCode === -3 ? "not-allowed" : "pointer",
+                color: !isEditDisabled || isViewDisabled || formik.values?.statusCode === -3 ? "#ccc" : "#166ee0",
+                opacity: !isEditDisabled || isViewDisabled || formik.values?.statusCode === -3 ? 0.5 : 1,
               }}
               onClick={() => {
-                if (isEditDisabled) handleEditClick(row);
+                if (isEditDisabled || isViewDisabled || formik.values?.statusCode === -3) handleEditClick(row);
               }}
             />
             <Delete
               style={{
-                cursor: "pointer",
-                color: "red",
+                cursor: isViewDisabled || formik.values?.statusCode === -3 ? "not-allowed" : "pointer",
+                color: isViewDisabled || formik.values?.statusCode === -3? "#ccc" : "red",
+                opacity: isViewDisabled || formik.values?.statusCode === -3 ? 0.5 : 1,
               }}
               onClick={() => {
-                handleDeleteEntry(row.id);
+                if (!isViewDisabled || formik.values?.statusCode === -3) handleDeleteEntry(row.id);
               }}
             />
           </div>
@@ -300,6 +306,7 @@ export default function AddDebitAndInvoice({ formik }) {
                   disabled={isDisabled}
                   chargesData={chargesData}
                   DEBIT_INVOICE_COLUMNS={DEBIT_INVOICE_COLUMNS}
+                  isViewDisabled={isViewDisabled}
                 />
               </Box>
             </Box>

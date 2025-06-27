@@ -25,15 +25,20 @@ const ConsigneeSetting = () => {
     refetch,
   } = useGetOptionsSettingsQuery("consignee_settings");
   const [documentType, setDocumentType] = useState([]);
+  const [itemType, setItemType] = useState([]);
   const [isLoadingsave, setIsLoading] = useState(false);
 
   useEffect(() => {
     setDocumentType(data?.body.documentType || []);
+    setItemType(data?.body.itemType || []);
   }, [data, geterror]);
 
   const Postdata = async () => {
     const filteredData = {
       documentType: documentType.filter(
+        (item) => !item.value.includes("Type the")
+      ),
+      itemType: itemType.filter(
         (item) => !item.value.includes("Type the")
       ),
     };
@@ -81,6 +86,11 @@ const ConsigneeSetting = () => {
             value={documentType}
             setvalue={setDocumentType}
             title="Document Type"
+          />
+          <GlobalDrrpdownSetting
+            value={itemType}
+            setvalue={setItemType}
+            title="Item Type"
           />
         </Grid>
       )}

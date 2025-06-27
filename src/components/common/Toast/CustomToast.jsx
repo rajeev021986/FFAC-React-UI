@@ -10,6 +10,8 @@ function CustomToast({ message, toast }) {
       ? { ...styles.warn }
       : toast === "success"
       ? { ...styles.success }
+      :toast === "info" 
+      ? { ...styles.info }
       : { ...styles.error };
   return (
     <div
@@ -81,6 +83,10 @@ const styles = {
   success: {
     backgroundColor: "#e9f7ef",
     border: "1px solid #27ae60",
+  },
+  info: {
+    backgroundColor: "#e8f4fd", // light blue background
+    border: "1px solid #3498db", // blue border
   },
 };
 

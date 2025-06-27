@@ -39,10 +39,8 @@ export default function SubSections({
     approve: false,
     reject: false,
   });
-  const [dropdownData, setDropdownData] = useState({});
   const [value, setValue] = React.useState("1");
   const [rejectError, setRejectError] = useState(false);
-  const [chargesData, setChargesData] = useState([]);
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",
@@ -76,7 +74,19 @@ export default function SubSections({
           }
         );
       }
-
+      if (!payload.values?.customerId) {
+        return toast.custom(
+          <CustomToast
+            message={
+              "Please add Customer Name to create TaxInvoice/Debit Note"
+            }
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
+      }
       if (
         (values.currency === "USD" && values.exchangeRate === "1") ||
         !values.exchangeRate
@@ -158,24 +168,9 @@ export default function SubSections({
     getFirstError(formik.errors);
   }, [formik.errors]);
 
-  const handleFetchPayable = () => {
-    const apiPayableData = formik?.values?.paybleDetails || [];
-    const appendData = [...apiPayableData].reduce((acc, pay) => {
-      if (!acc.some((n) => n.id === pay.id)) {
-        acc.push(pay);
-      }
-      return acc;
-    }, []);
-    setChargesData(appendData);
-  };
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  useEffect(() => {
-    handleFetchPayable();
-  }, [formik?.values?.chargesData]);
 
   useEffect(() => {
     if (formik?.values?.currency && formik?.values?.exchangeRate) {
@@ -188,7 +183,18 @@ export default function SubSections({
   }, [formik?.values?.currency, formik?.values?.exchangeRate]);
 
   const handleApproveRequest = async () => {
-    // setRejectError(false);
+    if (formik.values.details.length === 0) {
+      toast.custom(
+        <CustomToast
+          message="Please add atleast one entry to approve TaxInvoice/Debit Note"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+      return;
+    }
     try {
       setLoaderApprove((prevState) => ({
         ...prevState,
@@ -199,10 +205,8 @@ export default function SubSections({
         formik.values.id,
         "RECEIVABLE_ENTRY"
       );
-      console.log("response.message", response);
       const message = response.message;
       nav("/app/accounts/operations/approveReceivable");
-
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
       });
@@ -225,74 +229,102 @@ export default function SubSections({
   };
 
   const handleReject = async () => {
+    if (!formik.values.rejectRemarks) {
+      setRejectError(true);
+      toast.custom(
+        <CustomToast message="Reject remarks to be filled!" toast="warn" />,
+        {
+          closeButton: false,
+        }
+      );
+      return;
+    }
+    if (formik.values.details.length === 0) {
+      setRejectError(true);
+      toast.custom(
+        <CustomToast
+          message="Please add atleast one entry to reject TaxInvoice/Debit Note"
+          toast="error"
+        />,
+        {
+          closeButton: false,
+        }
+      );
+      return;
+    }
     try {
       const response = await ApiManager.reciveableRejectHandler(
         formik.values.id,
-        "RECEIVABLE_ENTRY"
+        "RECEIVABLE_ENTRY",
+        formik?.values?.rejectRemarks
       );
       const message = response.message;
       toast.custom(<CustomToast message={message} toast="success" />, {
         closeButton: false,
       });
+      nav("/app/accounts/operations/receivableEntry");
     } catch (error) {
       toast.custom(<CustomToast message="Failed to reject." toast="error" />, {
         closeButton: false,
       });
     }
   };
+
   return (
     <>
       <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            {type !== "edit" ? (
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="Receivable Details"
-                  value="1"
-                  sx={{
-                    textTransform: "capitalize",
-                    minHeight: "50px",
-                  }}
-                  icon={<EditIconForHeader />}
-                  iconPosition="start"
-                />
-              </TabList>
-            ) : (
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="Job Entry Details"
-                  value="1"
-                  icon={<EditIconForHeader />}
-                  iconPosition="start"
-                  sx={{
-                    textTransform: "capitalize",
-                    minHeight: "50px",
-                    fontSize: { xs: "0.8rem", sm: "1.125rem" },
-                    padding: { xs: "5px", sm: "10px 16px" },
-                  }}
-                />
-                <Tab
-                  label="Audit Logs"
-                  value="2"
-                  icon={<AuditIcon />}
-                  iconPosition="start"
-                  sx={{
-                    textTransform: "capitalize",
-                    minHeight: "50px",
-                    fontSize: { xs: "0.8rem", sm: "1.125rem" },
-                    padding: { xs: "5px", sm: "10px 16px" },
-                  }}
-                />
-              </TabList>
-            )}
-          </Box>
+          {page !== "approveReceivableEntry" && (
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              {type !== "edit" ? (
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <TabList
+                    label="Receivable Details"
+                    value="1"
+                    sx={{
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                    }}
+                    icon={<EditIconForHeader />}
+                    iconPosition="start"
+                  />
+                </TabList>
+              ) : (
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab
+                    label="Receivable Details"
+                    value="1"
+                    icon={<EditIconForHeader />}
+                    iconPosition="start"
+                    sx={{
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                      fontSize: { xs: "0.8rem", sm: "1.125rem" },
+                      padding: { xs: "5px", sm: "10px 16px" },
+                    }}
+                  />
+                  <Tab
+                    label="Audit Logs"
+                    value="2"
+                    icon={<AuditIcon />}
+                    iconPosition="start"
+                    sx={{
+                      textTransform: "capitalize",
+                      minHeight: "50px",
+                      fontSize: { xs: "0.8rem", sm: "1.125rem" },
+                      padding: { xs: "5px", sm: "10px 16px" },
+                    }}
+                  />
+                </TabList>
+              )}
+            </Box>
+          )}
 
           <TabPanel value="1" sx={{ padding: 0 }}>
             <Box sx={{ width: "100%" }}>
@@ -302,15 +334,13 @@ export default function SubSections({
                   padding: 1,
                 }}
               >
-                <JobProfitAndLoss formik={formik} />
-                <AddDebitAndInvoice
-                  formik={formik}
-                  dropdownData={dropdownData}
-                  disabled={false}
-                />
+                {/* {page !== "approveReceivableEntry" && ( */}
+                <JobProfitAndLoss formik={formik} page={page} />
+                {/* )} */}
+                <AddDebitAndInvoice formik={formik} isViewDisabled={false} />
               </Box>
 
-              {/* <Box sx={{ gap: "10px", padding: "15px" }}>
+              <Box sx={{ gap: "10px", padding: "15px" }}>
                 {formik?.values?.status?.toLowerCase() === "rejected" ||
                 page == "approveReceivableEntry" ? (
                   <Grid item xs={12} paddingTop={1}>
@@ -325,7 +355,7 @@ export default function SubSections({
                           : formik.errors.rejectRemarks
                       }
                       onChange={formik.handleChange}
-                      // disabled={page === "payable" ? true : false}
+                      disabled={page === "receivableEntry" ? true : false}
                       multiline
                       rows={4}
                       variant="outlined"
@@ -340,7 +370,7 @@ export default function SubSections({
                 ) : (
                   <></>
                 )}
-              </Box> */}
+              </Box>
             </Box>
             {page == "receivableEntry" ? (
               <Box sx={{ display: "flex", gap: "10px", padding: "15px" }}>
@@ -387,6 +417,7 @@ export default function SubSections({
                             color: "white !important",
                           }}
                           // disabled={isDisabled}
+                          disabled={formik.values?.statusCode === -3}
                         >
                           {isUpdateLoading && (
                             <CircularProgress size={20} color="white" />
@@ -437,13 +468,11 @@ export default function SubSections({
                         Update TaxInvoice/Debit Note
                       </ThemeButton>
 
-                      {/* <ThemeButton
+                      <ThemeButton
                         sx={{
                           fontWeight: "500",
                           backgroundColor: "red",
                           color: "white !important",
-                          // visibility:
-                          //   viewPage === "editForm" ? "hidden" : "visible",
                         }}
                         onClick={() => handleReject()}
                       >
@@ -451,7 +480,7 @@ export default function SubSections({
                           <CircularProgress size={20} color="white" />
                         )}
                         Reject
-                      </ThemeButton> */}
+                      </ThemeButton>
 
                       <ThemeButton
                         sx={{

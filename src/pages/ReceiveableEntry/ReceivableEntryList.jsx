@@ -49,6 +49,7 @@ import AddNewReceivableModal from "./AddNewReceivableModal";
 import CancelModalApprove from "../JobEntry/CancelModalApprove";
 import ApprovePayableModal from "../payable/AddPayableForm/ApprovePayableModal";
 import AddRejectedRemarks from "../JobEntry/RejectedRemarks";
+import RecieveableViewModal from "./ViewReceivable/ReceveableViewModal";
 
 export default function ReceivableEntryList({ page }) {
   const location = useLocation();
@@ -263,7 +264,7 @@ export default function ReceivableEntryList({ page }) {
   }, [receivableEntrySelector.view, dispatch]);
 
   return (
-    <Box sx={{ backgroundColor: "white.main" }}>
+    <Box  sx={{ backgroundColor: "white.main" }}>
       <ScreenToolbar
         leftComps={<ThemedBreadcrumb />}
         rightComps={
@@ -324,11 +325,11 @@ export default function ReceivableEntryList({ page }) {
           </>
         }
       />
-      <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+      <Card sx={{ borderWidth: 1, borderColor: "border.main", height: "calc(100vh - 150px)", overflow: "auto" }}>
         <CardHeader
           sx={{ padding: "8px" }}
           title={
-            <Stack direction="row" justifyContent="space-between">
+            <Stack  direction="row" justifyContent="space-between">
               <Box sx={{ display: "flex", gap: 2 }}>
                 <GridSearchInput
                   filters={receivableEntrySelector?.formData}
@@ -468,6 +469,16 @@ export default function ReceivableEntryList({ page }) {
           open={modal.open}
           onClose={handleClose}
           data={modal.data}
+        />
+      )}
+
+      {modal.open && modal.type === "document" && (
+        <RecieveableViewModal
+          open={modal.open}
+          data={modal.data}
+          refetch={refetch}
+          onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+          viewType={"view"}
         />
       )}
     </Box>

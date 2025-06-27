@@ -24,6 +24,7 @@ import { formatIndianCurrency } from "../../../components/utils/utils";
 import { GetAutoCompleteDataWithLoader } from "../../../components/utils/GetAutoCompleteDataWithLoader";
 import useDebounce from "../../../hooks/useDebounce";
 import { useFetchVatAndHoldingQuery } from "../../../store/api/settingAuditAPI";
+import FormAutoComplete from "../../../components/common/AutoComplete/FormAutoComplete";
 
 const modalStyle = {
   position: "absolute",
@@ -127,7 +128,6 @@ export default function AddPayableEntryModal({
       return updatedEntry;
     });
   };
-
   const handleSubmit = async () => {
     try {
       await modalValidationSchema.validate(payableEntry, { abortEarly: false });
@@ -332,20 +332,11 @@ export default function AddPayableEntryModal({
             />
           </Grid>
           <Grid item xs={12} lg={8}>
-            {/* <FormAutoCompleteWithLoader
+            <FormAutoComplete
               label="Charge Name"
               id="chargeId"
               suggestionName="charge_name"
-              value={{
-                chargeId: payableEntry.chargeId,
-                chargeName: payableEntry.chargeName,
-              }}
-              error={errors.chargeName}
-            /> */}
-            <FormAutoCompleteWithLoader
-              label="Charge Name"
-              id="chargeId"
-              suggestionName="charge_name"
+              apitype="EXPENSE_CHARGE"
               value={{
                 chargeId: payableEntry.chargeId,
                 chargeName: payableEntry.chargeName,
@@ -354,8 +345,41 @@ export default function AddPayableEntryModal({
               idKey="chargeId"
               nameKey="chargeName"
               onChange={(selected) => {
-                handleChange("chargeId", selected.chargeId);
-                handleChange("chargeName", selected.chargeName);
+                if (selected?.chargeId) {
+                  handleChange("chargeId", selected.chargeId);
+                  handleChange("chargeName", selected.chargeName);
+                  //Automatically set VAT Applicable based on `vat_applicable` from fullData
+                  const vatValueFromCharge = selected?.fullData?.vat_applicable;
+
+                  if (vatValueFromCharge?.toUpperCase() === "NO") {
+                    const noOption =
+                      vatAndHoldingTaxSettingData?.body?.vatSettings.find(
+                        (opt) => opt.value.toUpperCase() === "NO"
+                      );
+                    if (noOption) {
+                      handleChange("vatApplicable", noOption.value);
+                    }
+                  } else {
+                    const defaultVat =
+                      vatAndHoldingTaxSettingData?.body?.vatSettings?.[0];
+                    if (defaultVat) {
+                      handleChange("vatApplicable", defaultVat.value);
+                    }
+                  }
+                } else {
+                  //  Handle clearing of Charge Name
+                  handleChange("chargeId", "");
+                  handleChange("chargeName", "");
+
+                  // Set VAT Applicable to "No"
+                  const noOption =
+                    vatAndHoldingTaxSettingData?.body?.vatSettings.find(
+                      (opt) => opt.value.toUpperCase() === "NO"
+                    );
+                  if (noOption) {
+                    handleChange("vatApplicable", noOption.value);
+                  }
+                }
               }}
             />
           </Grid>
@@ -475,6 +499,7 @@ export default function AddPayableEntryModal({
               id="vatApplicable"
               options={vatAndHoldingTaxSettingData?.body?.vatSettings}
               value={payableEntry.vatApplicable}
+              disabled={true}
               // error={formik.errors.vatApplicable}
               error={errors.vatApplicable}
               onChange={(e) => handleChange("vatApplicable", e.target.value)}

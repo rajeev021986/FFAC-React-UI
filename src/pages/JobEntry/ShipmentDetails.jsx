@@ -65,7 +65,6 @@ export default function ShipmentDetails({ formik }) {
 
     fetchData();
   }, [optionsSettingsData?.body?.currencyType]);
-
   return (
     <Box sx={{ width: "100%", typography: "body1", margin: 0, padding: 0 }}>
       <Grid container sx={{ margin: 0, padding: 0, paddingRight: 1 }}>

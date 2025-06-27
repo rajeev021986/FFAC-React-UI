@@ -43,35 +43,37 @@ export default function ReceiveableEntryDetails({ page }) {
     type: getDataFormParams?.type || "debit_note",
     status: "",
     statusCode: 0,
+    rejectRemarks: ""
   });
-
+  const mapResponseToInitialValues = (data = {}) => ({
+    id: data.id || "",
+    jobId: data.jobId || "",
+    consigneeName: data.consigneeName || "",
+    creditCost: data.creditCost || 0,
+    currency: data.currency || "",
+    customerName: data.customerName || "",
+    customerId: data.customerId || "",
+    debitCost: data.debitCost || 0,
+    exchangeRate: data.exchangeRate || "",
+    jobNo: data.jobNo || job_number,
+    netCost: data.netCost || "",
+    paybleRefNo: data.paybleRefNo || "",
+    profitLoss: data.profitLoss || 0,
+    totalRevenue: data.totalRevenue || 0,
+    type: data.type || getDataFormParams?.type,
+    containerTypeDTO: data.containerTypeDTO || [],
+    costDetails: data.costDetails || [],
+    details: data?.receivableDetails || [],
+    status: data?.status || "",
+    statusCode: data?.statusCode || 0,
+    amount: data?.amount || 0,
+    vatAmount: data?.vatAmount || 0,
+    totalAmount: data?.totalAmount || 0,
+    createdDate: data?.createdDate || "",
+    receivableRefNo: data?.receivableRefNo || "",
+    rejectRemarks: data?.rejectRemarks || ""
+  });
   useEffect(() => {
-    const mapResponseToInitialValues = (data = {}) => ({
-      id: data.id || "",
-      jobId: data.jobId || "",
-      consigneeName: data.consigneeName || "",
-      creditCost: data.creditCost || 0,
-      currency: data.currency || "",
-      customerName: data.customerName || "",
-      customerId: data.customerId || "",
-      debitCost: data.debitCost || 0,
-      exchangeRate: data.exchangeRate || "",
-      jobNo: data.jobNo || job_number,
-      netCost: data.netCost || "",
-      paybleRefNo: data.paybleRefNo || "",
-      profitLoss: data.profitLoss || 0,
-      totalRevenue: data.totalRevenue || 0,
-      type: data.type || getDataFormParams?.type, 
-      containerTypeDTO: data.containerTypeDTO || [],
-      costDetails: data.costDetails || [],
-      details: data?.receivableDetails || [],
-      status: data?.status || "",
-      statusCode: data?.statusCode || 0,
-      amount: data?.amount || 0,
-      vatAmount: data?.vatAmount || 0,
-      totalAmount: data?.totalAmount || 0,
-    });
-
     const init = async () => {
       try {
         setLoading(true);
@@ -79,38 +81,73 @@ export default function ReceiveableEntryDetails({ page }) {
         if (
           job_number &&
           getDataFormParams?.currency &&
-          getDataFormParams?.exchangeRate
+          getDataFormParams?.exchangeRate &&
+          !state?.initialValues?.id
         ) {
           response = await ApiManager.getReceivableData({
             job_number,
             currency: getDataFormParams.currency,
             exchangeRate: getDataFormParams.exchangeRate,
           });
-        } else if (state?.initialValues?.id) {
-          response = await ApiManager.getReceivableEntryDeatils(
-            state.initialValues.id
-          );
         }
+
         if (response?.body) {
           setInitialValues(mapResponseToInitialValues(response.body));
         }
       } catch (error) {
-        toast.custom(<CustomToast message={error.message} toast="error" />, {
-          closeButton: false,
-        });
+        toast.custom(
+          <CustomToast
+            message={error.message || "Error while loading the form"}
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
       } finally {
         setLoading(false);
       }
     };
 
     init();
-  }, [
-    job_number,
-    getDataFormParams?.currency,
-    getDataFormParams?.exchangeRate,
-    state?.initialValues?.id,
-  ]);
+  }, [job_number, getDataFormParams?.exchangeRate]);
+  useEffect(() => {
+    const init = async () => {
+      try {
+        setLoading(true);
+        let response;
+        if (
+          state?.initialValues?.id &&
+          !job_number &&
+          !getDataFormParams?.currency &&
+          !getDataFormParams?.exchangeRate
+        ) {
+          response = await ApiManager.getReceivableEntryDeatils(
+            state.initialValues.id
+          );
+        }
 
+        if (response?.body) {
+          setInitialValues(mapResponseToInitialValues(response.body));
+        }
+      } catch (error) {
+        console.log("err", error);
+        toast.custom(
+          <CustomToast
+            message={error.message || "Error while loading the form"}
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    init();
+  }, [state?.initialValues?.id]);
   return (
     <Box sx={{ padding: 0, margin: 0 }}>
       <Stack sx={{ padding: "8px 0px" }}>

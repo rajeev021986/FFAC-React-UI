@@ -3,10 +3,8 @@ import {
   TextField,
   InputAdornment,
   Tooltip,
-  Tab,
   Typography,
   Toolbar,
-  AppBar,
   Grid,
 } from "@mui/material";
 import { Box, IconButton, Stack } from "@mui/material";
@@ -27,28 +25,27 @@ import ThemedGrid from "../../../components/common/Grid/ThemedGrid";
 import muiTextFieldStyles from "../../../components/muiTextFieldStyles";
 import AddPayableEntryModal from "../AddDetails/AddDebitInvoiceModal";
 import useDebounce from "../../../hooks/useDebounce";
-import { TabList } from "@mui/lab";
-import EditIconForHeader from "../../../components/common/commonIcons/EditIcons/EditIconForHeader";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { getTheme } from "../../../config/theme";
-import { useGridSelector } from "@mui/x-data-grid";
-import { useSelector } from "react-redux";
 import InputBox from "../../../components/common/InputBox";
 import FormAutoCompleteWithLoader from "../../../components/common/AutoComplete/FormAutoCompletewithLoader";
-import { useGetOptionsSettingsQuery } from "../../../store/api/settingsApi";
-import ApiManager from "../../../services/ApiManager";
 import SelectBox from "../../../components/common/SelectBox";
 import FormAutoCompleteWithExchangeLoader from "../../../components/common/AutoComplete/FormAutoCompleteWithExchangeLoader";
 import { formatIndianCurrency } from "../../../components/utils/utils";
 import PopupAlert from "../../../components/common/Alert/PopupAlert";
-export default function CostDetails({ formik, selectedInvoiceType }) {
+export default function CostDetails({
+  formik,
+  selectedInvoiceType,
+  mergedCurrencyOptions,
+  page,
+}) {
+  const handleDate = (date) => {
+    return date.split("T")[0];
+  };
   const getButtonText = () => {
     if (selectedInvoiceType === "tax_invoice") return "Add Invoice";
     if (selectedInvoiceType === "debit_note") return "Add Debit";
     return "Add";
   };
-  const { data: optionsSettingsData } =
-    useGetOptionsSettingsQuery("common_settings");
   const [alertConfig, setAlertConfig] = useState({
     open: false,
     title: "",
@@ -64,43 +61,6 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
   });
   const [filteredData, setFilteredData] = useState([]);
   const [searchValue, setsearchValue] = useState("");
-  const [mergedCurrencyOptions, setMergedCurrencyOptions] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await ApiManager.fetchAutoCompleteData(
-          "",
-          "COMPANY_CODE"
-        );
-        const backendData = await response.body;
-
-        // Extract backend currencies safely
-        const backendCurrencies = Array.from(
-          new Set(
-            (backendData || []).map((item) => item.currency).filter(Boolean)
-          )
-        ).map((curr) => ({ id: curr, value: curr }));
-
-        // Get setting currencies safely
-        const settingCurrencies = optionsSettingsData?.body?.currencyType || [];
-
-        // Merge both arrays avoiding duplicates (based on `value`)
-        const mergedCurrencies = [
-          ...backendCurrencies,
-          ...settingCurrencies.filter(
-            (setting) =>
-              !backendCurrencies.some((item) => item.value === setting.value)
-          ),
-        ];
-
-        setMergedCurrencyOptions(mergedCurrencies);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [optionsSettingsData?.body?.currencyType]);
   const [modal, setModal] = React.useState({
     open: false,
     type: "",
@@ -129,10 +89,14 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
         const isPaybleIdInDetails = formik.values.details.some(
           (detail) => detail.paybleDetailId === params.row.paybleDetailId
         );
-        // const isEditDisabled = params.row.paybleDetailId === null;
         return (
           <button
-            disabled={isPaybleIdInDetails || params.row.paybleDetailId === null}
+            disabled={
+              isPaybleIdInDetails ||
+              params.row.paybleDetailId === null ||
+              params?.row?.receivableDetailId !== null ||
+              formik.values?.statusCode === -3
+            }
             onClick={() => {
               if (!isPaybleIdInDetails) handleAdd(params);
             }}
@@ -140,19 +104,25 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
               padding: "6px 12px",
               cursor: "pointer",
               backgroundColor:
-                isPaybleIdInDetails || params.row.paybleDetailId === null
+                isPaybleIdInDetails ||
+                params.row.paybleDetailId === null ||
+                params?.row?.receivableDetailId !== null
                   ? "#bdbdbd"
                   : "#1976d2",
               // color: "#fff",
               border: "none",
               borderRadius: "4px",
               cursor:
-                isPaybleIdInDetails || params.row.paybleDetailId === null
+                isPaybleIdInDetails ||
+                params.row.paybleDetailId === null ||
+                params?.row?.receivableDetailId !== null
                   ? "not-allowed"
                   : "pointer",
               color: "#fff",
               opacity:
-                isPaybleIdInDetails || params.row.paybleDetailId === null
+                isPaybleIdInDetails ||
+                params.row.paybleDetailId === null ||
+                params?.row?.receivableDetailId !== null
                   ? 0.5
                   : 1,
             }}
@@ -279,7 +249,13 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
     //   align: "center",
     // },
   ];
-
+  useEffect(() => {
+    if (formik.values.currency === "INR") {
+      formik.setFieldValue("exchangeRate", "1");
+    } else if (!formik.values.exchangeRate) {
+      formik.setFieldValue("exchangeRate", "");
+    }
+  }, [formik.values.currency]);
   useEffect(() => {
     if (debounceValue.trim()) {
       const lowerSearch = debounceValue.toLowerCase();
@@ -326,97 +302,99 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
   }, [formik.values.details]);
   return (
     <>
-      <Accordion
-        defaultExpanded
-        style={{
-          marginTop: "10px",
-          border: "0px",
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+      {page !== "approveReceivableEntry" && (
+        <Accordion
+          defaultExpanded
           style={{
-            // padding:"0"
-            margin: "0px",
+            marginTop: "10px",
+            border: "0px",
           }}
         >
-          <Toolbar
-            sx={{
-              minHeight: "10px !important",
-              display: "flex",
-              borderRadius: "18px !important",
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            style={{
+              // padding:"0"
+              margin: "0px",
             }}
           >
-            <Box style={{ margin: "0px" }}>
-              <Typography variant="body1">
-                <strong
-                  style={{
-                    color: theme.palette.primary.main,
-                    margin: "0px",
-                  }}
-                >
-                  Cost Details{" "}
-                </strong>
-              </Typography>
-            </Box>
-          </Toolbar>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
-            <CardHeader
-              sx={{ padding: "8px" }}
-              title={
-                <Stack direction="row" justifyContent="space-between">
-                  <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
-                    <TextField
-                      hiddenLabel
-                      id="search"
-                      name="search"
-                      label="Search"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      value={searchValue}
-                      onChange={handleSearchBar}
-                      sx={{ ...muiTextFieldStyles.root }}
-                      InputProps={{
-                        endAdornment: searchValue && (
-                          <InputAdornment position="end">
-                            <IconButton
-                              size="small"
-                              onClick={() => setsearchValue("")}
-                              edge="end"
-                            >
-                              <ClearIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Box>
-                </Stack>
-              }
-            />
-            <ThemedGrid
-              uniqueId="id"
-              columns={costDetailsColumns}
-              count={filteredData.length || 0}
-              handlePage={(model) =>
-                setLocalPagination({
-                  page: model.page,
-                  pageSize: model.pageSize,
-                })
-              }
-              data={paginatedCostDetails || []}
-              columnVisibility={{}}
-              columnVisibilityHandler={() => {}}
-              paginationModel={localPagination}
-              hideColumns={true}
-              storageKey="CostListDataGrid"
-            />
-          </Card>
-        </AccordionDetails>
-      </Accordion>
+            <Toolbar
+              sx={{
+                minHeight: "10px !important",
+                display: "flex",
+                borderRadius: "18px !important",
+              }}
+            >
+              <Box style={{ margin: "0px" }}>
+                <Typography variant="body1">
+                  <strong
+                    style={{
+                      color: theme.palette.primary.main,
+                      margin: "0px",
+                    }}
+                  >
+                    Cost Details{" "}
+                  </strong>
+                </Typography>
+              </Box>
+            </Toolbar>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card sx={{ borderWidth: 1, borderColor: "border.main" }}>
+              <CardHeader
+                sx={{ padding: "8px" }}
+                title={
+                  <Stack direction="row" justifyContent="space-between">
+                    <Box sx={{ display: "flex", gap: 2, marginTop: "10px" }}>
+                      <TextField
+                        hiddenLabel
+                        id="search"
+                        name="search"
+                        label="Search"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        value={searchValue}
+                        onChange={handleSearchBar}
+                        sx={{ ...muiTextFieldStyles.root }}
+                        InputProps={{
+                          endAdornment: searchValue && (
+                            <InputAdornment position="end">
+                              <IconButton
+                                size="small"
+                                onClick={() => setsearchValue("")}
+                                edge="end"
+                              >
+                                <ClearIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Box>
+                  </Stack>
+                }
+              />
+              <ThemedGrid
+                uniqueId="id"
+                columns={costDetailsColumns}
+                count={filteredData.length || 0}
+                handlePage={(model) =>
+                  setLocalPagination({
+                    page: model.page,
+                    pageSize: model.pageSize,
+                  })
+                }
+                data={paginatedCostDetails || []}
+                columnVisibility={{}}
+                columnVisibilityHandler={() => {}}
+                paginationModel={localPagination}
+                hideColumns={true}
+                storageKey="CostListDataGrid"
+              />
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+      )}
       <Box
         sx={{
           display: "flex",
@@ -437,6 +415,10 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                   customerName: formik.values.customerName,
                 }}
                 error={formik.errors.customerId}
+                disabled={
+                  page === "approveReceivableEntry" ||
+                  formik.values?.statusCode === -3
+                }
                 idKey="customerId"
                 nameKey="customerName"
                 onChange={(selected) => {
@@ -463,7 +445,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                   if (!formik.values.currency) {
                     return formik.setFieldValue("currency", value);
                   }
-                  if (value === "USD") {
+                  if (value && value !== "INR") {
                     formik.setFieldValue("exchangeRate", "");
                   }
                   if (formik.values.details?.length === 0)
@@ -477,11 +459,11 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                     confirmText: "Yes",
                     onConfirm: () => {
                       formik.setFieldValue("currency", value);
-                      if (value === "USD") {
+                      if (value && value !== "INR") {
                         formik.setFieldValue("exchangeRate", "");
                       }
                       if (value === "INR") {
-                        formik.setFieldValue("c", "1");
+                        formik.setFieldValue("exchangeRate", "1");
                       }
                       formik.setFieldValue("details", []);
                       setAlertConfig((prev) => ({ ...prev, open: false }));
@@ -523,7 +505,7 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                   suggestionName="usd_exchange"
                   name={true}
                   other={formik.values.currency}
-                disabled={formik.values.id ? true : false}
+                  disabled={formik.values.id ? true : false}
                 />
               )}
             </Grid>
@@ -557,6 +539,32 @@ export default function CostDetails({ formik, selectedInvoiceType }) {
                 disabled
               />
             </Grid>
+
+            {formik?.values?.id && (
+              <>
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <InputBox
+                    label="Created Date"
+                    id="createdDate"
+                    value={handleDate(formik.values.createdDate) || null}
+                    error={formik.errors.createdDate}
+                    onChange={formik.handleChange}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid item xs={12} lg={3} paddingLeft={2} marginTop={2}>
+                  <InputBox
+                    label="Receivable RefNo."
+                    id="receivableRefNo"
+                    value={formik.values.receivableRefNo}
+                    error={formik.errors.receivableRefNo}
+                    onChange={formik.handleChange}
+                    disabled
+                  />
+                </Grid>
+              </>
+            )}
           </Grid>
         </Box>
       </Box>
