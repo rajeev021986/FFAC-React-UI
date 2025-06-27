@@ -74,7 +74,19 @@ export default function SubSections({
           }
         );
       }
-
+      if (!payload.values?.customerId) {
+        return toast.custom(
+          <CustomToast
+            message={
+              "Please add Customer Name to create TaxInvoice/Debit Note"
+            }
+            toast="error"
+          />,
+          {
+            closeButton: false,
+          }
+        );
+      }
       if (
         (values.currency === "USD" && values.exchangeRate === "1") ||
         !values.exchangeRate

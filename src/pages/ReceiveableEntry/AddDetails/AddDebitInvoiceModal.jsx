@@ -120,15 +120,15 @@ export default function AddPayableEntryModal({
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!formik.values.customerName) return;
+      if (!formik.values.jobNo) return;
       setLoading(true);
       try {
         const data = await GetAutoCompleteDataWithLoader(
-          "unit_type",
-          "unitTypeReceviable",
-          "unit_type",
+          "size_type",
+          "unitType",
+          "size_type",
           debounceValue,
-          formik.values.customerName || ""
+          formik.values.jobNo || ""
         );
         const validData = data?.filter((item) => item.label?.trim() !== "");
         const flatExists = validData.some(
@@ -156,7 +156,7 @@ export default function AddPayableEntryModal({
     };
 
     fetchData();
-  }, [debounceValue, formik.values.customerName]);
+  }, [debounceValue, formik.values.jobNo]);
 
   const handleSubmit = async () => {
     try {
@@ -535,7 +535,7 @@ export default function AddPayableEntryModal({
                 id="unitType"
                 size="small"
                 disabled={
-                  !formik.values.customerName || type == "cost_details"
+                  !formik.values.jobNo || type == "cost_details"
                     ? true
                     : false
                 }
