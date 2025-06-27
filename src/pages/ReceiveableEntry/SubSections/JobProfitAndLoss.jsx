@@ -180,7 +180,7 @@ const JobProfitAndLoss = ({ formik, page }) => {
                       customerId: formik.values.customerId,
                       customerName: formik.values.customerName,
                     }}
-                    disabled = {formik.values?.statusCode === -3}
+                    disabled={formik.values?.statusCode === -3}
                     error={formik.errors.customerId}
                     idKey="customerId"
                     nameKey="customerName"
@@ -320,7 +320,7 @@ const JobProfitAndLoss = ({ formik, page }) => {
                       if (!formik.values.currency) {
                         return formik.setFieldValue("currency", value);
                       }
-                      if (value === "USD") {
+                      if (value && value !== "INR") {
                         formik.setFieldValue("exchangeRate", "");
                       }
                       if (
@@ -338,7 +338,7 @@ const JobProfitAndLoss = ({ formik, page }) => {
                         onConfirm: () => {
                           formik.setFieldValue("currency", value);
                           formik.setFieldValue("details", []);
-                          if (value === "USD") {
+                          if (value && value !== "INR") {
                             formik.setFieldValue("exchangeRate", "");
                           }
                           if (value === "INR") {
@@ -425,7 +425,7 @@ const JobProfitAndLoss = ({ formik, page }) => {
           selectedInvoiceType={formik.values.type}
           // page={"jobProfitAndLoss"}
           mergedCurrencyOptions={mergedCurrencyOptions}
-          page = {page}
+          page={page}
         />
       ) : null}
     </React.Fragment>
